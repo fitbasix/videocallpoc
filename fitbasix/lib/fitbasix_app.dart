@@ -16,7 +16,9 @@ class FitBasixApp extends StatelessWidget {
       locale: context.locale,
       home: const Scaffold(
         body: Center(
-          child: Text('FitBasix'),
+          child: Text(
+            'FitBasix',
+          ),
         ),
       ),
     );
