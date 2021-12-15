@@ -40,6 +40,8 @@ dependencies:
   firebase_auth: ^3.3.3
   google_sign_in: ^5.2.1
   dio: ^4.0.0
+  firebase_crashlytics: ^2.4.3
+  firebase_analytics: ^9.0.3
 
 dev_dependencies:
   flutter_test:

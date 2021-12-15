@@ -2,6 +2,7 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       body: Center(
           child: Column(
