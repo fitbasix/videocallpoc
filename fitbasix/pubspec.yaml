@@ -42,6 +42,7 @@ dependencies:
   dio: ^4.0.0
   firebase_crashlytics: ^2.4.3
   firebase_analytics: ^9.0.3
+  firebase_remote_config: ^1.0.2
 
 dev_dependencies:
   flutter_test:
