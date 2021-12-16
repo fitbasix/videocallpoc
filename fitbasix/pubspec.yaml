@@ -41,6 +41,7 @@ dependencies:
   google_sign_in: ^5.2.1
   firebase_crashlytics: ^2.4.3
   firebase_analytics: ^9.0.3
+  firebase_remote_config: ^1.0.2
 
 dev_dependencies:
   flutter_test:

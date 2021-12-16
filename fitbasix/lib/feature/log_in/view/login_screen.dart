@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/core/sevices/remote_config_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +27,8 @@ class LoginScreen extends StatelessWidget {
                       .logSignUp(signUpMethod: 'google_signup');
                 },
                 child: const Text('Google Signup')),
-            Text(user!.displayName! + ' is Logged In')
+            //Text(user!.displayName! + ' is Logged In')
+            Text(RemoteConfigService.remoteConfig.getString('xyz'))
           ],
         )),
       ),
