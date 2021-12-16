@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/core/sevices/remote_config_service.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -24,6 +25,8 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
+    RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
+    //RemoteConfigService.fetchAndActivate();
     super.onInit();
   }
 }

@@ -19,4 +19,9 @@ class RemoteConfigService {
       log(e.toString());
     }
   }
+
+  static Future fetchAndActivate() async {
+    await remoteConfig.fetch();
+    await remoteConfig.fetchAndActivate();
+  }
 }
