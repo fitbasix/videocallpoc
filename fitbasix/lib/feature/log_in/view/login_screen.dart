@@ -42,10 +42,11 @@ class LoginScreen extends StatelessWidget {
                 child: const Text('Mobile Verification')),
             TextButton(
                 onPressed: () {
-                  RemoteConfigService.onForceFetched(
-                      RemoteConfigService.remoteConfig);
+                  var locale = Locale('es', 'ES');
+                  Get.updateLocale(locale);
                 },
-                child: const Text('Get Locale'))
+                child: const Text('Get Locale')),
+            Text('logged_in'.tr)
           ],
         )),
       ),
