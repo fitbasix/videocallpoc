@@ -1,14 +1,15 @@
+import 'package:fitbasix/core/sevices/remote_config_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import 'package:easy_localization/easy_localization.dart';
+import 'package:fitbasix/core/localization/translations.dart';
+import 'package:fitbasix/fitbasix_app.dart';
 
-void setupApp(Widget child) {
-  runApp(
-    EasyLocalization(
-        path: 'assets/translation',
-        supportedLocales: const [Locale('en'), Locale('ar')],
-        fallbackLocale: const Locale('en'),
-        //assetLoader: CodegenLoader(),
-        child: child),
-  );
+void setupApp() {
+  Get.put(AppTranslations());
+  RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
+  final translations = GetTranslations.loadTranslations();
+  runApp(FitBasixApp(
+    translations: translations,
+  ));
 }
