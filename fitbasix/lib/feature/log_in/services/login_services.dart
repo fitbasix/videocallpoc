@@ -23,4 +23,20 @@ class LogInService {
     });
     print(response);
   }
+
+  static Future<String> getOTP(String mobile) async {
+    var response = await dio!.post(
+        "http://0f60-2405-201-3-4179-30b5-7690-bd1e-84a8.ngrok.io/api/auth/otp-get",
+        data: {"phoneNumber": mobile});
+    print(response);
+
+    return response.data['otp']['Details'];
+  }
+
+  static Future<void> verifyOTP(String otp, String otpVerifyDetails) async {
+    var response = await dio!.post(
+        "http://0f60-2405-201-3-4179-30b5-7690-bd1e-84a8.ngrok.io/api/auth/otp-verify",
+        data: {"otp": otp, "otpVerifyDetais": otpVerifyDetails});
+    print(response);
+  }
 }
