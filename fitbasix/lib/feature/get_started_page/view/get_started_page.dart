@@ -36,8 +36,11 @@ class GetStartedPage extends StatelessWidget {
                 ProceedButtonWithArrow(
                   title: 'getStarted'.tr,
                   onPressed: () {
-                    Navigator.pushNamed(context, RouteName.enterDetails);
+                    Navigator.pushNamed(context, RouteName.loginScreen);
                   },
+                ),
+                SizedBox(
+                  height: 16 * SizeConfig.heightMultiplier!,
                 )
               ],
             ),

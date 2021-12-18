@@ -2,6 +2,7 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -104,7 +105,10 @@ class LoginScreen extends StatelessWidget {
                     width: 12 * SizeConfig.heightMultiplier!,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      await _loginController.googleLogin();
+                      Navigator.pushNamed(context, RouteName.enterMobileGoogle);
+                    },
                     child: CircleAvatar(
                       radius: 16,
                       backgroundColor: kLightGrey,
