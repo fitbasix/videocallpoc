@@ -10,4 +10,9 @@ class AppTextStyle {
     fontStyle: FontStyle.italic,
     color: dustyWhite,
   );
+  static TextStyle normalWhiteText = GoogleFonts.openSans(
+    fontSize: (16) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kPureWhite,
+  );
 }

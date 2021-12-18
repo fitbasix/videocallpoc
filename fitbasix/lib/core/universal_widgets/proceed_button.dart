@@ -1,3 +1,5 @@
+import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +18,12 @@ class ProceedButton extends StatelessWidget {
         height: 45 * SizeConfig.heightMultiplier!,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-          color: kPureBlack,
+          color: kGreenColor,
         ),
         child: Center(
           child: Text(
             title,
-            style: AppTextStyle.whiteBoldHeader,
+            style: AppTextStyle.normalWhiteText,
           ),
         ),
       ),
