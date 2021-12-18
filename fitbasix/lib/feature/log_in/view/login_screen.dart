@@ -1,5 +1,11 @@
+import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/image_path.dart';
+import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/api_service/remote_config_service.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,38 +23,102 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 24),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-            ),
-            TextButton(
-                onPressed: () {
-                  _loginController.googleLogin();
-                },
-                child: const Text('Google Signup')),
-            TextButton(
-                onPressed: () async {
-                  // await LogInService.registerUser();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MobileScreen()));
-                },
-                child: const Text('Mobile Verification')),
-            TextButton(
-                onPressed: () {
-                  var locale = Locale('es', 'ES');
-                  Get.updateLocale(locale);
-                },
-                child: const Text('Get Locale')),
-            Text('logged_in'.tr)
-          ],
-        )),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'welcomeTo'.tr,
+                style: AppTextStyle.NormalText,
+              ),
+              SizedBox(
+                height: 20 * SizeConfig.heightMultiplier!,
+              ),
+              SvgPicture.asset(
+                ImagePath.fitBasixIconBlack,
+              ),
+              SizedBox(
+                height: 58 * SizeConfig.heightMultiplier!,
+              ),
+              Text(
+                'enter_mobile_text'.tr,
+                style: AppTextStyle.NormalText,
+              ),
+              SizedBox(
+                height: 8 * SizeConfig.heightMultiplier!,
+              ),
+              Container(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: kLightGrey,
+                      border: InputBorder.none,
+                      hintText: 'enter_number_hint'.tr),
+                ),
+              ),
+              SizedBox(
+                height: 32 * SizeConfig.heightMultiplier!,
+              ),
+              ProceedButton(
+                  title: 'next'.tr,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MobileScreen()));
+                  }),
+              const Spacer(),
+              Center(
+                child: Text(
+                  'or'.tr,
+                  style: AppTextStyle.NormalText,
+                ),
+              ),
+              SizedBox(
+                height: 16 * SizeConfig.heightMultiplier!,
+              ),
+              Center(
+                child: Text(
+                  'withLogin'.tr,
+                  style: AppTextStyle.NormalText,
+                ),
+              ),
+              SizedBox(
+                height: 16 * SizeConfig.heightMultiplier!,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: kLightGrey,
+                      child: SvgPicture.asset(ImagePath.appleIcon),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 12 * SizeConfig.heightMultiplier!,
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: kLightGrey,
+                      child: SvgPicture.asset(ImagePath.googleICon),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 32 * SizeConfig.heightMultiplier!,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
