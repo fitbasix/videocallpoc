@@ -2,6 +2,7 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
@@ -100,7 +101,9 @@ class EnterDetailsPage extends StatelessWidget {
               Spacer(),
               ProceedButtonWithArrow(
                 title: 'proceed'.tr,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, RouteName.homePage);
+                },
               ),
               SizedBox(
                 height: 16 * SizeConfig.heightMultiplier!,
