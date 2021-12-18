@@ -39,9 +39,11 @@ dependencies:
   firebase_auth: ^3.3.3
   google_sign_in: ^5.2.1
   dio: ^4.0.0
-  firebase_crashlytics: ^2.4.3
+  firebase_crashlytics: ^2.3.0
   firebase_analytics: ^9.0.3
   firebase_remote_config: ^1.0.2
+  flutter_svg: ^1.0.0
+  google_fonts: ^2.1.0
 
 dev_dependencies:
   flutter_test:

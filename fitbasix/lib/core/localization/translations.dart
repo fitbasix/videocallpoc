@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fitbasix/core/sevices/remote_config_service.dart';
+import '../api_service/remote_config_service.dart';
 import 'package:get/get.dart';
 
 class AppTranslations extends Translations {
