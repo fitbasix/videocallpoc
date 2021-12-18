@@ -15,6 +15,15 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: kPureWhite,
   );
+  static TextStyle NormalText = GoogleFonts.openSans(
+    fontSize: (16) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: kPureBlack,
+  );
+  static TextStyle titleText = GoogleFonts.openSans(
+    fontSize: (24) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kPureBlack);
   static TextStyle hintText = GoogleFonts.openSans(
     fontSize: (16) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w400,
