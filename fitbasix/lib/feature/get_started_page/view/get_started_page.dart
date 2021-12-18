@@ -41,6 +41,9 @@ class GetStartedPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(context, RouteName.loginScreen);
                   },
+                ),
+                SizedBox(
+                  height: 16 * SizeConfig.heightMultiplier!,
                 )
               ],
             ),

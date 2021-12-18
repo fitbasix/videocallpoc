@@ -102,7 +102,10 @@ class LoginScreen extends StatelessWidget {
                     width: 12 * SizeConfig.heightMultiplier!,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      await _loginController.googleLogin();
+                      Navigator.pushNamed(context, RouteName.enterMobileGoogle);
+                    },
                     child: CircleAvatar(
                       radius: 16,
                       backgroundColor: kLightGrey,

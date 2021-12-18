@@ -1,5 +1,8 @@
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/get_started_page/view/get_started_page.dart';
+import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
+import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
+import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/api_service/remote_config_service.dart';
 import 'package:flutter/material.dart';
