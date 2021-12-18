@@ -3,6 +3,7 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
@@ -67,7 +68,11 @@ class EnterOTPGoogle extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            ProceedButtonWithArrow(title: 'proceed'.tr, onPressed: () {}),
+            ProceedButtonWithArrow(
+                title: 'proceed'.tr,
+                onPressed: () {
+                  Navigator.pushNamed(context, RouteName.homePage);
+                }),
             SizedBox(
               height: 32 * SizeConfig.heightMultiplier!,
             ),

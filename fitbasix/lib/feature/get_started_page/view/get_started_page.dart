@@ -18,7 +18,10 @@ class GetStartedPage extends StatelessWidget {
           Container(
             height: size.height,
             width: size.width,
-            color: kPureBlack,
+            child: Image.asset(
+              ImagePath.welcomeImage,
+              fit: BoxFit.cover,
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),

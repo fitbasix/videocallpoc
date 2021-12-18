@@ -11,4 +11,5 @@ class ImagePath {
   static const String visibilityOnIcon = "assets/Icons/visibility-on.svg";
   static const String mailIcon = "assets/Icons/email-icon.svg";
   static const String backIcon = "assets/Icons/back_icon.svg";
+  static const String welcomeImage = 'assets/images/welcome_image.png';
 }

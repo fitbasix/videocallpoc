@@ -57,6 +57,8 @@ class GenerateRoute {
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             EnterOTPGoogle(),
+      );
+    }
     if (route == RouteName.enterPasswordPage) {
       return PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation<double> animation,
