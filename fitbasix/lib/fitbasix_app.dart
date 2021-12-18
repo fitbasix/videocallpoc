@@ -19,7 +19,7 @@ class FitBasixApp extends StatelessWidget {
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,
-        onGenerateRoute: GenerateRoute.generateRoute,
+         onGenerateRoute: GenerateRoute.generateRoute,
         navigatorObservers: [AnalyticsService.getAnalyticsObserver()],
         home: LoginScreen());
   }

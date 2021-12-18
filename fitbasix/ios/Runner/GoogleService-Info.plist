@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>608132731672-c03lmq3db3i313m5vhjqldvloc4g1ocs.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCfzkrLgry6BKeVmnrtMN_reObkiUgcUBU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>608132731672</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.antino.fitbasix.dev</string>
+	<key>PROJECT_ID</key>
+	<string>fitbitsix-d1493</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fitbitsix-d1493.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:608132731672:ios:0a331c552f775fdcad046d</string>
+</dict>
+</plist>
