@@ -26,6 +26,9 @@ class GetStartedPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SvgPicture.asset(ImagePath.fitBasixIcon),
+                SizedBox(
+                  height: 4 * SizeConfig.heightMultiplier!,
+                ),
                 Text(
                   'welcome_title'.tr,
                   style: AppTextStyle.italicWelcomeText,
@@ -36,7 +39,7 @@ class GetStartedPage extends StatelessWidget {
                 ProceedButtonWithArrow(
                   title: 'getStarted'.tr,
                   onPressed: () {
-                    Navigator.pushNamed(context, RouteName.enterDetails);
+                    Navigator.pushNamed(context, RouteName.loginScreen);
                   },
                 )
               ],

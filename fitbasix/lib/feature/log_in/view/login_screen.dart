@@ -2,7 +2,9 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
+import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +26,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
+          padding: const EdgeInsets.only(left: 16, top: 44, right: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,16 +50,15 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 height: 8 * SizeConfig.heightMultiplier!,
               ),
-              Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: kLightGrey,
-                      border: InputBorder.none,
-                      hintText: 'enter_number_hint'.tr),
-                ),
+              CutomizedTextField(
+                color: Colors.transparent,
+                child: TextFieldContainer(
+                    onChanged: (value) {
+                      _loginController.mobile.value = value;
+                    },
+                    textEditingController: _loginController.mobileController,
+                    isNumber: false,
+                    hint: 'enter_number_hint'.tr),
               ),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
@@ -65,10 +66,7 @@ class LoginScreen extends StatelessWidget {
               ProceedButton(
                   title: 'next'.tr,
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MobileScreen()));
+                    Navigator.pushNamed(context, RouteName.enterPasswordPage);
                   }),
               const Spacer(),
               Center(
