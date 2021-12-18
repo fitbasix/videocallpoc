@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import '../../../core/api_service/remote_config_service.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,16 @@ class LoginController extends GetxController {
   RxString mobile = RxString('');
   RxString otp = RxString('');
   RxString userDetail = RxString('');
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController reEnterPasswordController =
+      TextEditingController();
+  RxString name = "".obs;
+  RxString email = "".obs;
+  RxString password = "".obs;
+  RxString confirmPassword = "".obs;
+  RxBool isHidePassword = false.obs;
 
   Future googleLogin() async {
     final googleUser = await googleSignIn.value.signIn();
