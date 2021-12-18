@@ -34,7 +34,8 @@ class MobileScreen extends StatelessWidget {
               style: AppTextStyle.titleText,
             ),
             Text(
-              'enter_otp_text'.trParams({'number': '123'}),
+              'enter_otp_text'
+                  .trParams({'number': _loginController.mobile.value}),
               style: AppTextStyle.NormalText,
             ),
             SizedBox(
@@ -47,7 +48,10 @@ class MobileScreen extends StatelessWidget {
               enableActiveFill: true,
               pinTheme: PinTheme(
                   // shape: PinCodeFieldShape.box,
+                  selectedColor: Colors.transparent,
                   activeFillColor: kLightGrey,
+                  inactiveColor: Colors.transparent,
+                  activeColor: Colors.transparent,
                   inactiveFillColor: kLightGrey,
                   selectedFillColor: kLightGrey,
                   borderWidth: 0,

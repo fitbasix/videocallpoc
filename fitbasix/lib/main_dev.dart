@@ -11,7 +11,6 @@ Future<void> main() async {
     await Firebase.initializeApp();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('AccessToken');
-
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     setupApp();
   }, (error, stackTrace) {

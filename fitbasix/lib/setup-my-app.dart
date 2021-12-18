@@ -13,11 +13,12 @@ import 'package:fitbasix/fitbasix_app.dart';
 Future<void> setupApp() async {
   Get.put(AppTranslations());
   RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
-  print("accessToken");
-
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  var accessToken = prefs.getString('AccessToken');
+  print(accessToken);
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: GetStartedPage(),
+    child: accessToken == null ? GetStartedPage() : HomePage(),
   ));
 }
