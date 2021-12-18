@@ -1,5 +1,4 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
-import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
@@ -9,16 +8,16 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
-class EnterDetailsPage extends StatelessWidget {
-  final LoginController _loginController = Get.put(LoginController());
+class EnterPassword extends StatelessWidget {
+  final LoginController _loginController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: 16 * SizeConfig.widthMultiplier!),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -31,35 +30,19 @@ class EnterDetailsPage extends StatelessWidget {
                   },
                   child: SvgPicture.asset(ImagePath.backIcon)),
               SizedBox(
-                height: 24 * SizeConfig.heightMultiplier!,
+                height: 65 * SizeConfig.heightMultiplier!,
               ),
               Text(
-                'fillDetailsHeader'.tr,
-                style: AppTextStyle.normalBlackText,
+                'hi_name'.trParams({'name': "John"}),
+                style: AppTextStyle.titleText,
               ),
               SizedBox(
-                height: 28 * SizeConfig.heightMultiplier!,
+                height: 8 * SizeConfig.heightMultiplier!,
               ),
-              CutomizedTextField(
-                color: Colors.transparent,
-                child: TextFieldContainer(
-                    onChanged: (value) {},
-                    textEditingController: _loginController.nameController,
-                    isNumber: false,
-                    preFixWidget: SvgPicture.asset(ImagePath.profileIcon),
-                    hint: 'enterNameHint'.tr),
-              ),
-              SizedBox(
-                height: 16 * SizeConfig.heightMultiplier!,
-              ),
-              CutomizedTextField(
-                color: Colors.transparent,
-                child: TextFieldContainer(
-                    onChanged: (value) {},
-                    textEditingController: _loginController.emailController,
-                    isNumber: false,
-                    preFixWidget: SvgPicture.asset(ImagePath.mailIcon),
-                    hint: 'enterNameHint'.tr),
+              Text(
+                'enter_otp_text'
+                    .trParams({'number': _loginController.mobile.value}),
+                style: AppTextStyle.NormalText,
               ),
               SizedBox(
                 height: 16 * SizeConfig.heightMultiplier!,
@@ -70,7 +53,7 @@ class EnterDetailsPage extends StatelessWidget {
                   child: TextFieldContainer(
                       onChanged: (value) {},
                       textEditingController:
-                          _loginController.passwordController,
+                          _loginController.passwordForLoginController,
                       isNumber: false,
                       isObsecure: _loginController.isHidePassword.value,
                       preFixWidget: SvgPicture.asset(ImagePath.lockIcon),
@@ -85,22 +68,17 @@ class EnterDetailsPage extends StatelessWidget {
                       hint: 'enterPassword'.tr),
                 ),
               ),
-              Text(
-                "Error message",
-                style: AppTextStyle.smallGreyText,
-              ),
               SizedBox(
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
-              CutomizedTextField(
-                color: Colors.transparent,
-                child: TextFieldContainer(
-                    onChanged: (value) {},
-                    textEditingController:
-                        _loginController.reEnterPasswordController,
-                    isNumber: false,
-                    preFixWidget: SvgPicture.asset(ImagePath.lockIcon),
-                    hint: 're_enter_password'.tr),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.forgotPassword);
+                },
+                child: Text(
+                  'forgot_password'.tr,
+                  style: AppTextStyle.NormalText.copyWith(fontSize: 14),
+                ),
               ),
               Spacer(),
               ProceedButtonWithArrow(

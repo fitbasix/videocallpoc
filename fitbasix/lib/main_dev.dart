@@ -7,10 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   await runZonedGuarded(() async {
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // var accessToken = prefs.getString('AccessToken');
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var accessToken = prefs.getString('AccessToken');
+    print(accessToken);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     setupApp();
   }, (error, stackTrace) {

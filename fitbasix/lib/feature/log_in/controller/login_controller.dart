@@ -19,10 +19,17 @@ class LoginController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController reEnterPasswordController =
       TextEditingController();
+  final TextEditingController passwordForLoginController =
+      TextEditingController();
+  final TextEditingController resetPasswordController = TextEditingController();
+  final TextEditingController resetConfirmPasswordController =
+      TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
   RxString name = "".obs;
   RxString email = "".obs;
   RxString password = "".obs;
   RxString confirmPassword = "".obs;
+  RxString mobileNumber = "".obs;
   RxBool isHidePassword = false.obs;
 
   Future googleLogin() async {
