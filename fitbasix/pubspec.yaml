@@ -45,6 +45,7 @@ dependencies:
   flutter_svg: ^1.0.0
   google_fonts: ^2.1.0
   pin_code_fields: ^7.3.0
+  shared_preferences: ^2.0.11
 
 
 dev_dependencies:

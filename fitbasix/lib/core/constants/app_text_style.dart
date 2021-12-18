@@ -23,6 +23,20 @@ class AppTextStyle {
   static TextStyle titleText = GoogleFonts.openSans(
     fontSize: (24) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w600,
-    color: kPureBlack,
+    color: kPureBlack);
+  static TextStyle hintText = GoogleFonts.openSans(
+    fontSize: (16) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: kGreyColor,
+  );
+  static TextStyle normalBlackText = GoogleFonts.openSans(
+    fontSize: (16) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: lightBlack,
+  );
+  static TextStyle smallGreyText = GoogleFonts.openSans(
+    fontSize: (12) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: darkGreyColor,
   );
 }

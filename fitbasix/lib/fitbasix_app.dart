@@ -10,10 +10,9 @@ import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 
 class FitBasixApp extends StatelessWidget {
   final AppTranslations translations;
-  const FitBasixApp({
-    Key? key,
-    required this.translations,
-  }) : super(key: key);
+  final Widget child;
+  const FitBasixApp({Key? key, required this.translations, required this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class FitBasixApp extends StatelessWidget {
             fallbackLocale: const Locale('es', 'ES'),
             onGenerateRoute: GenerateRoute.generateRoute,
             navigatorObservers: [AnalyticsService.getAnalyticsObserver()],
-            home: GetStartedPage());
+            home: child);
       });
     });
   }
