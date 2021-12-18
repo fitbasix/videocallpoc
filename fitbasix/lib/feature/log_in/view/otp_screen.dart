@@ -40,7 +40,12 @@ class MobileScreen extends StatelessWidget {
               onChanged: (value) {},
               enableActiveFill: true,
               pinTheme: PinTheme(
-                  activeFillColor: kLightGrey, inactiveFillColor: kLightGrey),
+                  // shape: PinCodeFieldShape.box,
+                  activeFillColor: kLightGrey,
+                  inactiveFillColor: kLightGrey,
+                  selectedFillColor: kLightGrey,
+                  borderWidth: 0,
+                  borderRadius: BorderRadius.circular(8)),
             ),
             SizedBox(
               height: 32 * SizeConfig.heightMultiplier!,
