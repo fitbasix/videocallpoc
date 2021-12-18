@@ -1,6 +1,6 @@
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitbasix/core/sevices/remote_config_service.dart';
+import '../../../core/api_service/remote_config_service.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
