@@ -65,8 +65,30 @@ class LoginScreen extends StatelessWidget {
               ),
               ProceedButton(
                   title: 'next'.tr,
-                  onPressed: () {
-                    Navigator.pushNamed(context, RouteName.enterPasswordPage);
+                  onPressed: () async {
+                    await _loginController.logInRegisterUser("DEFAULT", "",
+                        _loginController.mobile.value, "+91", "", "", "");
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        0) {
+                      Navigator.pushNamed(context, RouteName.enterDetails);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        1) {
+                      Navigator.pushNamed(context, RouteName.enterPasswordPage);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        2) {
+                      Navigator.pushNamed(context, RouteName.otpScreen);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        3) {
+                      //google thing
+                      Navigator.pushNamed(context, RouteName.otpScreen);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        4) {
+                      Navigator.pushNamed(context, RouteName.homePage);
+                    }
                   }),
               const Spacer(),
               Center(

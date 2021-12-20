@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
 import 'package:flutter/material.dart';
 import '../../../core/api_service/remote_config_service.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
 
 class LoginController extends GetxController {
   final googleSignIn = GoogleSignIn().obs;
@@ -25,6 +25,7 @@ class LoginController extends GetxController {
   final TextEditingController resetConfirmPasswordController =
       TextEditingController();
   final TextEditingController mobileController = TextEditingController();
+  Rx<LogInRegisterModel> LogInRegisterResponse = LogInRegisterModel().obs;
   RxString name = "".obs;
   RxString email = "".obs;
   RxString password = "".obs;
@@ -53,8 +54,27 @@ class LoginController extends GetxController {
     userDetail.value = await LogInService.getOTP(mobile.value);
   }
 
-  Future<void> verifyOTP() async {
-    await LogInService.verifyOTP(otp.value, userDetail.value);
+  // Future<void> verifyOTP() async {
+  //   await LogInService.verifyOTP(otp.value, userDetail.value);
+  // }
+
+  Future<void> logInRegisterUser(
+      String regType,
+      String email,
+      String phnNumber,
+      String countryCode,
+      String accessToken,
+      String serverAuthCode,
+      String idToken) async {
+    LogInRegisterResponse.value = await LogInService.logInRegisterUser(
+        regType,
+        "USER",
+        email,
+        phnNumber,
+        countryCode,
+        accessToken,
+        serverAuthCode,
+        idToken);
   }
 
   @override
