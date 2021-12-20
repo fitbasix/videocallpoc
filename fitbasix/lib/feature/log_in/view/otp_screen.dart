@@ -2,15 +2,17 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class MobileScreen extends StatelessWidget {
-  MobileScreen({Key? key}) : super(key: key);
+class OtpScreen extends StatelessWidget {
+  OtpScreen({Key? key}) : super(key: key);
   final LoginController _loginController = Get.find();
 
   @override
@@ -44,7 +46,9 @@ class MobileScreen extends StatelessWidget {
             PinCodeTextField(
               appContext: context,
               length: 6,
-              onChanged: (value) {},
+              onChanged: (value) {
+                _loginController.otp.value = value;
+              },
               enableActiveFill: true,
               pinTheme: PinTheme(
                   // shape: PinCodeFieldShape.box,
@@ -60,7 +64,17 @@ class MobileScreen extends StatelessWidget {
             SizedBox(
               height: 32 * SizeConfig.heightMultiplier!,
             ),
-            ProceedButton(title: 'verify'.tr, onPressed: () {}),
+            ProceedButton(
+                title: 'verify'.tr,
+                onPressed: () async {
+                  bool status = await LogInService.verifyOTP(
+                      _loginController.otp.value,
+                      _loginController.mobile.value,
+                      "+91");
+                  if (status == true) {
+                    Navigator.pushNamed(context, RouteName.enterDetails);
+                  }
+                }),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),

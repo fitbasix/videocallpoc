@@ -32,7 +32,7 @@ class DioUtil {
           dio.interceptors.responseLock.lock();
           RequestOptions requestOptions = e.requestOptions;
           final opts = new Options(method: requestOptions.method);
-          // dio.options.headers["Authorization"] = "Bearer " + accessToken;
+          // dio.options.headers["language"] = "language " + accessToken;
           // dio.options.headers["Accept"] = "*/*";
           dio.interceptors.requestLock.unlock();
           dio.interceptors.responseLock.unlock();

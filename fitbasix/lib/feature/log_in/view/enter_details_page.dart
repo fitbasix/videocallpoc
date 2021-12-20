@@ -6,6 +6,7 @@ import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -43,7 +44,9 @@ class EnterDetailsPage extends StatelessWidget {
               CutomizedTextField(
                 color: Colors.transparent,
                 child: TextFieldContainer(
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _loginController.name.value = value;
+                    },
                     textEditingController: _loginController.nameController,
                     isNumber: false,
                     preFixWidget: SvgPicture.asset(ImagePath.profileIcon),
@@ -55,11 +58,13 @@ class EnterDetailsPage extends StatelessWidget {
               CutomizedTextField(
                 color: Colors.transparent,
                 child: TextFieldContainer(
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _loginController.email.value = value;
+                    },
                     textEditingController: _loginController.emailController,
                     isNumber: false,
                     preFixWidget: SvgPicture.asset(ImagePath.mailIcon),
-                    hint: 'enterNameHint'.tr),
+                    hint: 'enterEmailHint'.tr),
               ),
               SizedBox(
                 height: 16 * SizeConfig.heightMultiplier!,
@@ -68,7 +73,9 @@ class EnterDetailsPage extends StatelessWidget {
                 () => CutomizedTextField(
                   color: Colors.transparent,
                   child: TextFieldContainer(
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        _loginController.password.value = value;
+                      },
                       textEditingController:
                           _loginController.passwordController,
                       isNumber: false,
@@ -105,8 +112,14 @@ class EnterDetailsPage extends StatelessWidget {
               Spacer(),
               ProceedButtonWithArrow(
                 title: 'proceed'.tr,
-                onPressed: () {
-                  Navigator.pushNamed(context, RouteName.homePage);
+                onPressed: () async {
+                  int success = await LogInService.updateDetails(
+                      _loginController.password.value,
+                      _loginController.email.value,
+                      _loginController.name.value);
+                  if (success == 1) {
+                    Navigator.pushNamed(context, RouteName.homePage);
+                  }
                 },
               ),
               SizedBox(
