@@ -5,7 +5,9 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
+import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -30,10 +32,10 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
               GestureDetector(
-                onTap: (){
-                  Navigator.pop(context);
-                },
-                child:SvgPicture.asset(ImagePath.backIcon)),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: SvgPicture.asset(ImagePath.backIcon)),
               SizedBox(
                 height: 24 * SizeConfig.heightMultiplier!,
               ),
@@ -51,18 +53,35 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
               SizedBox(
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
-              Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: kLightGrey,
-                      border: InputBorder.none,
-                      hintText: 'enter_number_hint'.tr),
-                  onChanged: (value) {
-                    _loginController.mobile.value = value;
-                  },
+              Obx(
+                () => CutomizedTextField(
+                  color: Colors.transparent,
+                  child: TextFieldContainer(
+                      onChanged: (value) {
+                        _loginController.mobile.value = value;
+                      },
+                      isTextFieldActive: true,
+                      preFixWidget: Container(
+                        width: 80,
+                        child: Row(
+                          children: [
+                            CountryDropDown(
+                              hint: _loginController.selectedCountry.value,
+                              listofItems: _loginController.countryList,
+                              onChanged: (value) {
+                                _loginController.selectedCountry.value = value;
+                              },
+                            ),
+                            const Text(
+                              '|',
+                              style: TextStyle(fontSize: 24, color: kGreyColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                      textEditingController: _loginController.mobileController,
+                      isNumber: true,
+                      hint: 'enter_number_hint'.tr),
                 ),
               ),
               Spacer(),

@@ -27,7 +27,11 @@ class OtpScreen extends StatelessWidget {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
-            SvgPicture.asset(ImagePath.backIcon),
+            GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: SvgPicture.asset(ImagePath.backIcon)),
             SizedBox(
               height: 24 * SizeConfig.heightMultiplier!,
             ),
@@ -66,6 +70,7 @@ class OtpScreen extends StatelessWidget {
                 _loginController.otp.value = value;
               },
               enableActiveFill: true,
+              keyboardType: TextInputType.number,
               pinTheme: PinTheme(
                   // shape: PinCodeFieldShape.box,
                   selectedColor: Colors.transparent,
