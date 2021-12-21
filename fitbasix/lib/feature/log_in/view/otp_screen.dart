@@ -40,6 +40,22 @@ class OtpScreen extends StatelessWidget {
                   .trParams({'number': _loginController.mobile.value}),
               style: AppTextStyle.NormalText,
             ),
+            Row(
+              children: [
+                Text(
+                  'to_modify_number'.tr,
+                  style: AppTextStyle.NormalText,
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'click_here'.tr,
+                    style: AppTextStyle.NormalText.copyWith(
+                        decoration: TextDecoration.underline),
+                  ),
+                ),
+              ],
+            ),
             SizedBox(
               height: 58 * SizeConfig.heightMultiplier!,
             ),
@@ -62,8 +78,27 @@ class OtpScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8)),
             ),
             SizedBox(
-              height: 32 * SizeConfig.heightMultiplier!,
+              height: 16 * SizeConfig.heightMultiplier!,
             ),
+            Row(
+              children: [
+                Text(
+                  'resend_otp_text'.tr,
+                  style: AppTextStyle.NormalText.copyWith(
+                      fontSize: 14 * SizeConfig.textMultiplier!),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'resend'.tr,
+                    style: AppTextStyle.NormalText.copyWith(
+                        decoration: TextDecoration.underline,
+                        fontSize: 14 * SizeConfig.textMultiplier!),
+                  ),
+                ),
+              ],
+            ),
+            Spacer(),
             ProceedButton(
                 title: 'verify'.tr,
                 onPressed: () async {
@@ -76,9 +111,8 @@ class OtpScreen extends StatelessWidget {
                   }
                 }),
             SizedBox(
-              height: 16 * SizeConfig.heightMultiplier!,
+              height: 32 * SizeConfig.heightMultiplier!,
             ),
-            Text('resend_otp_text'.tr)
           ],
         ),
       )),

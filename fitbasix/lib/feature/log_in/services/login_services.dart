@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
 
 class LogInService {
@@ -74,5 +75,14 @@ class LogInService {
     print(response);
     print(responseData["status"]);
     return responseData["status"];
+  }
+
+  static Future<Countries> getCountries() async {
+    dio!.options.headers["language"] = "0";
+    var response = await dio!.get(ApiUrl.getCountries);
+
+    print(response);
+
+    return countriesFromJson(response.toString());
   }
 }

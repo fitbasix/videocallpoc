@@ -7,6 +7,8 @@ import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/api_service/remote_config_service.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
@@ -20,6 +22,11 @@ class LoginScreen extends StatelessWidget {
 
   final LoginController _loginController = Get.put(LoginController());
   String title = RemoteConfigService.remoteConfig.getString('welcome');
+
+  String _selected = '';
+  List<Map> _countryList = [
+    {'id': '1', 'name': "India", 'image': "assets/images/welcome_image"}
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,15 +59,25 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 height: 8 * SizeConfig.heightMultiplier!,
               ),
-              CutomizedTextField(
-                color: Colors.transparent,
-                child: TextFieldContainer(
-                    onChanged: (value) {
-                      _loginController.mobile.value = value;
-                    },
-                    textEditingController: _loginController.mobileController,
-                    isNumber: false,
-                    hint: 'enter_number_hint'.tr),
+              Row(
+                children: [
+                  CountryDropDown(listofItems: _loginController.countryList),
+                  Expanded(child: TextField())
+                ],
+              ),
+              Obx(
+                () => CutomizedTextField(
+                  color: Colors.transparent,
+                  child: TextFieldContainer(
+                      onChanged: (value) {
+                        _loginController.mobile.value = value;
+                      },
+                      preFixWidget: CountryDropDown(
+                          listofItems: _loginController.countryList),
+                      textEditingController: _loginController.mobileController,
+                      isNumber: false,
+                      hint: 'enter_number_hint'.tr),
+                ),
               ),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
@@ -68,31 +85,35 @@ class LoginScreen extends StatelessWidget {
               ProceedButton(
                   title: 'next'.tr,
                   onPressed: () async {
-                    await _loginController.logInRegisterUser("DEFAULT", "",
-                        _loginController.mobile.value, "+91", "", "", "");
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        0) {
-                      Navigator.pushNamed(context, RouteName.enterDetails);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        1) {
-                      Navigator.pushNamed(context, RouteName.enterPasswordPage);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        2) {
-                      Navigator.pushNamed(context, RouteName.otpScreen);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        3) {
-                      //google thing
-                      Navigator.pushNamed(context, RouteName.otpScreen);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        4) {
-                      Navigator.pushNamed(context, RouteName.homePage);
-                    }
+                    //LogInService.getCountries();
+                    _loginController.getCountries();
+                    // await _loginController.logInRegisterUser("DEFAULT", "",
+                    //     _loginController.mobile.value, "+91", "", "", "");
+                    // if (_loginController.LogInRegisterResponse.value.resCode ==
+                    //     0) {
+                    //   Navigator.pushNamed(context, RouteName.enterDetails);
+                    // }
+                    // if (_loginController.LogInRegisterResponse.value.resCode ==
+                    //     1) {
+                    //   Navigator.pushNamed(context, RouteName.enterPasswordPage);
+                    // }
+                    // if (_loginController.LogInRegisterResponse.value.resCode ==
+                    //     2) {
+                    // Navigator.pushNamed(context, RouteName.otpScreen);
+                    // }
+                    // if (_loginController.LogInRegisterResponse.value.resCode ==
+                    //     3) {
+                    //   //google thing
+                    //   Navigator.pushNamed(context, RouteName.otpScreen);
+                    // }
+                    // if (_loginController.LogInRegisterResponse.value.resCode ==
+                    //     4) {
+                    //   Navigator.pushNamed(context, RouteName.homePage);
+                    // }
                   }),
-              const Spacer(),
+              SizedBox(
+                height: 32 * SizeConfig.heightMultiplier!,
+              ),
               Center(
                 child: Text(
                   'or'.tr,
@@ -157,9 +178,7 @@ class LoginScreen extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
-                height: 32 * SizeConfig.heightMultiplier!,
-              ),
+              Spacer(),
             ],
           ),
         ),

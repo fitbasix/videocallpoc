@@ -18,6 +18,6 @@ Future<void> setupApp() async {
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: accessToken == null ? GetStartedPage() : HomePage(),
+    child: accessToken == null ? LoginScreen() : HomePage(),
   ));
 }
