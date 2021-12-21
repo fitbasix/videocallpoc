@@ -33,8 +33,8 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
                 onTap: (){
                   Navigator.pop(context);
                 },
-                child:SvgPicture.asset(ImagePath.backIcon))
-              ,
+                child:SvgPicture.asset(ImagePath.backIcon)),
+
               SizedBox(
                 height: 24 * SizeConfig.heightMultiplier!,
               ),

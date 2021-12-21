@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
@@ -145,8 +146,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-                    
-                      await _loginController.googleLogin();
+       await _loginController.googleLogin();
                       Navigator.pushNamed(context, RouteName.enterMobileGoogle);
                     },
                     child: CircleAvatar(
