@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -27,6 +29,7 @@ class LoginScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 16, top: 44, right: 16),
@@ -90,28 +93,20 @@ class LoginScreen extends StatelessWidget {
               ProceedButton(
                   title: 'next'.tr,
                   onPressed: () async {
-                    await _loginController.logInRegisterUser("DEFAULT", "",
-                        _loginController.mobile.value, "+91", "", "", "");
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        0) {
-                      Navigator.pushNamed(context, RouteName.enterDetails);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        1) {
-                      Navigator.pushNamed(context, RouteName.enterPasswordPage);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        2) {
+                    print(_loginController.selectedCountry.value.phoneCode!);
+                    await _loginController.logInRegisterUser(
+                        "DEFAULT",
+                        "",
+                        _loginController.mobile.value,
+                        _loginController.selectedCountry.value.phoneCode!,
+                        "",
+                        "",
+                        "");
+                    Navigator.pushNamed(context, RouteName.enterDetails);
+                    if (_loginController
+                            .LogInRegisterResponse.value.response!.redCode ==
+                        13) {
                       Navigator.pushNamed(context, RouteName.otpScreen);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        3) {
-                      //google thing
-                      Navigator.pushNamed(context, RouteName.otpScreen);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        4) {
-                      Navigator.pushNamed(context, RouteName.homePage);
                     }
                   }),
               SizedBox(
@@ -138,44 +133,65 @@ class LoginScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      final rawNonce = generateNonce();
-                      final credential =
-                          await SignInWithApple.getAppleIDCredential(
-                        scopes: [
-                          AppleIDAuthorizationScopes.email,
-                          AppleIDAuthorizationScopes.fullName,
-                        ],
-                      );
-                      final AuthCredential authCredential =
-                          GoogleAuthProvider.credential(
-                        idToken: credential.identityToken,
-                        accessToken: credential.authorizationCode,
-                      );
-                      await FirebaseAuth.instance
-                          .signInWithCredential(authCredential);
-                      print(credential.state);
-                      Navigator.pushNamed(context, RouteName.homePage);
-                      if (AppleIDAuthorizationScopes.email != null) {
-                        Navigator.pushNamed(context, RouteName.homePage);
-                      }
-                      print(AppleIDAuthorizationScopes.email);
-                      print(AppleIDAuthorizationScopes.fullName);
-                    },
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: kLightGrey,
-                      child: SvgPicture.asset(ImagePath.appleIcon),
-                    ),
-                  ),
+                  Platform.isIOS
+                      ? GestureDetector(
+                          onTap: () async {
+                            final rawNonce = generateNonce();
+                            final credential =
+                                await SignInWithApple.getAppleIDCredential(
+                              scopes: [
+                                AppleIDAuthorizationScopes.email,
+                                AppleIDAuthorizationScopes.fullName,
+                              ],
+                            );
+                            final AuthCredential authCredential =
+                                GoogleAuthProvider.credential(
+                              idToken: credential.identityToken,
+                              accessToken: credential.authorizationCode,
+                            );
+                            await FirebaseAuth.instance
+                                .signInWithCredential(authCredential);
+                            print(credential.state);
+                            // final user = FirebaseAuth.instance.currentUser;
+                            // if (user != null) {
+                            //   await _loginController.logInRegisterUser(
+                            //       "APPLE",
+                            //       user.email!,
+                            //       _loginController.mobile.value,
+                            //       "",
+                            //       _loginController.accessToken.value,
+                            //       "",
+                            //       _loginController.idToken.value);
+                            //   Navigator.pushNamed(
+                            //       context, RouteName.enterMobileGoogle);
+                            // }
+                          },
+                          child: CircleAvatar(
+                            radius: 16,
+                            backgroundColor: kLightGrey,
+                            child: SvgPicture.asset(ImagePath.appleIcon),
+                          ),
+                        )
+                      : Container(),
                   SizedBox(
                     width: 12 * SizeConfig.heightMultiplier!,
                   ),
                   GestureDetector(
                     onTap: () async {
                       await _loginController.googleLogin();
-                      Navigator.pushNamed(context, RouteName.enterMobileGoogle);
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        await _loginController.logInRegisterUser(
+                            "GOOGLE",
+                            user.email!,
+                            _loginController.mobile.value,
+                            "",
+                            _loginController.accessToken.value,
+                            "",
+                            _loginController.idToken.value);
+                        Navigator.pushNamed(
+                            context, RouteName.enterMobileGoogle);
+                      }
                     },
                     child: CircleAvatar(
                       radius: 16,

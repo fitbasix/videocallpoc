@@ -39,11 +39,12 @@ class Response {
   });
 
   final int? redCode;
-  final List<Datum>? data;
+  final List<CountryData>? data;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
         redCode: json["redCode"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<CountryData>.from(
+            json["data"].map((x) => CountryData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,8 +53,8 @@ class Response {
       };
 }
 
-class Datum {
-  Datum({
+class CountryData {
+  CountryData({
     this.countryCode,
     this.phoneCode,
     this.nameEn,
@@ -65,7 +66,7 @@ class Datum {
   final String? nameEn;
   final String? flag;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory CountryData.fromJson(Map<String, dynamic> json) => CountryData(
         countryCode: json["country_code"],
         phoneCode: json["phone_code"],
         nameEn: json["name_en"],

@@ -35,9 +35,11 @@ class LoginController extends GetxController {
   RxString confirmPassword = "".obs;
   RxString mobileNumber = "".obs;
   RxBool isHidePassword = false.obs;
-  RxList<Datum> countryList = <Datum>[].obs;
+  RxList<CountryData> countryList = <CountryData>[].obs;
   Rx<Countries> countries = Countries().obs;
-  Rx<Datum> selectedCountry = Rx(Datum());
+  Rx<CountryData> selectedCountry = Rx(CountryData());
+  RxString idToken = "".obs;
+  RxString accessToken = "".obs;
 
   Future googleLogin() async {
     final googleUser = await googleSignIn.value.signIn();
@@ -57,6 +59,8 @@ class LoginController extends GetxController {
       idToken: googleAuth.idToken,
     );
     await FirebaseAuth.instance.signInWithCredential(credential);
+    idToken.value = googleAuth.idToken.toString();
+    accessToken.value = googleAuth.accessToken.toString();
   }
 
   Future googleSignout() async {
