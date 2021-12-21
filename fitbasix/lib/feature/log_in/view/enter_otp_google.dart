@@ -55,6 +55,7 @@ class EnterOTPGoogle extends StatelessWidget {
               length: 6,
               onChanged: (value) {},
               enableActiveFill: true,
+              keyboardType: TextInputType.number,
               pinTheme: PinTheme(
                 // shape: PinCodeFieldShape.box,
                 activeFillColor: kLightGrey,

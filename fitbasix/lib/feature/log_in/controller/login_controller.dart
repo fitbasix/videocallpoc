@@ -37,6 +37,7 @@ class LoginController extends GetxController {
   RxBool isHidePassword = false.obs;
   RxList<Datum> countryList = <Datum>[].obs;
   Rx<Countries> countries = Countries().obs;
+  Rx<Datum> selectedCountry = Rx(Datum());
 
   Future googleLogin() async {
     final googleUser = await googleSignIn.value.signIn();

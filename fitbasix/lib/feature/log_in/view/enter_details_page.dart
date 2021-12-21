@@ -69,46 +69,6 @@ class EnterDetailsPage extends StatelessWidget {
               SizedBox(
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
-              Obx(
-                () => CutomizedTextField(
-                  color: Colors.transparent,
-                  child: TextFieldContainer(
-                      onChanged: (value) {
-                        _loginController.password.value = value;
-                      },
-                      textEditingController:
-                          _loginController.passwordController,
-                      isNumber: false,
-                      isObsecure: _loginController.isHidePassword.value,
-                      preFixWidget: SvgPicture.asset(ImagePath.lockIcon),
-                      suffixWidget: GestureDetector(
-                          onTap: () {
-                            _loginController.isHidePassword.value =
-                                !_loginController.isHidePassword.value;
-                          },
-                          child: _loginController.isHidePassword.value
-                              ? SvgPicture.asset(ImagePath.visibilityOnIcon)
-                              : SvgPicture.asset(ImagePath.visibilityOffIcon)),
-                      hint: 'enterPassword'.tr),
-                ),
-              ),
-              Text(
-                "Error message",
-                style: AppTextStyle.smallGreyText,
-              ),
-              SizedBox(
-                height: 16 * SizeConfig.heightMultiplier!,
-              ),
-              CutomizedTextField(
-                color: Colors.transparent,
-                child: TextFieldContainer(
-                    onChanged: (value) {},
-                    textEditingController:
-                        _loginController.reEnterPasswordController,
-                    isNumber: false,
-                    preFixWidget: SvgPicture.asset(ImagePath.lockIcon),
-                    hint: 're_enter_password'.tr),
-              ),
               Spacer(),
               ProceedButtonWithArrow(
                 title: 'proceed'.tr,

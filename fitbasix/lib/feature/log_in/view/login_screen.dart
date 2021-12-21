@@ -16,17 +16,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   final LoginController _loginController = Get.put(LoginController());
   String title = RemoteConfigService.remoteConfig.getString('welcome');
-
-  String _selected = '';
-  List<Map> _countryList = [
-    {'id': '1', 'name': "India", 'image': "assets/images/welcome_image"}
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +53,6 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 height: 8 * SizeConfig.heightMultiplier!,
               ),
-              Row(
-                children: [
-                  CountryDropDown(listofItems: _loginController.countryList),
-                  Expanded(child: TextField())
-                ],
-              ),
               Obx(
                 () => CutomizedTextField(
                   color: Colors.transparent,
@@ -72,10 +60,27 @@ class LoginScreen extends StatelessWidget {
                       onChanged: (value) {
                         _loginController.mobile.value = value;
                       },
-                      preFixWidget: CountryDropDown(
-                          listofItems: _loginController.countryList),
+                      isTextFieldActive: true,
+                      preFixWidget: Container(
+                        width: 80,
+                        child: Row(
+                          children: [
+                            CountryDropDown(
+                              hint: _loginController.selectedCountry.value,
+                              listofItems: _loginController.countryList,
+                              onChanged: (value) {
+                                _loginController.selectedCountry.value = value;
+                              },
+                            ),
+                            const Text(
+                              '|',
+                              style: TextStyle(fontSize: 24, color: kGreyColor),
+                            ),
+                          ],
+                        ),
+                      ),
                       textEditingController: _loginController.mobileController,
-                      isNumber: false,
+                      isNumber: true,
                       hint: 'enter_number_hint'.tr),
                 ),
               ),
@@ -85,31 +90,29 @@ class LoginScreen extends StatelessWidget {
               ProceedButton(
                   title: 'next'.tr,
                   onPressed: () async {
-                    //LogInService.getCountries();
-                    _loginController.getCountries();
-                    // await _loginController.logInRegisterUser("DEFAULT", "",
-                    //     _loginController.mobile.value, "+91", "", "", "");
-                    // if (_loginController.LogInRegisterResponse.value.resCode ==
-                    //     0) {
-                    //   Navigator.pushNamed(context, RouteName.enterDetails);
-                    // }
-                    // if (_loginController.LogInRegisterResponse.value.resCode ==
-                    //     1) {
-                    //   Navigator.pushNamed(context, RouteName.enterPasswordPage);
-                    // }
-                    // if (_loginController.LogInRegisterResponse.value.resCode ==
-                    //     2) {
-                    // Navigator.pushNamed(context, RouteName.otpScreen);
-                    // }
-                    // if (_loginController.LogInRegisterResponse.value.resCode ==
-                    //     3) {
-                    //   //google thing
-                    //   Navigator.pushNamed(context, RouteName.otpScreen);
-                    // }
-                    // if (_loginController.LogInRegisterResponse.value.resCode ==
-                    //     4) {
-                    //   Navigator.pushNamed(context, RouteName.homePage);
-                    // }
+                    await _loginController.logInRegisterUser("DEFAULT", "",
+                        _loginController.mobile.value, "+91", "", "", "");
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        0) {
+                      Navigator.pushNamed(context, RouteName.enterDetails);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        1) {
+                      Navigator.pushNamed(context, RouteName.enterPasswordPage);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        2) {
+                      Navigator.pushNamed(context, RouteName.otpScreen);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        3) {
+                      //google thing
+                      Navigator.pushNamed(context, RouteName.otpScreen);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        4) {
+                      Navigator.pushNamed(context, RouteName.homePage);
+                    }
                   }),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
@@ -136,25 +139,29 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       final rawNonce = generateNonce();
-                       final credential =await SignInWithApple.getAppleIDCredential(
-                  scopes: [
-                    AppleIDAuthorizationScopes.email,
-                    AppleIDAuthorizationScopes.fullName,
-                  ],);
-                  final AuthCredential authCredential = GoogleAuthProvider.credential(
-          idToken:credential.identityToken,
-          accessToken:credential.authorizationCode,
-        );
-                   await FirebaseAuth.instance.signInWithCredential(authCredential);
-                  print(credential.state);
-                  Navigator.pushNamed(context, RouteName.homePage);
-                  if(AppleIDAuthorizationScopes.email!=null){
-                    Navigator.pushNamed(context, RouteName.homePage);
-                  }
-                  print(AppleIDAuthorizationScopes.email);
-                  print(AppleIDAuthorizationScopes.fullName);
+                      final credential =
+                          await SignInWithApple.getAppleIDCredential(
+                        scopes: [
+                          AppleIDAuthorizationScopes.email,
+                          AppleIDAuthorizationScopes.fullName,
+                        ],
+                      );
+                      final AuthCredential authCredential =
+                          GoogleAuthProvider.credential(
+                        idToken: credential.identityToken,
+                        accessToken: credential.authorizationCode,
+                      );
+                      await FirebaseAuth.instance
+                          .signInWithCredential(authCredential);
+                      print(credential.state);
+                      Navigator.pushNamed(context, RouteName.homePage);
+                      if (AppleIDAuthorizationScopes.email != null) {
+                        Navigator.pushNamed(context, RouteName.homePage);
+                      }
+                      print(AppleIDAuthorizationScopes.email);
+                      print(AppleIDAuthorizationScopes.fullName);
                     },
                     child: CircleAvatar(
                       radius: 16,
@@ -167,7 +174,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-       await _loginController.googleLogin();
+                      await _loginController.googleLogin();
                       Navigator.pushNamed(context, RouteName.enterMobileGoogle);
                     },
                     child: CircleAvatar(
