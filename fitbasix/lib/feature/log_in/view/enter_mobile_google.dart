@@ -30,10 +30,10 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
               GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: SvgPicture.asset(ImagePath.backIcon)),
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child:SvgPicture.asset(ImagePath.backIcon)),
               SizedBox(
                 height: 24 * SizeConfig.heightMultiplier!,
               ),

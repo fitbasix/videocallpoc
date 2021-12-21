@@ -14,6 +14,8 @@ import '../../../core/api_service/remote_config_service.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -134,7 +136,26 @@ class LoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async{
+                      final rawNonce = generateNonce();
+                       final credential =await SignInWithApple.getAppleIDCredential(
+                  scopes: [
+                    AppleIDAuthorizationScopes.email,
+                    AppleIDAuthorizationScopes.fullName,
+                  ],);
+                  final AuthCredential authCredential = GoogleAuthProvider.credential(
+          idToken:credential.identityToken,
+          accessToken:credential.authorizationCode,
+        );
+                   await FirebaseAuth.instance.signInWithCredential(authCredential);
+                  print(credential.state);
+                  Navigator.pushNamed(context, RouteName.homePage);
+                  if(AppleIDAuthorizationScopes.email!=null){
+                    Navigator.pushNamed(context, RouteName.homePage);
+                  }
+                  print(AppleIDAuthorizationScopes.email);
+                  print(AppleIDAuthorizationScopes.fullName);
+                    },
                     child: CircleAvatar(
                       radius: 16,
                       backgroundColor: kLightGrey,
@@ -146,7 +167,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      await _loginController.googleLogin();
+       await _loginController.googleLogin();
                       Navigator.pushNamed(context, RouteName.enterMobileGoogle);
                     },
                     child: CircleAvatar(
