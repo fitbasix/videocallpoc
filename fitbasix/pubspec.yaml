@@ -46,6 +46,7 @@ dependencies:
   google_fonts: ^2.1.0
   pin_code_fields: ^7.3.0
   shared_preferences: ^2.0.11
+  sign_in_with_apple: ^3.3.0
 
 
 dev_dependencies:
