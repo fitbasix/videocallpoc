@@ -1,137 +1,169 @@
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-
-import 'package:fitbasix/core/analytics/analytics_service.dart';
+import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/image_path.dart';
+import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
+import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
-import 'package:the_apple_sign_in/the_apple_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../core/api_service/remote_config_service.dart';
+import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   final LoginController _loginController = Get.put(LoginController());
-final _firebaseAuth = FirebaseAuth.instance;
+  String title = RemoteConfigService.remoteConfig.getString('welcome');
 
-  Future<User> signInWithApple({List<Scope> scopes = const []}) async {
-    // 1. perform the sign-in request'
-    print("lll");
-    final bool _isAvailableFuture = await TheAppleSignIn.isAvailable();
-print(_isAvailableFuture);
-    final result = await TheAppleSignIn.performRequests(
-        [AppleIdRequest(requestedScopes: scopes)]);
-    // 2. check the result
-    switch (result.status) {
-      case AuthorizationStatus.authorized:
-        final appleIdCredential = result.credential!;
-        final oAuthProvider = OAuthProvider('apple.com');
-        final credential = oAuthProvider.credential(
-          idToken: String.fromCharCodes(appleIdCredential.identityToken!),
-          accessToken:
-              String.fromCharCodes(appleIdCredential.authorizationCode!),
-        );
-        final userCredential =
-            await _firebaseAuth.signInWithCredential(credential);
-        final firebaseUser = userCredential.user!;
-        if (scopes.contains(Scope.fullName)) {
-          final fullName = appleIdCredential.fullName;
-          if (fullName != null &&
-              fullName.givenName != null &&
-              fullName.familyName != null) {
-            final displayName = '${fullName.givenName} ${fullName.familyName}';
-            await firebaseUser.updateDisplayName(displayName);
-          }
-        }
-        return firebaseUser;
-      case AuthorizationStatus.error:
-        throw PlatformException(
-          code: 'ERROR_AUTHORIZATION_DENIED',
-          message: result.error.toString(),
-        );
-
-      case AuthorizationStatus.cancelled:
-        throw PlatformException(
-          code: 'ERROR_ABORTED_BY_USER',
-          message: 'Sign in aborted by user',
-        );
-      default:
-        throw UnimplementedError();
-    }
-  }
   @override
   Widget build(BuildContext context) {
-    //final user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       body: SafeArea(
-        child: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-                onPressed: () async {
-                   await _loginController.appleSignIn();
-                   final user = await signInWithApple(
-        scopes: [Scope.email, Scope.fullName]);
-    print('uid: ${user.uid}');
-                  await AnalyticsService.analytics
-                      .logSignUp(signUpMethod: 'google_signup');
-                },
-                child: const Text('Google Signup')),
-           // Text(user!.displayName! + ' is Logged In')
-          ],
-        )),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, top: 44, right: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'welcomeTo'.tr,
+                style: AppTextStyle.NormalText,
+              ),
+              SizedBox(
+                height: 20 * SizeConfig.heightMultiplier!,
+              ),
+              SvgPicture.asset(
+                ImagePath.fitBasixIconBlack,
+              ),
+              SizedBox(
+                height: 58 * SizeConfig.heightMultiplier!,
+              ),
+              Text(
+                'enter_mobile_text'.tr,
+                style: AppTextStyle.NormalText,
+              ),
+              SizedBox(
+                height: 8 * SizeConfig.heightMultiplier!,
+              ),
+              CutomizedTextField(
+                color: Colors.transparent,
+                child: TextFieldContainer(
+                    onChanged: (value) {
+                      _loginController.mobile.value = value;
+                    },
+                    textEditingController: _loginController.mobileController,
+                    isNumber: false,
+                    hint: 'enter_number_hint'.tr),
+              ),
+              SizedBox(
+                height: 32 * SizeConfig.heightMultiplier!,
+              ),
+              ProceedButton(
+                  title: 'next'.tr,
+                  onPressed: () async {
+                    await _loginController.logInRegisterUser("DEFAULT", "",
+                        _loginController.mobile.value, "+91", "", "", "");
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        0) {
+                      Navigator.pushNamed(context, RouteName.enterDetails);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        1) {
+                      Navigator.pushNamed(context, RouteName.enterPasswordPage);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        2) {
+                      Navigator.pushNamed(context, RouteName.otpScreen);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        3) {
+                      //google thing
+                      Navigator.pushNamed(context, RouteName.otpScreen);
+                    }
+                    if (_loginController.LogInRegisterResponse.value.resCode ==
+                        4) {
+                      Navigator.pushNamed(context, RouteName.homePage);
+                    }
+                  }),
+              const Spacer(),
+              Center(
+                child: Text(
+                  'or'.tr,
+                  style: AppTextStyle.NormalText,
+                ),
+              ),
+              SizedBox(
+                height: 16 * SizeConfig.heightMultiplier!,
+              ),
+              Center(
+                child: Text(
+                  'withLogin'.tr,
+                  style: AppTextStyle.NormalText,
+                ),
+              ),
+              SizedBox(
+                height: 16 * SizeConfig.heightMultiplier!,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () async{
+                      final rawNonce = generateNonce();
+                       final credential =await SignInWithApple.getAppleIDCredential(
+                  scopes: [
+                    AppleIDAuthorizationScopes.email,
+                    AppleIDAuthorizationScopes.fullName,
+                  ],);
+                  final AuthCredential authCredential = GoogleAuthProvider.credential(
+          idToken:credential.identityToken,
+          accessToken:credential.authorizationCode,
+        );
+                   await FirebaseAuth.instance.signInWithCredential(authCredential);
+                  print(credential.state);
+                  Navigator.pushNamed(context, RouteName.homePage);
+                  if(AppleIDAuthorizationScopes.email!=null){
+                    Navigator.pushNamed(context, RouteName.homePage);
+                  }
+                  print(AppleIDAuthorizationScopes.email);
+                  print(AppleIDAuthorizationScopes.fullName);
+                    },
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: kLightGrey,
+                      child: SvgPicture.asset(ImagePath.appleIcon),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 12 * SizeConfig.heightMultiplier!,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                    
+                      await _loginController.googleLogin();
+                      Navigator.pushNamed(context, RouteName.enterMobileGoogle);
+                    },
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: kLightGrey,
+                      child: SvgPicture.asset(ImagePath.googleICon),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 32 * SizeConfig.heightMultiplier!,
+              ),
+            ],
+          ),
+        ),
       ),
     );
-  }
-}
-
-
-
-class AuthServices {
-  final _firebaseAuth = FirebaseAuth.instance;
-
-  Future<User> signInWithApple({List<Scope> scopes = const []}) async {
-    // 1. perform the sign-in request
-    final result = await TheAppleSignIn.performRequests(
-        [AppleIdRequest(requestedScopes: scopes)]);
-    // 2. check the result
-    switch (result.status) {
-      case AuthorizationStatus.authorized:
-        final appleIdCredential = result.credential!;
-        final oAuthProvider = OAuthProvider('apple.com');
-        final credential = oAuthProvider.credential(
-          idToken: String.fromCharCodes(appleIdCredential.identityToken!),
-          accessToken:
-              String.fromCharCodes(appleIdCredential.authorizationCode!),
-        );
-        final userCredential =
-            await _firebaseAuth.signInWithCredential(credential);
-        final firebaseUser = userCredential.user!;
-        if (scopes.contains(Scope.fullName)) {
-          final fullName = appleIdCredential.fullName;
-          if (fullName != null &&
-              fullName.givenName != null &&
-              fullName.familyName != null) {
-            final displayName = '${fullName.givenName} ${fullName.familyName}';
-            await firebaseUser.updateDisplayName(displayName);
-          }
-        }
-        return firebaseUser;
-      case AuthorizationStatus.error:
-        throw PlatformException(
-          code: 'ERROR_AUTHORIZATION_DENIED',
-          message: result.error.toString(),
-        );
-
-      case AuthorizationStatus.cancelled:
-        throw PlatformException(
-          code: 'ERROR_ABORTED_BY_USER',
-          message: 'Sign in aborted by user',
-        );
-      default:
-        throw UnimplementedError();
-    }
   }
 }

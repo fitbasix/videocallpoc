@@ -1,17 +1,19 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:fitbasix/fitbasix_app.dart';
+import 'dart:async';
 import 'package:fitbasix/setup-my-app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await EasyLocalization.ensureInitialized();
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  setupApp(const FitBasixApp());
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var accessToken = prefs.getString('AccessToken');
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    setupApp();
+  }, (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
 }
-
-
-//https://fitbitsix-d1493.firebaseapp.com/__/auth/handler

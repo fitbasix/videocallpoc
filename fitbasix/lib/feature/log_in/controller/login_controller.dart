@@ -1,34 +1,86 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
+import 'package:flutter/material.dart';
+import '../../../core/api_service/remote_config_service.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:the_apple_sign_in/the_apple_sign_in.dart';
+import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
 
 class LoginController extends GetxController {
   final googleSignIn = GoogleSignIn().obs;
   GoogleSignInAccount? _user;
   GoogleSignInAccount get user => _user!;
+  RxString mobile = RxString('');
+  RxString otp = RxString('');
+  RxString userDetail = RxString('');
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController reEnterPasswordController =
+      TextEditingController();
+  final TextEditingController passwordForLoginController =
+      TextEditingController();
+  final TextEditingController resetPasswordController = TextEditingController();
+  final TextEditingController resetConfirmPasswordController =
+      TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  Rx<LogInRegisterModel> LogInRegisterResponse = LogInRegisterModel().obs;
+  RxString name = "".obs;
+  RxString email = "".obs;
+  RxString password = "".obs;
+  RxString confirmPassword = "".obs;
+  RxString mobileNumber = "".obs;
+  RxBool isHidePassword = false.obs;
 
   Future googleLogin() async {
     final googleUser = await googleSignIn.value.signIn();
     if (googleUser == null) return;
     _user = googleUser;
-
+    print("Server Auth Code- " + googleUser.serverAuthCode.toString());
     final googleAuth = await googleUser.authentication;
 
-    // final credential = GoogleAuthProvider.credential(
-    //   accessToken: googleAuth.accessToken,
-    //   idToken: googleAuth.idToken,
-    // );
+    print("Access Token- " + googleAuth.accessToken.toString());
+    print("idToken- " + googleAuth.idToken.toString());
 
-    // await FirebaseAuth.instance.signInWithCredential(credential);
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
-  Future<void> appleSignIn() async{
-    final bool _isAvailableFuture = await TheAppleSignIn.isAvailable();
-    print(_isAvailableFuture);
+
+  Future<void> getOTP() async {
+    userDetail.value = await LogInService.getOTP(mobile.value);
+  }
+
+  // Future<void> verifyOTP() async {
+  //   await LogInService.verifyOTP(otp.value, userDetail.value);
+  // }
+
+  Future<void> logInRegisterUser(
+      String regType,
+      String email,
+      String phnNumber,
+      String countryCode,
+      String accessToken,
+      String serverAuthCode,
+      String idToken) async {
+    LogInRegisterResponse.value = await LogInService.logInRegisterUser(
+        regType,
+        "USER",
+        email,
+        phnNumber,
+        countryCode,
+        accessToken,
+        serverAuthCode,
+        idToken);
   }
 
   @override
   void onInit() {
+    RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
+    //RemoteConfigService.fetchAndActivate();
     super.onInit();
   }
 }
