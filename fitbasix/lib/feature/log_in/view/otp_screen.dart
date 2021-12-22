@@ -107,13 +107,28 @@ class OtpScreen extends StatelessWidget {
             ProceedButton(
                 title: 'verify'.tr,
                 onPressed: () async {
-                  bool status = await LogInService.verifyOTP(
-                      _loginController.otp.value,
+                  print('hello1');
+                  final redScreen = await LogInService.loginAndSignup(
                       _loginController.mobile.value,
-                      "+91");
-                  if (status == true) {
+                      _loginController.otp.value,
+                      _loginController.selectedCountry.value.code!,
+                      "");
+
+                  if (redScreen == 18) {
                     Navigator.pushNamed(context, RouteName.enterDetails);
+                  } else if (redScreen == 16) {
+                    Navigator.pushNamed(context, RouteName.homePage);
                   }
+                  // await LogInService.loginAndSignup(
+                  //     _loginController.mobile.value,
+                  //     _loginController.otp.value);
+                  // bool status = await LogInService.verifyOTP(
+                  //     _loginController.otp.value,
+                  //     _loginController.mobile.value,
+                  //     "+91");
+                  // if (status == true) {
+                  //   Navigator.pushNamed(context, RouteName.enterDetails);
+                  // }
                 }),
             SizedBox(
               height: 32 * SizeConfig.heightMultiplier!,

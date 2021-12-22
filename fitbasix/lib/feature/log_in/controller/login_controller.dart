@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
+import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/api_service/remote_config_service.dart';
@@ -35,18 +36,29 @@ class LoginController extends GetxController {
   RxString confirmPassword = "".obs;
   RxString mobileNumber = "".obs;
   RxBool isHidePassword = false.obs;
-  RxList<Datum> countryList = <Datum>[].obs;
+  RxList<CountryData> countryList = <CountryData>[].obs;
   Rx<Countries> countries = Countries().obs;
-  Rx<Datum> selectedCountry = Rx(Datum());
-
+  Rx<CountryData> selectedCountry = Rx(CountryData(
+      id: "61c2f699b5c8afaf1e15a670",
+      name: "India",
+      code: "+91",
+      flag: "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg",
+      v: 0,
+      createdAt: DateTime.parse("2021-12-22T09:57:45.915Z"),
+      updatedAt: DateTime.parse("2021-12-22T09:57:45.915Z")));
+  RxString idToken = "".obs;
+  RxString accessToken = "".obs;
+  Rx<ThirdPartyModel> thirdPartyModel = Rx(ThirdPartyModel());
   Future googleLogin() async {
     final googleUser = await googleSignIn.value.signIn();
     if (googleUser == null) return;
     _user.value = googleUser;
-    print("Server Auth Code- " + googleUser.serverAuthCode.toString());
+    // print("Server Auth Code- " + googleUser.serverAuthCode.toString());
     final googleAuth = await googleUser.authentication;
 
-    print("Access Token- " + googleAuth.accessToken.toString());
+    print(googleUser.id);
+
+    // print("Access Token- " + googleAuth.accessToken.toString());
     print("idToken- " + googleAuth.idToken.toString());
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -57,6 +69,8 @@ class LoginController extends GetxController {
       idToken: googleAuth.idToken,
     );
     await FirebaseAuth.instance.signInWithCredential(credential);
+    idToken.value = googleAuth.idToken.toString();
+    accessToken.value = googleAuth.accessToken.toString();
   }
 
   Future googleSignout() async {
@@ -64,7 +78,8 @@ class LoginController extends GetxController {
   }
 
   Future<void> getOTP() async {
-    userDetail.value = await LogInService.getOTP(mobile.value);
+    userDetail.value =
+        await LogInService.getOTP(mobile.value, selectedCountry.value.code!);
   }
 
   Future<void> getCountries() async {
@@ -73,11 +88,11 @@ class LoginController extends GetxController {
     //print(countries.value.response!.country![0].countryCode);
 
     if (countries != null) {
-      countryList.value = countries.value.response!.data!;
+      countryList.value = countries.value.data!;
     }
 
-    print(countries.value.response!.data![0].countryCode);
-    print(countryList.value.length);
+    // print(countries.value.response!.data![0].countryCode);
+    // print(countryList.value.length);
 
     // print(countryList.);
   }

@@ -16,6 +16,7 @@ class EnterDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -73,13 +74,16 @@ class EnterDetailsPage extends StatelessWidget {
               ProceedButtonWithArrow(
                 title: 'proceed'.tr,
                 onPressed: () async {
-                  int success = await LogInService.updateDetails(
-                      _loginController.password.value,
-                      _loginController.email.value,
-                      _loginController.name.value);
-                  if (success == 1) {
-                    Navigator.pushNamed(context, RouteName.homePage);
-                  }
+                  await LogInService.registerUser(_loginController.name.value,
+                      _loginController.email.value);
+                  Navigator.pushNamed(context, RouteName.homePage);
+                  // int success = await LogInService.updateDetails(
+                  //     _loginController.password.value,
+                  //     _loginController.email.value,
+                  //     _loginController.name.value);
+                  // if (success == 1) {
+                  //   Navigator.pushNamed(context, RouteName.homePage);
+                  // }
                 },
               ),
               SizedBox(

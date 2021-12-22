@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -27,6 +29,7 @@ class LoginScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 16, top: 44, right: 16),
@@ -70,6 +73,8 @@ class LoginScreen extends StatelessWidget {
                               listofItems: _loginController.countryList,
                               onChanged: (value) {
                                 _loginController.selectedCountry.value = value;
+                                print(_loginController
+                                    .selectedCountry.value.code);
                               },
                             ),
                             const Text(
@@ -90,29 +95,25 @@ class LoginScreen extends StatelessWidget {
               ProceedButton(
                   title: 'next'.tr,
                   onPressed: () async {
-                    await _loginController.logInRegisterUser("DEFAULT", "",
-                        _loginController.mobile.value, "+91", "", "", "");
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        0) {
-                      Navigator.pushNamed(context, RouteName.enterDetails);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        1) {
-                      Navigator.pushNamed(context, RouteName.enterPasswordPage);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        2) {
-                      Navigator.pushNamed(context, RouteName.otpScreen);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        3) {
-                      //google thing
-                      Navigator.pushNamed(context, RouteName.otpScreen);
-                    }
-                    if (_loginController.LogInRegisterResponse.value.resCode ==
-                        4) {
-                      Navigator.pushNamed(context, RouteName.homePage);
-                    }
+                    // print(_loginController.selectedCountry.value.phoneCode!);
+                    await LogInService.getOTP(_loginController.mobile.value,
+                        _loginController.selectedCountry.value.code!);
+
+                    // await _loginController.logInRegisterUser(
+                    //     "DEFAULT",
+                    //     "",
+                    //     _loginController.mobile.value,
+                    //     _loginController.selectedCountry.value.phoneCode!,
+                    //     "",
+                    //     "",
+                    //     "");
+                    Navigator.pushNamed(context, RouteName.otpScreen);
+                    // Navigator.pushNamed(context, RouteName.enterDetails);
+                    // if (_loginController
+                    //         .LogInRegisterResponse.value.response!.redCode ==
+                    //     13) {
+                    //   Navigator.pushNamed(context, RouteName.otpScreen);
+                    // }
                   }),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
@@ -138,44 +139,73 @@ class LoginScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      final rawNonce = generateNonce();
-                      final credential =
-                          await SignInWithApple.getAppleIDCredential(
-                        scopes: [
-                          AppleIDAuthorizationScopes.email,
-                          AppleIDAuthorizationScopes.fullName,
-                        ],
-                      );
-                      final AuthCredential authCredential =
-                          GoogleAuthProvider.credential(
-                        idToken: credential.identityToken,
-                        accessToken: credential.authorizationCode,
-                      );
-                      await FirebaseAuth.instance
-                          .signInWithCredential(authCredential);
-                      print(credential.state);
-                      Navigator.pushNamed(context, RouteName.homePage);
-                      if (AppleIDAuthorizationScopes.email != null) {
-                        Navigator.pushNamed(context, RouteName.homePage);
-                      }
-                      print(AppleIDAuthorizationScopes.email);
-                      print(AppleIDAuthorizationScopes.fullName);
-                    },
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: kLightGrey,
-                      child: SvgPicture.asset(ImagePath.appleIcon),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 12 * SizeConfig.heightMultiplier!,
-                  ),
+                  Platform.isIOS
+                      ? GestureDetector(
+                          onTap: () async {
+                            final credential =
+                                await SignInWithApple.getAppleIDCredential(
+                              scopes: [
+                                AppleIDAuthorizationScopes.email,
+                                AppleIDAuthorizationScopes.fullName,
+                              ],
+                            );
+                        
+                            OAuthProvider oAuthProvider =
+                                new OAuthProvider("apple.com");
+                            final AuthCredential authCredential =
+                                oAuthProvider.credential(
+                              idToken: credential.identityToken,
+                              accessToken: credential.authorizationCode,
+                            );
+                            await FirebaseAuth.instance
+                                .signInWithCredential(authCredential);
+                                _loginController.thirdPartyModel.value =
+                                await LogInService.thirdPartyAppleLogin(
+                                    "Apple",
+                                    credential.email!,
+                                    credential.identityToken!);
+                            if (_loginController
+                                    .thirdPartyModel.value.data!.screenId! ==
+                                15) {
+                              Navigator.pushNamed(
+                                  context, RouteName.enterMobileGoogle);
+                            } else {
+                              Navigator.pushNamed(context, RouteName.homePage);
+                            }
+                          },
+                          child: CircleAvatar(
+                            radius: 16,
+                            backgroundColor: kLightGrey,
+                            child: SvgPicture.asset(ImagePath.appleIcon),
+                          ),
+                        )
+                      : Container(),
+                  Platform.isIOS
+                      ? SizedBox(
+                          width: 12 * SizeConfig.heightMultiplier!,
+                        )
+                      : Container(),
                   GestureDetector(
                     onTap: () async {
                       await _loginController.googleLogin();
-                      Navigator.pushNamed(context, RouteName.enterMobileGoogle);
+                      final user = FirebaseAuth.instance.currentUser;
+
+                      if (user != null) {
+                        user.getIdToken().then((value) {
+                          print(value);
+                          _loginController.idToken.value = value;
+                        });
+                        print(user.getIdTokenResult());
+                        final screenId = await LogInService.thirdPartyLogin(
+                            'Google', _loginController.idToken.value);
+
+                        if (screenId == 15) {
+                          Navigator.pushNamed(
+                              context, RouteName.enterMobileGoogle);
+                        } else if (screenId == 16) {
+                          Navigator.pushNamed(context, RouteName.homePage);
+                        }
+                      }
                     },
                     child: CircleAvatar(
                       radius: 16,
