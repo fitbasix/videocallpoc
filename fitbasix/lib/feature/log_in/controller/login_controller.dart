@@ -41,7 +41,7 @@ class LoginController extends GetxController {
   Rx<CountryData> selectedCountry = Rx(CountryData(
       id: "61c2f699b5c8afaf1e15a670",
       name: "India",
-      code: "91",
+      code: "+91",
       flag: "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg",
       v: 0,
       createdAt: DateTime.parse("2021-12-22T09:57:45.915Z"),

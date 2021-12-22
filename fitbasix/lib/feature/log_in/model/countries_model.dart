@@ -55,7 +55,7 @@ class CountryData {
   factory CountryData.fromJson(Map<String, dynamic> json) => CountryData(
         id: json["_id"],
         name: json["name"],
-        code: json["code"],
+        code: "+"+json["code"],
         flag: json["flag"],
         v: json["__v"],
         createdAt: DateTime.parse(json["createdAt"]),

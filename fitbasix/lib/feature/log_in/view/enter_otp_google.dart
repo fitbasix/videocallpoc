@@ -82,6 +82,7 @@ class EnterOTPGoogle extends StatelessWidget {
                   await LogInService.loginAndSignup(
                       _loginController.mobile.value,
                       _loginController.otp.value,
+                      _loginController.selectedCountry.value.code!,
                       user.email);
                   Navigator.pushNamed(context, RouteName.homePage);
                 }),

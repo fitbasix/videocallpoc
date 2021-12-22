@@ -149,7 +149,17 @@ class LoginScreen extends StatelessWidget {
                                 AppleIDAuthorizationScopes.fullName,
                               ],
                             );
-                            _loginController.thirdPartyModel.value =
+                        
+                            OAuthProvider oAuthProvider =
+                                new OAuthProvider("apple.com");
+                            final AuthCredential authCredential =
+                                oAuthProvider.credential(
+                              idToken: credential.identityToken,
+                              accessToken: credential.authorizationCode,
+                            );
+                            await FirebaseAuth.instance
+                                .signInWithCredential(authCredential);
+                                _loginController.thirdPartyModel.value =
                                 await LogInService.thirdPartyAppleLogin(
                                     "Apple",
                                     credential.email!,
@@ -162,15 +172,6 @@ class LoginScreen extends StatelessWidget {
                             } else {
                               Navigator.pushNamed(context, RouteName.homePage);
                             }
-                            OAuthProvider oAuthProvider =
-                                new OAuthProvider("apple.com");
-                            final AuthCredential authCredential =
-                                oAuthProvider.credential(
-                              idToken: credential.identityToken,
-                              accessToken: credential.authorizationCode,
-                            );
-                            await FirebaseAuth.instance
-                                .signInWithCredential(authCredential);
                           },
                           child: CircleAvatar(
                             radius: 16,

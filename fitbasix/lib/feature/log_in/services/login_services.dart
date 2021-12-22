@@ -91,7 +91,7 @@ class LogInService {
 
   static Future<ThirdPartyModel> thirdPartyAppleLogin(
       String provider, String name, String token) async {
-    String url = "https://585f-103-15-254-8.ngrok.io" +
+    String url = ApiUrl.liveBaseURL +
         '/api/auth/thirdPartyLogin?type=EN';
     var response = await dio!
         .post(url, data: {"provider": provider, "token": token, "name": name});
@@ -122,7 +122,7 @@ class LogInService {
   // }
 
   static Future<int?> loginAndSignup(
-      String mobile, String otp, String? email) async {
+      String mobile, String otp,String countryCode, String? email) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/login';
     print('before');
     try {
@@ -133,7 +133,7 @@ class LogInService {
         },
         body: jsonEncode(<String, String>{
           "phone": mobile,
-          "countryCode": '+91',
+          "countryCode": countryCode,
           "otp": otp,
           "email": email!
         }),

@@ -111,6 +111,7 @@ class OtpScreen extends StatelessWidget {
                   final redScreen = await LogInService.loginAndSignup(
                       _loginController.mobile.value,
                       _loginController.otp.value,
+                      _loginController.selectedCountry.value.code!,
                       "");
 
                   if (redScreen == 18) {
