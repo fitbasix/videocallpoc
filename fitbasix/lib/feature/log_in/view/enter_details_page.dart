@@ -76,6 +76,7 @@ class EnterDetailsPage extends StatelessWidget {
                 onPressed: () async {
                   await LogInService.registerUser(_loginController.name.value,
                       _loginController.email.value);
+                  Navigator.pushNamed(context, RouteName.homePage);
                   // int success = await LogInService.updateDetails(
                   //     _loginController.password.value,
                   //     _loginController.email.value,

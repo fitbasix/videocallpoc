@@ -38,7 +38,14 @@ class LoginController extends GetxController {
   RxBool isHidePassword = false.obs;
   RxList<CountryData> countryList = <CountryData>[].obs;
   Rx<Countries> countries = Countries().obs;
-  Rx<CountryData> selectedCountry = Rx(CountryData());
+  Rx<CountryData> selectedCountry = Rx(CountryData(
+      id: "61c2f699b5c8afaf1e15a670",
+      name: "India",
+      code: "91",
+      flag: "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg",
+      v: 0,
+      createdAt: DateTime.parse("2021-12-22T09:57:45.915Z"),
+      updatedAt: DateTime.parse("2021-12-22T09:57:45.915Z")));
   RxString idToken = "".obs;
   RxString accessToken = "".obs;
   Rx<ThirdPartyModel> thirdPartyModel = Rx(ThirdPartyModel());
@@ -71,7 +78,8 @@ class LoginController extends GetxController {
   }
 
   Future<void> getOTP() async {
-    userDetail.value = await LogInService.getOTP(mobile.value);
+    userDetail.value =
+        await LogInService.getOTP(mobile.value, selectedCountry.value.code!);
   }
 
   Future<void> getCountries() async {
@@ -80,11 +88,11 @@ class LoginController extends GetxController {
     //print(countries.value.response!.country![0].countryCode);
 
     if (countries != null) {
-      countryList.value = countries.value.response!.data!;
+      countryList.value = countries.value.data!;
     }
 
-    print(countries.value.response!.data![0].countryCode);
-    print(countryList.value.length);
+    // print(countries.value.response!.data![0].countryCode);
+    // print(countryList.value.length);
 
     // print(countryList.);
   }

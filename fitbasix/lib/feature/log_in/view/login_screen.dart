@@ -73,6 +73,8 @@ class LoginScreen extends StatelessWidget {
                               listofItems: _loginController.countryList,
                               onChanged: (value) {
                                 _loginController.selectedCountry.value = value;
+                                print(_loginController
+                                    .selectedCountry.value.code);
                               },
                             ),
                             const Text(
@@ -94,7 +96,9 @@ class LoginScreen extends StatelessWidget {
                   title: 'next'.tr,
                   onPressed: () async {
                     // print(_loginController.selectedCountry.value.phoneCode!);
-                    await LogInService.getOTP(_loginController.mobile.value);
+                    await LogInService.getOTP(_loginController.mobile.value,
+                        _loginController.selectedCountry.value.code!);
+
                     // await _loginController.logInRegisterUser(
                     //     "DEFAULT",
                     //     "",
@@ -191,18 +195,15 @@ class LoginScreen extends StatelessWidget {
                           _loginController.idToken.value = value;
                         });
                         print(user.getIdTokenResult());
-                        await LogInService.thirdPartyLogin(
+                        final screenId = await LogInService.thirdPartyLogin(
                             'Google', _loginController.idToken.value);
-                        // await _loginController.logInRegisterUser(
-                        //     "GOOGLE",
-                        //     user.email!,
-                        //     _loginController.mobile.value,
-                        //     "",
-                        //     _loginController.accessToken.value,
-                        //     "",
-                        //     _loginController.idToken.value);
-                        await Navigator.pushNamed(
-                            context, RouteName.enterMobileGoogle);
+
+                        if (screenId == 15) {
+                          Navigator.pushNamed(
+                              context, RouteName.enterMobileGoogle);
+                        } else if (screenId == 16) {
+                          Navigator.pushNamed(context, RouteName.homePage);
+                        }
                       }
                     },
                     child: CircleAvatar(
