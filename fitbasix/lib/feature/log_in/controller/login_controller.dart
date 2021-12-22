@@ -45,10 +45,12 @@ class LoginController extends GetxController {
     final googleUser = await googleSignIn.value.signIn();
     if (googleUser == null) return;
     _user.value = googleUser;
-    print("Server Auth Code- " + googleUser.serverAuthCode.toString());
+    // print("Server Auth Code- " + googleUser.serverAuthCode.toString());
     final googleAuth = await googleUser.authentication;
 
-    print("Access Token- " + googleAuth.accessToken.toString());
+    print(googleUser.id);
+
+    // print("Access Token- " + googleAuth.accessToken.toString());
     print("idToken- " + googleAuth.idToken.toString());
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -65,7 +65,7 @@ class OtpScreen extends StatelessWidget {
             ),
             PinCodeTextField(
               appContext: context,
-              length: 6,
+              length: 4,
               onChanged: (value) {
                 _loginController.otp.value = value;
               },
@@ -107,13 +107,15 @@ class OtpScreen extends StatelessWidget {
             ProceedButton(
                 title: 'verify'.tr,
                 onPressed: () async {
-                  bool status = await LogInService.verifyOTP(
-                      _loginController.otp.value,
-                      _loginController.mobile.value,
-                      "+91");
-                  if (status == true) {
-                    Navigator.pushNamed(context, RouteName.enterDetails);
-                  }
+                  LogInService.loginAndSignup(_loginController.mobile.value,
+                      _loginController.otp.value);
+                  // bool status = await LogInService.verifyOTP(
+                  //     _loginController.otp.value,
+                  //     _loginController.mobile.value,
+                  //     "+91");
+                  // if (status == true) {
+                  //   Navigator.pushNamed(context, RouteName.enterDetails);
+                  // }
                 }),
             SizedBox(
               height: 32 * SizeConfig.heightMultiplier!,

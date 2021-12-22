@@ -42,16 +42,17 @@ class LogInService {
       "idToken": idToken
     });
     log(response.toString());
+    print(response.toString());
     return logInRegisterModelFromJson(response.toString());
   }
 
   static Future<String> getOTP(String mobile) async {
-    var response = await dio!.post(
-        "http://0f60-2405-201-3-4179-30b5-7690-bd1e-84a8.ngrok.io/api/auth/otp-get",
-        data: {"phoneNumber": mobile});
+    String url = ApiUrl.liveBaseURL + '/api/auth/sendOtp?leng=EN';
+    var response =
+        await dio!.post(url, data: {"phone": mobile, "countryCode": '+91'});
     print(response);
 
-    return response.data['otp']['Details'];
+    return response.data['type'];
   }
 
   static Future<int> updateDetails(
@@ -84,5 +85,31 @@ class LogInService {
     print(response);
 
     return countriesFromJson(response.toString());
+  }
+
+  static Future thirdPartyLogin(String provider, String token) async {
+    String url = ApiUrl.liveBaseURL + '/api/auth/thirdPartyLogin?type=EN';
+    var response = await dio!.post(url, data: {
+      "provider": provider,
+      "token": token,
+    });
+    print(response);
+  }
+
+  static Future loginAndSignup(String mobile, String otp) async {
+    String url = ApiUrl.liveBaseURL + '/api/auth/login';
+
+    var response = await dio!
+        .put(url, data: {"phone": mobile, "countryCode": '+91', "otp": otp});
+
+    print(response);
+  }
+
+  static Future registerUser(String name, String email) async {
+    String url = ApiUrl.liveBaseURL + '/api/auth/create';
+
+    var response = await dio!.put(url, data: {"name": name, "email": email});
+
+    print(response);
   }
 }
