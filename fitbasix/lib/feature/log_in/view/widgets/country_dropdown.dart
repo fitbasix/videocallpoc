@@ -17,8 +17,17 @@ Widget CountryDropDown(
           elevation: 0,
           hint: hint!.flag == null
               ? SvgPicture.network(
-                  'https://purecatamphetamine.github.io/country-flag-icons/3x2/DZ.svg')
-              : SvgPicture.network(hint.flag!),
+                  'https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg',
+                  height: 20,
+                  width: 30,
+                  fit: BoxFit.cover,
+                )
+              : SvgPicture.network(
+                  hint.flag!,
+                  height: 20,
+                  width: 30,
+                  fit: BoxFit.cover,
+                ),
           underline: Container(),
           items: listofItems.map((CountryData value) {
             return DropdownMenuItem<CountryData>(

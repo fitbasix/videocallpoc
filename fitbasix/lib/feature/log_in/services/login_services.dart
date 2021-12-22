@@ -6,6 +6,7 @@ import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
+import 'package:http/http.dart' as http;
 
 class LogInService {
   static var dio = DioUtil().getInstance();
@@ -46,10 +47,10 @@ class LogInService {
     return logInRegisterModelFromJson(response.toString());
   }
 
-  static Future<String> getOTP(String mobile) async {
+  static Future<String> getOTP(String mobile, String countryCode) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/sendOtp?leng=EN';
-    var response =
-        await dio!.post(url, data: {"phone": mobile, "countryCode": '+91'});
+    var response = await dio!
+        .post(url, data: {"phone": mobile, "countryCode": countryCode});
     print(response);
 
     return response.data['type'];
@@ -80,36 +81,78 @@ class LogInService {
 
   static Future<Countries> getCountries() async {
     dio!.options.headers["language"] = "0";
-    var response = await dio!.get(ApiUrl.getCountries);
+    var response = await dio!.get('http://34.131.64.64:3400/api/country');
 
     print(response);
 
     return countriesFromJson(response.toString());
   }
 
-  static Future thirdPartyLogin(String provider, String token) async {
+  static Future<int> thirdPartyLogin(String provider, String token) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/thirdPartyLogin?type=EN';
     var response = await dio!.post(url, data: {
       "provider": provider,
       "token": token,
     });
-    print(response);
+    print(response.data['data']['screenId']);
+
+    return response.data['data']['screenId'];
   }
 
-  static Future loginAndSignup(String mobile, String otp) async {
+  // static Future loginAndSignup(String mobile, String otp) async {
+  //   String url = ApiUrl.liveBaseURL + '/api/auth/login?leng=EN';
+
+  //   var response = await dio!.post(
+  //       'https://61d7-103-15-254-8.ngrok.io/api/auth/login',
+  //       data: {"phone": mobile, "countryCode": '+91', "otp": otp});
+
+  //   print(response);
+  // }
+
+  static Future<int?> loginAndSignup(
+      String mobile, String otp, String? email) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/login';
+    print('before');
+    try {
+      var putResponse = await http.put(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "phone": mobile,
+          "countryCode": '+91',
+          "otp": otp,
+          "email": email!
+        }),
+      );
 
-    var response = await dio!
-        .put(url, data: {"phone": mobile, "countryCode": '+91', "otp": otp});
-
-    print(response);
+      print('after');
+      print(putResponse.body);
+      final responseData = jsonDecode(putResponse.body);
+      return responseData['screenId'];
+    } on Exception catch (e) {
+      // TODO
+      return null;
+    }
   }
 
   static Future registerUser(String name, String email) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/create';
 
-    var response = await dio!.put(url, data: {"name": name, "email": email});
+    var putResponse = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMzMGJhNzhlZGViYmFmNzdjNDJkMjAiLCJyb2xlIjoidXNlciIsImlhdCI6MTY0MDE3MjQ1NSwiZXhwIjoxNjQwMjU4ODU1fQ.hyJGeviHEE9GbmwZ5tAVYoAZVMnadgXRckoPbJh8UrE'
+      },
+      body: jsonEncode(<String, String>{
+        "name": name,
+        "email": email,
+      }),
+    );
 
-    print(response);
+    print(putResponse.body);
   }
 }

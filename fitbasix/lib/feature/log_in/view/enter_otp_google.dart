@@ -7,6 +7,7 @@ import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -31,7 +32,11 @@ class EnterOTPGoogle extends StatelessWidget {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
-            SvgPicture.asset(ImagePath.backIcon),
+            GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: SvgPicture.asset(ImagePath.backIcon)),
             SizedBox(
               height: 24 * SizeConfig.heightMultiplier!,
             ),
@@ -53,7 +58,9 @@ class EnterOTPGoogle extends StatelessWidget {
             PinCodeTextField(
               appContext: context,
               length: 6,
-              onChanged: (value) {},
+              onChanged: (value) {
+                _loginController.otp.value = value;
+              },
               enableActiveFill: true,
               keyboardType: TextInputType.number,
               pinTheme: PinTheme(
@@ -71,7 +78,11 @@ class EnterOTPGoogle extends StatelessWidget {
             const Spacer(),
             ProceedButtonWithArrow(
                 title: 'proceed'.tr,
-                onPressed: () {
+                onPressed: () async {
+                  await LogInService.loginAndSignup(
+                      _loginController.mobile.value,
+                      _loginController.otp.value,
+                      user.email);
                   Navigator.pushNamed(context, RouteName.homePage);
                 }),
             SizedBox(

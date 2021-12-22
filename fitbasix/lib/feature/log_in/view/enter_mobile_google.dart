@@ -7,6 +7,7 @@ import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -87,7 +88,9 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
               Spacer(),
               ProceedButtonWithArrow(
                   title: 'proceed'.tr,
-                  onPressed: () {
+                  onPressed: () async {
+                    await LogInService.getOTP(_loginController.mobile.value,
+                        _loginController.selectedCountry.value.code!);
                     Navigator.pushNamed(context, RouteName.enterOTPGoogle);
                   }),
               SizedBox(
