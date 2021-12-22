@@ -6,6 +6,7 @@ import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
+import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
 import 'package:http/http.dart' as http;
 
 class LogInService {
@@ -88,6 +89,17 @@ class LogInService {
     return countriesFromJson(response.toString());
   }
 
+  static Future<ThirdPartyModel> thirdPartyAppleLogin(
+      String provider, String name, String token) async {
+    String url = "https://585f-103-15-254-8.ngrok.io" +
+        '/api/auth/thirdPartyLogin?type=EN';
+    var response = await dio!
+        .post(url, data: {"provider": provider, "token": token, "name": name});
+    print(response);
+    return thirdPartyModelFromJson(response.toString());
+  }
+
+  
   static Future<int> thirdPartyLogin(String provider, String token) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/thirdPartyLogin?type=EN';
     var response = await dio!.post(url, data: {

@@ -142,7 +142,6 @@ class LoginScreen extends StatelessWidget {
                   Platform.isIOS
                       ? GestureDetector(
                           onTap: () async {
-                            final rawNonce = generateNonce();
                             final credential =
                                 await SignInWithApple.getAppleIDCredential(
                               scopes: [
@@ -150,27 +149,28 @@ class LoginScreen extends StatelessWidget {
                                 AppleIDAuthorizationScopes.fullName,
                               ],
                             );
+                            _loginController.thirdPartyModel.value =
+                                await LogInService.thirdPartyAppleLogin(
+                                    "Apple",
+                                    credential.email!,
+                                    credential.identityToken!);
+                            if (_loginController
+                                    .thirdPartyModel.value.data!.screenId! ==
+                                15) {
+                              Navigator.pushNamed(
+                                  context, RouteName.enterMobileGoogle);
+                            } else {
+                              Navigator.pushNamed(context, RouteName.homePage);
+                            }
+                            OAuthProvider oAuthProvider =
+                                new OAuthProvider("apple.com");
                             final AuthCredential authCredential =
-                                GoogleAuthProvider.credential(
+                                oAuthProvider.credential(
                               idToken: credential.identityToken,
                               accessToken: credential.authorizationCode,
                             );
                             await FirebaseAuth.instance
                                 .signInWithCredential(authCredential);
-                            print(credential.state);
-                            // final user = FirebaseAuth.instance.currentUser;
-                            // if (user != null) {
-                            //   await _loginController.logInRegisterUser(
-                            //       "APPLE",
-                            //       user.email!,
-                            //       _loginController.mobile.value,
-                            //       "",
-                            //       _loginController.accessToken.value,
-                            //       "",
-                            //       _loginController.idToken.value);
-                            //   Navigator.pushNamed(
-                            //       context, RouteName.enterMobileGoogle);
-                            // }
                           },
                           child: CircleAvatar(
                             radius: 16,
@@ -179,9 +179,11 @@ class LoginScreen extends StatelessWidget {
                           ),
                         )
                       : Container(),
-                  SizedBox(
-                    width: 12 * SizeConfig.heightMultiplier!,
-                  ),
+                  Platform.isIOS
+                      ? SizedBox(
+                          width: 12 * SizeConfig.heightMultiplier!,
+                        )
+                      : Container(),
                   GestureDetector(
                     onTap: () async {
                       await _loginController.googleLogin();

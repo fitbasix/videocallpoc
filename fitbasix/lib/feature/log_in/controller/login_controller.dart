@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
+import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/api_service/remote_config_service.dart';
@@ -47,7 +48,7 @@ class LoginController extends GetxController {
       updatedAt: DateTime.parse("2021-12-22T09:57:45.915Z")));
   RxString idToken = "".obs;
   RxString accessToken = "".obs;
-
+  Rx<ThirdPartyModel> thirdPartyModel = Rx(ThirdPartyModel());
   Future googleLogin() async {
     final googleUser = await googleSignIn.value.signIn();
     if (googleUser == null) return;
