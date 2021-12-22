@@ -93,21 +93,23 @@ class LoginScreen extends StatelessWidget {
               ProceedButton(
                   title: 'next'.tr,
                   onPressed: () async {
-                    print(_loginController.selectedCountry.value.phoneCode!);
-                    await _loginController.logInRegisterUser(
-                        "DEFAULT",
-                        "",
-                        _loginController.mobile.value,
-                        _loginController.selectedCountry.value.phoneCode!,
-                        "",
-                        "",
-                        "");
-                    Navigator.pushNamed(context, RouteName.enterDetails);
-                    if (_loginController
-                            .LogInRegisterResponse.value.response!.redCode ==
-                        13) {
-                      Navigator.pushNamed(context, RouteName.otpScreen);
-                    }
+                    // print(_loginController.selectedCountry.value.phoneCode!);
+                    await LogInService.getOTP(_loginController.mobile.value);
+                    // await _loginController.logInRegisterUser(
+                    //     "DEFAULT",
+                    //     "",
+                    //     _loginController.mobile.value,
+                    //     _loginController.selectedCountry.value.phoneCode!,
+                    //     "",
+                    //     "",
+                    //     "");
+                    Navigator.pushNamed(context, RouteName.otpScreen);
+                    // Navigator.pushNamed(context, RouteName.enterDetails);
+                    // if (_loginController
+                    //         .LogInRegisterResponse.value.response!.redCode ==
+                    //     13) {
+                    //   Navigator.pushNamed(context, RouteName.otpScreen);
+                    // }
                   }),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
@@ -180,16 +182,24 @@ class LoginScreen extends StatelessWidget {
                     onTap: () async {
                       await _loginController.googleLogin();
                       final user = FirebaseAuth.instance.currentUser;
+
                       if (user != null) {
-                        await _loginController.logInRegisterUser(
-                            "GOOGLE",
-                            user.email!,
-                            _loginController.mobile.value,
-                            "",
-                            _loginController.accessToken.value,
-                            "",
-                            _loginController.idToken.value);
-                        Navigator.pushNamed(
+                        user.getIdToken().then((value) {
+                          print(value);
+                          _loginController.idToken.value = value;
+                        });
+                        print(user.getIdTokenResult());
+                        await LogInService.thirdPartyLogin(
+                            'Google', _loginController.idToken.value);
+                        // await _loginController.logInRegisterUser(
+                        //     "GOOGLE",
+                        //     user.email!,
+                        //     _loginController.mobile.value,
+                        //     "",
+                        //     _loginController.accessToken.value,
+                        //     "",
+                        //     _loginController.idToken.value);
+                        await Navigator.pushNamed(
                             context, RouteName.enterMobileGoogle);
                       }
                     },
