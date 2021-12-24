@@ -4,12 +4,15 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
 import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class LogInService {
+  static LoginController loginController = Get.find();
   static var dio = DioUtil().getInstance();
   static Future<void> logInRequest(String logInType, String email) async {
     print(logInType);
@@ -91,15 +94,13 @@ class LogInService {
 
   static Future<ThirdPartyModel> thirdPartyAppleLogin(
       String provider, String name, String token) async {
-    String url = ApiUrl.liveBaseURL +
-        '/api/auth/thirdPartyLogin?type=EN';
+    String url = ApiUrl.liveBaseURL + '/api/auth/thirdPartyLogin?type=EN';
     var response = await dio!
         .post(url, data: {"provider": provider, "token": token, "name": name});
     print(response);
     return thirdPartyModelFromJson(response.toString());
   }
 
-  
   static Future<int> thirdPartyLogin(String provider, String token) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/thirdPartyLogin?type=EN';
     var response = await dio!.post(url, data: {
@@ -122,7 +123,7 @@ class LogInService {
   // }
 
   static Future<int?> loginAndSignup(
-      String mobile, String otp,String countryCode, String? email) async {
+      String mobile, String otp, String countryCode, String? email) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/login';
     print('before');
     try {
@@ -142,6 +143,15 @@ class LogInService {
       print('after');
       print(putResponse.body);
       final responseData = jsonDecode(putResponse.body);
+      if (responseData['type'] == 'incomplete registration-EN ') {
+        print(responseData['token']);
+
+        loginController.token.value = responseData['token'];
+        print(loginController.token.value);
+      }
+      //
+
+      // print(responseData['token']);
       return responseData['screenId'];
     } on Exception catch (e) {
       // TODO
@@ -149,22 +159,40 @@ class LogInService {
     }
   }
 
-  static Future registerUser(String name, String email) async {
+  static Future<int?> registerUser(String name, String email) async {
     String url = ApiUrl.liveBaseURL + '/api/auth/create';
 
-    var putResponse = await http.put(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWMzMGJhNzhlZGViYmFmNzdjNDJkMjAiLCJyb2xlIjoidXNlciIsImlhdCI6MTY0MDE3MjQ1NSwiZXhwIjoxNjQwMjU4ODU1fQ.hyJGeviHEE9GbmwZ5tAVYoAZVMnadgXRckoPbJh8UrE'
-      },
-      body: jsonEncode(<String, String>{
-        "name": name,
-        "email": email,
-      }),
-    );
-
-    print(putResponse.body);
+    print(name);
+    print(email);
+    if (loginController.token.value == '') {
+      var putResponse = await http.put(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          // 'Authorization': LoginController().token.value
+        },
+        body: jsonEncode(<String, String>{
+          "name": name,
+          "email": email,
+        }),
+      );
+      print(putResponse.body);
+    } else {
+      var putResponse = await http.put(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': loginController.token.value
+        },
+        body: jsonEncode(<String, String>{
+          "name": name,
+          "email": email,
+        }),
+      );
+      final responseData = jsonDecode(putResponse.body);
+      print(putResponse.body);
+      print(responseData['data']['screenId']);
+      return responseData['data']['screenId'];
+    }
   }
 }

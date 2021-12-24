@@ -4,6 +4,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
@@ -64,28 +65,35 @@ class EnterOTPGoogle extends StatelessWidget {
               enableActiveFill: true,
               keyboardType: TextInputType.number,
               pinTheme: PinTheme(
-                // shape: PinCodeFieldShape.box,
+                shape: PinCodeFieldShape.box,
+                borderRadius: BorderRadius.circular(8),
+                fieldHeight: 56 * SizeConfig.widthMultiplier!,
+                fieldWidth: 56 * SizeConfig.widthMultiplier!,
+                selectedColor: Colors.transparent,
                 activeFillColor: kLightGrey,
                 inactiveColor: Colors.transparent,
                 activeColor: Colors.transparent,
-                selectedColor: Colors.transparent,
                 inactiveFillColor: kLightGrey,
                 selectedFillColor: kLightGrey,
-                borderWidth: 0,
-                borderRadius: BorderRadius.circular(8),
               ),
             ),
             const Spacer(),
-            ProceedButtonWithArrow(
-                title: 'proceed'.tr,
-                onPressed: () async {
-                  await LogInService.loginAndSignup(
-                      _loginController.mobile.value,
-                      _loginController.otp.value,
-                      _loginController.selectedCountry.value.code!,
-                      user.email);
-                  Navigator.pushNamed(context, RouteName.homePage);
-                }),
+            Obx(() => _loginController.isLoading.value
+                ? Center(
+                    child: CustomizedCircularProgress(),
+                  )
+                : ProceedButtonWithArrow(
+                    title: 'proceed'.tr,
+                    onPressed: () async {
+                      _loginController.isLoading.value = true;
+                      await LogInService.loginAndSignup(
+                          _loginController.mobile.value,
+                          _loginController.otp.value,
+                          _loginController.selectedCountry.value.code!,
+                          user.email);
+                      _loginController.isLoading.value = false;
+                      Navigator.pushNamed(context, RouteName.homePage);
+                    })),
             SizedBox(
               height: 32 * SizeConfig.heightMultiplier!,
             ),

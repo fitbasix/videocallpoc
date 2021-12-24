@@ -36,6 +36,7 @@ class LoginController extends GetxController {
   RxString confirmPassword = "".obs;
   RxString mobileNumber = "".obs;
   RxBool isHidePassword = false.obs;
+  RxBool isLoading = false.obs;
   RxList<CountryData> countryList = <CountryData>[].obs;
   Rx<Countries> countries = Countries().obs;
   Rx<CountryData> selectedCountry = Rx(CountryData(
@@ -48,6 +49,7 @@ class LoginController extends GetxController {
       updatedAt: DateTime.parse("2021-12-22T09:57:45.915Z")));
   RxString idToken = "".obs;
   RxString accessToken = "".obs;
+  RxString token = RxString('');
   Rx<ThirdPartyModel> thirdPartyModel = Rx(ThirdPartyModel());
   Future googleLogin() async {
     final googleUser = await googleSignIn.value.signIn();
@@ -78,8 +80,9 @@ class LoginController extends GetxController {
   }
 
   Future<void> getOTP() async {
-    userDetail.value =
-        await LogInService.getOTP(mobile.value, selectedCountry.value.code!);
+    isLoading.value = true;
+    await LogInService.getOTP(mobile.value, selectedCountry.value.code!);
+    // isLoading.value = false;
   }
 
   Future<void> getCountries() async {

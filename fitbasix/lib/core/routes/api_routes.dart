@@ -1,5 +1,5 @@
 class ApiUrl {
-  static String liveBaseURL = 'https://7363-103-15-254-8.ngrok.io';
+  static String liveBaseURL = 'http://34.131.64.64:3500';
   static String getOTP = liveBaseURL + '/api/auth/otp-get';
   static String verifyOTP = liveBaseURL + '/api/auth/otp-verify';
   static String loginRegisterRequest =

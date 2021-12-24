@@ -4,6 +4,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
@@ -86,13 +87,18 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              ProceedButtonWithArrow(
-                  title: 'proceed'.tr,
-                  onPressed: () async {
-                    await LogInService.getOTP(_loginController.mobile.value,
-                        _loginController.selectedCountry.value.code!);
-                    Navigator.pushNamed(context, RouteName.enterOTPGoogle);
-                  }),
+              Obx(() => _loginController.isLoading.value
+                  ? Center(
+                      child: CustomizedCircularProgress(),
+                    )
+                  : ProceedButtonWithArrow(
+                      title: 'proceed'.tr,
+                      onPressed: () async {
+                        await LogInService.getOTP(_loginController.mobile.value,
+                            _loginController.selectedCountry.value.code!);
+                        _loginController.isLoading.value == true;
+                        Navigator.pushNamed(context, RouteName.enterOTPGoogle);
+                      })),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
               ),
