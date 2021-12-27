@@ -1,10 +1,8 @@
 class ApiUrl {
-  static String liveBaseURL = 'https://7363-103-15-254-8.ngrok.io';
-  static String getOTP = liveBaseURL + '/api/auth/otp-get';
-  static String verifyOTP = liveBaseURL + '/api/auth/otp-verify';
-  static String loginRegisterRequest =
-      liveBaseURL + '/api/auth/loginAndRegister';
-  static String registerRequest = liveBaseURL + '/api/auth/register';
-  static String updateDetails = liveBaseURL + '/api/auth/update-details';
-  static String getCountries = liveBaseURL + '/api/auth/get-countries';
+  static String liveBaseURL = 'https://hidden-garden-94551.herokuapp.com';
+  static String getOTP = liveBaseURL + '/api/auth/sendOtp';
+  static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
+  static String loginAndSignup = liveBaseURL + '/api/auth/login';
+  static String registerUser = liveBaseURL + '/api/auth/create';
+  static String getCountries = liveBaseURL + '/api/country/get';
 }

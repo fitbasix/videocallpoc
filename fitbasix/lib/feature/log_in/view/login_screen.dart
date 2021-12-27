@@ -1,22 +1,24 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../../core/api_service/remote_config_service.dart';
-import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -92,29 +94,25 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
               ),
-              ProceedButton(
-                  title: 'next'.tr,
-                  onPressed: () async {
-                    // print(_loginController.selectedCountry.value.phoneCode!);
-                    await LogInService.getOTP(_loginController.mobile.value,
-                        _loginController.selectedCountry.value.code!);
-
-                    // await _loginController.logInRegisterUser(
-                    //     "DEFAULT",
-                    //     "",
-                    //     _loginController.mobile.value,
-                    //     _loginController.selectedCountry.value.phoneCode!,
-                    //     "",
-                    //     "",
-                    //     "");
-                    Navigator.pushNamed(context, RouteName.otpScreen);
-                    // Navigator.pushNamed(context, RouteName.enterDetails);
-                    // if (_loginController
-                    //         .LogInRegisterResponse.value.response!.redCode ==
-                    //     13) {
-                    //   Navigator.pushNamed(context, RouteName.otpScreen);
-                    // }
-                  }),
+              Obx(() => _loginController.isLoading.value
+                  ? Center(
+                      child: CustomizedCircularProgress(),
+                    )
+                  : ProceedButton(
+                      title: 'next'.tr,
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+                        if (_loginController.mobile.value.length == 10) {
+                          _loginController.isLoading.value = true;
+                          await _loginController.getOTP();
+                          _loginController.isLoading.value = false;
+                          Navigator.pushNamed(context, RouteName.otpScreen);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Please enter valid mobile number')));
+                        }
+                      })),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
               ),
@@ -149,7 +147,7 @@ class LoginScreen extends StatelessWidget {
                                 AppleIDAuthorizationScopes.fullName,
                               ],
                             );
-                        
+
                             OAuthProvider oAuthProvider =
                                 new OAuthProvider("apple.com");
                             final AuthCredential authCredential =
@@ -159,7 +157,7 @@ class LoginScreen extends StatelessWidget {
                             );
                             await FirebaseAuth.instance
                                 .signInWithCredential(authCredential);
-                                _loginController.thirdPartyModel.value =
+                            _loginController.thirdPartyModel.value =
                                 await LogInService.thirdPartyAppleLogin(
                                     "Apple",
                                     credential.email!,
@@ -192,10 +190,9 @@ class LoginScreen extends StatelessWidget {
 
                       if (user != null) {
                         user.getIdToken().then((value) {
-                          print(value);
                           _loginController.idToken.value = value;
                         });
-                        print(user.getIdTokenResult());
+
                         final screenId = await LogInService.thirdPartyLogin(
                             'Google', _loginController.idToken.value);
 

@@ -3,6 +3,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
@@ -72,15 +73,17 @@ class OtpScreen extends StatelessWidget {
               enableActiveFill: true,
               keyboardType: TextInputType.number,
               pinTheme: PinTheme(
-                  // shape: PinCodeFieldShape.box,
-                  selectedColor: Colors.transparent,
-                  activeFillColor: kLightGrey,
-                  inactiveColor: Colors.transparent,
-                  activeColor: Colors.transparent,
-                  inactiveFillColor: kLightGrey,
-                  selectedFillColor: kLightGrey,
-                  borderWidth: 0,
-                  borderRadius: BorderRadius.circular(8)),
+                shape: PinCodeFieldShape.box,
+                borderRadius: BorderRadius.circular(8),
+                fieldHeight: 56 * SizeConfig.widthMultiplier!,
+                fieldWidth: 56 * SizeConfig.widthMultiplier!,
+                selectedColor: Colors.transparent,
+                activeFillColor: kLightGrey,
+                inactiveColor: Colors.transparent,
+                activeColor: Colors.transparent,
+                inactiveFillColor: kLightGrey,
+                selectedFillColor: kLightGrey,
+              ),
             ),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
@@ -93,7 +96,9 @@ class OtpScreen extends StatelessWidget {
                       fontSize: 14 * SizeConfig.textMultiplier!),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    await _loginController.getOTP();
+                  },
                   child: Text(
                     'resend'.tr,
                     style: AppTextStyle.NormalText.copyWith(
@@ -104,32 +109,33 @@ class OtpScreen extends StatelessWidget {
               ],
             ),
             Spacer(),
-            ProceedButton(
-                title: 'verify'.tr,
-                onPressed: () async {
-                  print('hello1');
-                  final redScreen = await LogInService.loginAndSignup(
-                      _loginController.mobile.value,
-                      _loginController.otp.value,
-                      _loginController.selectedCountry.value.code!,
-                      "");
+            Obx(() => _loginController.isLoading.value
+                ? Center(child: CustomizedCircularProgress())
+                : ProceedButton(
+                    title: 'verify'.tr,
+                    onPressed: () async {
+                      _loginController.isLoading.value = true;
+                      final redScreen = await LogInService.loginAndSignup(
+                          _loginController.mobile.value,
+                          _loginController.otp.value,
+                          _loginController.selectedCountry.value.code!,
+                          "");
 
-                  if (redScreen == 18) {
-                    Navigator.pushNamed(context, RouteName.enterDetails);
-                  } else if (redScreen == 16) {
-                    Navigator.pushNamed(context, RouteName.homePage);
-                  }
-                  // await LogInService.loginAndSignup(
-                  //     _loginController.mobile.value,
-                  //     _loginController.otp.value);
-                  // bool status = await LogInService.verifyOTP(
-                  //     _loginController.otp.value,
-                  //     _loginController.mobile.value,
-                  //     "+91");
-                  // if (status == true) {
-                  //   Navigator.pushNamed(context, RouteName.enterDetails);
-                  // }
-                }),
+                      if (redScreen == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text(_loginController.otpErrorMessage.value)));
+                        _loginController.isLoading.value = false;
+                      }
+
+                      if (redScreen == 18) {
+                        _loginController.isLoading.value = false;
+                        Navigator.pushNamed(context, RouteName.enterDetails);
+                      } else if (redScreen == 16) {
+                        _loginController.isLoading.value = false;
+                        Navigator.pushNamed(context, RouteName.homePage);
+                      }
+                    })),
             SizedBox(
               height: 32 * SizeConfig.heightMultiplier!,
             ),

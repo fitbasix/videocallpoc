@@ -3,6 +3,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
@@ -71,20 +72,44 @@ class EnterDetailsPage extends StatelessWidget {
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
               Spacer(),
-              ProceedButtonWithArrow(
-                title: 'proceed'.tr,
-                onPressed: () async {
-                  await LogInService.registerUser(_loginController.name.value,
-                      _loginController.email.value);
-                  Navigator.pushNamed(context, RouteName.homePage);
-                  // int success = await LogInService.updateDetails(
-                  //     _loginController.password.value,
-                  //     _loginController.email.value,
-                  //     _loginController.name.value);
-                  // if (success == 1) {
-                  //   Navigator.pushNamed(context, RouteName.homePage);
-                  // }
-                },
+              Obx(
+                () => _loginController.isLoading.value
+                    ? Center(
+                        child: CustomizedCircularProgress(),
+                      )
+                    : ProceedButtonWithArrow(
+                        title: 'proceed'.tr,
+                        onPressed: () async {
+                          if (_loginController.name.value != '' &&
+                              _loginController.email.value != '') {
+                            _loginController.isLoading.value = true;
+                            var screenId = await LogInService.registerUser(
+                                _loginController.name.value,
+                                _loginController.email.value);
+                            if (screenId == 16) {
+                              _loginController.isLoading.value = false;
+                              Navigator.pushNamed(context, RouteName.homePage);
+                            } else
+                              return;
+                          } else {
+                            if (_loginController.name.value == '' &&
+                                _loginController.email.value == '') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Please enter a name and an email')));
+                            } else if (_loginController.name.value == '') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Please enter a name')));
+                            } else if (_loginController.email.value == '') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Please enter an email')));
+                            }
+                          }
+                        },
+                      ),
               ),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
