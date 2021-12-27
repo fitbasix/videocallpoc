@@ -10,24 +10,44 @@ String countriesToJson(Countries data) => json.encode(data.toJson());
 
 class Countries {
   Countries({
-    this.type,
+    this.code,
+    this.response,
+    this.resStr,
+  });
+
+  final int? code;
+  final Response? response;
+  final String? resStr;
+
+  factory Countries.fromJson(Map<String, dynamic> json) => Countries(
+        code: json["code"],
+        response: Response.fromJson(json["response"]),
+        resStr: json["resStr"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "response": response!.toJson(),
+        "resStr": resStr,
+      };
+}
+
+class Response {
+  Response({
     this.message,
     this.data,
   });
 
-  final String? type;
   final String? message;
   final List<CountryData>? data;
 
-  factory Countries.fromJson(Map<String, dynamic> json) => Countries(
-        type: json["type"],
+  factory Response.fromJson(Map<String, dynamic> json) => Response(
         message: json["message"],
         data: List<CountryData>.from(
             json["data"].map((x) => CountryData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "type": type,
         "message": message,
         "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
@@ -55,7 +75,7 @@ class CountryData {
   factory CountryData.fromJson(Map<String, dynamic> json) => CountryData(
         id: json["_id"],
         name: json["name"],
-        code: "+"+json["code"],
+        code: json["code"],
         flag: json["flag"],
         v: json["__v"],
         createdAt: DateTime.parse(json["createdAt"]),

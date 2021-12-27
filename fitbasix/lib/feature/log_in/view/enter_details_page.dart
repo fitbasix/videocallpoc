@@ -80,15 +80,34 @@ class EnterDetailsPage extends StatelessWidget {
                     : ProceedButtonWithArrow(
                         title: 'proceed'.tr,
                         onPressed: () async {
-                          _loginController.isLoading.value = true;
-                          var screenId = await LogInService.registerUser(
-                              _loginController.name.value,
-                              _loginController.email.value);
-                          if (screenId == 16) {
-                            _loginController.isLoading.value = false;
-                            Navigator.pushNamed(context, RouteName.homePage);
-                          } else
-                            return;
+                          if (_loginController.name.value != '' &&
+                              _loginController.email.value != '') {
+                            _loginController.isLoading.value = true;
+                            var screenId = await LogInService.registerUser(
+                                _loginController.name.value,
+                                _loginController.email.value);
+                            if (screenId == 16) {
+                              _loginController.isLoading.value = false;
+                              Navigator.pushNamed(context, RouteName.homePage);
+                            } else
+                              return;
+                          } else {
+                            if (_loginController.name.value == '' &&
+                                _loginController.email.value == '') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Please enter a name and an email')));
+                            } else if (_loginController.name.value == '') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Please enter a name')));
+                            } else if (_loginController.email.value == '') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Please enter an email')));
+                            }
+                          }
                         },
                       ),
               ),

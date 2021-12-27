@@ -96,7 +96,9 @@ class OtpScreen extends StatelessWidget {
                       fontSize: 14 * SizeConfig.textMultiplier!),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    await _loginController.getOTP();
+                  },
                   child: Text(
                     'resend'.tr,
                     style: AppTextStyle.NormalText.copyWith(
@@ -112,13 +114,19 @@ class OtpScreen extends StatelessWidget {
                 : ProceedButton(
                     title: 'verify'.tr,
                     onPressed: () async {
-                      print('hello1');
                       _loginController.isLoading.value = true;
                       final redScreen = await LogInService.loginAndSignup(
                           _loginController.mobile.value,
                           _loginController.otp.value,
                           _loginController.selectedCountry.value.code!,
                           "");
+
+                      if (redScreen == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text(_loginController.otpErrorMessage.value)));
+                        _loginController.isLoading.value = false;
+                      }
 
                       if (redScreen == 18) {
                         _loginController.isLoading.value = false;

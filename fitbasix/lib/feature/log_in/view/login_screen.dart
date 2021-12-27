@@ -100,12 +100,17 @@ class LoginScreen extends StatelessWidget {
                   : ProceedButton(
                       title: 'next'.tr,
                       onPressed: () async {
+                        FocusScope.of(context).unfocus();
                         if (_loginController.mobile.value.length == 10) {
+                          _loginController.isLoading.value = true;
                           await _loginController.getOTP();
                           _loginController.isLoading.value = false;
                           Navigator.pushNamed(context, RouteName.otpScreen);
-                        } else
-                          return;
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Please enter valid mobile number')));
+                        }
                       })),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
@@ -187,6 +192,7 @@ class LoginScreen extends StatelessWidget {
                           print(value);
                           _loginController.idToken.value = value;
                         });
+                        print(user.refreshToken);
                         print(user.getIdTokenResult());
                         final screenId = await LogInService.thirdPartyLogin(
                             'Google', _loginController.idToken.value);
