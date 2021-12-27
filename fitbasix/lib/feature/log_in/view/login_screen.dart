@@ -1,5 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -9,15 +15,10 @@ import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.da
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../../core/api_service/remote_config_service.dart';
-import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -189,11 +190,9 @@ class LoginScreen extends StatelessWidget {
 
                       if (user != null) {
                         user.getIdToken().then((value) {
-                          print(value);
                           _loginController.idToken.value = value;
                         });
-                        print(user.refreshToken);
-                        print(user.getIdTokenResult());
+
                         final screenId = await LogInService.thirdPartyLogin(
                             'Google', _loginController.idToken.value);
 

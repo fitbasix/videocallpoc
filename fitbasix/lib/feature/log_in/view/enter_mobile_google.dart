@@ -1,4 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -10,10 +14,6 @@ import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class EnterMobileDetailsGoogle extends StatelessWidget {
   EnterMobileDetailsGoogle({Key? key}) : super(key: key);
@@ -94,10 +94,20 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
                   : ProceedButtonWithArrow(
                       title: 'proceed'.tr,
                       onPressed: () async {
-                        await LogInService.getOTP(_loginController.mobile.value,
-                            _loginController.selectedCountry.value.code!);
-                        _loginController.isLoading.value == true;
-                        Navigator.pushNamed(context, RouteName.enterOTPGoogle);
+                        if (_loginController.mobile.value.length == 10) {
+                          _loginController.isLoading.value == true;
+                          await LogInService.getOTP(
+                              _loginController.mobile.value,
+                              _loginController.selectedCountry.value.code!);
+
+                          Navigator.pushNamed(
+                              context, RouteName.enterOTPGoogle);
+                          _loginController.isLoading.value = false;
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Please enter valid mobile number')));
+                        }
                       })),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,

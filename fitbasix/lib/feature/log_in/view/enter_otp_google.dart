@@ -1,19 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
-import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 class EnterOTPGoogle extends StatelessWidget {
   EnterOTPGoogle({Key? key}) : super(key: key);
@@ -86,13 +85,22 @@ class EnterOTPGoogle extends StatelessWidget {
                     title: 'proceed'.tr,
                     onPressed: () async {
                       _loginController.isLoading.value = true;
-                      await LogInService.loginAndSignup(
+                      final redScreen = await LogInService.loginAndSignup(
                           _loginController.mobile.value,
                           _loginController.otp.value,
                           _loginController.selectedCountry.value.code!,
                           user.email);
-                      _loginController.isLoading.value = false;
-                      Navigator.pushNamed(context, RouteName.homePage);
+
+                      if (redScreen == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text(_loginController.otpErrorMessage.value)));
+                        _loginController.isLoading.value = false;
+                      }
+                      if (redScreen == 16) {
+                        _loginController.isLoading.value = false;
+                        Navigator.pushNamed(context, RouteName.homePage);
+                      }
                     })),
             SizedBox(
               height: 32 * SizeConfig.heightMultiplier!,

@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/model/countries_model.dart';
-import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
 import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class LogInService {
   static LoginController loginController = Get.find();
@@ -46,7 +46,7 @@ class LogInService {
       "provider": provider,
       "token": token,
     });
-    log(response.data['response']['screenId']);
+    log(response.data['response']['screenId'].toString());
 
     return response.data['response']['screenId'];
   }
@@ -69,8 +69,11 @@ class LogInService {
       );
 
       final responseData = jsonDecode(putResponse.body);
+      log(responseData.toString());
       if (responseData['code'] == 0) {
         loginController.token.value = responseData['response']['token'];
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        var accessToken = prefs.getString('AccessToken');
       } else {
         loginController.otpErrorMessage.value =
             responseData['response']['message'];
@@ -110,6 +113,7 @@ class LogInService {
         }),
       );
       final responseData = jsonDecode(putResponse.body);
+      log(responseData.toString());
       return responseData['response']['screenId'];
     }
   }
