@@ -41,7 +41,10 @@ class EnterOTPGoogle extends StatelessWidget {
               height: 24 * SizeConfig.heightMultiplier!,
             ),
             Text(
-              'hi_name'.trParams({'name': user!.displayName!}),
+              'hi_name'.trParams({
+                'name':
+                    _loginController.thirdPartyLogin.value.response!.user!.name!
+              }),
               style: AppTextStyle.titleText,
             ),
             SizedBox(
@@ -89,7 +92,8 @@ class EnterOTPGoogle extends StatelessWidget {
                           _loginController.mobile.value,
                           _loginController.otp.value,
                           _loginController.selectedCountry.value.code!,
-                          user.email);
+                          _loginController
+                              .thirdPartyLogin.value.response!.user!.email);
 
                       if (redScreen == null) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

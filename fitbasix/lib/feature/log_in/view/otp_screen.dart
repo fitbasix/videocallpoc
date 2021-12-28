@@ -52,7 +52,9 @@ class OtpScreen extends StatelessWidget {
                   style: AppTextStyle.NormalText,
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                   child: Text(
                     'click_here'.tr,
                     style: AppTextStyle.NormalText.copyWith(

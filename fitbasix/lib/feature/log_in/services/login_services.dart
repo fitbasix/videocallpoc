@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:fitbasix/feature/log_in/model/third_party_login.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,24 +32,54 @@ class LogInService {
     return countriesFromJson(response.toString());
   }
 
-  static Future<ThirdPartyModel> thirdPartyAppleLogin(
-      String provider, String name, String token) async {
-    String url = ApiUrl.liveBaseURL + '/api/auth/thirdPartyLogin?type=EN';
-    var response = await dio!
-        .post(url, data: {"provider": provider, "token": token, "name": name});
-    print(response);
-    return thirdPartyModelFromJson(response.toString());
+  static Future<String> getAccessToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('AccessToken').toString();
   }
 
-  static Future<int> thirdPartyLogin(String provider, String token) async {
+  static Future<String> getRefreshToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('RefreshToken').toString();
+  }
+
+  static Future<ThirdPartyLogin> thirdPartyAppleLogin(
+      String provider, String name, String token) async {
+    String url = ApiUrl.liveBaseURL + '/api/auth/thirdPartyLogin?type=EN';
+    Map firstTime = {"provider": provider, "token": token, "name": name};
+    Map notFirstTime = {
+      "provider": provider,
+      "token": token,
+    };
+    var response =
+        await dio!.post(url, data: name == "" ? notFirstTime : firstTime);
+    print(response);
+    return thirdPartyLoginFromJson(response.toString());
+  }
+
+  static Future<ThirdPartyLogin> thirdPartyLogin(
+      String provider, String token) async {
     dio!.options.headers["language"] = "1";
     var response = await dio!.post(ApiUrl.thirdPartyLogin, data: {
       "provider": provider,
       "token": token,
     });
     log(response.data['response']['screenId'].toString());
+    log(response.data.toString());
+    print(response.data);
 
-    return response.data['response']['screenId'];
+    return thirdPartyLoginFromJson(response.toString());
+  }
+
+  static Future updateToken() async {
+    var refreshToken = getRefreshToken();
+    dio!.options.headers["language"] = "1";
+    var response = await dio!.post(ApiUrl.updateToken, data: {
+      "refreshToken": refreshToken,
+    });
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('AccessToken', response.data['response']['token']);
+    prefs.setString('RefreshToken', response.data['response']['refreshToken']);
   }
 
   static Future<int?> loginAndSignup(
@@ -73,7 +104,7 @@ class LogInService {
       if (responseData['code'] == 0) {
         loginController.token.value = responseData['response']['token'];
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('AccessToken');
+        prefs.setString('AccessToken', responseData['response']['token']);
       } else {
         loginController.otpErrorMessage.value =
             responseData['response']['message'];
@@ -100,21 +131,28 @@ class LogInService {
         }),
       );
     } else {
-      var putResponse = await http.put(
-        Uri.parse(ApiUrl.registerUser),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'language': '1',
-          'Authorization': loginController.token.value
-        },
-        body: jsonEncode(<String, String>{
-          "name": name,
-          "email": email,
-        }),
-      );
-      final responseData = jsonDecode(putResponse.body);
-      log(responseData.toString());
-      return responseData['response']['screenId'];
+      try {
+        var putResponse = await http.put(
+          Uri.parse(ApiUrl.registerUser),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'language': '1',
+            'Authorization': loginController.token.value
+          },
+          body: jsonEncode(<String, String>{
+            "name": name,
+            "email": email,
+          }),
+        );
+        final responseData = jsonDecode(putResponse.body);
+        log(responseData.toString());
+        if (responseData['code'] == 0) {
+          return responseData['response']['screenId'];
+        } else
+          return 1;
+      } on Exception catch (e) {
+        // TODO
+      }
     }
   }
 }
