@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -157,13 +158,17 @@ class LoginScreen extends StatelessWidget {
                             );
                             await FirebaseAuth.instance
                                 .signInWithCredential(authCredential);
-                            _loginController.thirdPartyModel.value =
+                            _loginController.thirdPartyLogin.value =
                                 await LogInService.thirdPartyAppleLogin(
                                     "Apple",
-                                    credential.email!,
+                                    credential.familyName == null
+                                        ? ""
+                                        : "${credential.givenName} " +
+                                            credential.familyName!,
                                     credential.identityToken!);
-                            if (_loginController
-                                    .thirdPartyModel.value.data!.screenId! ==
+                            print(credential.identityToken!);
+                            if (_loginController.thirdPartyLogin.value.response!
+                                    .screenId! ==
                                 15) {
                               Navigator.pushNamed(
                                   context, RouteName.enterMobileGoogle);
@@ -190,16 +195,25 @@ class LoginScreen extends StatelessWidget {
 
                       if (user != null) {
                         user.getIdToken().then((value) {
+                          log(value.toString());
                           _loginController.idToken.value = value;
                         });
 
-                        final screenId = await LogInService.thirdPartyLogin(
-                            'Google', _loginController.idToken.value);
+                        _loginController.thirdPartyLogin.value =
+                            await LogInService.thirdPartyLogin(
+                                'Google', _loginController.idToken.value);
 
-                        if (screenId == 15) {
+                        // log(_loginController.thirdPartyLogin.value.code
+                        //     .toString());
+
+                        if (_loginController
+                                .thirdPartyLogin.value.response!.screenId ==
+                            15) {
                           Navigator.pushNamed(
                               context, RouteName.enterMobileGoogle);
-                        } else if (screenId == 16) {
+                        } else if (_loginController
+                                .thirdPartyLogin.value.response!.screenId ==
+                            16) {
                           Navigator.pushNamed(context, RouteName.homePage);
                         }
                       }

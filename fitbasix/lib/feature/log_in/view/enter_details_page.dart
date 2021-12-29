@@ -32,7 +32,8 @@ class EnterDetailsPage extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: SvgPicture.asset(ImagePath.backIcon)),
+                  child: SizedBox(
+                      width: 16, child: SvgPicture.asset(ImagePath.backIcon))),
               SizedBox(
                 height: 24 * SizeConfig.heightMultiplier!,
               ),
@@ -86,7 +87,19 @@ class EnterDetailsPage extends StatelessWidget {
                             var screenId = await LogInService.registerUser(
                                 _loginController.name.value,
                                 _loginController.email.value);
-                            if (screenId == 16) {
+
+                            if (!_loginController.email.value.contains('@')) {
+                              _loginController.isLoading.value = false;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text('Please enter an valid email')));
+                            } else if (screenId == 1) {
+                              _loginController.isLoading.value = false;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Email already exists')));
+                            } else if (screenId == 16) {
                               _loginController.isLoading.value = false;
                               Navigator.pushNamed(context, RouteName.homePage);
                             } else

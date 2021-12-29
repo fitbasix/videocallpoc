@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 
 class DioUtil {
   Dio? _instance;
@@ -26,14 +27,16 @@ class DioUtil {
       }
     }, onError: (DioError e, handler) async {
       if (e.response != null) {
-        if (e.response!.statusCode == 403) {
+        if (e.response!.statusCode == 500) {
           //catch the 401 here
           dio.interceptors.requestLock.lock();
           dio.interceptors.responseLock.lock();
           RequestOptions requestOptions = e.requestOptions;
+          await LogInService.updateToken();
+          var accessToken = await LogInService.getAccessToken();
           final opts = new Options(method: requestOptions.method);
-          // dio.options.headers["language"] = "language " + accessToken;
-          // dio.options.headers["Accept"] = "*/*";
+          dio.options.headers["language"] = "1";
+          dio.options.headers["Accept"] = "*/*";
           dio.interceptors.requestLock.unlock();
           dio.interceptors.responseLock.unlock();
           final response = await dio.request(requestOptions.path,

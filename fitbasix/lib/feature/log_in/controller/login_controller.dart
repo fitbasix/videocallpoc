@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/feature/log_in/model/third_party_login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -49,7 +50,8 @@ class LoginController extends GetxController {
   RxString accessToken = "".obs;
   RxString token = RxString('');
   RxString otpErrorMessage = RxString('');
-  Rx<ThirdPartyModel> thirdPartyModel = Rx(ThirdPartyModel());
+  Rx<ThirdPartyLogin> ApplethirdPartyModel = Rx(ThirdPartyLogin());
+  Rx<ThirdPartyLogin> thirdPartyLogin = Rx(ThirdPartyLogin());
 
   Future googleLogin() async {
     final googleUser = await googleSignIn.value.signIn();
