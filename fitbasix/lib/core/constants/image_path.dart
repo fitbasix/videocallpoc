@@ -12,4 +12,12 @@ class ImagePath {
   static const String mailIcon = "assets/Icons/email-icon.svg";
   static const String backIcon = "assets/Icons/back_icon.svg";
   static const String welcomeImage = 'assets/images/welcome_image.png';
+  static const String getTrainerIcon = 'assets/get_trained/get_trainer.svg';
+  static const String getFitnessConsultationIcon =
+      'assets/get_trained/get_fitness_consultation.svg';
+  static const String getNutritionConsultationIcon =
+      'assets/get_trained/get_nutrition_consultation.svg';
+  static const String certificateIcon =
+      'assets/get_trained/certificate_icon.svg';
+  static const String trainerCoverImage = 'assets/get_trained/cover_image.png';
 }

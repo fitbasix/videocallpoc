@@ -3,6 +3,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/back_button.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
@@ -28,12 +29,7 @@ class EnterDetailsPage extends StatelessWidget {
               SizedBox(
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
-              InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: SizedBox(
-                      width: 16, child: SvgPicture.asset(ImagePath.backIcon))),
+              CustomBackButton(),
               SizedBox(
                 height: 24 * SizeConfig.heightMultiplier!,
               ),

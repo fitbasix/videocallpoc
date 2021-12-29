@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/core/universal_widgets/back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -32,11 +33,7 @@ class EnterOTPGoogle extends StatelessWidget {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
-            GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: SvgPicture.asset(ImagePath.backIcon)),
+            CustomBackButton(),
             SizedBox(
               height: 24 * SizeConfig.heightMultiplier!,
             ),
