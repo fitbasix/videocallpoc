@@ -21,9 +21,9 @@ class AppTextStyle {
     color: kPureBlack,
   );
   static TextStyle titleText = GoogleFonts.openSans(
-    fontSize: (24) * SizeConfig.textMultiplier!,
-    fontWeight: FontWeight.w600,
-    color: kPureBlack);
+      fontSize: (24) * SizeConfig.textMultiplier!,
+      fontWeight: FontWeight.w600,
+      color: kPureBlack);
   static TextStyle hintText = GoogleFonts.openSans(
     fontSize: (16) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w400,
@@ -38,5 +38,25 @@ class AppTextStyle {
     fontSize: (12) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w400,
     color: darkGreyColor,
+  );
+  static TextStyle smallBlackText = GoogleFonts.openSans(
+    fontSize: (10) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: lightBlack,
+  );
+  static TextStyle boldBlackText = GoogleFonts.openSans(
+    fontSize: (18) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: lightBlack,
+  );
+  static TextStyle greenSemiBoldText = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kGreenColor,
+  );
+  static TextStyle lightMediumBlackText = GoogleFonts.openSans(
+    fontSize: (12) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: lightBlack,
   );
 }

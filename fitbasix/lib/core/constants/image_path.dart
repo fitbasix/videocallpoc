@@ -20,4 +20,6 @@ class ImagePath {
   static const String certificateIcon =
       'assets/get_trained/certificate_icon.svg';
   static const String trainerCoverImage = 'assets/get_trained/cover_image.png';
+  static const String clockIcon='assets/Icons/clock.svg';
+  static const String thumsUpIcon='assets/Icons/thums_up.svg';
 }
