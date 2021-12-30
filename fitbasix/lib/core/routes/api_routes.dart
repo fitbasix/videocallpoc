@@ -6,4 +6,5 @@ class ApiUrl {
   static String registerUser = liveBaseURL + '/api/auth/create';
   static String getCountries = liveBaseURL + '/api/country/get';
   static String updateToken = liveBaseURL + '/api/auth/generateToken';
+  static String getTrainerById = liveBaseURL + '/api/trainer/getTrainerById';
 }

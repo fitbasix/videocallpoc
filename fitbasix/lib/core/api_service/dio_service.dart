@@ -27,7 +27,7 @@ class DioUtil {
       }
     }, onError: (DioError e, handler) async {
       if (e.response != null) {
-        if (e.response!.statusCode == 500) {
+        if (e.response!.statusCode == 403) {
           //catch the 401 here
           dio.interceptors.requestLock.lock();
           dio.interceptors.responseLock.lock();

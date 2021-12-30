@@ -1,4 +1,5 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,7 +22,7 @@ class TrainerProfileScreen extends StatelessWidget {
         onMessage: () {},
         onEnroll: () {},
         onBack: () {},
-        name: "vartika Mangal",
+        name: "Vartika Mangal",
         followersCount: "16.8k",
         followingCount: "1.3k",
         rating: 5.0,
@@ -90,6 +91,261 @@ class TrainerPage extends StatelessWidget {
                   children: [
                     Stack(
                       children: [
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 243 * SizeConfig.heightMultiplier!,
+                            ),
+                            Text(
+                              name,
+                              style: AppTextStyle.titleText.copyWith(
+                                  fontSize: 18 * SizeConfig.textMultiplier!),
+                            ),
+                            SizedBox(
+                              height: 12 * SizeConfig.heightMultiplier!,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomButton(
+                                  title: 'follow'.tr,
+                                  onPress: onFollow,
+                                  color: kGreenColor,
+                                ),
+                                SizedBox(
+                                  width: 12 * SizeConfig.widthMultiplier!,
+                                ),
+                                CustomButton(
+                                    title: 'message'.tr,
+                                    onPress: onMessage,
+                                    color: kGreyColor)
+                              ],
+                            ),
+                            SizedBox(
+                              height: 24 * SizeConfig.heightMultiplier!,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 24.0 * SizeConfig.widthMultiplier!,
+                                  right: 27 * SizeConfig.heightMultiplier!),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(followersCount,
+                                              style:
+                                                  AppTextStyle.boldBlackText),
+                                          Text('follower'.tr,
+                                              style:
+                                                  AppTextStyle.smallBlackText)
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              25 * SizeConfig.widthMultiplier!),
+                                      Column(
+                                        children: [
+                                          Text(followingCount,
+                                              style:
+                                                  AppTextStyle.boldBlackText),
+                                          Text('following'.tr,
+                                              style:
+                                                  AppTextStyle.smallBlackText)
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    width: 1,
+                                    height: 56 * SizeConfig.widthMultiplier!,
+                                    color: kDarkGrey,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            ratingCount.toString(),
+                                            style:
+                                                AppTextStyle.greenSemiBoldText,
+                                          ),
+                                          SizedBox(
+                                              width: 8 *
+                                                  SizeConfig.widthMultiplier!),
+                                          StarRating(
+                                            rating: rating,
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            totalPeopleTrained.toString(),
+                                            style: AppTextStyle
+                                                .greenSemiBoldText
+                                                .copyWith(color: lightBlack),
+                                          ),
+                                          SizedBox(
+                                              width: 8 *
+                                                  SizeConfig.widthMultiplier!),
+                                          Text(
+                                            'people_trained'.tr,
+                                            style: AppTextStyle.smallBlackText,
+                                          )
+                                        ],
+                                      ),
+                                      Text(
+                                        'view_and_review'.tr,
+                                        style: AppTextStyle.smallBlackText
+                                            .copyWith(
+                                                color: greyColor,
+                                                decoration:
+                                                    TextDecoration.underline),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 24 * SizeConfig.heightMultiplier!),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 24.0 * SizeConfig.heightMultiplier!),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'strength'.tr,
+                                    style: AppTextStyle.greenSemiBoldText
+                                        .copyWith(color: lightBlack),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          12 * SizeConfig.heightMultiplier!),
+                                  Container(
+                                    height: 28 * SizeConfig.heightMultiplier!,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: strengths.length,
+                                        shrinkWrap: true,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 8.0 *
+                                                    SizeConfig
+                                                        .widthMultiplier!),
+                                            child: Container(
+                                              height: 28 *
+                                                  SizeConfig.heightMultiplier!,
+                                              decoration: BoxDecoration(
+                                                  color: offWhite,
+                                                  borderRadius:
+                                                      BorderRadius.circular(28 *
+                                                          SizeConfig
+                                                              .heightMultiplier!)),
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12 *
+                                                        SizeConfig
+                                                            .widthMultiplier!),
+                                                child: Text(
+                                                  strengths[index],
+                                                  style: AppTextStyle
+                                                      .lightMediumBlackText,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          24 * SizeConfig.heightMultiplier!),
+                                  Text(
+                                    'achivement'.tr,
+                                    style: AppTextStyle.greenSemiBoldText
+                                        .copyWith(color: lightBlack),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          12 * SizeConfig.heightMultiplier!),
+                                  Container(
+                                    height: 79 * SizeConfig.heightMultiplier!,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: certifcateTitle.length,
+                                        shrinkWrap: true,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                                right: 8.0 *
+                                                    SizeConfig
+                                                        .widthMultiplier!),
+                                            child: AchivementCertificateTile(
+                                              certificateDescription:
+                                                  certifcateTitle[index],
+                                              color: index % 2 == 0
+                                                  ? oceanBlue
+                                                  : lightOrange,
+                                            ),
+                                          );
+                                        }),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          24 * SizeConfig.heightMultiplier!),
+                                  Text(
+                                    'about'.tr,
+                                    style: AppTextStyle.greenSemiBoldText
+                                        .copyWith(color: lightBlack),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          12 * SizeConfig.heightMultiplier!),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        right:
+                                            24.0 * SizeConfig.widthMultiplier!),
+                                    child: Text(
+                                      aboutTrainer,
+                                      style: AppTextStyle.lightMediumBlackText
+                                          .copyWith(
+                                              fontSize: (14) *
+                                                  SizeConfig.textMultiplier!),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          24 * SizeConfig.heightMultiplier!),
+                                  Text('plan'.tr,
+                                      style: AppTextStyle.greenSemiBoldText
+                                          .copyWith(color: lightBlack)),
+                                  SizedBox(
+                                      height:
+                                          12 * SizeConfig.heightMultiplier!),
+                                  PlanTile(
+                                    rating: 5,
+                                    planTitle: "Sports Nutrition",
+                                    palnTime: "8 weeks plan",
+                                    likesCount: "16.8k",
+                                    ratingCount: "123",
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          224 * SizeConfig.heightMultiplier!),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                         Container(
                           width: double.infinity,
                           height: 177 * SizeConfig.heightMultiplier!,
@@ -110,233 +366,27 @@ class TrainerPage extends StatelessWidget {
                           ),
                         ),
                         Positioned(
+                            top: 16 * SizeConfig.heightMultiplier!,
+                            left: 16 * SizeConfig.widthMultiplier!,
                             child: GestureDetector(
-                          onTap: onBack,
-                          child: Container(
-                            height: 40 * SizeConfig.heightMultiplier!,
-                            width: 40 * SizeConfig.heightMultiplier!,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.white),
-                            child: SvgPicture.asset(
-                              ImagePath.backIcon,
-                              color: kPureBlack,
-                            ),
-                          ),
-                        )),
+                              onTap: onBack,
+                              child: Container(
+                                height: 40 * SizeConfig.heightMultiplier!,
+                                width: 40 * SizeConfig.heightMultiplier!,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white),
+                                child: SvgPicture.asset(
+                                  ImagePath.backIcon,
+                                  color: kPureBlack,
+                                  height: 15,
+                                  width: 7,
+                                  fit: BoxFit.scaleDown,
+                                ),
+                              ),
+                            )),
                       ],
                     ),
-                    SizedBox(
-                      height: 243 * SizeConfig.heightMultiplier!,
-                    ),
-                    Text(
-                      name,
-                      style: AppTextStyle.titleText
-                          .copyWith(fontSize: 18 * SizeConfig.textMultiplier!),
-                    ),
-                    SizedBox(
-                      height: 12 * SizeConfig.heightMultiplier!,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomButton(
-                          title: 'follow'.tr,
-                          onPress: onFollow,
-                          color: kGreenColor,
-                        ),
-                        SizedBox(
-                          width: 12 * SizeConfig.widthMultiplier!,
-                        ),
-                        CustomButton(
-                            title: 'message'.tr,
-                            onPress: onMessage,
-                            color: kGreyColor)
-                      ],
-                    ),
-                    SizedBox(
-                      height: 24 * SizeConfig.heightMultiplier!,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 24.0 * SizeConfig.widthMultiplier!,
-                          right: 27 * SizeConfig.heightMultiplier!),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Text(followersCount,
-                                      style: AppTextStyle.boldBlackText),
-                                  Text('follower'.tr,
-                                      style: AppTextStyle.smallBlackText)
-                                ],
-                              ),
-                              SizedBox(width: 25 * SizeConfig.widthMultiplier!),
-                              Column(
-                                children: [
-                                  Text(followingCount,
-                                      style: AppTextStyle.boldBlackText),
-                                  Text('following'.tr,
-                                      style: AppTextStyle.smallBlackText)
-                                ],
-                              ),
-                            ],
-                          ),
-                          Container(
-                            width: 1,
-                            height: 56 * SizeConfig.widthMultiplier!,
-                            color: kDarkGrey,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    ratingCount.toString(),
-                                    style: AppTextStyle.greenSemiBoldText,
-                                  ),
-                                  SizedBox(
-                                      width: 8 * SizeConfig.widthMultiplier!),
-                                  StarRating(
-                                    rating: rating,
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    totalPeopleTrained.toString(),
-                                    style: AppTextStyle.greenSemiBoldText
-                                        .copyWith(color: lightBlack),
-                                  ),
-                                  SizedBox(
-                                      width: 8 * SizeConfig.widthMultiplier!),
-                                  Text(
-                                    'people_trained'.tr,
-                                    style: AppTextStyle.smallBlackText,
-                                  )
-                                ],
-                              ),
-                              Text(
-                                'view_and_review'.tr,
-                                style: AppTextStyle.smallBlackText.copyWith(
-                                    color: greyColor,
-                                    decoration: TextDecoration.underline),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 24 * SizeConfig.heightMultiplier!),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 24.0 * SizeConfig.heightMultiplier!),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'strength'.tr,
-                            style: AppTextStyle.greenSemiBoldText
-                                .copyWith(color: lightBlack),
-                          ),
-                          SizedBox(height: 12 * SizeConfig.heightMultiplier!),
-                          Container(
-                            height: 28 * SizeConfig.heightMultiplier!,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: strengths.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                        left:
-                                            8.0 * SizeConfig.widthMultiplier!),
-                                    child: Container(
-                                      height: 28 * SizeConfig.heightMultiplier!,
-                                      decoration: BoxDecoration(
-                                          color: offWhite,
-                                          borderRadius: BorderRadius.circular(
-                                              28 *
-                                                  SizeConfig
-                                                      .heightMultiplier!)),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 12 *
-                                                SizeConfig.widthMultiplier!),
-                                        child: Text(
-                                          strengths[index],
-                                          style:
-                                              AppTextStyle.lightMediumBlackText,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                          ),
-                          SizedBox(height: 24 * SizeConfig.heightMultiplier!),
-                          Text(
-                            'achivement'.tr,
-                            style: AppTextStyle.greenSemiBoldText
-                                .copyWith(color: lightBlack),
-                          ),
-                          SizedBox(height: 12 * SizeConfig.heightMultiplier!),
-                          Container(
-                            height: 79 * SizeConfig.heightMultiplier!,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: certifcateTitle.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                        right:
-                                            8.0 * SizeConfig.widthMultiplier!),
-                                    child: AchivementCertificateTile(
-                                      certificateDescription:
-                                          certifcateTitle[index],
-                                      color: index % 2 == 0
-                                          ? oceanBlue
-                                          : lightOrange,
-                                    ),
-                                  );
-                                }),
-                          ),
-                          SizedBox(height: 24 * SizeConfig.heightMultiplier!),
-                          Text(
-                            'about'.tr,
-                            style: AppTextStyle.greenSemiBoldText
-                                .copyWith(color: lightBlack),
-                          ),
-                          SizedBox(height: 12 * SizeConfig.heightMultiplier!),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                right: 24.0 * SizeConfig.widthMultiplier!),
-                            child: Text(
-                              aboutTrainer,
-                              style: AppTextStyle.lightMediumBlackText.copyWith(
-                                  fontSize: (14) * SizeConfig.textMultiplier!),
-                            ),
-                          ),
-                          SizedBox(height: 24 * SizeConfig.heightMultiplier!),
-                          Text('plan'.tr,
-                              style: AppTextStyle.greenSemiBoldText
-                                  .copyWith(color: lightBlack)),
-                          SizedBox(height: 12 * SizeConfig.heightMultiplier!),
-                          PlanTile(
-                            rating: 5,
-                            planTitle: "Sports Nutrition",
-                            palnTime: "8 weeks plan",
-                            likesCount: "16.8k",
-                            ratingCount: "123",
-                          ),
-                          SizedBox(height: 224 * SizeConfig.heightMultiplier!),
-                        ],
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -347,6 +397,7 @@ class TrainerPage extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Container(
                 color: kPureWhite,
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
