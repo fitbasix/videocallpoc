@@ -20,6 +20,7 @@ Future<void> setupApp() async {
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: accessToken == null ? LoginScreen() : TrainerProfileScreen(),
+    child:
+        accessToken == null ? TrainerProfileScreen() : TrainerProfileScreen(),
   ));
 }
