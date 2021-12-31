@@ -23,10 +23,14 @@ class AllTrainerScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
             onPressed: () {}, icon: SvgPicture.asset(ImagePath.backIcon)),
-        title: Text(
-          'trainers'.tr,
-          style: AppTextStyle.titleText
-              .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+        title: Transform(
+          transform: Matrix4.translationValues(
+              -20 * SizeConfig.widthMultiplier!, 0, 0),
+          child: Text(
+            'trainers'.tr,
+            style: AppTextStyle.titleText
+                .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+          ),
         ),
         actions: [
           IconButton(
@@ -283,10 +287,14 @@ class TrainerTile extends StatelessWidget {
                     )
                   ],
                 ),
-                Text(
-                  '4',
-                  style: AppTextStyle.titleText
-                      .copyWith(fontSize: 36, color: kGreenColor),
+                Padding(
+                  padding:
+                      EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
+                  child: Text(
+                    '4',
+                    style: AppTextStyle.titleText
+                        .copyWith(fontSize: 36, color: kGreenColor),
+                  ),
                 ),
               ],
             ),
