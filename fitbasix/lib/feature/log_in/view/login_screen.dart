@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -168,6 +169,21 @@ class LoginScreen extends StatelessWidget {
                                     credential.identityToken!);
                             print(credential.identityToken!);
                             if (_loginController.thirdPartyLogin.value.response!
+                                    .user!.token !=
+                                null) {
+                              final SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setString(
+                                  'AccessToken',
+                                  _loginController.thirdPartyLogin.value
+                                      .response!.user!.token!);
+
+                              prefs.setString(
+                                  'RefreshToken',
+                                  _loginController.thirdPartyLogin.value
+                                      .response!.refreshToken!);
+                            }
+                            if (_loginController.thirdPartyLogin.value.response!
                                     .screenId! ==
                                 15) {
                               Navigator.pushNamed(
@@ -205,6 +221,22 @@ class LoginScreen extends StatelessWidget {
 
                         // log(_loginController.thirdPartyLogin.value.code
                         //     .toString());
+
+                        if (_loginController
+                                .thirdPartyLogin.value.response!.user!.token !=
+                            null) {
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.setString(
+                              'AccessToken',
+                              _loginController.thirdPartyLogin.value.response!
+                                  .user!.token!);
+
+                          prefs.setString(
+                              'RefreshToken',
+                              _loginController.thirdPartyLogin.value.response!
+                                  .refreshToken!);
+                        }
 
                         if (_loginController
                                 .thirdPartyLogin.value.response!.screenId ==

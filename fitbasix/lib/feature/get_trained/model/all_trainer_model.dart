@@ -1,0 +1,252 @@
+// To parse this JSON data, do
+//
+//     final allTrainer = allTrainerFromJson(jsonString);
+
+import 'dart:convert';
+
+AllTrainer allTrainerFromJson(String str) =>
+    AllTrainer.fromJson(json.decode(str));
+
+String allTrainerToJson(AllTrainer data) => json.encode(data.toJson());
+
+class AllTrainer {
+  AllTrainer({
+    this.code,
+    this.response,
+    this.resStr,
+  });
+
+  final int? code;
+  final Response? response;
+  final String? resStr;
+
+  factory AllTrainer.fromJson(Map<String, dynamic> json) => AllTrainer(
+        code: json["code"],
+        response: Response.fromJson(json["response"]),
+        resStr: json["resStr"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "response": response!.toJson(),
+        "resStr": resStr,
+      };
+}
+
+class Response {
+  Response({
+    this.message,
+    this.data,
+  });
+
+  final String? message;
+  final Data? data;
+
+  factory Response.fromJson(Map<String, dynamic> json) => Response(
+        message: json["message"],
+        data: Data.fromJson(json["data"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "message": message,
+        "data": data!.toJson(),
+      };
+}
+
+class Data {
+  Data({
+    this.trainers,
+  });
+
+  final List<Trainer>? trainers;
+
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        trainers: List<Trainer>.from(
+            json["trainers"].map((x) => Trainer.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "trainers": List<dynamic>.from(trainers!.map((x) => x.toJson())),
+      };
+}
+
+class Trainer {
+  Trainer({
+    this.followers,
+    this.following,
+    this.trainees,
+    this.slotsFeft,
+    this.totalRating,
+    this.rating,
+    this.id,
+    this.about,
+    this.trainerType,
+    this.strength,
+    this.user,
+    this.numOfCertificates,
+    this.tags,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+    this.isFitnessConsultant,
+    this.isNutritionConsultant,
+    this.certificates,
+  });
+
+  final String? followers;
+  final String? following;
+  final String? trainees;
+  final String? slotsFeft;
+  final String? totalRating;
+  final String? rating;
+  final String? id;
+  final String? about;
+  final List<TrainerType>? trainerType;
+  final List<Strength>? strength;
+  final User? user;
+  final int? numOfCertificates;
+  final List<Strength>? tags;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
+  final bool? isFitnessConsultant;
+  final bool? isNutritionConsultant;
+  final List<Certificate>? certificates;
+
+  factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
+        followers: json["followers"],
+        following: json["following"],
+        trainees: json["trainees"],
+        slotsFeft: json["slotsFeft"],
+        totalRating: json["totalRating"],
+        rating: json["rating"],
+        id: json["_id"],
+        about: json["about"],
+        trainerType: List<TrainerType>.from(
+            json["trainerType"].map((x) => trainerTypeValues.map![x])),
+        strength: List<Strength>.from(
+            json["strength"].map((x) => strengthValues.map![x])),
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        numOfCertificates: json["numOfCertificates"],
+        tags: List<Strength>.from(
+            json["tags"].map((x) => strengthValues.map![x])),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+        v: json["__v"],
+        isFitnessConsultant: json["isFitnessConsultant"],
+        isNutritionConsultant: json["isNutritionConsultant"],
+        certificates: List<Certificate>.from(
+            json["certificates"].map((x) => Certificate.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "followers": followers,
+        "following": following,
+        "trainees": trainees,
+        "slotsFeft": slotsFeft,
+        "totalRating": totalRating,
+        "rating": rating,
+        "_id": id,
+        "about": about,
+        "trainerType": List<dynamic>.from(
+            trainerType!.map((x) => trainerTypeValues.reverse![x])),
+        "strength": List<dynamic>.from(
+            strength!.map((x) => strengthValues.reverse![x])),
+        "user": user == null ? null : user!.toJson(),
+        "numOfCertificates": numOfCertificates,
+        "tags":
+            List<dynamic>.from(tags!.map((x) => strengthValues.reverse![x])),
+        "createdAt": createdAt == null ? null : createdAt!.toIso8601String(),
+        "updatedAt": updatedAt == null ? null : updatedAt!.toIso8601String(),
+        "__v": v,
+        "isFitnessConsultant": isFitnessConsultant,
+        "isNutritionConsultant": isNutritionConsultant,
+        "certificates":
+            List<dynamic>.from(certificates!.map((x) => x.toJson())),
+      };
+}
+
+class Certificate {
+  Certificate({
+    this.isVerified,
+    this.v,
+    this.certificateName,
+    this.url,
+    this.certificateIcon,
+  });
+
+  final bool? isVerified;
+  final int? v;
+  final String? certificateName;
+  final String? url;
+  final String? certificateIcon;
+
+  factory Certificate.fromJson(Map<String, dynamic> json) => Certificate(
+        isVerified: json["isVerified"],
+        v: json["__v"],
+        certificateName: json["certificateName"],
+        url: json["url"],
+        certificateIcon: json["certificateIcon"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "isVerified": isVerified,
+        "__v": v,
+        "certificateName": certificateName,
+        "url": url,
+        "certificateIcon": certificateIcon,
+      };
+}
+
+enum Strength { ALL, STR2 }
+
+final strengthValues = EnumValues({"ALL": Strength.ALL, "str2": Strength.STR2});
+
+enum TrainerType { TRAINER, FITNESS_CONSULTATION }
+
+final trainerTypeValues = EnumValues({
+  "Fitness Consultation": TrainerType.FITNESS_CONSULTATION,
+  "Trainer": TrainerType.TRAINER
+});
+
+class User {
+  User({
+    this.id,
+    this.profilePhoto,
+    this.name,
+  });
+
+  final String? id;
+  final String? profilePhoto;
+  final String? name;
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json["_id"],
+        profilePhoto: json["profilePhoto"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "profilePhoto": profilePhoto,
+        "name": name,
+      };
+}
+
+class EnumValues<T> {
+  Map<String, T>? map;
+  Map<T, String>? reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String>? get reverse {
+    if (reverseMap == null) {
+      reverseMap = map!.map((k, v) => new MapEntry(v, k));
+    }
+    return reverseMap;
+  }
+}
