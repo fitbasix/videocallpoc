@@ -1,6 +1,10 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
+import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -14,32 +18,42 @@ class TrainerProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TrainerController trainerController = Get.put(TrainerController());
     return Scaffold(
-      body: TrainerPage(
-        trainerImage:
-            'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-        onFollow: () {},
-        onMessage: () {},
-        onEnroll: () {},
-        onBack: () {},
-        name: "Vartika Mangal",
-        followersCount: "16.8k",
-        followingCount: "1.3k",
-        rating: 5.0,
-        ratingCount: 431,
-        totalPeopleTrained: 120,
-        strengths: [
-          'Sports Nutrition',
-          'Fat-Loss',
-          'General Well being',
-          'General Well being'
-        ],
-        aboutTrainer:
-            "Hi, This is Jonathan. I am certified by Institute Viverra cras facilisis massa amet, hendrerit nunc. Tristique tellus, massa scelerisque tincidunt neque dui metus, id pellentesque./n/nLet’s start your fitness journey!!!",
-        certifcateTitle: [
-          'Specialist in Sports Nutrition from ISSA...',
-          'Specialist in Sports Nutrition from ISSA...'
-        ],
+      body: SafeArea(
+        child: Obx(
+          () => trainerController.isLoading.value
+              ? Center(
+                  child: CustomizedCircularProgress(),
+                )
+              : TrainerPage(
+                  trainerImage: trainerController.atrainerDetail.value.response!
+                      .trainer!.user!.profilePhoto!,
+                  onFollow: () {},
+                  onMessage: () {},
+                  onEnroll: () {},
+                  onBack: () {},
+                  name: trainerController
+                      .atrainerDetail.value.response!.trainer!.user!.name!,
+                  followersCount: trainerController
+                      .atrainerDetail.value.response!.trainer!.followers!,
+                  followingCount: trainerController
+                      .atrainerDetail.value.response!.trainer!.following!,
+                  rating: double.parse(trainerController
+                      .atrainerDetail.value.response!.trainer!.rating!),
+                  ratingCount: int.parse(trainerController
+                      .atrainerDetail.value.response!.trainer!.totalRating!),
+                  totalPeopleTrained: int.parse(trainerController
+                      .atrainerDetail.value.response!.trainer!.trainees!),
+                  strengths: trainerController
+                      .atrainerDetail.value.response!.trainer!.strength!,
+                  aboutTrainer: trainerController
+                      .atrainerDetail.value.response!.trainer!.about!,
+                  certifcateTitle: trainerController
+                      .atrainerDetail.value.response!.trainer!.certificates!,
+                  allPlans: trainerController.planModel.value.response!.data!,
+                ),
+        ),
       ),
     );
   }
@@ -61,6 +75,7 @@ class TrainerPage extends StatelessWidget {
       required this.certifcateTitle,
       required this.onEnroll,
       required this.name,
+      required this.allPlans,
       Key? key})
       : super(key: key);
   final String trainerImage;
@@ -75,8 +90,9 @@ class TrainerPage extends StatelessWidget {
   final int totalPeopleTrained;
   final double rating;
   final List<String> strengths;
-  final List<String> certifcateTitle;
+  final List<Certificate> certifcateTitle;
   final String aboutTrainer;
+  final List<Plan> allPlans;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -291,7 +307,10 @@ class TrainerPage extends StatelessWidget {
                                                         .widthMultiplier!),
                                             child: AchivementCertificateTile(
                                               certificateDescription:
-                                                  certifcateTitle[index],
+                                                  certifcateTitle[index]
+                                                      .certificateName!,
+                                              certificateIcon:
+                                                  certifcateTitle[index].url!,
                                               color: index % 2 == 0
                                                   ? oceanBlue
                                                   : lightOrange,
@@ -331,12 +350,40 @@ class TrainerPage extends StatelessWidget {
                                   SizedBox(
                                       height:
                                           12 * SizeConfig.heightMultiplier!),
-                                  PlanTile(
-                                    rating: 5,
-                                    planTitle: "Sports Nutrition",
-                                    palnTime: "8 weeks plan",
-                                    likesCount: "16.8k",
-                                    ratingCount: "123",
+                                  Container(
+                                    height: 238 * SizeConfig.heightMultiplier!,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: allPlans.length,
+                                        shrinkWrap: true,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                                right: 8.0 *
+                                                    SizeConfig
+                                                        .widthMultiplier!),
+                                            child: PlanTile(
+                                              rating: double.parse(
+                                                  allPlans[index]
+                                                      .plansRating
+                                                      .toString()),
+                                              planTitle:
+                                                  allPlans[index].planName!,
+                                              planImage:
+                                                  allPlans[index].planIcon!,
+                                              palnTime: allPlans[index]
+                                                  .planDuration
+                                                  .toString(),
+                                              likesCount: allPlans[index]
+                                                  .likesCount!
+                                                  .toString(),
+                                              ratingCount: allPlans[index]
+                                                  .raters!
+                                                  .toString(),
+                                            ),
+                                          );
+                                        }),
                                   ),
                                   SizedBox(
                                       height:
@@ -476,10 +523,14 @@ class CustomButton extends StatelessWidget {
 
 class AchivementCertificateTile extends StatelessWidget {
   const AchivementCertificateTile(
-      {required this.color, required this.certificateDescription, Key? key})
+      {required this.color,
+      required this.certificateDescription,
+      required this.certificateIcon,
+      Key? key})
       : super(key: key);
   final Color color;
   final String certificateDescription;
+  final String certificateIcon;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -492,10 +543,17 @@ class AchivementCertificateTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-              height: 38 * SizeConfig.widthMultiplier!,
-              width: 38 * SizeConfig.widthMultiplier!,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: kDarkGrey)),
+            height: 38 * SizeConfig.widthMultiplier!,
+            width: 38 * SizeConfig.widthMultiplier!,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: kDarkGrey),
+            child: CircleAvatar(
+              radius: 38 * SizeConfig.widthMultiplier!,
+              child: CircleAvatar(
+                radius: 19 * SizeConfig.heightMultiplier!,
+                backgroundImage: NetworkImage(certificateIcon),
+              ),
+            ),
+          ),
           SizedBox(
             width: 8 * SizeConfig.widthMultiplier!,
           ),
@@ -504,7 +562,7 @@ class AchivementCertificateTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 30 * SizeConfig.widthMultiplier!,
+                //height: 30 * SizeConfig.widthMultiplier!,
                 width: 144 * SizeConfig.heightMultiplier!,
                 child: Text(certificateDescription,
                     style: AppTextStyle.lightMediumBlackText
@@ -531,6 +589,7 @@ class PlanTile extends StatelessWidget {
       required this.likesCount,
       required this.ratingCount,
       required this.palnTime,
+      required this.planImage,
       Key? key})
       : super(key: key);
   final double rating;
@@ -538,6 +597,7 @@ class PlanTile extends StatelessWidget {
   final String palnTime;
   final String likesCount;
   final String ratingCount;
+  final String planImage;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -556,10 +616,15 @@ class PlanTile extends StatelessWidget {
               height: 144 * SizeConfig.heightMultiplier!,
               width: 160 * SizeConfig.widthMultiplier!,
               decoration: BoxDecoration(
-                  color: Colors.green,
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(10.0),
                       topLeft: Radius.circular(10.0))),
+              child: Image.network(
+                planImage,
+                height: 144 * SizeConfig.heightMultiplier!,
+                width: 160 * SizeConfig.widthMultiplier!,
+                fit: BoxFit.contain,
+              ),
             ),
             SizedBox(height: 8 * SizeConfig.heightMultiplier!),
             Padding(

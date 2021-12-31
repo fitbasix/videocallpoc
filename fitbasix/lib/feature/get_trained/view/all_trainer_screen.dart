@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -87,8 +88,8 @@ class AllTrainerScreen extends StatelessWidget {
               description:
                   'Hi, This is Jonathan. I am certified by Institute Viverra cras facilisis massa amet hendrerit nun Tristiqu...',
               certifcateTitle: [
-                'Specialist in Sports Nutrition from ISSA...',
-                'Specialist in Sports Nutrition from ISSA...'
+                // 'Specialist in Sports Nutrition from ISSA...',
+                // 'Specialist in Sports Nutrition from ISSA...'
               ],
               traineeCount: 1235,
               rating: 5,
@@ -118,7 +119,7 @@ class TrainerTile extends StatelessWidget {
   final String strength;
   final int strengthCount;
   final String description;
-  final List<String> certifcateTitle;
+  final List<Certificate> certifcateTitle;
   final int traineeCount;
   final double rating;
   final int numberRated;
@@ -216,7 +217,8 @@ class TrainerTile extends StatelessWidget {
                     padding: EdgeInsets.only(
                         right: 8.0 * SizeConfig.widthMultiplier!),
                     child: AchivementCertificateTile(
-                      certificateDescription: certifcateTitle[index],
+                      certificateDescription: certifcateTitle[index].certificateName!,
+                      certificateIcon: certifcateTitle[index].url!,
                       color: index % 2 == 0 ? oceanBlue : lightOrange,
                     ),
                   );
