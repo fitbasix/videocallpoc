@@ -1,4 +1,3 @@
-import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -9,6 +8,7 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
@@ -195,6 +195,24 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                   .trainees!)!,
                               rating: 5,
                               numberRated: 234,
+                              profilePhoto: _trainerController
+                                          .allTrainer
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .user !=
+                                      null
+                                  ? _trainerController
+                                          .allTrainer
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .user!
+                                          .profilePhoto ??
+                                      ''
+                                  : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
                             );
                           }),
                     ),
@@ -215,6 +233,7 @@ class TrainerTile extends StatelessWidget {
     required this.description,
     required this.certifcateTitle,
     required this.traineeCount,
+    required this.profilePhoto,
     required this.rating,
     required this.numberRated,
   }) : super(key: key);
@@ -225,6 +244,7 @@ class TrainerTile extends StatelessWidget {
   final String description;
   final List<Certificate> certifcateTitle;
   final int traineeCount;
+  final String profilePhoto;
   final double rating;
   final int numberRated;
 
@@ -255,7 +275,7 @@ class TrainerTile extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
-                      'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                      profilePhoto,
                       fit: BoxFit.fill,
                     ),
                   ),
