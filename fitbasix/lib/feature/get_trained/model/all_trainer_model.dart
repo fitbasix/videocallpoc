@@ -102,7 +102,7 @@ class Trainer {
   final String? id;
   final String? about;
   final List<TrainerType>? trainerType;
-  final List<Strength>? strength;
+  final List<String>? strength;
   final User? user;
   final int? numOfCertificates;
   final List<Strength>? tags;
@@ -124,12 +124,11 @@ class Trainer {
         about: json["about"],
         trainerType: List<TrainerType>.from(
             json["trainerType"].map((x) => trainerTypeValues.map![x])),
-        strength: List<Strength>.from(
-            json["strength"].map((x) => strengthValues.map![x])),
+        strength: List<String>.from(json["strength"].map((x) => x)),
         user: json["user"] == null ? null : User.fromJson(json["user"]),
         numOfCertificates: json["numOfCertificates"],
-        tags: List<Strength>.from(
-            json["tags"].map((x) => strengthValues.map![x])),
+        // tags:
+        //     List<Strength>.from(json["strength"].map((x) => Strength.fromJson(x))),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),
@@ -139,8 +138,9 @@ class Trainer {
         v: json["__v"],
         isFitnessConsultant: json["isFitnessConsultant"],
         isNutritionConsultant: json["isNutritionConsultant"],
-        certificates: List<Certificate>.from(
-            json["certificates"].map((x) => Certificate.fromJson(x))),
+        certificates: List<Certificate>.from(json["certificates"] == null
+            ? []
+            : json["certificates"].map((x) => Certificate.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -154,12 +154,10 @@ class Trainer {
         "about": about,
         "trainerType": List<dynamic>.from(
             trainerType!.map((x) => trainerTypeValues.reverse![x])),
-        "strength": List<dynamic>.from(
-            strength!.map((x) => strengthValues.reverse![x])),
+        "strength": List<String>.from(strength!.map((x) => x)),
         "user": user == null ? null : user!.toJson(),
         "numOfCertificates": numOfCertificates,
-        "tags":
-            List<dynamic>.from(tags!.map((x) => strengthValues.reverse![x])),
+        "tags": List<dynamic>.from(tags!.map((x) => x.toJson())),
         "createdAt": createdAt == null ? null : createdAt!.toIso8601String(),
         "updatedAt": updatedAt == null ? null : updatedAt!.toIso8601String(),
         "__v": v,
@@ -202,9 +200,25 @@ class Certificate {
       };
 }
 
-enum Strength { ALL, STR2 }
+// enum Strength { ALL, STR2 }
 
-final strengthValues = EnumValues({"ALL": Strength.ALL, "str2": Strength.STR2});
+class Strength {
+  Strength({
+    this.strength,
+  });
+
+  final List<String>? strength;
+
+  factory Strength.fromJson(Map<String, dynamic> json) => Strength(
+        strength: List<String>.from(json["strength"].map((x) => x)),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "strength": List<dynamic>.from(strength!.map((x) => x)),
+      };
+}
+
+// final strengthValues = EnumValues({"ALL": Strength.ALL, "str2": Strength.STR2});
 
 enum TrainerType { TRAINER, FITNESS_CONSULTATION }
 

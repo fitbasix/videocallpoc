@@ -25,8 +25,8 @@ class TrainerServices {
   // }
   static Future<PlanModel> getPlanByTrainerId(String trainerId) async {
     dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWNlOTFjNTRiNzg5Y2RmMTNiNGU5ZjEiLCJyb2xlIjoidXNlciIsImlhdCI6MTY0MDkzNDc2NCwiZXhwIjoxNjQxNzk4NzY0fQ.46BNh_sWnZUY9P2tMtP-DuKjWwQh_5HGs_NkEgX4XJg";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
     var response = await dio!
         .post(ApiUrl.getPlanByTrainerId, data: {"trainerId": trainerId});
     print(response.toString());
@@ -35,8 +35,8 @@ class TrainerServices {
 
   static Future<TrainerModel> getATrainerDetail(String trainerId) async {
     dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWNlOTFjNTRiNzg5Y2RmMTNiNGU5ZjEiLCJyb2xlIjoidXNlciIsImlhdCI6MTY0MDkzNDc2NCwiZXhwIjoxNjQxNzk4NzY0fQ.46BNh_sWnZUY9P2tMtP-DuKjWwQh_5HGs_NkEgX4XJg";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
     var response =
         await dio!.post(ApiUrl.getTrainerById, data: {"trainerId": trainerId});
     print(response.toString());
@@ -45,19 +45,38 @@ class TrainerServices {
 
   static Future<AllTrainer> getAllTrainer() async {
     dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWNlOTFjNTRiNzg5Y2RmMTNiNGU5ZjEiLCJyb2xlIjoidXNlciIsImlhdCI6MTY0MDkzNDc2NCwiZXhwIjoxNjQxNzk4NzY0fQ.46BNh_sWnZUY9P2tMtP-DuKjWwQh_5HGs_NkEgX4XJg";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getAllTrainer, data: {
-      "trainerId": ['ALL']
+      "interests": ['ALL']
     });
+    print(response.toString());
+    return allTrainerFromJson(response.toString());
+  }
+
+  static Future<AllTrainer> getFitnessConsultant() async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!
+        .post(ApiUrl.getAllTrainer, data: {"isFitnessConsultant": true});
+    print(response.toString());
+    return allTrainerFromJson(response.toString());
+  }
+
+  static Future<AllTrainer> getNutritionConsultant() async {
+    print('before');
+    print(await LogInService.getAccessToken());
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!
+        .post(ApiUrl.getAllTrainer, data: {"isNutritionConsultant": true});
     print(response.toString());
     return allTrainerFromJson(response.toString());
   }
 
   static Future<InterestModel> getAllInterest() async {
     dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWNlOTFjNTRiNzg5Y2RmMTNiNGU5ZjEiLCJyb2xlIjoidXNlciIsImlhdCI6MTY0MDkzNDc2NCwiZXhwIjoxNjQxNzk4NzY0fQ.46BNh_sWnZUY9P2tMtP-DuKjWwQh_5HGs_NkEgX4XJg";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
     var response = await dio!.post(ApiUrl.getAllInterest, data: {});
     print(response.toString());
     return interestModelFromJson(response.toString());

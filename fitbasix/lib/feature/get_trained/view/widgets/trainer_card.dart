@@ -12,11 +12,21 @@ class TrainerCard extends StatelessWidget {
     Key? key,
     required this.name,
     required this.certificateCount,
+    required this.profilePhoto,
+    required this.strength,
+    required this.strengthLength,
+    required this.about,
+    required this.raters,
     required this.rating,
   }) : super(key: key);
 
   final String name;
-  final String certificateCount;
+  final int certificateCount;
+  final String profilePhoto;
+  final String strength;
+  final int strengthLength;
+  final String about;
+  final String raters;
   final double rating;
 
   @override
@@ -45,8 +55,7 @@ class TrainerCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40 * SizeConfig.heightMultiplier!,
-            backgroundImage: NetworkImage(
-                'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg'),
+            backgroundImage: NetworkImage(profilePhoto),
           ),
           SizedBox(
             height: 8 * SizeConfig.heightMultiplier!,
@@ -61,7 +70,7 @@ class TrainerCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Sports Nutrition +3',
+                '$strength + ${strengthLength - 1}',
                 style: AppTextStyle.NormalText.copyWith(
                     fontSize: 10 * SizeConfig.textMultiplier!),
               ),
@@ -80,7 +89,7 @@ class TrainerCard extends StatelessWidget {
                 width: 2 * SizeConfig.widthMultiplier!,
               ),
               Text(
-                certificateCount,
+                '$certificateCount',
                 style: AppTextStyle.titleText
                     .copyWith(fontSize: 10 * SizeConfig.textMultiplier!),
               ),
@@ -90,7 +99,7 @@ class TrainerCard extends StatelessWidget {
             height: 8 * SizeConfig.heightMultiplier!,
           ),
           Text(
-            'Hi, This is Coach Name. I am certified by Institute ...',
+            about,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: AppTextStyle.NormalText.copyWith(
@@ -106,7 +115,7 @@ class TrainerCard extends StatelessWidget {
             height: 4 * SizeConfig.heightMultiplier!,
           ),
           Text(
-            '(234)',
+            '($raters)',
             style: AppTextStyle.NormalText.copyWith(
                 fontSize: 10, color: kGreyText),
           ),

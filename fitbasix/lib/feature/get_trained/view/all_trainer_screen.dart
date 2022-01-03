@@ -24,7 +24,10 @@ class AllTrainerScreen extends StatelessWidget {
         backgroundColor: kPureWhite,
         elevation: 0,
         leading: IconButton(
-            onPressed: () {}, icon: SvgPicture.asset(ImagePath.backIcon)),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: SvgPicture.asset(ImagePath.backIcon)),
         title: Transform(
           transform: Matrix4.translationValues(
               -20 * SizeConfig.widthMultiplier!, 0, 0),
@@ -77,6 +80,9 @@ class AllTrainerScreen extends StatelessWidget {
                               .interests.value.response!.response!.data!.length,
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
+                            for (int i = 0; i < 5; i++) {
+                              _trainerController.contactSelection.add(false);
+                            }
                             return Obx(() => Padding(
                                   padding: index == 0
                                       ? EdgeInsets.only(
@@ -85,11 +91,13 @@ class AllTrainerScreen extends StatelessWidget {
                                       : EdgeInsets.all(0),
                                   child: ItemCategory(
                                     onTap: () {
-                                      _trainerController.isSelected.value =
-                                          !_trainerController.isSelected.value;
+                                      _trainerController
+                                              .contactSelection[index] =
+                                          !_trainerController
+                                              .contactSelection[index];
                                     },
-                                    isSelected:
-                                        _trainerController.isSelected.value,
+                                    isSelected: _trainerController
+                                        .contactSelection[index],
                                     interest: _trainerController.interests.value
                                         .response!.response!.data![index].name!,
                                   ),
@@ -126,14 +134,7 @@ class AllTrainerScreen extends StatelessWidget {
                                           .name ??
                                       ''
                                   : '',
-                              strength: _trainerController
-                                  .allTrainer
-                                  .value
-                                  .response!
-                                  .data!
-                                  .trainers![index]
-                                  .strength![0]
-                                  .name,
+                              strength: '',
                               strengthCount: _trainerController
                                       .allTrainer
                                       .value
@@ -434,22 +435,26 @@ class ItemCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0 * SizeConfig.widthMultiplier!),
-      child: Container(
-        height: 28 * SizeConfig.heightMultiplier!,
-        decoration: BoxDecoration(
-            color: isSelected ? kBlack : offWhite,
-            borderRadius:
-                BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-            border: Border.all(
-              color: kBlack,
-            )),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: 12 * SizeConfig.widthMultiplier!),
-          child: Center(
-            child: Text(
-              interest,
-              style: AppTextStyle.lightMediumBlackText,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 28 * SizeConfig.heightMultiplier!,
+          decoration: BoxDecoration(
+              color: isSelected ? kBlack : offWhite,
+              borderRadius:
+                  BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+              border: Border.all(
+                color: kBlack,
+              )),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 12 * SizeConfig.widthMultiplier!),
+            child: Center(
+              child: Text(
+                interest,
+                style: AppTextStyle.lightMediumBlackText
+                    .copyWith(color: isSelected ? offWhite : kBlack),
+              ),
             ),
           ),
         ),

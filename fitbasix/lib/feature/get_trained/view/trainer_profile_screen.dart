@@ -103,19 +103,26 @@ class TrainerPage extends StatelessWidget {
               width: double.infinity,
               child: SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Stack(
                       children: [
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
                               height: 243 * SizeConfig.heightMultiplier!,
                             ),
-                            Text(
-                              name,
-                              style: AppTextStyle.titleText.copyWith(
-                                  fontSize: 18 * SizeConfig.textMultiplier!),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  name,
+                                  style: AppTextStyle.titleText.copyWith(
+                                      fontSize:
+                                          18 * SizeConfig.textMultiplier!),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 12 * SizeConfig.heightMultiplier!,
@@ -623,7 +630,7 @@ class PlanTile extends StatelessWidget {
                 planImage,
                 height: 144 * SizeConfig.heightMultiplier!,
                 width: 160 * SizeConfig.widthMultiplier!,
-                fit: BoxFit.contain,
+                fit: BoxFit.fill,
               ),
             ),
             SizedBox(height: 8 * SizeConfig.heightMultiplier!),
