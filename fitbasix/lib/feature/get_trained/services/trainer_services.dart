@@ -43,12 +43,11 @@ class TrainerServices {
     return trainerModelFromJson(response.toString());
   }
 
-  static Future<AllTrainer> getAllTrainer() async {
+  static Future<AllTrainer> getAllTrainer({int? currentPage}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.getAllTrainer, data: {
-      "interests": ['ALL']
-    });
+    var response = await dio!.post(ApiUrl.getAllTrainer,
+        data: {"skip": currentPage == null ? 0 : currentPage * 5});
     print(response.toString());
     return allTrainerFromJson(response.toString());
   }

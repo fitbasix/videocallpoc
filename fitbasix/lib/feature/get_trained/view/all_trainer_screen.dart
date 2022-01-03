@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -12,10 +13,35 @@ import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
-class AllTrainerScreen extends StatelessWidget {
+class AllTrainerScreen extends StatefulWidget {
   AllTrainerScreen({Key? key}) : super(key: key);
 
-  final TrainerController _trainerController = Get.put(TrainerController());
+  @override
+  State<AllTrainerScreen> createState() => _AllTrainerScreenState();
+}
+
+class _AllTrainerScreenState extends State<AllTrainerScreen> {
+  int currentPage = 1;
+  final TrainerController _trainerController = Get.find();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(() async {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        final trainer =
+            await TrainerServices.getAllTrainer(currentPage: currentPage);
+
+        for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
+          _trainerController.allTrainer.value.response!.data!.trainers!
+              .add(trainer.response!.data!.trainers![i]);
+        }
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +79,7 @@ class AllTrainerScreen extends StatelessWidget {
               )
             : SingleChildScrollView(
                 // physics: ScrollPhysics(),
+                controller: _scrollController,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -134,7 +161,13 @@ class AllTrainerScreen extends StatelessWidget {
                                           .name ??
                                       ''
                                   : '',
-                              strength: '',
+                              strength: _trainerController
+                                  .allTrainer
+                                  .value
+                                  .response!
+                                  .data!
+                                  .trainers![index]
+                                  .strength![0],
                               strengthCount: _trainerController
                                       .allTrainer
                                       .value
@@ -144,12 +177,15 @@ class AllTrainerScreen extends StatelessWidget {
                                       .strength!
                                       .length -
                                   1,
-                              description:
-                                  'Hi, This is Jonathan. I am certified by Institute Viverra cras facilisis massa amet hendrerit nun Tristiqu...',
-                              certifcateTitle: [
-                                // 'Specialist in Sports Nutrition from ISSA...',
-                                // 'Specialist in Sports Nutrition from ISSA...'
-                              ],
+                              description: _trainerController.allTrainer.value
+                                  .response!.data!.trainers![index].about!,
+                              certifcateTitle: _trainerController
+                                  .allTrainer
+                                  .value
+                                  .response!
+                                  .data!
+                                  .trainers![index]
+                                  .certificates!,
                               traineeCount: int.tryParse(_trainerController
                                   .allTrainer
                                   .value

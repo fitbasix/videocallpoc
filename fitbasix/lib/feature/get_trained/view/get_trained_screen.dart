@@ -79,13 +79,23 @@ class GetTrainedScreen extends StatelessWidget {
                                       : EdgeInsets.all(0),
                                   child: TrainerCard(
                                     name: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .user!
-                                        .name!,
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .name ??
+                                            ''
+                                        : '',
                                     certificateCount: _trainerController
                                         .allTrainer
                                         .value
@@ -101,13 +111,23 @@ class GetTrainedScreen extends StatelessWidget {
                                         .trainers![index]
                                         .rating!)!,
                                     profilePhoto: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .user!
-                                        .profilePhoto!,
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .profilePhoto ??
+                                            ''
+                                        : '',
                                     about: _trainerController
                                         .allTrainer
                                         .value
@@ -239,13 +259,23 @@ class GetTrainedScreen extends StatelessWidget {
                                       : EdgeInsets.all(0),
                                   child: TrainerCard(
                                     name: _trainerController
-                                        .nutritionConsultant
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .user!
-                                        .name!,
+                                                .nutritionConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .nutritionConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .name ??
+                                            ''
+                                        : '',
                                     certificateCount: _trainerController
                                         .nutritionConsultant
                                         .value
@@ -261,13 +291,23 @@ class GetTrainedScreen extends StatelessWidget {
                                         .trainers![index]
                                         .rating!)!,
                                     profilePhoto: _trainerController
-                                        .nutritionConsultant
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .user!
-                                        .profilePhoto!,
+                                                .nutritionConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .nutritionConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .profilePhoto ??
+                                            ''
+                                        : '',
                                     about: _trainerController
                                         .nutritionConsultant
                                         .value
