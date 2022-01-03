@@ -3,6 +3,7 @@ import 'package:fitbasix/feature/get_started_page/view/get_started_page.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
 import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
@@ -21,6 +22,6 @@ Future<void> setupApp() async {
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: accessToken == null ? TrainerProfileScreen() : AllTrainerScreen(),
+    child: accessToken == null ? LoginScreen() : TrainerProfileScreen(),
   ));
 }
