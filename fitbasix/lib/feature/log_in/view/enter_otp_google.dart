@@ -39,8 +39,9 @@ class EnterOTPGoogle extends StatelessWidget {
             ),
             Text(
               'hi_name'.trParams({
-                'name':
-                    _loginController.thirdPartyLogin.value.response!.user!.name!
+                'name': _loginController
+                    .thirdPartyLogin.value.response!.user!.name
+                    .toString()
               }),
               style: AppTextStyle.titleText,
             ),
