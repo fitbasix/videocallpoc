@@ -19,14 +19,6 @@ class CustomAppBar extends StatelessWidget {
         title: Text(titleOfModule,
             style: AppTextStyle.titleText
                 .copyWith(fontSize: 16 * SizeConfig.textMultiplier!)),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                color: kPureBlack,
-              ))
-        ],
       ),
     );
   }

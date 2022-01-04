@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
@@ -10,19 +8,7 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 
 class TrainerServices {
   static var dio = DioUtil().getInstance();
-  // static Future getTrainerById() async {
-  //   print('before');
-  //   var accessToken = await LogInService.getAccessToken();
-  //   print(accessToken);
-  //   dio!.options.headers["language"] = "1";
-  //   dio!.options.headers['Authorization'] = accessToken;
-  //   var response = await dio!.post(ApiUrl.getTrainerById, data: {
-  //     "trainerId": "61cd3562a66144fddd96af80",
-  //   });
-  //   print('after');
-  //   print(response.statusCode.toString());
-  //   log(response.data.toString());
-  // }
+
   static Future<PlanModel> getPlanByTrainerId(String trainerId) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
@@ -43,11 +29,14 @@ class TrainerServices {
     return trainerModelFromJson(response.toString());
   }
 
-  static Future<AllTrainer> getAllTrainer({int? currentPage}) async {
+  static Future<AllTrainer> getAllTrainer(
+      {int? currentPage, String? name}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.getAllTrainer,
-        data: {"skip": currentPage == null ? 0 : currentPage * 5});
+    var response = await dio!.post(ApiUrl.getAllTrainer, data: {
+      "skip": currentPage == null ? 0 : currentPage * 5,
+      "name": name == null ? "" : name
+    });
     print(response.toString());
     return allTrainerFromJson(response.toString());
   }
