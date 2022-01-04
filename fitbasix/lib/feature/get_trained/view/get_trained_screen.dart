@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -53,7 +54,11 @@ class GetTrainedScreen extends StatelessWidget {
                               ),
                               Spacer(),
                               SeeAllButton(
-                                onTap: () {
+                                onTap: () async {
+                                  _trainerController.pageTitle.value =
+                                      'trainers'.tr;
+                                  _trainerController.allTrainer.value =
+                                      await TrainerServices.getAllTrainer();
                                   Navigator.pushNamed(
                                       context, RouteName.allTrainerScreen);
                                 },
@@ -79,13 +84,23 @@ class GetTrainedScreen extends StatelessWidget {
                                       : EdgeInsets.all(0),
                                   child: TrainerCard(
                                     name: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .user!
-                                        .name!,
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .name ??
+                                            ''
+                                        : '',
                                     certificateCount: _trainerController
                                         .allTrainer
                                         .value
@@ -101,13 +116,23 @@ class GetTrainedScreen extends StatelessWidget {
                                         .trainers![index]
                                         .rating!)!,
                                     profilePhoto: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .user!
-                                        .profilePhoto!,
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .profilePhoto ??
+                                            ''
+                                        : '',
                                     about: _trainerController
                                         .allTrainer
                                         .value
@@ -159,9 +184,17 @@ class GetTrainedScreen extends StatelessWidget {
                               ),
                               Spacer(),
                               SeeAllButton(
-                                onTap: () {
+                                onTap: () async {
+                                  // _trainerController.isLoading.value = true;
+                                  _trainerController.pageTitle.value =
+                                      'fitnessConsult'.tr;
+
+                                  _trainerController.allTrainer.value =
+                                      await TrainerServices
+                                          .getFitnessConsultant();
                                   Navigator.pushNamed(
                                       context, RouteName.allTrainerScreen);
+                                  // _trainerController.isLoading.value = false;
                                 },
                               )
                             ],
@@ -183,14 +216,85 @@ class GetTrainedScreen extends StatelessWidget {
                                               12 * SizeConfig.widthMultiplier!)
                                       : EdgeInsets.all(0),
                                   child: TrainerCard(
-                                    name: 'Jonathan Swift',
-                                    certificateCount: 3,
-                                    rating: 5,
-                                    profilePhoto: '',
-                                    about: '',
-                                    raters: '',
-                                    strength: '',
-                                    strengthLength: 0,
+                                    name: _trainerController
+                                                .fitnessConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .fitnessConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .name ??
+                                            ''
+                                        : '',
+                                    certificateCount: _trainerController
+                                        .fitnessConsultant
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .numOfCertificates!,
+                                    rating: double.tryParse(_trainerController
+                                        .fitnessConsultant
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .rating!)!,
+                                    profilePhoto: _trainerController
+                                                .fitnessConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .fitnessConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .profilePhoto ??
+                                            ''
+                                        : '',
+                                    about: _trainerController
+                                        .fitnessConsultant
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .about!,
+                                    raters: _trainerController
+                                        .fitnessConsultant
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .totalRating!,
+                                    strength: _trainerController
+                                        .fitnessConsultant
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .strength![0],
+                                    strengthLength: _trainerController
+                                        .fitnessConsultant
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .strength!
+                                        .length,
                                   ),
                                 );
                               }),
@@ -213,9 +317,16 @@ class GetTrainedScreen extends StatelessWidget {
                               ),
                               Spacer(),
                               SeeAllButton(
-                                onTap: () {
+                                onTap: () async {
+                                  // _trainerController.isLoading.value = true;
+                                  _trainerController.pageTitle.value =
+                                      'nutritionConsult'.tr;
+                                  _trainerController.allTrainer.value =
+                                      await TrainerServices
+                                          .getNutritionConsultant();
                                   Navigator.pushNamed(
                                       context, RouteName.allTrainerScreen);
+                                  // _trainerController.isLoading.value = false;
                                 },
                               )
                             ],
@@ -239,13 +350,23 @@ class GetTrainedScreen extends StatelessWidget {
                                       : EdgeInsets.all(0),
                                   child: TrainerCard(
                                     name: _trainerController
-                                        .nutritionConsultant
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .user!
-                                        .name!,
+                                                .nutritionConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .nutritionConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .name ??
+                                            ''
+                                        : '',
                                     certificateCount: _trainerController
                                         .nutritionConsultant
                                         .value
@@ -261,13 +382,23 @@ class GetTrainedScreen extends StatelessWidget {
                                         .trainers![index]
                                         .rating!)!,
                                     profilePhoto: _trainerController
-                                        .nutritionConsultant
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .user!
-                                        .profilePhoto!,
+                                                .nutritionConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .nutritionConsultant
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .profilePhoto ??
+                                            ''
+                                        : '',
                                     about: _trainerController
                                         .nutritionConsultant
                                         .value

@@ -8,14 +8,48 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
-class AllTrainerScreen extends StatelessWidget {
+class AllTrainerScreen extends StatefulWidget {
   AllTrainerScreen({Key? key}) : super(key: key);
 
-  final TrainerController _trainerController = Get.put(TrainerController());
+  @override
+  State<AllTrainerScreen> createState() => _AllTrainerScreenState();
+}
+
+class _AllTrainerScreenState extends State<AllTrainerScreen> {
+  int currentPage = 1;
+  final TrainerController _trainerController = Get.find();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(() async {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        final trainer =
+            await TrainerServices.getAllTrainer(currentPage: currentPage);
+        if (trainer.response!.data!.trainers!.length < 5) {
+          for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
+            _trainerController.allTrainer.value.response!.data!.trainers!
+                .add(trainer.response!.data!.trainers![i]);
+          }
+          return;
+        } else {
+          for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
+            _trainerController.allTrainer.value.response!.data!.trainers!
+                .add(trainer.response!.data!.trainers![i]);
+          }
+        }
+
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +66,7 @@ class AllTrainerScreen extends StatelessWidget {
           transform: Matrix4.translationValues(
               -20 * SizeConfig.widthMultiplier!, 0, 0),
           child: Text(
-            'trainers'.tr,
+            _trainerController.pageTitle.value,
             style: AppTextStyle.titleText
                 .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
           ),
@@ -53,6 +87,7 @@ class AllTrainerScreen extends StatelessWidget {
               )
             : SingleChildScrollView(
                 // physics: ScrollPhysics(),
+                controller: _scrollController,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -81,7 +116,7 @@ class AllTrainerScreen extends StatelessWidget {
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             for (int i = 0; i < 5; i++) {
-                              _trainerController.contactSelection.add(false);
+                              _trainerController.interestSelection.add(false);
                             }
                             return Obx(() => Padding(
                                   padding: index == 0
@@ -92,12 +127,13 @@ class AllTrainerScreen extends StatelessWidget {
                                   child: ItemCategory(
                                     onTap: () {
                                       _trainerController
-                                              .contactSelection[index] =
-                                          !_trainerController
-                                              .contactSelection[index];
+                                          .SelectedInterestIndex.value = index;
+
+                                      _trainerController.UpdatedInterestStatus(
+                                          index);
                                     },
                                     isSelected: _trainerController
-                                        .contactSelection[index],
+                                        .interestSelection[index],
                                     interest: _trainerController.interests.value
                                         .response!.response!.data![index].name!,
                                   ),
@@ -134,7 +170,13 @@ class AllTrainerScreen extends StatelessWidget {
                                           .name ??
                                       ''
                                   : '',
-                              strength: '',
+                              strength: _trainerController
+                                  .allTrainer
+                                  .value
+                                  .response!
+                                  .data!
+                                  .trainers![index]
+                                  .strength![0],
                               strengthCount: _trainerController
                                       .allTrainer
                                       .value
@@ -144,12 +186,15 @@ class AllTrainerScreen extends StatelessWidget {
                                       .strength!
                                       .length -
                                   1,
-                              description:
-                                  'Hi, This is Jonathan. I am certified by Institute Viverra cras facilisis massa amet hendrerit nun Tristiqu...',
-                              certifcateTitle: [
-                                // 'Specialist in Sports Nutrition from ISSA...',
-                                // 'Specialist in Sports Nutrition from ISSA...'
-                              ],
+                              description: _trainerController.allTrainer.value
+                                  .response!.data!.trainers![index].about!,
+                              certifcateTitle: _trainerController
+                                  .allTrainer
+                                  .value
+                                  .response!
+                                  .data!
+                                  .trainers![index]
+                                  .certificates!,
                               traineeCount: int.tryParse(_trainerController
                                   .allTrainer
                                   .value
@@ -157,8 +202,45 @@ class AllTrainerScreen extends StatelessWidget {
                                   .data!
                                   .trainers![index]
                                   .trainees!)!,
-                              rating: 5,
-                              numberRated: 234,
+                              rating: double.tryParse(_trainerController
+                                  .allTrainer
+                                  .value
+                                  .response!
+                                  .data!
+                                  .trainers![index]
+                                  .rating!)!,
+                              numberRated: int.tryParse(_trainerController
+                                  .allTrainer
+                                  .value
+                                  .response!
+                                  .data!
+                                  .trainers![index]
+                                  .totalRating!)!,
+                              profilePhoto: _trainerController
+                                          .allTrainer
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .user !=
+                                      null
+                                  ? _trainerController
+                                          .allTrainer
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .user!
+                                          .profilePhoto ??
+                                      ''
+                                  : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                              slotLeft: int.tryParse(_trainerController
+                                  .allTrainer
+                                  .value
+                                  .response!
+                                  .data!
+                                  .trainers![index]
+                                  .slotsFeft!)!,
                             );
                           }),
                     ),
@@ -179,23 +261,29 @@ class TrainerTile extends StatelessWidget {
     required this.description,
     required this.certifcateTitle,
     required this.traineeCount,
+    required this.profilePhoto,
     required this.rating,
     required this.numberRated,
+    required this.slotLeft,
   }) : super(key: key);
 
   final String name;
   final String strength;
   final int strengthCount;
   final String description;
-  final List<Certificate> certifcateTitle;
+  final List<Certificate>? certifcateTitle;
   final int traineeCount;
+  final String profilePhoto;
   final double rating;
   final int numberRated;
+  final int slotLeft;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 325 * SizeConfig.heightMultiplier!,
+      height: certifcateTitle!.isEmpty
+          ? 246 * SizeConfig.heightMultiplier!
+          : 325 * SizeConfig.heightMultiplier!,
       margin: EdgeInsets.only(
           left: 12 * SizeConfig.widthMultiplier!,
           right: 12 * SizeConfig.widthMultiplier!,
@@ -219,7 +307,7 @@ class TrainerTile extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.network(
-                      'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                      profilePhoto,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -276,25 +364,27 @@ class TrainerTile extends StatelessWidget {
           SizedBox(
             height: 12 * SizeConfig.heightMultiplier!,
           ),
-          Container(
-            height: 79 * SizeConfig.heightMultiplier!,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: certifcateTitle.length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        right: 8.0 * SizeConfig.widthMultiplier!),
-                    child: AchivementCertificateTile(
-                      certificateDescription:
-                          certifcateTitle[index].certificateName!,
-                      certificateIcon: certifcateTitle[index].url!,
-                      color: index % 2 == 0 ? oceanBlue : lightOrange,
-                    ),
-                  );
-                }),
-          ),
+          certifcateTitle!.isEmpty
+              ? Container()
+              : Container(
+                  height: 79 * SizeConfig.heightMultiplier!,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: certifcateTitle!.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              right: 8.0 * SizeConfig.widthMultiplier!),
+                          child: AchivementCertificateTile(
+                            certificateDescription:
+                                certifcateTitle![index].certificateName!,
+                            certificateIcon: certifcateTitle![index].url!,
+                            color: index % 2 == 0 ? oceanBlue : lightOrange,
+                          ),
+                        );
+                      }),
+                ),
           SizedBox(
             height: 12 * SizeConfig.heightMultiplier!,
           ),
@@ -360,7 +450,7 @@ class TrainerTile extends StatelessWidget {
                   padding:
                       EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
                   child: Text(
-                    '4',
+                    slotLeft.toString(),
                     style: AppTextStyle.titleText
                         .copyWith(fontSize: 36, color: kGreenColor),
                   ),

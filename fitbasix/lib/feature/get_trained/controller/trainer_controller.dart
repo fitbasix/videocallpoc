@@ -14,7 +14,23 @@ class TrainerController extends GetxController {
   Rx<AllTrainer> fitnessConsultant = AllTrainer().obs;
   Rx<AllTrainer> nutritionConsultant = AllTrainer().obs;
   Rx<InterestModel> interests = InterestModel().obs;
-  RxList<bool> contactSelection = <bool>[].obs;
+  RxList<bool> interestSelection = <bool>[true].obs;
+  RxInt SelectedInterestIndex = RxInt(0);
+  RxString pageTitle = RxString('');
+
+  List<bool> UpdatedInterestStatus(int index) {
+    int length = interests.value.response!.response!.data!.length;
+    List<bool> selecteOption = [];
+    for (int i = 0; i < length; i++) {
+      if (i == index) {
+        selecteOption.add(true);
+      } else {
+        selecteOption.add(false);
+      }
+    }
+    interestSelection.value = selecteOption;
+    return interestSelection;
+  }
 
   Future<void> setUp() async {
     isLoading.value = true;
@@ -25,10 +41,6 @@ class TrainerController extends GetxController {
     allTrainer.value = await TrainerServices.getAllTrainer();
     fitnessConsultant.value = await TrainerServices.getFitnessConsultant();
     nutritionConsultant.value = await TrainerServices.getNutritionConsultant();
-
-    // print(allTrainer.value.response!.data!.trainers![0].followers);
-    // print(allTrainer.value.response!.data!.trainers![2]);
-    // print(nutritionConsultant.value.response!.data!.trainers!.length);
 
     interests.value = await TrainerServices.getAllInterest();
     isLoading.value = false;

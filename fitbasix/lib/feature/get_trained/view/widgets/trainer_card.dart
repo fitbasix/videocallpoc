@@ -62,6 +62,8 @@ class TrainerCard extends StatelessWidget {
           ),
           Text(
             name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyle.titleText
                 .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
           ),
