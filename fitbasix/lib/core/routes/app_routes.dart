@@ -55,7 +55,7 @@ class GenerateRoute {
       return PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
-            HomePage(),
+            HomeAndTrainerPage(),
       );
     }
     if (route == RouteName.enterMobileGoogle) {
