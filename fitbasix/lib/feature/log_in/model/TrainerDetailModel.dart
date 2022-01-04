@@ -103,9 +103,10 @@ class Trainer {
         strength: List<String>.from(json["strength"].map((x) => x)),
         user: User.fromJson(json["user"]),
         numOfCertificates: json["numOfCertificates"],
-        certificates: List<Certificate>.from(json["certificates"]
-                ["certificates"]
-            .map((x) => Certificate.fromJson(x))),
+        certificates: List<Certificate>.from(json["certificates"] == null
+            ? []
+            : json["certificates"]["certificates"]
+                .map((x) => Certificate.fromJson(x))),
         followers: json["followers"],
         following: json["following"],
         trainees: json["trainees"],
@@ -185,18 +186,24 @@ class User {
     this.id,
     this.profilePhoto,
     this.name,
+    this.coverPhoto,
   });
 
   String? id;
   String? profilePhoto;
+  String? coverPhoto;
   String? name;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["_id"],
-        profilePhoto: json["profilePhoto"],
-        name: json["name"],
-      );
+      id: json["_id"],
+      profilePhoto: json["profilePhoto"],
+      name: json["name"],
+      coverPhoto: json['coverPhoto']);
 
-  Map<String, dynamic> toJson() =>
-      {"_id": id, "profilePhoto": profilePhoto, "name": name};
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "profilePhoto": profilePhoto,
+        "name": name,
+        "coverPhoto": coverPhoto
+      };
 }

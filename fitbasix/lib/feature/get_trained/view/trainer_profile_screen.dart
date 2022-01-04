@@ -1,5 +1,6 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/core/universal_widgets/number_format.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
@@ -29,22 +30,28 @@ class TrainerProfileScreen extends StatelessWidget {
               : TrainerPage(
                   trainerImage: trainerController.atrainerDetail.value.response!
                       .trainer!.user!.profilePhoto!,
+                  trainerCoverImage: trainerController
+                      .atrainerDetail.value.response!.trainer!.user!.coverPhoto
+                      .toString(),
                   onFollow: () {},
                   onMessage: () {},
                   onEnroll: () {},
                   onBack: () {},
                   name: trainerController
                       .atrainerDetail.value.response!.trainer!.user!.name!,
-                  followersCount: trainerController
-                      .atrainerDetail.value.response!.trainer!.followers!,
-                  followingCount: trainerController
-                      .atrainerDetail.value.response!.trainer!.following!,
+                  followersCount: NumberFormatter.textFormatter(
+                      trainerController
+                          .atrainerDetail.value.response!.trainer!.followers!),
+                  followingCount: NumberFormatter.textFormatter(
+                      trainerController
+                          .atrainerDetail.value.response!.trainer!.following!),
                   rating: double.parse(trainerController
                       .atrainerDetail.value.response!.trainer!.rating!),
-                  ratingCount: int.parse(trainerController
+                  ratingCount: NumberFormatter.textFormatter(trainerController
                       .atrainerDetail.value.response!.trainer!.totalRating!),
-                  totalPeopleTrained: int.parse(trainerController
-                      .atrainerDetail.value.response!.trainer!.trainees!),
+                  totalPeopleTrained: NumberFormatter.textFormatter(
+                      trainerController
+                          .atrainerDetail.value.response!.trainer!.trainees!),
                   strengths: trainerController
                       .atrainerDetail.value.response!.trainer!.strength!,
                   aboutTrainer: trainerController
@@ -62,6 +69,7 @@ class TrainerProfileScreen extends StatelessWidget {
 class TrainerPage extends StatelessWidget {
   const TrainerPage(
       {required this.trainerImage,
+      required this.trainerCoverImage,
       required this.onFollow,
       required this.onMessage,
       required this.onBack,
@@ -79,6 +87,7 @@ class TrainerPage extends StatelessWidget {
       Key? key})
       : super(key: key);
   final String trainerImage;
+  final String trainerCoverImage;
   final String name;
   final String followersCount;
   final VoidCallback onFollow;
@@ -86,8 +95,8 @@ class TrainerPage extends StatelessWidget {
   final VoidCallback onMessage;
   final VoidCallback onBack;
   final String followingCount;
-  final int ratingCount;
-  final int totalPeopleTrained;
+  final String ratingCount;
+  final String totalPeopleTrained;
   final double rating;
   final List<String> strengths;
   final List<Certificate> certifcateTitle;
@@ -288,43 +297,53 @@ class TrainerPage extends StatelessWidget {
                                           );
                                         }),
                                   ),
-                                  SizedBox(
-                                      height:
-                                          24 * SizeConfig.heightMultiplier!),
-                                  Text(
-                                    'achivement'.tr,
-                                    style: AppTextStyle.greenSemiBoldText
-                                        .copyWith(color: lightBlack),
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          12 * SizeConfig.heightMultiplier!),
-                                  Container(
-                                    height: 79 * SizeConfig.heightMultiplier!,
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: certifcateTitle.length,
-                                        shrinkWrap: true,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Padding(
-                                            padding: EdgeInsets.only(
-                                                right: 8.0 *
-                                                    SizeConfig
-                                                        .widthMultiplier!),
-                                            child: AchivementCertificateTile(
-                                              certificateDescription:
-                                                  certifcateTitle[index]
-                                                      .certificateName!,
-                                              certificateIcon:
-                                                  certifcateTitle[index].url!,
-                                              color: index % 2 == 0
-                                                  ? oceanBlue
-                                                  : lightOrange,
-                                            ),
-                                          );
-                                        }),
-                                  ),
+                                  certifcateTitle.length == 0
+                                      ? Container()
+                                      : Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 24 *
+                                                  SizeConfig.heightMultiplier!,
+                                              bottom: 12 *
+                                                  SizeConfig.heightMultiplier!),
+                                          child: Text(
+                                            'achivement'.tr,
+                                            style: AppTextStyle
+                                                .greenSemiBoldText
+                                                .copyWith(color: lightBlack),
+                                          ),
+                                        ),
+                                  certifcateTitle.length == 0
+                                      ? Container()
+                                      : Container(
+                                          height:
+                                              79 * SizeConfig.heightMultiplier!,
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: certifcateTitle.length,
+                                              shrinkWrap: true,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 8.0 *
+                                                          SizeConfig
+                                                              .widthMultiplier!),
+                                                  child:
+                                                      AchivementCertificateTile(
+                                                    certificateDescription:
+                                                        certifcateTitle[index]
+                                                            .certificateName!,
+                                                    certificateIcon:
+                                                        certifcateTitle[index]
+                                                            .url!,
+                                                    color: index % 2 == 0
+                                                        ? oceanBlue
+                                                        : lightOrange,
+                                                  ),
+                                                );
+                                              }),
+                                        ),
                                   SizedBox(
                                       height:
                                           24 * SizeConfig.heightMultiplier!),
@@ -379,15 +398,22 @@ class TrainerPage extends StatelessWidget {
                                                   allPlans[index].planName!,
                                               planImage:
                                                   allPlans[index].planIcon!,
-                                              palnTime: allPlans[index]
-                                                  .planDuration
-                                                  .toString(),
-                                              likesCount: allPlans[index]
-                                                  .likesCount!
-                                                  .toString(),
-                                              ratingCount: allPlans[index]
-                                                  .raters!
-                                                  .toString(),
+                                              palnTime: 'planTime'.trParams({
+                                                'duration': (allPlans[index]
+                                                            .planDuration! %
+                                                        5)
+                                                    .toString()
+                                              }),
+                                              likesCount:
+                                                  NumberFormatter.textFormatter(
+                                                      allPlans[index]
+                                                          .likesCount!
+                                                          .toString()),
+                                              ratingCount:
+                                                  NumberFormatter.textFormatter(
+                                                      allPlans[index]
+                                                          .raters!
+                                                          .toString()),
                                             ),
                                           );
                                         }),
@@ -403,9 +429,9 @@ class TrainerPage extends StatelessWidget {
                         Container(
                           width: double.infinity,
                           height: 177 * SizeConfig.heightMultiplier!,
-                          child: Image.asset(
-                            ImagePath.trainerCoverImage,
-                            fit: BoxFit.cover,
+                          child: Image.network(
+                            trainerCoverImage,
+                            fit: BoxFit.fill,
                           ),
                         ),
                         Positioned(
@@ -626,11 +652,16 @@ class PlanTile extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(10.0),
                       topLeft: Radius.circular(10.0))),
-              child: Image.network(
-                planImage,
-                height: 144 * SizeConfig.heightMultiplier!,
-                width: 160 * SizeConfig.widthMultiplier!,
-                fit: BoxFit.fill,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10.0),
+                    topLeft: Radius.circular(10.0)),
+                child: Image.network(
+                  planImage,
+                  height: 144 * SizeConfig.heightMultiplier!,
+                  width: 160 * SizeConfig.widthMultiplier!,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             SizedBox(height: 8 * SizeConfig.heightMultiplier!),
