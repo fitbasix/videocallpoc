@@ -30,12 +30,17 @@ class TrainerServices {
   }
 
   static Future<AllTrainer> getAllTrainer(
-      {int? currentPage, String? name}) async {
+      {int? currentPage,
+      String? name,
+      int? trainerType,
+      int? interests}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getAllTrainer, data: {
       "skip": currentPage == null ? 0 : currentPage * 5,
-      "name": name == null ? "" : name
+      "name": name == null ? "" : name,
+      "trainerType": trainerType == null ? 0 : trainerType,
+      "interests": interests == null ? [0] : [interests]
     });
     print(response.toString());
     return allTrainerFromJson(response.toString());
@@ -44,8 +49,9 @@ class TrainerServices {
   static Future<AllTrainer> getFitnessConsultant() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!
-        .post(ApiUrl.getAllTrainer, data: {"isFitnessConsultant": true});
+    var response = await dio!.post(ApiUrl.getAllTrainer, data: {
+      "trainerType": [1]
+    });
     print(response.toString());
     return allTrainerFromJson(response.toString());
   }
@@ -55,8 +61,9 @@ class TrainerServices {
     print(await LogInService.getAccessToken());
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!
-        .post(ApiUrl.getAllTrainer, data: {"isNutritionConsultant": true});
+    var response = await dio!.post(ApiUrl.getAllTrainer, data: {
+      "trainerType": [2]
+    });
     print(response.toString());
     return allTrainerFromJson(response.toString());
   }

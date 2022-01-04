@@ -1,4 +1,5 @@
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,7 @@ class AllTrainerScreen extends StatefulWidget {
 }
 
 class _AllTrainerScreenState extends State<AllTrainerScreen> {
-  int currentPage = 1;
+  // int currentPage = 1;
   final TrainerController _trainerController = Get.find();
   final ScrollController _scrollController = ScrollController();
 
@@ -31,8 +32,18 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
     _scrollController.addListener(() async {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        final trainer =
-            await TrainerServices.getAllTrainer(currentPage: currentPage);
+        final trainer = _trainerController.trainerType.value == 0
+            ? await TrainerServices.getAllTrainer(
+                currentPage: _trainerController.currentPage.value)
+            : _trainerController.trainerType.value == 1
+                ? await TrainerServices.getAllTrainer(
+                    currentPage: _trainerController.currentPage.value,
+                    trainerType: 1)
+                : _trainerController.trainerType.value == 2
+                    ? await TrainerServices.getAllTrainer(
+                        currentPage: _trainerController.currentPage.value,
+                        trainerType: 2)
+                    : AllTrainer();
         if (trainer.response!.data!.trainers!.length < 5) {
           for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
             _trainerController.allTrainer.value.response!.data!.trainers!
@@ -45,6 +56,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                 .add(trainer.response!.data!.trainers![i]);
           }
         }
+        _trainerController.currentPage.value++;
 
         setState(() {});
       }
@@ -168,7 +180,11 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                 .response!.response!.data!.length,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
-                              for (int i = 0; i < 5; i++) {
+                              for (int i = 0;
+                                  i <
+                                      _trainerController.interests.value
+                                          .response!.response!.data!.length;
+                                  i++) {
                                 _trainerController.interestSelection.add(false);
                               }
                               return Obx(() => Padding(
@@ -178,12 +194,23 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                 SizeConfig.widthMultiplier!)
                                         : EdgeInsets.all(0),
                                     child: ItemCategory(
-                                      onTap: () {
+                                      onTap: () async {
                                         _trainerController.SelectedInterestIndex
                                             .value = index;
 
                                         _trainerController
                                             .UpdatedInterestStatus(index);
+                                        _trainerController.allTrainer.value =
+                                            await TrainerServices.getAllTrainer(
+                                                interests: _trainerController
+                                                    .interests
+                                                    .value
+                                                    .response!
+                                                    .response!
+                                                    .data![index]
+                                                    .serialId);
+                                        _trainerController.currentPage.value =
+                                            1;
                                       },
                                       isSelected: _trainerController
                                           .interestSelection[index],
