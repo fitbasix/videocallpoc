@@ -43,7 +43,9 @@ class TrainerController extends GetxController {
     // planModel.value =
     //     await TrainerServices.getPlanByTrainerId("61d2d1422f5935456683ff4f");
     allTrainer.value = await TrainerServices.getAllTrainer();
+    print("lll");
     fitnessConsultant.value = await TrainerServices.getFitnessConsultant();
+    print("lll");
     nutritionConsultant.value = await TrainerServices.getNutritionConsultant();
 
     interests.value = await TrainerServices.getAllInterest();
