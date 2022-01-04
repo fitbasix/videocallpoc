@@ -34,17 +34,13 @@ class TrainerController extends GetxController {
 
   Future<void> setUp() async {
     isLoading.value = true;
-    // atrainerDetail.value =
-    //     await TrainerServices.getATrainerDetail("61d2d1422f5935456683ff4f");
-    // planModel.value =
-    //     await TrainerServices.getPlanByTrainerId("61d2d1422f5935456683ff4f");
+    atrainerDetail.value =
+        await TrainerServices.getATrainerDetail("61d2d1422f5935456683ff4f");
+    planModel.value =
+        await TrainerServices.getPlanByTrainerId("61d2d1422f5935456683ff4f");
     allTrainer.value = await TrainerServices.getAllTrainer();
     fitnessConsultant.value = await TrainerServices.getFitnessConsultant();
     nutritionConsultant.value = await TrainerServices.getNutritionConsultant();
-
-    // print(allTrainer.value.response!.data!.trainers![0].followers);
-    // print(allTrainer.value.response!.data!.trainers![2]);
-    // print(nutritionConsultant.value.response!.data!.trainers!.length);
 
     interests.value = await TrainerServices.getAllInterest();
     isLoading.value = false;

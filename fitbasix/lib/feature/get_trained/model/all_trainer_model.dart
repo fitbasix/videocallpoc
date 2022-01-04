@@ -171,40 +171,6 @@ class Trainer {
       };
 }
 
-// class Certificate {
-//   Certificate({
-//     this.isVerified,
-//     this.v,
-//     this.certificateName,
-//     this.url,
-//     this.certificateIcon,
-//   });
-
-//   final bool? isVerified;
-//   final int? v;
-//   final String? certificateName;
-//   final String? url;
-//   final String? certificateIcon;
-
-//   factory Certificate.fromJson(Map<String, dynamic> json) => Certificate(
-//         isVerified: json["isVerified"],
-//         v: json["__v"],
-//         certificateName: json["certificateName"],
-//         url: json["url"],
-//         certificateIcon: json["certificateIcon"],
-//       );
-
-//   Map<String, dynamic> toJson() => {
-//         "isVerified": isVerified,
-//         "__v": v,
-//         "certificateName": certificateName,
-//         "url": url,
-//         "certificateIcon": certificateIcon,
-//       };
-// }
-
-// enum Strength { ALL, STR2 }
-
 class Strength {
   Strength({
     this.strength,
