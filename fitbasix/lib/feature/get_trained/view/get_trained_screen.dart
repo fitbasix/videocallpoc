@@ -1,20 +1,17 @@
-import 'dart:ffi';
-
-import 'package:fitbasix/core/routes/app_routes.dart';
-import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
-import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
-import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/custom_app_bar.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/trainer_card.dart';
-import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class GetTrainedScreen extends StatelessWidget {
   GetTrainedScreen({Key? key}) : super(key: key);
@@ -162,6 +159,32 @@ class GetTrainedScreen extends StatelessWidget {
                                         .trainers![index]
                                         .strength!
                                         .length,
+                                    onTap: () async {
+                                      _trainerController.atrainerDetail.value =
+                                          await TrainerServices
+                                              .getATrainerDetail(
+                                                  _trainerController
+                                                      .allTrainer
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user!
+                                                      .id!);
+                                      _trainerController.planModel.value =
+                                          await TrainerServices
+                                              .getPlanByTrainerId(
+                                                  _trainerController
+                                                      .allTrainer
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user!
+                                                      .id!);
+                                      Navigator.pushNamed(context,
+                                          RouteName.trainerProfileScreen);
+                                    },
                                   ),
                                 );
                               }),
@@ -295,6 +318,32 @@ class GetTrainedScreen extends StatelessWidget {
                                         .trainers![index]
                                         .strength!
                                         .length,
+                                    onTap: () async {
+                                      _trainerController.atrainerDetail.value =
+                                          await TrainerServices
+                                              .getATrainerDetail(
+                                                  _trainerController
+                                                      .fitnessConsultant
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user!
+                                                      .id!);
+                                      _trainerController.planModel.value =
+                                          await TrainerServices
+                                              .getPlanByTrainerId(
+                                                  _trainerController
+                                                      .fitnessConsultant
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user!
+                                                      .id!);
+                                      Navigator.pushNamed(context,
+                                          RouteName.trainerProfileScreen);
+                                    },
                                   ),
                                 );
                               }),
@@ -428,6 +477,32 @@ class GetTrainedScreen extends StatelessWidget {
                                         .trainers![index]
                                         .strength!
                                         .length,
+                                    onTap: () async {
+                                      _trainerController.atrainerDetail.value =
+                                          await TrainerServices
+                                              .getATrainerDetail(
+                                                  _trainerController
+                                                      .nutritionConsultant
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user!
+                                                      .id!);
+                                      _trainerController.planModel.value =
+                                          await TrainerServices
+                                              .getPlanByTrainerId(
+                                                  _trainerController
+                                                      .nutritionConsultant
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user!
+                                                      .id!);
+                                      Navigator.pushNamed(context,
+                                          RouteName.trainerProfileScreen);
+                                    },
                                   ),
                                 );
                               }),

@@ -1,5 +1,6 @@
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
+import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/log_in/view/enter_details_page.dart';
 import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
 import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
@@ -21,6 +22,7 @@ abstract class RouteName {
   static const forgotPassword = '/forgot_password';
   static const resetPassword = '/reset_password';
   static const allTrainerScreen = '/all_trainer_screen';
+  static const trainerProfileScreen = '/trainer_profile_Screen';
   RouteName._();
 }
 
@@ -96,6 +98,13 @@ class GenerateRoute {
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             AllTrainerScreen(),
+      );
+    }
+    if (route == RouteName.trainerProfileScreen) {
+      return PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            TrainerProfileScreen(),
       );
     } else {
       return PageRouteBuilder(

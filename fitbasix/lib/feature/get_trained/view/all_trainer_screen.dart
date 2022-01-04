@@ -1,3 +1,4 @@
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -53,200 +54,283 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kPureWhite,
-        elevation: 0,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset(ImagePath.backIcon)),
-        title: Transform(
-          transform: Matrix4.translationValues(
-              -20 * SizeConfig.widthMultiplier!, 0, 0),
-          child: Text(
-            _trainerController.pageTitle.value,
-            style: AppTextStyle.titleText
-                .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
-          ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        _trainerController.isSearchActive.value = false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kPureWhite,
+          elevation: 0,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: SvgPicture.asset(ImagePath.backIcon)),
+          title: Obx(() => _trainerController.isSearchActive.value
+              ? Transform(
+                  transform: Matrix4.translationValues(
+                      -20 * SizeConfig.widthMultiplier!, 0, 0),
+                  child: Container(
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: lightGrey,
+                      borderRadius: BorderRadius.circular(
+                          8 * SizeConfig.widthMultiplier!),
+                    ),
+                    child: TextField(
+                      controller: _trainerController.searchController,
+                      onChanged: (value) {
+                        _trainerController.search.value = value;
+                      },
+                      onSubmitted: (value) async {
+                        _trainerController.allTrainer.value =
+                            await TrainerServices.getAllTrainer(name: value);
+                      },
+                      decoration: InputDecoration(
+                          prefixIcon: Transform(
+                            transform: Matrix4.translationValues(0, 2, 0),
+                            child: Icon(
+                              Icons.search,
+                              color: hintGrey,
+                            ),
+                          ),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              _trainerController.searchController.clear();
+                            },
+                            child: Icon(
+                              Icons.clear,
+                              color: hintGrey,
+                            ),
+                          ),
+                          border: InputBorder.none,
+                          hintText: 'searchHint'.tr,
+                          contentPadding: EdgeInsets.only(bottom: 2)),
+                    ),
+                  ),
+                )
+              : Transform(
+                  transform: Matrix4.translationValues(
+                      -20 * SizeConfig.widthMultiplier!, 0, 0),
+                  child: Text(
+                    _trainerController.pageTitle.value,
+                    style: AppTextStyle.titleText
+                        .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                  ),
+                )),
+          actions: [
+            Obx(() => _trainerController.isSearchActive.value
+                ? SizedBox()
+                : IconButton(
+                    onPressed: () {
+                      _trainerController.isSearchActive.value = true;
+                    },
+                    icon: Icon(
+                      Icons.search,
+                      color: kPureBlack,
+                    )))
+          ],
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                color: kPureBlack,
-              ))
-        ],
-      ),
-      body: SafeArea(
-        child: Obx(() => _trainerController.isLoading.value
-            ? Center(
-                child: CustomizedCircularProgress(),
-              )
-            : SingleChildScrollView(
-                // physics: ScrollPhysics(),
-                controller: _scrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 24 * SizeConfig.heightMultiplier!,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 24 * SizeConfig.widthMultiplier!),
-                      child: Text(
-                        'interests'.tr,
-                        style: AppTextStyle.titleText.copyWith(
-                            fontSize: 14 * SizeConfig.textMultiplier!,
-                            color: kBlack),
+        body: SafeArea(
+          child: Obx(() => _trainerController.isLoading.value
+              ? Center(
+                  child: CustomizedCircularProgress(),
+                )
+              : SingleChildScrollView(
+                  // physics: ScrollPhysics(),
+                  controller: _scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 24 * SizeConfig.heightMultiplier!,
                       ),
-                    ),
-                    SizedBox(
-                      height: 12 * SizeConfig.heightMultiplier!,
-                    ),
-                    Container(
-                      height: 28 * SizeConfig.heightMultiplier!,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _trainerController
-                              .interests.value.response!.response!.data!.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            for (int i = 0; i < 5; i++) {
-                              _trainerController.interestSelection.add(false);
-                            }
-                            return Obx(() => Padding(
-                                  padding: index == 0
-                                      ? EdgeInsets.only(
-                                          left:
-                                              16 * SizeConfig.widthMultiplier!)
-                                      : EdgeInsets.all(0),
-                                  child: ItemCategory(
-                                    onTap: () {
-                                      _trainerController
-                                          .SelectedInterestIndex.value = index;
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 24 * SizeConfig.widthMultiplier!),
+                        child: Text(
+                          'interests'.tr,
+                          style: AppTextStyle.titleText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kBlack),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12 * SizeConfig.heightMultiplier!,
+                      ),
+                      Container(
+                        height: 28 * SizeConfig.heightMultiplier!,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _trainerController.interests.value
+                                .response!.response!.data!.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              for (int i = 0; i < 5; i++) {
+                                _trainerController.interestSelection.add(false);
+                              }
+                              return Obx(() => Padding(
+                                    padding: index == 0
+                                        ? EdgeInsets.only(
+                                            left: 16 *
+                                                SizeConfig.widthMultiplier!)
+                                        : EdgeInsets.all(0),
+                                    child: ItemCategory(
+                                      onTap: () {
+                                        _trainerController.SelectedInterestIndex
+                                            .value = index;
 
-                                      _trainerController.UpdatedInterestStatus(
-                                          index);
-                                    },
-                                    isSelected: _trainerController
-                                        .interestSelection[index],
-                                    interest: _trainerController.interests.value
-                                        .response!.response!.data![index].name!,
-                                  ),
-                                ));
-                          }),
-                    ),
-                    SizedBox(
-                      height: 16 * SizeConfig.heightMultiplier!,
-                    ),
-                    Container(
-                      // height: Get.height,
-                      child: ListView.builder(
-                          itemCount: _trainerController.allTrainer.value
-                              .response!.data!.trainers!.length,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return TrainerTile(
-                              name: _trainerController
-                                          .allTrainer
+                                        _trainerController
+                                            .UpdatedInterestStatus(index);
+                                      },
+                                      isSelected: _trainerController
+                                          .interestSelection[index],
+                                      interest: _trainerController
+                                          .interests
                                           .value
                                           .response!
-                                          .data!
-                                          .trainers![index]
-                                          .user !=
-                                      null
-                                  ? _trainerController
-                                          .allTrainer
-                                          .value
                                           .response!
-                                          .data!
-                                          .trainers![index]
-                                          .user!
-                                          .name ??
-                                      ''
-                                  : '',
-                              strength: _trainerController
-                                  .allTrainer
-                                  .value
-                                  .response!
-                                  .data!
-                                  .trainers![index]
-                                  .strength![0],
-                              strengthCount: _trainerController
-                                      .allTrainer
-                                      .value
-                                      .response!
-                                      .data!
-                                      .trainers![index]
-                                      .strength!
-                                      .length -
-                                  1,
-                              description: _trainerController.allTrainer.value
-                                  .response!.data!.trainers![index].about!,
-                              certifcateTitle: _trainerController
-                                  .allTrainer
-                                  .value
-                                  .response!
-                                  .data!
-                                  .trainers![index]
-                                  .certificates!,
-                              traineeCount: int.tryParse(_trainerController
-                                  .allTrainer
-                                  .value
-                                  .response!
-                                  .data!
-                                  .trainers![index]
-                                  .trainees!)!,
-                              rating: double.tryParse(_trainerController
-                                  .allTrainer
-                                  .value
-                                  .response!
-                                  .data!
-                                  .trainers![index]
-                                  .rating!)!,
-                              numberRated: int.tryParse(_trainerController
-                                  .allTrainer
-                                  .value
-                                  .response!
-                                  .data!
-                                  .trainers![index]
-                                  .totalRating!)!,
-                              profilePhoto: _trainerController
-                                          .allTrainer
-                                          .value
-                                          .response!
-                                          .data!
-                                          .trainers![index]
-                                          .user !=
-                                      null
-                                  ? _trainerController
-                                          .allTrainer
-                                          .value
-                                          .response!
-                                          .data!
-                                          .trainers![index]
-                                          .user!
-                                          .profilePhoto ??
-                                      ''
-                                  : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-                              slotLeft: int.tryParse(_trainerController
-                                  .allTrainer
-                                  .value
-                                  .response!
-                                  .data!
-                                  .trainers![index]
-                                  .slotsFeft!)!,
-                            );
-                          }),
-                    ),
-                  ],
-                ),
-              )),
+                                          .data![index]
+                                          .name!,
+                                    ),
+                                  ));
+                            }),
+                      ),
+                      SizedBox(
+                        height: 16 * SizeConfig.heightMultiplier!,
+                      ),
+                      Container(
+                        // height: Get.height,
+                        child: ListView.builder(
+                            itemCount: _trainerController.allTrainer.value
+                                .response!.data!.trainers!.length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return TrainerTile(
+                                name: _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .user !=
+                                        null
+                                    ? _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .user!
+                                            .name ??
+                                        ''
+                                    : '',
+                                strength: _trainerController
+                                    .allTrainer
+                                    .value
+                                    .response!
+                                    .data!
+                                    .trainers![index]
+                                    .strength![0],
+                                strengthCount: _trainerController
+                                        .allTrainer
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .strength!
+                                        .length -
+                                    1,
+                                description: _trainerController.allTrainer.value
+                                    .response!.data!.trainers![index].about!,
+                                certifcateTitle: _trainerController
+                                    .allTrainer
+                                    .value
+                                    .response!
+                                    .data!
+                                    .trainers![index]
+                                    .certificates!,
+                                traineeCount: int.tryParse(_trainerController
+                                    .allTrainer
+                                    .value
+                                    .response!
+                                    .data!
+                                    .trainers![index]
+                                    .trainees!)!,
+                                rating: double.tryParse(_trainerController
+                                    .allTrainer
+                                    .value
+                                    .response!
+                                    .data!
+                                    .trainers![index]
+                                    .rating!)!,
+                                numberRated: int.tryParse(_trainerController
+                                    .allTrainer
+                                    .value
+                                    .response!
+                                    .data!
+                                    .trainers![index]
+                                    .totalRating!)!,
+                                profilePhoto: _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .user !=
+                                        null
+                                    ? _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .user!
+                                            .profilePhoto ??
+                                        ''
+                                    : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                                slotLeft: int.tryParse(_trainerController
+                                    .allTrainer
+                                    .value
+                                    .response!
+                                    .data!
+                                    .trainers![index]
+                                    .slotsFeft!)!,
+                                onTap: () async {
+                                  _trainerController.atrainerDetail.value =
+                                      await TrainerServices.getATrainerDetail(
+                                          _trainerController
+                                              .allTrainer
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers![index]
+                                              .user!
+                                              .id!);
+                                  _trainerController.planModel.value =
+                                      await TrainerServices.getPlanByTrainerId(
+                                          _trainerController
+                                              .allTrainer
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers![index]
+                                              .user!
+                                              .id!);
+
+                                  Navigator.pushNamed(
+                                      context, RouteName.trainerProfileScreen);
+                                },
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
+                )),
+        ),
       ),
     );
   }
@@ -265,6 +349,7 @@ class TrainerTile extends StatelessWidget {
     required this.rating,
     required this.numberRated,
     required this.slotLeft,
+    required this.onTap,
   }) : super(key: key);
 
   final String name;
@@ -277,204 +362,211 @@ class TrainerTile extends StatelessWidget {
   final double rating;
   final int numberRated;
   final int slotLeft;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: certifcateTitle!.isEmpty
-          ? 246 * SizeConfig.heightMultiplier!
-          : 325 * SizeConfig.heightMultiplier!,
-      margin: EdgeInsets.only(
-          left: 12 * SizeConfig.widthMultiplier!,
-          right: 12 * SizeConfig.widthMultiplier!,
-          bottom: 16 * SizeConfig.heightMultiplier!),
-      padding: EdgeInsets.only(top: 16 * SizeConfig.heightMultiplier!),
-      decoration: BoxDecoration(
-          color: kPureWhite, borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 12 * SizeConfig.widthMultiplier!),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 80 * SizeConfig.heightMultiplier!,
-                  height: 80 * SizeConfig.heightMultiplier!,
-                  decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: certifcateTitle!.isEmpty
+            ? 246 * SizeConfig.heightMultiplier!
+            : 325 * SizeConfig.heightMultiplier!,
+        margin: EdgeInsets.only(
+            left: 12 * SizeConfig.widthMultiplier!,
+            right: 12 * SizeConfig.widthMultiplier!,
+            bottom: 16 * SizeConfig.heightMultiplier!),
+        padding: EdgeInsets.only(top: 16 * SizeConfig.heightMultiplier!),
+        decoration: BoxDecoration(
+            color: kPureWhite, borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 12 * SizeConfig.widthMultiplier!),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 80 * SizeConfig.heightMultiplier!,
+                    height: 80 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: kPureBlack),
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      color: kPureBlack),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      profilePhoto,
-                      fit: BoxFit.fill,
+                      child: Image.network(
+                        profilePhoto,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 12 * SizeConfig.widthMultiplier!,
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: 8 * SizeConfig.heightMultiplier!),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: AppTextStyle.titleText.copyWith(
-                            fontSize: 16 * SizeConfig.textMultiplier!),
-                      ),
-                      SizedBox(
-                        height: 8 * SizeConfig.heightMultiplier!,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          StrengthTile(text: strength),
-                          SizedBox(
-                            width: 8 * SizeConfig.widthMultiplier!,
-                          ),
-                          StrengthTile(text: '+' + strengthCount.toString())
-                        ],
-                      )
-                    ],
+                  SizedBox(
+                    width: 12 * SizeConfig.widthMultiplier!,
                   ),
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 12 * SizeConfig.heightMultiplier!,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: 12 * SizeConfig.widthMultiplier!,
-                right: 12 * SizeConfig.widthMultiplier!),
-            child: Text(
-              description,
-              style: AppTextStyle.NormalText.copyWith(
-                  fontSize: 12 * SizeConfig.textMultiplier!),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(
-            height: 12 * SizeConfig.heightMultiplier!,
-          ),
-          certifcateTitle!.isEmpty
-              ? Container()
-              : Container(
-                  height: 79 * SizeConfig.heightMultiplier!,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: certifcateTitle!.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              right: 8.0 * SizeConfig.widthMultiplier!),
-                          child: AchivementCertificateTile(
-                            certificateDescription:
-                                certifcateTitle![index].certificateName!,
-                            certificateIcon: certifcateTitle![index].url!,
-                            color: index % 2 == 0 ? oceanBlue : lightOrange,
-                          ),
-                        );
-                      }),
-                ),
-          SizedBox(
-            height: 12 * SizeConfig.heightMultiplier!,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: 12 * SizeConfig.widthMultiplier!,
-                right: 16 * SizeConfig.widthMultiplier!),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                  Padding(
+                    padding:
+                        EdgeInsets.only(top: 8 * SizeConfig.heightMultiplier!),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'trainee'.tr,
+                          name,
                           style: AppTextStyle.titleText.copyWith(
-                              fontSize: 12 * SizeConfig.textMultiplier!),
+                              fontSize: 16 * SizeConfig.textMultiplier!),
                         ),
                         SizedBox(
-                          width: 8 * SizeConfig.widthMultiplier!,
+                          height: 8 * SizeConfig.heightMultiplier!,
                         ),
-                        Text(
-                          traineeCount.toString(),
-                          style: AppTextStyle.NormalText.copyWith(
-                              fontSize: 12 * SizeConfig.textMultiplier!),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            StrengthTile(text: strength),
+                            SizedBox(
+                              width: 8 * SizeConfig.widthMultiplier!,
+                            ),
+                            strengthCount != 0
+                                ? StrengthTile(
+                                    text: '+' + strengthCount.toString())
+                                : Container()
+                          ],
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 12 * SizeConfig.heightMultiplier!,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('ratings'.tr,
-                            style: AppTextStyle.titleText.copyWith(
-                                fontSize: 12 * SizeConfig.textMultiplier!)),
-                        SizedBox(
-                          width: 8 * SizeConfig.widthMultiplier!,
-                        ),
-                        StarRating(
-                          rating: rating,
-                        ),
-                        SizedBox(
-                          width: 8 * SizeConfig.widthMultiplier!,
-                        ),
-                        Text(
-                          '($numberRated Rated)',
-                          style: AppTextStyle.normalBlackText.copyWith(
-                              fontSize: 12 * SizeConfig.textMultiplier!),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
-                  child: Text(
-                    slotLeft.toString(),
-                    style: AppTextStyle.titleText
-                        .copyWith(fontSize: 36, color: kGreenColor),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 12 * SizeConfig.heightMultiplier!,
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: 12 * SizeConfig.widthMultiplier!,
+                  right: 12 * SizeConfig.widthMultiplier!),
+              child: Text(
+                description,
+                style: AppTextStyle.NormalText.copyWith(
+                    fontSize: 12 * SizeConfig.textMultiplier!),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            SizedBox(
+              height: 12 * SizeConfig.heightMultiplier!,
+            ),
+            certifcateTitle!.isEmpty
+                ? Container()
+                : Container(
+                    height: 79 * SizeConfig.heightMultiplier!,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: certifcateTitle!.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                right: 8.0 * SizeConfig.widthMultiplier!),
+                            child: AchivementCertificateTile(
+                              certificateDescription:
+                                  certifcateTitle![index].certificateName!,
+                              certificateIcon: certifcateTitle![index].url!,
+                              color: index % 2 == 0 ? oceanBlue : lightOrange,
+                            ),
+                          );
+                        }),
                   ),
-                ),
-              ],
+            SizedBox(
+              height: 12 * SizeConfig.heightMultiplier!,
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 12 * SizeConfig.widthMultiplier!),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'slotLeft'.tr,
-                  style: AppTextStyle.titleText
-                      .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
-                ),
-              ],
+            Padding(
+              padding: EdgeInsets.only(
+                  left: 12 * SizeConfig.widthMultiplier!,
+                  right: 16 * SizeConfig.widthMultiplier!),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'trainee'.tr,
+                            style: AppTextStyle.titleText.copyWith(
+                                fontSize: 12 * SizeConfig.textMultiplier!),
+                          ),
+                          SizedBox(
+                            width: 8 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            traineeCount.toString(),
+                            style: AppTextStyle.NormalText.copyWith(
+                                fontSize: 12 * SizeConfig.textMultiplier!),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 12 * SizeConfig.heightMultiplier!,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('ratings'.tr,
+                              style: AppTextStyle.titleText.copyWith(
+                                  fontSize: 12 * SizeConfig.textMultiplier!)),
+                          SizedBox(
+                            width: 8 * SizeConfig.widthMultiplier!,
+                          ),
+                          StarRating(
+                            rating: rating,
+                          ),
+                          SizedBox(
+                            width: 8 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            '($numberRated Rated)',
+                            style: AppTextStyle.normalBlackText.copyWith(
+                                fontSize: 12 * SizeConfig.textMultiplier!),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        right: 16 * SizeConfig.widthMultiplier!),
+                    child: Text(
+                      slotLeft.toString(),
+                      style: AppTextStyle.titleText
+                          .copyWith(fontSize: 36, color: kGreenColor),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 16 * SizeConfig.heightMultiplier!,
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.only(right: 12 * SizeConfig.widthMultiplier!),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'slotLeft'.tr,
+                    style: AppTextStyle.titleText
+                        .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 16 * SizeConfig.heightMultiplier!,
+            )
+          ],
+        ),
       ),
     );
   }

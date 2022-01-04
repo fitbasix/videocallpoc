@@ -36,7 +36,9 @@ class TrainerProfileScreen extends StatelessWidget {
                   onFollow: () {},
                   onMessage: () {},
                   onEnroll: () {},
-                  onBack: () {},
+                  onBack: () {
+                    Navigator.pop(context);
+                  },
                   name: trainerController
                       .atrainerDetail.value.response!.trainer!.user!.name!,
                   followersCount: NumberFormatter.textFormatter(
@@ -269,10 +271,12 @@ class TrainerPage extends StatelessWidget {
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 8.0 *
-                                                    SizeConfig
-                                                        .widthMultiplier!),
+                                            padding: index == 0
+                                                ? EdgeInsets.all(0)
+                                                : EdgeInsets.only(
+                                                    left: 8.0 *
+                                                        SizeConfig
+                                                            .widthMultiplier!),
                                             child: Container(
                                               height: 28 *
                                                   SizeConfig.heightMultiplier!,
@@ -287,10 +291,12 @@ class TrainerPage extends StatelessWidget {
                                                     horizontal: 12 *
                                                         SizeConfig
                                                             .widthMultiplier!),
-                                                child: Text(
-                                                  strengths[index],
-                                                  style: AppTextStyle
-                                                      .lightMediumBlackText,
+                                                child: Center(
+                                                  child: Text(
+                                                    strengths[index],
+                                                    style: AppTextStyle
+                                                        .lightMediumBlackText,
+                                                  ),
                                                 ),
                                               ),
                                             ),
