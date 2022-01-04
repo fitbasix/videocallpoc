@@ -119,7 +119,7 @@ class Trainer {
         followers: json["followers"],
         following: json["following"],
         trainees: json["trainees"],
-        slotsFeft: json["slotsFeft"],
+        slotsFeft: json["slotsLeft"],
         totalRating: json["totalRating"],
         rating: json["rating"],
         id: json["_id"],
@@ -142,14 +142,15 @@ class Trainer {
         isNutritionConsultant: json["isNutritionConsultant"],
         certificates: List<Certificate>.from(json["certificates"] == null
             ? []
-            : json["certificates"].map((x) => Certificate.fromJson(x))),
+            : json["certificates"]['certificates']
+                .map((x) => Certificate.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "followers": followers,
         "following": following,
         "trainees": trainees,
-        "slotsFeft": slotsFeft,
+        "slotsLeft": slotsFeft,
         "totalRating": totalRating,
         "rating": rating,
         "_id": id,

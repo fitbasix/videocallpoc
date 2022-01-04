@@ -14,7 +14,23 @@ class TrainerController extends GetxController {
   Rx<AllTrainer> fitnessConsultant = AllTrainer().obs;
   Rx<AllTrainer> nutritionConsultant = AllTrainer().obs;
   Rx<InterestModel> interests = InterestModel().obs;
-  RxList<bool> contactSelection = <bool>[].obs;
+  RxList<bool> interestSelection = <bool>[true].obs;
+  RxInt SelectedInterestIndex = RxInt(0);
+  RxString pageTitle = RxString('');
+
+  List<bool> UpdatedInterestStatus(int index) {
+    int length = interests.value.response!.response!.data!.length;
+    List<bool> selecteOption = [];
+    for (int i = 0; i < length; i++) {
+      if (i == index) {
+        selecteOption.add(true);
+      } else {
+        selecteOption.add(false);
+      }
+    }
+    interestSelection.value = selecteOption;
+    return interestSelection;
+  }
 
   Future<void> setUp() async {
     isLoading.value = true;
