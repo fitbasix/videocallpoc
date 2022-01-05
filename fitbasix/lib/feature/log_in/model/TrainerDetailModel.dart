@@ -77,7 +77,7 @@ class Trainer {
 
   String? id;
   String? about;
-  List<String>? trainerType;
+  List<dynamic>? trainerType;
   bool? isFitnessConsultant;
   bool? isNutritionConsultant;
   List<String>? strength;
@@ -97,7 +97,9 @@ class Trainer {
   factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
         id: json["_id"],
         about: json["about"],
-        trainerType: List<String>.from(json["trainerType"].map((x) => x)),
+        trainerType: List<dynamic>.from(json["trainerType"] == null
+            ? []
+            : json["trainerType"].map((x) => x)),
         isFitnessConsultant: json["isFitnessConsultant"],
         isNutritionConsultant: json["isNutritionConsultant"],
         strength: List<String>.from(json["strength"].map((x) => x)),

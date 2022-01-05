@@ -103,7 +103,7 @@ class Trainer {
   final String? rating;
   final String? id;
   final String? about;
-  final List<TrainerType>? trainerType;
+  final List<dynamic>? trainerType;
   final List<String>? strength;
   final User? user;
   final int? numOfCertificates;
@@ -124,8 +124,9 @@ class Trainer {
         rating: json["rating"],
         id: json["_id"],
         about: json["about"],
-        trainerType: List<TrainerType>.from(
-            json["trainerType"].map((x) => trainerTypeValues.map![x])),
+        trainerType: List<dynamic>.from(json["trainerType"] == null
+            ? []
+            : json["trainerType"].map((x) => x)),
         strength: List<String>.from(json["strength"].map((x) => x)),
         user: json["user"] == null ? null : User.fromJson(json["user"]),
         numOfCertificates: json["numOfCertificates"],
@@ -155,8 +156,7 @@ class Trainer {
         "rating": rating,
         "_id": id,
         "about": about,
-        "trainerType": List<dynamic>.from(
-            trainerType!.map((x) => trainerTypeValues.reverse![x])),
+        "trainerType": List<dynamic>.from(trainerType!.map((x) => x)),
         "strength": List<String>.from(strength!.map((x) => x)),
         "user": user == null ? null : user!.toJson(),
         "numOfCertificates": numOfCertificates,
@@ -189,12 +189,12 @@ class Strength {
 
 // final strengthValues = EnumValues({"ALL": Strength.ALL, "str2": Strength.STR2});
 
-enum TrainerType { TRAINER, FITNESS_CONSULTATION }
+// enum TrainerType { TRAINER, FITNESS_CONSULTATION }
 
-final trainerTypeValues = EnumValues({
-  "Fitness Consultation": TrainerType.FITNESS_CONSULTATION,
-  "Trainer": TrainerType.TRAINER
-});
+// final trainerTypeValues = EnumValues({
+//   "Fitness Consultation": TrainerType.FITNESS_CONSULTATION,
+//   "Trainer": TrainerType.TRAINER
+// });
 
 class User {
   User({

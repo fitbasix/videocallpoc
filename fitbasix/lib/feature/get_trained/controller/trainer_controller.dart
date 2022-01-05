@@ -21,6 +21,8 @@ class TrainerController extends GetxController {
   RxBool isSearchActive = RxBool(false);
   final TextEditingController searchController = TextEditingController();
   RxString search = RxString('');
+  RxInt trainerType = RxInt(0);
+  RxInt currentPage = RxInt(1);
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;
