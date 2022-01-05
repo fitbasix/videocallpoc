@@ -102,9 +102,10 @@ class LogInService {
       final responseData = jsonDecode(putResponse.body);
       log(responseData.toString());
       if (responseData['code'] == 0) {
-        loginController.token.value = responseData['response']['token'];
+        loginController.token.value = responseData['response']['user']['token'];
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('AccessToken', responseData['response']['token']);
+        prefs.setString(
+            'AccessToken', responseData['response']['user']['token']);
       } else {
         loginController.otpErrorMessage.value =
             responseData['response']['message'];

@@ -97,7 +97,8 @@ class EnterDetailsPage extends StatelessWidget {
                                       content: Text('Email already exists')));
                             } else if (screenId == 16) {
                               _loginController.isLoading.value = false;
-                              Navigator.pushNamed(context, RouteName.homePage);
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  RouteName.homePage, (route) => false);
                             } else
                               return;
                           } else {

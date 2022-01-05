@@ -25,7 +25,7 @@ class GetTrainedScreen extends StatelessWidget {
           preferredSize: const Size(double.infinity, kToolbarHeight)),
       backgroundColor: kGreyBackground,
       body: SafeArea(
-          child: Obx(() => _trainerController.isLoading.value
+          child: Obx(() => _trainerController.getTrainedIsLoading.value
               ? Center(child: CustomizedCircularProgress())
               : SingleChildScrollView(
                   child: Container(
@@ -52,13 +52,16 @@ class GetTrainedScreen extends StatelessWidget {
                               Spacer(),
                               SeeAllButton(
                                 onTap: () async {
+                                  Navigator.pushNamed(
+                                      context, RouteName.allTrainerScreen);
+                                  _trainerController.isLoading.value = true;
                                   _trainerController.pageTitle.value =
                                       'trainers'.tr;
                                   _trainerController.allTrainer.value =
                                       await TrainerServices.getAllTrainer();
                                   _trainerController.trainerType.value = 0;
-                                  Navigator.pushNamed(
-                                      context, RouteName.allTrainerScreen);
+
+                                  _trainerController.isLoading.value = false;
                                 },
                               )
                             ],
@@ -162,6 +165,9 @@ class GetTrainedScreen extends StatelessWidget {
                                         .strength!
                                         .length,
                                     onTap: () async {
+                                      Navigator.pushNamed(context,
+                                          RouteName.trainerProfileScreen);
+                                      _trainerController.isLoading.value = true;
                                       _trainerController.atrainerDetail.value =
                                           await TrainerServices
                                               .getATrainerDetail(
@@ -184,8 +190,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                       .trainers![index]
                                                       .user!
                                                       .id!);
-                                      Navigator.pushNamed(context,
-                                          RouteName.trainerProfileScreen);
+                                      _trainerController.isLoading.value =
+                                          false;
                                     },
                                   ),
                                 );
@@ -210,7 +216,9 @@ class GetTrainedScreen extends StatelessWidget {
                               Spacer(),
                               SeeAllButton(
                                 onTap: () async {
-                                  // _trainerController.isLoading.value = true;
+                                  Navigator.pushNamed(
+                                      context, RouteName.allTrainerScreen);
+                                  _trainerController.isLoading.value = true;
                                   _trainerController.pageTitle.value =
                                       'fitnessConsult'.tr;
 
@@ -218,9 +226,8 @@ class GetTrainedScreen extends StatelessWidget {
                                       await TrainerServices
                                           .getFitnessConsultant();
                                   _trainerController.trainerType.value = 1;
-                                  Navigator.pushNamed(
-                                      context, RouteName.allTrainerScreen);
-                                  // _trainerController.isLoading.value = false;
+
+                                  _trainerController.isLoading.value = false;
                                 },
                               )
                             ],
@@ -323,6 +330,9 @@ class GetTrainedScreen extends StatelessWidget {
                                         .strength!
                                         .length,
                                     onTap: () async {
+                                      Navigator.pushNamed(context,
+                                          RouteName.trainerProfileScreen);
+                                      _trainerController.isLoading.value = true;
                                       _trainerController.atrainerDetail.value =
                                           await TrainerServices
                                               .getATrainerDetail(
@@ -345,8 +355,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                       .trainers![index]
                                                       .user!
                                                       .id!);
-                                      Navigator.pushNamed(context,
-                                          RouteName.trainerProfileScreen);
+                                      _trainerController.isLoading.value =
+                                          false;
                                     },
                                   ),
                                 );
@@ -371,16 +381,17 @@ class GetTrainedScreen extends StatelessWidget {
                               Spacer(),
                               SeeAllButton(
                                 onTap: () async {
-                                  // _trainerController.isLoading.value = true;
+                                  Navigator.pushNamed(
+                                      context, RouteName.allTrainerScreen);
+                                  _trainerController.isLoading.value = true;
                                   _trainerController.pageTitle.value =
                                       'nutritionConsult'.tr;
                                   _trainerController.allTrainer.value =
                                       await TrainerServices
                                           .getNutritionConsultant();
                                   _trainerController.trainerType.value = 2;
-                                  Navigator.pushNamed(
-                                      context, RouteName.allTrainerScreen);
-                                  // _trainerController.isLoading.value = false;
+
+                                  _trainerController.isLoading.value = false;
                                 },
                               )
                             ],
@@ -484,6 +495,9 @@ class GetTrainedScreen extends StatelessWidget {
                                         .strength!
                                         .length,
                                     onTap: () async {
+                                      Navigator.pushNamed(context,
+                                          RouteName.trainerProfileScreen);
+                                      _trainerController.isLoading.value = true;
                                       _trainerController.atrainerDetail.value =
                                           await TrainerServices
                                               .getATrainerDetail(
@@ -506,8 +520,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                       .trainers![index]
                                                       .user!
                                                       .id!);
-                                      Navigator.pushNamed(context,
-                                          RouteName.trainerProfileScreen);
+                                      _trainerController.isLoading.value =
+                                          false;
                                     },
                                   ),
                                 );
