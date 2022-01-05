@@ -105,7 +105,8 @@ class GetTrainedScreen extends StatelessWidget {
                                         .response!
                                         .data!
                                         .trainers![index]
-                                        .numOfCertificates!,
+                                        .certificates!
+                                        .length,
                                     rating: double.tryParse(_trainerController
                                         .allTrainer
                                         .value
@@ -265,7 +266,8 @@ class GetTrainedScreen extends StatelessWidget {
                                         .response!
                                         .data!
                                         .trainers![index]
-                                        .numOfCertificates!,
+                                        .certificates!
+                                        .length,
                                     rating: double.tryParse(_trainerController
                                         .fitnessConsultant
                                         .value
@@ -425,7 +427,8 @@ class GetTrainedScreen extends StatelessWidget {
                                         .response!
                                         .data!
                                         .trainers![index]
-                                        .numOfCertificates!,
+                                        .certificates!
+                                        .length,
                                     rating: double.tryParse(_trainerController
                                         .nutritionConsultant
                                         .value
