@@ -23,6 +23,9 @@ class TrainerController extends GetxController {
   RxString search = RxString('');
   RxInt trainerType = RxInt(0);
   RxInt currentPage = RxInt(1);
+  RxBool getTrainedIsLoading = RxBool(false);
+  RxBool filterIsLoading = RxBool(false);
+  RxBool showLoader = RxBool(false);
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;
@@ -39,7 +42,7 @@ class TrainerController extends GetxController {
   }
 
   Future<void> setUp() async {
-    isLoading.value = true;
+    getTrainedIsLoading.value = true;
     // atrainerDetail.value =
     //     await TrainerServices.getATrainerDetail("61d2d1422f5935456683ff4f");
     // planModel.value =
@@ -51,7 +54,7 @@ class TrainerController extends GetxController {
     nutritionConsultant.value = await TrainerServices.getNutritionConsultant();
 
     interests.value = await TrainerServices.getAllInterest();
-    isLoading.value = false;
+    getTrainedIsLoading.value = false;
   }
 
   @override

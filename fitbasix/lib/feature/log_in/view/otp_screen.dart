@@ -132,7 +132,8 @@ class OtpScreen extends StatelessWidget {
                         Navigator.pushNamed(context, RouteName.enterDetails);
                       } else if (redScreen == 16) {
                         _loginController.isLoading.value = false;
-                        Navigator.pushNamed(context, RouteName.homePage);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, RouteName.homePage, (route) => false);
                       }
                     })),
             SizedBox(

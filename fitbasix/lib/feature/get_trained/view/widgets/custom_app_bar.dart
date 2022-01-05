@@ -16,6 +16,7 @@ class CustomAppBar extends StatelessWidget {
         backgroundColor: kPureWhite,
         centerTitle: false,
         elevation: 0,
+        automaticallyImplyLeading: false,
         title: Text(titleOfModule,
             style: AppTextStyle.titleText
                 .copyWith(fontSize: 16 * SizeConfig.textMultiplier!)),

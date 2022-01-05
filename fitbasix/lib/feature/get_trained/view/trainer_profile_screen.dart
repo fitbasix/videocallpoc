@@ -376,54 +376,62 @@ class TrainerPage extends StatelessWidget {
                                   SizedBox(
                                       height:
                                           24 * SizeConfig.heightMultiplier!),
-                                  Text('plan'.tr,
-                                      style: AppTextStyle.greenSemiBoldText
-                                          .copyWith(color: lightBlack)),
+                                  allPlans.length != 0
+                                      ? Text('plan'.tr,
+                                          style: AppTextStyle.greenSemiBoldText
+                                              .copyWith(color: lightBlack))
+                                      : SizedBox(),
                                   SizedBox(
                                       height:
                                           12 * SizeConfig.heightMultiplier!),
-                                  Container(
-                                    height: 238 * SizeConfig.heightMultiplier!,
-                                    child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: allPlans.length,
-                                        shrinkWrap: true,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Padding(
-                                            padding: EdgeInsets.only(
-                                                right: 8.0 *
-                                                    SizeConfig
-                                                        .widthMultiplier!),
-                                            child: PlanTile(
-                                              rating: double.parse(
-                                                  allPlans[index]
-                                                      .plansRating
-                                                      .toString()),
-                                              planTitle:
-                                                  allPlans[index].planName!,
-                                              planImage:
-                                                  allPlans[index].planIcon!,
-                                              palnTime: 'planTime'.trParams({
-                                                'duration': (allPlans[index]
-                                                            .planDuration! %
-                                                        5)
-                                                    .toString()
+                                  allPlans.length != 0
+                                      ? Container(
+                                          height: 238 *
+                                              SizeConfig.heightMultiplier!,
+                                          child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: allPlans.length,
+                                              shrinkWrap: true,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 8.0 *
+                                                          SizeConfig
+                                                              .widthMultiplier!),
+                                                  child: PlanTile(
+                                                    rating: double.parse(
+                                                        allPlans[index]
+                                                            .plansRating
+                                                            .toString()),
+                                                    planTitle: allPlans[index]
+                                                        .planName!,
+                                                    planImage: allPlans[index]
+                                                        .planIcon!,
+                                                    palnTime: 'planTime'
+                                                        .trParams({
+                                                      'duration': (allPlans[
+                                                                      index]
+                                                                  .planDuration! %
+                                                              5)
+                                                          .toString()
+                                                    }),
+                                                    likesCount: NumberFormatter
+                                                        .textFormatter(
+                                                            allPlans[index]
+                                                                .likesCount!
+                                                                .toString()),
+                                                    ratingCount: NumberFormatter
+                                                        .textFormatter(
+                                                            allPlans[index]
+                                                                .raters!
+                                                                .toString()),
+                                                  ),
+                                                );
                                               }),
-                                              likesCount:
-                                                  NumberFormatter.textFormatter(
-                                                      allPlans[index]
-                                                          .likesCount!
-                                                          .toString()),
-                                              ratingCount:
-                                                  NumberFormatter.textFormatter(
-                                                      allPlans[index]
-                                                          .raters!
-                                                          .toString()),
-                                            ),
-                                          );
-                                        }),
-                                  ),
+                                        )
+                                      : SizedBox(),
                                   SizedBox(
                                       height:
                                           224 * SizeConfig.heightMultiplier!),
