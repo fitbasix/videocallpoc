@@ -15,6 +15,7 @@ import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AllTrainerScreen extends StatefulWidget {
   AllTrainerScreen({Key? key}) : super(key: key);
@@ -153,128 +154,127 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
           ],
         ),
         body: SafeArea(
-          child: Obx(() => _trainerController.isLoading.value
-              ? Center(
-                  child: CustomizedCircularProgress(),
-                )
-              : Stack(
-                  children: [
-                    SingleChildScrollView(
-                      // physics: ScrollPhysics(),
-                      controller: _scrollController,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 24 * SizeConfig.heightMultiplier!,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 24 * SizeConfig.widthMultiplier!),
-                            child: Text(
-                              'interests'.tr,
-                              style: AppTextStyle.titleText.copyWith(
-                                  fontSize: 14 * SizeConfig.textMultiplier!,
-                                  color: kBlack),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 12 * SizeConfig.heightMultiplier!,
-                          ),
-                          Container(
-                            height: 28 * SizeConfig.heightMultiplier!,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _trainerController.interests.value
-                                    .response!.response!.data!.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  for (int i = 0;
-                                      i <
-                                          _trainerController.interests.value
-                                              .response!.response!.data!.length;
-                                      i++) {
-                                    _trainerController.interestSelection
-                                        .add(false);
-                                  }
-                                  return Obx(() => Padding(
-                                        padding: index == 0
-                                            ? EdgeInsets.only(
-                                                left: 16 *
-                                                    SizeConfig.widthMultiplier!)
-                                            : EdgeInsets.all(0),
-                                        child: ItemCategory(
-                                          onTap: () async {
-                                            _trainerController
-                                                .SelectedInterestIndex
-                                                .value = index;
-
-                                            _trainerController
-                                                .UpdatedInterestStatus(index);
-                                            _trainerController
-                                                .filterIsLoading.value = true;
-                                            _trainerController
-                                                    .allTrainer.value =
-                                                await TrainerServices
-                                                    .getAllTrainer(
-                                                        interests:
-                                                            _trainerController
-                                                                .interests
-                                                                .value
-                                                                .response!
-                                                                .response!
-                                                                .data![index]
-                                                                .serialId);
-                                            _trainerController
-                                                .currentPage.value = 1;
-                                            _trainerController
-                                                .filterIsLoading.value = false;
-                                          },
-                                          isSelected: _trainerController
-                                              .interestSelection[index],
-                                          interest: _trainerController
-                                              .interests
-                                              .value
-                                              .response!
-                                              .response!
-                                              .data![index]
-                                              .name!,
-                                        ),
-                                      ));
-                                }),
-                          ),
-                          SizedBox(
-                            height: 16 * SizeConfig.heightMultiplier!,
-                          ),
-                          _trainerController.filterIsLoading.value
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SizedBox(
-                                      height: 200,
-                                    ),
-                                    Center(
-                                      child: CustomizedCircularProgress(),
-                                    ),
-                                    // Spacer()
-                                  ],
-                                )
-                              : Container(
-                                  // height: Get.height,
-                                  child: ListView.builder(
-                                      itemCount: _trainerController
-                                          .allTrainer
+            child: Stack(
+          children: [
+            SingleChildScrollView(
+              // physics: ScrollPhysics(),
+              controller: _scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 24 * SizeConfig.heightMultiplier!,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: 24 * SizeConfig.widthMultiplier!),
+                    child: Text(
+                      'interests'.tr,
+                      style: AppTextStyle.titleText.copyWith(
+                          fontSize: 14 * SizeConfig.textMultiplier!,
+                          color: kBlack),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 12 * SizeConfig.heightMultiplier!,
+                  ),
+                  Container(
+                    height: 28 * SizeConfig.heightMultiplier!,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _trainerController
+                            .interests.value.response!.response!.data!.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          for (int i = 0;
+                              i <
+                                  _trainerController.interests.value.response!
+                                      .response!.data!.length;
+                              i++) {
+                            _trainerController.interestSelection.add(false);
+                          }
+                          return Obx(() => _trainerController.isLoading.value
+                              ? Shimmer.fromColors(
+                                  child: ItemCategory(
+                                      interest: _trainerController
+                                          .interests
                                           .value
                                           .response!
-                                          .data!
-                                          .trainers!
-                                          .length,
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return TrainerTile(
+                                          .response!
+                                          .data![index]
+                                          .name!,
+                                      onTap: () {},
+                                      isSelected: false),
+                                  baseColor:
+                                      const Color.fromRGBO(230, 230, 230, 1),
+                                  highlightColor:
+                                      const Color.fromRGBO(242, 245, 245, 1),
+                                )
+                              : Padding(
+                                  padding: index == 0
+                                      ? EdgeInsets.only(
+                                          left:
+                                              16 * SizeConfig.widthMultiplier!)
+                                      : EdgeInsets.all(0),
+                                  child: ItemCategory(
+                                    onTap: () async {
+                                      _trainerController
+                                          .SelectedInterestIndex.value = index;
+
+                                      _trainerController.UpdatedInterestStatus(
+                                          index);
+                                      _trainerController.filterIsLoading.value =
+                                          true;
+                                      _trainerController.allTrainer.value =
+                                          await TrainerServices.getAllTrainer(
+                                              interests: _trainerController
+                                                  .interests
+                                                  .value
+                                                  .response!
+                                                  .response!
+                                                  .data![index]
+                                                  .serialId);
+                                      _trainerController.currentPage.value = 1;
+                                      _trainerController.filterIsLoading.value =
+                                          false;
+                                    },
+                                    isSelected: _trainerController
+                                        .interestSelection[index],
+                                    interest: _trainerController.interests.value
+                                        .response!.response!.data![index].name!,
+                                  ),
+                                ));
+                        }),
+                  ),
+                  SizedBox(
+                    height: 16 * SizeConfig.heightMultiplier!,
+                  ),
+                  _trainerController.filterIsLoading.value
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              height: 200,
+                            ),
+                            Center(
+                              child: CustomizedCircularProgress(),
+                            ),
+                            // Spacer()
+                          ],
+                        )
+                      : Container(
+                          // height: Get.height,
+                          child: ListView.builder(
+                              itemCount: _trainerController.allTrainer.value
+                                  .response!.data!.trainers!.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                return Obx(() => _trainerController
+                                        .isLoading.value
+                                    ? Shimmer.fromColors(
+                                        child: TrainerTile(
                                           name: _trainerController
                                                       .allTrainer
                                                       .value
@@ -373,54 +373,159 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                   .data!
                                                   .trainers![index]
                                                   .slotsFeft!)!,
-                                          onTap: () async {
-                                            Navigator.pushNamed(context,
-                                                RouteName.trainerProfileScreen);
-                                            _trainerController.isLoading.value =
-                                                true;
+                                          onTap: () {},
+                                        ),
+                                        baseColor: const Color.fromRGBO(
+                                            230, 230, 230, 1),
+                                        highlightColor: const Color.fromRGBO(
+                                            242, 245, 245, 1),
+                                      )
+                                    : TrainerTile(
+                                        name: _trainerController
+                                                    .allTrainer
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index]
+                                                    .user !=
+                                                null
+                                            ? _trainerController
+                                                    .allTrainer
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index]
+                                                    .user!
+                                                    .name ??
+                                                ''
+                                            : '',
+                                        strength: _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .strength![0],
+                                        strengthCount: _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .strength!
+                                                .length -
+                                            1,
+                                        description: _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .about!,
+                                        certifcateTitle: _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .certificates!,
+                                        traineeCount: int.tryParse(
                                             _trainerController
-                                                    .atrainerDetail.value =
-                                                await TrainerServices
-                                                    .getATrainerDetail(
-                                                        _trainerController
-                                                            .allTrainer
-                                                            .value
-                                                            .response!
-                                                            .data!
-                                                            .trainers![index]
-                                                            .user!
-                                                            .id!);
-                                            _trainerController.planModel.value =
-                                                await TrainerServices
-                                                    .getPlanByTrainerId(
-                                                        _trainerController
-                                                            .allTrainer
-                                                            .value
-                                                            .response!
-                                                            .data!
-                                                            .trainers![index]
-                                                            .user!
-                                                            .id!);
-                                            _trainerController.isLoading.value =
-                                                false;
-                                          },
-                                        );
-                                      }),
-                                ),
-                        ],
-                      ),
-                    ),
-                    Obx(() => _trainerController.showLoader.value
-                        ? Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CustomizedCircularProgress(),
-                            ))
-                        : Container())
-                  ],
-                )),
-        ),
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .trainees!)!,
+                                        rating: double.tryParse(
+                                            _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .rating!)!,
+                                        numberRated: int.tryParse(
+                                            _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .totalRating!)!,
+                                        profilePhoto: _trainerController
+                                                    .allTrainer
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index]
+                                                    .user !=
+                                                null
+                                            ? _trainerController
+                                                    .allTrainer
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index]
+                                                    .user!
+                                                    .profilePhoto ??
+                                                ''
+                                            : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                                        slotLeft: int.tryParse(
+                                            _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .slotsFeft!)!,
+                                        onTap: () async {
+                                          Navigator.pushNamed(context,
+                                              RouteName.trainerProfileScreen);
+                                          _trainerController
+                                              .isProfileLoading.value = true;
+                                          _trainerController
+                                                  .atrainerDetail.value =
+                                              await TrainerServices
+                                                  .getATrainerDetail(
+                                                      _trainerController
+                                                          .allTrainer
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .trainers![index]
+                                                          .user!
+                                                          .id!);
+                                          _trainerController.planModel.value =
+                                              await TrainerServices
+                                                  .getPlanByTrainerId(
+                                                      _trainerController
+                                                          .allTrainer
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .trainers![index]
+                                                          .user!
+                                                          .id!);
+                                          _trainerController
+                                              .isProfileLoading.value = false;
+                                        },
+                                      ));
+                              }),
+                        ),
+                ],
+              ),
+            ),
+            Obx(() => _trainerController.showLoader.value
+                ? Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomizedCircularProgress(),
+                    ))
+                : Container())
+          ],
+        )),
       ),
     );
   }

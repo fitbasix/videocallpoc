@@ -27,6 +27,7 @@ class TrainerController extends GetxController {
   RxBool filterIsLoading = RxBool(false);
   RxBool showLoader = RxBool(false);
   RxInt slotsLeftLimit = RxInt(5);
+  RxBool isProfileLoading = RxBool(false);
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;
