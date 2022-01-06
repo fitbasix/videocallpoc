@@ -249,19 +249,117 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                   SizedBox(
                     height: 16 * SizeConfig.heightMultiplier!,
                   ),
-                  _trainerController.filterIsLoading.value
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              height: 200,
-                            ),
-                            Center(
-                              child: CustomizedCircularProgress(),
-                            ),
-                            // Spacer()
-                          ],
+                  // _trainerController.filterIsLoading.value
+                  //     ? Column(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: [
+                  //           SizedBox(
+                  //             height: 200,
+                  //           ),
+                  //           Center(
+                  //             child: CustomizedCircularProgress(),
+                  //           ),
+                  //           // Spacer()
+                  //         ],
+                  //       )
+                  Obx(() => _trainerController.isLoading.value ||
+                          _trainerController.filterIsLoading.value
+                      ? Container(
+                          // height: Get.height,
+                          child: ListView.builder(
+                              itemCount: 5,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                return Shimmer.fromColors(
+                                  child: TrainerTile(
+                                    name: '',
+                                    strength: _trainerController
+                                        .allTrainer
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .strength![0],
+                                    strengthCount: _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .strength!
+                                            .length -
+                                        1,
+                                    description: _trainerController
+                                        .allTrainer
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .about!,
+                                    certifcateTitle: _trainerController
+                                        .allTrainer
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .certificates!,
+                                    traineeCount: int.tryParse(
+                                        _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .trainees!)!,
+                                    rating: double.tryParse(_trainerController
+                                        .allTrainer
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .rating!)!,
+                                    numberRated: int.tryParse(_trainerController
+                                        .allTrainer
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .totalRating!)!,
+                                    profilePhoto: _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .profilePhoto ??
+                                            ''
+                                        : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                                    slotLeft: int.tryParse(_trainerController
+                                        .allTrainer
+                                        .value
+                                        .response!
+                                        .data!
+                                        .trainers![index]
+                                        .slotsFeft!)!,
+                                    onTap: () {},
+                                  ),
+                                  baseColor:
+                                      const Color.fromRGBO(230, 230, 230, 1),
+                                  highlightColor:
+                                      const Color.fromRGBO(242, 245, 245, 1),
+                                );
+                              }),
                         )
                       : Container(
                           // height: Get.height,
@@ -271,248 +369,133 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
-                                return Obx(() => _trainerController
-                                        .isLoading.value
-                                    ? Shimmer.fromColors(
-                                        child: TrainerTile(
-                                          name: _trainerController
-                                                      .allTrainer
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .trainers![index]
-                                                      .user !=
-                                                  null
-                                              ? _trainerController
-                                                      .allTrainer
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .trainers![index]
-                                                      .user!
-                                                      .name ??
-                                                  ''
-                                              : '',
-                                          strength: _trainerController
+                                return TrainerTile(
+                                  name: _trainerController
                                               .allTrainer
                                               .value
                                               .response!
                                               .data!
                                               .trainers![index]
-                                              .strength![0],
-                                          strengthCount: _trainerController
-                                                  .allTrainer
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .strength!
-                                                  .length -
-                                              1,
-                                          description: _trainerController
+                                              .user !=
+                                          null
+                                      ? _trainerController
                                               .allTrainer
                                               .value
                                               .response!
                                               .data!
                                               .trainers![index]
-                                              .about!,
-                                          certifcateTitle: _trainerController
+                                              .user!
+                                              .name ??
+                                          ''
+                                      : '',
+                                  strength: _trainerController
+                                      .allTrainer
+                                      .value
+                                      .response!
+                                      .data!
+                                      .trainers![index]
+                                      .strength![0],
+                                  strengthCount: _trainerController
+                                          .allTrainer
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .strength!
+                                          .length -
+                                      1,
+                                  description: _trainerController
+                                      .allTrainer
+                                      .value
+                                      .response!
+                                      .data!
+                                      .trainers![index]
+                                      .about!,
+                                  certifcateTitle: _trainerController
+                                      .allTrainer
+                                      .value
+                                      .response!
+                                      .data!
+                                      .trainers![index]
+                                      .certificates!,
+                                  traineeCount: int.tryParse(_trainerController
+                                      .allTrainer
+                                      .value
+                                      .response!
+                                      .data!
+                                      .trainers![index]
+                                      .trainees!)!,
+                                  rating: double.tryParse(_trainerController
+                                      .allTrainer
+                                      .value
+                                      .response!
+                                      .data!
+                                      .trainers![index]
+                                      .rating!)!,
+                                  numberRated: int.tryParse(_trainerController
+                                      .allTrainer
+                                      .value
+                                      .response!
+                                      .data!
+                                      .trainers![index]
+                                      .totalRating!)!,
+                                  profilePhoto: _trainerController
                                               .allTrainer
                                               .value
                                               .response!
                                               .data!
                                               .trainers![index]
-                                              .certificates!,
-                                          traineeCount: int.tryParse(
-                                              _trainerController
-                                                  .allTrainer
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .trainees!)!,
-                                          rating: double.tryParse(
-                                              _trainerController
-                                                  .allTrainer
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .rating!)!,
-                                          numberRated: int.tryParse(
-                                              _trainerController
-                                                  .allTrainer
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .totalRating!)!,
-                                          profilePhoto: _trainerController
-                                                      .allTrainer
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .trainers![index]
-                                                      .user !=
-                                                  null
-                                              ? _trainerController
-                                                      .allTrainer
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .trainers![index]
-                                                      .user!
-                                                      .profilePhoto ??
-                                                  ''
-                                              : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-                                          slotLeft: int.tryParse(
-                                              _trainerController
-                                                  .allTrainer
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .slotsFeft!)!,
-                                          onTap: () {},
-                                        ),
-                                        baseColor: const Color.fromRGBO(
-                                            230, 230, 230, 1),
-                                        highlightColor: const Color.fromRGBO(
-                                            242, 245, 245, 1),
-                                      )
-                                    : TrainerTile(
-                                        name: _trainerController
-                                                    .allTrainer
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .trainers![index]
-                                                    .user !=
-                                                null
-                                            ? _trainerController
+                                              .user !=
+                                          null
+                                      ? _trainerController
+                                              .allTrainer
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers![index]
+                                              .user!
+                                              .profilePhoto ??
+                                          ''
+                                      : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                                  slotLeft: int.tryParse(_trainerController
+                                      .allTrainer
+                                      .value
+                                      .response!
+                                      .data!
+                                      .trainers![index]
+                                      .slotsFeft!)!,
+                                  onTap: () async {
+                                    Navigator.pushNamed(context,
+                                        RouteName.trainerProfileScreen);
+                                    _trainerController.isProfileLoading.value =
+                                        true;
+                                    _trainerController.atrainerDetail.value =
+                                        await TrainerServices.getATrainerDetail(
+                                            _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .id!);
+                                    _trainerController.planModel.value =
+                                        await TrainerServices
+                                            .getPlanByTrainerId(
+                                                _trainerController
                                                     .allTrainer
                                                     .value
                                                     .response!
                                                     .data!
                                                     .trainers![index]
                                                     .user!
-                                                    .name ??
-                                                ''
-                                            : '',
-                                        strength: _trainerController
-                                            .allTrainer
-                                            .value
-                                            .response!
-                                            .data!
-                                            .trainers![index]
-                                            .strength![0],
-                                        strengthCount: _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .strength!
-                                                .length -
-                                            1,
-                                        description: _trainerController
-                                            .allTrainer
-                                            .value
-                                            .response!
-                                            .data!
-                                            .trainers![index]
-                                            .about!,
-                                        certifcateTitle: _trainerController
-                                            .allTrainer
-                                            .value
-                                            .response!
-                                            .data!
-                                            .trainers![index]
-                                            .certificates!,
-                                        traineeCount: int.tryParse(
-                                            _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .trainees!)!,
-                                        rating: double.tryParse(
-                                            _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .rating!)!,
-                                        numberRated: int.tryParse(
-                                            _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .totalRating!)!,
-                                        profilePhoto: _trainerController
-                                                    .allTrainer
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .trainers![index]
-                                                    .user !=
-                                                null
-                                            ? _trainerController
-                                                    .allTrainer
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .trainers![index]
-                                                    .user!
-                                                    .profilePhoto ??
-                                                ''
-                                            : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-                                        slotLeft: int.tryParse(
-                                            _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .slotsFeft!)!,
-                                        onTap: () async {
-                                          Navigator.pushNamed(context,
-                                              RouteName.trainerProfileScreen);
-                                          _trainerController
-                                              .isProfileLoading.value = true;
-                                          _trainerController
-                                                  .atrainerDetail.value =
-                                              await TrainerServices
-                                                  .getATrainerDetail(
-                                                      _trainerController
-                                                          .allTrainer
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .trainers![index]
-                                                          .user!
-                                                          .id!);
-                                          _trainerController.planModel.value =
-                                              await TrainerServices
-                                                  .getPlanByTrainerId(
-                                                      _trainerController
-                                                          .allTrainer
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .trainers![index]
-                                                          .user!
-                                                          .id!);
-                                          _trainerController
-                                              .isProfileLoading.value = false;
-                                        },
-                                      ));
+                                                    .id!);
+                                    _trainerController.isProfileLoading.value =
+                                        false;
+                                  },
+                                );
                               }),
-                        ),
+                        )),
                 ],
               ),
             ),

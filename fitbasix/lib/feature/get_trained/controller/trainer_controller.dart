@@ -14,6 +14,7 @@ class TrainerController extends GetxController {
   Rx<AllTrainer> allTrainer = AllTrainer().obs;
   Rx<AllTrainer> fitnessConsultant = AllTrainer().obs;
   Rx<AllTrainer> nutritionConsultant = AllTrainer().obs;
+  Rx<AllTrainer> trainer = AllTrainer().obs;
   Rx<InterestModel> interests = InterestModel().obs;
   RxList<bool> interestSelection = <bool>[true].obs;
   RxInt SelectedInterestIndex = RxInt(0);
@@ -45,14 +46,9 @@ class TrainerController extends GetxController {
 
   Future<void> setUp() async {
     getTrainedIsLoading.value = true;
-    // atrainerDetail.value =
-    //     await TrainerServices.getATrainerDetail("61d2d1422f5935456683ff4f");
-    // planModel.value =
-    //     await TrainerServices.getPlanByTrainerId("61d2d1422f5935456683ff4f");
     allTrainer.value = await TrainerServices.getAllTrainer();
-    print("lll");
+    trainer.value = await TrainerServices.getAllTrainer();
     fitnessConsultant.value = await TrainerServices.getFitnessConsultant();
-    print("lll");
     nutritionConsultant.value = await TrainerServices.getNutritionConsultant();
 
     interests.value = await TrainerServices.getAllInterest();

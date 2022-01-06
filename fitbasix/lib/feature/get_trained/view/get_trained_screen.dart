@@ -74,8 +74,8 @@ class GetTrainedScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: _trainerController.getTrainedIsLoading.value
                           ? 5
-                          : _trainerController.allTrainer.value.response!.data!
-                              .trainers!.length,
+                          : _trainerController
+                              .trainer.value.response!.data!.trainers!.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Obx(() => _trainerController
                                 .getTrainedIsLoading.value
@@ -110,7 +110,7 @@ class GetTrainedScreen extends StatelessWidget {
                                     : EdgeInsets.all(0),
                                 child: TrainerCard(
                                   name: _trainerController
-                                              .allTrainer
+                                              .trainer
                                               .value
                                               .response!
                                               .data!
@@ -118,7 +118,7 @@ class GetTrainedScreen extends StatelessWidget {
                                               .user !=
                                           null
                                       ? _trainerController
-                                              .allTrainer
+                                              .trainer
                                               .value
                                               .response!
                                               .data!
@@ -128,7 +128,7 @@ class GetTrainedScreen extends StatelessWidget {
                                           ''
                                       : '',
                                   certificateCount: _trainerController
-                                      .allTrainer
+                                      .trainer
                                       .value
                                       .response!
                                       .data!
@@ -136,14 +136,14 @@ class GetTrainedScreen extends StatelessWidget {
                                       .certificates!
                                       .length,
                                   rating: double.tryParse(_trainerController
-                                      .allTrainer
+                                      .trainer
                                       .value
                                       .response!
                                       .data!
                                       .trainers![index]
                                       .rating!)!,
                                   profilePhoto: _trainerController
-                                              .allTrainer
+                                              .trainer
                                               .value
                                               .response!
                                               .data!
@@ -151,7 +151,7 @@ class GetTrainedScreen extends StatelessWidget {
                                               .user !=
                                           null
                                       ? _trainerController
-                                              .allTrainer
+                                              .trainer
                                               .value
                                               .response!
                                               .data!
@@ -160,24 +160,24 @@ class GetTrainedScreen extends StatelessWidget {
                                               .profilePhoto ??
                                           ''
                                       : '',
-                                  about: _trainerController.allTrainer.value
+                                  about: _trainerController.trainer.value
                                       .response!.data!.trainers![index].about!,
                                   raters: _trainerController
-                                      .allTrainer
+                                      .trainer
                                       .value
                                       .response!
                                       .data!
                                       .trainers![index]
                                       .totalRating!,
                                   strength: _trainerController
-                                      .allTrainer
+                                      .trainer
                                       .value
                                       .response!
                                       .data!
                                       .trainers![index]
                                       .strength![0],
                                   strengthLength: _trainerController
-                                      .allTrainer
+                                      .trainer
                                       .value
                                       .response!
                                       .data!
@@ -192,7 +192,7 @@ class GetTrainedScreen extends StatelessWidget {
                                     _trainerController.atrainerDetail.value =
                                         await TrainerServices.getATrainerDetail(
                                             _trainerController
-                                                .allTrainer
+                                                .trainer
                                                 .value
                                                 .response!
                                                 .data!
@@ -203,7 +203,7 @@ class GetTrainedScreen extends StatelessWidget {
                                         await TrainerServices
                                             .getPlanByTrainerId(
                                                 _trainerController
-                                                    .allTrainer
+                                                    .trainer
                                                     .value
                                                     .response!
                                                     .data!
