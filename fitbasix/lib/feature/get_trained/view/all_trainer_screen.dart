@@ -1,4 +1,5 @@
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/number_format.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -426,7 +427,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
 }
 
 class TrainerTile extends StatelessWidget {
-  const TrainerTile({
+  final TrainerController _trainerController = Get.find();
+  TrainerTile({
     Key? key,
     required this.name,
     required this.strength,
@@ -593,7 +595,8 @@ class TrainerTile extends StatelessWidget {
                             width: 8 * SizeConfig.widthMultiplier!,
                           ),
                           Text(
-                            traineeCount.toString(),
+                            NumberFormatter.textFormatter(
+                                traineeCount.toString()),
                             style: AppTextStyle.NormalText.copyWith(
                                 fontSize: 12 * SizeConfig.textMultiplier!),
                           )
@@ -618,7 +621,12 @@ class TrainerTile extends StatelessWidget {
                             width: 8 * SizeConfig.widthMultiplier!,
                           ),
                           Text(
-                            '($numberRated Rated)',
+                            '(' +
+                                'rated_count'.trParams({
+                                  "count": NumberFormatter.textFormatter(
+                                      numberRated.toString())
+                                }) +
+                                ')',
                             style: AppTextStyle.normalBlackText.copyWith(
                                 fontSize: 12 * SizeConfig.textMultiplier!),
                           )
@@ -626,28 +634,30 @@ class TrainerTile extends StatelessWidget {
                       )
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        right: 16 * SizeConfig.widthMultiplier!),
-                    child: Text(
-                      slotLeft.toString(),
-                      style: AppTextStyle.titleText
-                          .copyWith(fontSize: 36, color: kGreenColor),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 12 * SizeConfig.widthMultiplier!),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'slotLeft'.tr,
-                    style: AppTextStyle.titleText
-                        .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
-                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        slotLeft.toString(),
+                        style: AppTextStyle.titleText.copyWith(
+                            fontSize: 36,
+                            color: slotLeft >=
+                                    _trainerController.slotsLeftLimit.value
+                                ? kGreenColor
+                                : kRed),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'slotLeft'.tr,
+                            style: AppTextStyle.titleText.copyWith(
+                                fontSize: 12 * SizeConfig.textMultiplier!),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
