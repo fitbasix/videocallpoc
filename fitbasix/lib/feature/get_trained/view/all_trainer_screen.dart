@@ -627,7 +627,6 @@ class TrainerTile extends StatelessWidget {
                                       numberRated.toString())
                                 }) +
                                 ')',
-                            // '($numberRated Rated)',
                             style: AppTextStyle.normalBlackText.copyWith(
                                 fontSize: 12 * SizeConfig.textMultiplier!),
                           )
@@ -636,33 +635,26 @@ class TrainerTile extends StatelessWidget {
                     ],
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            right: 16 * SizeConfig.widthMultiplier!),
-                        child: Text(
-                          slotLeft.toString(),
-                          style: AppTextStyle.titleText.copyWith(
-                              fontSize: 36,
-                              color: slotLeft >=
-                                      _trainerController.slotsLeftLimit.value
-                                  ? kGreenColor
-                                  : kRed),
-                        ),
+                      Text(
+                        slotLeft.toString(),
+                        style: AppTextStyle.titleText.copyWith(
+                            fontSize: 36,
+                            color: slotLeft >=
+                                    _trainerController.slotsLeftLimit.value
+                                ? kGreenColor
+                                : kRed),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            right: 12 * SizeConfig.widthMultiplier!),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'slotLeft'.tr,
-                              style: AppTextStyle.titleText.copyWith(
-                                  fontSize: 12 * SizeConfig.textMultiplier!),
-                            ),
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'slotLeft'.tr,
+                            style: AppTextStyle.titleText.copyWith(
+                                fontSize: 12 * SizeConfig.textMultiplier!),
+                          ),
+                        ],
                       ),
                     ],
                   )
