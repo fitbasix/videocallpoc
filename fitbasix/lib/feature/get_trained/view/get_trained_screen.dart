@@ -75,7 +75,7 @@ class GetTrainedScreen extends StatelessWidget {
                       itemCount: _trainerController.getTrainedIsLoading.value
                           ? 5
                           : _trainerController
-                              .trainer.value.response!.data!.trainers!.length,
+                              .trainers.value.response!.data!.trainers!.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Obx(() => _trainerController
                                 .getTrainedIsLoading.value
@@ -110,7 +110,7 @@ class GetTrainedScreen extends StatelessWidget {
                                     : EdgeInsets.all(0),
                                 child: TrainerCard(
                                   name: _trainerController
-                                              .trainer
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
@@ -118,7 +118,7 @@ class GetTrainedScreen extends StatelessWidget {
                                               .user !=
                                           null
                                       ? _trainerController
-                                              .trainer
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
@@ -128,7 +128,7 @@ class GetTrainedScreen extends StatelessWidget {
                                           ''
                                       : '',
                                   certificateCount: _trainerController
-                                      .trainer
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
@@ -136,14 +136,14 @@ class GetTrainedScreen extends StatelessWidget {
                                       .certificates!
                                       .length,
                                   rating: double.tryParse(_trainerController
-                                      .trainer
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
                                       .trainers![index]
                                       .rating!)!,
                                   profilePhoto: _trainerController
-                                              .trainer
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
@@ -151,7 +151,7 @@ class GetTrainedScreen extends StatelessWidget {
                                               .user !=
                                           null
                                       ? _trainerController
-                                              .trainer
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
@@ -160,24 +160,24 @@ class GetTrainedScreen extends StatelessWidget {
                                               .profilePhoto ??
                                           ''
                                       : '',
-                                  about: _trainerController.trainer.value
+                                  about: _trainerController.trainers.value
                                       .response!.data!.trainers![index].about!,
                                   raters: _trainerController
-                                      .trainer
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
                                       .trainers![index]
                                       .totalRating!,
                                   strength: _trainerController
-                                      .trainer
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
                                       .trainers![index]
                                       .strength![0],
                                   strengthLength: _trainerController
-                                      .trainer
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
@@ -190,13 +190,13 @@ class GetTrainedScreen extends StatelessWidget {
                                     _trainerController.isProfileLoading.value =
                                         true;
                                     _trainerController.atrainerDetail.value =
-                                        _trainerController.trainer.value
+                                        _trainerController.trainers.value
                                             .response!.data!.trainers![index];
                                     _trainerController.planModel.value =
                                         await TrainerServices
                                             .getPlanByTrainerId(
                                                 _trainerController
-                                                    .trainer
+                                                    .trainers
                                                     .value
                                                     .response!
                                                     .data!
@@ -286,83 +286,83 @@ class GetTrainedScreen extends StatelessWidget {
                                     : EdgeInsets.all(0),
                                 child: TrainerCard(
                                   name: _trainerController
-                                              .fitnessConsultant
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .trainers![index]
+                                              .fitnessConsultant![index]
                                               .user !=
                                           null
                                       ? _trainerController
-                                              .fitnessConsultant
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .trainers![index]
+                                              .fitnessConsultant![index]
                                               .user!
                                               .name ??
                                           ''
                                       : '',
                                   certificateCount: _trainerController
-                                      .fitnessConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .fitnessConsultant![index]
                                       .certificates!
                                       .length,
                                   rating: double.tryParse(_trainerController
-                                      .fitnessConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .fitnessConsultant![index]
                                       .rating!)!,
                                   profilePhoto: _trainerController
-                                              .fitnessConsultant
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .trainers![index]
+                                              .fitnessConsultant![index]
                                               .user !=
                                           null
                                       ? _trainerController
-                                              .fitnessConsultant
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .trainers![index]
+                                              .fitnessConsultant![index]
                                               .user!
                                               .profilePhoto ??
                                           ''
                                       : '',
                                   about: _trainerController
-                                      .fitnessConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .fitnessConsultant![index]
                                       .about!,
                                   raters: _trainerController
-                                      .fitnessConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .fitnessConsultant![index]
                                       .totalRating!,
                                   strength: _trainerController
-                                      .fitnessConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .fitnessConsultant![index]
                                       .strength![0],
                                   strengthLength: _trainerController
-                                      .fitnessConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .fitnessConsultant![index]
                                       .strength!
                                       .length,
                                   onTap: () async {
@@ -372,20 +372,20 @@ class GetTrainedScreen extends StatelessWidget {
                                         true;
                                     _trainerController.atrainerDetail.value =
                                         _trainerController
-                                            .fitnessConsultant
+                                            .trainers
                                             .value
                                             .response!
                                             .data!
-                                            .trainers![index];
+                                            .fitnessConsultant![index];
                                     _trainerController.planModel.value =
                                         await TrainerServices
                                             .getPlanByTrainerId(
                                                 _trainerController
-                                                    .fitnessConsultant
+                                                    .trainers
                                                     .value
                                                     .response!
                                                     .data!
-                                                    .trainers![index]
+                                                    .fitnessConsultant![index]
                                                     .user!
                                                     .id!);
                                     _trainerController.isProfileLoading.value =
@@ -470,83 +470,83 @@ class GetTrainedScreen extends StatelessWidget {
                                     : EdgeInsets.all(0),
                                 child: TrainerCard(
                                   name: _trainerController
-                                              .nutritionConsultant
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .trainers![index]
+                                              .nutritionConsultant![index]
                                               .user !=
                                           null
                                       ? _trainerController
-                                              .nutritionConsultant
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .trainers![index]
+                                              .nutritionConsultant![index]
                                               .user!
                                               .name ??
                                           ''
                                       : '',
                                   certificateCount: _trainerController
-                                      .nutritionConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .nutritionConsultant![index]
                                       .certificates!
                                       .length,
                                   rating: double.tryParse(_trainerController
-                                      .nutritionConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .nutritionConsultant![index]
                                       .rating!)!,
                                   profilePhoto: _trainerController
-                                              .nutritionConsultant
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .trainers![index]
+                                              .nutritionConsultant![index]
                                               .user !=
                                           null
                                       ? _trainerController
-                                              .nutritionConsultant
+                                              .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .trainers![index]
+                                              .nutritionConsultant![index]
                                               .user!
                                               .profilePhoto ??
                                           ''
                                       : '',
                                   about: _trainerController
-                                      .nutritionConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .nutritionConsultant![index]
                                       .about!,
                                   raters: _trainerController
-                                      .nutritionConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .nutritionConsultant![index]
                                       .totalRating!,
                                   strength: _trainerController
-                                      .nutritionConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .nutritionConsultant![index]
                                       .strength![0],
                                   strengthLength: _trainerController
-                                      .nutritionConsultant
+                                      .trainers
                                       .value
                                       .response!
                                       .data!
-                                      .trainers![index]
+                                      .nutritionConsultant![index]
                                       .strength!
                                       .length,
                                   onTap: () async {
@@ -556,20 +556,20 @@ class GetTrainedScreen extends StatelessWidget {
                                         true;
                                     _trainerController.atrainerDetail.value =
                                         _trainerController
-                                            .nutritionConsultant
+                                            .trainers
                                             .value
                                             .response!
                                             .data!
-                                            .trainers![index];
+                                            .nutritionConsultant![index];
                                     _trainerController.planModel.value =
                                         await TrainerServices
                                             .getPlanByTrainerId(
                                                 _trainerController
-                                                    .nutritionConsultant
+                                                    .trainers
                                                     .value
                                                     .response!
                                                     .data!
-                                                    .trainers![index]
+                                                    .nutritionConsultant![index]
                                                     .user!
                                                     .id!);
                                     _trainerController.isProfileLoading.value =

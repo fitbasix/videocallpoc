@@ -14,4 +14,5 @@ class ApiUrl {
   static String getPlanByTrainerId = liveBaseURL + '/api/plan/getAllPlansById';
   static String getAllTrainer = liveBaseURL + '/api/trainer/getAll';
   static String getAllInterest = liveBaseURL + '/api/interests/getAll';
+  static String getTrainers = liveBaseURL + '/api/trainer/getInit';
 }
