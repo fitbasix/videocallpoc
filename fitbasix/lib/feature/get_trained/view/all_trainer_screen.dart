@@ -101,10 +101,9 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                     ),
                     child: TextField(
                       controller: _trainerController.searchController,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         _trainerController.search.value = value;
-                      },
-                      onSubmitted: (value) async {
+
                         if (value.length >= 3) {
                           _trainerController.filterIsLoading.value = true;
                           _trainerController.allTrainer.value =
@@ -112,11 +111,15 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
 
                           _scrollController.jumpTo(0);
                           _trainerController.filterIsLoading.value = false;
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text('Please enter atleast 3 characters')));
                         }
+                      },
+                      onSubmitted: (value) async {
+                        _trainerController.filterIsLoading.value = true;
+                        _trainerController.allTrainer.value =
+                            await TrainerServices.getAllTrainer(name: value);
+
+                        _scrollController.jumpTo(0);
+                        _trainerController.filterIsLoading.value = false;
                       },
                       decoration: InputDecoration(
                           prefixIcon: Transform(
@@ -146,8 +149,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                               fontSize: 14 * SizeConfig.textMultiplier!,
                               color: hintGrey),
                           contentPadding: EdgeInsets.only(
-                              top: 5 * SizeConfig.heightMultiplier!,
-                              bottom: 2 * SizeConfig.heightMultiplier!)),
+                            top: 5,
+                          )),
                     ),
                   ),
                 )
