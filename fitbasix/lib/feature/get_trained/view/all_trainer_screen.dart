@@ -89,7 +89,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                   transform: Matrix4.translationValues(
                       -20 * SizeConfig.widthMultiplier!, 0, 0),
                   child: Container(
-                    height: 32,
+                    height: 32 * SizeConfig.heightMultiplier!,
                     decoration: BoxDecoration(
                       color: lightGrey,
                       borderRadius: BorderRadius.circular(

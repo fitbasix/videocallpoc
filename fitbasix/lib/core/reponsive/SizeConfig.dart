@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SizeConfig {
   static double? _screenWidth;
@@ -36,9 +37,9 @@ class SizeConfig {
     // heightMultiplier = _blockSizeVertical / 6.4;
     // widthMultiplier = _blockSizeHorizontal / 3.6;
 
-    textMultiplier = 1;
+    textMultiplier = 1.sp;
     imageSizeMultiplier = 1;
-    heightMultiplier = 1;
-    widthMultiplier = 1;
+    heightMultiplier = 1.h;
+    widthMultiplier = 1.w;
   }
 }

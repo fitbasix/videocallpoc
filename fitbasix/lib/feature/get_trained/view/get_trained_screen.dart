@@ -69,7 +69,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 250,
+                  height: 250 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: _trainerController.getTrainedIsLoading.value
@@ -218,7 +218,7 @@ class GetTrainedScreen extends StatelessWidget {
                       }),
                 ),
                 SizedBox(
-                  height: 39,
+                  height: 39 * SizeConfig.heightMultiplier!,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -255,7 +255,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 250,
+                  height: 242 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
@@ -406,7 +406,7 @@ class GetTrainedScreen extends StatelessWidget {
                       }),
                 ),
                 SizedBox(
-                  height: 39,
+                  height: 39 * SizeConfig.heightMultiplier!,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -442,7 +442,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 250,
+                  height: 242 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
