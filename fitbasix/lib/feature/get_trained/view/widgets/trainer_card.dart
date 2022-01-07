@@ -125,7 +125,7 @@ class TrainerCard extends StatelessWidget {
             Text(
               '($raters)',
               style: AppTextStyle.NormalText.copyWith(
-                  fontSize: 10, color: kGreyText),
+                  fontSize: 10 * SizeConfig.textMultiplier!, color: kGreyText),
             ),
           ],
         ),

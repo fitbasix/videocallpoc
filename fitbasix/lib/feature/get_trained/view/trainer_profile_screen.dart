@@ -1,19 +1,17 @@
-import 'package:fitbasix/core/constants/app_text_style.dart';
-import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
-import 'package:fitbasix/core/universal_widgets/number_format.dart';
-import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
-import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
-import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
-import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
-import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
+import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:fitbasix/core/universal_widgets/number_format.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
+import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
+import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
 class TrainerProfileScreen extends StatelessWidget {
   const TrainerProfileScreen({Key? key}) : super(key: key);
@@ -236,7 +234,7 @@ class TrainerPage extends StatelessWidget {
                             SizedBox(height: 24 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: 24.0 * SizeConfig.heightMultiplier!),
+                                  left: 24.0 * SizeConfig.widthMultiplier!),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -485,10 +483,12 @@ class TrainerPage extends StatelessWidget {
                           left: 16 * SizeConfig.widthMultiplier!,
                           child: Container(
                             decoration: BoxDecoration(
-                                border: Border.all(width: 4, color: kPureWhite),
+                                border: Border.all(
+                                    width: 4 * SizeConfig.widthMultiplier!,
+                                    color: kPureWhite),
                                 shape: BoxShape.circle),
-                            height: 120 * SizeConfig.heightMultiplier!,
-                            width: 120 * SizeConfig.heightMultiplier!,
+                            height: 120 * SizeConfig.widthMultiplier!,
+                            width: 120 * SizeConfig.widthMultiplier!,
                             child: CircleAvatar(
                               radius: 60 * SizeConfig.heightMultiplier!,
                               backgroundImage: NetworkImage(trainerImage),
@@ -527,7 +527,9 @@ class TrainerPage extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Container(
                 color: kPureWhite,
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding: EdgeInsets.symmetric(
+                    vertical: 8 * SizeConfig.heightMultiplier!,
+                    horizontal: 16 * SizeConfig.widthMultiplier!),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -552,7 +554,7 @@ class TrainerPage extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 31.0 * SizeConfig.widthMultiplier!,
-                              vertical: 10 * SizeConfig.widthMultiplier!),
+                              vertical: 14 * SizeConfig.heightMultiplier!),
                           child: Text(
                             'enroll'.tr,
                             style: AppTextStyle.titleText.copyWith(
@@ -592,7 +594,9 @@ class CustomButton extends StatelessWidget {
       child: Container(
           height: 28 * SizeConfig.heightMultiplier!,
           width: 140 * SizeConfig.widthMultiplier!,
-          padding: EdgeInsets.symmetric(vertical: 4),
+          padding: EdgeInsets.symmetric(
+            vertical: 4 * SizeConfig.heightMultiplier!,
+          ),
           decoration: BoxDecoration(
               color: color, borderRadius: BorderRadius.circular(8.0)),
           child: Center(
