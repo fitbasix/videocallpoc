@@ -2,6 +2,7 @@ import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
+import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
@@ -44,6 +45,14 @@ class TrainerServices {
     });
     print(response.toString());
     return allTrainerFromJson(response.toString());
+  }
+
+  static Future<GetTrainerModel> getTrainers() async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.post(ApiUrl.getTrainers, data: {});
+    print(response.toString());
+    return getTrainerModelFromJson(response.toString());
   }
 
   static Future<AllTrainer> getFitnessConsultant() async {

@@ -22,7 +22,9 @@ class OtpScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
+        padding: EdgeInsets.only(
+            left: 16 * SizeConfig.widthMultiplier!,
+            right: 16 * SizeConfig.widthMultiplier!),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -74,8 +76,8 @@ class OtpScreen extends StatelessWidget {
               pinTheme: PinTheme(
                 shape: PinCodeFieldShape.box,
                 borderRadius: BorderRadius.circular(8),
-                fieldHeight: 56 * SizeConfig.widthMultiplier!,
-                fieldWidth: 56 * SizeConfig.widthMultiplier!,
+                fieldHeight: 48 * SizeConfig.widthMultiplier!,
+                fieldWidth: 48 * SizeConfig.widthMultiplier!,
                 selectedColor: Colors.transparent,
                 activeFillColor: kLightGrey,
                 inactiveColor: Colors.transparent,

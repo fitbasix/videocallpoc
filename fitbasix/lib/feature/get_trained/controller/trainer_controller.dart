@@ -1,5 +1,6 @@
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
+import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,10 @@ class TrainerController extends GetxController {
   Rx<Trainer> atrainerDetail = Trainer().obs;
   Rx<PlanModel> planModel = PlanModel().obs;
   Rx<AllTrainer> allTrainer = AllTrainer().obs;
-  Rx<AllTrainer> fitnessConsultant = AllTrainer().obs;
-  Rx<AllTrainer> nutritionConsultant = AllTrainer().obs;
-  Rx<AllTrainer> trainer = AllTrainer().obs;
+  // Rx<AllTrainer> fitnessConsultant = AllTrainer().obs;
+  // Rx<AllTrainer> nutritionConsultant = AllTrainer().obs;
+  // Rx<AllTrainer> trainer = AllTrainer().obs;
+  Rx<GetTrainerModel> trainers = GetTrainerModel().obs;
   Rx<InterestModel> interests = InterestModel().obs;
   RxList<bool> interestSelection = <bool>[true].obs;
   RxInt SelectedInterestIndex = RxInt(0);
@@ -46,9 +48,7 @@ class TrainerController extends GetxController {
   Future<void> setUp() async {
     getTrainedIsLoading.value = true;
     allTrainer.value = await TrainerServices.getAllTrainer();
-    trainer.value = await TrainerServices.getAllTrainer();
-    fitnessConsultant.value = await TrainerServices.getFitnessConsultant();
-    nutritionConsultant.value = await TrainerServices.getNutritionConsultant();
+    trainers.value = await TrainerServices.getTrainers();
 
     interests.value = await TrainerServices.getAllInterest();
     getTrainedIsLoading.value = false;

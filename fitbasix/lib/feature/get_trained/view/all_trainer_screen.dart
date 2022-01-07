@@ -83,7 +83,11 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: SvgPicture.asset(ImagePath.backIcon)),
+              icon: SvgPicture.asset(
+                ImagePath.backIcon,
+                width: 7 * SizeConfig.widthMultiplier!,
+                height: 12 * SizeConfig.heightMultiplier!,
+              )),
           title: Obx(() => _trainerController.isSearchActive.value
               ? Transform(
                   transform: Matrix4.translationValues(
@@ -101,12 +105,18 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                         _trainerController.search.value = value;
                       },
                       onSubmitted: (value) async {
-                        _trainerController.filterIsLoading.value = true;
-                        _trainerController.allTrainer.value =
-                            await TrainerServices.getAllTrainer(name: value);
+                        if (value.length >= 3) {
+                          _trainerController.filterIsLoading.value = true;
+                          _trainerController.allTrainer.value =
+                              await TrainerServices.getAllTrainer(name: value);
 
-                        _scrollController.jumpTo(0);
-                        _trainerController.filterIsLoading.value = false;
+                          _scrollController.jumpTo(0);
+                          _trainerController.filterIsLoading.value = false;
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Please enter atleast 3 characters')));
+                        }
                       },
                       decoration: InputDecoration(
                           prefixIcon: Transform(
@@ -118,7 +128,12 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           ),
                           suffixIcon: GestureDetector(
                             onTap: () {
-                              _trainerController.searchController.clear();
+                              _trainerController.searchController.text.length ==
+                                      0
+                                  ? _trainerController.isSearchActive.value =
+                                      false
+                                  : _trainerController.searchController.clear();
+                              ;
                             },
                             child: Icon(
                               Icons.clear,
@@ -127,7 +142,12 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           ),
                           border: InputBorder.none,
                           hintText: 'searchHint'.tr,
-                          contentPadding: EdgeInsets.only(bottom: 2)),
+                          hintStyle: AppTextStyle.smallGreyText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: hintGrey),
+                          contentPadding: EdgeInsets.only(
+                              top: 5 * SizeConfig.heightMultiplier!,
+                              bottom: 2 * SizeConfig.heightMultiplier!)),
                     ),
                   ),
                 )
@@ -218,13 +238,14 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                       : EdgeInsets.all(0),
                                   child: ItemCategory(
                                     onTap: () async {
+                                      _trainerController.filterIsLoading.value =
+                                          true;
                                       _trainerController
                                           .SelectedInterestIndex.value = index;
 
                                       _trainerController.UpdatedInterestStatus(
                                           index);
-                                      _trainerController.filterIsLoading.value =
-                                          true;
+
                                       _trainerController.allTrainer.value =
                                           await TrainerServices.getAllTrainer(
                                               interests: _trainerController
@@ -263,95 +284,28 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                   //           // Spacer()
                   //         ],
                   //       )
-                  Obx(() => _trainerController.isLoading.value ||
-                          _trainerController.filterIsLoading.value
+                  Obx(() => _trainerController.filterIsLoading.value ||
+                          _trainerController.isLoading.value
                       ? Container(
                           // height: Get.height,
                           child: ListView.builder(
-                              itemCount: 5,
+                              itemCount: 2,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
                                 return Shimmer.fromColors(
                                   child: TrainerTile(
                                     name: '',
-                                    strength: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .strength![0],
-                                    strengthCount: _trainerController
-                                            .allTrainer
-                                            .value
-                                            .response!
-                                            .data!
-                                            .trainers![index]
-                                            .strength!
-                                            .length -
-                                        1,
-                                    description: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .about!,
-                                    certifcateTitle: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .certificates!,
-                                    traineeCount: int.tryParse(
-                                        _trainerController
-                                            .allTrainer
-                                            .value
-                                            .response!
-                                            .data!
-                                            .trainers![index]
-                                            .trainees!)!,
-                                    rating: double.tryParse(_trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .rating!)!,
-                                    numberRated: int.tryParse(_trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .totalRating!)!,
-                                    profilePhoto: _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .user !=
-                                            null
-                                        ? _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .user!
-                                                .profilePhoto ??
-                                            ''
-                                        : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-                                    slotLeft: int.tryParse(_trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .slotsFeft!)!,
+                                    strength: '',
+                                    strengthCount: 0,
+                                    description: '',
+                                    certifcateTitle: [],
+                                    traineeCount: 0,
+                                    rating: 0,
+                                    numberRated: 0,
+                                    profilePhoto:
+                                        'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                                    slotLeft: 0,
                                     onTap: () {},
                                   ),
                                   baseColor:
@@ -365,7 +319,11 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           // height: Get.height,
                           child: ListView.builder(
                               itemCount: _trainerController.allTrainer.value
-                                  .response!.data!.trainers!.length,
+                                          .response!.data!.trainers!.length ==
+                                      0
+                                  ? 0
+                                  : _trainerController.allTrainer.value
+                                      .response!.data!.trainers!.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
