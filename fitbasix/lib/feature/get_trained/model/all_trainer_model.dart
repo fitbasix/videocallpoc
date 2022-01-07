@@ -200,16 +200,19 @@ class User {
   User({
     this.id,
     this.profilePhoto,
+    this.coverPhoto,
     this.name,
   });
 
   final String? id;
   final String? profilePhoto;
   final String? name;
+  final String? coverPhoto;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["_id"],
         profilePhoto: json["profilePhoto"],
+        coverPhoto: json["coverPhoto"],
         name: json["name"],
       );
 

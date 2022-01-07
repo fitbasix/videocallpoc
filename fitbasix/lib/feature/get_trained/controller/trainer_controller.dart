@@ -2,14 +2,13 @@ import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
-import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TrainerController extends GetxController {
   RxBool isSelected = RxBool(false);
   RxBool isLoading = RxBool(false);
-  Rx<TrainerModel> atrainerDetail = TrainerModel().obs;
+  Rx<Trainer> atrainerDetail = Trainer().obs;
   Rx<PlanModel> planModel = PlanModel().obs;
   Rx<AllTrainer> allTrainer = AllTrainer().obs;
   Rx<AllTrainer> fitnessConsultant = AllTrainer().obs;
