@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TrainerProfileScreen extends StatelessWidget {
   const TrainerProfileScreen({Key? key}) : super(key: key);
@@ -23,9 +24,32 @@ class TrainerProfileScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Obx(
-          () => trainerController.isLoading.value
-              ? Center(
-                  child: CustomizedCircularProgress(),
+          () => trainerController.isProfileLoading.value
+              ? SizedBox(
+                  child: Shimmer.fromColors(
+                    child: TrainerPage(
+                      trainerImage:
+                          'https://randomuser.me/api/portraits/men/1.jpg',
+                      trainerCoverImage:
+                          'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg',
+                      onFollow: () {},
+                      onMessage: () {},
+                      onEnroll: () {},
+                      onBack: () {},
+                      name: '',
+                      followersCount: '',
+                      followingCount: '',
+                      rating: 0,
+                      ratingCount: '',
+                      totalPeopleTrained: '',
+                      strengths: [],
+                      aboutTrainer: '',
+                      certifcateTitle: [],
+                      allPlans: [],
+                    ),
+                    baseColor: const Color.fromRGBO(230, 230, 230, 1),
+                    highlightColor: const Color.fromRGBO(242, 245, 245, 1),
+                  ),
                 )
               : TrainerPage(
                   trainerImage: trainerController.atrainerDetail.value.response!
@@ -121,39 +145,31 @@ class TrainerPage extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              height: 243 * SizeConfig.heightMultiplier!,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  name,
-                                  style: AppTextStyle.titleText.copyWith(
-                                      fontSize:
-                                          18 * SizeConfig.textMultiplier!),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12 * SizeConfig.heightMultiplier!,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CustomButton(
-                                  title: 'follow'.tr,
-                                  onPress: onFollow,
-                                  color: kGreenColor,
-                                ),
-                                SizedBox(
-                                  width: 12 * SizeConfig.widthMultiplier!,
-                                ),
-                                CustomButton(
-                                    title: 'message'.tr,
-                                    onPress: onMessage,
-                                    color: kGreyColor)
-                              ],
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: 152 * SizeConfig.widthMultiplier!),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 187 * SizeConfig.heightMultiplier!,
+                                  ),
+                                  Text(
+                                    name,
+                                    style: AppTextStyle.titleText.copyWith(
+                                        fontSize:
+                                            18 * SizeConfig.textMultiplier!),
+                                  ),
+                                  SizedBox(
+                                    height: 12 * SizeConfig.heightMultiplier!,
+                                  ),
+                                  CustomButton(
+                                    title: 'send_a_message'.tr,
+                                    onPress: onFollow,
+                                    color: kGreenColor,
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 24 * SizeConfig.heightMultiplier!,
@@ -450,11 +466,15 @@ class TrainerPage extends StatelessWidget {
                         ),
                         Positioned(
                           top: 127 * SizeConfig.heightMultiplier!,
-                          left: Get.width / 2 - 50,
+                          left: 16 * SizeConfig.widthMultiplier!,
                           child: Container(
-                            height: 100,
+                            decoration: BoxDecoration(
+                                border: Border.all(width: 4, color: kPureWhite),
+                                shape: BoxShape.circle),
+                            height: 120 * SizeConfig.heightMultiplier!,
+                            width: 120 * SizeConfig.heightMultiplier!,
                             child: CircleAvatar(
-                              radius: 50 * SizeConfig.heightMultiplier!,
+                              radius: 60 * SizeConfig.heightMultiplier!,
                               backgroundImage: NetworkImage(trainerImage),
                             ),
                           ),
@@ -555,7 +575,8 @@ class CustomButton extends StatelessWidget {
       onTap: onPress,
       child: Container(
           height: 28 * SizeConfig.heightMultiplier!,
-          width: 102 * SizeConfig.widthMultiplier!,
+          width: 140 * SizeConfig.widthMultiplier!,
+          padding: EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
               color: color, borderRadius: BorderRadius.circular(8.0)),
           child: Center(
