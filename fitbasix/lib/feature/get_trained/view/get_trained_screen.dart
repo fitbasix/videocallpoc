@@ -190,15 +190,8 @@ class GetTrainedScreen extends StatelessWidget {
                                     _trainerController.isProfileLoading.value =
                                         true;
                                     _trainerController.atrainerDetail.value =
-                                        await TrainerServices.getATrainerDetail(
-                                            _trainerController
-                                                .trainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .user!
-                                                .id!);
+                                        _trainerController.trainer.value
+                                            .response!.data!.trainers![index];
                                     _trainerController.planModel.value =
                                         await TrainerServices
                                             .getPlanByTrainerId(
@@ -255,7 +248,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 250,
+                  height: 250 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
@@ -378,15 +371,12 @@ class GetTrainedScreen extends StatelessWidget {
                                     _trainerController.isProfileLoading.value =
                                         true;
                                     _trainerController.atrainerDetail.value =
-                                        await TrainerServices.getATrainerDetail(
-                                            _trainerController
-                                                .fitnessConsultant
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .user!
-                                                .id!);
+                                        _trainerController
+                                            .fitnessConsultant
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index];
                                     _trainerController.planModel.value =
                                         await TrainerServices
                                             .getPlanByTrainerId(
@@ -565,15 +555,12 @@ class GetTrainedScreen extends StatelessWidget {
                                     _trainerController.isProfileLoading.value =
                                         true;
                                     _trainerController.atrainerDetail.value =
-                                        await TrainerServices.getATrainerDetail(
-                                            _trainerController
-                                                .nutritionConsultant
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .user!
-                                                .id!);
+                                        _trainerController
+                                            .nutritionConsultant
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index];
                                     _trainerController.planModel.value =
                                         await TrainerServices
                                             .getPlanByTrainerId(

@@ -465,20 +465,22 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                       .trainers![index]
                                       .slotsFeft!)!,
                                   onTap: () async {
+                                    _trainerController.atrainerDetail.value =
+                                        _trainerController.allTrainer.value
+                                            .response!.data!.trainers![index];
                                     Navigator.pushNamed(context,
                                         RouteName.trainerProfileScreen);
                                     _trainerController.isProfileLoading.value =
                                         true;
-                                    _trainerController.atrainerDetail.value =
-                                        await TrainerServices.getATrainerDetail(
-                                            _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .user!
-                                                .id!);
+                                    // await TrainerServices.getATrainerDetail(
+                                    //     _trainerController
+                                    //         .allTrainer
+                                    //         .value
+                                    //         .response!
+                                    //         .data!
+                                    //         .trainers![index]
+                                    //         .user!
+                                    //         .id!);
                                     _trainerController.planModel.value =
                                         await TrainerServices
                                             .getPlanByTrainerId(
