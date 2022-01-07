@@ -114,12 +114,18 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                         }
                       },
                       onSubmitted: (value) async {
-                        _trainerController.filterIsLoading.value = true;
-                        _trainerController.allTrainer.value =
-                            await TrainerServices.getAllTrainer(name: value);
+                        if (value.length >= 3) {
+                          _trainerController.filterIsLoading.value = true;
+                          _trainerController.allTrainer.value =
+                              await TrainerServices.getAllTrainer(name: value);
 
-                        _scrollController.jumpTo(0);
-                        _trainerController.filterIsLoading.value = false;
+                          _scrollController.jumpTo(0);
+                          _trainerController.filterIsLoading.value = false;
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Please enter atleast 3 character')));
+                        }
                       },
                       decoration: InputDecoration(
                           prefixIcon: Transform(
@@ -155,8 +161,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                   ),
                 )
               : Transform(
-                  transform: Matrix4.translationValues(
-                      -20 * SizeConfig.widthMultiplier!, 0, 0),
+                  transform: Matrix4.translationValues(-20, 0, 0),
                   child: Text(
                     _trainerController.pageTitle.value,
                     style: AppTextStyle.titleText
