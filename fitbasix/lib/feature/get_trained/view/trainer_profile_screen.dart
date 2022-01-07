@@ -22,68 +22,37 @@ class TrainerProfileScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Obx(
-          () => trainerController.isProfileLoading.value
-              ? SizedBox(
-                  child: Shimmer.fromColors(
-                    child: TrainerPage(
-                      trainerImage:
-                          'https://randomuser.me/api/portraits/men/1.jpg',
-                      trainerCoverImage:
-                          'https://i.pinimg.com/originals/30/5c/5a/305c5a457807ba421ed67495c93198d3.jpg',
-                      onFollow: () {},
-                      onMessage: () {},
-                      onEnroll: () {},
-                      onBack: () {},
-                      name: '',
-                      followersCount: '',
-                      followingCount: '',
-                      rating: 0,
-                      ratingCount: '',
-                      totalPeopleTrained: '',
-                      strengths: [],
-                      aboutTrainer: '',
-                      certifcateTitle: [],
-                      allPlans: [],
-                    ),
-                    baseColor: const Color.fromRGBO(230, 230, 230, 1),
-                    highlightColor: const Color.fromRGBO(242, 245, 245, 1),
-                  ),
-                )
-              : TrainerPage(
-                  trainerImage: trainerController.atrainerDetail.value.response!
-                      .trainer!.user!.profilePhoto!,
-                  trainerCoverImage: trainerController
-                      .atrainerDetail.value.response!.trainer!.user!.coverPhoto
-                      .toString(),
-                  onFollow: () {},
-                  onMessage: () {},
-                  onEnroll: () {},
-                  onBack: () {
-                    Navigator.pop(context);
-                  },
-                  name: trainerController
-                      .atrainerDetail.value.response!.trainer!.user!.name!,
-                  followersCount: NumberFormatter.textFormatter(
-                      trainerController
-                          .atrainerDetail.value.response!.trainer!.followers!),
-                  followingCount: NumberFormatter.textFormatter(
-                      trainerController
-                          .atrainerDetail.value.response!.trainer!.following!),
-                  rating: double.parse(trainerController
-                      .atrainerDetail.value.response!.trainer!.rating!),
-                  ratingCount: NumberFormatter.textFormatter(trainerController
-                      .atrainerDetail.value.response!.trainer!.totalRating!),
-                  totalPeopleTrained: NumberFormatter.textFormatter(
-                      trainerController
-                          .atrainerDetail.value.response!.trainer!.trainees!),
-                  strengths: trainerController
-                      .atrainerDetail.value.response!.trainer!.strength!,
-                  aboutTrainer: trainerController
-                      .atrainerDetail.value.response!.trainer!.about!,
-                  certifcateTitle: trainerController
-                      .atrainerDetail.value.response!.trainer!.certificates!,
-                  allPlans: trainerController.planModel.value.response!.data!,
-                ),
+          () => TrainerPage(
+            trainerImage:
+                trainerController.atrainerDetail.value.user!.profilePhoto!,
+            trainerCoverImage: trainerController
+                .atrainerDetail.value.user!.coverPhoto!
+                .toString(),
+            onFollow: () {},
+            onMessage: () {},
+            onEnroll: () {},
+            onBack: () {
+              Navigator.pop(context);
+            },
+            name: trainerController.atrainerDetail.value.user!.name!,
+            followersCount: NumberFormatter.textFormatter(
+                trainerController.atrainerDetail.value.followers!),
+            followingCount: NumberFormatter.textFormatter(
+                trainerController.atrainerDetail.value.following!),
+            rating:
+                double.parse(trainerController.atrainerDetail.value.rating!),
+            ratingCount: NumberFormatter.textFormatter(
+                trainerController.atrainerDetail.value.totalRating!),
+            totalPeopleTrained: NumberFormatter.textFormatter(
+                trainerController.atrainerDetail.value.trainees!),
+            strengths: trainerController.atrainerDetail.value.strength!,
+            aboutTrainer: trainerController.atrainerDetail.value.about!,
+            certifcateTitle:
+                trainerController.atrainerDetail.value.certificates!,
+            allPlans: trainerController.isProfileLoading.value
+                ? []
+                : trainerController.planModel.value.response!.data!,
+          ),
         ),
       ),
     );
@@ -128,6 +97,7 @@ class TrainerPage extends StatelessWidget {
   final List<Plan> allPlans;
   @override
   Widget build(BuildContext context) {
+    final TrainerController trainerController = Get.put(TrainerController());
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -390,62 +360,108 @@ class TrainerPage extends StatelessWidget {
                                   SizedBox(
                                       height:
                                           24 * SizeConfig.heightMultiplier!),
-                                  allPlans.length != 0
+                                  Obx(() => trainerController
+                                          .isProfileLoading.value
                                       ? Text('plan'.tr,
                                           style: AppTextStyle.greenSemiBoldText
                                               .copyWith(color: lightBlack))
-                                      : SizedBox(),
+                                      : allPlans.length != 0
+                                          ? Text('plan'.tr,
+                                              style: AppTextStyle
+                                                  .greenSemiBoldText
+                                                  .copyWith(color: lightBlack))
+                                          : SizedBox()),
                                   SizedBox(
                                       height:
                                           12 * SizeConfig.heightMultiplier!),
-                                  allPlans.length != 0
+                                  Obx(() => trainerController
+                                          .isProfileLoading.value
                                       ? Container(
                                           height: 238 *
                                               SizeConfig.heightMultiplier!,
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
-                                              itemCount: allPlans.length,
+                                              itemCount: 4,
                                               shrinkWrap: true,
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int index) {
-                                                return Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 8.0 *
-                                                          SizeConfig
-                                                              .widthMultiplier!),
-                                                  child: PlanTile(
-                                                    rating: double.parse(
-                                                        allPlans[index]
-                                                            .plansRating
-                                                            .toString()),
-                                                    planTitle: allPlans[index]
-                                                        .planName!,
-                                                    planImage: allPlans[index]
-                                                        .planIcon!,
-                                                    palnTime: 'planTime'
-                                                        .trParams({
-                                                      'duration': (allPlans[
-                                                                      index]
-                                                                  .planDuration! %
-                                                              5)
-                                                          .toString()
-                                                    }),
-                                                    likesCount: NumberFormatter
-                                                        .textFormatter(
-                                                            allPlans[index]
-                                                                .likesCount!
-                                                                .toString()),
-                                                    ratingCount: NumberFormatter
-                                                        .textFormatter(
-                                                            allPlans[index]
-                                                                .raters!
-                                                                .toString()),
+                                                return Shimmer.fromColors(
+                                                  baseColor:
+                                                      const Color.fromRGBO(
+                                                          230, 230, 230, 1),
+                                                  highlightColor:
+                                                      const Color.fromRGBO(
+                                                          242, 245, 245, 1),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 8.0 *
+                                                            SizeConfig
+                                                                .widthMultiplier!),
+                                                    child: PlanTile(
+                                                      rating: double.parse("2"),
+                                                      planTitle: "",
+                                                      planImage:
+                                                          "https://randomuser.me/api/portraits/men/1.jpg",
+                                                      palnTime: "",
+                                                      likesCount: "",
+                                                      ratingCount: "",
+                                                    ),
                                                   ),
                                                 );
                                               }),
                                         )
-                                      : SizedBox(),
+                                      : (allPlans.length != 0
+                                          ? Container(
+                                              height: 238 *
+                                                  SizeConfig.heightMultiplier!,
+                                              child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: allPlans.length,
+                                                  shrinkWrap: true,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return Padding(
+                                                      padding: EdgeInsets.only(
+                                                          right: 8.0 *
+                                                              SizeConfig
+                                                                  .widthMultiplier!),
+                                                      child: PlanTile(
+                                                        rating: double.parse(
+                                                            allPlans[index]
+                                                                .plansRating
+                                                                .toString()),
+                                                        planTitle:
+                                                            allPlans[index]
+                                                                .planName!,
+                                                        planImage:
+                                                            allPlans[index]
+                                                                .planIcon!,
+                                                        palnTime: 'planTime'
+                                                            .trParams({
+                                                          'duration': (allPlans[
+                                                                          index]
+                                                                      .planDuration! %
+                                                                  5)
+                                                              .toString()
+                                                        }),
+                                                        likesCount: NumberFormatter
+                                                            .textFormatter(
+                                                                allPlans[index]
+                                                                    .likesCount!
+                                                                    .toString()),
+                                                        ratingCount: NumberFormatter
+                                                            .textFormatter(
+                                                                allPlans[index]
+                                                                    .raters!
+                                                                    .toString()),
+                                                      ),
+                                                    );
+                                                  }),
+                                            )
+                                          : SizedBox())),
                                   SizedBox(
                                       height:
                                           224 * SizeConfig.heightMultiplier!),
