@@ -623,13 +623,16 @@ class AchivementCertificateTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 79 * SizeConfig.heightMultiplier!,
-      width: 214 * SizeConfig.widthMultiplier!,
+      width: 222 * SizeConfig.widthMultiplier!,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0), color: color),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(
+            width: 12 * SizeConfig.widthMultiplier!,
+          ),
           Container(
             height: 38 * SizeConfig.widthMultiplier!,
             width: 38 * SizeConfig.widthMultiplier!,
@@ -651,7 +654,7 @@ class AchivementCertificateTile extends StatelessWidget {
             children: [
               Container(
                 //height: 30 * SizeConfig.widthMultiplier!,
-                width: 144 * SizeConfig.heightMultiplier!,
+                width: 134 * SizeConfig.heightMultiplier!,
                 child: Text(certificateDescription,
                     style: AppTextStyle.lightMediumBlackText
                         .copyWith(fontWeight: FontWeight.w600)),

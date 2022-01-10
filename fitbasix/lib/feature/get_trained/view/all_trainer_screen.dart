@@ -37,7 +37,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
         _trainerController.showLoader.value = true;
         final trainer = _trainerController.trainerType.value == 0
             ? await TrainerServices.getAllTrainer(
-                currentPage: _trainerController.currentPage.value)
+                currentPage: _trainerController.currentPage.value,
+              )
             : _trainerController.trainerType.value == 1
                 ? await TrainerServices.getAllTrainer(
                     currentPage: _trainerController.currentPage.value,
@@ -103,11 +104,16 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                       controller: _trainerController.searchController,
                       onChanged: (value) async {
                         _trainerController.search.value = value;
-
                         if (value.length >= 3) {
                           _trainerController.filterIsLoading.value = true;
+                          _trainerController.searchedName.value = value;
                           _trainerController.allTrainer.value =
-                              await TrainerServices.getAllTrainer(name: value);
+                              await TrainerServices.getAllTrainer(
+                            name: value,
+                            interests:
+                                _trainerController.SelectedInterestIndex.value,
+                            trainerType: _trainerController.trainerType.value,
+                          );
 
                           _scrollController.jumpTo(0);
                           _trainerController.filterIsLoading.value = false;
@@ -116,8 +122,14 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                       onSubmitted: (value) async {
                         if (value.length >= 3) {
                           _trainerController.filterIsLoading.value = true;
+                          _trainerController.searchedName.value = value;
                           _trainerController.allTrainer.value =
-                              await TrainerServices.getAllTrainer(name: value);
+                              await TrainerServices.getAllTrainer(
+                                  name: value,
+                                  interests: _trainerController
+                                      .SelectedInterestIndex.value,
+                                  trainerType:
+                                      _trainerController.trainerType.value);
 
                           _scrollController.jumpTo(0);
                           _trainerController.filterIsLoading.value = false;
@@ -252,7 +264,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                           .SelectedInterestIndex.value = index;
 
                                       _trainerController.UpdatedInterestStatus(
-                                          index);
+                                          _trainerController
+                                              .SelectedInterestIndex.value);
 
                                       _trainerController.allTrainer.value =
                                           await TrainerServices.getAllTrainer(

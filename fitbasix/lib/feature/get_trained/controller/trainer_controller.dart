@@ -18,12 +18,13 @@ class TrainerController extends GetxController {
   Rx<GetTrainerModel> trainers = GetTrainerModel().obs;
   Rx<InterestModel> interests = InterestModel().obs;
   RxList<bool> interestSelection = <bool>[true].obs;
-  RxInt SelectedInterestIndex = RxInt(0);
   RxString pageTitle = RxString('');
   RxBool isSearchActive = RxBool(false);
   final TextEditingController searchController = TextEditingController();
   RxString search = RxString('');
   RxInt trainerType = RxInt(0);
+  RxInt SelectedInterestIndex = RxInt(0);
+  RxString searchedName=RxString('');
   RxInt currentPage = RxInt(1);
   RxBool getTrainedIsLoading = RxBool(false);
   RxBool filterIsLoading = RxBool(false);
@@ -47,7 +48,6 @@ class TrainerController extends GetxController {
 
   Future<void> setUp() async {
     getTrainedIsLoading.value = true;
-    allTrainer.value = await TrainerServices.getAllTrainer();
     trainers.value = await TrainerServices.getTrainers();
 
     interests.value = await TrainerServices.getAllInterest();
