@@ -1,15 +1,17 @@
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:get/get.dart';
 
 class TrainerServices {
   static var dio = DioUtil().getInstance();
-
+  static TrainerController _trainerController = Get.find();
   static Future<PlanModel> getPlanByTrainerId(String trainerId) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
@@ -37,11 +39,15 @@ class TrainerServices {
       int? interests}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
     var response = await dio!.post(ApiUrl.getAllTrainer, data: {
       "skip": currentPage == null ? 0 : currentPage * 5,
-      "name": name == null ? "" : name,
-      "trainerType": trainerType == null ? 0 : trainerType,
-      "interests": interests == null ? [0] : [interests]
+      "name": name == null ? _trainerController.searchedName.value : name,
+      "trainerType": trainerType == null
+          ? _trainerController.trainerType.value
+          : trainerType,
+      "interests":
+          interests == null ? _trainerController.SelectedInterestIndex.value : [interests]
     });
     print(response.toString());
     return allTrainerFromJson(response.toString());

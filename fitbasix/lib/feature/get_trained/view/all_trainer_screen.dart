@@ -37,7 +37,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
         _trainerController.showLoader.value = true;
         final trainer = _trainerController.trainerType.value == 0
             ? await TrainerServices.getAllTrainer(
-                currentPage: _trainerController.currentPage.value)
+                currentPage: _trainerController.currentPage.value,
+              )
             : _trainerController.trainerType.value == 1
                 ? await TrainerServices.getAllTrainer(
                     currentPage: _trainerController.currentPage.value,
@@ -103,23 +104,40 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                       controller: _trainerController.searchController,
                       onChanged: (value) async {
                         _trainerController.search.value = value;
-
                         if (value.length >= 3) {
                           _trainerController.filterIsLoading.value = true;
+                          _trainerController.searchedName.value = value;
                           _trainerController.allTrainer.value =
-                              await TrainerServices.getAllTrainer(name: value);
+                              await TrainerServices.getAllTrainer(
+                            name: value,
+                            interests:
+                                _trainerController.SelectedInterestIndex.value,
+                            trainerType: _trainerController.trainerType.value,
+                          );
 
                           _scrollController.jumpTo(0);
                           _trainerController.filterIsLoading.value = false;
                         }
                       },
                       onSubmitted: (value) async {
-                        _trainerController.filterIsLoading.value = true;
-                        _trainerController.allTrainer.value =
-                            await TrainerServices.getAllTrainer(name: value);
+                        if (value.length >= 3) {
+                          _trainerController.filterIsLoading.value = true;
+                          _trainerController.searchedName.value = value;
+                          _trainerController.allTrainer.value =
+                              await TrainerServices.getAllTrainer(
+                                  name: value,
+                                  interests: _trainerController
+                                      .SelectedInterestIndex.value,
+                                  trainerType:
+                                      _trainerController.trainerType.value);
 
-                        _scrollController.jumpTo(0);
-                        _trainerController.filterIsLoading.value = false;
+                          _scrollController.jumpTo(0);
+                          _trainerController.filterIsLoading.value = false;
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Please enter atleast 3 character')));
+                        }
                       },
                       decoration: InputDecoration(
                           prefixIcon: Transform(
@@ -155,8 +173,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                   ),
                 )
               : Transform(
-                  transform: Matrix4.translationValues(
-                      -20 * SizeConfig.widthMultiplier!, 0, 0),
+                  transform: Matrix4.translationValues(-20, 0, 0),
                   child: Text(
                     _trainerController.pageTitle.value,
                     style: AppTextStyle.titleText
@@ -247,7 +264,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                           .SelectedInterestIndex.value = index;
 
                                       _trainerController.UpdatedInterestStatus(
-                                          index);
+                                          _trainerController
+                                              .SelectedInterestIndex.value);
 
                                       _trainerController.allTrainer.value =
                                           await TrainerServices.getAllTrainer(

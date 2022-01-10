@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -53,13 +52,15 @@ class GetTrainedScreen extends StatelessWidget {
                         onTap: () async {
                           Navigator.pushNamed(
                               context, RouteName.allTrainerScreen);
+                        
                           _trainerController.isLoading.value = true;
                           _trainerController.pageTitle.value = 'trainers'.tr;
+                           _trainerController.SelectedInterestIndex.value = 0;
+                          _trainerController.trainerType.value = 0;
+                          _trainerController.searchedName.value = "";
                           _trainerController.allTrainer.value =
                               await TrainerServices.getAllTrainer();
-                          _trainerController.trainerType.value = 0;
-
-                          _trainerController.isLoading.value = false;
+        _trainerController.isLoading.value = false;
                         },
                       )
                     ],
@@ -233,10 +234,11 @@ class GetTrainedScreen extends StatelessWidget {
                           _trainerController.isLoading.value = true;
                           _trainerController.pageTitle.value =
                               'fitnessConsult'.tr;
-
+                          _trainerController.SelectedInterestIndex.value = 0;
+                          _trainerController.searchedName.value = "";
+                          _trainerController.trainerType.value = 1;
                           _trainerController.allTrainer.value =
                               await TrainerServices.getFitnessConsultant();
-                          _trainerController.trainerType.value = 1;
 
                           _trainerController.isLoading.value = false;
                         },
@@ -413,6 +415,9 @@ class GetTrainedScreen extends StatelessWidget {
                       Spacer(),
                       SeeAllButton(
                         onTap: () async {
+                          _trainerController.SelectedInterestIndex.value = 0;
+                          _trainerController.searchedName.value = "";
+                          _trainerController.trainerType.value = 2;
                           Navigator.pushNamed(
                               context, RouteName.allTrainerScreen);
                           _trainerController.isLoading.value = true;
@@ -420,8 +425,6 @@ class GetTrainedScreen extends StatelessWidget {
                               'nutritionConsult'.tr;
                           _trainerController.allTrainer.value =
                               await TrainerServices.getNutritionConsultant();
-                          _trainerController.trainerType.value = 2;
-
                           _trainerController.isLoading.value = false;
                         },
                       )
