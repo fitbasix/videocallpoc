@@ -24,6 +24,6 @@ Future<void> setupApp() async {
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: accessToken == null ? LoginScreen() : SelectMediaScreen(),
+    child: accessToken == null ? LoginScreen() : CreatePostScreen(),
   ));
 }

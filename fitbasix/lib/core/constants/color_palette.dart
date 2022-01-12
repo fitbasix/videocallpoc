@@ -20,3 +20,4 @@ const kOrange = Color.fromARGB(255, 255, 181, 72);
 const kBlack = Color(0xFF222222);
 const hintGrey = Color(0xFF747474);
 const kRed = Color(0xFFDC675F);
+const kPink = Color(0xFFFF5A5A);

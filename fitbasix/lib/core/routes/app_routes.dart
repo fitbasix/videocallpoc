@@ -9,6 +9,8 @@ import 'package:fitbasix/feature/log_in/view/forgot_password.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:fitbasix/feature/log_in/view/reset_password.dart';
+import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
+import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class RouteName {
@@ -23,6 +25,8 @@ abstract class RouteName {
   static const resetPassword = '/reset_password';
   static const allTrainerScreen = '/all_trainer_screen';
   static const trainerProfileScreen = '/trainer_profile_Screen';
+  static const selectLocationScreen = '/select_location_screen';
+  static const tagPeopleScreen = '/tag_people_screen';
   RouteName._();
 }
 
@@ -105,6 +109,20 @@ class GenerateRoute {
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             TrainerProfileScreen(),
+      );
+    }
+    if (route == RouteName.selectLocationScreen) {
+      return PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            SelectLocationScreen(),
+      );
+    }
+    if (route == RouteName.tagPeopleScreen) {
+      return PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            TagPeopleScreen(),
       );
     } else {
       return PageRouteBuilder(
