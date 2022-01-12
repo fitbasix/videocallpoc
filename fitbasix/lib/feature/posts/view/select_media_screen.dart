@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
+import 'package:fitbasix/feature/posts/view/cached_network_image.dart';
+import 'package:fitbasix/feature/posts/view/widgets/custom_dropDown.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -22,6 +26,19 @@ class SelectMediaScreen extends StatefulWidget {
 class _SelectMediaScreenState extends State<SelectMediaScreen> {
   final PostController _postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
+  List<DropdownMenuItem<AssetPathEntity>> buildDropdownMenuItems(
+      List companies) {
+    List<DropdownMenuItem<AssetPathEntity>> items = [];
+    for (AssetPathEntity company in companies) {
+      items.add(
+        DropdownMenuItem(
+          value: company,
+          child: Text(company.name),
+        ),
+      );
+    }
+    return items;
+  }
 
   @override
   void initState() {
@@ -88,72 +105,86 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
             padding: EdgeInsets.symmetric(
                 vertical: 16 * SizeConfig.heightMultiplier!,
                 horizontal: 16 * SizeConfig.widthMultiplier!),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'gallery'.tr,
-                      style: AppTextStyle.titleText
-                          .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
-                    ),
-                    Transform.rotate(
-                      angle: -90 * math.pi / 180,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: SvgPicture.asset(
-                            ImagePath.backIcon,
-                            width: 12 * SizeConfig.widthMultiplier!,
-                            height: 10 * SizeConfig.heightMultiplier!,
-                          )),
-                    )
-                  ],
-                ),
-                Obx(
-                  () => _postController.assets.length == 0
-                      ? Container()
-                      : GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 6,
-                                  mainAxisSpacing: 6),
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _postController.assets.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            _postController.getSelectedMedia(100);
-                            return Obx(() => AssetThumbnail(
-                                  asset: _postController.assets[index],
-                                  onTap: () {
-                                    _postController
-                                            .lastSelectedMediaIndex.value =
-                                        int.tryParse(
-                                            _postController.assets[index].id)!;
+            child: Obx(
+              () => Stack(
+                children: [
+                  Text(_postController.assets.length.toString()),
+                  Obx(
+                    () => _postController.assets.length == 0
+                        ? Container()
+                        : Padding(
+                            padding: EdgeInsets.only(top: 58.0),
+                            child: GridView.builder(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 6,
+                                        mainAxisSpacing: 6),
+                                physics: BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _postController.assets.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  // _postController.getSelectedMedia(
+                                  //     _postController.assets[0]);
+                                  print("kkkk" +
+                                      _postController.assets[index].id
+                                          .toString() +
+                                      _postController
+                                          .assets[index].modifiedDateSecond
+                                          .toString());
+                                  return Obx(() => AssetThumbnail(
+                                        asset: _postController.assets[index],
+                                        tag: _postController
+                                                .foldersAvailable[
+                                                    _postController
+                                                        .selectedFolder.value]
+                                                .name +
+                                            _postController.assets[index]
+                                                .modifiedDateSecond
+                                                .toString(),
+                                        onTap: () {
+                                          _postController.lastSelectedMediaIndex
+                                                  .value =
+                                              int.tryParse(_postController
+                                                  .assets[index].id)!;
 
-                                    _postController.getSelectedMedia(
-                                        _postController
-                                            .lastSelectedMediaIndex.value);
-                                    print(_postController.assets[index].id);
+                                          _postController.getSelectedMedia(
+                                              _postController.assets[index]);
 
-                                    _postController.selectedMediaCount.add(
-                                        _postController
-                                            .selectedMediaIndex.length);
-                                  },
-                                  isSelected: _postController.selectedMediaIndex
-                                              .indexOf(int.tryParse(
-                                                  _postController
-                                                      .assets[index].id)!) ==
-                                          -1
-                                      ? false
-                                      : true,
-                                  selectionNumber:
-                                      _postController.selectedMediaIndex.length,
-                                ));
-                          }),
-                )
-              ],
+                                          _postController.selectedMediaCount
+                                              .add(_postController
+                                                  .selectedMediaIndex.length);
+                                        },
+                                        isSelected: _postController
+                                                    .selectedMediaIndex
+                                                    .indexOf(_postController
+                                                        .assets[index]) ==
+                                                -1
+                                            ? false
+                                            : true,
+                                        selectionNumber: (_postController
+                                                    .selectedMediaIndex
+                                                    .indexOf(_postController
+                                                        .assets[index]) +
+                                                1)
+                                            .toString(),
+                                      ));
+                                }),
+                          ),
+                  ),
+                  customDropDownBtn(
+                      options: _postController.foldersAvailable,
+                      controller: _postController,
+                      isExpanded: _postController.isDropDownExpanded.value,
+                      label: _postController
+                          .foldersAvailable[
+                              _postController.selectedFolder.value]
+                          .name,
+                      onPressed: () {
+                        _postController.toggleDropDownExpansion();
+                      }),
+                ],
+              ),
             ),
           ),
         ),
@@ -163,18 +194,20 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
 }
 
 class AssetThumbnail extends StatelessWidget {
-  AssetThumbnail({
-    Key? key,
-    required this.asset,
-    required this.onTap,
-    required this.isSelected,
-    required this.selectionNumber,
-  }) : super(key: key);
+  AssetThumbnail(
+      {Key? key,
+      required this.asset,
+      required this.onTap,
+      required this.isSelected,
+      required this.selectionNumber,
+      required this.tag})
+      : super(key: key);
 
   final AssetEntity asset;
   final VoidCallback onTap;
   final bool isSelected;
-  final int selectionNumber;
+  final String selectionNumber;
+  final String tag;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -183,20 +216,18 @@ class AssetThumbnail extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border.all(
                 color: isSelected ? kGreenColor : kPureWhite, width: 2)),
-        child: FutureBuilder<File?>(
-          future: asset.file,
+        child: FutureBuilder<Uint8List?>(
+          future: asset.thumbData,
           builder: (_, snapshot) {
             final image = snapshot.data;
             if (image != null)
               return Stack(
                 children: [
                   Positioned.fill(
-                      child: asset.type == AssetType.video
-                          ? Container()
-                          : Image.file(
-                              snapshot.data!,
-                              fit: BoxFit.cover,
-                            )),
+                      child: Image(
+                    image: CacheImageProvider(img: snapshot.data!, tag: tag),
+                    fit: BoxFit.cover,
+                  )),
                   if (asset.type == AssetType.video)
                     Center(
                       child: Container(
@@ -222,7 +253,18 @@ class AssetThumbnail extends StatelessWidget {
                             ),
                           ),
                         )
-                      : Container()
+                      : Positioned(
+                          top: 7 * SizeConfig.heightMultiplier!,
+                          right: 8 * SizeConfig.widthMultiplier!,
+                          child: Container(
+                              height: 24 * SizeConfig.widthMultiplier!,
+                              width: 24 * SizeConfig.widthMultiplier!,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      12 * SizeConfig.widthMultiplier!),
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0))),
+                        )
                 ],
               );
             return Container();
