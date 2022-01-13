@@ -108,7 +108,6 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
             child: Obx(
               () => Stack(
                 children: [
-                  Text(_postController.assets.length.toString()),
                   Obx(
                     () => _postController.assets.length == 0
                         ? Container()
@@ -135,13 +134,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                   return Obx(() => AssetThumbnail(
                                         asset: _postController.assets[index],
                                         tag: _postController
-                                                .foldersAvailable[
-                                                    _postController
-                                                        .selectedFolder.value]
-                                                .name +
-                                            _postController.assets[index]
-                                                .modifiedDateSecond
-                                                .toString(),
+                                            .assets[index].modifiedDateSecond!,
                                         onTap: () {
                                           _postController.lastSelectedMediaIndex
                                                   .value =
@@ -173,16 +166,14 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                           ),
                   ),
                   customDropDownBtn(
-                      options: _postController.foldersAvailable,
-                      controller: _postController,
-                      isExpanded: _postController.isDropDownExpanded.value,
-                      label: _postController
-                          .foldersAvailable[
-                              _postController.selectedFolder.value]
-                          .name,
-                      onPressed: () {
+                    options: _postController.foldersAvailable,
+                    controller: _postController,
+                    isExpanded: _postController.isDropDownExpanded.value,
+                    label: 'gallery'.tr,
+                    /* onPressed: () {
                         _postController.toggleDropDownExpansion();
-                      }),
+                      }*/
+                  ),
                 ],
               ),
             ),
@@ -207,9 +198,10 @@ class AssetThumbnail extends StatelessWidget {
   final VoidCallback onTap;
   final bool isSelected;
   final String selectionNumber;
-  final String tag;
+  final int tag;
   @override
   Widget build(BuildContext context) {
+    print(ImageCache().liveImageCount);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -219,14 +211,18 @@ class AssetThumbnail extends StatelessWidget {
         child: FutureBuilder<Uint8List?>(
           future: asset.thumbData,
           builder: (_, snapshot) {
+            // print("lll" + tag.toString());
             final image = snapshot.data;
             if (image != null)
               return Stack(
                 children: [
                   Positioned.fill(
                       child: Image(
-                    image: CacheImageProvider(img: snapshot.data!, tag: tag),
+                    image: CacheImageProvider(
+                        img: snapshot.data!, tag: tag.toString()),
                     fit: BoxFit.cover,
+                    //  loadingBuilder: CircularProgressIndicator(),
+                    key: ValueKey(tag),
                   )),
                   if (asset.type == AssetType.video)
                     Center(

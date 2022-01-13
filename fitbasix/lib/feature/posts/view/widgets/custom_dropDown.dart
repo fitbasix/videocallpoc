@@ -1,5 +1,6 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -47,7 +48,10 @@ Widget customDropDownBtn({
                             onTap: () async {
                               DefaultCacheManager manager =
                                   new DefaultCacheManager();
-                              manager.emptyCache();
+                              var file = await manager
+                                  .getFileFromMemory("330581640967182");
+                              print("lll" + file.toString());
+                              await manager.emptyCache();
                               imageCache!.clear();
                               imageCache!.clearLiveImages();
                               PaintingBinding.instance!.imageCache!.clear();
@@ -161,13 +165,13 @@ class _DropDownTopHeader extends StatelessWidget {
             ),
             if (isExpanded)
               Icon(
-                Icons.keyboard_arrow_down_rounded,
+                Icons.keyboard_arrow_up_rounded,
                 color: Colors.black,
                 size: 36,
               )
             else
               Icon(
-                Icons.keyboard_arrow_up_rounded,
+                Icons.keyboard_arrow_down_rounded,
                 color: Colors.black,
                 size: 36,
               ),
