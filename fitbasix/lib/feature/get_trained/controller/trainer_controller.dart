@@ -24,7 +24,7 @@ class TrainerController extends GetxController {
   RxString search = RxString('');
   RxInt trainerType = RxInt(0);
   RxInt SelectedInterestIndex = RxInt(0);
-  RxString searchedName=RxString('');
+  RxString searchedName = RxString('');
   RxInt currentPage = RxInt(1);
   RxBool getTrainedIsLoading = RxBool(false);
   RxBool filterIsLoading = RxBool(false);
