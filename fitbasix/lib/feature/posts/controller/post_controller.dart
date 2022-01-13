@@ -1,10 +1,13 @@
-
+import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:uuid/uuid.dart';
 
@@ -32,6 +35,11 @@ class PostController extends GetxController {
   RxList<bool>? selectedPeople = RxList<bool>([]);
   final TextEditingController postTextController = TextEditingController();
   RxString postText = RxString('');
+  final ImagePicker _picker = ImagePicker();
+  Rx<File> imageFile = File('').obs;
+  Rx<File> videoFile = File('').obs;
+  RxList<File> selectedMediaFileIndex = RxList<File>([]);
+  RxList<File>? selectedMediaFiles = RxList<File>([]);
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -87,6 +95,35 @@ class PostController extends GetxController {
     return selectedMedia!;
   }
 
+  List<File>? getSelectedMediaFiles(File? index) {
+    int length = 10;
+    index == 100
+        ? selectedMediaFileIndex.removeRange(0, 0)
+        : selectedMediaFileIndex.contains(index)
+            ? selectedMediaFileIndex.remove(index)
+            : selectedMediaFileIndex.add(index!);
+    List<File> selectedMediaFile = [];
+    File? x;
+    for (int i = 0; i < selectedMediaFileIndex.length; i++) {
+      if (selectedMediaFileIndex.length == 0) {
+        return null;
+      } else {
+        // print(index.path)
+
+        if (selectedMediaFileIndex.contains(index)) {
+          print(index!.path);
+          selectedMediaFile.add(index);
+        } else {
+          print('After' + index!.path);
+          selectedMediaFile.remove(index);
+          // selectedMediaFile.add(x!);
+        }
+      }
+    }
+    selectedMediaFiles!.value = selectedMediaFile;
+    return selectedMediaFile;
+  }
+
   List<bool> getSelectedPeople(int index) {
     int length = 10;
     index == 100
@@ -109,6 +146,32 @@ class PostController extends GetxController {
 
     selectedPeople!.value = selectedOption;
     return selectedPeople!;
+  }
+
+  Future pickImage() async {
+    try {
+      final image = await _picker.pickImage(source: ImageSource.camera);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+
+      imageFile.value = imageTemporary;
+    } on PlatformException catch (e) {
+      log('failed to pick a image');
+    }
+  }
+
+  Future pickVideo() async {
+    try {
+      final video = await _picker.pickVideo(source: ImageSource.camera);
+      if (video == null) return;
+
+      final imageTemporary = File(video.path);
+
+      videoFile.value = imageTemporary;
+    } on PlatformException catch (e) {
+      log('failed to pick a video');
+    }
   }
 
   @override

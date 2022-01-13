@@ -149,21 +149,26 @@ class CreatePostScreen extends StatelessWidget {
               SizedBox(
                 height: 34 * SizeConfig.heightMultiplier!,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(ImagePath.locationIcon,
-                      width: 17 * SizeConfig.widthMultiplier!),
-                  SizedBox(
-                    width: 16 * SizeConfig.widthMultiplier!,
-                  ),
-                  Text(
-                    'photo_video'.tr,
-                    style: AppTextStyle.titleText
-                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
-                  )
-                ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.selectMediaScreen);
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(ImagePath.locationIcon,
+                        width: 17 * SizeConfig.widthMultiplier!),
+                    SizedBox(
+                      width: 16 * SizeConfig.widthMultiplier!,
+                    ),
+                    Text(
+                      'photo_video'.tr,
+                      style: AppTextStyle.titleText
+                          .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                    )
+                  ],
+                ),
               ),
               SizedBox(
                 height: 17 * SizeConfig.heightMultiplier!,

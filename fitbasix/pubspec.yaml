@@ -54,6 +54,7 @@ dependencies:
   video_thumbnail: ^0.4.3
   flutter_cache_manager: ^3.3.0
   uuid: ^3.0.5
+  image_picker: ^0.8.4+4
 
 
 dev_dependencies:

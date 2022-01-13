@@ -2,12 +2,14 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/posts/view/cached_network_image.dart';
 import 'package:fitbasix/feature/posts/view/widgets/custom_dropDown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -91,7 +93,13 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                // await _postController.pickImage();
+                print(_postController.selectedMediaFiles!.length);
+                // PostService.uploadMedia(
+                //   _postController.selectedMediaFiles!.value,
+                // );
+              },
               icon: Icon(
                 Icons.camera_alt,
                 color: kPureBlack,
@@ -135,7 +143,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                         asset: _postController.assets[index],
                                         tag: _postController
                                             .assets[index].modifiedDateSecond!,
-                                        onTap: () {
+                                        onTap: () async {
                                           _postController.lastSelectedMediaIndex
                                                   .value =
                                               int.tryParse(_postController
@@ -144,9 +152,19 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                           _postController.getSelectedMedia(
                                               _postController.assets[index]);
 
-                                          _postController.selectedMediaCount
-                                              .add(_postController
-                                                  .selectedMediaIndex.length);
+                                          if (_postController.selectedMediaIndex
+                                                  .indexOf(_postController
+                                                      .assets[index]) !=
+                                              -1) {
+                                            _postController
+                                                .getSelectedMediaFiles(
+                                                    await _postController
+                                                        .assets[index].file);
+                                          }
+
+                                          // _postController.selectedMediaCount
+                                          //     .add(_postController
+                                          //         .selectedMediaIndex.length);
                                         },
                                         isSelected: _postController
                                                     .selectedMediaIndex
