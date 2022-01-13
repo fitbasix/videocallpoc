@@ -1,6 +1,12 @@
+
+import 'dart:typed_data';
+
+import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:uuid/uuid.dart';
 
 class PostController extends GetxController {
   RxList<AssetEntity> assets = RxList();
@@ -15,6 +21,17 @@ class PostController extends GetxController {
   RxInt currentPage = RxInt(0);
   RxInt lastPage = RxInt(0);
   RxBool isDropDownExpanded = false.obs;
+  final TextEditingController locationSearchController =
+      TextEditingController();
+  Rx<Suggestion> searchSuggestion = Rx(Suggestion());
+  final sessionToken = Uuid().v4();
+  RxBool searchLoading = RxBool(false);
+  RxString selectedLocation = RxString('');
+  RxInt lastSelectedPersonIndex = RxInt(0);
+  RxList<int> selectedPeopleIndex = RxList<int>([]);
+  RxList<bool>? selectedPeople = RxList<bool>([]);
+  final TextEditingController postTextController = TextEditingController();
+  RxString postText = RxString('');
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -71,6 +88,30 @@ class PostController extends GetxController {
     }
     selectedMedia!.value = selectedOption;
     return selectedMedia!;
+  }
+
+  List<bool> getSelectedPeople(int index) {
+    int length = 10;
+    index == 100
+        ? selectedPeopleIndex.removeRange(0, 0)
+        : selectedPeopleIndex.contains(index)
+            ? selectedPeopleIndex.remove(index)
+            : selectedPeopleIndex.add(index);
+    List<bool> selectedOption = [];
+    for (int i = 0; i < length; i++) {
+      if (selectedPeopleIndex.length == 0) {
+        selectedOption.add(false);
+      } else {
+        if (selectedPeopleIndex.contains(i)) {
+          selectedOption.add(true);
+        } else {
+          selectedOption.add(false);
+        }
+      }
+    }
+
+    selectedPeople!.value = selectedOption;
+    return selectedPeople!;
   }
 
   @override

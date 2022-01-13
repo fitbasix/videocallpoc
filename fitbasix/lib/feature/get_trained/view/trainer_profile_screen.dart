@@ -627,23 +627,15 @@ class AchivementCertificateTile extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0), color: color),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             width: 12 * SizeConfig.widthMultiplier!,
           ),
-          Container(
-            height: 38 * SizeConfig.widthMultiplier!,
-            width: 38 * SizeConfig.widthMultiplier!,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: kDarkGrey),
-            child: CircleAvatar(
-              radius: 38 * SizeConfig.widthMultiplier!,
-              child: CircleAvatar(
-                radius: 19 * SizeConfig.heightMultiplier!,
-                backgroundImage: NetworkImage(certificateIcon),
-              ),
-            ),
+          CircleAvatar(
+            radius: 19 * SizeConfig.heightMultiplier!,
+            backgroundImage: NetworkImage(certificateIcon),
           ),
           SizedBox(
             width: 8 * SizeConfig.widthMultiplier!,
