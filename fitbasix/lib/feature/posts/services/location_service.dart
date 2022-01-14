@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
 import 'package:http/http.dart';
+
+import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
 
 // For storing our result
 // class Suggestion {
@@ -26,13 +26,14 @@ class PlaceApiProvider {
   // final sessionToken;
 
   static final String androidKey = 'AIzaSyAy8rYTzODjftfUAQapbyyEwBILAMSpT40';
-  static final String iosKey = '';
+  static final String iosKey = 'AIzaSyAy8rYTzODjftfUAQapbyyEwBILAMSpT40';
+
   static final apiKey = Platform.isAndroid ? androidKey : iosKey;
 
   static Future<Suggestion?> fetchSuggestions(
       String input, String lang, String sessionToken) async {
     final request =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=establishment&language=$lang&components=country:in&key=$apiKey&sessiontoken=$sessionToken';
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=(cities)&language=$lang&components=country:in&key=$apiKey&sessiontoken=$sessionToken';
     final response = await client.get(Uri.parse(request));
 
     if (response.statusCode == 200) {

@@ -154,13 +154,17 @@ class CreatePostScreen extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
+
                   Navigator.pushNamed(context, RouteName.customGallery);
+
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
                     SvgPicture.asset(ImagePath.galleryIcon,
+
                         width: 17 * SizeConfig.widthMultiplier!),
                     SizedBox(
                       width: 16 * SizeConfig.widthMultiplier!,

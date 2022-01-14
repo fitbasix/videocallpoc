@@ -30,6 +30,7 @@ abstract class RouteName {
   static const trainerProfileScreen = '/trainer_profile_Screen';
   static const selectLocationScreen = '/select_location_screen';
   static const tagPeopleScreen = '/tag_people_screen';
+
   static const customGallery = '/custom_gallery';
   static const createPost = '/create_post';
   RouteName._();
@@ -138,6 +139,13 @@ class GenerateRoute {
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             TagPeopleScreen(),
+      );
+    }
+    if (route == RouteName.selectMediaScreen) {
+      return PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            SelectMediaScreen(),
       );
     } else {
       return PageRouteBuilder(
