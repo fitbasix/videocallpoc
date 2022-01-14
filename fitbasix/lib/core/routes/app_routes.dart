@@ -9,10 +9,12 @@ import 'package:fitbasix/feature/log_in/view/forgot_password.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:fitbasix/feature/log_in/view/reset_password.dart';
+import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 abstract class RouteName {
   static const loginScreen = '/login';
@@ -28,7 +30,9 @@ abstract class RouteName {
   static const trainerProfileScreen = '/trainer_profile_Screen';
   static const selectLocationScreen = '/select_location_screen';
   static const tagPeopleScreen = '/tag_people_screen';
-  static const selectMediaScreen = '/select_media_screen';
+
+  static const customGallery = '/custom_gallery';
+  static const createPost = '/create_post';
   RouteName._();
 }
 
@@ -76,6 +80,16 @@ class GenerateRoute {
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             EnterOTPGoogle(),
+      );
+    }
+    if (route == RouteName.customGallery) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => SelectMediaScreen(),
+      );
+    }
+    if (route == RouteName.createPost) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => CreatePostScreen(),
       );
     }
     if (route == RouteName.enterPasswordPage) {

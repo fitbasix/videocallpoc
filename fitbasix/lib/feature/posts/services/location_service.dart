@@ -27,6 +27,7 @@ class PlaceApiProvider {
 
   static final String androidKey = 'AIzaSyAy8rYTzODjftfUAQapbyyEwBILAMSpT40';
   static final String iosKey = 'AIzaSyAy8rYTzODjftfUAQapbyyEwBILAMSpT40';
+
   static final apiKey = Platform.isAndroid ? androidKey : iosKey;
 
   static Future<Suggestion?> fetchSuggestions(

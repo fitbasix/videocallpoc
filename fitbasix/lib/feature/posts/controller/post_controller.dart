@@ -1,7 +1,9 @@
+
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:fitbasix/feature/posts/model/UserModel.dart';
 import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
 
 import 'package:flutter/material.dart';
@@ -27,12 +29,13 @@ class PostController extends GetxController {
   final TextEditingController locationSearchController =
       TextEditingController();
   Rx<Suggestion> searchSuggestion = Rx(Suggestion());
+  RxList<UserData> users = RxList<UserData>([]);
   final sessionToken = Uuid().v4();
   RxBool searchLoading = RxBool(false);
   RxString selectedLocation = RxString('');
   RxInt lastSelectedPersonIndex = RxInt(0);
-  RxList<int> selectedPeopleIndex = RxList<int>([]);
-  RxList<bool>? selectedPeople = RxList<bool>([]);
+  RxList<String> selectedPeopleIndex = RxList<String>([]);
+  RxList<UserData> selectedUserData = RxList<UserData>([]);
   final TextEditingController postTextController = TextEditingController();
   RxString postText = RxString('');
   final ImagePicker _picker = ImagePicker();
@@ -40,6 +43,7 @@ class PostController extends GetxController {
   Rx<File> videoFile = File('').obs;
   RxList<File> selectedMediaFileIndex = RxList<File>([]);
   RxList<File>? selectedMediaFiles = RxList<File>([]);
+  RxString postId = "".obs;
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -94,7 +98,6 @@ class PostController extends GetxController {
     selectedMedia!.value = selectedOption;
     return selectedMedia!;
   }
-
   List<File>? getSelectedMediaFiles(File? index) {
     int length = 10;
     index == 100
@@ -124,29 +127,30 @@ class PostController extends GetxController {
     return selectedMediaFile;
   }
 
-  List<bool> getSelectedPeople(int index) {
-    int length = 10;
-    index == 100
-        ? selectedPeopleIndex.removeRange(0, 0)
-        : selectedPeopleIndex.contains(index)
-            ? selectedPeopleIndex.remove(index)
-            : selectedPeopleIndex.add(index);
-    List<bool> selectedOption = [];
-    for (int i = 0; i < length; i++) {
-      if (selectedPeopleIndex.length == 0) {
-        selectedOption.add(false);
-      } else {
-        if (selectedPeopleIndex.contains(i)) {
-          selectedOption.add(true);
-        } else {
-          selectedOption.add(false);
-        }
-      }
-    }
-
-    selectedPeople!.value = selectedOption;
-    return selectedPeople!;
-  }
+ 
+  // List<bool> getSelectedPeople(int index) {
+  //   int length = 10;
+  //   index == 100
+  //       ? selectedPeopleIndex.removeRange(0, 0)
+  //       : selectedPeopleIndex.contains(index)
+  //           ? selectedPeopleIndex.remove(index)
+  //           : selectedPeopleIndex.add(index);
+  //   List<bool> selectedOption = [];
+  //   for (int i = 0; i < length; i++) {
+  //     if (selectedPeopleIndex.length == 0) {
+  //       selectedOption.add(false);
+  //     } else {
+  //       if (selectedPeopleIndex.contains(i)) {
+  //         selectedOption.add(true);
+  //       } else {
+  //         selectedOption.add(false);
+  //       }
+  //     }
+  //   }
+  //
+  //   selectedPeople!.value = selectedOption;
+  //   return selectedPeople!;
+  // }
 
   Future pickImage() async {
     try {

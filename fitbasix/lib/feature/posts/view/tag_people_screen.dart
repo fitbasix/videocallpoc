@@ -1,8 +1,9 @@
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/view/widgets/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -22,14 +23,6 @@ class TagPeopleScreen extends StatelessWidget {
   TagPeopleScreen({Key? key}) : super(key: key);
 
   final PostController _postController = Get.find();
-
-  final notification = [
-    CheckboxState(title: '1'),
-    CheckboxState(title: '2'),
-    CheckboxState(title: '3'),
-    CheckboxState(title: '4'),
-    CheckboxState(title: '5')
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +69,31 @@ class TagPeopleScreen extends StatelessWidget {
                     borderRadius:
                         BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                   ),
-                  child: TextField(
-                    onChanged: (value) {},
-                    decoration: InputDecoration(
-                      prefixIcon: Transform(
-                        transform: Matrix4.translationValues(0, 2, 0),
-                        child: Icon(
-                          Icons.search,
-                          color: hintGrey,
+                  child: Center(
+                    child: TextField(
+                      onChanged: (value) async {
+                        print(value);
+                        var users = await CreatePostService.getUsers(value);
+                        _postController.users.value = users.response!.data!;
+                        print(_postController.users.value);
+                      },
+                      onSubmitted: (value) {
+                        print(value);
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Transform(
+                          transform: Matrix4.translationValues(0, 2, 0),
+                          child: Icon(
+                            Icons.search,
+                            color: hintGrey,
+                          ),
                         ),
+                        border: InputBorder.none,
+                        hintText: 'search'.tr,
+                        hintStyle: AppTextStyle.smallGreyText.copyWith(
+                            fontSize: 14 * SizeConfig.textMultiplier!,
+                            color: hintGrey),
                       ),
-                      border: InputBorder.none,
-                      hintText: 'search'.tr,
-                      hintStyle: AppTextStyle.smallGreyText.copyWith(
-                          fontSize: 14 * SizeConfig.textMultiplier!,
-                          color: hintGrey),
                     ),
                   ),
                 ),
@@ -104,11 +107,10 @@ class TagPeopleScreen extends StatelessWidget {
                     : Container()),
                 Obx(() => _postController.selectedPeopleIndex.length > 0
                     ? Container(
-                        height: 106 * SizeConfig.heightMultiplier!,
+                        height: 115 * SizeConfig.heightMultiplier!,
                         child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount:
-                                _postController.selectedPeopleIndex.length,
+                            itemCount: _postController.selectedUserData.length,
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: EdgeInsets.only(
@@ -119,15 +121,29 @@ class TagPeopleScreen extends StatelessWidget {
                                       width: 64 * SizeConfig.widthMultiplier!,
                                       child: Column(
                                         children: [
-                                          CircleAvatar(
-                                            radius: 32,
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                32 *
+                                                    SizeConfig
+                                                        .widthMultiplier!),
+                                            child: CachedNetworkImage(
+                                                imageUrl: _postController
+                                                    .selectedUserData[index]
+                                                    .profilePhoto!,
+                                                fit: BoxFit.cover,
+                                                height: 64 *
+                                                    SizeConfig.widthMultiplier!,
+                                                width: 64 *
+                                                    SizeConfig
+                                                        .widthMultiplier!),
                                           ),
                                           SizedBox(
                                             height: 8 *
                                                 SizeConfig.heightMultiplier!,
                                           ),
                                           Text(
-                                            'Jonathan Swift',
+                                            _postController
+                                                .selectedUserData[index].name!,
                                             style: AppTextStyle.boldBlackText
                                                 .copyWith(
                                                     fontSize: 14 *
@@ -147,10 +163,13 @@ class TagPeopleScreen extends StatelessWidget {
                                             _postController.selectedPeopleIndex
                                                 .removeAt(index);
                                           },
-                                          child: Icon(
-                                            Icons.cancel_sharp,
-                                            size: 20,
-                                            color: hintGrey,
+                                          child: SvgPicture.asset(
+                                            ImagePath.cancelIcon,
+                                            height: 16 *
+                                                SizeConfig.widthMultiplier!,
+                                            width: 16 *
+                                                SizeConfig.widthMultiplier!,
+                                            fit: BoxFit.contain,
                                           ),
                                         ))
                                   ],
@@ -159,33 +178,61 @@ class TagPeopleScreen extends StatelessWidget {
                             }),
                       )
                     : Container()),
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: 24 * SizeConfig.heightMultiplier!),
-                  child: TitleText(title: 'suggestions'.tr),
-                ),
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Obx(() => PeopleTile(
-                            name: 'Jonathan Swift',
-                            subtitle: 'Nutrition Consultant',
-                            onTap: (value) {
-                              _postController.lastSelectedPersonIndex.value =
-                                  int.tryParse(notification[index].title)!;
-
-                              _postController.getSelectedPeople(_postController
-                                  .lastSelectedPersonIndex.value);
-                            },
-                            value: _postController.selectedPeopleIndex.indexOf(
-                                        int.tryParse(
-                                            notification[index].title)!) ==
-                                    -1
-                                ? false
-                                : true,
-                          ));
-                    })
+                _postController.selectedPeopleIndex.length > 0
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            top: 24 * SizeConfig.heightMultiplier!),
+                        child: TitleText(title: 'suggestions'.tr),
+                      )
+                    : Container(),
+                Obx(
+                  () => _postController.users.length == 0
+                      ? Container()
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _postController.users.length,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Obx(() => PeopleTile(
+                                  name: _postController.users[index].name!,
+                                  subtitle: _postController.users[index].name!,
+                                  image: _postController
+                                      .users[index].profilePhoto!,
+                                  onTap: (value) {
+                                    if (_postController
+                                            .selectedPeopleIndex.length ==
+                                        0) {
+                                      _postController.selectedPeopleIndex.add(
+                                          _postController.users[index].id!);
+                                      _postController.selectedUserData
+                                          .add(_postController.users[index]);
+                                    } else {
+                                      if (_postController.selectedPeopleIndex
+                                              .indexOf(_postController
+                                                  .users[index].id!) ==
+                                          -1) {
+                                        _postController.selectedPeopleIndex.add(
+                                            _postController.users[index].id!);
+                                        _postController.selectedUserData
+                                            .add(_postController.users[index]);
+                                      } else {
+                                        _postController.selectedPeopleIndex
+                                            .remove(_postController
+                                                .users[index].id!);
+                                        _postController.selectedUserData.remove(
+                                            _postController.users[index]);
+                                      }
+                                    }
+                                  },
+                                  value: _postController.selectedPeopleIndex
+                                              .indexOf(_postController
+                                                  .users[index].id!) ==
+                                          -1
+                                      ? false
+                                      : true,
+                                ));
+                          }),
+                )
               ],
             ),
           ),
@@ -200,12 +247,14 @@ class PeopleTile extends StatelessWidget {
     Key? key,
     required this.name,
     required this.subtitle,
+    required this.image,
     required this.value,
     required this.onTap,
   }) : super(key: key);
 
   final String name;
   final String subtitle;
+  final String image;
   final bool value;
   final Function onTap;
 
@@ -215,8 +264,14 @@ class PeopleTile extends StatelessWidget {
       margin: EdgeInsets.only(top: 12 * SizeConfig.heightMultiplier!),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 16 * SizeConfig.widthMultiplier!,
+          ClipRRect(
+            borderRadius:
+                BorderRadius.circular(16 * SizeConfig.widthMultiplier!),
+            child: CachedNetworkImage(
+                imageUrl: image,
+                fit: BoxFit.cover,
+                height: 32 * SizeConfig.widthMultiplier!,
+                width: 32 * SizeConfig.widthMultiplier!),
           ),
           SizedBox(
             width: 12 * SizeConfig.widthMultiplier!,
