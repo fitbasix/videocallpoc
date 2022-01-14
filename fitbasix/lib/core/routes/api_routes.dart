@@ -15,4 +15,10 @@ class ApiUrl {
   static String getAllTrainer = liveBaseURL + '/api/trainer/getAll';
   static String getAllInterest = liveBaseURL + '/api/interests/getAll';
   static String getTrainers = liveBaseURL + '/api/trainer/getInit';
+
+  ///create post
+  static String createPost = liveBaseURL + '/api/posts/create';
+
+  ///get users
+  static String getUsers = liveBaseURL + '/api/auth/getAllUsers';
 }

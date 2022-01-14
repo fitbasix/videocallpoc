@@ -18,7 +18,7 @@ class CutomizedTextField extends StatelessWidget {
         color: lightGrey,
         borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
       ),
-      child: child,
+      child: Center(child: child),
     );
   }
 }

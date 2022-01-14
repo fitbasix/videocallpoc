@@ -104,89 +104,86 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextField(
-                            controller: _trainerController.searchController,
-                            style: AppTextStyle.smallGreyText.copyWith(
+                      child: Center(
+                        child: TextField(
+                          controller: _trainerController.searchController,
+                          style: AppTextStyle.smallGreyText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kBlack),
+                          onChanged: (value) async {
+                            _trainerController.search.value = value;
+                            if (value.length >= 3) {
+                              _trainerController.filterIsLoading.value = true;
+                              _trainerController.searchedName.value = value;
+                              _trainerController.allTrainer.value =
+                                  await TrainerServices.getAllTrainer(
+                                name: value,
+                                interests: _trainerController
+                                    .SelectedInterestIndex.value,
+                                trainerType:
+                                    _trainerController.trainerType.value,
+                              );
+                              _scrollController.jumpTo(0);
+                              _trainerController.filterIsLoading.value = false;
+                            }
+                          },
+                          // onSubmitted: (value) async {
+                          //   if (value.length >= 3) {
+                          //     _trainerController.filterIsLoading.value = true;
+                          //     _trainerController.searchedName.value = value;
+                          //     _trainerController.allTrainer.value =
+                          //         await TrainerServices.getAllTrainer(
+                          //             name: value,
+                          //             interests: _trainerController
+                          //                 .SelectedInterestIndex.value,
+                          //             trainerType:
+                          //                 _trainerController.trainerType.value);
+                          //
+                          //     _scrollController.jumpTo(0);
+                          //     _trainerController.filterIsLoading.value = false;
+                          //   } else {
+                          //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          //         content:
+                          //             Text('Please enter atleast 3 character')));
+                          //   }
+                          // },
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 10.5 * SizeConfig.widthMultiplier!,
+                                  right: 5),
+                              child: Icon(
+                                Icons.search,
+                                color: hintGrey,
+                                size: 22 * SizeConfig.heightMultiplier!,
+                              ),
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                _trainerController
+                                            .searchController.text.length ==
+                                        0
+                                    ? _trainerController.isSearchActive.value =
+                                        false
+                                    : _trainerController.searchController
+                                        .clear();
+                              },
+                              child: Icon(
+                                Icons.clear,
+                                color: hintGrey,
+                                size: 18 * SizeConfig.heightMultiplier!,
+                              ),
+                            ),
+                            border: InputBorder.none,
+                            hintText: 'searchHint'.tr,
+                            hintStyle: AppTextStyle.smallGreyText.copyWith(
                                 fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: kBlack),
-                            onChanged: (value) async {
-                              _trainerController.search.value = value;
-                              if (value.length >= 3) {
-                                _trainerController.filterIsLoading.value = true;
-                                _trainerController.searchedName.value = value;
-                                _trainerController.allTrainer.value =
-                                    await TrainerServices.getAllTrainer(
-                                  name: value,
-                                  interests: _trainerController
-                                      .SelectedInterestIndex.value,
-                                  trainerType:
-                                      _trainerController.trainerType.value,
-                                );
-                                _scrollController.jumpTo(0);
-                                _trainerController.filterIsLoading.value =
-                                    false;
-                              }
-                            },
-                            // onSubmitted: (value) async {
-                            //   if (value.length >= 3) {
-                            //     _trainerController.filterIsLoading.value = true;
-                            //     _trainerController.searchedName.value = value;
-                            //     _trainerController.allTrainer.value =
-                            //         await TrainerServices.getAllTrainer(
-                            //             name: value,
-                            //             interests: _trainerController
-                            //                 .SelectedInterestIndex.value,
-                            //             trainerType:
-                            //                 _trainerController.trainerType.value);
-                            //
-                            //     _scrollController.jumpTo(0);
-                            //     _trainerController.filterIsLoading.value = false;
-                            //   } else {
-                            //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            //         content:
-                            //             Text('Please enter atleast 3 character')));
-                            //   }
-                            // },
-                            decoration: InputDecoration(
-                                prefixIcon: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 10.5 * SizeConfig.widthMultiplier!,
-                                      right: 5),
-                                  child: Icon(
-                                    Icons.search,
-                                    color: hintGrey,
-                                    size: 22 * SizeConfig.heightMultiplier!,
-                                  ),
-                                ),
-                                suffixIcon: GestureDetector(
-                                  onTap: () {
-                                    _trainerController
-                                                .searchController.text.length ==
-                                            0
-                                        ? _trainerController
-                                            .isSearchActive.value = false
-                                        : _trainerController.searchController
-                                            .clear();
-                                  },
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: hintGrey,
-                                    size: 18 * SizeConfig.heightMultiplier!,
-                                  ),
-                                ),
-                                border: InputBorder.none,
-                                hintText: 'searchHint'.tr,
-                                hintStyle: AppTextStyle.smallGreyText.copyWith(
-                                    fontSize: 14 * SizeConfig.textMultiplier!,
-                                    color: hintGrey),
-                                contentPadding: EdgeInsets.only(
-                                  bottom: -2,
-                                )),
+                                color: hintGrey),
+                            /*contentPadding: EdgeInsets.only(
+                                top: -2,
+                              )*/
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   )

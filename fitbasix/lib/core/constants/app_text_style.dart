@@ -59,4 +59,9 @@ class AppTextStyle {
     fontWeight: FontWeight.w400,
     color: lightBlack,
   );
+  static TextStyle normalPureBlackText = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w500,
+    color: kPureBlack,
+  );
 }

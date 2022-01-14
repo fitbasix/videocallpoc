@@ -64,9 +64,12 @@ class SelectLocationScreen extends StatelessWidget {
                         _postController.searchSuggestion.value =
                             (await PlaceApiProvider.fetchSuggestions(
                                 value, 'en', _postController.sessionToken))!;
+                        print("lll" +
+                            _postController
+                                .searchSuggestion.value.predictions![0].placeId
+                                .toString());
                         _postController.searchLoading.value = false;
                       }
-
                       print(_postController
                           .searchSuggestion.value.predictions!.length);
                     },
@@ -159,6 +162,8 @@ class SelectLocationScreen extends StatelessWidget {
                                         .structuredFormatting!
                                         .secondaryText!,
                                     onTap: () {
+                                      print(_postController.searchSuggestion
+                                          .value.predictions![index].placeId);
                                       _postController.selectedLocation.value =
                                           _postController
                                               .searchSuggestion
