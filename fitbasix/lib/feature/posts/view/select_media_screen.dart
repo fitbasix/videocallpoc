@@ -125,12 +125,6 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                 itemBuilder: (BuildContext context, int index) {
                                   // _postController.getSelectedMedia(
                                   //     _postController.assets[0]);
-                                  print("kkkk" +
-                                      _postController.assets[index].id
-                                          .toString() +
-                                      _postController
-                                          .assets[index].modifiedDateSecond
-                                          .toString());
                                   return Obx(() => AssetThumbnail(
                                         asset: _postController.assets[index],
                                         tag: _postController

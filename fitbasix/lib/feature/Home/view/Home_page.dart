@@ -4,6 +4,8 @@ import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/view/widgets/bottom_app_bar.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,16 +33,32 @@ class HomePage extends StatelessWidget {
         title: Text('Home Page'),
       ),
       body: Center(
-        child: TextButton(
-            onPressed: () async {
-              final SharedPreferences prefs =
-                  await SharedPreferences.getInstance();
-              prefs.clear();
-              await _controller.googleSignout();
-              Navigator.pushNamedAndRemoveUntil(
-                  context, RouteName.loginScreen, (route) => false);
-            },
-            child: const Text('Sign Out')),
+        child: Column(
+          children: [
+            TextButton(
+                onPressed: () async {
+                  final PostController _postController =
+                      Get.put(PostController());
+                  _postController.postId.value =
+                      await CreatePostService.getPostId();
+                  Navigator.pushNamed(context, RouteName.createPost);
+                },
+                child: const Text('Create post')),
+            SizedBox(
+              height: 18,
+            ),
+            TextButton(
+                onPressed: () async {
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.clear();
+                  await _controller.googleSignout();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, RouteName.loginScreen, (route) => false);
+                },
+                child: const Text('Sign Out')),
+          ],
+        ),
       ),
     );
   }

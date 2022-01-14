@@ -23,5 +23,7 @@ class ImagePath {
   static const String clockIcon = 'assets/Icons/clock.svg';
   static const String thumsUpIcon = 'assets/Icons/thums_up.svg';
   static const String locationIcon = "assets/Icons/location_icon.svg";
+  static const String galleryIcon = "assets/Icons/gallery.svg";
   static const String tagPeopleIcon = "assets/Icons/tag_people_icon.svg";
+  static const String cancelIcon = "assets/Icons/cancel.svg";
 }

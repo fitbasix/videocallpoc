@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 
 class CreatePostScreen extends StatelessWidget {
   CreatePostScreen({Key? key}) : super(key: key);
-  final PostController _postController = Get.put(PostController());
+  final PostController _postController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +112,8 @@ class CreatePostScreen extends StatelessWidget {
                   onChanged: (value) {
                     _postController.postText.value = value;
                   },
+                  onSubmitted: (value) {},
+                  style: AppTextStyle.normalPureBlackText,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   decoration: InputDecoration(
@@ -149,21 +152,26 @@ class CreatePostScreen extends StatelessWidget {
               SizedBox(
                 height: 34 * SizeConfig.heightMultiplier!,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(ImagePath.locationIcon,
-                      width: 17 * SizeConfig.widthMultiplier!),
-                  SizedBox(
-                    width: 16 * SizeConfig.widthMultiplier!,
-                  ),
-                  Text(
-                    'photo_video'.tr,
-                    style: AppTextStyle.titleText
-                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
-                  )
-                ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.customGallery);
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(ImagePath.galleryIcon,
+                        width: 17 * SizeConfig.widthMultiplier!),
+                    SizedBox(
+                      width: 16 * SizeConfig.widthMultiplier!,
+                    ),
+                    Text(
+                      'photo_video'.tr,
+                      style: AppTextStyle.titleText
+                          .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                    )
+                  ],
+                ),
               ),
               SizedBox(
                 height: 17 * SizeConfig.heightMultiplier!,
@@ -175,7 +183,11 @@ class CreatePostScreen extends StatelessWidget {
                 height: 17 * SizeConfig.heightMultiplier!,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  print("vartika");
+                  // var users = await CreatePostService.getUsers();
+                  // _postController.users.value = users.response!.data!;
+                  // print(_postController.users.value);
                   Navigator.pushNamed(context, RouteName.tagPeopleScreen);
                 },
                 child: Row(
