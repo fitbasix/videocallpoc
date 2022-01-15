@@ -17,7 +17,7 @@ import 'package:uuid/uuid.dart';
 class PostController extends GetxController {
   RxList<AssetEntity> assets = RxList();
   RxList<bool> mediaSelection = <bool>[false].obs;
-  RxList<AssetEntity> selectedMediaIndex = RxList<AssetEntity>([]);
+  RxList<AssetEntity> selectedMediaAsset = RxList<AssetEntity>([]);
   RxList<AssetPathEntity> foldersAvailable = RxList<AssetPathEntity>([]);
   RxInt selectedFolder = 0.obs;
   RxInt lastSelectedMediaIndex = RxInt(0);
@@ -42,8 +42,7 @@ class PostController extends GetxController {
   final ImagePicker _picker = ImagePicker();
   Rx<File> imageFile = File('').obs;
   Rx<File> videoFile = File('').obs;
-  RxList<File> selectedMediaFileIndex = RxList<File>([]);
-  RxList<File>? selectedMediaFiles = RxList<File>([]);
+  RxList<File> selectedMediaFiles = RxList<File>([]);
   RxString postId = "".obs;
   Rx<UserProfileModel> userProfileData = Rx(UserProfileModel());
   Rx<LocationModel> selectedLocationData = Rx(LocationModel());
@@ -51,8 +50,9 @@ class PostController extends GetxController {
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
     foldersAvailable.value = await PhotoManager.getAssetPathList();
-    selectedFolder.value = foldersAvailable.indexOf(foldersAvailable
-        .singleWhere((element) => element.name.toLowerCase().contains("recent")));
+    selectedFolder.value = foldersAvailable.indexOf(
+        foldersAvailable.singleWhere(
+            (element) => element.name.toLowerCase().contains("recent")));
     final assetList = await foldersAvailable.value[selectedFolder.value]
         .getAssetListPaged(currentPage.value, 100);
 
@@ -80,81 +80,24 @@ class PostController extends GetxController {
     isDropDownExpanded.value = !isDropDownExpanded.value;
   }
 
-  List<bool> getSelectedMedia(AssetEntity? index) {
-    int length = 10;
-    index == 100
-        ? selectedMediaIndex.removeRange(0, 0)
-        : selectedMediaIndex.contains(index)
-            ? selectedMediaIndex.remove(index)
-            : selectedMediaIndex.add(index!);
-    List<bool> selectedOption = [];
-    for (int i = 0; i < length; i++) {
-      if (selectedMediaIndex.length == 0) {
-        selectedOption.add(false);
-      } else {
-        if (selectedMediaIndex.contains(i)) {
-          selectedOption.add(true);
-        } else {
-          selectedOption.add(false);
-        }
-      }
+  void getSelectedMedia(AssetEntity? assetEntity) {
+    if (selectedMediaAsset.indexOf(assetEntity) == -1) {
+      selectedMediaAsset.add(assetEntity!);
+    } else {
+      print("remove");
+      selectedMediaAsset.remove(assetEntity!);
     }
-    selectedMedia!.value = selectedOption;
-    return selectedMedia!;
+    print(selectedMediaAsset);
   }
 
-  List<File>? getSelectedMediaFiles(File? index) {
-    int length = 10;
-    index == 100
-        ? selectedMediaFileIndex.removeRange(0, 0)
-        : selectedMediaFileIndex.contains(index)
-            ? selectedMediaFileIndex.remove(index)
-            : selectedMediaFileIndex.add(index!);
-    List<File> selectedMediaFile = [];
-    File? x;
-    for (int i = 0; i < selectedMediaFileIndex.length; i++) {
-      if (selectedMediaFileIndex.length == 0) {
-        return null;
-      } else {
-        // print(index.path)
-
-        if (selectedMediaFileIndex.contains(index)) {
-          print(index!.path);
-          selectedMediaFile.add(index);
-        } else {
-          print('After' + index!.path);
-          selectedMediaFile.remove(index);
-          // selectedMediaFile.add(x!);
-        }
-      }
+  Future<List<File>> getFile(List<AssetEntity> assetEntities) async {
+    selectedMediaFiles.value = [];
+    for (int i = 0; i < assetEntities.length; i++) {
+      File? fileName = await assetEntities[i].file;
+      selectedMediaFiles.add(fileName!);
     }
-    selectedMediaFiles!.value = selectedMediaFile;
-    return selectedMediaFile;
+    return selectedMediaFiles;
   }
-
-  // List<bool> getSelectedPeople(int index) {
-  //   int length = 10;
-  //   index == 100
-  //       ? selectedPeopleIndex.removeRange(0, 0)
-  //       : selectedPeopleIndex.contains(index)
-  //           ? selectedPeopleIndex.remove(index)
-  //           : selectedPeopleIndex.add(index);
-  //   List<bool> selectedOption = [];
-  //   for (int i = 0; i < length; i++) {
-  //     if (selectedPeopleIndex.length == 0) {
-  //       selectedOption.add(false);
-  //     } else {
-  //       if (selectedPeopleIndex.contains(i)) {
-  //         selectedOption.add(true);
-  //       } else {
-  //         selectedOption.add(false);
-  //       }
-  //     }
-  //   }
-  //
-  //   selectedPeople!.value = selectedOption;
-  //   return selectedPeople!;
-  // }
 
   Future pickImage() async {
     try {
@@ -184,7 +127,6 @@ class PostController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    assets.value = await fetchAssets(presentPage: currentPage.value);
     super.onInit();
   }
 }

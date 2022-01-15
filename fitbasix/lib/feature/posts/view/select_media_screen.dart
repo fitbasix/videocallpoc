@@ -94,11 +94,12 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
         actions: [
           IconButton(
               onPressed: () async {
-                await _postController.pickImage();
-                print(_postController.selectedMediaFiles!.length);
-                // PostService.uploadMedia(
-                //   _postController.selectedMediaFiles!.value,
-                // );
+                //  await _postController.pickImage();
+                await _postController
+                    .getFile(_postController.selectedMediaAsset);
+                PostService.uploadMedia(
+                  _postController.selectedMediaFiles,
+                );
               },
               icon: Icon(
                 Icons.camera_alt,
@@ -142,33 +143,18 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                                   .value =
                                               int.tryParse(_postController
                                                   .assets[index].id)!;
-
                                           _postController.getSelectedMedia(
                                               _postController.assets[index]);
-
-                                          if (_postController.selectedMediaIndex
-                                                  .indexOf(_postController
-                                                      .assets[index]) !=
-                                              -1) {
-                                            _postController
-                                                .getSelectedMediaFiles(
-                                                    await _postController
-                                                        .assets[index].file);
-                                          }
-
-                                          // _postController.selectedMediaCount
-                                          //     .add(_postController
-                                          //         .selectedMediaIndex.length);
                                         },
                                         isSelected: _postController
-                                                    .selectedMediaIndex
+                                                    .selectedMediaAsset
                                                     .indexOf(_postController
                                                         .assets[index]) ==
                                                 -1
                                             ? false
                                             : true,
                                         selectionNumber: (_postController
-                                                    .selectedMediaIndex
+                                                    .selectedMediaAsset
                                                     .indexOf(_postController
                                                         .assets[index]) +
                                                 1)

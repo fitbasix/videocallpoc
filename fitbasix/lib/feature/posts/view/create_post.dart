@@ -111,7 +111,8 @@ class CreatePostScreen extends StatelessWidget {
                           20 * SizeConfig.widthMultiplier!),
                       child: CachedNetworkImage(
                           imageUrl: _postController.userProfileData.value
-                              .response!.data!.profilePhoto!,
+                              .response!.data!.profilePhoto
+                              .toString(),
                           fit: BoxFit.cover,
                           height: 40 * SizeConfig.widthMultiplier!,
                           width: 40 * SizeConfig.widthMultiplier!),
@@ -177,7 +178,10 @@ class CreatePostScreen extends StatelessWidget {
                   height: 34 * SizeConfig.heightMultiplier!,
                 ),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    _postController.assets.value =
+                        await _postController.fetchAssets(
+                            presentPage: _postController.currentPage.value);
                     Navigator.pushNamed(context, RouteName.customGallery);
                   },
                   child: Row(
