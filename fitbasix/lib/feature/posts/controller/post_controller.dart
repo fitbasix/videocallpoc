@@ -3,7 +3,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
+import 'package:fitbasix/feature/posts/model/location_model.dart';
 import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
+import 'package:fitbasix/feature/posts/model/user_profile_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,6 +45,8 @@ class PostController extends GetxController {
   RxList<File> selectedMediaFileIndex = RxList<File>([]);
   RxList<File>? selectedMediaFiles = RxList<File>([]);
   RxString postId = "".obs;
+  Rx<UserProfileModel> userProfileData = Rx(UserProfileModel());
+  Rx<LocationModel> selectedLocationData = Rx(LocationModel());
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;

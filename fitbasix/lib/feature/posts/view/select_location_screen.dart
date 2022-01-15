@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/view/widgets/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +25,14 @@ class SelectLocationScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              if (_postController.selectedLocation.value.length == 0) {
+                Navigator.pop(context);
+              } else {
+                CreatePostService.createPost(placeName: [
+                  _postController.selectedLocationData.value.placeName!
+                ], placeId: _postController.selectedLocationData.value.placeId);
+                Navigator.pop(context);
+              }
             },
             icon: SvgPicture.asset(
               ImagePath.backIcon,
@@ -125,6 +133,10 @@ class SelectLocationScreen extends StatelessWidget {
                             IconButton(
                                 onPressed: () {
                                   _postController.selectedLocation.value = '';
+                                  _postController.selectedLocationData.value
+                                      .placeName = '';
+                                  _postController
+                                      .selectedLocationData.value.placeId = '';
                                 },
                                 icon: Icon(Icons.clear))
                           ],
@@ -171,6 +183,20 @@ class SelectLocationScreen extends StatelessWidget {
                                               .predictions![index]
                                               .structuredFormatting!
                                               .mainText!;
+
+                                      _postController.selectedLocationData.value
+                                              .placeId =
+                                          _postController.searchSuggestion.value
+                                              .predictions![index].placeId;
+
+                                      _postController.selectedLocationData.value
+                                              .placeName =
+                                          _postController
+                                              .searchSuggestion
+                                              .value
+                                              .predictions![index]
+                                              .structuredFormatting!
+                                              .mainText;
                                     },
                                   ));
                             }),
