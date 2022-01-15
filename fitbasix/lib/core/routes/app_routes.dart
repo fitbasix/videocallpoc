@@ -141,7 +141,7 @@ class GenerateRoute {
             TagPeopleScreen(),
       );
     }
-    if (route == RouteName.selectMediaScreen) {
+    if (route == RouteName.customGallery) {
       return PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>

@@ -17,6 +17,7 @@ class ApiUrl {
   static String getTrainers = liveBaseURL + '/api/trainer/getInit';
   static String uploadMedia = liveBaseURL + '/api/posts/uploadMedia';
   static String getUserByName = liveBaseURL + '/api/auth/getAllUsers';
+  static String getUserProfile = liveBaseURL + '/api/auth';
 
   ///create post
   static String createPost = liveBaseURL + '/api/posts/create';

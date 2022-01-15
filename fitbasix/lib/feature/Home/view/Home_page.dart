@@ -41,6 +41,8 @@ class HomePage extends StatelessWidget {
                       Get.put(PostController());
                   _postController.postId.value =
                       await CreatePostService.getPostId();
+                  _postController.userProfileData.value =
+                      await CreatePostService.getUserProfile();
                   Navigator.pushNamed(context, RouteName.createPost);
                 },
                 child: const Text('Create post')),
