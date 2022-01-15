@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
@@ -48,7 +47,8 @@ class PostController extends GetxController {
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
     foldersAvailable.value = await PhotoManager.getAssetPathList();
-    print(foldersAvailable[0]);
+    selectedFolder.value = foldersAvailable.indexOf(foldersAvailable
+        .singleWhere((element) => element.name.toLowerCase().contains("recent")));
     final assetList = await foldersAvailable.value[selectedFolder.value]
         .getAssetListPaged(currentPage.value, 100);
 
@@ -98,6 +98,7 @@ class PostController extends GetxController {
     selectedMedia!.value = selectedOption;
     return selectedMedia!;
   }
+
   List<File>? getSelectedMediaFiles(File? index) {
     int length = 10;
     index == 100
@@ -127,7 +128,6 @@ class PostController extends GetxController {
     return selectedMediaFile;
   }
 
- 
   // List<bool> getSelectedPeople(int index) {
   //   int length = 10;
   //   index == 100

@@ -141,13 +141,7 @@ class GenerateRoute {
             TagPeopleScreen(),
       );
     }
-    if (route == RouteName.selectMediaScreen) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
-            SelectMediaScreen(),
-      );
-    } else {
+    else {
       return PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
