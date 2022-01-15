@@ -10,9 +10,10 @@ class CreatePostService {
   static var dio = DioUtil().getInstance();
   static Future<String> getPostId() async {
     dio!.options.headers["language"] = "1";
+    print("lll");
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.createPost, data: {});
-    print(response.data['response']['data']["_id"]);
+    print("kkk" + response.data['response']['data']["_id"]);
     return response.data['response']['data']["_id"];
   }
 

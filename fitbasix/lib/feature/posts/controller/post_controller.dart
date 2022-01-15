@@ -51,7 +51,8 @@ class PostController extends GetxController {
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
     foldersAvailable.value = await PhotoManager.getAssetPathList();
-    print(foldersAvailable[0]);
+    selectedFolder.value = foldersAvailable.indexOf(foldersAvailable
+        .singleWhere((element) => element.name.toLowerCase().contains("recent")));
     final assetList = await foldersAvailable.value[selectedFolder.value]
         .getAssetListPaged(currentPage.value, 100);
 

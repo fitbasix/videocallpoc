@@ -94,7 +94,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
         actions: [
           IconButton(
               onPressed: () async {
-                // await _postController.pickImage();
+                await _postController.pickImage();
                 print(_postController.selectedMediaFiles!.length);
                 // PostService.uploadMedia(
                 //   _postController.selectedMediaFiles!.value,
