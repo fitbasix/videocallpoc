@@ -36,8 +36,19 @@ class TagPeopleScreen extends StatelessWidget {
           backgroundColor: kPureWhite,
           elevation: 0,
           leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                final List<String> taggedPeople = [];
+                if (_postController.selectedUserData.length == 0) {
+                  Navigator.pop(context);
+                } else {
+                  for (var i in _postController.selectedUserData) {
+                    taggedPeople.add(i.id!);
+                  }
+                  await CreatePostService.createPost(
+                      postId: _postController.postId.value,
+                      taggedPeople: taggedPeople);
+                  Navigator.pop(context);
+                }
               },
               icon: SvgPicture.asset(
                 ImagePath.backIcon,
@@ -160,6 +171,8 @@ class TagPeopleScreen extends StatelessWidget {
                                         right: 3,
                                         child: GestureDetector(
                                           onTap: () {
+                                            _postController.selectedUserData
+                                                .removeAt(index);
                                             _postController.selectedPeopleIndex
                                                 .removeAt(index);
                                           },

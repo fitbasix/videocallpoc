@@ -238,12 +238,10 @@ class AssetThumbnail extends StatelessWidget {
                   )),
                   if (asset.type == AssetType.video)
                     Center(
-                      child: Container(
-                        color: Colors.blue,
-                        child: Icon(
-                          Icons.play_arrow,
-                          color: kPureWhite,
-                        ),
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: kPureWhite,
+                        size: 36,
                       ),
                     ),
                   isSelected
