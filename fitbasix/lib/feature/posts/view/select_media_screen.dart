@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:fitbasix/core/universal_widgets/right_tick.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/posts/view/cached_network_image.dart';
 import 'package:fitbasix/feature/posts/view/widgets/custom_dropDown.dart';
@@ -92,19 +93,24 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
           ),
         ),
         actions: [
-          IconButton(
-              onPressed: () async {
-                //  await _postController.pickImage();
-                await _postController
-                    .getFile(_postController.selectedMediaAsset);
-                PostService.uploadMedia(
-                  _postController.selectedMediaFiles,
-                );
-              },
-              icon: Icon(
-                Icons.camera_alt,
-                color: kPureBlack,
-              ))
+          Obx(() => _postController.selectedMediaAsset.length > 0
+              ? RightTick(
+                  onTap: () async {
+                    await _postController
+                        .getFile(_postController.selectedMediaAsset);
+                    PostService.uploadMedia(
+                      _postController.selectedMediaFiles,
+                    );
+                  },
+                )
+              : IconButton(
+                  onPressed: () async {
+                    await _postController.pickImage();
+                  },
+                  icon: Icon(
+                    Icons.camera_alt,
+                    color: kPureBlack,
+                  )))
         ],
       ),
       body: SafeArea(

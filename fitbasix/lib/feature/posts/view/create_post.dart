@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
+import 'package:fitbasix/feature/posts/view/widgets/select_category_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -128,6 +130,85 @@ class CreatePostScreen extends StatelessWidget {
                     )
                   ],
                 ),
+                SizedBox(
+                  height: 10 * SizeConfig.heightMultiplier!,
+                ),
+                Obx(
+                  () => GestureDetector(
+                      onTap: () async {
+                        print(_postController.selectedCategory.value);
+                        _postController.getCategory();
+                        await showDialog(
+                            context: context,
+                            builder: (_) => SelectCategoryDialog(
+                                  category: _postController.categories,
+                                ));
+                      },
+                      child: _postController.selectedCategory.value.name == null
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: hintGrey,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                      8 * SizeConfig.heightMultiplier!)),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        12 * SizeConfig.widthMultiplier!,
+                                    vertical: 8 * SizeConfig.heightMultiplier!),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      size: 15 * SizeConfig.textMultiplier!,
+                                      color: hintGrey,
+                                    ),
+                                    SizedBox(
+                                      width: 10.5 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    Text(
+                                      'add_category'.tr,
+                                      style: AppTextStyle.smallGreyText
+                                          .copyWith(color: hintGrey),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: lightBlack,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                      8 * SizeConfig.heightMultiplier!)),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        12 * SizeConfig.widthMultiplier!,
+                                    vertical: 8 * SizeConfig.heightMultiplier!),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      _postController
+                                          .selectedCategory.value.name
+                                          .toString(),
+                                      style: AppTextStyle.smallGreyText
+                                          .copyWith(color: lightBlack),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )),
+                ),
+                SizedBox(
+                  height: 10 * SizeConfig.heightMultiplier!,
+                ),
                 Container(
                   height: 180 * SizeConfig.heightMultiplier!,
                   child: TextField(
@@ -179,6 +260,7 @@ class CreatePostScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () async {
+                    _postController.currentPage.value = 0;
                     _postController.assets.value =
                         await _postController.fetchAssets(
                             presentPage: _postController.currentPage.value);

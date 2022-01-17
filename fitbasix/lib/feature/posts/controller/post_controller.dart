@@ -3,9 +3,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
+import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/model/location_model.dart';
 import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
 import 'package:fitbasix/feature/posts/model/user_profile_model.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +48,8 @@ class PostController extends GetxController {
   RxString postId = "".obs;
   Rx<UserProfileModel> userProfileData = Rx(UserProfileModel());
   Rx<LocationModel> selectedLocationData = Rx(LocationModel());
+  RxList<Category> categories = RxList<Category>([]);
+  Rx<Category> selectedCategory = Category().obs;
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -53,7 +57,7 @@ class PostController extends GetxController {
     selectedFolder.value = foldersAvailable.indexOf(
         foldersAvailable.singleWhere(
             (element) => element.name.toLowerCase().contains("recent")));
-    final assetList = await foldersAvailable.value[selectedFolder.value]
+    final assetList = await foldersAvailable[selectedFolder.value]
         .getAssetListPaged(currentPage.value, 100);
 
     // final assetList = await recentAlbum.getAssetListRange(
@@ -63,6 +67,13 @@ class PostController extends GetxController {
     currentPage++;
 
     return assetList;
+  }
+
+  Future<void> getCategory() async {
+    if (categories.length == 0) {
+      CategoryModel categoryModel = await CreatePostService.getCategory();
+      categories.value = categoryModel.response!.response!.data!;
+    }
   }
 
   Future<void> setFolderIndex({required int index}) async {
