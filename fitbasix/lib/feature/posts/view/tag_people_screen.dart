@@ -1,3 +1,4 @@
+import 'package:fitbasix/core/universal_widgets/right_tick.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/view/widgets/title_text.dart';
 import 'package:flutter/material.dart';
@@ -33,37 +34,45 @@ class TagPeopleScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: kPureWhite,
         appBar: AppBar(
-          backgroundColor: kPureWhite,
-          elevation: 0,
-          leading: IconButton(
-              onPressed: () async {
-                final List<String> taggedPeople = [];
-                if (_postController.selectedUserData.length == 0) {
+            backgroundColor: kPureWhite,
+            elevation: 0,
+            leading: IconButton(
+                onPressed: () async {
                   Navigator.pop(context);
-                } else {
-                  for (var i in _postController.selectedUserData) {
-                    taggedPeople.add(i.id!);
-                  }
-                  await CreatePostService.createPost(
-                      postId: _postController.postId.value,
-                      taggedPeople: taggedPeople);
-                  Navigator.pop(context);
-                }
-              },
-              icon: SvgPicture.asset(
-                ImagePath.backIcon,
-                width: 7 * SizeConfig.widthMultiplier!,
-                height: 12 * SizeConfig.heightMultiplier!,
-              )),
-          title: Transform(
-            transform: Matrix4.translationValues(-20, 0, 0),
-            child: Text(
-              'tag_people'.tr,
-              style: AppTextStyle.titleText
-                  .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                },
+                icon: SvgPicture.asset(
+                  ImagePath.backIcon,
+                  width: 7 * SizeConfig.widthMultiplier!,
+                  height: 12 * SizeConfig.heightMultiplier!,
+                )),
+            title: Transform(
+              transform: Matrix4.translationValues(-20, 0, 0),
+              child: Text(
+                'tag_people'.tr,
+                style: AppTextStyle.titleText
+                    .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+              ),
             ),
-          ),
-        ),
+            actions: [
+              Obx(() => _postController.selectedUserData.length > 0
+                  ? RightTick(
+                      onTap: () async {
+                        final List<String> taggedPeople = [];
+                        if (_postController.selectedUserData.length == 0) {
+                          Navigator.pop(context);
+                        } else {
+                          for (var i in _postController.selectedUserData) {
+                            taggedPeople.add(i.id!);
+                          }
+                          await CreatePostService.createPost(
+                              postId: _postController.postId.value,
+                              taggedPeople: taggedPeople);
+                          Navigator.pop(context);
+                        }
+                      },
+                    )
+                  : Container())
+            ]),
         body: SafeArea(
             child: SingleChildScrollView(
           child: Padding(
