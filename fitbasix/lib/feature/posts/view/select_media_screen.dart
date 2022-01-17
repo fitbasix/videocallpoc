@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:fitbasix/core/universal_widgets/right_tick.dart';
+import 'package:fitbasix/feature/posts/model/post_model.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/posts/view/cached_network_image.dart';
 import 'package:fitbasix/feature/posts/view/widgets/custom_dropDown.dart';
@@ -98,14 +100,36 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                   onTap: () async {
                     await _postController
                         .getFile(_postController.selectedMediaAsset);
-                    PostService.uploadMedia(
+                    _postController.uploadedFiles.value =
+                        await PostService.uploadMedia(
                       _postController.selectedMediaFiles,
                     );
+                    if (_postController.uploadedFiles.value.code == 0) {
+                      _postController.postData.value =
+                          await CreatePostService.createPost(
+                              postId: _postController.postId.value,
+                              files: _postController
+                                  .uploadedFiles.value.response!.data);
+                      Navigator.pop(context);
+                    }
                   },
                 )
               : IconButton(
                   onPressed: () async {
                     await _postController.pickImage();
+
+                    _postController.uploadedFiles.value =
+                        await PostService.uploadMedia(
+                      [_postController.imageFile.value],
+                    );
+                    if (_postController.uploadedFiles.value.code == 0) {
+                      _postController.postData.value =
+                          await CreatePostService.createPost(
+                              postId: _postController.postId.value,
+                              files: _postController
+                                  .uploadedFiles.value.response!.data);
+                      Navigator.pop(context);
+                    }
                   },
                   icon: Icon(
                     Icons.camera_alt,

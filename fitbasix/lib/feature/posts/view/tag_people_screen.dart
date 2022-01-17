@@ -64,9 +64,10 @@ class TagPeopleScreen extends StatelessWidget {
                           for (var i in _postController.selectedUserData) {
                             taggedPeople.add(i.id!);
                           }
-                          await CreatePostService.createPost(
-                              postId: _postController.postId.value,
-                              taggedPeople: taggedPeople);
+                          _postController.postData.value =
+                              await CreatePostService.createPost(
+                                  postId: _postController.postId.value,
+                                  taggedPeople: taggedPeople);
                           Navigator.pop(context);
                         }
                       },

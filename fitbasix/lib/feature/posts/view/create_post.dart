@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
+import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/view/widgets/select_category_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -19,11 +21,12 @@ class CreatePostScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _postController.getPostData();
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         FocusScope.of(context).unfocus();
         if (_postController.postText.value.length > 0) {
-          CreatePostService.createPost(
+          _postController.postData.value = await CreatePostService.createPost(
               postId: _postController.postId.value,
               caption: _postController.postText.value);
         }
@@ -122,12 +125,30 @@ class CreatePostScreen extends StatelessWidget {
                     SizedBox(
                       width: 12 * SizeConfig.widthMultiplier!,
                     ),
-                    Text(
-                      _postController
-                          .userProfileData.value.response!.data!.name!,
-                      style: AppTextStyle.boldBlackText
-                          .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
-                    )
+                    Obx(() => _postController.postData.value.response!.data!
+                                .people!.length ==
+                            0
+                        ? Text(
+                            _postController
+                                .userProfileData.value.response!.data!.name!,
+                            style: AppTextStyle.boldBlackText.copyWith(
+                                fontSize: 14 * SizeConfig.textMultiplier!),
+                          )
+                        : _postController.postData.value.response!.data!.people!
+                                    .length ==
+                                1
+                            ? Container(
+                                child: Row(
+                                  children: [
+                                    Text(_postController.userProfileData.value
+                                        .response!.data!.name!),
+                                    Text('with'),
+                                    Text(_postController
+                                        .selectedUserData[0].name!)
+                                  ],
+                                ),
+                              )
+                            : Container())
                   ],
                 ),
                 SizedBox(
@@ -209,52 +230,186 @@ class CreatePostScreen extends StatelessWidget {
                 SizedBox(
                   height: 10 * SizeConfig.heightMultiplier!,
                 ),
-                Container(
-                  height: 180 * SizeConfig.heightMultiplier!,
-                  child: TextField(
-                    controller: _postController.postTextController,
-                    onChanged: (value) {
-                      _postController.postText.value = value;
-                    },
-                    onSubmitted: (value) {},
-                    onEditingComplete: () {},
-                    style: AppTextStyle.normalPureBlackText,
-                    // keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'post_hint'.tr,
-                        hintStyle: AppTextStyle.NormalText.copyWith(
-                            fontSize: 18 * SizeConfig.textMultiplier!,
-                            color: hintGrey)),
-                  ),
-                ),
+                Obx(() => _postController
+                            .postData.value.response!.data!.files!.length ==
+                        0
+                    ? Container(
+                        height: 180 * SizeConfig.heightMultiplier!,
+                        child: TextField(
+                          controller: _postController.postTextController,
+                          onChanged: (value) {
+                            _postController.postText.value = value;
+                          },
+                          onSubmitted: (value) {},
+                          onEditingComplete: () {},
+                          style: AppTextStyle.normalPureBlackText,
+                          // keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'post_hint'.tr,
+                              hintStyle: AppTextStyle.NormalText.copyWith(
+                                  fontSize: 18 * SizeConfig.textMultiplier!,
+                                  color: hintGrey)),
+                        ),
+                      )
+                    : _postController.postData.value.response!.data!.files!
+                                    .length ==
+                                1 &&
+                            _postController
+                                    .postData.value.response!.data!.caption ==
+                                null
+                        ? Container(
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              children: [
+                                Container(
+                                  height: 64 * SizeConfig.heightMultiplier!,
+                                  child: TextField(
+                                    controller:
+                                        _postController.postTextController,
+                                    onChanged: (value) {
+                                      _postController.postText.value = value;
+                                    },
+                                    onSubmitted: (value) {},
+                                    onEditingComplete: () {},
+                                    style: AppTextStyle.normalPureBlackText,
+                                    // keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'post_hint'.tr,
+                                        hintStyle:
+                                            AppTextStyle.NormalText.copyWith(
+                                                fontSize: 18 *
+                                                    SizeConfig.textMultiplier!,
+                                                color: hintGrey)),
+                                  ),
+                                ),
+                                CachedNetworkImage(
+                                  imageUrl: _postController
+                                      .postData.value.response!.data!.files![0],
+                                  height: 336 * SizeConfig.heightMultiplier!,
+                                  fit: BoxFit.fitWidth,
+                                )
+                              ],
+                            ),
+                          )
+                        : Container(
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              children: [
+                                Container(
+                                  height: 64 * SizeConfig.heightMultiplier!,
+                                  child: TextField(
+                                    controller:
+                                        _postController.postTextController,
+                                    onChanged: (value) {
+                                      _postController.postText.value = value;
+                                    },
+                                    onSubmitted: (value) {},
+                                    onEditingComplete: () {},
+                                    style: AppTextStyle.normalPureBlackText,
+                                    // keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'post_hint'.tr,
+                                        hintStyle:
+                                            AppTextStyle.NormalText.copyWith(
+                                                fontSize: 18 *
+                                                    SizeConfig.textMultiplier!,
+                                                color: hintGrey)),
+                                  ),
+                                ),
+                                Container(
+                                  height: 120,
+                                  child: ListView.builder(
+                                      itemCount: _postController.postData.value
+                                          .response!.data!.files!.length,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 12 *
+                                                  SizeConfig.widthMultiplier!),
+                                          child: CachedNetworkImage(
+                                            imageUrl: _postController
+                                                .postData
+                                                .value
+                                                .response!
+                                                .data!
+                                                .files![index],
+                                            height: 120 *
+                                                SizeConfig.widthMultiplier!,
+                                            width: 120 *
+                                                SizeConfig.widthMultiplier!,
+                                            fit: BoxFit.fitWidth,
+                                          ),
+                                        );
+                                      }),
+                                )
+                              ],
+                            ),
+                          )),
                 SizedBox(
                   height: 16 * SizeConfig.heightMultiplier!,
                 ),
                 Divider(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(
-                        context, RouteName.selectLocationScreen);
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(ImagePath.locationIcon,
-                          width: 17 * SizeConfig.widthMultiplier!),
-                      SizedBox(
-                        width: 16 * SizeConfig.widthMultiplier!,
-                      ),
-                      Text(
-                        'location'.tr,
-                        style: AppTextStyle.titleText.copyWith(
-                            fontSize: 14 * SizeConfig.textMultiplier!),
+                Obx(() => _postController.postData.value.response!.data!
+                            .location!.placeName!.length ==
+                        0
+                    ? GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, RouteName.selectLocationScreen);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(ImagePath.locationIcon,
+                                width: 17 * SizeConfig.widthMultiplier!),
+                            SizedBox(
+                              width: 16 * SizeConfig.widthMultiplier!,
+                            ),
+                            Text(
+                              'location'.tr,
+                              style: AppTextStyle.titleText.copyWith(
+                                  fontSize: 14 * SizeConfig.textMultiplier!),
+                            )
+                          ],
+                        ),
                       )
-                    ],
-                  ),
-                ),
+                    : GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, RouteName.selectLocationScreen);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.location_pin,
+                              color: kPink,
+                            ),
+                            SizedBox(
+                              width: 16 * SizeConfig.widthMultiplier!,
+                            ),
+                            Text(
+                              _postController.postData.value.response!.data!
+                                  .location!.placeName![1],
+                              style: AppTextStyle.titleText.copyWith(
+                                  fontSize: 14 * SizeConfig.textMultiplier!),
+                            )
+                          ],
+                        ),
+                      )),
                 SizedBox(
                   height: 34 * SizeConfig.heightMultiplier!,
                 ),
