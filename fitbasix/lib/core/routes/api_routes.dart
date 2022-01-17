@@ -21,6 +21,7 @@ class ApiUrl {
 
   ///create post
   static String createPost = liveBaseURL + '/api/posts/create';
+  static String getAllCategory = liveBaseURL + '/api/category/getAll';
 
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';

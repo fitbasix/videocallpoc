@@ -21,14 +21,12 @@ class PostService {
           MapEntry(
               'files',
               await MultipartFile.fromFile(file.path,
-                  filename: file.path.split('/').last,
-                  contentType: MediaType('image', 'jpeg'))),
+                  filename: file.path.split('/').last)),
         ]);
       }
 
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-
     var response = await dio!.post(
       ApiUrl.uploadMedia,
       data: formData,

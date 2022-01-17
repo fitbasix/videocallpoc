@@ -4,6 +4,7 @@ import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
+import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/model/user_profile_model.dart';
 
 class CreatePostService {
@@ -51,5 +52,14 @@ class CreatePostService {
     var response = await dio!.get(ApiUrl.getUserProfile);
     log(response.data.toString());
     return userProfileModelFromJson(response.toString());
+  }
+
+  static Future<CategoryModel> getCategory() async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.get(ApiUrl.getAllCategory);
+
+    log(response.data.toString());
+    return categoryModelFromJson(response.toString());
   }
 }
