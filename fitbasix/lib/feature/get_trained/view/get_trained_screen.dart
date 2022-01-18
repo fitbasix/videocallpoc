@@ -52,15 +52,15 @@ class GetTrainedScreen extends StatelessWidget {
                         onTap: () async {
                           Navigator.pushNamed(
                               context, RouteName.allTrainerScreen);
-                        
+
                           _trainerController.isLoading.value = true;
                           _trainerController.pageTitle.value = 'trainers'.tr;
-                           _trainerController.SelectedInterestIndex.value = 0;
+                          _trainerController.SelectedInterestIndex.value = 0;
                           _trainerController.trainerType.value = 0;
                           _trainerController.searchedName.value = "";
                           _trainerController.allTrainer.value =
                               await TrainerServices.getAllTrainer();
-        _trainerController.isLoading.value = false;
+                          _trainerController.isLoading.value = false;
                         },
                       )
                     ],
@@ -176,7 +176,9 @@ class GetTrainedScreen extends StatelessWidget {
                                       .response!
                                       .data!
                                       .trainers![index]
-                                      .strength![0],
+                                      .strength![0]
+                                      .name
+                                      .toString(),
                                   strengthLength: _trainerController
                                       .trainers
                                       .value
@@ -250,7 +252,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 242 * SizeConfig.heightMultiplier!,
+                  height: 250 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
@@ -358,7 +360,9 @@ class GetTrainedScreen extends StatelessWidget {
                                       .response!
                                       .data!
                                       .fitnessConsultant![index]
-                                      .strength![0],
+                                      .strength![0]
+                                      .name
+                                      .toString(),
                                   strengthLength: _trainerController
                                       .trainers
                                       .value
@@ -435,7 +439,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 242 * SizeConfig.heightMultiplier!,
+                  height: 250 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
@@ -543,7 +547,9 @@ class GetTrainedScreen extends StatelessWidget {
                                       .response!
                                       .data!
                                       .nutritionConsultant![index]
-                                      .strength![0],
+                                      .strength![0]
+                                      .name
+                                      .toString(),
                                   strengthLength: _trainerController
                                       .trainers
                                       .value

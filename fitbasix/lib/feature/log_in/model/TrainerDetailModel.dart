@@ -107,8 +107,7 @@ class Trainer {
         numOfCertificates: json["numOfCertificates"],
         certificates: List<Certificate>.from(json["certificates"] == null
             ? []
-            : json["certificates"]["certificates"]
-                .map((x) => Certificate.fromJson(x))),
+            : json["certificates"].map((x) => Certificate.fromJson(x))),
         followers: json["followers"],
         following: json["following"],
         trainees: json["trainees"],

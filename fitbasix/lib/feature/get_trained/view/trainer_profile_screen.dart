@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -91,7 +92,7 @@ class TrainerPage extends StatelessWidget {
   final String ratingCount;
   final String totalPeopleTrained;
   final double rating;
-  final List<String> strengths;
+  final List<StrengthElement> strengths;
   final List<Certificate> certifcateTitle;
   final String aboutTrainer;
   final List<Plan> allPlans;
@@ -277,7 +278,9 @@ class TrainerPage extends StatelessWidget {
                                                             .widthMultiplier!),
                                                 child: Center(
                                                   child: Text(
-                                                    strengths[index],
+                                                    strengths[index]
+                                                        .name
+                                                        .toString(),
                                                     style: AppTextStyle
                                                         .lightMediumBlackText,
                                                   ),
