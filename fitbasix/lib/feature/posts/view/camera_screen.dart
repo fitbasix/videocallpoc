@@ -5,7 +5,9 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -140,10 +142,20 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                   SizedBox(width: 30 * SizeConfig.widthMultiplier!),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        PostService.uploadMedia(
+                      onTap: () async {
+                        _postController.uploadedFiles.value =
+                            await PostService.uploadMedia(
                           [widget.imageFile!],
                         );
+
+                        if (_postController.uploadedFiles.value.code == 0) {
+                          _postController.postData.value =
+                              await CreatePostService.createPost(
+                                  postId: _postController.postId.value,
+                                  files: _postController
+                                      .uploadedFiles.value.response!.data);
+                          Navigator.pushNamed(context, RouteName.createPost);
+                        }
                       },
                       child: Container(
                         height: 48 * SizeConfig.heightMultiplier!,
@@ -151,7 +163,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                             color: kGreenColor,
                             borderRadius: BorderRadius.circular(8.0)),
                         child: Center(
-                          child: Text('camera'.tr,
+                          child: Text('next'.tr,
                               style: AppTextStyle.greenSemiBoldText.copyWith(
                                   fontSize: 18 * SizeConfig.textMultiplier!,
                                   color: kPureWhite)),

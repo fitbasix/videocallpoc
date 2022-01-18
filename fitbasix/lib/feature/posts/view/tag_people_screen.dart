@@ -1,3 +1,5 @@
+import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/right_tick.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/view/widgets/title_text.dart';
@@ -39,6 +41,7 @@ class TagPeopleScreen extends StatelessWidget {
             leading: IconButton(
                 onPressed: () async {
                   Navigator.pop(context);
+                  _postController.isLoading.value == false;
                 },
                 icon: SvgPicture.asset(
                   ImagePath.backIcon,
@@ -55,23 +58,33 @@ class TagPeopleScreen extends StatelessWidget {
             ),
             actions: [
               Obx(() => _postController.selectedUserData.length > 0
-                  ? RightTick(
-                      onTap: () async {
-                        final List<String> taggedPeople = [];
-                        if (_postController.selectedUserData.length == 0) {
-                          Navigator.pop(context);
-                        } else {
-                          for (var i in _postController.selectedUserData) {
-                            taggedPeople.add(i.id!);
-                          }
-                          _postController.postData.value =
-                              await CreatePostService.createPost(
-                                  postId: _postController.postId.value,
-                                  taggedPeople: taggedPeople);
-                          Navigator.pop(context);
-                        }
-                      },
-                    )
+                  ? _postController.isLoading.value == false
+                      ? RightTick(
+                          onTap: () async {
+                            _postController.isLoading.value = true;
+                            final List<String> taggedPeople = [];
+                            if (_postController.selectedUserData.length == 0) {
+                              Navigator.pop(context);
+                            } else {
+                              for (var i in _postController.selectedUserData) {
+                                taggedPeople.add(i.id!);
+                              }
+                              _postController.postData.value =
+                                  await CreatePostService.createPost(
+                                      postId: _postController.postId.value,
+                                      taggedPeople: taggedPeople);
+
+                              Navigator.pushNamed(
+                                  context, RouteName.createPost);
+                              _postController.isLoading.value = false;
+                            }
+                          },
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(
+                              right: 16 * SizeConfig.widthMultiplier!),
+                          child: CustomizedCircularProgress(),
+                        )
                   : Container())
             ]),
         body: SafeArea(

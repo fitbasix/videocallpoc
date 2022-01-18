@@ -27,6 +27,7 @@ class CreatePostService {
     List<String>? placeName,
     String? placeId,
     List<String>? files,
+    int? category,
     bool? isPublish,
   }) async {
     var access = await LogInService.getAccessToken();
@@ -41,6 +42,7 @@ class CreatePostService {
       "location": {"placeName": placeName, "placeId": placeId}
     };
     Map updatePeople = {"postId": postId, "people": taggedPeople};
+    Map updateCategory = {"postId": postId, "category": category};
     Map publishPost = {"postId": postId, "isPublished": isPublish};
     Map getPostData = {"postId": postId};
     var response = await dio!.post(ApiUrl.createPost,
@@ -52,12 +54,23 @@ class CreatePostService {
                     ? updateLocation
                     : taggedPeople != null
                         ? updatePeople
-                        : isPublish != null
-                            ? publishPost
-                            : getPostData);
+                        : category != null
+                            ? updateCategory
+                            : isPublish != null
+                                ? publishPost
+                                : getPostData);
     log(response.data.toString());
     return postDataFromJson(response.toString());
     // return response.data['response']['data']["_id"];
+  }
+
+  static Future deletePost(String? postId) async {
+    dio!.options.headers["language"] = "1";
+    print("lll");
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response =
+        await dio!.delete(ApiUrl.deletePost, data: {"postId": postId});
+    print(response.data.toString());
   }
 
   // static Fut

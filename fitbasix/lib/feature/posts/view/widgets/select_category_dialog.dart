@@ -3,6 +3,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -83,12 +84,21 @@ class SelectCategoryDialog extends StatelessWidget {
                                   index < category.length;
                                   index++)
                                 GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
                                     _postController.selectedCategory.value =
                                         category[index];
+                                    _postController.postData.value =
+                                        await CreatePostService.createPost(
+                                            category: _postController
+                                                .selectedCategory
+                                                .value
+                                                .serialId);
                                     Navigator.pop(context);
                                   },
                                   child: Container(
+                                    margin: EdgeInsets.only(
+                                        bottom:
+                                            10 * SizeConfig.heightMultiplier!),
                                     height: 28 * SizeConfig.heightMultiplier!,
                                     decoration: BoxDecoration(
                                         border: Border.all(

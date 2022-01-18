@@ -1,3 +1,5 @@
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/core/universal_widgets/right_tick.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/view/widgets/title_text.dart';
 import 'package:flutter/material.dart';
@@ -24,20 +26,9 @@ class SelectLocationScreen extends StatelessWidget {
         backgroundColor: kPureWhite,
         elevation: 0,
         leading: IconButton(
-            onPressed: () async {
-              if (_postController.selectedLocation.value.length == 0) {
-                Navigator.pop(context);
-              } else {
-                _postController.postData.value =
-                    await CreatePostService.createPost(
-                        postId: _postController.postId.value,
-                        placeName: [
-                          _postController.selectedLocationData.value.placeName!
-                        ],
-                        placeId:
-                            _postController.selectedLocationData.value.placeId);
-                Navigator.pop(context);
-              }
+            onPressed: () {
+              Navigator.pop(context);
+              _postController.isLoading.value == false;
             },
             icon: SvgPicture.asset(
               ImagePath.backIcon,
@@ -52,6 +43,29 @@ class SelectLocationScreen extends StatelessWidget {
                 .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
           ),
         ),
+        actions: [
+          Obx(() => _postController.selectedLocation.value == ''
+              ? Container()
+              : _postController.isLoading.value == false
+                  ? RightTick(onTap: () async {
+                      _postController.isLoading.value = true;
+                      _postController.postData.value =
+                          await CreatePostService.createPost(
+                              postId: _postController.postId.value,
+                              placeName: [
+                                _postController
+                                    .selectedLocationData.value.placeName!
+                              ],
+                              placeId: _postController
+                                  .selectedLocationData.value.placeId);
+                      Navigator.pop(context);
+                      _postController.isLoading.value = false;
+                    })
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: 16 * SizeConfig.widthMultiplier!),
+                      child: CustomizedCircularProgress()))
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

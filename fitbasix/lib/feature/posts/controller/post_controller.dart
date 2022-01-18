@@ -56,6 +56,7 @@ class PostController extends GetxController {
   Rx<Category> selectedCategory = Category().obs;
   Rx<MediaUrl> uploadedFiles = MediaUrl().obs;
   Rx<PostData> postData = PostData().obs;
+  RxBool isLoading = RxBool(false);
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -93,7 +94,8 @@ class PostController extends GetxController {
     );
     File file = File(fileName!);
     return file;
-}
+  }
+
   Future getPostData() async {
     postData.value = await CreatePostService.createPost(postId: postId.value);
   }
@@ -158,8 +160,22 @@ class PostController extends GetxController {
     }
   }
 
+  int? getUrlType(String url) {
+    Uri uri = Uri.parse(url);
+    String typeString = uri.path.substring(uri.path.length - 3).toLowerCase();
+    if (typeString == "jpg") {
+      return 0;
+    }
+    if (typeString == "mp4") {
+      return 1;
+    } else {
+      return null;
+    }
+  }
+
   @override
   Future<void> onInit() async {
+    assets.value = await fetchAssets(presentPage: currentPage.value);
     super.onInit();
   }
 }
