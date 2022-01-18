@@ -397,7 +397,9 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                         .response!
                                         .data!
                                         .trainers![index]
-                                        .strength![0],
+                                        .strength![0]
+                                        .name
+                                        .toString(),
                                     strengthCount: _trainerController
                                             .allTrainer
                                             .value

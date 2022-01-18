@@ -104,7 +104,7 @@ class Trainer {
   final String? id;
   final String? about;
   final List<dynamic>? trainerType;
-  final List<String>? strength;
+  final List<StrengthElement>? strength;
   final User? user;
   final int? numOfCertificates;
   final List<Strength>? tags;
@@ -116,8 +116,8 @@ class Trainer {
   final List<Certificate>? certificates;
 
   factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
-        followers: json["followers"],
-        following: json["following"],
+        followers: json["followers"].toString(),
+        following: json["following"].toString(),
         trainees: json["trainees"],
         slotsFeft: json["slotsLeft"],
         totalRating: json["totalRating"],
@@ -127,8 +127,9 @@ class Trainer {
         trainerType: List<dynamic>.from(json["trainerType"] == null
             ? []
             : json["trainerType"].map((x) => x)),
-        strength: List<String>.from(json["strength"].map((x) => x)),
-        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        strength: List<StrengthElement>.from(
+            json["strengths"].map((x) => StrengthElement.fromJson(x))),
+        user: json["users"] == null ? null : User.fromJson(json["users"]),
         numOfCertificates: json["numOfCertificates"],
         // tags:
         //     List<Strength>.from(json["strength"].map((x) => Strength.fromJson(x))),
@@ -143,8 +144,7 @@ class Trainer {
         isNutritionConsultant: json["isNutritionConsultant"],
         certificates: List<Certificate>.from(json["certificates"] == null
             ? []
-            : json["certificates"]['certificates']
-                .map((x) => Certificate.fromJson(x))),
+            : json["certificates"][0].map((x) => Certificate.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -235,4 +235,29 @@ class EnumValues<T> {
     }
     return reverseMap;
   }
+}
+
+class StrengthElement {
+  StrengthElement({
+    this.id,
+    this.name,
+    this.serialId,
+  });
+
+  String? id;
+  String? name;
+  int? serialId;
+
+  factory StrengthElement.fromJson(Map<String, dynamic> json) =>
+      StrengthElement(
+        id: json["_id"],
+        name: json["name"],
+        serialId: json["serialId"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+        "serialId": serialId,
+      };
 }
