@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/model/location_model.dart';
+import 'package:fitbasix/feature/posts/model/media_response_model.dart';
+import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
 import 'package:fitbasix/feature/posts/model/user_profile_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
@@ -52,6 +54,8 @@ class PostController extends GetxController {
   Rx<LocationModel> selectedLocationData = Rx(LocationModel());
   RxList<Category> categories = RxList<Category>([]);
   Rx<Category> selectedCategory = Category().obs;
+  Rx<MediaUrl> uploadedFiles = MediaUrl().obs;
+  Rx<PostData> postData = PostData().obs;
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -89,6 +93,9 @@ class PostController extends GetxController {
     );
     File file = File(fileName!);
     return file;
+}
+  Future getPostData() async {
+    postData.value = await CreatePostService.createPost(postId: postId.value);
   }
 
   Future<void> setFolderIndex({required int index}) async {

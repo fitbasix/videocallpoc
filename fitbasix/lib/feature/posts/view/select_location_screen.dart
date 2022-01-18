@@ -24,13 +24,18 @@ class SelectLocationScreen extends StatelessWidget {
         backgroundColor: kPureWhite,
         elevation: 0,
         leading: IconButton(
-            onPressed: () {
+            onPressed: () async {
               if (_postController.selectedLocation.value.length == 0) {
                 Navigator.pop(context);
               } else {
-                CreatePostService.createPost(placeName: [
-                  _postController.selectedLocationData.value.placeName!
-                ], placeId: _postController.selectedLocationData.value.placeId);
+                _postController.postData.value =
+                    await CreatePostService.createPost(
+                        postId: _postController.postId.value,
+                        placeName: [
+                          _postController.selectedLocationData.value.placeName!
+                        ],
+                        placeId:
+                            _postController.selectedLocationData.value.placeId);
                 Navigator.pop(context);
               }
             },

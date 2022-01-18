@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:fitbasix/core/api_service/dio_service.dart';
@@ -5,6 +6,7 @@ import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
+import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/posts/model/user_profile_model.dart';
 
 class CreatePostService {
@@ -18,23 +20,43 @@ class CreatePostService {
     return response.data['response']['data']["_id"];
   }
 
-  static Future<void> createPost(
-      {String? postId,
-      String? caption,
-      List<String>? taggedPeople,
-      List<String>? placeName,
-      String? placeId,
-      bool? isPublish}) async {
+  static Future<PostData> createPost({
+    String? postId,
+    String? caption,
+    List<String>? taggedPeople,
+    List<String>? placeName,
+    String? placeId,
+    List<String>? files,
+    bool? isPublish,
+  }) async {
+    var access = await LogInService.getAccessToken();
+    print(access);
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.createPost, data: {
+
+    Map updateCaption = {"postId": postId, "caption": caption};
+    Map updateFiles = {"postId": postId, "files": files};
+    Map updateLocation = {
       "postId": postId,
-      "caption": caption,
-      "people": taggedPeople,
-      "location": {"placeName": placeName, "placeId": placeId},
-      "isPublished": isPublish
-    });
-    print(response.data.toString());
+      "location": {"placeName": placeName, "placeId": placeId}
+    };
+    Map updatePeople = {"postId": postId, "people": taggedPeople};
+    Map publishPost = {"postId": postId, "isPublished": isPublish};
+    Map getPostData = {"postId": postId};
+    var response = await dio!.post(ApiUrl.createPost,
+        data: caption != null
+            ? updateCaption
+            : files != null
+                ? updateFiles
+                : placeId != null
+                    ? updateLocation
+                    : taggedPeople != null
+                        ? updatePeople
+                        : isPublish != null
+                            ? publishPost
+                            : getPostData);
+    log(response.data.toString());
+    return postDataFromJson(response.toString());
     // return response.data['response']['data']["_id"];
   }
 
