@@ -15,6 +15,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:uuid/uuid.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PostController extends GetxController {
   RxList<AssetEntity> assets = RxList();
@@ -74,6 +76,19 @@ class PostController extends GetxController {
       CategoryModel categoryModel = await CreatePostService.getCategory();
       categories.value = categoryModel.response!.response!.data!;
     }
+  }
+
+  Future<File> genThumbnailFile(String path) async {
+    final fileName = await VideoThumbnail.thumbnailFile(
+      video: path,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.JPEG,
+      maxHeight:
+          100, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+      quality: 75,
+    );
+    File file = File(fileName!);
+    return file;
   }
 
   Future<void> setFolderIndex({required int index}) async {

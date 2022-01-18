@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:fitbasix/core/universal_widgets/right_tick.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/posts/view/cached_network_image.dart';
+import 'package:fitbasix/feature/posts/view/camera_screen.dart';
 import 'package:fitbasix/feature/posts/view/widgets/custom_dropDown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class SelectMediaScreen extends StatefulWidget {
   SelectMediaScreen({Key? key}) : super(key: key);
@@ -103,14 +105,55 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                     );
                   },
                 )
-              : IconButton(
-                  onPressed: () async {
-                    await _postController.pickImage();
-                  },
-                  icon: Icon(
-                    Icons.camera_alt,
-                    color: kPureBlack,
-                  )))
+              : Row(
+                  children: [
+                    IconButton(
+                        onPressed: () async {
+                          final ImagePicker picker = ImagePicker();
+                          XFile? file = await picker.pickImage(
+                              source: ImageSource.camera);
+                          if (file != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CameraViewScreen(
+                                        imageFile: File(file.path),
+                                      )),
+                            );
+                          }
+                        },
+                        icon: Icon(
+                          Icons.camera_alt,
+                          color: kPureBlack,
+                        )),
+                    GestureDetector(
+                      onTap: () async {
+                        final ImagePicker picker = ImagePicker();
+                        XFile? file =
+                            await picker.pickVideo(source: ImageSource.camera);
+                        if (file != null) {
+                          final fileName =
+                              await _postController.genThumbnailFile(file.path);
+                          print(fileName);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CameraViewScreen(
+                                      imageFile: fileName,
+                                      isVideo: true,
+                                    )),
+                          );
+                        }
+                      },
+                      child: SvgPicture.asset(
+                        ImagePath.videoIcon,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 17.66 * SizeConfig.widthMultiplier!,
+                    )
+                  ],
+                ))
         ],
       ),
       body: SafeArea(
@@ -233,7 +276,7 @@ class AssetThumbnail extends StatelessWidget {
                       child: Icon(
                         Icons.play_arrow,
                         color: kPureWhite,
-                        size: 36,
+                        size: 32 * SizeConfig.heightMultiplier!,
                       ),
                     ),
                   isSelected
