@@ -47,7 +47,7 @@ class TrainerServices {
           ? _trainerController.trainerType.value
           : trainerType,
       "interests": interests == null
-          ? _trainerController.SelectedInterestIndex.value
+          ? [_trainerController.SelectedInterestIndex.value]
           : [interests]
     });
     print(response.toString());
@@ -58,7 +58,6 @@ class TrainerServices {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getTrainers, data: {});
-    print("kkk" + response.toString());
     return getTrainerModelFromJson(response.toString());
   }
 
@@ -68,7 +67,6 @@ class TrainerServices {
     var response = await dio!.post(ApiUrl.getAllTrainer, data: {
       "trainerType": [1]
     });
-    print("kkk" + response.toString());
     return allTrainerFromJson(response.toString());
   }
 

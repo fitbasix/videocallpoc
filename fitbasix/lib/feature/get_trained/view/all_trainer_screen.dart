@@ -55,7 +55,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
               _trainerController.allTrainer.value.response!.data!.trainers!
                   .add(trainer.response!.data!.trainers![i]);
             }
-            return;
+            //return;
           } else {
             for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
               _trainerController.allTrainer.value.response!.data!.trainers!
@@ -300,7 +300,11 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                             .filterIsLoading.value = false;
                                       },
                                       isSelected: _trainerController
-                                          .interestSelection[index],
+                                                  .SelectedInterestIndex
+                                                  .value ==
+                                              index
+                                          ? true
+                                          : false,
                                       interest: _trainerController
                                           .interests
                                           .value
