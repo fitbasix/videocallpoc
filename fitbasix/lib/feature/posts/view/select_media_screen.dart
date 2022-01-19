@@ -138,6 +138,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                           XFile? file = await picker.pickImage(
                               source: ImageSource.camera);
                           if (file != null) {
+                            _postController.imageFile.value = File(file.path);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -157,6 +158,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         XFile? file =
                             await picker.pickVideo(source: ImageSource.camera);
                         if (file != null) {
+                          _postController.imageFile.value = File(file.path);
                           final fileName =
                               await _postController.genThumbnailFile(file.path);
                           print(fileName);

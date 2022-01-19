@@ -105,6 +105,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                           XFile? file = await picker.pickVideo(
                               source: ImageSource.camera);
                           if (file != null) {
+                            _postController.imageFile.value = File(file.path);
                             final fileName = await _postController
                                 .genThumbnailFile(file.path);
                             setState(() {
@@ -115,6 +116,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                           XFile? file = await picker.pickImage(
                               source: ImageSource.camera);
                           if (file != null) {
+                            _postController.imageFile.value = File(file.path);
                             setState(() {
                               widget.imageFile = File(file.path);
                             });
@@ -145,7 +147,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                       onTap: () async {
                         _postController.uploadedFiles.value =
                             await PostService.uploadMedia(
-                          [widget.imageFile!],
+                          [_postController.imageFile.value],
                         );
 
                         if (_postController.uploadedFiles.value.code == 0) {

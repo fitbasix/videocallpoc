@@ -90,7 +90,7 @@ class PostController extends GetxController {
       imageFormat: ImageFormat.JPEG,
       maxHeight:
           100, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
-      quality: 75,
+      quality: 100,
     );
     File file = File(fileName!);
     return file;

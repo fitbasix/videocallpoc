@@ -89,6 +89,8 @@ class SelectCategoryDialog extends StatelessWidget {
                                         category[index];
                                     _postController.postData.value =
                                         await CreatePostService.createPost(
+                                            postId:
+                                                _postController.postId.value,
                                             category: _postController
                                                 .selectedCategory
                                                 .value

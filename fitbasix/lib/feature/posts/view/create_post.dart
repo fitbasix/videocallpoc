@@ -441,17 +441,86 @@ class CreatePostScreen extends StatelessWidget {
                                                           .data!
                                                           .files![0]) ==
                                                   0
-                                              ? CachedNetworkImage(
-                                                  imageUrl: _postController
-                                                      .postData
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .files![0],
-                                                  height: 336 *
-                                                      SizeConfig
-                                                          .heightMultiplier!,
-                                                  fit: BoxFit.fitWidth,
+                                              ? Stack(
+                                                  children: [
+                                                    CachedNetworkImage(
+                                                      imageUrl: _postController
+                                                          .postData
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .files![0],
+                                                      height: 336 *
+                                                          SizeConfig
+                                                              .heightMultiplier!,
+                                                      width: double.infinity,
+                                                      fit: BoxFit.fitWidth,
+                                                    ),
+                                                    Positioned(
+                                                        top: 10,
+                                                        right: 10,
+                                                        child: GestureDetector(
+                                                          onTap: () async {
+                                                            if (_postController
+                                                                    .selectedMediaFiles
+                                                                    .length !=
+                                                                0) {
+                                                              _postController
+                                                                  .selectedMediaAsset
+                                                                  .removeAt(0);
+                                                              _postController
+                                                                  .selectedMediaFiles
+                                                                  .removeAt(0);
+                                                              _postController
+                                                                      .uploadedFiles
+                                                                      .value =
+                                                                  await PostService
+                                                                      .uploadMedia(
+                                                                _postController
+                                                                    .selectedMediaFiles,
+                                                              );
+                                                            } else {
+                                                              _postController
+                                                                      .uploadedFiles
+                                                                      .value =
+                                                                  await PostService
+                                                                      .uploadMedia(
+                                                                [],
+                                                              );
+                                                            }
+                                                            if (_postController
+                                                                    .uploadedFiles
+                                                                    .value
+                                                                    .code ==
+                                                                0) {
+                                                              _postController
+                                                                      .postData
+                                                                      .value =
+                                                                  await CreatePostService.createPost(
+                                                                      postId: _postController
+                                                                          .postId
+                                                                          .value,
+                                                                      files: _postController
+                                                                          .uploadedFiles
+                                                                          .value
+                                                                          .response!
+                                                                          .data);
+                                                            }
+                                                          },
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            ImagePath
+                                                                .cancelIcon,
+                                                            height: 24 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!,
+                                                            width: 24 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        ))
+                                                  ],
                                                 )
                                               : FutureBuilder<File?>(
                                                   future: _postController
@@ -463,16 +532,117 @@ class CreatePostScreen extends StatelessWidget {
                                                               .data!
                                                               .files![0]),
                                                   builder: (_, snapshot) {
-                                                    return Image.file(
-                                                      snapshot.data!,
-                                                      fit: BoxFit.contain,
-                                                      height: 120 *
-                                                          SizeConfig
-                                                              .widthMultiplier!,
-                                                      width: 120 *
-                                                          SizeConfig
-                                                              .widthMultiplier!,
-                                                    );
+                                                    final image = snapshot.data;
+                                                    if (image != null)
+                                                      return Stack(
+                                                        children: [
+                                                          Image.file(
+                                                            image,
+                                                            height: 336 *
+                                                                SizeConfig
+                                                                    .heightMultiplier!,
+                                                            width:
+                                                                double.infinity,
+                                                            fit:
+                                                                BoxFit.fitWidth,
+                                                          ),
+                                                          Positioned(
+                                                              top: 10,
+                                                              right: 10,
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap:
+                                                                    () async {
+                                                                  if (_postController
+                                                                          .selectedMediaFiles
+                                                                          .length !=
+                                                                      0) {
+                                                                    _postController
+                                                                        .selectedMediaAsset
+                                                                        .removeAt(
+                                                                            0);
+                                                                    _postController
+                                                                        .selectedMediaFiles
+                                                                        .removeAt(
+                                                                            0);
+                                                                    _postController
+                                                                            .uploadedFiles
+                                                                            .value =
+                                                                        await PostService
+                                                                            .uploadMedia(
+                                                                      _postController
+                                                                          .selectedMediaFiles,
+                                                                    );
+                                                                  } else {
+                                                                    _postController
+                                                                            .uploadedFiles
+                                                                            .value =
+                                                                        await PostService
+                                                                            .uploadMedia(
+                                                                      [],
+                                                                    );
+                                                                  }
+                                                                  if (_postController
+                                                                          .uploadedFiles
+                                                                          .value
+                                                                          .code ==
+                                                                      0) {
+                                                                    _postController.postData.value = await CreatePostService.createPost(
+                                                                        postId: _postController
+                                                                            .postId
+                                                                            .value,
+                                                                        files: _postController
+                                                                            .uploadedFiles
+                                                                            .value
+                                                                            .response!
+                                                                            .data);
+                                                                  }
+                                                                },
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  ImagePath
+                                                                      .cancelIcon,
+                                                                  height: 24 *
+                                                                      SizeConfig
+                                                                          .widthMultiplier!,
+                                                                  width: 24 *
+                                                                      SizeConfig
+                                                                          .widthMultiplier!,
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                ),
+                                                              )),
+                                                          Positioned(
+                                                            top: 336 /
+                                                                    2 *
+                                                                    SizeConfig
+                                                                        .heightMultiplier! -
+                                                                28 *
+                                                                    SizeConfig
+                                                                        .heightMultiplier!,
+                                                            left: Get.width /
+                                                                    2 *
+                                                                    SizeConfig
+                                                                        .widthMultiplier! -
+                                                                60 *
+                                                                    SizeConfig
+                                                                        .widthMultiplier!,
+                                                            child: Center(
+                                                              child: Icon(
+                                                                Icons
+                                                                    .play_arrow,
+                                                                color:
+                                                                    kPureWhite,
+                                                                size: 56 *
+                                                                    SizeConfig
+                                                                        .heightMultiplier!,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      );
+                                                    return Container();
                                                   })
                                         ],
                                       ),
@@ -566,13 +736,18 @@ class CreatePostScreen extends StatelessWidget {
                                                                             GestureDetector(
                                                                           onTap:
                                                                               () async {
-                                                                            _postController.selectedMediaAsset.removeAt(index);
-                                                                            _postController.selectedMediaFiles.removeAt(index);
-
-                                                                            _postController.uploadedFiles.value =
-                                                                                await PostService.uploadMedia(
-                                                                              _postController.selectedMediaFiles,
-                                                                            );
+                                                                            if (_postController.selectedMediaFiles.length !=
+                                                                                0) {
+                                                                              _postController.selectedMediaAsset.removeAt(index);
+                                                                              _postController.selectedMediaFiles.removeAt(index);
+                                                                              _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                _postController.selectedMediaFiles,
+                                                                              );
+                                                                            } else {
+                                                                              _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                [],
+                                                                              );
+                                                                            }
                                                                             if (_postController.uploadedFiles.value.code ==
                                                                                 0) {
                                                                               _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
@@ -602,60 +777,65 @@ class CreatePostScreen extends StatelessWidget {
                                                                       index]),
                                                                   builder: (_,
                                                                       snapshot) {
-                                                                    return Stack(
-                                                                      children: [
-                                                                        Image
-                                                                            .file(
-                                                                          snapshot
-                                                                              .data!,
-                                                                          fit: BoxFit
-                                                                              .fitWidth,
-                                                                          height:
-                                                                              120 * SizeConfig.widthMultiplier!,
-                                                                          width:
-                                                                              120 * SizeConfig.widthMultiplier!,
-                                                                        ),
-                                                                        Positioned(
-                                                                          top:
-                                                                              40,
-                                                                          left:
-                                                                              40,
-                                                                          child:
-                                                                              Icon(
-                                                                            Icons.play_arrow,
-                                                                            color:
-                                                                                kPureWhite,
-                                                                            size:
-                                                                                32 * SizeConfig.heightMultiplier!,
+                                                                    final image =
+                                                                        snapshot
+                                                                            .data;
+                                                                    if (image !=
+                                                                        null)
+                                                                      return Stack(
+                                                                        children: [
+                                                                          Image
+                                                                              .file(
+                                                                            image,
+                                                                            fit:
+                                                                                BoxFit.fitWidth,
+                                                                            height:
+                                                                                120 * SizeConfig.widthMultiplier!,
+                                                                            width:
+                                                                                120 * SizeConfig.widthMultiplier!,
                                                                           ),
-                                                                        ),
-                                                                        Positioned(
+                                                                          Positioned(
                                                                             top:
-                                                                                4,
-                                                                            right:
-                                                                                4,
+                                                                                40,
+                                                                            left:
+                                                                                40,
                                                                             child:
-                                                                                GestureDetector(
-                                                                              onTap: () async {
-                                                                                _postController.selectedMediaAsset.removeAt(index);
-                                                                                _postController.selectedMediaFiles.removeAt(index);
-
-                                                                                _postController.uploadedFiles.value = await PostService.uploadMedia(
-                                                                                  _postController.selectedMediaFiles,
-                                                                                );
-                                                                                if (_postController.uploadedFiles.value.code == 0) {
-                                                                                  _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
-                                                                                }
-                                                                              },
-                                                                              child: SvgPicture.asset(
-                                                                                ImagePath.cancelIcon,
-                                                                                height: 24 * SizeConfig.widthMultiplier!,
-                                                                                width: 24 * SizeConfig.widthMultiplier!,
-                                                                                fit: BoxFit.contain,
-                                                                              ),
-                                                                            ))
-                                                                      ],
-                                                                    );
+                                                                                Icon(
+                                                                              Icons.play_arrow,
+                                                                              color: kPureWhite,
+                                                                              size: 32 * SizeConfig.heightMultiplier!,
+                                                                            ),
+                                                                          ),
+                                                                          Positioned(
+                                                                              top: 4,
+                                                                              right: 4,
+                                                                              child: GestureDetector(
+                                                                                onTap: () async {
+                                                                                  if (_postController.selectedMediaFiles.length != 0) {
+                                                                                    _postController.selectedMediaAsset.removeAt(index);
+                                                                                    _postController.selectedMediaFiles.removeAt(index);
+                                                                                    _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                      _postController.selectedMediaFiles,
+                                                                                    );
+                                                                                  } else {
+                                                                                    _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                      [],
+                                                                                    );
+                                                                                  }
+                                                                                  if (_postController.uploadedFiles.value.code == 0) {
+                                                                                    _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
+                                                                                  }
+                                                                                },
+                                                                                child: SvgPicture.asset(
+                                                                                  ImagePath.cancelIcon,
+                                                                                  height: 24 * SizeConfig.widthMultiplier!,
+                                                                                  width: 24 * SizeConfig.widthMultiplier!,
+                                                                                  fit: BoxFit.contain,
+                                                                                ),
+                                                                              ))
+                                                                        ],
+                                                                      );
+                                                                    return Container();
                                                                   })
 
                                                       // child: CachedNetworkImage(
