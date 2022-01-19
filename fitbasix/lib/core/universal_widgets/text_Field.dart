@@ -11,7 +11,7 @@ class CutomizedTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: 56 * SizeConfig.heightMultiplier!,
+      height: 56,
       width: size.width,
       decoration: BoxDecoration(
         border: Border.all(color: color),
@@ -52,8 +52,7 @@ Widget TextFieldContainer(
             height: 0,
           ),
           contentPadding: EdgeInsets.only(
-              bottom: 10 * SizeConfig.heightMultiplier!,
-              left: 39 * SizeConfig.widthMultiplier!),
+              bottom: 10, left: 39 * SizeConfig.widthMultiplier!),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           border: InputBorder.none,
           hintText: hint,

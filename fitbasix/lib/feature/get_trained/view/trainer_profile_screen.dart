@@ -1,4 +1,5 @@
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,10 @@ class TrainerProfileScreen extends StatelessWidget {
             trainerCoverImage: trainerController
                 .atrainerDetail.value.user!.coverPhoto!
                 .toString(),
-            onFollow: () {},
+            onFollow: () {
+              TrainerServices.followTrainer(
+                  trainerController.atrainerDetail.value.user!.id!);
+            },
             onMessage: () {},
             onEnroll: () {},
             onBack: () {

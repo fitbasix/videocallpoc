@@ -90,4 +90,13 @@ class TrainerServices {
     print(response.toString());
     return interestModelFromJson(response.toString());
   }
+
+  static Future followTrainer(String trainerId) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response =
+        await dio!.post(ApiUrl.doFollow, data: {"followee": trainerId});
+    print(response.toString());
+  }
 }

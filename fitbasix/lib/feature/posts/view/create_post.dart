@@ -18,6 +18,7 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CreatePostScreen extends StatelessWidget {
   CreatePostScreen({Key? key}) : super(key: key);
@@ -86,6 +87,9 @@ class CreatePostScreen extends StatelessWidget {
                               _postController.selectedMediaAsset.clear();
                               _postController.selectedCategory.value =
                                   Category();
+                              _postController.selectedUserData.clear();
+                              _postController.selectedPeopleIndex.clear();
+                              _postController.users.clear();
                             }
                           },
                           child: Text(
@@ -253,6 +257,9 @@ class CreatePostScreen extends StatelessWidget {
                                             .copyWith(
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
                                       ),
                                       Text(
                                         'and'.tr,
@@ -454,7 +461,15 @@ class CreatePostScreen extends StatelessWidget {
                                                           SizeConfig
                                                               .heightMultiplier!,
                                                       width: double.infinity,
-                                                      fit: BoxFit.fitWidth,
+                                                      fit: BoxFit.cover,
+                                                      placeholder: (_, __) =>
+                                                          Center(
+                                                        child: Container(
+                                                            width: 100,
+                                                            height: 100,
+                                                            child:
+                                                                CustomizedCircularProgress()),
+                                                      ),
                                                     ),
                                                     Positioned(
                                                         top: 10,
@@ -727,6 +742,12 @@ class CreatePostScreen extends StatelessWidget {
                                                                               .widthMultiplier!,
                                                                       fit: BoxFit
                                                                           .fitWidth,
+                                                                      placeholder:
+                                                                          (_, __) =>
+                                                                              Center(
+                                                                        child:
+                                                                            CustomizedCircularProgress(),
+                                                                      ),
                                                                     ),
                                                                     Positioned(
                                                                         top: 4,
@@ -912,7 +933,13 @@ class CreatePostScreen extends StatelessWidget {
                           ),
                         )),
                   SizedBox(
-                    height: 34 * SizeConfig.heightMultiplier!,
+                    height: 17 * SizeConfig.heightMultiplier!,
+                  ),
+                  Divider(
+                    height: 0,
+                  ),
+                  SizedBox(
+                    height: 17 * SizeConfig.heightMultiplier!,
                   ),
                   GestureDetector(
                     onTap: () async {
