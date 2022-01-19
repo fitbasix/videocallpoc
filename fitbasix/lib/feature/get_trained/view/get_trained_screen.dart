@@ -58,6 +58,7 @@ class GetTrainedScreen extends StatelessWidget {
                           _trainerController.SelectedInterestIndex.value = 0;
                           _trainerController.trainerType.value = 0;
                           _trainerController.searchedName.value = "";
+                          _trainerController.searchController.text = "";
                           _trainerController.allTrainer.value =
                               await TrainerServices.getAllTrainer();
                           _trainerController.isLoading.value = false;
@@ -239,6 +240,7 @@ class GetTrainedScreen extends StatelessWidget {
                           _trainerController.SelectedInterestIndex.value = 0;
                           _trainerController.searchedName.value = "";
                           _trainerController.trainerType.value = 1;
+                          _trainerController.searchController.text = "";
                           _trainerController.allTrainer.value =
                               await TrainerServices.getFitnessConsultant();
 
@@ -422,6 +424,7 @@ class GetTrainedScreen extends StatelessWidget {
                           _trainerController.SelectedInterestIndex.value = 0;
                           _trainerController.searchedName.value = "";
                           _trainerController.trainerType.value = 2;
+                          _trainerController.searchController.text = "";
                           Navigator.pushNamed(
                               context, RouteName.allTrainerScreen);
                           _trainerController.isLoading.value = true;
