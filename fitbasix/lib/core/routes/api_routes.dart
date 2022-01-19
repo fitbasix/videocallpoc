@@ -1,7 +1,6 @@
 class ApiUrl {
   static String liveBaseURL = 'http://3.131.171.176';
-  // static String liveBaseURL =
-  // 'http://335f-2405-201-3-4179-91a2-97a1-c334-959b.ngrok.io';
+  // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
@@ -18,6 +17,7 @@ class ApiUrl {
   static String uploadMedia = liveBaseURL + '/api/posts/uploadMedia';
   static String getUserByName = liveBaseURL + '/api/auth/getAllUsers';
   static String getUserProfile = liveBaseURL + '/api/auth';
+  static String deletePost = liveBaseURL + '/api/posts/delete';
 
   ///create post
   static String createPost = liveBaseURL + '/api/posts/create';

@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/right_tick.dart';
 import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
@@ -81,6 +83,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
         elevation: 0,
         leading: IconButton(
             onPressed: () {
+              _postController.isLoading.value == false;
               Navigator.pop(context);
             },
             icon: SvgPicture.asset(
@@ -98,24 +101,35 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
         ),
         actions: [
           Obx(() => _postController.selectedMediaAsset.length > 0
-              ? RightTick(
-                  onTap: () async {
-                    await _postController
-                        .getFile(_postController.selectedMediaAsset);
-                    _postController.uploadedFiles.value =
-                        await PostService.uploadMedia(
-                      _postController.selectedMediaFiles,
-                    );
-                    if (_postController.uploadedFiles.value.code == 0) {
-                      _postController.postData.value =
-                          await CreatePostService.createPost(
-                              postId: _postController.postId.value,
-                              files: _postController
-                                  .uploadedFiles.value.response!.data);
-                      Navigator.pop(context);
-                    }
-                  },
-                )
+              ? _postController.isLoading.value == false
+                  ? RightTick(
+                      onTap: () async {
+                        await _postController
+                            .getFile(_postController.selectedMediaAsset);
+                        _postController.isLoading.value = true;
+                        _postController.uploadedFiles.value =
+                            await PostService.uploadMedia(
+                          _postController.selectedMediaFiles,
+                        );
+                        if (_postController.uploadedFiles.value.code == 0) {
+                          _postController.postData.value =
+                              await CreatePostService.createPost(
+                                  postId: _postController.postId.value,
+                                  files: _postController
+                                      .uploadedFiles.value.response!.data);
+                          Navigator.pop(context);
+                        }
+                        log(_postController
+                            .postData.value.response!.data!.files!.length
+                            .toString());
+                        _postController.isLoading.value = false;
+                      },
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: 16 * SizeConfig.widthMultiplier!),
+                      child: CustomizedCircularProgress(),
+                    )
               : Row(
                   children: [
                     IconButton(
@@ -124,6 +138,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                           XFile? file = await picker.pickImage(
                               source: ImageSource.camera);
                           if (file != null) {
+                            _postController.imageFile.value = File(file.path);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -143,6 +158,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         XFile? file =
                             await picker.pickVideo(source: ImageSource.camera);
                         if (file != null) {
+                          _postController.imageFile.value = File(file.path);
                           final fileName =
                               await _postController.genThumbnailFile(file.path);
                           print(fileName);
@@ -165,7 +181,6 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                     )
                   ],
                 ))
-
         ],
       ),
       body: SafeArea(

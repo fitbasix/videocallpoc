@@ -53,20 +53,20 @@ class Response {
 }
 
 class Data {
-  Data({
-    this.location,
-    this.id,
-    this.v,
-    this.createdAt,
-    this.files,
-    this.isInappropriate,
-    this.isPublished,
-    this.people,
-    this.updatedAt,
-    this.userId,
-    this.caption,
-    this.dataId,
-  });
+  Data(
+      {this.location,
+      this.id,
+      this.v,
+      this.createdAt,
+      this.files,
+      this.isInappropriate,
+      this.isPublished,
+      this.people,
+      this.updatedAt,
+      this.userId,
+      this.caption,
+      this.dataId,
+      this.category});
 
   final Location? location;
   final String? id;
@@ -75,11 +75,12 @@ class Data {
   final List<String>? files;
   final bool? isInappropriate;
   final bool? isPublished;
-  final List<String>? people;
+  final List<People>? people;
   final DateTime? updatedAt;
   final String? userId;
   final String? caption;
   final String? dataId;
+  final int? category;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         location: Location.fromJson(json["location"]),
@@ -89,7 +90,9 @@ class Data {
         files: List<String>.from(json["files"].map((x) => x)),
         isInappropriate: json["isInappropriate"],
         isPublished: json["isPublished"],
-        people: List<String>.from(json["people"].map((x) => x)),
+        category: json["category"],
+        people:
+            List<People>.from(json['people'].map((x) => People.fromJson(x))),
         updatedAt: DateTime.parse(json["updatedAt"]),
         userId: json["userId"],
         caption: json["caption"],
@@ -109,6 +112,30 @@ class Data {
         "userId": userId,
         "caption": caption,
         "id": dataId,
+      };
+}
+
+class People {
+  People({
+    this.id,
+    this.name,
+    this.personId,
+  });
+
+  final String? id;
+  final String? name;
+  final String? personId;
+
+  factory People.fromJson(Map<String, dynamic> json) => People(
+        id: json["_id"],
+        name: json["name"],
+        personId: json["id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+        "id": personId,
       };
 }
 

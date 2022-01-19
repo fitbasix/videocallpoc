@@ -1,12 +1,19 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class DiscardPostBottomSheet extends StatelessWidget {
-  const DiscardPostBottomSheet({
+  DiscardPostBottomSheet({
     Key? key,
   }) : super(key: key);
+
+  final PostController _postController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,9 @@ class DiscardPostBottomSheet extends StatelessWidget {
             height: 31 * SizeConfig.heightMultiplier!,
           ),
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: const Icon(Icons.create),
             label: Text(
               'continue_editing'.tr,
@@ -46,22 +55,28 @@ class DiscardPostBottomSheet extends StatelessWidget {
                   .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
             ),
             style: TextButton.styleFrom(
+                primary: lightBlack,
                 minimumSize: Size.zero,
                 padding: EdgeInsets.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap),
           ),
           SizedBox(
-            height: 20 * SizeConfig.heightMultiplier!,
+            height: 34 * SizeConfig.heightMultiplier!,
           ),
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () async {
+              await CreatePostService.deletePost(_postController.postId.value);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, RouteName.homePage, (route) => false);
+            },
             icon: const Icon(Icons.delete_outline),
             label: Text(
               'discard_post'.tr,
-              style: AppTextStyle.boldBlackText
-                  .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+              style: AppTextStyle.boldBlackText.copyWith(
+                  fontSize: 14 * SizeConfig.textMultiplier!, color: kPink),
             ),
             style: TextButton.styleFrom(
+                primary: kPink,
                 minimumSize: Size.zero,
                 padding: EdgeInsets.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap),
