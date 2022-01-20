@@ -113,7 +113,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                           XFile? file = await picker.pickVideo(
                               source: ImageSource.camera);
                           if (file != null) {
-                            _postController.imageFile.value = File(file.path);
+                            _postController.imageFile = File(file.path);
                             final fileName = await _postController
                                 .genThumbnailFile(file.path);
                             setState(() {
@@ -124,7 +124,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                           XFile? file = await picker.pickImage(
                               source: ImageSource.camera);
                           if (file != null) {
-                            _postController.imageFile.value = File(file.path);
+                            _postController.imageFile = File(file.path);
                             setState(() {
                               widget.imageFile = File(file.path);
                             });
@@ -154,9 +154,26 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                     child: GestureDetector(
                       onTap: () async {
                         _postController.isLoading.value = true;
+
+                        // final List<File> selectedImage = [];
+                        if (_postController.imageFile != null) {
+                          print('inside');
+                          _postController.selectedFiles
+                              .add(_postController.imageFile!);
+                        }
+                        // if (_postController.selectedMediaFiles.length != 0)
+                        //   for (var item in _postController.selectedMediaFiles) {
+                        //     _postController.selectedFiles.add(item);
+                        //   }
+
+                        print(_postController.selectedFiles.length);
+                        // selectedImage.addAllIf(
+                        //     _postController.selectedMediaFiles.length != 0,
+                        //     _postController.selectedMediaFiles);
+                        _postController.imageFile = null;
                         _postController.uploadedFiles.value =
                             await PostService.uploadMedia(
-                          [_postController.imageFile.value],
+                          _postController.selectedFiles,
                         );
 
                         _postController.isLoading.value = false;

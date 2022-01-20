@@ -9,6 +9,7 @@ import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/posts/view/widgets/discard_post_bottom_sheet.dart';
 import 'package:fitbasix/feature/posts/view/widgets/select_category_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -451,48 +452,52 @@ class CreatePostScreen extends StatelessWidget {
                                               ? Stack(
                                                   children: [
                                                     CachedNetworkImage(
-                                                      imageUrl: _postController
-                                                          .postData
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .files![0],
-                                                      height: 336 *
-                                                          SizeConfig
-                                                              .heightMultiplier!,
-                                                      width: double.infinity,
-                                                      fit: BoxFit.cover,
-                                                      placeholder: (_, __) =>
-                                                          Center(
-                                                        child: Container(
-                                                            width: 100,
-                                                            height: 100,
-                                                            child:
-                                                                CustomizedCircularProgress()),
-                                                      ),
-                                                    ),
+                                                        imageUrl:
+                                                            _postController
+                                                                .postData
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .files![0],
+                                                        height: 336 *
+                                                            SizeConfig
+                                                                .heightMultiplier!,
+                                                        width: double.infinity,
+                                                        fit: BoxFit.cover,
+                                                        placeholder: (_, __) =>
+                                                            AspectRatio(
+                                                              aspectRatio: 1.6,
+                                                              child: BlurHash(
+                                                                hash:
+                                                                    'L6Pj0^i_.AyE_3t7t7R**0o#DgR4',
+                                                                image: _postController
+                                                                    .postData
+                                                                    .value
+                                                                    .response!
+                                                                    .data!
+                                                                    .files![0],
+                                                              ),
+                                                            )),
                                                     Positioned(
                                                         top: 10,
                                                         right: 10,
                                                         child: GestureDetector(
                                                           onTap: () async {
                                                             if (_postController
-                                                                    .selectedMediaFiles
+                                                                    .selectedFiles
                                                                     .length !=
                                                                 0) {
                                                               _postController
-                                                                  .selectedMediaAsset
+                                                                  .selectedFiles
                                                                   .removeAt(0);
-                                                              _postController
-                                                                  .selectedMediaFiles
-                                                                  .removeAt(0);
+
                                                               _postController
                                                                       .uploadedFiles
                                                                       .value =
                                                                   await PostService
                                                                       .uploadMedia(
                                                                 _postController
-                                                                    .selectedMediaFiles,
+                                                                    .selectedFiles,
                                                               );
                                                             } else {
                                                               _postController
@@ -569,24 +574,21 @@ class CreatePostScreen extends StatelessWidget {
                                                                 onTap:
                                                                     () async {
                                                                   if (_postController
-                                                                          .selectedMediaFiles
+                                                                          .selectedFiles
                                                                           .length !=
                                                                       0) {
                                                                     _postController
-                                                                        .selectedMediaAsset
+                                                                        .selectedFiles
                                                                         .removeAt(
                                                                             0);
-                                                                    _postController
-                                                                        .selectedMediaFiles
-                                                                        .removeAt(
-                                                                            0);
+
                                                                     _postController
                                                                             .uploadedFiles
                                                                             .value =
                                                                         await PostService
                                                                             .uploadMedia(
                                                                       _postController
-                                                                          .selectedMediaFiles,
+                                                                          .selectedFiles,
                                                                     );
                                                                   } else {
                                                                     _postController
@@ -744,9 +746,20 @@ class CreatePostScreen extends StatelessWidget {
                                                                           .fitWidth,
                                                                       placeholder:
                                                                           (_, __) =>
-                                                                              Center(
+                                                                              AspectRatio(
+                                                                        aspectRatio:
+                                                                            1.6,
                                                                         child:
-                                                                            CustomizedCircularProgress(),
+                                                                            BlurHash(
+                                                                          hash:
+                                                                              'L6Pj0^i_.AyE_3t7t7R**0o#DgR4',
+                                                                          image: _postController
+                                                                              .postData
+                                                                              .value
+                                                                              .response!
+                                                                              .data!
+                                                                              .files![0],
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                     Positioned(
@@ -757,12 +770,12 @@ class CreatePostScreen extends StatelessWidget {
                                                                             GestureDetector(
                                                                           onTap:
                                                                               () async {
-                                                                            if (_postController.selectedMediaFiles.length !=
+                                                                            if (_postController.selectedFiles.length !=
                                                                                 0) {
-                                                                              _postController.selectedMediaAsset.removeAt(index);
-                                                                              _postController.selectedMediaFiles.removeAt(index);
+                                                                              _postController.selectedFiles.removeAt(index);
+                                                                              // _postController.selectedFiles.removeAt(index);
                                                                               _postController.uploadedFiles.value = await PostService.uploadMedia(
-                                                                                _postController.selectedMediaFiles,
+                                                                                _postController.selectedFiles,
                                                                               );
                                                                             } else {
                                                                               _postController.uploadedFiles.value = await PostService.uploadMedia(
@@ -832,11 +845,11 @@ class CreatePostScreen extends StatelessWidget {
                                                                               right: 4,
                                                                               child: GestureDetector(
                                                                                 onTap: () async {
-                                                                                  if (_postController.selectedMediaFiles.length != 0) {
-                                                                                    _postController.selectedMediaAsset.removeAt(index);
-                                                                                    _postController.selectedMediaFiles.removeAt(index);
+                                                                                  if (_postController.selectedFiles.length != 0) {
+                                                                                    _postController.selectedFiles.removeAt(index);
+                                                                                    // _postController.selectedFiles.removeAt(index);
                                                                                     _postController.uploadedFiles.value = await PostService.uploadMedia(
-                                                                                      _postController.selectedMediaFiles,
+                                                                                      _postController.selectedFiles,
                                                                                     );
                                                                                   } else {
                                                                                     _postController.uploadedFiles.value = await PostService.uploadMedia(

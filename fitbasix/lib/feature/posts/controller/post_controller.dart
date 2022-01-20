@@ -46,7 +46,7 @@ class PostController extends GetxController {
   final TextEditingController postTextController = TextEditingController();
   RxString postText = RxString('');
   final ImagePicker _picker = ImagePicker();
-  Rx<File> imageFile = File('').obs;
+  File? imageFile;
   Rx<File> videoFile = File('').obs;
   RxList<File> selectedMediaFiles = RxList<File>([]);
   RxString postId = "".obs;
@@ -55,8 +55,10 @@ class PostController extends GetxController {
   RxList<Category> categories = RxList<Category>([]);
   Rx<Category> selectedCategory = Category().obs;
   Rx<MediaUrl> uploadedFiles = MediaUrl().obs;
+  RxList<String> uploadUrls = RxList<String>([]);
   Rx<PostData> postData = PostData().obs;
   RxBool isLoading = RxBool(false);
+  RxList<File> selectedFiles = RxList<File>([]);
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -141,7 +143,7 @@ class PostController extends GetxController {
 
       final imageTemporary = File(image.path);
 
-      imageFile.value = imageTemporary;
+      imageFile = imageTemporary;
     } on PlatformException catch (e) {
       log('failed to pick a image');
     }

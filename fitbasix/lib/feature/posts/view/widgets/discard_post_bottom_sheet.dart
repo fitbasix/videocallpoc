@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
@@ -78,6 +80,8 @@ class DiscardPostBottomSheet extends StatelessWidget {
               _postController.selectedUserData.clear();
               _postController.selectedPeopleIndex.clear();
               _postController.users.clear();
+              _postController.imageFile = null;
+              _postController.isLoading.value = false;
             },
             icon: const Icon(Icons.delete_outline),
             label: Text(
