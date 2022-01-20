@@ -91,6 +91,8 @@ class CreatePostScreen extends StatelessWidget {
                               _postController.selectedUserData.clear();
                               _postController.selectedPeopleIndex.clear();
                               _postController.users.clear();
+                              _postController.imageFile = null;
+                              _postController.selectedFiles.clear();
                             }
                           },
                           child: Text(
@@ -470,12 +472,6 @@ class CreatePostScreen extends StatelessWidget {
                                                               child: BlurHash(
                                                                 hash:
                                                                     'L6Pj0^i_.AyE_3t7t7R**0o#DgR4',
-                                                                image: _postController
-                                                                    .postData
-                                                                    .value
-                                                                    .response!
-                                                                    .data!
-                                                                    .files![0],
                                                               ),
                                                             )),
                                                     Positioned(
@@ -753,12 +749,6 @@ class CreatePostScreen extends StatelessWidget {
                                                                             BlurHash(
                                                                           hash:
                                                                               'L6Pj0^i_.AyE_3t7t7R**0o#DgR4',
-                                                                          image: _postController
-                                                                              .postData
-                                                                              .value
-                                                                              .response!
-                                                                              .data!
-                                                                              .files![0],
                                                                         ),
                                                                       ),
                                                                     ),

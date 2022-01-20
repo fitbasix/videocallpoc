@@ -82,6 +82,7 @@ class DiscardPostBottomSheet extends StatelessWidget {
               _postController.users.clear();
               _postController.imageFile = null;
               _postController.isLoading.value = false;
+              _postController.selectedFiles.clear();
             },
             icon: const Icon(Icons.delete_outline),
             label: Text(
