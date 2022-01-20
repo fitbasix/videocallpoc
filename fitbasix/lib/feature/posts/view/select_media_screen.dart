@@ -107,10 +107,21 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         await _postController
                             .getFile(_postController.selectedMediaAsset);
                         _postController.isLoading.value = true;
+                        // print('before');
+                        // if (_postController.imageFile != null) {
+                        //   _postController.selectedMediaFiles.addIf(
+                        //       _postController.imageFile != null,
+                        //       _postController.imageFile!);
+                        // }
+                        _postController.selectedFiles
+                            .addAll(_postController.selectedMediaFiles);
+                        print('after');
                         _postController.uploadedFiles.value =
                             await PostService.uploadMedia(
-                          _postController.selectedMediaFiles,
+                          _postController.selectedFiles,
                         );
+                        // _postController.uploadUrls.value =
+                        //     _postController.uploadedFiles.value.response!.data!;
                         if (_postController.uploadedFiles.value.code == 0) {
                           _postController.postData.value =
                               await CreatePostService.createPost(
@@ -122,6 +133,9 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         log(_postController
                             .postData.value.response!.data!.files!.length
                             .toString());
+
+                        _postController.selectedMediaFiles.clear();
+                        _postController.selectedMediaAsset.clear();
                         _postController.isLoading.value = false;
                       },
                     )
@@ -138,7 +152,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                           XFile? file = await picker.pickImage(
                               source: ImageSource.camera);
                           if (file != null) {
-                            _postController.imageFile.value = File(file.path);
+                            _postController.imageFile = File(file.path);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -158,7 +172,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         XFile? file =
                             await picker.pickVideo(source: ImageSource.camera);
                         if (file != null) {
-                          _postController.imageFile.value = File(file.path);
+                          _postController.imageFile = File(file.path);
                           final fileName =
                               await _postController.genThumbnailFile(file.path);
                           print(fileName);
