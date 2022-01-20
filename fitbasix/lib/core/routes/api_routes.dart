@@ -18,6 +18,7 @@ class ApiUrl {
   static String getUserByName = liveBaseURL + '/api/auth/getAllUsers';
   static String getUserProfile = liveBaseURL + '/api/auth';
   static String deletePost = liveBaseURL + '/api/posts/delete';
+  static String doFollow = liveBaseURL + '/api/follow/doFollow';
 
   ///create post
   static String createPost = liveBaseURL + '/api/posts/create';

@@ -6,6 +6,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
@@ -76,7 +77,14 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                         ),
                       ),
                     )
-                  : Container()
+                  : Container(),
+              Obx(() => _postController.isLoading.value
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                          top: 170 * SizeConfig.heightMultiplier!),
+                      child: Center(child: CustomizedCircularProgress()),
+                    )
+                  : Container())
             ],
           ),
         ],
@@ -145,10 +153,13 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+                        _postController.isLoading.value = true;
                         _postController.uploadedFiles.value =
                             await PostService.uploadMedia(
                           [_postController.imageFile.value],
                         );
+
+                        _postController.isLoading.value = false;
 
                         if (_postController.uploadedFiles.value.code == 0) {
                           _postController.postData.value =
@@ -158,6 +169,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                                       .uploadedFiles.value.response!.data);
                           Navigator.pushNamed(context, RouteName.createPost);
                         }
+                        _postController.isLoading.value = false;
                       },
                       child: Container(
                         height: 48 * SizeConfig.heightMultiplier!,

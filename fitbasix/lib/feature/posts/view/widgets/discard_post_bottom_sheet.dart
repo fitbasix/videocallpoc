@@ -3,6 +3,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -68,6 +69,15 @@ class DiscardPostBottomSheet extends StatelessWidget {
               await CreatePostService.deletePost(_postController.postId.value);
               Navigator.pushNamedAndRemoveUntil(
                   context, RouteName.homePage, (route) => false);
+
+              _postController.postTextController.clear();
+              _postController.postText.value = '';
+              _postController.selectedMediaFiles.clear();
+              _postController.selectedMediaAsset.clear();
+              _postController.selectedCategory.value = Category();
+              _postController.selectedUserData.clear();
+              _postController.selectedPeopleIndex.clear();
+              _postController.users.clear();
             },
             icon: const Icon(Icons.delete_outline),
             label: Text(
