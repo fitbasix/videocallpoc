@@ -26,7 +26,7 @@ class PostController extends GetxController {
   RxList<AssetEntity> selectedMediaAsset = RxList<AssetEntity>([]);
   RxList<AssetPathEntity> foldersAvailable = RxList<AssetPathEntity>([]);
   RxInt selectedFolder = 0.obs;
-  RxInt lastSelectedMediaIndex = RxInt(0);
+  RxString lastSelectedMediaIndex = RxString("");
   RxList<bool>? selectedMedia = RxList<bool>([]);
   RxList<int> selectedMediaCount = RxList<int>([]);
   RxInt count = RxInt(0);
@@ -62,11 +62,20 @@ class PostController extends GetxController {
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
-    foldersAvailable.value = await PhotoManager.getAssetPathList();
-    selectedFolder.value = foldersAvailable.indexOf(
-        foldersAvailable.singleWhere(
-            (element) => element.name.toLowerCase().contains("recent")));
-    final assetList = await foldersAvailable[selectedFolder.value]
+    foldersAvailable.value = await PhotoManager.getAssetPathList(onlyAll: true);
+    print("kkk" + foldersAvailable.value.toString());
+//     try{
+// selectedFolder.value = foldersAvailable.indexOf(
+//         foldersAvailable.singleWhere(
+//             (element) => element.name.toLowerCase().contains("recent")));
+//     }
+//     catch(e){
+//       selectedFolder.value = foldersAvailable.indexOf(
+//         foldersAvailable.singleWhere(
+//             (element) => element.name.toLowerCase().contains("all photos")));
+//     }
+    
+    final assetList = await foldersAvailable[0]
         .getAssetListPaged(currentPage.value, 100);
 
     // final assetList = await recentAlbum.getAssetListRange(
@@ -110,7 +119,7 @@ class PostController extends GetxController {
         .getAssetListPaged(currentPage.value, 100);
     imageCache!.clear();
     imageCache!.clearLiveImages();
-    print(assets.value);
+    print("lll" + assets.value.toString());
   }
 
   void toggleDropDownExpansion() {

@@ -231,8 +231,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                         onTap: () async {
                                           _postController.lastSelectedMediaIndex
                                                   .value =
-                                              int.tryParse(_postController
-                                                  .assets[index].id)!;
+                                              _postController.assets[index].id;
                                           _postController.getSelectedMedia(
                                               _postController.assets[index]);
                                         },
