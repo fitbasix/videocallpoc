@@ -58,6 +58,7 @@ dependencies:
   image_picker: ^0.8.4+4
   path_provider: ^2.0.8
   flutter_blurhash: ^0.6.0
+  flutter_holo_date_picker: ^1.0.1+2
 
 dev_dependencies:
   flutter_test:
