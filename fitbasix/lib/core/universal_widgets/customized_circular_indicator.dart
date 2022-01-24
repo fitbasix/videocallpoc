@@ -10,11 +10,11 @@ class CustomizedCircularProgress extends StatelessWidget {
       width: 20 * SizeConfig.heightMultiplier!,
       child: FittedBox(
         fit: BoxFit.contain,
-        child: const CircularProgressIndicator(
+        child:  CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(
             kGreenColor,
           ),
-          strokeWidth: 2,
+          strokeWidth: 4 * SizeConfig.heightMultiplier!,
         ),
       ),
     );

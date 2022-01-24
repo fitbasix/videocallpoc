@@ -60,7 +60,14 @@ class CreatePostScreen extends StatelessWidget {
             ),
           ),
           actions: [
-            Obx(() => _postController.postText.value.length > 0
+            Obx(() => (_postController
+                                .postData.value.response!.data!.files!.length >
+                            0 ||
+                        _postController
+                                .postData.value.response!.data!.caption !=
+                            null) &&
+                    _postController.postData.value.response!.data!.category !=
+                        null
                 ? _postController.isLoading.value == false
                     ? Container(
                         height: 32,
@@ -78,7 +85,7 @@ class CreatePostScreen extends StatelessWidget {
                               Navigator.pushNamedAndRemoveUntil(context,
                                   RouteName.homePage, (route) => false);
                               Get.showSnackbar(GetSnackBar(
-                                message: 'Post posted successfully',
+                                message: 'post_successfull'.tr,
                                 duration: Duration(seconds: 3),
                               ));
 
@@ -893,21 +900,25 @@ class CreatePostScreen extends StatelessWidget {
                             Navigator.pushNamed(
                                 context, RouteName.selectLocationScreen);
                           },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(ImagePath.locationIcon,
-                                  width: 17 * SizeConfig.widthMultiplier!),
-                              SizedBox(
-                                width: 16 * SizeConfig.widthMultiplier!,
-                              ),
-                              Text(
-                                'location'.tr,
-                                style: AppTextStyle.titleText.copyWith(
-                                    fontSize: 14 * SizeConfig.textMultiplier!),
-                              )
-                            ],
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(ImagePath.locationIcon,
+                                    width: 17 * SizeConfig.widthMultiplier!),
+                                SizedBox(
+                                  width: 16 * SizeConfig.widthMultiplier!,
+                                ),
+                                Text(
+                                  'location'.tr,
+                                  style: AppTextStyle.titleText.copyWith(
+                                      fontSize:
+                                          14 * SizeConfig.textMultiplier!),
+                                )
+                              ],
+                            ),
                           ),
                         )
                       : GestureDetector(
@@ -915,24 +926,28 @@ class CreatePostScreen extends StatelessWidget {
                             Navigator.pushNamed(
                                 context, RouteName.selectLocationScreen);
                           },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.location_pin,
-                                color: kPink,
-                              ),
-                              SizedBox(
-                                width: 16 * SizeConfig.widthMultiplier!,
-                              ),
-                              Text(
-                                _postController.postData.value.response!.data!
-                                    .location!.placeName![1],
-                                style: AppTextStyle.titleText.copyWith(
-                                    fontSize: 14 * SizeConfig.textMultiplier!),
-                              )
-                            ],
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.location_pin,
+                                  color: kPink,
+                                ),
+                                SizedBox(
+                                  width: 16 * SizeConfig.widthMultiplier!,
+                                ),
+                                Text(
+                                  _postController.postData.value.response!.data!
+                                      .location!.placeName![1],
+                                  style: AppTextStyle.titleText.copyWith(
+                                      fontSize:
+                                          14 * SizeConfig.textMultiplier!),
+                                )
+                              ],
+                            ),
                           ),
                         )),
                   SizedBox(
@@ -952,21 +967,24 @@ class CreatePostScreen extends StatelessWidget {
                               presentPage: _postController.currentPage.value);
                       Navigator.pushNamed(context, RouteName.customGallery);
                     },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(ImagePath.galleryIcon,
-                            width: 17 * SizeConfig.widthMultiplier!),
-                        SizedBox(
-                          width: 16 * SizeConfig.widthMultiplier!,
-                        ),
-                        Text(
-                          'photo_video'.tr,
-                          style: AppTextStyle.titleText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!),
-                        )
-                      ],
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(ImagePath.galleryIcon,
+                              width: 17 * SizeConfig.widthMultiplier!),
+                          SizedBox(
+                            width: 16 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'photo_video'.tr,
+                            style: AppTextStyle.titleText.copyWith(
+                                fontSize: 14 * SizeConfig.textMultiplier!),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -980,29 +998,32 @@ class CreatePostScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      print("vartika");
                       // var users = await CreatePostService.getUsers();
                       // _postController.users.value = users.response!.data!;
                       // print(_postController.users.value);
+                      _postController.selectedMediaAsset.value = [];
                       Navigator.pushNamed(context, RouteName.tagPeopleScreen);
                     },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          ImagePath.tagPeopleIcon,
-                          width: 17 * SizeConfig.widthMultiplier!,
-                        ),
-                        SizedBox(
-                          width: 16 * SizeConfig.widthMultiplier!,
-                        ),
-                        Text(
-                          'tag_people'.tr,
-                          style: AppTextStyle.titleText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!),
-                        )
-                      ],
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            ImagePath.tagPeopleIcon,
+                            width: 17 * SizeConfig.widthMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 16 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'tag_people'.tr,
+                            style: AppTextStyle.titleText.copyWith(
+                                fontSize: 14 * SizeConfig.textMultiplier!),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(

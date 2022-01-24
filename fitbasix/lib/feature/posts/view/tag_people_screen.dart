@@ -297,6 +297,7 @@ class PeopleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.transparent,
       margin: EdgeInsets.only(top: 12 * SizeConfig.heightMultiplier!),
       child: Row(
         children: [
