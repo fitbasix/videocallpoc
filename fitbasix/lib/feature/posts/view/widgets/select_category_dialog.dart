@@ -1,6 +1,7 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
@@ -45,38 +46,8 @@ class SelectCategoryDialog extends StatelessWidget {
                   ),
                   Obx(
                     () => _postController.categories.length == 0
-                        ? Column(
-                            children: [
-                              for (int index = 0; index < 3; index++)
-                                Shimmer.fromColors(
-                                  baseColor:
-                                      const Color.fromRGBO(230, 230, 230, 1),
-                                  highlightColor:
-                                      const Color.fromRGBO(242, 245, 245, 1),
-                                  child: Container(
-                                    height: 28 * SizeConfig.heightMultiplier!,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 1,
-                                          color: hintGrey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                            8 * SizeConfig.heightMultiplier!)),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              12 * SizeConfig.widthMultiplier!,
-                                          vertical:
-                                              5 * SizeConfig.heightMultiplier!),
-                                      child: Text(
-                                        "CategoryValue",
-                                        style: AppTextStyle.smallGreyText
-                                            .copyWith(color: hintGrey),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                            ],
+                        ? Center(
+                            child: CustomizedCircularProgress(),
                           )
                         : Column(
                             children: [
@@ -87,6 +58,7 @@ class SelectCategoryDialog extends StatelessWidget {
                                   onTap: () async {
                                     _postController.selectedCategory.value =
                                         category[index];
+                                    Navigator.pop(context);
                                     _postController.postData.value =
                                         await CreatePostService.createPost(
                                             postId:
@@ -95,7 +67,6 @@ class SelectCategoryDialog extends StatelessWidget {
                                                 .selectedCategory
                                                 .value
                                                 .serialId);
-                                    Navigator.pop(context);
                                   },
                                   child: Container(
                                     margin: EdgeInsets.only(
