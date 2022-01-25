@@ -26,6 +26,6 @@ class ImagePath {
   static const String galleryIcon = "assets/Icons/gallery.svg";
   static const String tagPeopleIcon = "assets/Icons/tag_people_icon.svg";
   static const String cancelIcon = "assets/Icons/cancel.svg";
-  static const String rightTickIcon = "assets/Icons/Right_tick.svg";
+  static const String rightTickIcon = "assets/Icons/right_tick.svg";
   static const String videoIcon = "assets/Icons/video.svg";
 }

@@ -24,3 +24,5 @@ const kPink = Color(0xFFFF5A5A);
 const kSelectedGreen = Color(0xFFEBF7EB);
 const kBlueColor = Color(0xFF143684);
 const kSelectedBlue = Color(0xFFEDF5FF);
+const kBlue = Color(0xFF3984FF);
+const kLightGreen = Color.fromARGB(127, 235, 247, 235);

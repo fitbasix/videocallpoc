@@ -87,192 +87,219 @@ class TagPeopleScreen extends StatelessWidget {
                         )
                   : Container())
             ]),
-        body: SafeArea(
-            child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(
-                left: 16 * SizeConfig.widthMultiplier!,
-                right: 16 * SizeConfig.widthMultiplier!,
-                top: 16 * SizeConfig.heightMultiplier!),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: lightGrey,
-                    borderRadius:
-                        BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                  ),
-                  child: Center(
-                    child: TextField(
-                      onChanged: (value) async {
-                        print(value);
-                        var users = await CreatePostService.getUsers(value);
-                        _postController.users.value = users.response!.data!;
-                        print(_postController.users.value);
-                      },
-                      onSubmitted: (value) {
-                        print(value);
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Transform(
-                          transform: Matrix4.translationValues(0, 2, 0),
-                          child: Icon(
-                            Icons.search,
-                            color: hintGrey,
+        body: Stack(
+          children: [
+            SafeArea(
+                child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: 16 * SizeConfig.widthMultiplier!,
+                    right: 16 * SizeConfig.widthMultiplier!,
+                    top: 16 * SizeConfig.heightMultiplier!),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: lightGrey,
+                        borderRadius: BorderRadius.circular(
+                            8 * SizeConfig.widthMultiplier!),
+                      ),
+                      child: Center(
+                        child: TextField(
+                          onChanged: (value) async {
+                            print(value);
+                            var users = await CreatePostService.getUsers(value);
+                            _postController.users.value = users.response!.data!;
+                            print(_postController.users.value);
+                          },
+                          onSubmitted: (value) {
+                            print(value);
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Transform(
+                              transform: Matrix4.translationValues(0, 2, 0),
+                              child: Icon(
+                                Icons.search,
+                                color: hintGrey,
+                              ),
+                            ),
+                            border: InputBorder.none,
+                            hintText: 'search'.tr,
+                            hintStyle: AppTextStyle.smallGreyText.copyWith(
+                                fontSize: 14 * SizeConfig.textMultiplier!,
+                                color: hintGrey),
                           ),
                         ),
-                        border: InputBorder.none,
-                        hintText: 'search'.tr,
-                        hintStyle: AppTextStyle.smallGreyText.copyWith(
-                            fontSize: 14 * SizeConfig.textMultiplier!,
-                            color: hintGrey),
                       ),
                     ),
-                  ),
-                ),
-                Obx(() => _postController.selectedPeopleIndex.length > 0
-                    ? Padding(
-                        padding: EdgeInsets.only(
-                            top: 24 * SizeConfig.heightMultiplier!,
-                            bottom: 24 * SizeConfig.heightMultiplier!),
-                        child: TitleText(title: 'selected'.tr),
-                      )
-                    : Container()),
-                Obx(() => _postController.selectedPeopleIndex.length > 0
-                    ? Container(
-                        height: 115 * SizeConfig.heightMultiplier!,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _postController.selectedUserData.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                    right: 16 * SizeConfig.widthMultiplier!),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      width: 64 * SizeConfig.widthMultiplier!,
-                                      child: Column(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                32 *
-                                                    SizeConfig
-                                                        .widthMultiplier!),
-                                            child: CachedNetworkImage(
-                                                imageUrl: _postController
-                                                    .selectedUserData[index]
-                                                    .profilePhoto!,
-                                                fit: BoxFit.cover,
-                                                height: 64 *
-                                                    SizeConfig.widthMultiplier!,
-                                                width: 64 *
-                                                    SizeConfig
-                                                        .widthMultiplier!),
-                                          ),
-                                          SizedBox(
-                                            height: 8 *
-                                                SizeConfig.heightMultiplier!,
-                                          ),
-                                          Text(
-                                            _postController
-                                                .selectedUserData[index].name!,
-                                            style: AppTextStyle.boldBlackText
-                                                .copyWith(
-                                                    fontSize: 14 *
+                    Obx(() => _postController.selectedPeopleIndex.length > 0
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                top: 24 * SizeConfig.heightMultiplier!,
+                                bottom: 24 * SizeConfig.heightMultiplier!),
+                            child: TitleText(title: 'selected'.tr),
+                          )
+                        : Container()),
+                    Obx(() => _postController.selectedPeopleIndex.length > 0
+                        ? Container(
+                            height: 115 * SizeConfig.heightMultiplier!,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    _postController.selectedUserData.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        right:
+                                            16 * SizeConfig.widthMultiplier!),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          width:
+                                              64 * SizeConfig.widthMultiplier!,
+                                          child: Column(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(32 *
                                                         SizeConfig
-                                                            .textMultiplier!),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.center,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                        right: 3,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            _postController.selectedUserData
-                                                .removeAt(index);
-                                            _postController.selectedPeopleIndex
-                                                .removeAt(index);
-                                          },
-                                          child: SvgPicture.asset(
-                                            ImagePath.cancelIcon,
-                                            height: 16 *
-                                                SizeConfig.widthMultiplier!,
-                                            width: 16 *
-                                                SizeConfig.widthMultiplier!,
-                                            fit: BoxFit.contain,
+                                                            .widthMultiplier!),
+                                                child: CachedNetworkImage(
+                                                    imageUrl: _postController
+                                                        .selectedUserData[index]
+                                                        .profilePhoto!,
+                                                    fit: BoxFit.cover,
+                                                    height: 64 *
+                                                        SizeConfig
+                                                            .widthMultiplier!,
+                                                    width: 64 *
+                                                        SizeConfig
+                                                            .widthMultiplier!),
+                                              ),
+                                              SizedBox(
+                                                height: 8 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
+                                              ),
+                                              Text(
+                                                _postController
+                                                    .selectedUserData[index]
+                                                    .name!,
+                                                style: AppTextStyle
+                                                    .boldBlackText
+                                                    .copyWith(
+                                                        fontSize: 14 *
+                                                            SizeConfig
+                                                                .textMultiplier!),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
+                                              )
+                                            ],
                                           ),
-                                        ))
-                                  ],
-                                ),
-                              );
-                            }),
-                      )
-                    : Container()),
-                _postController.selectedPeopleIndex.length > 0
-                    ? Padding(
-                        padding: EdgeInsets.only(
-                            top: 24 * SizeConfig.heightMultiplier!),
-                        child: TitleText(title: 'suggestions'.tr),
-                      )
-                    : Container(),
-                Obx(
-                  () => _postController.users.length == 0
-                      ? Container()
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _postController.users.length,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return Obx(() => PeopleTile(
-                                  name: _postController.users[index].name!,
-                                  subtitle: _postController.users[index].name!,
-                                  image: _postController
-                                      .users[index].profilePhoto!,
-                                  onTap: (value) {
-                                    if (_postController
-                                            .selectedPeopleIndex.length ==
-                                        0) {
-                                      _postController.selectedPeopleIndex.add(
-                                          _postController.users[index].id!);
-                                      _postController.selectedUserData
-                                          .add(_postController.users[index]);
-                                    } else {
-                                      if (_postController.selectedPeopleIndex
-                                              .indexOf(_postController
-                                                  .users[index].id!) ==
-                                          -1) {
-                                        _postController.selectedPeopleIndex.add(
-                                            _postController.users[index].id!);
-                                        _postController.selectedUserData
-                                            .add(_postController.users[index]);
-                                      } else {
-                                        _postController.selectedPeopleIndex
-                                            .remove(_postController
-                                                .users[index].id!);
-                                        _postController.selectedUserData.remove(
-                                            _postController.users[index]);
-                                      }
-                                    }
-                                  },
-                                  value: _postController.selectedPeopleIndex
-                                              .indexOf(_postController
-                                                  .users[index].id!) ==
-                                          -1
-                                      ? false
-                                      : true,
-                                ));
-                          }),
-                )
-              ],
-            ),
-          ),
-        )),
+                                        ),
+                                        Positioned(
+                                            right: 3,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                _postController.selectedUserData
+                                                    .removeAt(index);
+                                                _postController
+                                                    .selectedPeopleIndex
+                                                    .removeAt(index);
+                                              },
+                                              child: SvgPicture.asset(
+                                                ImagePath.cancelIcon,
+                                                height: 16 *
+                                                    SizeConfig.widthMultiplier!,
+                                                width: 16 *
+                                                    SizeConfig.widthMultiplier!,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ))
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          )
+                        : Container()),
+                    _postController.selectedPeopleIndex.length > 0
+                        ? Padding(
+                            padding: EdgeInsets.only(
+                                top: 24 * SizeConfig.heightMultiplier!),
+                            child: TitleText(title: 'suggestions'.tr),
+                          )
+                        : Container(),
+                    Obx(
+                      () => _postController.users.length == 0
+                          ? Container()
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _postController.users.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return Obx(() => PeopleTile(
+                                      name: _postController.users[index].name!,
+                                      subtitle:
+                                          _postController.users[index].name!,
+                                      image: _postController
+                                          .users[index].profilePhoto!,
+                                      onTap: (value) {
+                                        if (_postController
+                                                .selectedPeopleIndex.length ==
+                                            0) {
+                                          _postController.selectedPeopleIndex
+                                              .add(_postController
+                                                  .users[index].id!);
+                                          _postController.selectedUserData.add(
+                                              _postController.users[index]);
+                                        } else {
+                                          if (_postController
+                                                  .selectedPeopleIndex
+                                                  .indexOf(_postController
+                                                      .users[index].id!) ==
+                                              -1) {
+                                            _postController.selectedPeopleIndex
+                                                .add(_postController
+                                                    .users[index].id!);
+                                            _postController.selectedUserData
+                                                .add(_postController
+                                                    .users[index]);
+                                          } else {
+                                            _postController.selectedPeopleIndex
+                                                .remove(_postController
+                                                    .users[index].id!);
+                                            _postController.selectedUserData
+                                                .remove(_postController
+                                                    .users[index]);
+                                          }
+                                        }
+                                      },
+                                      value: _postController.selectedPeopleIndex
+                                                  .indexOf(_postController
+                                                      .users[index].id!) ==
+                                              -1
+                                          ? false
+                                          : true,
+                                    ));
+                              }),
+                    )
+                  ],
+                ),
+              ),
+            )),
+            Obx(
+              () => _postController.isLoading.value
+                  ? Container(
+                      height: Get.height,
+                      width: Get.width,
+                      color: Colors.black.withOpacity(0.015),
+                    )
+                  : Container(),
+            )
+          ],
+        ),
       ),
     );
   }

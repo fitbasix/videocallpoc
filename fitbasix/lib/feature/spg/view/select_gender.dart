@@ -1,6 +1,9 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
 import 'package:fitbasix/feature/spg/view/widgets/spg_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +51,7 @@ class SelectGenderScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 40 * SizeConfig.heightMultiplier!,
+                  height: 40,
                 ),
                 Container(
                   height: 202 * SizeConfig.heightMultiplier!,
@@ -87,6 +90,19 @@ class SelectGenderScreen extends StatelessWidget {
                 )
               ],
             ),
+          ),
+          Spacer(),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 16 * SizeConfig.widthMultiplier!),
+            child: ProceedButton(
+                title: 'proceed'.tr,
+                onPressed: () {
+                  Navigator.pushNamed(context, RouteName.setDob);
+                }),
+          ),
+          SizedBox(
+            height: 16 * SizeConfig.heightMultiplier!,
           )
         ],
       )),
@@ -111,26 +127,52 @@ class GenderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: 202 * SizeConfig.heightMultiplier!,
-        width: (Get.width - 54) / 2,
-        padding: EdgeInsets.only(top: 20 * SizeConfig.heightMultiplier!),
-        decoration: BoxDecoration(
-            color: isSelected ? kSelectedBlue : kPureWhite,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: kLightGrey)),
-        child: Column(
-          children: [
-            SvgPicture.network(imageUrl),
-            SizedBox(
-              height: 14 * SizeConfig.heightMultiplier!,
+      child: Stack(
+        children: [
+          Container(
+            height: 202 * SizeConfig.heightMultiplier!,
+            width: (Get.width - 54 * SizeConfig.widthMultiplier!) / 2,
+            padding: EdgeInsets.only(top: 20 * SizeConfig.heightMultiplier!),
+            decoration: BoxDecoration(
+                color: isSelected ? kSelectedBlue : kPureWhite,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: kLightGrey)),
+            child: Column(
+              children: [
+                SizedBox(
+                    height: 130 * SizeConfig.heightMultiplier!,
+                    child: SvgPicture.network(imageUrl)),
+                SizedBox(
+                  height: 14 * SizeConfig.heightMultiplier!,
+                ),
+                Text(
+                  title,
+                  style:
+                      AppTextStyle.normalBlackText.copyWith(color: kBlueColor),
+                ),
+                SizedBox(
+                  height: 14 * SizeConfig.heightMultiplier!,
+                ),
+              ],
             ),
-            Text(
-              title,
-              style: AppTextStyle.normalBlackText.copyWith(color: kBlueColor),
-            )
-          ],
-        ),
+          ),
+          isSelected
+              ? Container(
+                  height: 202 * SizeConfig.heightMultiplier!,
+                  width: (Get.width - 54 * SizeConfig.widthMultiplier!) / 2,
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: 15.6 * SizeConfig.heightMultiplier!,
+                          right: 12 * SizeConfig.widthMultiplier!),
+                      child: SvgPicture.asset(ImagePath.rightTickIcon,
+                          color: kBlue),
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }

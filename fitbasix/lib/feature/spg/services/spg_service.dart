@@ -9,9 +9,15 @@ class SPGService {
   static Future getSPGData() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-
     var response = await dio!.post(ApiUrl.getSPGData, data: {});
-    print(response.toString());
+    return spgModelFromJson(response.toString());
+  }
+
+  static Future updateSPGData(int goalType) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response =
+        await dio!.post(ApiUrl.updateGoal, data: {"goalType": goalType});
     return spgModelFromJson(response.toString());
   }
 }

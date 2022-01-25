@@ -115,7 +115,6 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         // }
                         _postController.selectedFiles
                             .addAll(_postController.selectedMediaFiles);
-                        print('after');
                         _postController.uploadedFiles.value =
                             await PostService.uploadMedia(
                           _postController.selectedFiles,
@@ -197,75 +196,93 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                 ))
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: 16 * SizeConfig.heightMultiplier!,
-                horizontal: 16 * SizeConfig.widthMultiplier!),
-            child: Obx(
-              () => Stack(
-                children: [
-                  Obx(
-                    () => _postController.assets.length == 0
-                        ? Container()
-                        : Padding(
-                            padding: EdgeInsets.only(top: 58.0),
-                            child: GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        crossAxisSpacing: 6,
-                                        mainAxisSpacing: 6),
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: _postController.assets.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // _postController.getSelectedMedia(
-                                  //     _postController.assets[0]);
-                                  return Obx(() => AssetThumbnail(
-                                        asset: _postController.assets[index],
-                                        tag: _postController
-                                            .assets[index].modifiedDateSecond!,
-                                        onTap: () async {
-                                          _postController.lastSelectedMediaIndex
-                                                  .value =
-                                              _postController.assets[index].id;
-                                          _postController.getSelectedMedia(
-                                              _postController.assets[index]);
-                                        },
-                                        isSelected: _postController
-                                                    .selectedMediaAsset
-                                                    .indexOf(_postController
-                                                        .assets[index]) ==
-                                                -1
-                                            ? false
-                                            : true,
-                                        selectionNumber: (_postController
-                                                    .selectedMediaAsset
-                                                    .indexOf(_postController
-                                                        .assets[index]) +
-                                                1)
-                                            .toString(),
-                                      ));
-                                }),
-                          ),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 16 * SizeConfig.heightMultiplier!,
+                    horizontal: 16 * SizeConfig.widthMultiplier!),
+                child: Obx(
+                  () => Stack(
+                    children: [
+                      Obx(
+                        () => _postController.assets.length == 0
+                            ? Container()
+                            : Padding(
+                                padding: EdgeInsets.only(top: 58.0),
+                                child: GridView.builder(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            crossAxisSpacing: 6,
+                                            mainAxisSpacing: 6),
+                                    physics: BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: _postController.assets.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      // _postController.getSelectedMedia(
+                                      //     _postController.assets[0]);
+                                      return Obx(() => AssetThumbnail(
+                                            asset:
+                                                _postController.assets[index],
+                                            tag: _postController.assets[index]
+                                                .modifiedDateSecond!,
+                                            onTap: () async {
+                                              _postController
+                                                      .lastSelectedMediaIndex
+                                                      .value =
+                                                  _postController
+                                                      .assets[index].id;
+                                              _postController.getSelectedMedia(
+                                                  _postController
+                                                      .assets[index]);
+                                            },
+                                            isSelected: _postController
+                                                        .selectedMediaAsset
+                                                        .indexOf(_postController
+                                                            .assets[index]) ==
+                                                    -1
+                                                ? false
+                                                : true,
+                                            selectionNumber: (_postController
+                                                        .selectedMediaAsset
+                                                        .indexOf(_postController
+                                                            .assets[index]) +
+                                                    1)
+                                                .toString(),
+                                          ));
+                                    }),
+                              ),
+                      ),
+                      customDropDownBtn(
+                        options: _postController.foldersAvailable,
+                        controller: _postController,
+                        isExpanded: _postController.isDropDownExpanded.value,
+                        label: 'gallery'.tr,
+                        /* onPressed: () {
+                            _postController.toggleDropDownExpansion();
+                          }*/
+                      ),
+                    ],
                   ),
-                  customDropDownBtn(
-                    options: _postController.foldersAvailable,
-                    controller: _postController,
-                    isExpanded: _postController.isDropDownExpanded.value,
-                    label: 'gallery'.tr,
-                    /* onPressed: () {
-                        _postController.toggleDropDownExpansion();
-                      }*/
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+          Obx(
+            () => _postController.isLoading.value
+                ? Container(
+                    height: Get.height,
+                    width: Get.width,
+                    color: Colors.black.withOpacity(0.015),
+                  )
+                : Container(),
+          )
+        ],
       ),
     );
   }
