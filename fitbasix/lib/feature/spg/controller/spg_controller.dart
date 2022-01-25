@@ -1,18 +1,17 @@
-import 'package:fitbasix/feature/spg/model/goal_model.dart';
 import 'package:fitbasix/feature/spg/model/spg_model.dart';
 import 'package:fitbasix/feature/spg/services/spg_service.dart';
 import 'package:get/get.dart';
 
 class SPGController extends GetxController {
   RxInt selectedGoalIndex = RxInt(0);
-
   RxList<bool> goalSelection = <bool>[true].obs;
-
   Rx<SpgModel> spgData = SpgModel().obs;
   RxBool isLoading = RxBool(false);
+  RxInt selectedGenderIndex = RxInt(0);
+  RxList<bool> genderSelection = <bool>[true].obs;
 
   List<bool> updatedGoalStatus(int index) {
-    int length = goalModel.length;
+    int length = spgData.value.response!.data!.goalType!.length;
     List<bool> selecteOption = [];
     for (int i = 0; i < length; i++) {
       if (i == index) {
@@ -23,6 +22,20 @@ class SPGController extends GetxController {
     }
     goalSelection.value = selecteOption;
     return goalSelection;
+  }
+
+  List<bool> updatedGenderStatus(int index) {
+    int length = spgData.value.response!.data!.genderType!.length;
+    List<bool> selecteOption = [];
+    for (int i = 0; i < length; i++) {
+      if (i == index) {
+        selecteOption.add(true);
+      } else {
+        selecteOption.add(false);
+      }
+    }
+    genderSelection.value = selecteOption;
+    return genderSelection;
   }
 
   Future<void> setup() async {
