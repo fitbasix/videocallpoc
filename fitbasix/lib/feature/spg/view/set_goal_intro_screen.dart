@@ -77,7 +77,8 @@ class SetGoalIntroScreen extends StatelessWidget {
             Spacer(),
             ProceedButton(
                 title: 'proceed'.tr,
-                onPressed: () {
+                onPressed: () async {
+                  await SPGService.updateSPGData(null, null);
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => SetGoalScreen()));
                 })

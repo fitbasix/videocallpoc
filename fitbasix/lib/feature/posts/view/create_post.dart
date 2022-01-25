@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
-import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/posts/view/widgets/discard_post_bottom_sheet.dart';
@@ -12,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';

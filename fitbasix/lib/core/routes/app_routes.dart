@@ -13,7 +13,9 @@ import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
-import 'package:fitbasix/feature/set_dob.dart';
+import 'package:fitbasix/feature/spg/view/set_height.dart';
+import 'package:fitbasix/feature/spg/view/set_weight.dart';
+import '../../feature/spg/view/set_dob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +36,8 @@ abstract class RouteName {
   static const setDob = '/set_dob';
   static const customGallery = '/custom_gallery';
   static const createPost = '/create_post';
+  static const setWeight = '/set_weight';
+  static const setHeight = '/set_height';
   RouteName._();
 }
 
@@ -145,6 +149,16 @@ class GenerateRoute {
     if (route == RouteName.setDob) {
       return MaterialPageRoute(
         builder: (BuildContext context) => SetDob(),
+      );
+    }
+    if (route == RouteName.setHeight) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => SetHeight(),
+      );
+    }
+    if (route == RouteName.setWeight) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => SetWeight(),
       );
     }
     if (route == RouteName.customGallery) {

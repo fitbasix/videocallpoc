@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/spg/services/spg_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -64,16 +65,18 @@ class SetGoalScreen extends StatelessWidget {
                               imageUrl: _spgController.spgData.value.response!
                                   .data!.goalType![index].image!,
                               onTap: () {
-                                _spgController.selectedGoalIndex.value = index;
+                                _spgController.selectedGoalIndex.value =
+                                    _spgController.spgData.value.response!.data!
+                                        .goalType![index];
 
-                                _spgController.updatedGoalStatus(
-                                    _spgController.selectedGoalIndex.value);
+                                // _spgController.updatedGoalStatus(
+                                //     _spgController.selectedGoalIndex.value);
                               },
-                              isSelected:
-                                  _spgController.selectedGoalIndex.value ==
-                                          index
-                                      ? true
-                                      : false,
+                              isSelected: _spgController.spgData.value.response!
+                                          .data!.goalType![index] ==
+                                      _spgController.selectedGoalIndex.value
+                                  ? true
+                                  : false,
                             ));
                       }),
                   SizedBox(
@@ -81,7 +84,14 @@ class SetGoalScreen extends StatelessWidget {
                   ),
                   ProceedButton(
                       title: 'proceed'.tr,
-                      onPressed: () {
+                      onPressed: () async {
+                        if (_spgController.selectedGoalIndex.value.serialId !=
+                            null) {
+                          await SPGService.updateSPGData(
+                              _spgController.selectedGoalIndex.value.serialId,
+                              null);
+                        }
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -132,9 +142,15 @@ class GoalCard extends StatelessWidget {
               ]),
           child: Row(
             children: [
-              SvgPicture.network(imageUrl),
+              Container(
+                  height: 60 * SizeConfig.heightMultiplier!,
+                  width: 60 * SizeConfig.heightMultiplier!,
+                  child: SvgPicture.network(imageUrl,
+                      height: 60 * SizeConfig.heightMultiplier!,
+                      width: 60 * SizeConfig.heightMultiplier!,
+                      fit: BoxFit.contain)),
               SizedBox(
-                width: 16 * SizeConfig.widthMultiplier!,
+                width: 8 * SizeConfig.widthMultiplier!,
               ),
               Text(
                 title,

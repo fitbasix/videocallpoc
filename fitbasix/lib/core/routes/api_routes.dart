@@ -20,6 +20,7 @@ class ApiUrl {
   static String deletePost = liveBaseURL + '/api/posts/delete';
   static String doFollow = liveBaseURL + '/api/follow/doFollow';
   static String getSPGData = liveBaseURL + '/api/goal/getAll';
+  static String updateGoal = liveBaseURL + '/api/goal/updateGoalDetails';
 
   ///create post
   static String createPost = liveBaseURL + '/api/posts/create';
