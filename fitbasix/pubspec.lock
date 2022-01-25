@@ -272,6 +272,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  flutter_ruler_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_ruler_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   flutter_screenutil:
     dependency: "direct main"
     description:
