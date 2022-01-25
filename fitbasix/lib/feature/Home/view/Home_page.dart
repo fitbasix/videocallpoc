@@ -6,6 +6,7 @@ import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,6 +61,15 @@ class HomePage extends StatelessWidget {
                       context, RouteName.loginScreen, (route) => false);
                 },
                 child: const Text('Sign Out')),
+            SizedBox(
+              height: 18,
+            ),
+            TextButton(
+                onPressed: () async {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => SetGoalIntroScreen()));
+                },
+                child: const Text('Set Goal')),
           ],
         ),
       ),
