@@ -28,4 +28,8 @@ class ImagePath {
   static const String cancelIcon = "assets/Icons/cancel.svg";
   static const String rightTickIcon = "assets/Icons/right_tick.svg";
   static const String videoIcon = "assets/Icons/video.svg";
+  static const String bellIcon = "assets/Icons/bell_icon.svg";
+  static const String dropIcon = "assets/Icons/drop_icon.png";
+  static const String fireIcon = "assets/Icons/fire_icon.png";
+  static const String searchFavoriteIcon = "assets/Icons/search-favorite.svg";
 }
