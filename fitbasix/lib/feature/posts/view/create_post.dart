@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
@@ -24,6 +25,7 @@ import 'package:shimmer/shimmer.dart';
 class CreatePostScreen extends StatelessWidget {
   CreatePostScreen({Key? key}) : super(key: key);
   final PostController _postController = Get.find();
+  final HomeController _homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -163,8 +165,8 @@ class CreatePostScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(
                             20 * SizeConfig.widthMultiplier!),
                         child: CachedNetworkImage(
-                            imageUrl: _postController.userProfileData.value
-                                .response!.data!.profilePhoto
+                            imageUrl: _homeController.userProfileData.value
+                                .response!.data!.profile!.profilePhoto
                                 .toString(),
                             fit: BoxFit.cover,
                             height: 40 * SizeConfig.widthMultiplier!,
@@ -177,8 +179,8 @@ class CreatePostScreen extends StatelessWidget {
                                   .people!.length ==
                               0
                           ? Text(
-                              _postController
-                                  .userProfileData.value.response!.data!.name!,
+                              _homeController.userProfileData.value.response!
+                                  .data!.profile!.name!,
                               style: AppTextStyle.boldBlackText.copyWith(
                                   fontSize: 14 * SizeConfig.textMultiplier!),
                             )
@@ -192,8 +194,8 @@ class CreatePostScreen extends StatelessWidget {
                                         WrapCrossAlignment.center,
                                     children: [
                                       Text(
-                                        _postController.userProfileData.value
-                                            .response!.data!.name!,
+                                        _homeController.userProfileData.value
+                                            .response!.data!.profile!.name!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
                                                 fontSize: 14 *
@@ -232,8 +234,8 @@ class CreatePostScreen extends StatelessWidget {
                                         WrapCrossAlignment.center,
                                     children: [
                                       Text(
-                                        _postController.userProfileData.value
-                                            .response!.data!.name!,
+                                        _homeController.userProfileData.value
+                                            .response!.data!.profile!.name!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
                                                 fontSize: 14 *

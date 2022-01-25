@@ -7,7 +7,7 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/model/post_model.dart';
-import 'package:fitbasix/feature/posts/model/user_profile_model.dart';
+import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 
 class CreatePostService {
   static var dio = DioUtil().getInstance();

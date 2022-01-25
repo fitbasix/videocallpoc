@@ -8,7 +8,7 @@ import 'package:fitbasix/feature/posts/model/location_model.dart';
 import 'package:fitbasix/feature/posts/model/media_response_model.dart';
 import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
-import 'package:fitbasix/feature/posts/model/user_profile_model.dart';
+import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 
 import 'package:flutter/material.dart';
@@ -50,7 +50,6 @@ class PostController extends GetxController {
   Rx<File> videoFile = File('').obs;
   RxList<File> selectedMediaFiles = RxList<File>([]);
   RxString postId = "".obs;
-  Rx<UserProfileModel> userProfileData = Rx(UserProfileModel());
   Rx<LocationModel> selectedLocationData = Rx(LocationModel());
   RxList<Category> categories = RxList<Category>([]);
   Rx<Category> selectedCategory = Category().obs;
@@ -74,9 +73,9 @@ class PostController extends GetxController {
 //         foldersAvailable.singleWhere(
 //             (element) => element.name.toLowerCase().contains("all photos")));
 //     }
-    
-    final assetList = await foldersAvailable[0]
-        .getAssetListPaged(currentPage.value, 100);
+
+    final assetList =
+        await foldersAvailable[0].getAssetListPaged(currentPage.value, 100);
 
     // final assetList = await recentAlbum.getAssetListRange(
     //   start: start,
