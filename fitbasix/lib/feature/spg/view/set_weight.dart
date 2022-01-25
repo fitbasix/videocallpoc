@@ -71,7 +71,7 @@ class SetWeight extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: 100 * SizeConfig.heightMultiplier!,
             rulerScaleTextStyle: AppTextStyle.normalGreenText,
-            rulerBackgroundColor: kLightGreen,
+            rulerBackgroundColor: LightGreen,
             rulerMarginTop: 15,
           ),
           SizedBox(
@@ -114,7 +114,7 @@ class SetWeight extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: 100 * SizeConfig.heightMultiplier!,
             rulerScaleTextStyle: AppTextStyle.normalGreenText,
-            rulerBackgroundColor: kLightGreen,
+            rulerBackgroundColor: LightGreen,
             rulerMarginTop: 15,
           ),
           Spacer(),

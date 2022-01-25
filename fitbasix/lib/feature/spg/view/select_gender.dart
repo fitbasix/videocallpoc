@@ -167,7 +167,7 @@ class GenderCard extends StatelessWidget {
                           top: 15.6 * SizeConfig.heightMultiplier!,
                           right: 12 * SizeConfig.widthMultiplier!),
                       child: SvgPicture.asset(ImagePath.rightTickIcon,
-                          color: kBlue),
+                          color: Blue),
                     ),
                   ),
                 )

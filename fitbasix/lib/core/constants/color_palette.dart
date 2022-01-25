@@ -29,5 +29,5 @@ const kBlue = Color(0xFF7AC2F4);
 const kLightGreen = Color(0xFF69D6BC);
 const kLightBlue = Color(0xFFEBF9EB);
 const kRedColor = Color(0xFFF66868);
-const kBlue = Color(0xFF3984FF);
-const kLightGreen = Color.fromARGB(127, 235, 247, 235);
+const Blue = Color(0xFF3984FF);
+const LightGreen = Color.fromARGB(127, 235, 247, 235);
