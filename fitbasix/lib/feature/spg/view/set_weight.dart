@@ -41,8 +41,18 @@ class SetWeight extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
+          Obx(
+            () => Center(
+              child: Text(
+                _spgController.currentWeight.value.toString(),
+                style: AppTextStyle.normalBlackText
+                    .copyWith(fontSize: 48 * SizeConfig.textMultiplier!),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
           SizedBox(
-            height: 40 * SizeConfig.heightMultiplier!,
+            height: 12 * SizeConfig.heightMultiplier!,
           ),
           RulerPicker(
             controller: _spgController.rulerPickerController,
@@ -74,8 +84,18 @@ class SetWeight extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
+          Obx(
+            () => Center(
+              child: Text(
+                _spgController.targetWeight.value.toString(),
+                style: AppTextStyle.normalBlackText
+                    .copyWith(fontSize: 48 * SizeConfig.textMultiplier!),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
           SizedBox(
-            height: 40 * SizeConfig.heightMultiplier!,
+            height: 12 * SizeConfig.heightMultiplier!,
           ),
           RulerPicker(
             controller: _spgController.targetRulerPickerController,

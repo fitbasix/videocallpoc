@@ -36,11 +36,11 @@ class Response {
   });
 
   String? message;
-  Data? data;
+  GoalData? data;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: GoalData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,8 +49,8 @@ class Response {
       };
 }
 
-class Data {
-  Data({
+class GoalData {
+  GoalData({
     this.id,
     this.userId,
     this.v,
@@ -70,7 +70,7 @@ class Data {
   int? foodType;
   int? genderType;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory GoalData.fromJson(Map<String, dynamic> json) => GoalData(
         id: json["_id"],
         userId: json["userId"],
         v: json["__v"],

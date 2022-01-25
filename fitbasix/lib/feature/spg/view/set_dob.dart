@@ -3,12 +3,14 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
+import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
+import 'package:fitbasix/feature/spg/services/spg_service.dart';
 import 'package:fitbasix/feature/spg/view/widgets/spg_app_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class SetDob extends StatelessWidget {
@@ -51,7 +53,11 @@ class SetDob extends StatelessWidget {
                 horizontal: 16 * SizeConfig.widthMultiplier!),
             child: ProceedButton(
                 title: 'proceed'.tr,
-                onPressed: () {
+                onPressed: () async {
+                  if (_spgController.selectedDate.value != "") {
+                    await SPGService.updateSPGData(
+                        null, _spgController.selectedDate.value);
+                  }
                   Navigator.pushNamed(context, RouteName.setHeight);
                 }),
           ),
@@ -64,6 +70,8 @@ class SetDob extends StatelessWidget {
   }
 }
 
+final SPGController _spgController = Get.find();
+
 Widget datePicker() => Container(
       child: DatePickerWidget(
         looping: true,
@@ -75,8 +83,11 @@ Widget datePicker() => Container(
         //locale: DatePicker.localeFromString('he'),
         onChange: (DateTime newDate, _) {
           DateTime _selectedDate = newDate;
+          _spgController.selectedDate.value =
+              (DateFormat('dd-LL-yyyy').format(_selectedDate))
+                  .replaceAll("-", "/");
           // ignore: avoid_print
-          print(_selectedDate);
+          print(_spgController.selectedDate.value);
         },
         pickerTheme: DateTimePickerTheme(
           backgroundColor: Colors.transparent,

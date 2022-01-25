@@ -51,7 +51,7 @@ class SelectGenderScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 40 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
                   height: 202 * SizeConfig.heightMultiplier!,
@@ -140,7 +140,7 @@ class GenderCard extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                    height: 130 * SizeConfig.heightMultiplier!,
+                    height: 129 * SizeConfig.heightMultiplier!,
                     child: SvgPicture.network(imageUrl)),
                 SizedBox(
                   height: 14 * SizeConfig.heightMultiplier!,
