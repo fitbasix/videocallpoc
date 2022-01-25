@@ -59,19 +59,30 @@ class SelectGenderScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       // physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (_, index) {
-                        return Padding(
-                          padding: index == 0
-                              ? EdgeInsets.only(
-                                  right: 16 * SizeConfig.widthMultiplier!)
-                              : EdgeInsets.all(0),
-                          child: GenderCard(
-                            title: _spgController.spgData.value.response!.data!
-                                .genderType![index].name!,
-                            imageUrl: _spgController.spgData.value.response!
-                                .data!.genderType![index].image!,
-                            onTap: () {},
-                          ),
-                        );
+                        return Obx(() => Padding(
+                              padding: index == 0
+                                  ? EdgeInsets.only(
+                                      right: 16 * SizeConfig.widthMultiplier!)
+                                  : EdgeInsets.all(0),
+                              child: GenderCard(
+                                title: _spgController.spgData.value.response!
+                                    .data!.genderType![index].name!,
+                                imageUrl: _spgController.spgData.value.response!
+                                    .data!.genderType![index].image!,
+                                onTap: () {
+                                  _spgController.selectedGenderIndex.value =
+                                      index;
+
+                                  _spgController.updatedGenderStatus(
+                                      _spgController.selectedGenderIndex.value);
+                                },
+                                isSelected:
+                                    _spgController.selectedGenderIndex.value ==
+                                            index
+                                        ? true
+                                        : false,
+                              ),
+                            ));
                       }),
                 )
               ],
@@ -98,25 +109,28 @@ class GenderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 202 * SizeConfig.heightMultiplier!,
-      width: (Get.width - 54) / 2,
-      padding: EdgeInsets.only(top: 20 * SizeConfig.heightMultiplier!),
-      decoration: BoxDecoration(
-          color: kPureWhite,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: kLightGrey)),
-      child: Column(
-        children: [
-          SvgPicture.network(imageUrl),
-          SizedBox(
-            height: 14 * SizeConfig.heightMultiplier!,
-          ),
-          Text(
-            title,
-            style: AppTextStyle.normalBlackText.copyWith(color: kBlueColor),
-          )
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 202 * SizeConfig.heightMultiplier!,
+        width: (Get.width - 54) / 2,
+        padding: EdgeInsets.only(top: 20 * SizeConfig.heightMultiplier!),
+        decoration: BoxDecoration(
+            color: isSelected ? kSelectedBlue : kPureWhite,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: kLightGrey)),
+        child: Column(
+          children: [
+            SvgPicture.network(imageUrl),
+            SizedBox(
+              height: 14 * SizeConfig.heightMultiplier!,
+            ),
+            Text(
+              title,
+              style: AppTextStyle.normalBlackText.copyWith(color: kBlueColor),
+            )
+          ],
+        ),
       ),
     );
   }

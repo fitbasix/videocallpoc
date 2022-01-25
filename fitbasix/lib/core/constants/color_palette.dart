@@ -22,4 +22,5 @@ const hintGrey = Color(0xFF747474);
 const kRed = Color(0xFFDC675F);
 const kPink = Color(0xFFFF5A5A);
 const kSelectedGreen = Color(0xFFEBF7EB);
-const kBlueColor = Color(0XFF143684);
+const kBlueColor = Color(0xFF143684);
+const kSelectedBlue = Color(0xFFEDF5FF);
