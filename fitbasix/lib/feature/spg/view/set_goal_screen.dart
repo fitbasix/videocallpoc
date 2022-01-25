@@ -142,9 +142,15 @@ class GoalCard extends StatelessWidget {
               ]),
           child: Row(
             children: [
-              SvgPicture.network(imageUrl),
+              Container(
+                  height: 60 * SizeConfig.heightMultiplier!,
+                  width: 60 * SizeConfig.heightMultiplier!,
+                  child: SvgPicture.network(imageUrl,
+                      height: 60 * SizeConfig.heightMultiplier!,
+                      width: 60 * SizeConfig.heightMultiplier!,
+                      fit: BoxFit.contain)),
               SizedBox(
-                width: 16 * SizeConfig.widthMultiplier!,
+                width: 8 * SizeConfig.widthMultiplier!,
               ),
               Text(
                 title,
