@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +56,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {}, icon: SvgPicture.asset(ImagePath.bellIcon))
         ],
       ),
+      backgroundColor: kBackgroundColor,
       body: SafeArea(
           child: Obx(() => _homeController.isLoading.value
               ? Padding(
@@ -403,13 +402,97 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 32 * SizeConfig.heightMultiplier!,
+                                  height: 16 * SizeConfig.heightMultiplier!,
                                 ),
+                                Obx(() => _homeController.isLoading.value
+                                    ? Center(
+                                        child: CustomizedCircularProgress(),
+                                      )
+                                    : Container(
+                                        child: ListView.builder(
+                                            itemCount: _homeController.posts
+                                                .value.response!.data!.length,
+                                            shrinkWrap: true,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            itemBuilder: (_, index) {
+                                              return Column(
+                                                children: [
+                                                  PostTile(
+                                                    name: 'Jonathan Swift',
+                                                    category: _homeController
+                                                        .posts
+                                                        .value
+                                                        .response!
+                                                        .data![index]
+                                                        .postCategory![0]
+                                                        .name!,
+                                                    date: DateFormat.d()
+                                                        .add_MMM()
+                                                        .format(_homeController
+                                                            .posts
+                                                            .value
+                                                            .response!
+                                                            .data![index]
+                                                            .updatedAt!),
+                                                    place: _homeController
+                                                        .posts
+                                                        .value
+                                                        .response!
+                                                        .data![index]
+                                                        .location!
+                                                        .placeName![1]
+                                                        .toString(),
+                                                    imageUrl: _homeController
+                                                        .posts
+                                                        .value
+                                                        .response!
+                                                        .data![index]
+                                                        .files![0],
+                                                    caption: _homeController
+                                                        .posts
+                                                        .value
+                                                        .response!
+                                                        .data![index]
+                                                        .caption!,
+                                                    likes: _homeController
+                                                        .posts
+                                                        .value
+                                                        .response!
+                                                        .data![index]
+                                                        .likes
+                                                        .toString(),
+                                                    comments: _homeController
+                                                        .posts
+                                                        .value
+                                                        .response!
+                                                        .data![index]
+                                                        .comments
+                                                        .toString(),
+                                                  ),
+                                                  Container(
+                                                    height: 16 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    color: kBackgroundColor,
+                                                  )
+                                                ],
+                                              );
+                                            }),
+                                      )),
                                 PostTile(
                                   name: 'Jonathan Swift',
-                                  category: 'Transformation',
+                                  category: _homeController
+                                      .posts
+                                      .value
+                                      .response!
+                                      .data![0]
+                                      .postCategory![0]
+                                      .name!,
                                   date: '29 May',
-                                  place: 'Chicago',
+                                  place: _homeController.posts.value.response!
+                                      .data![0].location!.placeName![1]
+                                      .toString(),
                                   imageUrl:
                                       'https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png',
                                   caption:
@@ -458,7 +541,8 @@ class PostTile extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(
                 left: 16 * SizeConfig.widthMultiplier!,
-                bottom: 16 * SizeConfig.heightMultiplier!),
+                bottom: 16 * SizeConfig.heightMultiplier!,
+                top: 16 * SizeConfig.heightMultiplier!),
             child: Row(
               children: [
                 CircleAvatar(
@@ -532,12 +616,14 @@ class PostTile extends StatelessWidget {
           CachedNetworkImage(
             imageUrl: imageUrl,
             height: 198 * SizeConfig.heightMultiplier!,
+            fit: BoxFit.cover,
           ),
           Padding(
             padding: EdgeInsets.only(
                 left: 16 * SizeConfig.widthMultiplier!,
                 bottom: 16 * SizeConfig.heightMultiplier!,
-                right: 16 * SizeConfig.widthMultiplier!),
+                right: 16 * SizeConfig.widthMultiplier!,
+                top: 16 * SizeConfig.heightMultiplier!),
             child: Row(
               children: [
                 Icon(
@@ -566,7 +652,13 @@ class PostTile extends StatelessWidget {
           CommentsTile(
             name: 'Percy Bysshe Shelley',
             comment: 'Thank you for the motivational thoughts!',
+            time: '26',
+            likes: 214,
+            onReply: () {},
           ),
+          SizedBox(
+            height: 16 * SizeConfig.heightMultiplier!,
+          )
         ],
       ),
     );
@@ -578,10 +670,16 @@ class CommentsTile extends StatelessWidget {
     Key? key,
     required this.name,
     required this.comment,
+    required this.time,
+    required this.likes,
+    required this.onReply,
   }) : super(key: key);
 
   final String name;
   final String comment;
+  final String time;
+  final int likes;
+  final VoidCallback onReply;
 
   @override
   Widget build(BuildContext context) {
@@ -598,37 +696,89 @@ class CommentsTile extends StatelessWidget {
           SizedBox(
             width: 8 * SizeConfig.widthMultiplier!,
           ),
-          Container(
-            height: 84 * SizeConfig.heightMultiplier!,
-            width: Get.width - 80 * SizeConfig.widthMultiplier!,
-            padding: EdgeInsets.only(
-                top: 12 * SizeConfig.heightMultiplier!,
-                left: 12 * SizeConfig.widthMultiplier!,
-                right: 12 * SizeConfig.widthMultiplier!),
-            decoration: BoxDecoration(
-                color: kLightGrey,
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                    bottomRight: Radius.circular(8))),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: AppTextStyle.boldBlackText
-                      .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 84 * SizeConfig.heightMultiplier!,
+                width: Get.width - 80 * SizeConfig.widthMultiplier!,
+                padding: EdgeInsets.only(
+                    top: 12 * SizeConfig.heightMultiplier!,
+                    left: 12 * SizeConfig.widthMultiplier!,
+                    right: 12 * SizeConfig.widthMultiplier!),
+                decoration: BoxDecoration(
+                    color: kLightGrey,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8))),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: AppTextStyle.boldBlackText
+                          .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
+                    ),
+                    SizedBox(
+                      height: 8 * SizeConfig.heightMultiplier!,
+                    ),
+                    Text(
+                      comment,
+                      style: AppTextStyle.normalBlackText
+                          .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  height: 8 * SizeConfig.heightMultiplier!,
+              ),
+              SizedBox(
+                height: 8 * SizeConfig.heightMultiplier!,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 4 * SizeConfig.widthMultiplier!),
+                child: Row(
+                  children: [
+                    Text('post_time'.trParams({'duration': time}),
+                        style: AppTextStyle.normalBlackText.copyWith(
+                            fontSize: 12 * SizeConfig.textMultiplier!,
+                            color: kGreyColor)),
+                    SizedBox(
+                      width: 13 * SizeConfig.widthMultiplier!,
+                    ),
+                    Icon(
+                      Icons.favorite,
+                      color: kGreyColor,
+                      size: 14,
+                    ),
+                    SizedBox(
+                      width: 5 * SizeConfig.widthMultiplier!,
+                    ),
+                    Text('likes'.trParams({'no_likes': likes.toString()}),
+                        style: AppTextStyle.normalBlackText.copyWith(
+                            fontSize: 12 * SizeConfig.textMultiplier!,
+                            color: kGreyColor)),
+                    SizedBox(
+                      width: 13 * SizeConfig.widthMultiplier!,
+                    ),
+                    Icon(
+                      Icons.reply,
+                      color: kGreyColor,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 4 * SizeConfig.widthMultiplier!,
+                    ),
+                    GestureDetector(
+                      onTap: onReply,
+                      child: Text('reply'.tr,
+                          style: AppTextStyle.normalBlackText.copyWith(
+                              fontSize: 12 * SizeConfig.textMultiplier!,
+                              color: kGreyColor)),
+                    ),
+                  ],
                 ),
-                Text(
-                  comment,
-                  style: AppTextStyle.normalBlackText
-                      .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
-                )
-              ],
-            ),
+              )
+            ],
           )
         ],
       ),

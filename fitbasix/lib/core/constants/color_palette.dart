@@ -31,3 +31,4 @@ const kLightBlue = Color(0xFFEBF9EB);
 const kRedColor = Color(0xFFF66868);
 const Blue = Color(0xFF3984FF);
 const LightGreen = Color.fromARGB(127, 235, 247, 235);
+const kBackgroundColor = Color(0x1A000000);

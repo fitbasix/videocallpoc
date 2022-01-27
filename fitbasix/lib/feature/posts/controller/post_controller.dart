@@ -58,6 +58,7 @@ class PostController extends GetxController {
   Rx<PostData> postData = PostData().obs;
   RxBool isLoading = RxBool(false);
   RxList<File> selectedFiles = RxList<File>([]);
+  RxBool deletingFile = RxBool(false);
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
