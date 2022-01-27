@@ -13,6 +13,7 @@ import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
+import 'package:fitbasix/feature/spg/view/set_bodyFat.dart';
 import 'package:fitbasix/feature/spg/view/set_height.dart';
 import 'package:fitbasix/feature/spg/view/set_weight.dart';
 import '../../feature/spg/view/set_dob.dart';
@@ -38,6 +39,7 @@ abstract class RouteName {
   static const createPost = '/create_post';
   static const setWeight = '/set_weight';
   static const setHeight = '/set_height';
+  static const setBodyFat = '/set_bodyFat';
   RouteName._();
 }
 
@@ -159,6 +161,11 @@ class GenerateRoute {
     if (route == RouteName.setWeight) {
       return MaterialPageRoute(
         builder: (BuildContext context) => SetWeight(),
+      );
+    }
+    if (route == RouteName.setBodyFat) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => SetBodyFat(),
       );
     }
     if (route == RouteName.customGallery) {

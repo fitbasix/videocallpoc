@@ -9,15 +9,19 @@ class SPGController extends GetxController {
   Rx<Type> selectedGoalIndex = Type().obs;
   RxList<bool> goalSelection = <bool>[true].obs;
   Rx<SpgModel> spgData = SpgModel().obs;
+  RxList<BodyType>? bodyFatData = <BodyType>[].obs;
   RxBool isLoading = RxBool(false);
   RxInt selectedGenderIndex = RxInt(0);
   RxList<bool> genderSelection = <bool>[true].obs;
   final rulerPickerController = RulerPickerController(value: 0);
-  RxInt currentWeight = 50.obs;
+  RxInt currentWeight = 65.obs;
+  RxInt currentHeight = 170.obs;
   final targetRulerPickerController = RulerPickerController(value: 0);
-  RxInt targetWeight = 50.obs;
+  final heightRulerPickerController = RulerPickerController(value: 0);
+  RxInt targetWeight = 65.obs;
   Rx<GoalData> personalGoal = GoalData().obs;
   RxString selectedDate = "".obs;
+  Rx<BodyType> selectedBodyFat = BodyType().obs;
   // final DateTimeFormatter formatter =
   //     DateTimeFormatter.isDayFormat("'yyyy-MM-dd'");
 
@@ -52,6 +56,7 @@ class SPGController extends GetxController {
   Future<void> setup() async {
     isLoading.value = true;
     spgData.value = await SPGService.getSPGData();
+    bodyFatData!.value = spgData.value.response!.data!.bodyTypeMale!;
     isLoading.value = false;
   }
 

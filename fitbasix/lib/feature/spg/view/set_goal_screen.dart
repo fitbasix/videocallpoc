@@ -89,6 +89,9 @@ class SetGoalScreen extends StatelessWidget {
                             null) {
                           await SPGService.updateSPGData(
                               _spgController.selectedGoalIndex.value.serialId,
+                              null,
+                              null,
+                              null,
                               null);
                         }
 

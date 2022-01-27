@@ -55,8 +55,8 @@ class SetDob extends StatelessWidget {
                 title: 'proceed'.tr,
                 onPressed: () async {
                   if (_spgController.selectedDate.value != "") {
-                    await SPGService.updateSPGData(
-                        null, _spgController.selectedDate.value);
+                    await SPGService.updateSPGData(null,
+                        _spgController.selectedDate.value, null, null, null);
                   }
                   Navigator.pushNamed(context, RouteName.setHeight);
                 }),
