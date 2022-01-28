@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final profileModel = profileModelFromJson(jsonString);
+//     final userProfileModel = userProfileModelFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -58,63 +58,98 @@ class Response {
 class Data {
   Data({
     this.profile,
-    this.nutrition,
   });
 
   final Profile? profile;
-  final Nutrition? nutrition;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         profile: Profile.fromJson(json["profile"]),
-        nutrition: json["nutrition"] == null
-            ? null
-            : Nutrition.fromJson(json["nutrition"]),
       );
 
   Map<String, dynamic> toJson() => {
         "profile": profile!.toJson(),
-        "nutrition": nutrition!.toJson(),
+      };
+}
+
+class Profile {
+  Profile({
+    this.id,
+    this.name,
+    this.profilePhoto,
+    this.coverPhoto,
+    this.nutrition,
+    this.following,
+    this.followers,
+  });
+
+  final String? id;
+  final String? name;
+  final String? profilePhoto;
+  final String? coverPhoto;
+  final List<Nutrition>? nutrition;
+  final int? following;
+  final int? followers;
+
+  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+        id: json["_id"],
+        name: json["name"],
+        profilePhoto: json["profilePhoto"],
+        coverPhoto: json["coverPhoto"],
+        nutrition: List<Nutrition>.from(
+            json["nutrition"].map((x) => Nutrition.fromJson(x))),
+        following: json["following"],
+        followers: json["followers"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+        "profilePhoto": profilePhoto,
+        "coverPhoto": coverPhoto,
+        "nutrition": List<dynamic>.from(nutrition!.map((x) => x.toJson())),
+        "following": following,
+        "followers": followers,
       };
 }
 
 class Nutrition {
   Nutrition({
-    this.protein,
-    this.carbs,
-    this.fats,
     this.id,
     this.userId,
     this.totalWaterRequired,
     this.totalWaterConsumed,
     this.totalRequiredCalories,
+    this.protein,
+    this.carbs,
+    this.fats,
     this.date,
     this.createdAt,
     this.updatedAt,
     this.v,
   });
 
-  final Protein? protein;
-  final Carbs? carbs;
-  final Fats? fats;
   final String? id;
   final String? userId;
   final int? totalWaterRequired;
   final int? totalWaterConsumed;
   final int? totalRequiredCalories;
+  final Protein? protein;
+  final Carbs? carbs;
+  final Fats? fats;
   final DateTime? date;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
 
   factory Nutrition.fromJson(Map<String, dynamic> json) => Nutrition(
-        protein: Protein.fromJson(json["protein"]),
-        carbs: Carbs.fromJson(json["carbs"]),
-        fats: Fats.fromJson(json["fats"]),
         id: json["_id"],
         userId: json["userId"],
         totalWaterRequired: json["totalWaterRequired"],
         totalWaterConsumed: json["totalWaterConsumed"],
         totalRequiredCalories: json["totalRequiredCalories"],
+        protein: Protein.fromJson(json["protein"]),
+        carbs: Carbs.fromJson(json["carbs"]),
+        fats: Fats.fromJson(json["fats"]),
         date: DateTime.parse(json["date"]),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
@@ -122,14 +157,14 @@ class Nutrition {
       );
 
   Map<String, dynamic> toJson() => {
-        "protein": protein!.toJson(),
-        "carbs": carbs!.toJson(),
-        "fats": fats!.toJson(),
         "_id": id,
         "userId": userId,
         "totalWaterRequired": totalWaterRequired,
         "totalWaterConsumed": totalWaterConsumed,
         "totalRequiredCalories": totalRequiredCalories,
+        "protein": protein!.toJson(),
+        "carbs": carbs!.toJson(),
+        "fats": fats!.toJson(),
         "date": date!.toIso8601String(),
         "createdAt": createdAt!.toIso8601String(),
         "updatedAt": updatedAt!.toIso8601String(),
@@ -194,89 +229,5 @@ class Protein {
   Map<String, dynamic> toJson() => {
         "proteinGrams": proteinGrams,
         "proteinKiloCals": proteinKiloCals,
-      };
-}
-
-class Profile {
-  Profile({
-    this.id,
-    this.phone,
-    this.v,
-    this.countryCode,
-    this.createdAt,
-    this.isBlacklisted,
-    this.numCertificates,
-    this.provider,
-    this.role,
-    this.updatedAt,
-    this.token,
-    this.email,
-    this.name,
-    this.profilePhoto,
-    this.coverPhoto,
-    this.followers,
-    this.following,
-    this.profileId,
-  });
-
-  final String? id;
-  final String? phone;
-  final int? v;
-  final String? countryCode;
-  final DateTime? createdAt;
-  final bool? isBlacklisted;
-  final int? numCertificates;
-  final String? provider;
-  final String? role;
-  final DateTime? updatedAt;
-  final String? token;
-  final String? email;
-  final String? name;
-  final String? profilePhoto;
-  final String? coverPhoto;
-  final int? followers;
-  final int? following;
-  final String? profileId;
-
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json["_id"],
-        phone: json["phone"],
-        v: json["__v"],
-        countryCode: json["countryCode"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        isBlacklisted: json["isBlacklisted"],
-        numCertificates: json["numCertificates"],
-        provider: json["provider"],
-        role: json["role"],
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        token: json["token"],
-        email: json["email"],
-        name: json["name"],
-        profilePhoto: json["profilePhoto"],
-        coverPhoto: json["coverPhoto"],
-        followers: json["followers"],
-        following: json["following"],
-        profileId: json["id"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "phone": phone,
-        "__v": v,
-        "countryCode": countryCode,
-        "createdAt": createdAt!.toIso8601String(),
-        "isBlacklisted": isBlacklisted,
-        "numCertificates": numCertificates,
-        "provider": provider,
-        "role": role,
-        "updatedAt": updatedAt!.toIso8601String(),
-        "token": token,
-        "email": email,
-        "name": name,
-        "profilePhoto": profilePhoto,
-        "coverPhoto": coverPhoto,
-        "followers": followers,
-        "following": following,
-        "id": profileId,
       };
 }

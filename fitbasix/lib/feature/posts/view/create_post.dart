@@ -485,6 +485,9 @@ class CreatePostScreen extends StatelessWidget {
                                                         right: 10,
                                                         child: GestureDetector(
                                                           onTap: () async {
+                                                            _postController
+                                                                .deletingFile
+                                                                .value = true;
                                                             if (_postController
                                                                     .selectedFiles
                                                                     .length !=
@@ -528,6 +531,9 @@ class CreatePostScreen extends StatelessWidget {
                                                                           .response!
                                                                           .data);
                                                             }
+                                                            _postController
+                                                                .deletingFile
+                                                                .value = false;
                                                           },
                                                           child:
                                                               SvgPicture.asset(
@@ -575,6 +581,9 @@ class CreatePostScreen extends StatelessWidget {
                                                                   GestureDetector(
                                                                 onTap:
                                                                     () async {
+                                                                  _postController
+                                                                      .deletingFile
+                                                                      .value = true;
                                                                   if (_postController
                                                                           .selectedFiles
                                                                           .length !=
@@ -616,6 +625,9 @@ class CreatePostScreen extends StatelessWidget {
                                                                             .response!
                                                                             .data);
                                                                   }
+                                                                  _postController
+                                                                      .deletingFile
+                                                                      .value = false;
                                                                 },
                                                                 child:
                                                                     SvgPicture
@@ -766,6 +778,8 @@ class CreatePostScreen extends StatelessWidget {
                                                                             GestureDetector(
                                                                           onTap:
                                                                               () async {
+                                                                            _postController.deletingFile.value =
+                                                                                true;
                                                                             if (_postController.selectedFiles.length !=
                                                                                 0) {
                                                                               _postController.selectedFiles.removeAt(index);
@@ -782,6 +796,8 @@ class CreatePostScreen extends StatelessWidget {
                                                                                 0) {
                                                                               _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
                                                                             }
+                                                                            _postController.deletingFile.value =
+                                                                                false;
                                                                           },
                                                                           child:
                                                                               SvgPicture.asset(
@@ -841,6 +857,7 @@ class CreatePostScreen extends StatelessWidget {
                                                                               right: 4,
                                                                               child: GestureDetector(
                                                                                 onTap: () async {
+                                                                                  _postController.deletingFile.value = true;
                                                                                   if (_postController.selectedFiles.length != 0) {
                                                                                     _postController.selectedFiles.removeAt(index);
                                                                                     // _postController.selectedFiles.removeAt(index);
@@ -855,6 +872,7 @@ class CreatePostScreen extends StatelessWidget {
                                                                                   if (_postController.uploadedFiles.value.code == 0) {
                                                                                     _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
                                                                                   }
+                                                                                  _postController.deletingFile.value = false;
                                                                                 },
                                                                                 child: SvgPicture.asset(
                                                                                   ImagePath.cancelIcon,
@@ -1028,7 +1046,13 @@ class CreatePostScreen extends StatelessWidget {
                   SizedBox(
                     height: 17 * SizeConfig.heightMultiplier!,
                   ),
-                  Divider()
+                  Divider(),
+                  SizedBox(
+                    height: 34 * SizeConfig.heightMultiplier!,
+                  ),
+                  Obx(() => _postController.deletingFile.value
+                      ? Center(child: CustomizedCircularProgress())
+                      : Container())
                 ],
               ),
             ),
