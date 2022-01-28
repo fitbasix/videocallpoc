@@ -89,6 +89,7 @@ class SetWeight extends StatelessWidget {
               rulerBackgroundColor: kLightGreen,
               rulerMarginTop: 15,
             ),
+
           ),
           SizedBox(
             height: 40 * SizeConfig.heightMultiplier!,
@@ -146,6 +147,7 @@ class SetWeight extends StatelessWidget {
               rulerBackgroundColor: kLightGreen,
               rulerMarginTop: 15,
             ),
+
           ),
           Spacer(),
           Padding(
