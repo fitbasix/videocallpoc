@@ -36,7 +36,7 @@ class SetBodyFat extends StatelessWidget {
           ),
           Center(
             child: Text(
-              'ask_weight'.tr,
+              'set_body_fat'.tr,
               style: AppTextStyle.boldBlackText,
               textAlign: TextAlign.center,
             ),
