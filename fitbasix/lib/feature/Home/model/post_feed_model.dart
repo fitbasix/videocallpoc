@@ -77,7 +77,7 @@ class Post {
   final Person? userId;
   final int? category;
   final List<PostCategory>? postCategory;
-  final int? likes;
+  late final int? likes;
   final int? comments;
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(

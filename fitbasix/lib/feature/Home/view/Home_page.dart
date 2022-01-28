@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
+import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -35,9 +38,16 @@ class HomeAndTrainerPage extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final LoginController _controller = Get.put(LoginController());
+
   final PostController _postController = Get.put(PostController());
+
   final HomeController _homeController = Get.find();
 
   @override
@@ -404,14 +414,14 @@ class HomePage extends StatelessWidget {
                                 SizedBox(
                                   height: 16 * SizeConfig.heightMultiplier!,
                                 ),
-                                Obx(() => _homeController.isLoading.value
-                                    ? Center(
-                                        child: CustomizedCircularProgress(),
-                                      )
-                                    : Container(
-                                        child: ListView.builder(
-                                            itemCount: _homeController.posts
-                                                .value.response!.data!.length,
+
+                                StreamBuilder<PostsModel>(
+                                    stream: HomeService.getPosts(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData)
+                                        return ListView.builder(
+                                            itemCount: snapshot
+                                                .data!.response!.data!.length,
                                             shrinkWrap: true,
                                             physics:
                                                 NeverScrollableScrollPhysics(),
@@ -419,62 +429,69 @@ class HomePage extends StatelessWidget {
                                               return Column(
                                                 children: [
                                                   PostTile(
-                                                    name: _homeController
-                                                        .posts
-                                                        .value
+                                                    name: snapshot
+                                                        .data!
                                                         .response!
                                                         .data![index]
                                                         .userId!
                                                         .name!,
-                                                    category: _homeController
-                                                        .posts
-                                                        .value
+                                                    profilePhoto: snapshot
+                                                        .data!
+                                                        .response!
+                                                        .data![index]
+                                                        .userId!
+                                                        .profilePhoto!,
+                                                    category: snapshot
+                                                        .data!
                                                         .response!
                                                         .data![index]
                                                         .postCategory![0]
                                                         .name!,
                                                     date: DateFormat.d()
                                                         .add_MMM()
-                                                        .format(_homeController
-                                                            .posts
-                                                            .value
+                                                        .format(snapshot
+                                                            .data!
                                                             .response!
                                                             .data![index]
                                                             .updatedAt!),
-                                                    place: _homeController
-                                                        .posts
-                                                        .value
+                                                    place: snapshot
+                                                        .data!
                                                         .response!
                                                         .data![index]
                                                         .location!
                                                         .placeName![1]
                                                         .toString(),
-                                                    imageUrl: _homeController
-                                                        .posts
-                                                        .value
+                                                    imageUrl: snapshot
+                                                        .data!
                                                         .response!
                                                         .data![index]
                                                         .files![0],
-                                                    caption: _homeController
-                                                        .posts
-                                                        .value
+                                                    caption: snapshot
+                                                        .data!
                                                         .response!
                                                         .data![index]
                                                         .caption!,
-                                                    likes: _homeController
-                                                        .posts
-                                                        .value
+                                                    likes: snapshot
+                                                        .data!
                                                         .response!
                                                         .data![index]
                                                         .likes
                                                         .toString(),
-                                                    comments: _homeController
-                                                        .posts
-                                                        .value
+                                                    comments: snapshot
+                                                        .data!
                                                         .response!
                                                         .data![index]
                                                         .comments
                                                         .toString(),
+                                                    hitLike: () {
+                                                      HomeService.likePost(
+                                                          snapshot
+                                                              .data!
+                                                              .response!
+                                                              .data![index]
+                                                              .id!);
+                                                      setState(() {});
+                                                    },
                                                   ),
                                                   Container(
                                                     height: 16 *
@@ -484,20 +501,21 @@ class HomePage extends StatelessWidget {
                                                   )
                                                 ],
                                               );
-                                            }),
-                                      )),
-                                PostTile(
-                                  name: 'Jonathan Swift',
-                                  category: 'Transformation',
-                                  date: '29 May',
-                                  place: 'Chicago',
-                                  imageUrl:
-                                      'https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png',
-                                  caption:
-                                      'Without the right habits, you can surely get fit but can’t stay fit.',
-                                  likes: '1234',
-                                  comments: '60',
-                                )
+                                            });
+                                      return Container();
+                                    }),
+                                // PostTile(
+                                //   name: 'Jonathan Swift',
+                                //   category: 'Transformation',
+                                //   date: '29 May',
+                                //   place: 'Chicago',
+                                //   imageUrl:
+                                //       'https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png',
+                                //   caption:
+                                //       'Without the right habits, you can surely get fit but can’t stay fit.',
+                                //   likes: '1234',
+                                //   comments: '60',
+                                // )
                               ],
                             ),
                           )
@@ -506,280 +524,6 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ))),
-    );
-  }
-}
-
-class PostTile extends StatelessWidget {
-  const PostTile({
-    Key? key,
-    required this.name,
-    required this.imageUrl,
-    required this.category,
-    required this.date,
-    required this.place,
-    required this.caption,
-    required this.likes,
-    required this.comments,
-  }) : super(key: key);
-  final String name;
-  final String imageUrl;
-  final String category;
-  final String date;
-  final String place;
-  final String caption;
-  final String likes;
-  final String comments;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-                left: 16 * SizeConfig.widthMultiplier!,
-                bottom: 16 * SizeConfig.heightMultiplier!,
-                top: 16 * SizeConfig.heightMultiplier!),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 20 * SizeConfig.widthMultiplier!,
-                ),
-                SizedBox(
-                  width: 12 * SizeConfig.widthMultiplier!,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppTextStyle.boldBlackText
-                          .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
-                    ),
-                    Row(
-                      children: [
-                        Text(category,
-                            style: AppTextStyle.normalBlackText.copyWith(
-                                fontSize: 12 * SizeConfig.textMultiplier!,
-                                color: kGreyColor)),
-                        SizedBox(
-                          width: 13 * SizeConfig.widthMultiplier!,
-                        ),
-                        Icon(
-                          Icons.access_time,
-                          size: 16,
-                          color: kGreyColor,
-                        ),
-                        SizedBox(
-                          width: 5 * SizeConfig.widthMultiplier!,
-                        ),
-                        Text(date,
-                            style: AppTextStyle.normalBlackText.copyWith(
-                                fontSize: 12 * SizeConfig.textMultiplier!,
-                                color: kGreyColor)),
-                        SizedBox(
-                          width: 14 * SizeConfig.widthMultiplier!,
-                        ),
-                        Icon(
-                          Icons.place,
-                          size: 16,
-                          color: kGreyColor,
-                        ),
-                        SizedBox(
-                          width: 6.5 * SizeConfig.widthMultiplier!,
-                        ),
-                        Text(place,
-                            style: AppTextStyle.normalBlackText.copyWith(
-                                fontSize: 12 * SizeConfig.textMultiplier!,
-                                color: kGreyColor))
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: 16 * SizeConfig.widthMultiplier!,
-                bottom: 16 * SizeConfig.heightMultiplier!,
-                right: 16 * SizeConfig.widthMultiplier!),
-            child: Text(
-              caption,
-              style: AppTextStyle.NormalText.copyWith(
-                  fontSize: 14 * SizeConfig.textMultiplier!),
-            ),
-          ),
-          CachedNetworkImage(
-            imageUrl: imageUrl,
-            height: 198 * SizeConfig.heightMultiplier!,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: 16 * SizeConfig.widthMultiplier!,
-                bottom: 16 * SizeConfig.heightMultiplier!,
-                right: 16 * SizeConfig.widthMultiplier!,
-                top: 16 * SizeConfig.heightMultiplier!),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.favorite,
-                  color: kRedColor,
-                ),
-                SizedBox(
-                  width: 5 * SizeConfig.widthMultiplier!,
-                ),
-                Text(
-                  'likes'.trParams({'no_likes': likes}),
-                  style: AppTextStyle.boldBlackText
-                      .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
-                ),
-                SizedBox(
-                  width: 18 * SizeConfig.widthMultiplier!,
-                ),
-                Text(
-                  'comments'.trParams({'no_comments': comments}),
-                  style: AppTextStyle.boldBlackText
-                      .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
-                )
-              ],
-            ),
-          ),
-          CommentsTile(
-            name: 'Percy Bysshe Shelley',
-            comment: 'Thank you for the motivational thoughts!',
-            time: '26',
-            likes: 214,
-            onReply: () {},
-          ),
-          SizedBox(
-            height: 16 * SizeConfig.heightMultiplier!,
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class CommentsTile extends StatelessWidget {
-  const CommentsTile({
-    Key? key,
-    required this.name,
-    required this.comment,
-    required this.time,
-    required this.likes,
-    required this.onReply,
-  }) : super(key: key);
-
-  final String name;
-  final String comment;
-  final String time;
-  final int likes;
-  final VoidCallback onReply;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-          left: 16 * SizeConfig.widthMultiplier!,
-          right: 16 * SizeConfig.widthMultiplier!),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 20,
-          ),
-          SizedBox(
-            width: 8 * SizeConfig.widthMultiplier!,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 84 * SizeConfig.heightMultiplier!,
-                width: Get.width - 80 * SizeConfig.widthMultiplier!,
-                padding: EdgeInsets.only(
-                    top: 12 * SizeConfig.heightMultiplier!,
-                    left: 12 * SizeConfig.widthMultiplier!,
-                    right: 12 * SizeConfig.widthMultiplier!),
-                decoration: BoxDecoration(
-                    color: kLightGrey,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8))),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppTextStyle.boldBlackText
-                          .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
-                    ),
-                    SizedBox(
-                      height: 8 * SizeConfig.heightMultiplier!,
-                    ),
-                    Text(
-                      comment,
-                      style: AppTextStyle.normalBlackText
-                          .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 8 * SizeConfig.heightMultiplier!,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 4 * SizeConfig.widthMultiplier!),
-                child: Row(
-                  children: [
-                    Text('post_time'.trParams({'duration': time}),
-                        style: AppTextStyle.normalBlackText.copyWith(
-                            fontSize: 12 * SizeConfig.textMultiplier!,
-                            color: kGreyColor)),
-                    SizedBox(
-                      width: 13 * SizeConfig.widthMultiplier!,
-                    ),
-                    Icon(
-                      Icons.favorite,
-                      color: kGreyColor,
-                      size: 14,
-                    ),
-                    SizedBox(
-                      width: 5 * SizeConfig.widthMultiplier!,
-                    ),
-                    Text('likes'.trParams({'no_likes': likes.toString()}),
-                        style: AppTextStyle.normalBlackText.copyWith(
-                            fontSize: 12 * SizeConfig.textMultiplier!,
-                            color: kGreyColor)),
-                    SizedBox(
-                      width: 13 * SizeConfig.widthMultiplier!,
-                    ),
-                    Icon(
-                      Icons.reply,
-                      color: kGreyColor,
-                      size: 18,
-                    ),
-                    SizedBox(
-                      width: 4 * SizeConfig.widthMultiplier!,
-                    ),
-                    GestureDetector(
-                      onTap: onReply,
-                      child: Text('reply'.tr,
-                          style: AppTextStyle.normalBlackText.copyWith(
-                              fontSize: 12 * SizeConfig.textMultiplier!,
-                              color: kGreyColor)),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          )
-        ],
-      ),
     );
   }
 }
