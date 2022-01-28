@@ -419,7 +419,13 @@ class HomePage extends StatelessWidget {
                                               return Column(
                                                 children: [
                                                   PostTile(
-                                                    name: 'Jonathan Swift',
+                                                    name: _homeController
+                                                        .posts
+                                                        .value
+                                                        .response!
+                                                        .data![index]
+                                                        .userId!
+                                                        .name!,
                                                     category: _homeController
                                                         .posts
                                                         .value
@@ -482,17 +488,9 @@ class HomePage extends StatelessWidget {
                                       )),
                                 PostTile(
                                   name: 'Jonathan Swift',
-                                  category: _homeController
-                                      .posts
-                                      .value
-                                      .response!
-                                      .data![0]
-                                      .postCategory![0]
-                                      .name!,
+                                  category: 'Transformation',
                                   date: '29 May',
-                                  place: _homeController.posts.value.response!
-                                      .data![0].location!.placeName![1]
-                                      .toString(),
+                                  place: 'Chicago',
                                   imageUrl:
                                       'https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png',
                                   caption:
