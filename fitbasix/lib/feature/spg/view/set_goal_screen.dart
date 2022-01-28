@@ -21,7 +21,8 @@ class SetGoalScreen extends StatelessWidget {
       backgroundColor: kPureWhite,
       appBar: PreferredSize(
           child: SPGAppBar(
-              title: '1 of 8',
+              title:
+                  'page_count'.trParams({'pageNumber': "1", 'total_page': "7"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -35,7 +36,7 @@ class SetGoalScreen extends StatelessWidget {
             Container(
               color: kGreenColor,
               height: 2 * SizeConfig.heightMultiplier!,
-              width: Get.width / 8,
+              width: Get.width * (1 / 7),
             ),
             Padding(
               padding: EdgeInsets.only(
@@ -89,6 +90,9 @@ class SetGoalScreen extends StatelessWidget {
                             null) {
                           await SPGService.updateSPGData(
                               _spgController.selectedGoalIndex.value.serialId,
+                              null,
+                              null,
+                              null,
                               null);
                         }
 

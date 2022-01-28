@@ -11,14 +11,17 @@ class SPGService {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getSPGData, data: {});
+    print(response.data.toString());
     return spgModelFromJson(response.toString());
   }
 
-  static Future<PersonalGoal> updateSPGData(int? goalType, String? dob) async {
+  static Future<PersonalGoal> updateSPGData(int? goalType, String? dob,
+      String? height, String? targetWeight, String? currentWeight) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     Map updateGoal = {"goalType": goalType};
     Map updateDob = {"dob": dob};
+    // Map height={}
     Map getData = {};
     var response = await dio!.post(ApiUrl.updateGoal,
         data: goalType != null

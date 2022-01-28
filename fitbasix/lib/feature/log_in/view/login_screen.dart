@@ -1,13 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -210,7 +208,6 @@ class LoginScreen extends StatelessWidget {
                     onTap: () async {
                       await _loginController.googleLogin();
                       final user = FirebaseAuth.instance.currentUser;
-
                       if (user != null) {
                         user.getIdToken().then((value) {
                           log(value.toString());
@@ -233,7 +230,6 @@ class LoginScreen extends StatelessWidget {
                               'AccessToken',
                               _loginController.thirdPartyLogin.value.response!
                                   .user!.token!);
-
                           prefs.setString(
                               'RefreshToken',
                               _loginController.thirdPartyLogin.value.response!
