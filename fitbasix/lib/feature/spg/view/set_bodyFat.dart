@@ -56,8 +56,9 @@ class SetBodyFat extends StatelessWidget {
                     imageUrl: _spgController.bodyFatData![index].image,
                     StartRange:
                         _spgController.bodyFatData![index].start.toString(),
-                    EndRange:
-                        _spgController.bodyFatData![index].start.toString(),
+                    EndRange: (_spgController.bodyFatData![index].start! > 39)
+                        ? "+"
+                        : _spgController.bodyFatData![index].end.toString(),
                     onTap: () {
                       _spgController.selectedBodyFat.value =
                           _spgController.bodyFatData![index];
@@ -125,7 +126,7 @@ class BodyFatTile extends StatelessWidget {
                     fit: BoxFit.contain,
                     imageUrl: imageUrl.toString())),
             SizedBox(height: 17 * SizeConfig.heightMultiplier!),
-            Text(StartRange + "-" + EndRange + "%",
+            Text(StartRange + (EndRange == "+" ? "" : "-") + EndRange + "%",
                 style: AppTextStyle.normalWhiteText
                     .copyWith(height: 0, color: lightBlack)),
             SizedBox(height: 12 * SizeConfig.heightMultiplier!)

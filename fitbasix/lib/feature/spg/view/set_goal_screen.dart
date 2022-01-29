@@ -95,7 +95,6 @@ class SetGoalScreen extends StatelessWidget {
                               null,
                               null);
                         }
-
                         Navigator.push(
                             context,
                             MaterialPageRoute(
