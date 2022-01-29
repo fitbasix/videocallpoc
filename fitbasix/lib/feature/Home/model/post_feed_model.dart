@@ -74,10 +74,10 @@ class Post {
   final Location? location;
   final List<Person>? people;
   final DateTime? updatedAt;
-  final String? userId;
+  final Person? userId;
   final int? category;
   final List<PostCategory>? postCategory;
-  final int? likes;
+  late final int? likes;
   final int? comments;
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
@@ -88,7 +88,7 @@ class Post {
         people:
             List<Person>.from(json["people"].map((x) => Person.fromJson(x))),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        userId: json["userId"],
+        userId: Person.fromJson(json["userId"]),
         category: json["category"] == null ? null : json["category"],
         postCategory: List<PostCategory>.from(
             json["postCategory"].map((x) => PostCategory.fromJson(x))),

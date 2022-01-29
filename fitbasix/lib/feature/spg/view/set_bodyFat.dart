@@ -79,7 +79,7 @@ class SetBodyFat extends StatelessWidget {
             child: ProceedButton(
                 title: 'proceed'.tr,
                 onPressed: () {
-                  Navigator.pushNamed(context, RouteName.setWeight);
+                  Navigator.pushNamed(context, RouteName.setFoodType);
                 }),
           ),
           SizedBox(
@@ -120,16 +120,17 @@ class BodyFatTile extends StatelessWidget {
                         color: isSelected! ? kGreenColor : Colors.transparent),
                     borderRadius: BorderRadius.circular(4),
                     color: kDarkGrey),
-                child: CachedNetworkImage(
-                    height: 98.67 * SizeConfig.widthMultiplier!,
-                    width: 98.67 * SizeConfig.widthMultiplier!,
-                    fit: BoxFit.contain,
-                    imageUrl: imageUrl.toString())),
+                child: SvgPicture.network(
+                  imageUrl.toString(),
+                  height: 98.67 * SizeConfig.widthMultiplier!,
+                  width: 98.67 * SizeConfig.widthMultiplier!,
+                  fit: BoxFit.contain,
+                )),
             SizedBox(height: 17 * SizeConfig.heightMultiplier!),
             Text(StartRange + (EndRange == "+" ? "" : "-") + EndRange + "%",
                 style: AppTextStyle.normalWhiteText
                     .copyWith(height: 0, color: lightBlack)),
-            SizedBox(height: 12 * SizeConfig.heightMultiplier!)
+            SizedBox(height: 6 * SizeConfig.heightMultiplier!)
           ],
         ),
       ),

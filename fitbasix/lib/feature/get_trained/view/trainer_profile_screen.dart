@@ -1,8 +1,12 @@
+import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
+import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -64,7 +68,7 @@ class TrainerProfileScreen extends StatelessWidget {
   }
 }
 
-class TrainerPage extends StatelessWidget {
+class TrainerPage extends StatefulWidget {
   const TrainerPage(
       {required this.trainerImage,
       required this.trainerCoverImage,
@@ -100,10 +104,17 @@ class TrainerPage extends StatelessWidget {
   final List<Certificate> certifcateTitle;
   final String aboutTrainer;
   final List<Plan> allPlans;
+
+  @override
+  State<TrainerPage> createState() => _TrainerPageState();
+}
+
+class _TrainerPageState extends State<TrainerPage> {
   @override
   Widget build(BuildContext context) {
     final TrainerController trainerController = Get.put(TrainerController());
     return Scaffold(
+      backgroundColor: kPureWhite,
       body: SafeArea(
         child: Stack(
           children: [
@@ -128,7 +139,7 @@ class TrainerPage extends StatelessWidget {
                                     height: 187 * SizeConfig.heightMultiplier!,
                                   ),
                                   Text(
-                                    name,
+                                    widget.name,
                                     style: AppTextStyle.titleText.copyWith(
                                         fontSize:
                                             18 * SizeConfig.textMultiplier!),
@@ -138,7 +149,7 @@ class TrainerPage extends StatelessWidget {
                                   ),
                                   CustomButton(
                                     title: 'send_a_message'.tr,
-                                    onPress: onFollow,
+                                    onPress: widget.onFollow,
                                     color: kGreenColor,
                                   ),
                                 ],
@@ -159,7 +170,7 @@ class TrainerPage extends StatelessWidget {
                                     children: [
                                       Column(
                                         children: [
-                                          Text(followersCount,
+                                          Text(widget.followersCount,
                                               style:
                                                   AppTextStyle.boldBlackText),
                                           Text('follower'.tr,
@@ -172,7 +183,7 @@ class TrainerPage extends StatelessWidget {
                                               25 * SizeConfig.widthMultiplier!),
                                       Column(
                                         children: [
-                                          Text(followingCount,
+                                          Text(widget.followingCount,
                                               style:
                                                   AppTextStyle.boldBlackText),
                                           Text('following'.tr,
@@ -194,7 +205,7 @@ class TrainerPage extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            ratingCount.toString(),
+                                            widget.ratingCount.toString(),
                                             style:
                                                 AppTextStyle.greenSemiBoldText,
                                           ),
@@ -202,14 +213,15 @@ class TrainerPage extends StatelessWidget {
                                               width: 8 *
                                                   SizeConfig.widthMultiplier!),
                                           StarRating(
-                                            rating: rating,
+                                            rating: widget.rating,
                                           )
                                         ],
                                       ),
                                       Row(
                                         children: [
                                           Text(
-                                            totalPeopleTrained.toString(),
+                                            widget.totalPeopleTrained
+                                                .toString(),
                                             style: AppTextStyle
                                                 .greenSemiBoldText
                                                 .copyWith(color: lightBlack),
@@ -239,7 +251,8 @@ class TrainerPage extends StatelessWidget {
                             SizedBox(height: 24 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: 24.0 * SizeConfig.widthMultiplier!),
+                                  left: 24.0 * SizeConfig.widthMultiplier!,
+                                  bottom: 24 * SizeConfig.heightMultiplier!),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -255,7 +268,7 @@ class TrainerPage extends StatelessWidget {
                                     height: 28 * SizeConfig.heightMultiplier!,
                                     child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: strengths.length,
+                                        itemCount: widget.strengths.length,
                                         shrinkWrap: true,
                                         itemBuilder:
                                             (BuildContext context, int index) {
@@ -282,8 +295,7 @@ class TrainerPage extends StatelessWidget {
                                                             .widthMultiplier!),
                                                 child: Center(
                                                   child: Text(
-                                                    strengths[index]
-                                                        .name
+                                                    widget.strengths[index].name
                                                         .toString(),
                                                     style: AppTextStyle
                                                         .lightMediumBlackText,
@@ -294,7 +306,7 @@ class TrainerPage extends StatelessWidget {
                                           );
                                         }),
                                   ),
-                                  certifcateTitle.length == 0
+                                  widget.certifcateTitle.length == 0
                                       ? Container()
                                       : Padding(
                                           padding: EdgeInsets.only(
@@ -309,14 +321,15 @@ class TrainerPage extends StatelessWidget {
                                                 .copyWith(color: lightBlack),
                                           ),
                                         ),
-                                  certifcateTitle.length == 0
+                                  widget.certifcateTitle.length == 0
                                       ? Container()
                                       : Container(
                                           height:
                                               79 * SizeConfig.heightMultiplier!,
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
-                                              itemCount: certifcateTitle.length,
+                                              itemCount:
+                                                  widget.certifcateTitle.length,
                                               shrinkWrap: true,
                                               itemBuilder:
                                                   (BuildContext context,
@@ -329,11 +342,13 @@ class TrainerPage extends StatelessWidget {
                                                   child:
                                                       AchivementCertificateTile(
                                                     certificateDescription:
-                                                        certifcateTitle[index]
+                                                        widget
+                                                            .certifcateTitle[
+                                                                index]
                                                             .certificateName!,
-                                                    certificateIcon:
-                                                        certifcateTitle[index]
-                                                            .url!,
+                                                    certificateIcon: widget
+                                                        .certifcateTitle[index]
+                                                        .url!,
                                                     color: index % 2 == 0
                                                         ? oceanBlue
                                                         : lightOrange,
@@ -357,7 +372,7 @@ class TrainerPage extends StatelessWidget {
                                         right:
                                             24.0 * SizeConfig.widthMultiplier!),
                                     child: Text(
-                                      aboutTrainer,
+                                      widget.aboutTrainer,
                                       style: AppTextStyle.lightMediumBlackText
                                           .copyWith(
                                               fontSize: (14) *
@@ -372,7 +387,7 @@ class TrainerPage extends StatelessWidget {
                                       ? Text('plan'.tr,
                                           style: AppTextStyle.greenSemiBoldText
                                               .copyWith(color: lightBlack))
-                                      : allPlans.length != 0
+                                      : widget.allPlans.length != 0
                                           ? Text('plan'.tr,
                                               style: AppTextStyle
                                                   .greenSemiBoldText
@@ -418,14 +433,15 @@ class TrainerPage extends StatelessWidget {
                                                 );
                                               }),
                                         )
-                                      : (allPlans.length != 0
+                                      : (widget.allPlans.length != 0
                                           ? Container(
                                               height: 238 *
                                                   SizeConfig.heightMultiplier!,
                                               child: ListView.builder(
                                                   scrollDirection:
                                                       Axis.horizontal,
-                                                  itemCount: allPlans.length,
+                                                  itemCount:
+                                                      widget.allPlans.length,
                                                   shrinkWrap: true,
                                                   itemBuilder:
                                                       (BuildContext context,
@@ -437,51 +453,136 @@ class TrainerPage extends StatelessWidget {
                                                                   .widthMultiplier!),
                                                       child: PlanTile(
                                                         rating: double.parse(
-                                                            allPlans[index]
+                                                            widget
+                                                                .allPlans[index]
                                                                 .plansRating
                                                                 .toString()),
-                                                        planTitle:
-                                                            allPlans[index]
-                                                                .planName!,
-                                                        planImage:
-                                                            allPlans[index]
-                                                                .planIcon!,
+                                                        planTitle: widget
+                                                            .allPlans[index]
+                                                            .planName!,
+                                                        planImage: widget
+                                                            .allPlans[index]
+                                                            .planIcon!,
                                                         palnTime: 'planTime'
                                                             .trParams({
-                                                          'duration': (allPlans[
+                                                          'duration': (widget
+                                                                      .allPlans[
                                                                           index]
                                                                       .planDuration! %
                                                                   5)
                                                               .toString()
                                                         }),
                                                         likesCount: NumberFormatter
-                                                            .textFormatter(
-                                                                allPlans[index]
-                                                                    .likesCount!
-                                                                    .toString()),
+                                                            .textFormatter(widget
+                                                                .allPlans[index]
+                                                                .likesCount!
+                                                                .toString()),
                                                         ratingCount: NumberFormatter
-                                                            .textFormatter(
-                                                                allPlans[index]
-                                                                    .raters!
-                                                                    .toString()),
+                                                            .textFormatter(widget
+                                                                .allPlans[index]
+                                                                .raters!
+                                                                .toString()),
                                                       ),
                                                     );
                                                   }),
                                             )
                                           : SizedBox())),
-                                  SizedBox(
-                                      height:
-                                          224 * SizeConfig.heightMultiplier!),
                                 ],
                               ),
                             ),
+                            Container(
+                              height: 16 * SizeConfig.heightMultiplier!,
+                              color: kBackgroundColor,
+                            ),
+                            StreamBuilder<PostsModel>(
+                                stream: TrainerServices.getTrainerPosts(
+                                    trainerController
+                                        .atrainerDetail.value.user!.id!),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData)
+                                    return ListView.builder(
+                                        itemCount: snapshot
+                                            .data!.response!.data!.length,
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (_, index) {
+                                          return Column(
+                                            children: [
+                                              PostTile(
+                                                name: snapshot.data!.response!
+                                                    .data![index].userId!.name!,
+                                                profilePhoto: snapshot
+                                                    .data!
+                                                    .response!
+                                                    .data![index]
+                                                    .userId!
+                                                    .profilePhoto!,
+                                                category: snapshot
+                                                    .data!
+                                                    .response!
+                                                    .data![index]
+                                                    .postCategory![0]
+                                                    .name!,
+                                                date: DateFormat.d()
+                                                    .add_MMM()
+                                                    .format(snapshot
+                                                        .data!
+                                                        .response!
+                                                        .data![index]
+                                                        .updatedAt!),
+                                                place: snapshot
+                                                    .data!
+                                                    .response!
+                                                    .data![index]
+                                                    .location!
+                                                    .placeName![1]
+                                                    .toString(),
+                                                imageUrl: snapshot
+                                                    .data!
+                                                    .response!
+                                                    .data![index]
+                                                    .files![0],
+                                                caption: snapshot
+                                                    .data!
+                                                    .response!
+                                                    .data![index]
+                                                    .caption!,
+                                                likes: snapshot.data!.response!
+                                                    .data![index].likes
+                                                    .toString(),
+                                                comments: snapshot
+                                                    .data!
+                                                    .response!
+                                                    .data![index]
+                                                    .comments
+                                                    .toString(),
+                                                hitLike: () {
+                                                  HomeService.likePost(snapshot
+                                                      .data!
+                                                      .response!
+                                                      .data![index]
+                                                      .id!);
+                                                  setState(() {});
+                                                },
+                                              ),
+                                              Container(
+                                                height: 16 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
+                                                color: kBackgroundColor,
+                                              )
+                                            ],
+                                          );
+                                        });
+                                  return Container();
+                                }),
                           ],
                         ),
                         Container(
                           width: double.infinity,
                           height: 177 * SizeConfig.heightMultiplier!,
                           child: Image.network(
-                            trainerCoverImage,
+                            widget.trainerCoverImage,
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -498,7 +599,8 @@ class TrainerPage extends StatelessWidget {
                             width: 120 * SizeConfig.widthMultiplier!,
                             child: CircleAvatar(
                               radius: 60 * SizeConfig.heightMultiplier!,
-                              backgroundImage: NetworkImage(trainerImage),
+                              backgroundImage:
+                                  NetworkImage(widget.trainerImage),
                             ),
                           ),
                         ),
@@ -506,7 +608,7 @@ class TrainerPage extends StatelessWidget {
                             top: 16 * SizeConfig.heightMultiplier!,
                             left: 16 * SizeConfig.widthMultiplier!,
                             child: GestureDetector(
-                              onTap: onBack,
+                              onTap: widget.onBack,
                               child: Container(
                                 height: 40 * SizeConfig.heightMultiplier!,
                                 width: 40 * SizeConfig.heightMultiplier!,
@@ -541,7 +643,7 @@ class TrainerPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     TextButton.icon(
-                        onPressed: onFollow,
+                        onPressed: widget.onFollow,
                         icon: Icon(
                           Icons.person_add,
                           color: kGreenColor,
@@ -553,7 +655,7 @@ class TrainerPage extends StatelessWidget {
                               color: kGreenColor),
                         )),
                     GestureDetector(
-                      onTap: onEnroll,
+                      onTap: widget.onEnroll,
                       child: Container(
                         decoration: BoxDecoration(
                             color: kGreenColor,

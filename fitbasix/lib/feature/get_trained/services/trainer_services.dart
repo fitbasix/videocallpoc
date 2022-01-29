@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
@@ -98,5 +101,16 @@ class TrainerServices {
     var response =
         await dio!.post(ApiUrl.doFollow, data: {"followee": trainerId});
     print(response.toString());
+  }
+
+  static Stream<PostsModel> getTrainerPosts(String userId) async* {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response =
+        await dio!.post(ApiUrl.getTrainerPosts, data: {"userId": userId});
+
+    log(response.toString());
+
+    yield postsModelFromJson(response.toString());
   }
 }
