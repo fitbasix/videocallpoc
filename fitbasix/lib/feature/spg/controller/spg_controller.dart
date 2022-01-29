@@ -11,7 +11,7 @@ class SPGController extends GetxController {
   Rx<SpgModel> spgData = SpgModel().obs;
   RxList<BodyType>? bodyFatData = <BodyType>[].obs;
   RxBool isLoading = RxBool(false);
-  RxInt selectedGenderIndex = RxInt(0);
+  Rx<Type> selectedGenderIndex = Type().obs;
   RxList<bool> genderSelection = <bool>[true].obs;
   final rulerPickerController = RulerPickerController(value: 2);
   final poundsRulerPickerController = RulerPickerController();
@@ -21,7 +21,7 @@ class SPGController extends GetxController {
   final heightRulerPickerController = RulerPickerController(value: 0);
   RxInt targetWeight = 65.obs;
   Rx<GoalData> personalGoal = GoalData().obs;
-  RxString selectedDate = "".obs;
+  RxString selectedDate = DateTime(1999).toString().obs;
   Rx<BodyType> selectedBodyFat = BodyType().obs;
   RxString heightType = "inch".obs;
   RxString weightType = "kg".obs;
@@ -45,33 +45,21 @@ class SPGController extends GetxController {
     return goalSelection;
   }
 
-  List<bool> updatedGenderStatus(int index) {
-    int length = spgData.value.response!.data!.genderType!.length;
-    List<bool> selecteOption = [];
-    for (int i = 0; i < length; i++) {
-      if (i == index) {
-        selecteOption.add(true);
-      } else {
-        selecteOption.add(false);
-      }
-    }
-    genderSelection.value = selecteOption;
-    return genderSelection;
-  }
+  void UpdatedData(String) {}
 
-  List<bool> updateFoodType(int index) {
-    int length = spgData.value.response!.data!.foodType!.length;
-    List<bool> selecteOption = [];
-    for (int i = 0; i < length; i++) {
-      if (i == index) {
-        selecteOption.add(true);
-      } else {
-        selecteOption.add(false);
-      }
-    }
-    foodSelection.value = selecteOption;
-    return foodSelection;
-  }
+  // List<bool> updateFoodType(int index) {
+  //   int length = spgData.value.response!.data!.foodType!.length;
+  //   List<bool> selecteOption = [];
+  //   for (int i = 0; i < length; i++) {
+  //     if (i == index) {
+  //       selecteOption.add(true);
+  //     } else {
+  //       selecteOption.add(false);
+  //     }
+  //   }
+  //   foodSelection.value = selecteOption;
+  //   return foodSelection;
+  // }
 
   Future<void> setup() async {
     isLoading.value = true;

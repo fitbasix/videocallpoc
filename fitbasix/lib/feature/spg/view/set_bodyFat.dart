@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
@@ -17,7 +18,8 @@ class SetBodyFat extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
           child: SPGAppBar(
-              title: '5 of 8',
+              title:
+                  'page_count'.trParams({'pageNumber': "6", 'total_page': "8"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -51,6 +53,10 @@ class SetBodyFat extends StatelessWidget {
                   crossAxisCount: 3,
                   crossAxisSpacing: 10 * SizeConfig.heightMultiplier!),
               itemBuilder: (_, index) {
+                if (_spgController.selectedBodyFat.value.serialId == null) {
+                  _spgController.selectedBodyFat.value =
+                      _spgController.bodyFatData![0];
+                }
                 return Obx(
                   () => BodyFatTile(
                     imageUrl: _spgController.bodyFatData![index].image,
@@ -79,6 +85,7 @@ class SetBodyFat extends StatelessWidget {
             child: ProceedButton(
                 title: 'proceed'.tr,
                 onPressed: () {
+                  print(_spgController.selectedBodyFat.value.serialId);
                   Navigator.pushNamed(context, RouteName.setFoodType);
                 }),
           ),
@@ -111,21 +118,45 @@ class BodyFatTile extends StatelessWidget {
         color: Colors.transparent,
         child: Column(
           children: [
-            Container(
-                height: 90 * SizeConfig.widthMultiplier!,
-                width: 90 * SizeConfig.widthMultiplier!,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        width: 1,
-                        color: isSelected! ? kGreenColor : Colors.transparent),
-                    borderRadius: BorderRadius.circular(4),
-                    color: kDarkGrey),
-                child: SvgPicture.network(
-                  imageUrl.toString(),
-                  height: 98.67 * SizeConfig.widthMultiplier!,
-                  width: 98.67 * SizeConfig.widthMultiplier!,
-                  fit: BoxFit.contain,
-                )),
+            Stack(
+              children: [
+                Container(
+                    height: 90 * SizeConfig.widthMultiplier!,
+                    width: 90 * SizeConfig.widthMultiplier!,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 1.5 * SizeConfig.widthMultiplier!,
+                          color:
+                              isSelected! ? kGreenColor : Colors.transparent),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Stack(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: imageUrl.toString(),
+                          height: 98.67 * SizeConfig.widthMultiplier!,
+                          width: 98.67 * SizeConfig.widthMultiplier!,
+                          fit: BoxFit.cover,
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right: 5 * SizeConfig.widthMultiplier!,
+                                top: 5 * SizeConfig.widthMultiplier!),
+                            child: Container(
+                              height: 15 * SizeConfig.widthMultiplier!,
+                              width: 15 * SizeConfig.widthMultiplier!,
+                              child: isSelected!
+                                  ? SvgPicture.asset(ImagePath.greenRightTick)
+                                  : Container(),
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
+              ],
+            ),
             SizedBox(height: 17 * SizeConfig.heightMultiplier!),
             Text(StartRange + (EndRange == "+" ? "" : "-") + EndRange + "%",
                 style: AppTextStyle.normalWhiteText

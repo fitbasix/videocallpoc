@@ -38,13 +38,13 @@ class SPGAppBar extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
-          TextButton(
-              onPressed: onSkip,
-              child: Text(
-                'skip'.tr,
-                style: AppTextStyle.normalBlackText.copyWith(
-                    color: hintGrey, fontSize: 14 * SizeConfig.textMultiplier!),
-              ))
+          // TextButton(
+          //     onPressed: onSkip,
+          //     child: Text(
+          //       'skip'.tr,
+          //       style: AppTextStyle.normalBlackText.copyWith(
+          //           color: hintGrey, fontSize: 14 * SizeConfig.textMultiplier!),
+          //     ))
         ],
       ),
     );

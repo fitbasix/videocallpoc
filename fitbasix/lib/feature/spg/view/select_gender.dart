@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -21,7 +22,8 @@ class SelectGenderScreen extends StatelessWidget {
       backgroundColor: kPureWhite,
       appBar: PreferredSize(
           child: SPGAppBar(
-              title: '2 of 8',
+              title:
+                  'page_count'.trParams({'pageNumber': "2", 'total_page': "8"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -62,6 +64,12 @@ class SelectGenderScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       // physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (_, index) {
+                        if (_spgController.selectedGenderIndex.value.serialId ==
+                            null) {
+                          _spgController.selectedGenderIndex.value =
+                              _spgController.spgData.value.response!.data!
+                                  .genderType![index];
+                        }
                         return Obx(() => Padding(
                               padding: index == 0
                                   ? EdgeInsets.only(
@@ -74,14 +82,17 @@ class SelectGenderScreen extends StatelessWidget {
                                     .data!.genderType![index].image!,
                                 onTap: () {
                                   _spgController.selectedGenderIndex.value =
-                                      index;
-
-                                  _spgController.updatedGenderStatus(
-                                      _spgController.selectedGenderIndex.value);
+                                      _spgController.spgData.value.response!
+                                          .data!.genderType![index];
                                 },
                                 isSelected:
                                     _spgController.selectedGenderIndex.value ==
-                                            index
+                                            _spgController
+                                                .spgData
+                                                .value
+                                                .response!
+                                                .data!
+                                                .genderType![index]
                                         ? true
                                         : false,
                               ),
@@ -98,6 +109,7 @@ class SelectGenderScreen extends StatelessWidget {
             child: ProceedButton(
                 title: 'proceed'.tr,
                 onPressed: () {
+                  print(_spgController.selectedGenderIndex.value.serialId);
                   Navigator.pushNamed(context, RouteName.setDob);
                 }),
           ),
@@ -141,7 +153,7 @@ class GenderCard extends StatelessWidget {
               children: [
                 SizedBox(
                     height: 129 * SizeConfig.heightMultiplier!,
-                    child: SvgPicture.network(imageUrl)),
+                    child: CachedNetworkImage(imageUrl: imageUrl)),
                 SizedBox(
                   height: 14 * SizeConfig.heightMultiplier!,
                 ),

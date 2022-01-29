@@ -18,7 +18,8 @@ class SetWeight extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
           child: SPGAppBar(
-              title: '5 of 8',
+              title:
+                  'page_count'.trParams({'pageNumber': "5", 'total_page': "8"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -160,7 +161,7 @@ class SetWeight extends StatelessWidget {
                             color: kGreenColor, width: 1, height: 15, scale: -1)
                       ],
                       onBuildRulerScalueText: (index, scaleValue) {
-                        return (scaleValue * 2).toInt().toString();
+                        return (scaleValue * 2).toInt().toString() + "lbs";
                       },
                       onValueChange: (value) {
                         _spgController.currentWeight.value = value * 2;
@@ -186,6 +187,9 @@ class SetWeight extends StatelessWidget {
                         ScaleLineStyle(
                             color: kGreenColor, width: 1, height: 15, scale: -1)
                       ],
+                      onBuildRulerScalueText: (index, scaleValue) {
+                        return (scaleValue).toInt().toString() + "kg";
+                      },
                       onValueChange: (value) {
                         _spgController.currentWeight.value = value;
                       },
@@ -251,7 +255,7 @@ class SetWeight extends StatelessWidget {
                             color: kGreenColor, width: 1, height: 15, scale: -1)
                       ],
                       onBuildRulerScalueText: (index, scaleValue) {
-                        return (scaleValue * 2).toInt().toString();
+                        return (scaleValue * 2).toInt().toString() + "lbs";
                       },
                       onValueChange: (value) {
                         _spgController.targetWeight.value = value * 2;
@@ -268,6 +272,9 @@ class SetWeight extends StatelessWidget {
                       beginValue: 30,
                       endValue: 200,
                       initValue: _spgController.targetWeight.value,
+                      onBuildRulerScalueText: (index, scaleValue) {
+                        return (scaleValue).toInt().toString() + "kg";
+                      },
                       scaleLineStyleList: const [
                         ScaleLineStyle(
                             color: kGreenColor,
@@ -296,6 +303,20 @@ class SetWeight extends StatelessWidget {
             child: ProceedButton(
                 title: 'proceed'.tr,
                 onPressed: () {
+                  if (_spgController.weightType.value == "kg") {
+                    print(_spgController.targetWeight.value);
+                    print(_spgController.currentWeight.value);
+                  } else {
+                    print((_spgController.targetWeight.value / 2.205).toInt());
+                    print((_spgController.currentWeight.value / 2.205).toInt());
+                  }
+                  if (_spgController.selectedGenderIndex.value.serialId == 1) {
+                    _spgController.bodyFatData!.value = _spgController
+                        .spgData.value.response!.data!.bodyTypeMale!;
+                  } else {
+                    _spgController.bodyFatData!.value = _spgController
+                        .spgData.value.response!.data!.bodyTypeFemale!;
+                  }
                   Navigator.pushNamed(context, RouteName.setBodyFat);
                 }),
           ),
