@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
@@ -21,7 +22,7 @@ class SetFoodType extends StatelessWidget {
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
-                  'page_count'.trParams({'pageNumber': "6", 'total_page': "7"}),
+                  'page_count'.trParams({'pageNumber': "7", 'total_page': "8"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -34,7 +35,7 @@ class SetFoodType extends StatelessWidget {
           Container(
             color: kGreenColor,
             height: 2 * SizeConfig.heightMultiplier!,
-            width: Get.width * (6 / 7),
+            width: Get.width * (7 / 8),
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -58,6 +59,11 @@ class SetFoodType extends StatelessWidget {
                         .spgData.value.response!.data!.foodType!.length,
                     shrinkWrap: true,
                     itemBuilder: (_, index) {
+                      if (_spgController.selectedFoodIndex.value.serialId ==
+                          null) {
+                        _spgController.selectedFoodIndex.value = _spgController
+                            .spgData.value.response!.data!.foodType![0];
+                      }
                       return Obx(() => FoodTile(
                             title: _spgController.spgData.value.response!.data!
                                 .foodType![index].name!,
@@ -67,9 +73,6 @@ class SetFoodType extends StatelessWidget {
                               _spgController.selectedFoodIndex.value =
                                   _spgController.spgData.value.response!.data!
                                       .foodType![index];
-
-                              print(_spgController.spgData.value.response!.data!
-                                  .foodType![index].image!);
                             },
                             isSelected: _spgController.spgData.value.response!
                                         .data!.foodType![index] ==
@@ -134,13 +137,13 @@ class FoodTile extends StatelessWidget {
               Container(
                   height: 60 * SizeConfig.heightMultiplier!,
                   width: 60 * SizeConfig.heightMultiplier!,
-                  child: SvgPicture.network(
-                    imageUrl,
+                  child: CachedNetworkImage(
                     height: 60 * SizeConfig.heightMultiplier!,
                     width: 60 * SizeConfig.heightMultiplier!,
+                    imageUrl: imageUrl,
                   )),
               SizedBox(
-                width: 8 * SizeConfig.widthMultiplier!,
+                width: 15 * SizeConfig.widthMultiplier!,
               ),
               Text(
                 title,

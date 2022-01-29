@@ -19,7 +19,8 @@ class SetHeight extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
           child: SPGAppBar(
-              title: '4 of 8',
+              title:
+                  'page_count'.trParams({'pageNumber': "4", 'total_page': "8"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -200,6 +201,9 @@ class SetHeight extends StatelessWidget {
               onValueChange: (value) {
                 _spgController.currentHeight.value = value;
               },
+              onBuildRulerScalueText: (index, scaleValue) {
+                return scaleValue.toString() + "cm";
+              },
               width: Get.width - 48 * SizeConfig.widthMultiplier!,
               height: 100 * SizeConfig.heightMultiplier!,
               rulerScaleTextStyle: AppTextStyle.normalGreenText,
@@ -213,13 +217,8 @@ class SetHeight extends StatelessWidget {
                 horizontal: 16 * SizeConfig.widthMultiplier!),
             child: ProceedButton(
                 title: 'proceed'.tr,
-                onPressed: () async {
-                  await SPGService.updateSPGData(
-                      null,
-                      null,
-                      _spgController.currentHeight.value.toString(),
-                      null,
-                      null);
+                onPressed: () {
+                  print(_spgController.currentHeight.value);
                   Navigator.pushNamed(context, RouteName.setWeight);
                 }),
           ),
