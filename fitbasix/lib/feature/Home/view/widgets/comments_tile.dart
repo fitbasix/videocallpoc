@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:readmore/readmore.dart';
 
 class CommentsTile extends StatelessWidget {
   const CommentsTile({
@@ -11,14 +14,18 @@ class CommentsTile extends StatelessWidget {
     required this.comment,
     required this.time,
     required this.likes,
+    required this.profilePhoto,
     required this.onReply,
+    required this.onLikeComment,
   }) : super(key: key);
 
   final String name;
   final String comment;
   final String time;
   final int likes;
+  final String profilePhoto;
   final VoidCallback onReply;
+  final VoidCallback onLikeComment;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +38,7 @@ class CommentsTile extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 20,
+            backgroundImage: CachedNetworkImageProvider(profilePhoto),
           ),
           SizedBox(
             width: 8 * SizeConfig.widthMultiplier!,
@@ -39,12 +47,13 @@ class CommentsTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 84 * SizeConfig.heightMultiplier!,
+                // height: 84 * SizeConfig.heightMultiplier!,
                 width: Get.width - 80 * SizeConfig.widthMultiplier!,
                 padding: EdgeInsets.only(
                     top: 12 * SizeConfig.heightMultiplier!,
                     left: 12 * SizeConfig.widthMultiplier!,
-                    right: 12 * SizeConfig.widthMultiplier!),
+                    right: 12 * SizeConfig.widthMultiplier!,
+                    bottom: 16 * SizeConfig.heightMultiplier!),
                 decoration: BoxDecoration(
                     color: kLightGrey,
                     borderRadius: BorderRadius.only(
@@ -62,11 +71,21 @@ class CommentsTile extends StatelessWidget {
                     SizedBox(
                       height: 8 * SizeConfig.heightMultiplier!,
                     ),
-                    Text(
+                    ReadMoreText(
                       comment,
+                      trimLines: 2,
+                      trimMode: TrimMode.Line,
+                      trimCollapsedText: 'see_more'.tr,
+                      trimExpandedText: 'see_less'.tr,
+                      colorClickableText: hintGrey,
                       style: AppTextStyle.normalBlackText
                           .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
                     )
+                    // Text(
+                    //   comment,
+                    //   style: AppTextStyle.normalBlackText
+                    //       .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                    // )
                   ],
                 ),
               ),
@@ -77,17 +96,20 @@ class CommentsTile extends StatelessWidget {
                 padding: EdgeInsets.only(left: 4 * SizeConfig.widthMultiplier!),
                 child: Row(
                   children: [
-                    Text('post_time'.trParams({'duration': time}),
+                    Text(time,
                         style: AppTextStyle.normalBlackText.copyWith(
                             fontSize: 12 * SizeConfig.textMultiplier!,
                             color: kGreyColor)),
                     SizedBox(
                       width: 13 * SizeConfig.widthMultiplier!,
                     ),
-                    Icon(
-                      Icons.favorite,
-                      color: kGreyColor,
-                      size: 14,
+                    InkWell(
+                      onTap: onLikeComment,
+                      child: Icon(
+                        Icons.favorite,
+                        color: kGreyColor,
+                        size: 14,
+                      ),
                     ),
                     SizedBox(
                       width: 5 * SizeConfig.widthMultiplier!,
