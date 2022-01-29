@@ -13,7 +13,9 @@ import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
+import 'package:fitbasix/feature/spg/view/set_activity.dart';
 import 'package:fitbasix/feature/spg/view/set_bodyFat.dart';
+import 'package:fitbasix/feature/spg/view/set_foodType.dart';
 import 'package:fitbasix/feature/spg/view/set_height.dart';
 import 'package:fitbasix/feature/spg/view/set_weight.dart';
 import '../../feature/spg/view/set_dob.dart';
@@ -40,6 +42,8 @@ abstract class RouteName {
   static const setWeight = '/set_weight';
   static const setHeight = '/set_height';
   static const setBodyFat = '/set_bodyFat';
+  static const setFoodType = '/set_food_type';
+  static const setActivity = '/set_activity';
   RouteName._();
 }
 
@@ -173,6 +177,21 @@ class GenerateRoute {
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             SelectMediaScreen(),
+      );
+    }
+    if (route == RouteName.setFoodType) {
+      return PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            SetFoodType(),
+      );
+    }
+
+    if (route == RouteName.setActivity) {
+      return PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            SetActivity(),
       );
     } else {
       return PageRouteBuilder(

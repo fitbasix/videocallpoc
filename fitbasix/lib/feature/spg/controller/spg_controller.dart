@@ -22,6 +22,9 @@ class SPGController extends GetxController {
   Rx<GoalData> personalGoal = GoalData().obs;
   RxString selectedDate = "".obs;
   Rx<BodyType> selectedBodyFat = BodyType().obs;
+  Rx<Type> selectedFoodIndex = Type().obs;
+  RxList<bool> foodSelection = <bool>[true].obs;
+  RxDouble activityNumber = RxDouble(0);
   // final DateTimeFormatter formatter =
   //     DateTimeFormatter.isDayFormat("'yyyy-MM-dd'");
 
@@ -53,10 +56,25 @@ class SPGController extends GetxController {
     return genderSelection;
   }
 
+  List<bool> updateFoodType(int index) {
+    int length = spgData.value.response!.data!.foodType!.length;
+    List<bool> selecteOption = [];
+    for (int i = 0; i < length; i++) {
+      if (i == index) {
+        selecteOption.add(true);
+      } else {
+        selecteOption.add(false);
+      }
+    }
+    foodSelection.value = selecteOption;
+    return foodSelection;
+  }
+
   Future<void> setup() async {
     isLoading.value = true;
     spgData.value = await SPGService.getSPGData();
     bodyFatData!.value = spgData.value.response!.data!.bodyTypeMale!;
+
     isLoading.value = false;
   }
 

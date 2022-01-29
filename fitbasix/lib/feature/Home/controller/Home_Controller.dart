@@ -15,9 +15,6 @@ class HomeController extends GetxController {
   Future<void> setup() async {
     isLoading.value = true;
     userProfileData.value = await CreatePostService.getUserProfile();
-    posts.value = await HomeService.getPosts();
-
-    log(posts.value.response!.data!.length.toString());
     isLoading.value = false;
   }
 

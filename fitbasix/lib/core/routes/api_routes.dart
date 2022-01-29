@@ -26,6 +26,8 @@ class ApiUrl {
   static String createPost = liveBaseURL + '/api/posts/create';
   static String getAllCategory = liveBaseURL + '/api/category/getAll';
   static String getPosts = liveBaseURL + '/api/posts/getPosts';
+  static String getTrainerPosts = liveBaseURL + '/api/posts/getMypost';
+  static String likePost = liveBaseURL + '/api/like/hitLike';
 
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';

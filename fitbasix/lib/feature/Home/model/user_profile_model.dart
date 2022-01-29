@@ -150,7 +150,7 @@ class Nutrition {
         protein: Protein.fromJson(json["protein"]),
         carbs: Carbs.fromJson(json["carbs"]),
         fats: Fats.fromJson(json["fats"]),
-        date: DateTime.parse(json["date"]),
+        // date: DateTime.parse(json["date"]),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
