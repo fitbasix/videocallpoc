@@ -15,6 +15,11 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: kPureWhite,
   );
+  static TextStyle white400Text = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: kPureWhite,
+  );
   static TextStyle NormalText = GoogleFonts.openSans(
     fontSize: (16) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w400,

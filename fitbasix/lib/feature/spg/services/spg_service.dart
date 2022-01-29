@@ -10,7 +10,9 @@ class SPGService {
   static Future getSPGData() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    print("test1");
     var response = await dio!.post(ApiUrl.getSPGData, data: {});
+    print("test2");
     print(response.data.toString());
     return spgModelFromJson(response.toString());
   }
