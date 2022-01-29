@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
@@ -110,6 +111,7 @@ class TrainerPage extends StatefulWidget {
 }
 
 class _TrainerPageState extends State<TrainerPage> {
+  final HomeController _homeController = Get.find();
   @override
   Widget build(BuildContext context) {
     final TrainerController trainerController = Get.put(TrainerController());
@@ -557,13 +559,28 @@ class _TrainerPageState extends State<TrainerPage> {
                                                     .comments
                                                     .toString(),
                                                 hitLike: () {
-                                                  HomeService.likePost(snapshot
-                                                      .data!
-                                                      .response!
-                                                      .data![index]
-                                                      .id!);
+                                                  HomeService.likePost(
+                                                      postId: snapshot
+                                                          .data!
+                                                          .response!
+                                                          .data![index]
+                                                          .id!);
                                                   setState(() {});
                                                 },
+                                                addComment: () {
+                                                  HomeService.addComment(
+                                                      snapshot.data!.response!
+                                                          .data![index].id!,
+                                                      _homeController
+                                                          .comment.value);
+
+                                                  setState(() {});
+                                                  _homeController
+                                                      .commentController
+                                                      .clear();
+                                                },
+                                                postId: snapshot.data!.response!
+                                                    .data![index].id!,
                                               ),
                                               Container(
                                                 height: 16 *
@@ -576,6 +593,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                         });
                                   return Container();
                                 }),
+                            SizedBox(
+                              height: 100 * SizeConfig.heightMultiplier!,
+                            )
                           ],
                         ),
                         Container(

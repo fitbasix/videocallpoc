@@ -2,7 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/tools_screen.dart';
+import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
+import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -28,12 +31,21 @@ import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
-  final List<Widget> screens = [HomePage(), GetTrainedScreen()];
+  final List<Widget> screens = [
+    HomePage(),
+    GetTrainedScreen(),
+    CreatePostScreen(),
+    ToolsScreen()
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: homeController.drawerKey,
       body: Obx(() => screens[homeController.selectedIndex.value]),
-      bottomNavigationBar: CustomizedBottomAppBar(),
+      // bottomNavigationBar: CustomizedBottomAppBar(),
+
+      bottomNavigationBar: CustomBottomNavigationBar(),
+      endDrawer: Drawer(),
     );
   }
 }
@@ -56,16 +68,16 @@ class _HomePageState extends State<HomePage> {
     final now = DateTime.now();
     String formatter = DateFormat('MMMd').format(now);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kPureWhite,
-        centerTitle: false,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-              onPressed: () {}, icon: SvgPicture.asset(ImagePath.bellIcon))
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: kPureWhite,
+      //   centerTitle: false,
+      //   elevation: 0,
+      //   automaticallyImplyLeading: false,
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () {}, icon: SvgPicture.asset(ImagePath.bellIcon))
+      //   ],
+      // ),
       backgroundColor: kBackgroundColor,
       body: SafeArea(
           child: Obx(() => _homeController.isLoading.value
@@ -118,17 +130,28 @@ class _HomePageState extends State<HomePage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'hi_name'.trParams({
-                                          'name': _homeController
-                                              .userProfileData
-                                              .value
-                                              .response!
-                                              .data!
-                                              .profile!
-                                              .name!
-                                        }),
-                                        style: AppTextStyle.boldBlackText,
+                                      Row(
+                                        // mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'hi_name'.trParams({
+                                              'name': _homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .profile!
+                                                  .name!
+                                            }),
+                                            style: AppTextStyle.boldBlackText,
+                                          ),
+                                          // SizedBox(
+                                          //   width: 31 *
+                                          //       SizeConfig.widthMultiplier!,
+                                          // ),
+                                        ],
                                       ),
                                       Text(
                                         'home_page_subtitle'.tr,
@@ -138,7 +161,9 @@ class _HomePageState extends State<HomePage> {
                                                     SizeConfig.textMultiplier!),
                                       )
                                     ],
-                                  )
+                                  ),
+                                  Spacer(),
+                                  SvgPicture.asset(ImagePath.bellIcon),
                                 ],
                               ),
                             ),
@@ -157,15 +182,9 @@ class _HomePageState extends State<HomePage> {
                                   color: kPurple,
                                   title: 'live_stream'.tr,
                                   icon: Icons.videocam,
-                                  onTap: () async {
-                                    final PostController _postController =
-                                        Get.put(PostController());
-                                    _postController.postId.value =
-                                        await CreatePostService.getPostId();
-
-                                    await _postController.getPostData();
+                                  onTap: () {
                                     Navigator.pushNamed(
-                                        context, RouteName.createPost);
+                                        context, RouteName.getTrainedScreen);
                                   },
                                 ),
                                 HomeTile(
@@ -467,10 +486,11 @@ class _HomePageState extends State<HomePage> {
                                                         .data![index]
                                                         .files![0],
                                                     caption: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .caption!,
+                                                            .data!
+                                                            .response!
+                                                            .data![index]
+                                                            .caption ??
+                                                        '',
                                                     likes: snapshot
                                                         .data!
                                                         .response!
@@ -485,13 +505,33 @@ class _HomePageState extends State<HomePage> {
                                                         .toString(),
                                                     hitLike: () {
                                                       HomeService.likePost(
-                                                          snapshot
+                                                          postId: snapshot
                                                               .data!
                                                               .response!
                                                               .data![index]
                                                               .id!);
                                                       setState(() {});
                                                     },
+                                                    addComment: () {
+                                                      HomeService.addComment(
+                                                          snapshot
+                                                              .data!
+                                                              .response!
+                                                              .data![index]
+                                                              .id!,
+                                                          _homeController
+                                                              .comment.value);
+
+                                                      setState(() {});
+                                                      _homeController
+                                                          .commentController
+                                                          .clear();
+                                                    },
+                                                    postId: snapshot
+                                                        .data!
+                                                        .response!
+                                                        .data![index]
+                                                        .id!,
                                                   ),
                                                   Container(
                                                     height: 16 *
