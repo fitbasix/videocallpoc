@@ -18,7 +18,8 @@ class SetWeight extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
           child: SPGAppBar(
-              title: '5 of 8',
+              title:
+                  'page_count'.trParams({'pageNumber': "5", 'total_page': "8"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -33,7 +34,81 @@ class SetWeight extends StatelessWidget {
             width: Get.width * 0.625,
           ),
           SizedBox(
-            height: 40 * SizeConfig.heightMultiplier!,
+            height: 30 * SizeConfig.heightMultiplier!,
+          ),
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _spgController.currentWeight.value =
+                        _spgController.currentWeight.value ~/ 2;
+                    _spgController.targetWeight.value =
+                        _spgController.targetWeight.value ~/ 2;
+                    _spgController.weightType.value = "kg";
+                  },
+                  child: Container(
+                    height: 36 * SizeConfig.heightMultiplier!,
+                    width: 87 * SizeConfig.widthMultiplier!,
+                    decoration: BoxDecoration(
+                        color: _spgController.weightType == "kg"
+                            ? kGreenColor
+                            : Colors.transparent,
+                        border: Border.all(
+                            color: _spgController.weightType == "kg"
+                                ? Colors.transparent
+                                : lightGrey),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            bottomLeft: Radius.circular(8))),
+                    child: Center(
+                        child: Text(
+                      'kg'.tr,
+                      style: _spgController.weightType == "kg"
+                          ? AppTextStyle.white400Text
+                          : AppTextStyle.white400Text
+                              .copyWith(color: lightBlack),
+                    )),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _spgController.currentWeight.value =
+                        (_spgController.currentWeight.value * 2).toInt();
+                    _spgController.targetWeight.value =
+                        (_spgController.targetWeight.value * 2).toInt();
+                    _spgController.weightType.value = "lbs";
+                  },
+                  child: Container(
+                    height: 36 * SizeConfig.heightMultiplier!,
+                    width: 87 * SizeConfig.widthMultiplier!,
+                    decoration: BoxDecoration(
+                        color: _spgController.weightType != "kg"
+                            ? kGreenColor
+                            : Colors.transparent,
+                        border: Border.all(
+                            color: _spgController.weightType != "kg"
+                                ? Colors.transparent
+                                : lightGrey),
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(8),
+                            bottomRight: Radius.circular(8))),
+                    child: Center(
+                        child: Text(
+                      'lb'.tr,
+                      style: _spgController.weightType != "kg"
+                          ? AppTextStyle.white400Text
+                          : AppTextStyle.white400Text
+                              .copyWith(color: lightBlack),
+                    )),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20 * SizeConfig.heightMultiplier!,
           ),
           Center(
             child: Text(
@@ -43,7 +118,7 @@ class SetWeight extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 40 * SizeConfig.heightMultiplier!,
+            height: 30 * SizeConfig.heightMultiplier!,
           ),
           Obx(
             () => Row(
@@ -57,7 +132,8 @@ class SetWeight extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(width: 3 * SizeConfig.widthMultiplier!),
-                Text("kg",
+                Text(
+                    _spgController.weightType.value == "kg" ? 'kg'.tr : 'lb'.tr,
                     textAlign: TextAlign.start,
                     style: AppTextStyle.normalBlackText
                         .copyWith(fontSize: 14 * SizeConfig.textMultiplier!))
@@ -67,32 +143,67 @@ class SetWeight extends StatelessWidget {
           SizedBox(
             height: 12 * SizeConfig.heightMultiplier!,
           ),
-          Center(
-            child: RulerPicker(
-              controller: _spgController.rulerPickerController,
-              beginValue: 30,
-              endValue: 200,
-              initValue: _spgController.currentWeight.value,
-              scaleLineStyleList: const [
-                ScaleLineStyle(
-                    color: kGreenColor, width: 1.5, height: 30, scale: 0),
-                ScaleLineStyle(
-                    color: kGreenColor, width: 1, height: 15, scale: -1)
-              ],
-              onValueChange: (value) {
-                _spgController.currentWeight.value = value;
-              },
-              width: MediaQuery.of(context).size.width -
-                  48 * SizeConfig.widthMultiplier!,
-              height: 100 * SizeConfig.heightMultiplier!,
-              rulerScaleTextStyle: AppTextStyle.normalGreenText,
-              rulerBackgroundColor: kLightGreen,
-              rulerMarginTop: 15,
+          Obx(
+            () => Center(
+              child: _spgController.weightType.value != "kg"
+                  ? RulerPicker(
+                      controller: _spgController.rulerPickerController,
+                      beginValue: 30,
+                      endValue: 200,
+                      initValue: 60,
+                      scaleLineStyleList: const [
+                        ScaleLineStyle(
+                            color: kGreenColor,
+                            width: 1.5,
+                            height: 30,
+                            scale: 0),
+                        ScaleLineStyle(
+                            color: kGreenColor, width: 1, height: 15, scale: -1)
+                      ],
+                      onBuildRulerScalueText: (index, scaleValue) {
+                        return (scaleValue * 2).toInt().toString() + "lbs";
+                      },
+                      onValueChange: (value) {
+                        _spgController.currentWeight.value = value * 2;
+                      },
+                      width: MediaQuery.of(context).size.width -
+                          48 * SizeConfig.widthMultiplier!,
+                      height: 100 * SizeConfig.heightMultiplier!,
+                      rulerScaleTextStyle: AppTextStyle.normalGreenText,
+                      rulerBackgroundColor: LightGreen,
+                      rulerMarginTop: 15,
+                    )
+                  : RulerPicker(
+                      controller: _spgController.rulerPickerController,
+                      beginValue: 30,
+                      endValue: 200,
+                      initValue: _spgController.currentWeight.value,
+                      scaleLineStyleList: const [
+                        ScaleLineStyle(
+                            color: kGreenColor,
+                            width: 1.5,
+                            height: 30,
+                            scale: 0),
+                        ScaleLineStyle(
+                            color: kGreenColor, width: 1, height: 15, scale: -1)
+                      ],
+                      onBuildRulerScalueText: (index, scaleValue) {
+                        return (scaleValue).toInt().toString() + "kg";
+                      },
+                      onValueChange: (value) {
+                        _spgController.currentWeight.value = value;
+                      },
+                      width: MediaQuery.of(context).size.width -
+                          48 * SizeConfig.widthMultiplier!,
+                      height: 100 * SizeConfig.heightMultiplier!,
+                      rulerScaleTextStyle: AppTextStyle.normalGreenText,
+                      rulerBackgroundColor: LightGreen,
+                      rulerMarginTop: 15,
+                    ),
             ),
-
           ),
           SizedBox(
-            height: 40 * SizeConfig.heightMultiplier!,
+            height: 30 * SizeConfig.heightMultiplier!,
           ),
           Center(
             child: Text(
@@ -115,7 +226,8 @@ class SetWeight extends StatelessWidget {
                       fontSize: 48 * SizeConfig.textMultiplier!, height: 0),
                 ),
                 SizedBox(width: 3 * SizeConfig.widthMultiplier!),
-                Text("kg",
+                Text(
+                    _spgController.weightType.value == "kg" ? 'kg'.tr : 'lb'.tr,
                     textAlign: TextAlign.start,
                     style: AppTextStyle.normalBlackText
                         .copyWith(fontSize: 14 * SizeConfig.textMultiplier!))
@@ -125,29 +237,64 @@ class SetWeight extends StatelessWidget {
           SizedBox(
             height: 12 * SizeConfig.heightMultiplier!,
           ),
-          Center(
-            child: RulerPicker(
-              controller: _spgController.targetRulerPickerController,
-              beginValue: 30,
-              endValue: 200,
-              initValue: _spgController.targetWeight.value,
-              scaleLineStyleList: const [
-                ScaleLineStyle(
-                    color: kGreenColor, width: 1.5, height: 30, scale: 0),
-                ScaleLineStyle(
-                    color: kGreenColor, width: 1, height: 15, scale: -1)
-              ],
-              onValueChange: (value) {
-                _spgController.targetWeight.value = value;
-              },
-              width: MediaQuery.of(context).size.width -
-                  48 * SizeConfig.widthMultiplier!,
-              height: 100 * SizeConfig.heightMultiplier!,
-              rulerScaleTextStyle: AppTextStyle.normalGreenText,
-              rulerBackgroundColor: kLightGreen,
-              rulerMarginTop: 15,
+          Obx(
+            () => Center(
+              child: _spgController.weightType.value != "kg"
+                  ? RulerPicker(
+                      controller: _spgController.targetRulerPickerController,
+                      beginValue: 30,
+                      endValue: 200,
+                      initValue: _spgController.targetWeight.value,
+                      scaleLineStyleList: const [
+                        ScaleLineStyle(
+                            color: kGreenColor,
+                            width: 1.5,
+                            height: 30,
+                            scale: 0),
+                        ScaleLineStyle(
+                            color: kGreenColor, width: 1, height: 15, scale: -1)
+                      ],
+                      onBuildRulerScalueText: (index, scaleValue) {
+                        return (scaleValue * 2).toInt().toString() + "lbs";
+                      },
+                      onValueChange: (value) {
+                        _spgController.targetWeight.value = value * 2;
+                      },
+                      width: MediaQuery.of(context).size.width -
+                          48 * SizeConfig.widthMultiplier!,
+                      height: 100 * SizeConfig.heightMultiplier!,
+                      rulerScaleTextStyle: AppTextStyle.normalGreenText,
+                      rulerBackgroundColor: LightGreen,
+                      rulerMarginTop: 15,
+                    )
+                  : RulerPicker(
+                      controller: _spgController.targetRulerPickerController,
+                      beginValue: 30,
+                      endValue: 200,
+                      initValue: _spgController.targetWeight.value,
+                      onBuildRulerScalueText: (index, scaleValue) {
+                        return (scaleValue).toInt().toString() + "kg";
+                      },
+                      scaleLineStyleList: const [
+                        ScaleLineStyle(
+                            color: kGreenColor,
+                            width: 1.5,
+                            height: 30,
+                            scale: 0),
+                        ScaleLineStyle(
+                            color: kGreenColor, width: 1, height: 15, scale: -1)
+                      ],
+                      onValueChange: (value) {
+                        _spgController.targetWeight.value = value;
+                      },
+                      width: MediaQuery.of(context).size.width -
+                          48 * SizeConfig.widthMultiplier!,
+                      height: 100 * SizeConfig.heightMultiplier!,
+                      rulerScaleTextStyle: AppTextStyle.normalGreenText,
+                      rulerBackgroundColor: LightGreen,
+                      rulerMarginTop: 15,
+                    ),
             ),
-
           ),
           Spacer(),
           Padding(
@@ -156,6 +303,20 @@ class SetWeight extends StatelessWidget {
             child: ProceedButton(
                 title: 'proceed'.tr,
                 onPressed: () {
+                  if (_spgController.weightType.value == "kg") {
+                    print(_spgController.targetWeight.value);
+                    print(_spgController.currentWeight.value);
+                  } else {
+                    print((_spgController.targetWeight.value / 2.205).toInt());
+                    print((_spgController.currentWeight.value / 2.205).toInt());
+                  }
+                  if (_spgController.selectedGenderIndex.value.serialId == 1) {
+                    _spgController.bodyFatData!.value = _spgController
+                        .spgData.value.response!.data!.bodyTypeMale!;
+                  } else {
+                    _spgController.bodyFatData!.value = _spgController
+                        .spgData.value.response!.data!.bodyTypeFemale!;
+                  }
                   Navigator.pushNamed(context, RouteName.setBodyFat);
                 }),
           ),

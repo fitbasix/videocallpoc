@@ -64,7 +64,7 @@ class Data {
   });
 
   final List<Type>? genderType;
-  final List<Type>? activenessType;
+  final List<ActivityType>? activenessType;
   final List<Type>? goalType;
   final List<Type>? foodType;
   final List<BodyType>? bodyTypeMale;
@@ -74,8 +74,8 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         genderType:
             List<Type>.from(json["genderType"].map((x) => Type.fromJson(x))),
-        activenessType: List<Type>.from(
-            json["activenessType"].map((x) => Type.fromJson(x))),
+        activenessType: List<ActivityType>.from(
+            json["activenessType"].map((x) => ActivityType.fromJson(x))),
         goalType:
             List<Type>.from(json["goalType"].map((x) => Type.fromJson(x))),
         foodType:
@@ -98,6 +98,58 @@ class Data {
         "bodyTypeFemale":
             List<dynamic>.from(bodyTypeFemale!.map((x) => x.toJson())),
         "set_goal_intro_image": setGoalIntroImage,
+      };
+}
+
+class ActivityType {
+  ActivityType({
+    this.id,
+    this.name,
+    this.serialId,
+    this.languageCode,
+    this.image,
+    this.title,
+    this.subTitle,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
+
+  final String? id;
+  final String? name;
+  final String? title;
+  final String? subTitle;
+  final int? serialId;
+  final int? languageCode;
+  final String? image;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
+
+  factory ActivityType.fromJson(Map<String, dynamic> json) => ActivityType(
+        id: json["_id"],
+        name: json["name"],
+        serialId: json["serialId"],
+        languageCode: json["languageCode"],
+        image: json["image"],
+        title: json["title"],
+        subTitle: json["subtitle"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        v: json["__v"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+        "serialId": serialId,
+        "languageCode": languageCode,
+        "image": image,
+        "title": title,
+        "subtitle": subTitle,
+        "createdAt": createdAt!.toIso8601String(),
+        "updatedAt": updatedAt!.toIso8601String(),
+        "__v": v,
       };
 }
 

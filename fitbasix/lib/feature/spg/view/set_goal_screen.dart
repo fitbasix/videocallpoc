@@ -1,6 +1,5 @@
-import 'package:fitbasix/feature/spg/services/spg_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -22,7 +21,7 @@ class SetGoalScreen extends StatelessWidget {
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
-                  'page_count'.trParams({'pageNumber': "1", 'total_page': "7"}),
+                  'page_count'.trParams({'pageNumber': "1", 'total_page': "8"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -36,7 +35,7 @@ class SetGoalScreen extends StatelessWidget {
             Container(
               color: kGreenColor,
               height: 2 * SizeConfig.heightMultiplier!,
-              width: Get.width * (1 / 7),
+              width: Get.width * (1 / 8),
             ),
             Padding(
               padding: EdgeInsets.only(
@@ -60,6 +59,12 @@ class SetGoalScreen extends StatelessWidget {
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (_, index) {
+                        if (_spgController.selectedGoalIndex.value.serialId ==
+                            null) {
+                          _spgController.selectedGoalIndex.value =
+                              _spgController
+                                  .spgData.value.response!.data!.goalType![0];
+                        }
                         return Obx(() => GoalCard(
                               title: _spgController.spgData.value.response!
                                   .data!.goalType![index].name!,
@@ -85,17 +90,8 @@ class SetGoalScreen extends StatelessWidget {
                   ),
                   ProceedButton(
                       title: 'proceed'.tr,
-                      onPressed: () async {
-                        if (_spgController.selectedGoalIndex.value.serialId !=
-                            null) {
-                          await SPGService.updateSPGData(
-                              _spgController.selectedGoalIndex.value.serialId,
-                              null,
-                              null,
-                              null,
-                              null);
-                        }
-
+                      onPressed: () {
+                        print(_spgController.selectedGoalIndex.value.serialId);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -149,12 +145,13 @@ class GoalCard extends StatelessWidget {
               Container(
                   height: 60 * SizeConfig.heightMultiplier!,
                   width: 60 * SizeConfig.heightMultiplier!,
-                  child: SvgPicture.network(imageUrl,
+                  child: CachedNetworkImage(
+                      imageUrl: imageUrl,
                       height: 60 * SizeConfig.heightMultiplier!,
                       width: 60 * SizeConfig.heightMultiplier!,
                       fit: BoxFit.contain)),
               SizedBox(
-                width: 8 * SizeConfig.widthMultiplier!,
+                width: 15 * SizeConfig.widthMultiplier!,
               ),
               Text(
                 title,

@@ -19,7 +19,8 @@ class SetDob extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
           child: SPGAppBar(
-              title: '3 of 8',
+              title:
+                  'page_count'.trParams({'pageNumber': "3", 'total_page': "8"}),
               onBack: () {
                 Navigator.pop(context);
               },
@@ -54,10 +55,7 @@ class SetDob extends StatelessWidget {
             child: ProceedButton(
                 title: 'proceed'.tr,
                 onPressed: () async {
-                  if (_spgController.selectedDate.value != "") {
-                    await SPGService.updateSPGData(null,
-                        _spgController.selectedDate.value, null, null, null);
-                  }
+                  print(_spgController.selectedDate.value);
                   Navigator.pushNamed(context, RouteName.setHeight);
                 }),
           ),
@@ -75,7 +73,7 @@ final SPGController _spgController = Get.find();
 Widget datePicker() => Container(
       child: DatePickerWidget(
         looping: true,
-        initialDate: DateTime(1999),
+        initialDate: DateTime.parse(_spgController.selectedDate.value),
         firstDate: DateTime(1994), //DateTime(1960),
         lastDate: DateTime.now(),
         dateFormat: "dd-MMMM-yyyy",
@@ -83,11 +81,9 @@ Widget datePicker() => Container(
         //locale: DatePicker.localeFromString('he'),
         onChange: (DateTime newDate, _) {
           DateTime _selectedDate = newDate;
-          _spgController.selectedDate.value =
-              (DateFormat('dd-LL-yyyy').format(_selectedDate))
-                  .replaceAll("-", "/");
+          _spgController.selectedDate.value = _selectedDate.toString();
+          // (DateFormat('LL-dd-yyyy').format(_selectedDate));
           // ignore: avoid_print
-          print(_spgController.selectedDate.value);
         },
         pickerTheme: DateTimePickerTheme(
           backgroundColor: Colors.transparent,

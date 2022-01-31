@@ -17,6 +17,8 @@ import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_activity.dart';
 import 'package:fitbasix/feature/spg/view/set_bodyFat.dart';
 import 'package:fitbasix/feature/spg/view/set_foodType.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_height.dart';
 import 'package:fitbasix/feature/spg/view/set_weight.dart';
 import '../../feature/spg/view/set_dob.dart';
@@ -40,6 +42,8 @@ abstract class RouteName {
   static const setDob = '/set_dob';
   static const customGallery = '/custom_gallery';
   static const createPost = '/create_post';
+  static const setGoalIntro = 'goal_intro';
+  static const setGoal = '/set-goal';
   static const setWeight = '/set_weight';
   static const setHeight = '/set_height';
   static const setBodyFat = '/set_bodyFat';
@@ -152,6 +156,16 @@ class GenerateRoute {
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             TagPeopleScreen(),
+      );
+    }
+    if (route == RouteName.setGoalIntro) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => SetGoalIntroScreen(),
+      );
+    }
+    if (route == RouteName.setGoal) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => SetGoalScreen(),
       );
     }
     if (route == RouteName.setDob) {
