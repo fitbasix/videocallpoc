@@ -27,7 +27,7 @@ class _CustomizedBottomAppBarState extends State<CustomizedBottomAppBar> {
           padding: EdgeInsets.symmetric(
               horizontal: 24 * SizeConfig.widthMultiplier!),
           child: Container(
-            height: 65 * SizeConfig.heightMultiplier!,
+            height: 64 * SizeConfig.heightMultiplier!,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

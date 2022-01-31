@@ -187,6 +187,8 @@ class PostController extends GetxController {
   @override
   Future<void> onInit() async {
     assets.value = await fetchAssets(presentPage: currentPage.value);
+    postId.value = await CreatePostService.getPostId();
+    await getPostData();
     super.onInit();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
+import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/log_in/view/enter_details_page.dart';
 import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
@@ -48,6 +49,7 @@ abstract class RouteName {
   static const setBodyFat = '/set_bodyFat';
   static const setFoodType = '/set_food_type';
   static const setActivity = '/set_activity';
+  static const getTrainedScreen = '/get_trained';
   RouteName._();
 }
 
@@ -206,6 +208,14 @@ class GenerateRoute {
         pageBuilder: (BuildContext context, Animation<double> animation,
                 Animation<double> secondaryAnimation) =>
             SetActivity(),
+      );
+    }
+
+    if (route == RouteName.getTrainedScreen) {
+      return PageRouteBuilder(
+        pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) =>
+            GetTrainedScreen(),
       );
     } else {
       return PageRouteBuilder(

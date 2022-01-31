@@ -21,7 +21,7 @@ import 'package:shimmer/shimmer.dart';
 
 class CreatePostScreen extends StatelessWidget {
   CreatePostScreen({Key? key}) : super(key: key);
-  final PostController _postController = Get.find();
+  final PostController _postController = Get.put(PostController());
   final HomeController _homeController = Get.find();
 
   @override

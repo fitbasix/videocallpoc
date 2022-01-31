@@ -86,7 +86,7 @@ class Profile {
   final String? name;
   final String? profilePhoto;
   final String? coverPhoto;
-  final List<Nutrition>? nutrition;
+  final Nutrition? nutrition;
   final int? following;
   final int? followers;
 
@@ -95,8 +95,7 @@ class Profile {
         name: json["name"],
         profilePhoto: json["profilePhoto"],
         coverPhoto: json["coverPhoto"],
-        nutrition: List<Nutrition>.from(
-            json["nutrition"].map((x) => Nutrition.fromJson(x))),
+        nutrition: Nutrition.fromJson(json["nutrition"]),
         following: json["following"],
         followers: json["followers"],
       );
@@ -106,7 +105,7 @@ class Profile {
         "name": name,
         "profilePhoto": profilePhoto,
         "coverPhoto": coverPhoto,
-        "nutrition": List<dynamic>.from(nutrition!.map((x) => x.toJson())),
+        "nutrition": nutrition!.toJson(),
         "following": following,
         "followers": followers,
       };
@@ -130,9 +129,9 @@ class Nutrition {
 
   final String? id;
   final String? userId;
-  final int? totalWaterRequired;
+  final double? totalWaterRequired;
   final int? totalWaterConsumed;
-  final int? totalRequiredCalories;
+  final double? totalRequiredCalories;
   final Protein? protein;
   final Carbs? carbs;
   final Fats? fats;
@@ -152,7 +151,7 @@ class Nutrition {
         fats: Fats.fromJson(json["fats"]),
         // date: DateTime.parse(json["date"]),
         createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        // updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
       );
 
@@ -178,7 +177,7 @@ class Carbs {
     this.carbsKiloCals,
   });
 
-  final int? carbsGrams;
+  final double? carbsGrams;
   final double? carbsKiloCals;
 
   factory Carbs.fromJson(Map<String, dynamic> json) => Carbs(
@@ -198,7 +197,7 @@ class Fats {
     this.fatsKiloCals,
   });
 
-  final int? fatsGrams;
+  final double? fatsGrams;
   final double? fatsKiloCals;
 
   factory Fats.fromJson(Map<String, dynamic> json) => Fats(
@@ -218,7 +217,7 @@ class Protein {
     this.proteinKiloCals,
   });
 
-  final int? proteinGrams;
+  final double? proteinGrams;
   final double? proteinKiloCals;
 
   factory Protein.fromJson(Map<String, dynamic> json) => Protein(
