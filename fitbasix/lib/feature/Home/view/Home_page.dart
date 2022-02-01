@@ -51,8 +51,8 @@ class HomeAndTrainerPage extends StatelessWidget {
         child: MenuScreen(
             imageCoverPic: homeController.userProfileData.value.response == null
                 ? ""
-                : homeController.userProfileData.value.response!.data!.profile!
-                    .profilePhoto!,
+                : homeController
+                    .userProfileData.value.response!.data!.profile!.coverPhoto!,
             name: homeController.userProfileData.value.response == null
                 ? ""
                 : homeController
