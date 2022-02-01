@@ -33,4 +33,21 @@ class ImagePath {
   static const String dropIcon = "assets/Icons/drop_icon.png";
   static const String fireIcon = "assets/Icons/fire_icon.png";
   static const String searchFavoriteIcon = "assets/Icons/search-favorite.svg";
+
+  ///menu slider options
+  static const String account = "assets/menuSlider/account.svg";
+  static const String feedback = "assets/menuSlider/feedback.svg";
+  static const String legal = "assets/menuSlider/legal.svg";
+  static const String logOut = "assets/menuSlider/logout.svg";
+  static const String settings = "assets/menuSlider/settings.svg";
+  static const String support = "assets/menuSlider/support.svg";
+
+  ///home healthImage
+  static const String carbsIcon = "assets/home/carbs.svg";
+  static const String fatIcon = "assets/home/fat.svg";
+  static const String proteinIcon = "assets/home/protein.svg";
+  static const String water = "assets/home/water.svg";
+  static const String fire = "assets/home/fire.svg";
+  static const String power = "assets/home/power.svg";
+  static const String add = "assets/home/add.svg";
 }
