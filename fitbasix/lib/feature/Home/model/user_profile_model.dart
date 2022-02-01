@@ -130,7 +130,7 @@ class Nutrition {
   final String? id;
   final String? userId;
   final double? totalWaterRequired;
-  final int? totalWaterConsumed;
+  final double? totalWaterConsumed;
   final double? totalRequiredCalories;
   final Protein? protein;
   final Carbs? carbs;
@@ -144,8 +144,8 @@ class Nutrition {
         id: json["_id"],
         userId: json["userId"],
         totalWaterRequired: json["totalWaterRequired"],
-        totalWaterConsumed: json["totalWaterConsumed"],
-        totalRequiredCalories: json["totalRequiredCalories"],
+        totalWaterConsumed: json["totalWaterConsumed"].toDouble(),
+        totalRequiredCalories: json["totalRequiredCalories"].toDouble(),
         protein: Protein.fromJson(json["protein"]),
         carbs: Carbs.fromJson(json["carbs"]),
         fats: Fats.fromJson(json["fats"]),

@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/tools_screen.dart';
+import 'package:fitbasix/feature/Home/view/widgets/caloriesDetails.dart';
 import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
+import 'package:fitbasix/feature/Home/view/widgets/menu_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +47,21 @@ class HomeAndTrainerPage extends StatelessWidget {
       // bottomNavigationBar: CustomizedBottomAppBar(),
 
       bottomNavigationBar: CustomBottomNavigationBar(),
-      endDrawer: Drawer(),
+      endDrawer: Drawer(
+        child: MenuScreen(
+            imageCoverPic: homeController.userProfileData.value.response == null
+                ? ""
+                : homeController
+                    .userProfileData.value.response!.data!.profile!.coverPhoto!,
+            name: homeController.userProfileData.value.response == null
+                ? ""
+                : homeController
+                    .userProfileData.value.response!.data!.profile!.name!,
+            imageUrl: homeController.userProfileData.value.response == null
+                ? ""
+                : homeController.userProfileData.value.response!.data!.profile!
+                    .profilePhoto!),
+      ),
     );
   }
 }
@@ -250,47 +266,178 @@ class _HomePageState extends State<HomePage> {
                                 left: 16 * SizeConfig.widthMultiplier!,
                                 right: 16 * SizeConfig.widthMultiplier!),
                             child: _homeController.spgStatus.value == true
-                                ? GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, RouteName.setGoal);
-                                    },
-                                    child: Container(
-                                        color: Colors.transparent,
-                                        child: Row(
-                                          children: [
-                                            Text('updateSpg'.tr,
-                                                style: AppTextStyle
-                                                    .normalBlackText
-                                                    .copyWith(
-                                                        fontSize: 14 *
-                                                            SizeConfig
-                                                                .textMultiplier!)),
-                                            Spacer(),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  color: kGreenColor),
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8.0 *
-                                                        SizeConfig
-                                                            .heightMultiplier!,
-                                                    horizontal: 23 *
-                                                        SizeConfig
-                                                            .widthMultiplier!),
-                                                child: Text('update'.tr,
+                                ? Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: WaterConsumed(
+                                                _homeController
+                                                    .userProfileData
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .profile!
+                                                    .nutrition!
+                                                    .totalWaterConsumed!
+                                                    .toDouble(),
+                                                _homeController
+                                                    .userProfileData
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .profile!
+                                                    .nutrition!
+                                                    .totalWaterRequired!
+                                                    .toDouble()),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 8.0 *
+                                                      SizeConfig
+                                                          .widthMultiplier!),
+                                              child: CaloriesBurnt(20.0),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height: 20 *
+                                              SizeConfig.heightMultiplier!),
+                                      CaloryConsumption(
+                                          _homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .profile!
+                                                  .nutrition!
+                                                  .totalRequiredCalories!
+                                                  .toInt()
+                                                  .toString() +
+                                              " kcal",
+                                          _homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .profile!
+                                                  .nutrition!
+                                                  .carbs!
+                                                  .carbsGrams!
+                                                  .toInt()
+                                                  .toString() +
+                                              " g",
+                                          _homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .profile!
+                                                  .nutrition!
+                                                  .carbs!
+                                                  .carbsKiloCals!
+                                                  .toInt()
+                                                  .toString() +
+                                              " kcal",
+                                          _homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .profile!
+                                                  .nutrition!
+                                                  .protein!
+                                                  .proteinGrams!
+                                                  .toInt()
+                                                  .toString() +
+                                              " g",
+                                          _homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .profile!
+                                                  .nutrition!
+                                                  .protein!
+                                                  .proteinKiloCals!
+                                                  .toInt()
+                                                  .toString() +
+                                              " kcal",
+                                          _homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .profile!
+                                                  .nutrition!
+                                                  .fats!
+                                                  .fatsGrams!
+                                                  .toInt()
+                                                  .toString() +
+                                              " g",
+                                          _homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .profile!
+                                                  .nutrition!
+                                                  .fats!
+                                                  .fatsKiloCals!
+                                                  .toInt()
+                                                  .toString() +
+                                              " kcal"),
+                                      SizedBox(
+                                          height: 20 *
+                                              SizeConfig.heightMultiplier!),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, RouteName.setGoal);
+                                        },
+                                        child: Container(
+                                            color: Colors.transparent,
+                                            child: Row(
+                                              children: [
+                                                Text('updateSpg'.tr,
                                                     style: AppTextStyle
-                                                        .normalWhiteText
+                                                        .normalBlackText
                                                         .copyWith(
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!)),
-                                              ),
-                                            )
-                                          ],
-                                        )),
+                                                Spacer(),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      color: kGreenColor),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 8.0 *
+                                                            SizeConfig
+                                                                .heightMultiplier!,
+                                                        horizontal: 23 *
+                                                            SizeConfig
+                                                                .widthMultiplier!),
+                                                    child: Text('update'.tr,
+                                                        style: AppTextStyle
+                                                            .normalWhiteText
+                                                            .copyWith(
+                                                                fontSize: 14 *
+                                                                    SizeConfig
+                                                                        .textMultiplier!)),
+                                                  ),
+                                                )
+                                              ],
+                                            )),
+                                      ),
+                                    ],
                                   )
                                 : Container(
                                     padding:
