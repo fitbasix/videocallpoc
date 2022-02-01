@@ -25,6 +25,6 @@ Future<void> setupApp() async {
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: accessToken == null ? LoginScreen() : HealthApp(),
+    child: accessToken == null ? LoginScreen() : HomeAndTrainerPage(),
   ));
 }
