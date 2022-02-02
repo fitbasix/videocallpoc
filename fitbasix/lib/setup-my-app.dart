@@ -17,6 +17,8 @@ import 'package:get/get.dart';
 import 'package:fitbasix/core/localization/translations.dart';
 import 'package:fitbasix/fitbasix_app.dart';
 
+import 'feature/Home/view/consumption_screen.dart';
+
 Future<void> setupApp() async {
   Get.put(AppTranslations());
   await RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
@@ -25,6 +27,6 @@ Future<void> setupApp() async {
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: accessToken == null ? LoginScreen() : HomeAndTrainerPage(),
+    child: accessToken == null ? LoginScreen() : ConsumptionScreen(),
   ));
 }

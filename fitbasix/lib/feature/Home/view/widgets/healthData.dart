@@ -35,20 +35,14 @@ class _HealthAppState extends State<HealthApp> {
 
     // define the types to get
     final types = [
-      HealthDataType.STEPS,
-      HealthDataType.WEIGHT,
-      HealthDataType.HEIGHT,
-      HealthDataType.BLOOD_GLUCOSE,
+      HealthDataType.ACTIVE_ENERGY_BURNED,
       // Uncomment this line on iOS - only available on iOS
       // HealthDataType.DISTANCE_WALKING_RUNNING,
     ];
 
     // with coresponsing permissions
     final permissions = [
-      HealthDataAccess.READ,
-      HealthDataAccess.READ,
-      HealthDataAccess.READ,
-      HealthDataAccess.READ,
+      HealthDataAccess.READ
     ];
 
     // get data within the last 24 hours
@@ -173,7 +167,7 @@ class _HealthAppState extends State<HealthApp> {
         itemBuilder: (_, index) {
           HealthDataPoint p = _healthDataList[index];
           return ListTile(
-            title: Text("${p.typeString}: ${p.value}"),
+            title: Text("${p.unit}: ${p.value}"),
             trailing: Text('${p.unitString}'),
             subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
           );
