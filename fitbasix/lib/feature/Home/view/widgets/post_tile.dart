@@ -176,7 +176,8 @@ class _PostTileState extends State<PostTile> {
           StreamBuilder<CommentModel>(
               stream: HomeService.fetchComment(widget.postId),
               builder: (context, snapshot) {
-                if (snapshot.hasData)
+                if (snapshot.hasData &&
+                    snapshot.data!.response!.data!.length != 0)
                   return ListView.builder(
                       itemCount: 1,
                       shrinkWrap: true,

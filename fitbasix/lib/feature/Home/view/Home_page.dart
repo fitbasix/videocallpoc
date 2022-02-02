@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/tools_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/caloriesDetails.dart';
 import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
@@ -35,7 +36,7 @@ class HomeAndTrainerPage extends StatelessWidget {
 
   final List<Widget> screens = [
     HomePage(),
-    GetTrainedScreen(),
+    MyTrainersScreen(),
     CreatePostScreen(),
     ToolsScreen()
   ];
@@ -198,24 +199,15 @@ class _HomePageState extends State<HomePage> {
                                   color: kPurple,
                                   title: 'live_stream'.tr,
                                   icon: Icons.videocam,
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, RouteName.getTrainedScreen);
-                                  },
+                                  onTap: () {},
                                 ),
                                 HomeTile(
                                   color: kBlue,
                                   title: 'trainers'.tr,
                                   icon: Icons.person,
-                                  onTap: () async {
-                                    final SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-                                    prefs.clear();
-                                    await _controller.googleSignout();
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        RouteName.loginScreen,
-                                        (route) => false);
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, RouteName.getTrainedScreen);
                                   },
                                 ),
                                 HomeTile(

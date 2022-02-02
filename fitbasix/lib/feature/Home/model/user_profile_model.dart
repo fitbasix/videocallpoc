@@ -95,7 +95,9 @@ class Profile {
         name: json["name"],
         profilePhoto: json["profilePhoto"],
         coverPhoto: json["coverPhoto"],
-        nutrition: Nutrition.fromJson(json["nutrition"]),
+        nutrition: json["nutrition"] == null
+            ? Nutrition()
+            : Nutrition.fromJson(json["nutrition"]),
         following: json["following"],
         followers: json["followers"],
       );

@@ -90,7 +90,9 @@ class GoalData {
         id: json["_id"],
         userId: json["userId"],
         v: json["__v"],
-        createdAt: DateTime.parse(json["createdAt"]),
+        createdAt: json["createdAt"] == null
+            ? DateTime(1999)
+            : DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         goalType: json["goalType"],
         dob: json["dob"] == null ? DateTime(1999) : DateTime.parse(json["dob"]),
