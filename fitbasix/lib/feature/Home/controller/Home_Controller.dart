@@ -21,6 +21,7 @@ class HomeController extends GetxController {
   final TextEditingController commentController = TextEditingController();
   RxString comment = RxString('');
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
+  RxInt currentPage = RxInt(1);
 
   Future<void> setup() async {
     isLoading.value = true;

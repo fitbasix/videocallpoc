@@ -25,6 +25,7 @@ class PostTile extends StatefulWidget {
     required this.caption,
     required this.likes,
     required this.hitLike,
+    required this.isLiked,
     required this.comments,
     required this.addComment,
     required this.postId,
@@ -38,6 +39,7 @@ class PostTile extends StatefulWidget {
   final String caption;
   final String likes;
   final VoidCallback hitLike;
+  final bool isLiked;
   final String comments;
   final VoidCallback addComment;
   final String postId;
@@ -149,10 +151,15 @@ class _PostTileState extends State<PostTile> {
               children: [
                 InkWell(
                   onTap: widget.hitLike,
-                  child: Icon(
-                    Icons.favorite,
-                    color: kRedColor,
-                  ),
+                  child: widget.isLiked
+                      ? Icon(
+                          Icons.favorite,
+                          color: kRedColor,
+                        )
+                      : Icon(
+                          Icons.favorite_outline,
+                          color: kGreyColor,
+                        ),
                 ),
                 SizedBox(
                   width: 5 * SizeConfig.widthMultiplier!,
@@ -248,7 +255,10 @@ class _PostTileState extends State<PostTile> {
               ),
               IconButton(onPressed: widget.addComment, icon: Icon(Icons.send))
             ],
-          )
+          ),
+          SizedBox(
+            height: 16 * SizeConfig.heightMultiplier!,
+          ),
         ],
       ),
     );

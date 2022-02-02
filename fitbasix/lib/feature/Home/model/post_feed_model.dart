@@ -63,6 +63,7 @@ class Post {
     this.updatedAt,
     this.userId,
     this.category,
+    this.isLiked,
     this.postCategory,
     this.likes,
     this.comments,
@@ -76,6 +77,7 @@ class Post {
   final DateTime? updatedAt;
   final Person? userId;
   final int? category;
+  final bool? isLiked;
   final List<PostCategory>? postCategory;
   late final int? likes;
   final int? comments;
@@ -90,6 +92,7 @@ class Post {
         updatedAt: DateTime.parse(json["updatedAt"]),
         userId: Person.fromJson(json["userId"]),
         category: json["category"] == null ? null : json["category"],
+        isLiked: json["isLiked"],
         postCategory: List<PostCategory>.from(
             json["postCategory"].map((x) => PostCategory.fromJson(x))),
         likes: json["likes"],
@@ -105,6 +108,7 @@ class Post {
         "updatedAt": updatedAt!.toIso8601String(),
         "userId": userId,
         "category": category == null ? null : category,
+        "isLiked": isLiked,
         "postCategory":
             List<dynamic>.from(postCategory!.map((x) => x.toJson())),
         "likes": likes,

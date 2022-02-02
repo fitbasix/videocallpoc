@@ -4,6 +4,7 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
@@ -17,6 +18,7 @@ class DiscardPostBottomSheet extends StatelessWidget {
   }) : super(key: key);
 
   final PostController _postController = Get.find();
+  final HomeController _homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +85,7 @@ class DiscardPostBottomSheet extends StatelessWidget {
               _postController.imageFile = null;
               _postController.isLoading.value = false;
               _postController.selectedFiles.clear();
+              _homeController.selectedIndex.value = 0;
             },
             icon: const Icon(Icons.delete_outline),
             label: Text(

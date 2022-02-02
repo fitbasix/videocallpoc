@@ -99,6 +99,7 @@ class CreatePostScreen extends StatelessWidget {
                               _postController.users.clear();
                               _postController.imageFile = null;
                               _postController.selectedFiles.clear();
+                              _homeController.selectedIndex.value = 0;
                             }
                           },
                           child: Text(
