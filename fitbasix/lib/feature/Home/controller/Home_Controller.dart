@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
+import 'package:fitbasix/feature/Home/model/water_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ class HomeController extends GetxController {
   final TextEditingController commentController = TextEditingController();
   RxString comment = RxString('');
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
+  Rx<WaterDetail> waterDetails = Rx(WaterDetail());
+  RxDouble waterLevel = 0.0.obs;
 
   Future<void> setup() async {
     isLoading.value = true;

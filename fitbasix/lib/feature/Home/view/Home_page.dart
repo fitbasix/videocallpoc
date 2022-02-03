@@ -273,26 +273,48 @@ class _HomePageState extends State<HomePage> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Expanded(
-                                            child: WaterConsumed(
-                                                _homeController
-                                                    .userProfileData
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .profile!
-                                                    .nutrition!
-                                                    .totalWaterConsumed!
-                                                    .toDouble(),
-                                                _homeController
-                                                    .userProfileData
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .profile!
-                                                    .nutrition!
-                                                    .totalWaterRequired!
-                                                    .toDouble()),
-                                          ),
+                                              child: WaterConsumed(
+                                                  _homeController
+                                                      .userProfileData
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .profile!
+                                                      .nutrition!
+                                                      .totalWaterConsumed!
+                                                      .toDouble(),
+                                                  _homeController
+                                                      .userProfileData
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .profile!
+                                                      .nutrition!
+                                                      .totalWaterRequired!
+                                                      .toDouble(), () async {
+                                            _homeController.waterDetails.value =
+                                                await HomeService
+                                                    .getWaterDetails();
+                                            _homeController.waterLevel
+                                                .value = _homeController
+                                                        .waterDetails
+                                                        .value
+                                                        .response!
+                                                        .data![0]
+                                                        .totalWaterConsumed ==
+                                                    0.0
+                                                ? 0.0
+                                                : (1 /
+                                                    (_homeController
+                                                            .waterDetails
+                                                            .value
+                                                            .response!
+                                                            .data![0]
+                                                            .totalWaterConsumed! *
+                                                        4));
+                                            Navigator.pushNamed(context,
+                                                RouteName.waterConsumed);
+                                          })),
                                           Expanded(
                                             child: Padding(
                                               padding: EdgeInsets.only(

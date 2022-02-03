@@ -143,16 +143,24 @@ class Nutrition {
   factory Nutrition.fromJson(Map<String, dynamic> json) => Nutrition(
         id: json["_id"],
         userId: json["userId"],
-        totalWaterRequired: json["totalWaterRequired"],
-        totalWaterConsumed: json["totalWaterConsumed"].toDouble(),
-        totalRequiredCalories: json["totalRequiredCalories"].toDouble(),
-        protein: Protein.fromJson(json["protein"]),
-        carbs: Carbs.fromJson(json["carbs"]),
-        fats: Fats.fromJson(json["fats"]),
+        totalWaterRequired: json["totalWaterRequired"].toDouble(),
+        totalWaterConsumed: json["totalWaterConsumed"] == null
+            ? 0.0
+            : json["totalWaterConsumed"].toDouble(),
+        totalRequiredCalories: json["totalRequiredCalories"] == null
+            ? 0.0
+            : json["totalRequiredCalories"].toDouble(),
+        protein: json["protein"] == null
+            ? Protein()
+            : Protein.fromJson(json["protein"]),
+        carbs: json["carbs"] == null ? Carbs() : Carbs.fromJson(json["carbs"]),
+        fats: json["fats"] == null ? Fats() : Fats.fromJson(json["fats"]),
         // date: DateTime.parse(json["date"]),
-        createdAt: DateTime.parse(json["createdAt"]),
+        createdAt: json["createdAt"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["createdAt"]),
         // updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
+        v: json["__v"] == null ? 1 : json["__v"],
       );
 
   Map<String, dynamic> toJson() => {

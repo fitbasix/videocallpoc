@@ -8,8 +8,6 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
 import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
-import 'package:fitbasix/feature/posts/view/create_post.dart';
-import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/api_service/remote_config_service.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +25,6 @@ Future<void> setupApp() async {
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: accessToken == null ? LoginScreen() : ConsumptionScreen(),
+    child: accessToken == null ? LoginScreen() : HomeAndTrainerPage(),
   ));
 }
