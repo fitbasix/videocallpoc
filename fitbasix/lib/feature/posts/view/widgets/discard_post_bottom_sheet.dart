@@ -69,10 +69,11 @@ class DiscardPostBottomSheet extends StatelessWidget {
             height: 34 * SizeConfig.heightMultiplier!,
           ),
           TextButton.icon(
-            onPressed: () async {
-              await CreatePostService.deletePost(_postController.postId.value);
-              Navigator.pushNamedAndRemoveUntil(
-                  context, RouteName.homePage, (route) => false);
+            onPressed: () {
+              CreatePostService.deletePost(_postController.postId.value);
+              Navigator.pop(context);
+              // Navigator.pushNamedAndRemoveUntil(
+              //     context, RouteName.homePage, (route) => false);
 
               _postController.postTextController.clear();
               _postController.postText.value = '';
