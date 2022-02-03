@@ -81,8 +81,6 @@ class CreatePostScreen extends StatelessWidget {
                                     isPublish: true);
                             _postController.isLoading.value = false;
                             if (_postController.postData.value.code == 0) {
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  RouteName.homePage, (route) => false);
                               Get.showSnackbar(GetSnackBar(
                                 message: 'post_successfull'.tr,
                                 duration: Duration(seconds: 3),
@@ -99,6 +97,7 @@ class CreatePostScreen extends StatelessWidget {
                               _postController.users.clear();
                               _postController.imageFile = null;
                               _postController.selectedFiles.clear();
+                              _homeController.selectedIndex.value = 0;
                             }
                           },
                           child: Text(

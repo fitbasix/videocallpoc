@@ -9,14 +9,15 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 
 class HomeService {
   static var dio = DioUtil().getInstance();
-  static Stream<PostsModel> getPosts() async* {
+  static Stream<List<PostsModel>> getPosts({int? skip}) async* {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.getPosts, data: {});
+    var response = await dio!
+        .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
 
     log(response.toString());
 
-    yield postsModelFromJson(response.toString());
+    yield [postsModelFromJson(response.toString())];
   }
 
   static Future<bool> likePost({String? postId, String? commentId}) async {
@@ -34,6 +35,20 @@ class HomeService {
     return false;
   }
 
+  static Future<bool> unlikePost({String? postId, String? commentId}) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    Map unlikePost = {"postId": postId};
+    Map unlikeComment = {"commentId": commentId};
+    var response = await dio!.delete(ApiUrl.unlike,
+        data: postId != null ? unlikePost : unlikeComment);
+
+    log(response.toString());
+    print(response.data['code']);
+    if (response.data['code'] == 0) return true;
+    return false;
+}
   static Future<WaterDetail> getWaterDetails() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();

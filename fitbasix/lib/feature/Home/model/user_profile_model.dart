@@ -95,7 +95,9 @@ class Profile {
         name: json["name"],
         profilePhoto: json["profilePhoto"],
         coverPhoto: json["coverPhoto"],
-        nutrition: Nutrition.fromJson(json["nutrition"]),
+        nutrition: json["nutrition"] == null
+            ? Nutrition()
+            : Nutrition.fromJson(json["nutrition"]),
         following: json["following"],
         followers: json["followers"],
       );
@@ -158,9 +160,7 @@ class Nutrition {
         carbs: json["carbs"] == null ? Carbs() : Carbs.fromJson(json["carbs"]),
         fats: json["fats"] == null ? Fats() : Fats.fromJson(json["fats"]),
         // date: DateTime.parse(json["date"]),
-        createdAt: json["createdAt"] == null
-            ? DateTime.now()
-            : DateTime.parse(json["createdAt"]),
+        // createdAt: DateTime.parse(json["createdAt"]),
         // updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"] == null ? 1 : json["__v"],
       );

@@ -22,6 +22,7 @@ class HomeController extends GetxController {
   final TextEditingController commentController = TextEditingController();
   RxString comment = RxString('');
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
+  RxInt currentPage = RxInt(1);
   Rx<WaterDetail> waterDetails = Rx(WaterDetail());
   RxDouble waterLevel = 0.0.obs;
 

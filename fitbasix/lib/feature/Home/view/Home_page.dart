@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/tools_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/caloriesDetails.dart';
 import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
@@ -32,7 +35,7 @@ class HomeAndTrainerPage extends StatelessWidget {
 
   final List<Widget> screens = [
     HomePage(),
-    GetTrainedScreen(),
+    MyTrainersScreen(),
     CreatePostScreen(),
     ToolsScreen()
   ];
@@ -77,6 +80,69 @@ class _HomePageState extends State<HomePage> {
 
   final HomeController _homeController = Get.find();
 
+  final ScrollController _scrollController = ScrollController();
+
+  final StreamController<List<PostsModel>> postController =
+      StreamController<List<PostsModel>>.broadcast();
+
+  final List<PostsModel> _list = <PostsModel>[];
+
+  // Stream<List<PostsModel>> listenToPostsRealTime() {
+  //   var postQuery = HomeService.getPosts();
+  //   postQuery.listen((event) {
+  //     postController.stream;
+  //   });
+  //   return postController.stream;
+  // }
+
+  // void requestPost() {
+  //   var postQuery = HomeService.getPosts();
+
+  //   postQuery.listen((event) {
+  //     if (event[0].response!.data!.length < 5) {
+  //       _list.addAll(event);
+  //       postController.sink.add(_list);
+  //       return;
+  //     } else {
+  //       _list.addAll(event);
+  //       postController.sink.add(_list);
+  //     }
+  //   });
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    var postQuery = HomeService.getPosts();
+    postQuery.listen((event) {
+      _list.addAll(event);
+      postController.sink.add(_list);
+    });
+
+    _homeController.currentPage.value = 1;
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent -
+              _scrollController.position.pixels <
+          MediaQuery.of(context).size.height * 0.20) {
+        var postQuery =
+            HomeService.getPosts(skip: _homeController.currentPage.value);
+        postQuery.listen((event) {
+          if (event[0].response!.data!.length < 5) {
+            _list.addAll(event);
+            postController.sink.add(_list);
+            return;
+          } else {
+            _list.addAll(event);
+            postController.sink.add(_list);
+          }
+        });
+        _homeController.currentPage.value++;
+        setState(() {});
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -101,6 +167,7 @@ class _HomePageState extends State<HomePage> {
                   child: Center(child: CustomizedCircularProgress()),
                 )
               : SingleChildScrollView(
+                  controller: _scrollController,
                   child: Stack(
                     children: [
                       Container(
@@ -197,24 +264,15 @@ class _HomePageState extends State<HomePage> {
                                   color: kPurple,
                                   title: 'live_stream'.tr,
                                   icon: Icons.videocam,
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, RouteName.getTrainedScreen);
-                                  },
+                                  onTap: () {},
                                 ),
                                 HomeTile(
                                   color: kBlue,
                                   title: 'trainers'.tr,
                                   icon: Icons.person,
-                                  onTap: () async {
-                                    final SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-                                    prefs.clear();
-                                    await _controller.googleSignout();
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        RouteName.loginScreen,
-                                        (route) => false);
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, RouteName.getTrainedScreen);
                                   },
                                 ),
                                 HomeTile(
@@ -671,115 +729,156 @@ class _HomePageState extends State<HomePage> {
                                   height: 16 * SizeConfig.heightMultiplier!,
                                 ),
 
-                                StreamBuilder<PostsModel>(
-                                    stream: HomeService.getPosts(),
+                                StreamBuilder<List<PostsModel>>(
+                                    stream: postController.stream,
                                     builder: (context, snapshot) {
-                                      if (snapshot.hasData)
+                                      if (snapshot.hasData) {
+                                        // _list.add(snapshot.data!);
                                         return ListView.builder(
-                                            itemCount: snapshot
-                                                .data!.response!.data!.length,
                                             shrinkWrap: true,
+                                            itemCount: snapshot.data!.length,
                                             physics:
                                                 NeverScrollableScrollPhysics(),
-                                            itemBuilder: (_, index) {
-                                              return Column(
-                                                children: [
-                                                  PostTile(
-                                                    name: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .userId!
-                                                        .name!,
-                                                    profilePhoto: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .userId!
-                                                        .profilePhoto!,
-                                                    category: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .postCategory![0]
-                                                        .name!,
-                                                    date: DateFormat.d()
-                                                        .add_MMM()
-                                                        .format(snapshot
-                                                            .data!
-                                                            .response!
-                                                            .data![index]
-                                                            .updatedAt!),
-                                                    place: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .location!
-                                                        .placeName![1]
-                                                        .toString(),
-                                                    imageUrl: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .files![0],
-                                                    caption: snapshot
-                                                            .data!
-                                                            .response!
-                                                            .data![index]
-                                                            .caption ??
-                                                        '',
-                                                    likes: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .likes
-                                                        .toString(),
-                                                    comments: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .comments
-                                                        .toString(),
-                                                    hitLike: () {
-                                                      HomeService.likePost(
-                                                          postId: snapshot
-                                                              .data!
-                                                              .response!
+                                            itemBuilder: (context, index) {
+                                              return ListView.builder(
+                                                  itemCount: snapshot
+                                                      .data![index]
+                                                      .response!
+                                                      .data!
+                                                      .length,
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  itemBuilder: (_, index1) {
+                                                    return Column(
+                                                      children: [
+                                                        PostTile(
+                                                          name: snapshot
                                                               .data![index]
-                                                              .id!);
-                                                      setState(() {});
-                                                    },
-                                                    addComment: () {
-                                                      HomeService.addComment(
-                                                          snapshot
-                                                              .data!
                                                               .response!
+                                                              .data![index1]
+                                                              .userId!
+                                                              .name!,
+                                                          profilePhoto: snapshot
                                                               .data![index]
-                                                              .id!,
-                                                          _homeController
-                                                              .comment.value);
+                                                              .response!
+                                                              .data![index1]
+                                                              .userId!
+                                                              .profilePhoto!,
+                                                          category: snapshot
+                                                              .data![index]
+                                                              .response!
+                                                              .data![index1]
+                                                              .postCategory![0]
+                                                              .name!,
+                                                          date: DateFormat.d()
+                                                              .add_MMM()
+                                                              .format(snapshot
+                                                                  .data![index]
+                                                                  .response!
+                                                                  .data![index1]
+                                                                  .updatedAt!),
+                                                          place: snapshot
+                                                              .data![index]
+                                                              .response!
+                                                              .data![index1]
+                                                              .location!
+                                                              .placeName![1]
+                                                              .toString(),
+                                                          imageUrl: snapshot
+                                                              .data![index]
+                                                              .response!
+                                                              .data![index1]
+                                                              .files![0],
+                                                          caption: snapshot
+                                                                  .data![index]
+                                                                  .response!
+                                                                  .data![index1]
+                                                                  .caption ??
+                                                              '',
+                                                          likes: snapshot
+                                                              .data![index]
+                                                              .response!
+                                                              .data![index1]
+                                                              .likes
+                                                              .toString(),
+                                                          comments: snapshot
+                                                              .data![index]
+                                                              .response!
+                                                              .data![index1]
+                                                              .comments
+                                                              .toString(),
+                                                          hitLike: () {
+                                                            snapshot
+                                                                    .data![
+                                                                        index]
+                                                                    .response!
+                                                                    .data![
+                                                                        index1]
+                                                                    .isLiked!
+                                                                ? HomeService.unlikePost(
+                                                                    postId: snapshot
+                                                                        .data![
+                                                                            index]
+                                                                        .response!
+                                                                        .data![
+                                                                            index1]
+                                                                        .id!)
+                                                                : HomeService.likePost(
+                                                                    postId: snapshot
+                                                                        .data![
+                                                                            index]
+                                                                        .response!
+                                                                        .data![
+                                                                            index1]
+                                                                        .id!);
+                                                            setState(() {});
+                                                          },
+                                                          addComment: () {
+                                                            HomeService.addComment(
+                                                                snapshot
+                                                                    .data![
+                                                                        index]
+                                                                    .response!
+                                                                    .data![
+                                                                        index1]
+                                                                    .id!,
+                                                                _homeController
+                                                                    .comment
+                                                                    .value);
 
-                                                      setState(() {});
-                                                      _homeController
-                                                          .commentController
-                                                          .clear();
-                                                    },
-                                                    postId: snapshot
-                                                        .data!
-                                                        .response!
-                                                        .data![index]
-                                                        .id!,
-                                                  ),
-                                                  Container(
-                                                    height: 16 *
-                                                        SizeConfig
-                                                            .heightMultiplier!,
-                                                    color: kBackgroundColor,
-                                                  )
-                                                ],
-                                              );
+                                                            setState(() {});
+
+                                                            _homeController
+                                                                .commentController
+                                                                .clear();
+                                                          },
+                                                          postId: snapshot
+                                                              .data![index]
+                                                              .response!
+                                                              .data![index1]
+                                                              .id!,
+                                                          isLiked: snapshot
+                                                              .data![index]
+                                                              .response!
+                                                              .data![index1]
+                                                              .isLiked!,
+                                                        ),
+                                                        Container(
+                                                          height: 16 *
+                                                              SizeConfig
+                                                                  .heightMultiplier!,
+                                                          color:
+                                                              kBackgroundColor,
+                                                        )
+                                                      ],
+                                                    );
+                                                  });
                                             });
-                                      return Container();
+                                      }
+                                      return Center(
+                                        child: CustomizedCircularProgress(),
+                                      );
                                     }),
                                 // PostTile(
                                 //   name: 'Jonathan Swift',
