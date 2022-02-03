@@ -56,6 +56,7 @@ class TrainerCard extends StatelessWidget {
             ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             CircleAvatar(
               radius: 40 * SizeConfig.heightMultiplier!,

@@ -4,7 +4,9 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
 import 'package:fitbasix/feature/spg/services/spg_service.dart';
 import 'package:fitbasix/feature/spg/view/widgets/spg_app_bar.dart';
@@ -16,6 +18,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 class SetActivity extends StatelessWidget {
   SetActivity({Key? key}) : super(key: key);
   final SPGController _spgController = Get.find();
+  final HomeController homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -155,9 +158,9 @@ class SetActivity extends StatelessWidget {
                       )
                     : ProceedButton(
                         title: 'proceed'.tr,
-                        onPressed: () {
+                        onPressed: () async {
                           _spgController.isLoading.value = true;
-                          SPGService.updateSPGData(
+                          await SPGService.updateSPGData(
                               _spgController.selectedGoalIndex.value.serialId,
                               _spgController.selectedGenderIndex.value.serialId,
                               _spgController.selectedDate.value,
@@ -171,6 +174,9 @@ class SetActivity extends StatelessWidget {
                               _spgController.activityNumber.value.toInt(),
                               _spgController.selectedBodyFat.value.serialId,
                               _spgController.selectedFoodIndex.value.serialId);
+                          homeController.userProfileData.value =
+                              await CreatePostService.getUserProfile();
+                          homeController.spgStatus.value = true;
                           _spgController.isLoading.value = false;
                           Navigator.pushAndRemoveUntil(
                               context,

@@ -143,12 +143,14 @@ class Nutrition {
   factory Nutrition.fromJson(Map<String, dynamic> json) => Nutrition(
         id: json["_id"],
         userId: json["userId"],
-        totalWaterRequired: json["totalWaterRequired"].toDouble(),
+        totalWaterRequired: json["totalWaterRequired"] == null
+            ? null
+            : json["totalWaterRequired"].toDouble(),
         totalWaterConsumed: json["totalWaterConsumed"] == null
-            ? 0.0
+            ? null
             : json["totalWaterConsumed"].toDouble(),
         totalRequiredCalories: json["totalRequiredCalories"] == null
-            ? 0.0
+            ? null
             : json["totalRequiredCalories"].toDouble(),
         protein: json["protein"] == null
             ? Protein()

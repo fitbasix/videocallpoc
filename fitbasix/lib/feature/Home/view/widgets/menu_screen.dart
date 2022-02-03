@@ -30,7 +30,7 @@ class MenuScreen extends StatelessWidget {
             Stack(
               children: [
                 Image.network(
-                  "https://fitbasix-dev.s3.me-south-1.amazonaws.com/wp8723176-valorant-agents-wallpapers.jpg",
+                  imageUrl,
                   height: 160 * SizeConfig.heightMultiplier!,
                   width: 300 * SizeConfig.widthMultiplier!,
                   fit: BoxFit.fitWidth,

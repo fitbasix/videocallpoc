@@ -111,20 +111,38 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                               fontSize: 14 * SizeConfig.textMultiplier!,
                               color: kBlack),
                           onChanged: (value) async {
-                            _trainerController.search.value = value;
-                            if (value.length >= 3) {
-                              _trainerController.filterIsLoading.value = true;
-                              _trainerController.searchedName.value = value;
-                              _trainerController.allTrainer.value =
-                                  await TrainerServices.getAllTrainer(
-                                name: value,
-                                interests: _trainerController
-                                    .SelectedInterestIndex.value,
-                                trainerType:
-                                    _trainerController.trainerType.value,
-                              );
-                              _scrollController.jumpTo(0);
-                              _trainerController.filterIsLoading.value = false;
+                            if (_trainerController.search.value != value) {
+                              _trainerController.search.value = value;
+                              if (value.length >= 3) {
+                                _trainerController.filterIsLoading.value = true;
+                                _trainerController.searchedName.value = value;
+                                _trainerController.allTrainer.value =
+                                    await TrainerServices.getAllTrainer(
+                                  name: value,
+                                  interests: _trainerController
+                                      .SelectedInterestIndex.value,
+                                  trainerType:
+                                      _trainerController.trainerType.value,
+                                );
+                                _scrollController.jumpTo(0);
+                                _trainerController.filterIsLoading.value =
+                                    false;
+                              }
+                              if (value.length == 0) {
+                                _trainerController.filterIsLoading.value = true;
+                                _trainerController.searchedName.value = value;
+                                _trainerController.allTrainer.value =
+                                    await TrainerServices.getAllTrainer(
+                                  name: value,
+                                  interests: _trainerController
+                                      .SelectedInterestIndex.value,
+                                  trainerType:
+                                      _trainerController.trainerType.value,
+                                );
+                                _scrollController.jumpTo(0);
+                                _trainerController.filterIsLoading.value =
+                                    false;
+                              }
                             }
                           },
                           // onSubmitted: (value) async {
@@ -376,6 +394,14 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
+                                  print(_trainerController
+                                      .allTrainer
+                                      .value
+                                      .response!
+                                      .data!
+                                      .trainers![index]
+                                      .certificates!
+                                      .length);
                                   return TrainerTile(
                                     name: _trainerController
                                                 .allTrainer
@@ -561,9 +587,9 @@ class TrainerTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: certifcateTitle!.isEmpty
-            ? 246 * SizeConfig.heightMultiplier!
-            : 325 * SizeConfig.heightMultiplier!,
+        // height: certifcateTitle!.isEmpty
+        //     ? 246 * SizeConfig.heightMultiplier!
+        //     : 325 * SizeConfig.heightMultiplier!,
         margin: EdgeInsets.only(
             left: 12 * SizeConfig.widthMultiplier!,
             right: 12 * SizeConfig.widthMultiplier!,

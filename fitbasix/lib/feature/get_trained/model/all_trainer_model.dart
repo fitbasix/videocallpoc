@@ -142,9 +142,10 @@ class Trainer {
         v: json["__v"],
         isFitnessConsultant: json["isFitnessConsultant"],
         isNutritionConsultant: json["isNutritionConsultant"],
-        certificates: List<Certificate>.from(json["certificates"] == null
+        certificates: json["certificate"] == null
             ? []
-            : json["certificates"][0].map((x) => Certificate.fromJson(x))),
+            : List<Certificate>.from(json["certificate"]["certificates"]
+                .map((x) => Certificate.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
