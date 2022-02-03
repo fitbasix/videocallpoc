@@ -71,7 +71,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 250 * SizeConfig.heightMultiplier!,
+                  height: 252 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: _trainerController.getTrainedIsLoading.value
@@ -242,7 +242,7 @@ class GetTrainedScreen extends StatelessWidget {
                           _trainerController.trainerType.value = 1;
                           _trainerController.searchController.text = "";
                           _trainerController.allTrainer.value =
-                              await TrainerServices.getFitnessConsultant();
+                              await TrainerServices.getAllTrainer();
 
                           _trainerController.isLoading.value = false;
                         },
@@ -254,7 +254,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 250 * SizeConfig.heightMultiplier!,
+                  height: 252 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
@@ -431,7 +431,7 @@ class GetTrainedScreen extends StatelessWidget {
                           _trainerController.pageTitle.value =
                               'nutritionConsult'.tr;
                           _trainerController.allTrainer.value =
-                              await TrainerServices.getNutritionConsultant();
+                              await TrainerServices.getAllTrainer();
                           _trainerController.isLoading.value = false;
                         },
                       )
@@ -442,7 +442,7 @@ class GetTrainedScreen extends StatelessWidget {
                   height: 19 * SizeConfig.heightMultiplier!,
                 ),
                 Container(
-                  height: 250 * SizeConfig.heightMultiplier!,
+                  height: 252 * SizeConfig.heightMultiplier!,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,

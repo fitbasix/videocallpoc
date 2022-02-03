@@ -13,7 +13,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -21,13 +20,11 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
-import 'package:fitbasix/feature/Home/view/widgets/bottom_app_bar.dart';
 import 'package:fitbasix/feature/Home/view/widgets/green_circle_arrow_button.dart';
 import 'package:fitbasix/feature/Home/view/widgets/home_tile.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
-import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
@@ -52,15 +49,17 @@ class HomeAndTrainerPage extends StatelessWidget {
             imageCoverPic: homeController.userProfileData.value.response == null
                 ? ""
                 : homeController
-                    .userProfileData.value.response!.data!.profile!.coverPhoto!,
+                    .userProfileData.value.response!.data!.profile!.coverPhoto
+                    .toString(),
             name: homeController.userProfileData.value.response == null
                 ? ""
                 : homeController
                     .userProfileData.value.response!.data!.profile!.name!,
             imageUrl: homeController.userProfileData.value.response == null
                 ? ""
-                : homeController.userProfileData.value.response!.data!.profile!
-                    .profilePhoto!),
+                : homeController
+                    .userProfileData.value.response!.data!.profile!.profilePhoto
+                    .toString()),
       ),
     );
   }
@@ -273,26 +272,48 @@ class _HomePageState extends State<HomePage> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Expanded(
-                                            child: WaterConsumed(
-                                                _homeController
-                                                    .userProfileData
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .profile!
-                                                    .nutrition!
-                                                    .totalWaterConsumed!
-                                                    .toDouble(),
-                                                _homeController
-                                                    .userProfileData
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .profile!
-                                                    .nutrition!
-                                                    .totalWaterRequired!
-                                                    .toDouble()),
-                                          ),
+                                              child: WaterConsumed(
+                                                  _homeController
+                                                      .userProfileData
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .profile!
+                                                      .nutrition!
+                                                      .totalWaterConsumed!
+                                                      .toDouble(),
+                                                  _homeController
+                                                      .userProfileData
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .profile!
+                                                      .nutrition!
+                                                      .totalWaterRequired!
+                                                      .toDouble(), () async {
+                                            _homeController.waterDetails.value =
+                                                await HomeService
+                                                    .getWaterDetails();
+                                            _homeController.waterLevel
+                                                .value = _homeController
+                                                        .waterDetails
+                                                        .value
+                                                        .response!
+                                                        .data![0]
+                                                        .totalWaterConsumed ==
+                                                    0.0
+                                                ? 0.0
+                                                : (1 /
+                                                    (_homeController
+                                                            .waterDetails
+                                                            .value
+                                                            .response!
+                                                            .data![0]
+                                                            .totalWaterConsumed! *
+                                                        4));
+                                            Navigator.pushNamed(context,
+                                                RouteName.waterConsumed);
+                                          })),
                                           Expanded(
                                             child: Padding(
                                               padding: EdgeInsets.only(

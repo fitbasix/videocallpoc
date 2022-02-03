@@ -107,6 +107,48 @@
             </list>
           </value>
         </entry>
+        <entry key="device_info_plus">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus-3.2.1/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_linux">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_linux-2.1.1/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_macos">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_macos-2.2.2/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_platform_interface">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_platform_interface-2.3.0+1/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_web">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_web-2.1.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="device_info_plus_windows">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_windows-2.1.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="dio">
           <value>
             <list>
@@ -345,6 +387,13 @@
             </list>
           </value>
         </entry>
+        <entry key="health">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/health-3.4.3/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="http">
           <value>
             <list>
@@ -545,6 +594,13 @@
           <value>
             <list>
               <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-3.0.1+1/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="readmore">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/readmore-2.1.0/lib" />
             </list>
           </value>
         </entry>
@@ -790,6 +846,12 @@
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/cross_file-0.3.2/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus-3.2.1/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_linux-2.1.1/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_macos-2.2.2/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_platform_interface-2.3.0+1/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_web-2.1.0/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/device_info_plus_windows-2.1.1/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/dio-4.0.4/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
@@ -821,6 +883,7 @@
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-5.2.1/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_platform_interface-2.1.0/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_web-0.10.0+3/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/health-3.4.3/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.1.0/lib" />
@@ -850,6 +913,7 @@
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/plugin_platform_interface-2.0.2/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/process-4.2.4/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-3.0.1+1/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/readmore-2.1.0/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.3/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.11/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.9/lib" />
