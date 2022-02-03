@@ -15,18 +15,19 @@ class HomeService {
     var response = await dio!
         .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
 
-    log(response.toString());
+    // log(response.toString());
 
     yield [postsModelFromJson(response.toString())];
   }
 
   static Future<PostsModel> getPosts2({int? skip}) async {
+    print(skip);
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!
         .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
 
-    log(response.toString());
+    print(response.toString());
 
     return postsModelFromJson(response.toString());
   }

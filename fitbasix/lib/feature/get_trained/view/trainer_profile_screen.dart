@@ -4,6 +4,7 @@ import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.da
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
@@ -117,37 +118,36 @@ class _TrainerPageState extends State<TrainerPage> {
   final HomeController _homeController = Get.find();
   final ScrollController _scrollController = ScrollController();
   final TrainerController _trainerController = Get.find();
-  final List<PostsModel> _list = <PostsModel>[];
-  final StreamController<List<PostsModel>> postController =
-      StreamController<List<PostsModel>>.broadcast();
 
   @override
   void initState() {
-    var postQuery = HomeService.getPosts();
-    postQuery.listen((event) {
-      _list.addAll(event);
-      postController.sink.add(_list);
-    });
+    super.initState();
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        var postQuery = TrainerServices.getTrainerPosts(
-            _trainerController.atrainerDetail.value.user!.id!);
-        postQuery.listen((event) {
-          if (event[0].response!.data!.length < 5) {
-            _list.addAll(event);
-            postController.sink.add(_list);
-            return;
-          } else {
-            _list.addAll(event);
-            postController.sink.add(_list);
-          }
-        });
-        _trainerController.currentPage.value++;
+    _homeController.currentPage.value = 1;
+
+    _scrollController.addListener(() async {
+      if (_scrollController.position.maxScrollExtent -
+              _scrollController.position.pixels <
+          MediaQuery.of(context).size.height * 0.30) {
+        _homeController.showLoader.value = true;
+        final postQuery = await HomeService.getPosts2(
+            skip: _homeController.currentPage.value);
+
+        if (postQuery.response!.data!.length < 5) {
+          _homeController.trendingPostList.addAll(postQuery.response!.data!);
+          _homeController.showLoader.value = false;
+          return;
+        } else {
+          if (_homeController.trendingPostList.last.id ==
+              postQuery.response!.data!.last.id) return;
+          _homeController.trendingPostList.addAll(postQuery.response!.data!);
+        }
+
+        _homeController.currentPage.value++;
+        _homeController.showLoader.value = false;
+        setState(() {});
       }
     });
-    super.initState();
   }
 
   @override
@@ -534,129 +534,159 @@ class _TrainerPageState extends State<TrainerPage> {
                               height: 16 * SizeConfig.heightMultiplier!,
                               color: kBackgroundColor,
                             ),
-                            StreamBuilder<List<PostsModel>>(
-                                stream: postController.stream,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData)
-                                    return ListView.builder(
-                                        itemCount: snapshot.data!.length,
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          return ListView.builder(
-                                              itemCount: snapshot.data![index]
-                                                  .response!.data!.length,
-                                              shrinkWrap: true,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              itemBuilder: (_, index2) {
-                                                return Column(
-                                                  children: [
-                                                    PostTile(
-                                                      name: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .userId!
-                                                          .name!,
-                                                      profilePhoto: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .userId!
-                                                          .profilePhoto!,
-                                                      category: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .postCategory![0]
-                                                          .name!,
-                                                      date: DateFormat.d()
-                                                          .add_MMM()
-                                                          .format(snapshot
-                                                              .data![index]
-                                                              .response!
-                                                              .data![index2]
-                                                              .updatedAt!),
-                                                      place: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
+                            Obx(
+                              () => _homeController.isLoading.value
+                                  ? CustomizedCircularProgress()
+                                  : ListView.builder(
+                                      itemCount: _homeController
+                                                  .trendingPostList.length ==
+                                              0
+                                          ? 0
+                                          : _homeController
+                                              .trendingPostList.length,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (_, index) {
+                                        return Obx(() => Column(
+                                              children: [
+                                                PostTile(
+                                                  name: _homeController
+                                                      .trendingPostList[index]
+                                                      .userId!
+                                                      .name!,
+                                                  profilePhoto: _homeController
+                                                      .trendingPostList[index]
+                                                      .userId!
+                                                      .profilePhoto!,
+                                                  category: _homeController
+                                                      .trendingPostList[index]
+                                                      .postCategory![0]
+                                                      .name!,
+                                                  date: DateFormat.d()
+                                                      .add_MMM()
+                                                      .format(_homeController
+                                                          .trendingPostList[
+                                                              index]
+                                                          .updatedAt!),
+                                                  place: _homeController
+                                                              .trendingPostList[
+                                                                  index]
+                                                              .location!
+                                                              .placeName!
+                                                              .length ==
+                                                          0
+                                                      ? ''
+                                                      : _homeController
+                                                          .trendingPostList[
+                                                              index]
                                                           .location!
                                                           .placeName![1]
                                                           .toString(),
-                                                      imageUrl: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
+                                                  imageUrl: _homeController
+                                                              .trendingPostList[
+                                                                  index]
+                                                              .files!
+                                                              .length ==
+                                                          0
+                                                      ? 'https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png'
+                                                      : _homeController
+                                                          .trendingPostList[
+                                                              index]
                                                           .files![0],
-                                                      caption: snapshot
-                                                              .data![index]
-                                                              .response!
-                                                              .data![index2]
-                                                              .caption ??
-                                                          '',
-                                                      likes: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .likes
-                                                          .toString(),
-                                                      comments: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .comments
-                                                          .toString(),
-                                                      hitLike: () {
-                                                        HomeService.likePost(
-                                                            postId: snapshot
-                                                                .data![index]
-                                                                .response!
-                                                                .data![index2]
-                                                                .id!);
-                                                        setState(() {});
-                                                      },
-                                                      addComment: () {
-                                                        HomeService.addComment(
-                                                            snapshot
-                                                                .data![index]
-                                                                .response!
-                                                                .data![index2]
-                                                                .id!,
-                                                            _homeController
-                                                                .comment.value);
-
-                                                        setState(() {});
+                                                  caption: _homeController
+                                                          .trendingPostList[
+                                                              index]
+                                                          .caption ??
+                                                      '',
+                                                  likes: _homeController
+                                                      .trendingPostList[index]
+                                                      .likes
+                                                      .toString(),
+                                                  comments: _homeController
+                                                      .trendingPostList[index]
+                                                      .comments
+                                                      .toString(),
+                                                  hitLike: () async {
+                                                    if (_homeController
+                                                        .trendingPostList[index]
+                                                        .isLiked!) {
+                                                      _homeController
+                                                          .trendingPostList[
+                                                              index]
+                                                          .isLiked = false;
+                                                      _homeController
+                                                          .trendingPostList[
+                                                              index]
+                                                          .likes = (_homeController
+                                                              .trendingPostList[
+                                                                  index]
+                                                              .likes! -
+                                                          1);
+                                                      HomeService.unlikePost(
+                                                          postId: _homeController
+                                                              .trendingPostList[
+                                                                  index]
+                                                              .id!);
+                                                    } else {
+                                                      _homeController
+                                                          .trendingPostList[
+                                                              index]
+                                                          .isLiked = true;
+                                                      _homeController
+                                                          .trendingPostList[
+                                                              index]
+                                                          .likes = (_homeController
+                                                              .trendingPostList[
+                                                                  index]
+                                                              .likes! +
+                                                          1);
+                                                      HomeService.likePost(
+                                                          postId: _homeController
+                                                              .trendingPostList[
+                                                                  index]
+                                                              .id!);
+                                                    }
+                                                    setState(() {});
+                                                  },
+                                                  addComment: () {
+                                                    HomeService.addComment(
                                                         _homeController
-                                                            .commentController
-                                                            .clear();
-                                                      },
-                                                      postId: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .id!,
-                                                      isLiked: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .isLiked!,
-                                                    ),
-                                                    Container(
-                                                      height: 16 *
-                                                          SizeConfig
-                                                              .heightMultiplier!,
-                                                      color: kBackgroundColor,
-                                                    )
-                                                  ],
-                                                );
-                                              });
-                                        });
-                                  return Center(
-                                    child: CustomizedCircularProgress(),
-                                  );
-                                }),
+                                                            .trendingPostList[
+                                                                index]
+                                                            .id!,
+                                                        _homeController
+                                                            .comment.value);
+
+                                                    setState(() {});
+
+                                                    _homeController
+                                                        .commentController
+                                                        .clear();
+                                                  },
+                                                  postId: _homeController
+                                                      .trendingPostList[index]
+                                                      .id!,
+                                                  isLiked: _homeController
+                                                      .trendingPostList[index]
+                                                      .isLiked!,
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                PostScreen()));
+                                                  },
+                                                ),
+                                                Container(
+                                                  height: 16 *
+                                                      SizeConfig
+                                                          .heightMultiplier!,
+                                                  color: kBackgroundColor,
+                                                )
+                                              ],
+                                            ));
+                                      }),
+                            ),
                             SizedBox(
                               height: 100 * SizeConfig.heightMultiplier!,
                             )

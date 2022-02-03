@@ -27,6 +27,7 @@ class HomeController extends GetxController {
   RxDouble waterLevel = 0.0.obs;
   RxList<Post> trendingPostList = RxList<Post>([]);
   Rx<PostsModel> initialPostData = Rx(PostsModel());
+  RxBool showLoader = RxBool(false);
 
   Future<void> setup() async {
     isLoading.value = true;
@@ -78,15 +79,17 @@ class HomeController extends GetxController {
             personalGoalData.value.response!.data!.activenessType!.toDouble();
       }
     }
-
+    await getTrendingPost();
     isLoading.value = false;
   }
 
-  Future<void> getTrendingPost() async {
-    initialPostData.value = await HomeService.getPosts2();
+  Future<void> getTrendingPost({int? skip}) async {
+    initialPostData.value = await HomeService.getPosts2(skip: skip);
 
-    if (initialPostData.value.response != null) {
+    if (initialPostData.value.response!.data!.length != 0) {
       trendingPostList.value = initialPostData.value.response!.data!;
+
+      print(trendingPostList.length);
     }
   }
 
