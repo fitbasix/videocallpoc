@@ -4,6 +4,7 @@ import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
+import 'package:fitbasix/feature/Home/model/water_model.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 
 class HomeService {
@@ -47,6 +48,23 @@ class HomeService {
     print(response.data['code']);
     if (response.data['code'] == 0) return true;
     return false;
+}
+  static Future<WaterDetail> getWaterDetails() async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response = await dio!.get(ApiUrl.getWater);
+    print(response.data.toString());
+    return waterDetailFromJson(response.toString());
+  }
+
+  static Future<void> updateWaterDetails(double waterLevel) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response = await dio!
+        .post(ApiUrl.updateWater, data: {"totalWaterConsumed": waterLevel});
+    print(response.data.toString());
   }
 
   static Future<void> addComment(String postId, String comment) async {

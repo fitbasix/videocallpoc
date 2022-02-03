@@ -21,6 +21,8 @@ class ApiUrl {
   static String doFollow = liveBaseURL + '/api/follow/doFollow';
   static String getSPGData = liveBaseURL + '/api/goal/getAll';
   static String updateGoal = liveBaseURL + '/api/goal/updateGoalDetails';
+  static String getWater = liveBaseURL + '/api/nutrition/water/get';
+  static String updateWater = liveBaseURL + '/api/nutrition/water/update';
 
   ///create post
   static String createPost = liveBaseURL + '/api/posts/create';

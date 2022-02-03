@@ -42,13 +42,23 @@ class TrainerServices {
       int? interests}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-
+    print(name == null ? _trainerController.searchedName.value : name);
+    print(trainerType == null
+        ? (_trainerController.trainerType.value == 0
+            ? []
+            : [_trainerController.trainerType.value])
+        : [trainerType]);
+    print(interests == null
+        ? [_trainerController.SelectedInterestIndex.value]
+        : [interests]);
     var response = await dio!.post(ApiUrl.getAllTrainer, data: {
       "skip": currentPage == null ? 0 : currentPage * 5,
       "name": name == null ? _trainerController.searchedName.value : name,
       "trainerType": trainerType == null
-          ? _trainerController.trainerType.value
-          : trainerType,
+          ? (_trainerController.trainerType.value == 0
+              ? []
+              : [_trainerController.trainerType.value])
+          : [trainerType],
       "interests": interests == null
           ? [_trainerController.SelectedInterestIndex.value]
           : [interests]

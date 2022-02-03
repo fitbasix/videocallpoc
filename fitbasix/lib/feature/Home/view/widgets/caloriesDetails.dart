@@ -16,7 +16,9 @@ class HealthScreen extends StatelessWidget {
   }
 }
 
-Widget WaterConsumed(double consumedWater, double totalWater) => Container(
+Widget WaterConsumed(
+        double consumedWater, double totalWater, VoidCallback onAddWater) =>
+    Container(
       child: Container(
         decoration: BoxDecoration(
             borderRadius:
@@ -78,10 +80,16 @@ Widget WaterConsumed(double consumedWater, double totalWater) => Container(
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SvgPicture.asset(
-                    ImagePath.add,
-                    height: 16 * SizeConfig.widthMultiplier!,
-                    width: 16 * SizeConfig.widthMultiplier!,
+                  GestureDetector(
+                    onTap: onAddWater,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: SvgPicture.asset(
+                        ImagePath.add,
+                        height: 16 * SizeConfig.widthMultiplier!,
+                        width: 16 * SizeConfig.widthMultiplier!,
+                      ),
+                    ),
                   )
                 ],
               )

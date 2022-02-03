@@ -190,7 +190,9 @@ class _PostTileState extends State<PostTile> {
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (_, index) {
-                        return CommentsTile(
+                        return snapshot.data!.response!.data!.length==0?
+                        Container()
+                        :CommentsTile(
                           name:
                               snapshot.data!.response!.data![index].user!.name!,
                           profilePhoto: snapshot
