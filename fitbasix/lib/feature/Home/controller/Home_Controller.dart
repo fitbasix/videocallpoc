@@ -25,6 +25,8 @@ class HomeController extends GetxController {
   RxInt currentPage = RxInt(1);
   Rx<WaterDetail> waterDetails = Rx(WaterDetail());
   RxDouble waterLevel = 0.0.obs;
+  RxList<Post> trendingPostList = RxList<Post>([]);
+  Rx<PostsModel> initialPostData = Rx(PostsModel());
 
   Future<void> setup() async {
     isLoading.value = true;
@@ -76,7 +78,16 @@ class HomeController extends GetxController {
             personalGoalData.value.response!.data!.activenessType!.toDouble();
       }
     }
+
     isLoading.value = false;
+  }
+
+  Future<void> getTrendingPost() async {
+    initialPostData.value = await HomeService.getPosts2();
+
+    if (initialPostData.value.response != null) {
+      trendingPostList.value = initialPostData.value.response!.data!;
+    }
   }
 
   String timeAgoSinceDate(String dateString, {bool numericDates = true}) {
