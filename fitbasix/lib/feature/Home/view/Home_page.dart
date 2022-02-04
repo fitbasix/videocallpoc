@@ -12,6 +12,7 @@ import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
 import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
 import 'package:fitbasix/feature/Home/view/widgets/menu_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
+import 'package:fitbasix/feature/get_trained/view/widgets/trainer_card.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,6 +32,7 @@ import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -307,53 +309,96 @@ class _HomePageState extends State<HomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Expanded(
-                                              child: WaterConsumed(
+                                          Obx(()=>_homeController.waterConsumedDataLoading
+                                                  .value
+                                              ? Shimmer.fromColors(
+                                                  child: Container(
+                                                    height: 220 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    width: (Get.width / 2) -
+                                                        20 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                    color: Colors.white,
+                                                  ),
+                                                  baseColor:
+                                                      const Color.fromRGBO(
+                                                          240, 240, 240, 1),
+                                                  highlightColor:
+                                                      const Color.fromRGBO(
+                                                          245, 245, 245, 1),
+                                                )
+                                              : Expanded(
+                                                  child: WaterConsumed(
+                                                      _homeController
+                                                          .userProfileData
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .profile!
+                                                          .nutrition!
+                                                          .totalWaterConsumed!
+                                                          .toDouble(),
+                                                      _homeController
+                                                          .userProfileData
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .profile!
+                                                          .nutrition!
+                                                          .totalWaterRequired!
+                                                          .toDouble(),
+                                                      () async {
                                                   _homeController
-                                                      .userProfileData
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .profile!
-                                                      .nutrition!
-                                                      .totalWaterConsumed!
-                                                      .toDouble(),
+                                                      .isConsumptionLoading
+                                                      .value = true;
+                                                      Navigator.pushNamed(context,
+                                                      RouteName.waterConsumed);
                                                   _homeController
-                                                      .userProfileData
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .profile!
-                                                      .nutrition!
-                                                      .totalWaterRequired!
-                                                      .toDouble(), () async {
-                                            _homeController.waterDetails.value =
-                                                await HomeService
-                                                    .getWaterDetails();
-                                            _homeController.waterLevel
-                                                .value = _homeController
-                                                        .waterDetails
-                                                        .value
-                                                        .response!
-                                                        .data![0]
-                                                        .totalWaterConsumed ==
-                                                    0.0
-                                                ? 0.0
-                                                : (1 /
-                                                    (_homeController
-                                                            .waterDetails
-                                                            .value
-                                                            .response!
-                                                            .data![0]
-                                                            .totalWaterConsumed! *
-                                                        4));
-                                            Navigator.pushNamed(context,
-                                                RouteName.waterConsumed);
-                                          })),
+                                                          .waterDetails.value =
+                                                      await HomeService
+                                                          .getWaterDetails();
+                                                  _homeController.waterLevel
+                                                      .value = _homeController
+                                                              .waterDetails
+                                                              .value
+                                                              .response!
+                                                              .data![0]
+                                                              .totalWaterConsumed ==
+                                                          0.0
+                                                      ? 0.0
+                                                      : (_homeController
+                                                          .userProfileData
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .profile!
+                                                          .nutrition!
+                                                          .totalWaterConsumed! /
+                                                          (_homeController
+                                                          .userProfileData
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .profile!
+                                                          .nutrition!
+                                                          .totalWaterRequired!
+                                                      ));
+                                                              _homeController
+                                                      .isConsumptionLoading
+                                                      .value = false;
+                                                  
+                                                })))
+                                          ,
+                                          SizedBox(
+                                            width: 8.0 *
+                                                SizeConfig.widthMultiplier!,
+                                          ),
                                           Expanded(
                                             child: Padding(
                                               padding: EdgeInsets.only(
-                                                  left: 8.0 *
+                                                  left: 0.0 *
                                                       SizeConfig
                                                           .widthMultiplier!),
                                               child: CaloriesBurnt(
@@ -767,7 +812,7 @@ class _HomePageState extends State<HomePage> {
                                                               .trendingPostList[
                                                                   index]
                                                               .location!
-                                                              .placeName![1]
+                                                              .placeName
                                                               .toString(),
                                                       imageUrl: _homeController
                                                                   .trendingPostList[

@@ -60,44 +60,38 @@ class GenerateRoute {
     final route = settings.name;
 
     if (route == RouteName.loginScreen) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
             LoginScreen(),
       );
     }
     if (route == RouteName.otpScreen) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             OtpScreen(),
       );
     }
     if (route == RouteName.enterDetails) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             EnterDetailsPage(),
       );
     }
     if (route == RouteName.homePage) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             HomeAndTrainerPage(),
       );
     }
     if (route == RouteName.enterMobileGoogle) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             EnterMobileDetailsGoogle(),
       );
     }
     if (route == RouteName.enterOTPGoogle) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             EnterOTPGoogle(),
       );
     }
@@ -112,59 +106,51 @@ class GenerateRoute {
       );
     }
     if (route == RouteName.enterPasswordPage) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             EnterPassword(),
       );
     }
     if (route == RouteName.forgotPassword) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             ForgotPassword(),
       );
     }
     if (route == RouteName.resetPassword) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
             ResetPassword(),
       );
     }
     if (route == RouteName.allTrainerScreen) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             AllTrainerScreen(),
       );
     }
     if (route == RouteName.trainerProfileScreen) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             TrainerProfileScreen(),
       );
     }
 
     if (route == RouteName.waterConsumed) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             ConsumptionScreen(),
       );
     }
     if (route == RouteName.selectLocationScreen) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             SelectLocationScreen(),
       );
     }
     if (route == RouteName.tagPeopleScreen) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             TagPeopleScreen(),
       );
     }
@@ -199,32 +185,28 @@ class GenerateRoute {
       );
     }
     if (route == RouteName.customGallery) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             SelectMediaScreen(),
       );
     }
     if (route == RouteName.setFoodType) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             SetFoodType(),
       );
     }
 
     if (route == RouteName.setActivity) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             SetActivity(),
       );
     }
 
     if (route == RouteName.getTrainedScreen) {
-      return PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation<double> animation,
-                Animation<double> secondaryAnimation) =>
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
             GetTrainedScreen(),
       );
     } else {
