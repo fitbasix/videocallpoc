@@ -305,7 +305,8 @@ class _HomePageState extends State<HomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Obx(()=>_homeController.waterConsumedDataLoading
+                                          Obx(() => _homeController
+                                                  .waterConsumedDataLoading
                                                   .value
                                               ? Shimmer.fromColors(
                                                   child: Container(
@@ -349,7 +350,7 @@ class _HomePageState extends State<HomePage> {
                                                   _homeController
                                                       .isConsumptionLoading
                                                       .value = true;
-                                                      Navigator.pushNamed(context,
+                                                  Navigator.pushNamed(context,
                                                       RouteName.waterConsumed);
                                                   _homeController
                                                           .waterDetails.value =
@@ -365,28 +366,25 @@ class _HomePageState extends State<HomePage> {
                                                           0.0
                                                       ? 0.0
                                                       : (_homeController
-                                                          .userProfileData
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .profile!
-                                                          .nutrition!
-                                                          .totalWaterConsumed! /
+                                                              .userProfileData
+                                                              .value
+                                                              .response!
+                                                              .data!
+                                                              .profile!
+                                                              .nutrition!
+                                                              .totalWaterConsumed! /
                                                           (_homeController
-                                                          .userProfileData
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .profile!
-                                                          .nutrition!
-                                                          .totalWaterRequired!
-                                                      ));
-                                                              _homeController
+                                                              .userProfileData
+                                                              .value
+                                                              .response!
+                                                              .data!
+                                                              .profile!
+                                                              .nutrition!
+                                                              .totalWaterRequired!));
+                                                  _homeController
                                                       .isConsumptionLoading
                                                       .value = false;
-                                                  
-                                                })))
-                                          ,
+                                                }))),
                                           SizedBox(
                                             width: 8.0 *
                                                 SizeConfig.widthMultiplier!,
@@ -808,7 +806,7 @@ class _HomePageState extends State<HomePage> {
                                                               .trendingPostList[
                                                                   index]
                                                               .location!
-                                                              .placeName
+                                                              .placeName![1]
                                                               .toString(),
                                                       imageUrl: _homeController
                                                                   .trendingPostList[
