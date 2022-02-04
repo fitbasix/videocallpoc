@@ -77,9 +77,9 @@ class Post {
   final DateTime? updatedAt;
   final Person? userId;
   final int? category;
-  final bool? isLiked;
+  bool? isLiked;
   final List<PostCategory>? postCategory;
-  late final int? likes;
+  int? likes;
   final int? comments;
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
@@ -130,8 +130,8 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) => Location(
         placeName: List<dynamic>.from(json['placeName'].map((x) => x)),
         placeId: json["placeId"],
-        geometry: Geometry.fromJson(
-            json["geometry"] == null ? Geometry() : json["geometry"]),
+        geometry:
+            Geometry.fromJson(json["geometry"] == null ? {} : json["geometry"]),
       );
 
   Map<String, dynamic> toJson() => {

@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
@@ -32,6 +33,8 @@ class TrainerController extends GetxController {
   RxInt slotsLeftLimit = RxInt(5);
   RxBool isProfileLoading = RxBool(false);
   RxInt currentPostPage = RxInt(1);
+  RxList<Post> trainerPostList = RxList<Post>([]);
+  Rx<PostsModel> initialPostData = Rx(PostsModel());
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;
