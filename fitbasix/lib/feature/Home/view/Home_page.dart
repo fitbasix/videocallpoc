@@ -765,11 +765,11 @@ class _HomePageState extends State<HomePage> {
                                                                   .files!
                                                                   .length ==
                                                               0
-                                                          ? 'https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png'
+                                                          ? []
                                                           : _homeController
                                                               .trendingPostList[
                                                                   index]
-                                                              .files![0],
+                                                              .files!,
                                                       caption: _homeController
                                                               .trendingPostList[
                                                                   index]

@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,7 +34,7 @@ class PostTile extends StatefulWidget {
   }) : super(key: key);
   final String name;
   final String profilePhoto;
-  final String imageUrl;
+  final List<String> imageUrl;
   final String category;
   final String date;
   final String place;
@@ -137,12 +140,89 @@ class _PostTileState extends State<PostTile> {
                     fontSize: 14 * SizeConfig.textMultiplier!),
               ),
             ),
-            CachedNetworkImage(
-              imageUrl: widget.imageUrl,
-              height: 360 * SizeConfig.widthMultiplier!,
-              width: 360 * SizeConfig.widthMultiplier!,
-              fit: BoxFit.cover,
-            ),
+            widget.imageUrl.length != 0
+                ? Container(
+                    height: 360 * SizeConfig.widthMultiplier!,
+                    child: ListView.builder(
+                        itemCount: widget.imageUrl.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: widget.imageUrl[index],
+                                height: 360 * SizeConfig.widthMultiplier!,
+                                width: 360 * SizeConfig.widthMultiplier!,
+                                fit: BoxFit.cover,
+                              ),
+                              ClipRect(
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaX: 7.0, sigmaY: 7.0),
+                                  child: Container(
+                                    // imageUrl: widget.imageUrl[index],
+                                    height: 360 * SizeConfig.widthMultiplier!,
+                                    width: 360 * SizeConfig.widthMultiplier!,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                              CachedNetworkImage(
+                                imageUrl: widget.imageUrl[index],
+                                height: 360 * SizeConfig.widthMultiplier!,
+                                width: 360 * SizeConfig.widthMultiplier!,
+                                fit: BoxFit.contain,
+                              ),
+                              // Positioned(
+                              //   top: 0,
+                              //   right: 0,
+                              //   child: Container(
+                              //     child: BackdropFilter(
+                              //       filter: ImageFilter.blur(
+                              //           sigmaX: 7.0, sigmaY: 7.0),
+                              //       child: Container(
+                              //         height: 360 * SizeConfig.widthMultiplier!,
+                              //         width: 360 * SizeConfig.widthMultiplier!,
+                              //         color: Colors.black.withOpacity(0.5),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              widget.imageUrl.length != 1
+                                  ? Positioned(
+                                      right: 0,
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                            top: 16 *
+                                                SizeConfig.heightMultiplier!,
+                                            right: 16 *
+                                                SizeConfig.widthMultiplier!),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 2 *
+                                                SizeConfig.heightMultiplier!,
+                                            horizontal: 12 *
+                                                SizeConfig.widthMultiplier!),
+                                        decoration: BoxDecoration(
+                                            color: lightBlack.withOpacity(0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: Text(
+                                          '${index + 1}/${widget.imageUrl.length}',
+                                          style: AppTextStyle.boldBlackText
+                                              .copyWith(
+                                                  color: kPureWhite,
+                                                  fontSize: 14 *
+                                                      SizeConfig
+                                                          .textMultiplier!),
+                                        ),
+                                      ))
+                                  : SizedBox()
+                            ],
+                          );
+                        }),
+                  )
+                : SizedBox(),
             Padding(
               padding: EdgeInsets.only(
                   left: 16 * SizeConfig.widthMultiplier!,
@@ -231,38 +311,46 @@ class _PostTileState extends State<PostTile> {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
-            Row(
-              // mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    // width: 260 * SizeConfig.widthMultiplier!,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    decoration: BoxDecoration(
-                      color: lightGrey,
-                      borderRadius: BorderRadius.circular(
-                          8 * SizeConfig.widthMultiplier!),
-                    ),
-                    child: TextField(
-                      controller: _homeController.commentController,
-                      onChanged: (value) {
-                        _homeController.comment.value = value;
-                      },
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'add_comment'.tr,
-                          hintStyle: AppTextStyle.smallGreyText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!,
-                              color: hintGrey),
-                          contentPadding: EdgeInsets.only(
-                              bottom: 10,
-                              left: 16 * SizeConfig.widthMultiplier!)),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => PostScreen()));
+              },
+              child: Row(
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 40,
+                      // width: 260 * SizeConfig.widthMultiplier!,
+                      margin: EdgeInsets.only(left: 16, right: 16),
+                      decoration: BoxDecoration(
+                        color: lightGrey,
+                        borderRadius: BorderRadius.circular(
+                            8 * SizeConfig.widthMultiplier!),
+                      ),
+                      child: TextField(
+                        controller: _homeController.commentController,
+                        onChanged: (value) {
+                          _homeController.comment.value = value;
+                        },
+                        decoration: InputDecoration(
+                            enabled: false,
+                            border: InputBorder.none,
+                            hintText: 'add_comment'.tr,
+                            hintStyle: AppTextStyle.smallGreyText.copyWith(
+                                fontSize: 14 * SizeConfig.textMultiplier!,
+                                color: hintGrey),
+                            contentPadding: EdgeInsets.only(
+                                bottom: 10,
+                                left: 16 * SizeConfig.widthMultiplier!)),
+                      ),
                     ),
                   ),
-                ),
-                IconButton(onPressed: widget.addComment, icon: Icon(Icons.send))
-              ],
+                  IconButton(
+                      onPressed: widget.addComment, icon: Icon(Icons.send))
+                ],
+              ),
             ),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,

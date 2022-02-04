@@ -538,6 +538,14 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                   .trainers![index]
                                                   .user!
                                                   .id!);
+                                      if (_trainerController.initialPostData
+                                              .value.response!.data!.length !=
+                                          0) {
+                                        _trainerController
+                                                .trainerPostList.value =
+                                            _trainerController.initialPostData
+                                                .value.response!.data!;
+                                      }
                                       _trainerController
                                           .isProfileLoading.value = false;
                                     },

@@ -88,8 +88,6 @@ class HomeController extends GetxController {
 
     if (initialPostData.value.response!.data!.length != 0) {
       trendingPostList.value = initialPostData.value.response!.data!;
-
-      print(trendingPostList.length);
     }
   }
 

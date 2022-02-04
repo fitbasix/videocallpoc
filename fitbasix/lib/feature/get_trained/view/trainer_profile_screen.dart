@@ -123,27 +123,28 @@ class _TrainerPageState extends State<TrainerPage> {
   void initState() {
     super.initState();
 
-    _homeController.currentPage.value = 1;
+    _trainerController.currentPostPage.value = 1;
 
     _scrollController.addListener(() async {
       if (_scrollController.position.maxScrollExtent -
               _scrollController.position.pixels <
           MediaQuery.of(context).size.height * 0.30) {
         _homeController.showLoader.value = true;
-        final postQuery = await HomeService.getPosts2(
-            skip: _homeController.currentPage.value);
+        final postQuery = await TrainerServices.getTrainerPosts(
+            _trainerController.atrainerDetail.value.user!.id!);
 
         if (postQuery.response!.data!.length < 5) {
-          _homeController.trendingPostList.addAll(postQuery.response!.data!);
+          _trainerController.trainerPostList.addAll(postQuery.response!.data!);
           _homeController.showLoader.value = false;
           return;
         } else {
-          if (_homeController.trendingPostList.last.id ==
+          if (_trainerController.trainerPostList.last.id ==
               postQuery.response!.data!.last.id) return;
-          _homeController.trendingPostList.addAll(postQuery.response!.data!);
+          _trainerController.trainerPostList.addAll(postQuery.response!.data!);
         }
 
-        _homeController.currentPage.value++;
+        // _homeController.currentPage.value++;
+        _trainerController.currentPostPage.value++;
         _homeController.showLoader.value = false;
         setState(() {});
       }
@@ -538,120 +539,126 @@ class _TrainerPageState extends State<TrainerPage> {
                               () => _homeController.isLoading.value
                                   ? CustomizedCircularProgress()
                                   : ListView.builder(
-                                      itemCount: _homeController
-                                                  .trendingPostList.length ==
+                                      itemCount: _trainerController
+                                                  .trainerPostList.length ==
                                               0
                                           ? 0
-                                          : _homeController
-                                              .trendingPostList.length,
+                                          : _trainerController
+                                              .trainerPostList.length,
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (_, index) {
                                         return Obx(() => Column(
                                               children: [
                                                 PostTile(
-                                                  name: _homeController
-                                                      .trendingPostList[index]
+                                                  name: _trainerController
+                                                      .trainerPostList[index]
                                                       .userId!
                                                       .name!,
-                                                  profilePhoto: _homeController
-                                                      .trendingPostList[index]
-                                                      .userId!
-                                                      .profilePhoto!,
-                                                  category: _homeController
-                                                      .trendingPostList[index]
+                                                  profilePhoto:
+                                                      _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .userId!
+                                                          .profilePhoto!,
+                                                  category: _trainerController
+                                                      .trainerPostList[index]
                                                       .postCategory![0]
                                                       .name!,
                                                   date: DateFormat.d()
                                                       .add_MMM()
-                                                      .format(_homeController
-                                                          .trendingPostList[
+                                                      .format(_trainerController
+                                                          .trainerPostList[
                                                               index]
                                                           .updatedAt!),
-                                                  place: _homeController
-                                                              .trendingPostList[
+                                                  place: _trainerController
+                                                              .trainerPostList[
                                                                   index]
                                                               .location!
                                                               .placeName!
                                                               .length ==
                                                           0
                                                       ? ''
-                                                      : _homeController
-                                                          .trendingPostList[
+                                                      : _trainerController
+                                                          .trainerPostList[
                                                               index]
                                                           .location!
                                                           .placeName![1]
                                                           .toString(),
-                                                  imageUrl: _homeController
-                                                              .trendingPostList[
+                                                  imageUrl: _trainerController
+                                                              .trainerPostList[
                                                                   index]
                                                               .files!
                                                               .length ==
                                                           0
-                                                      ? 'https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png'
-                                                      : _homeController
-                                                          .trendingPostList[
+                                                      ? []
+                                                      : _trainerController
+                                                          .trainerPostList[
                                                               index]
-                                                          .files![0],
-                                                  caption: _homeController
-                                                          .trendingPostList[
+                                                          .files!,
+                                                  caption: _trainerController
+                                                          .trainerPostList[
                                                               index]
                                                           .caption ??
                                                       '',
-                                                  likes: _homeController
-                                                      .trendingPostList[index]
+                                                  likes: _trainerController
+                                                      .trainerPostList[index]
                                                       .likes
                                                       .toString(),
-                                                  comments: _homeController
-                                                      .trendingPostList[index]
+                                                  comments: _trainerController
+                                                      .trainerPostList[index]
                                                       .comments
                                                       .toString(),
                                                   hitLike: () async {
-                                                    if (_homeController
-                                                        .trendingPostList[index]
+                                                    if (_trainerController
+                                                        .trainerPostList[index]
                                                         .isLiked!) {
-                                                      _homeController
-                                                          .trendingPostList[
+                                                      _trainerController
+                                                          .trainerPostList[
                                                               index]
                                                           .isLiked = false;
-                                                      _homeController
-                                                          .trendingPostList[
-                                                              index]
-                                                          .likes = (_homeController
-                                                              .trendingPostList[
+                                                      _trainerController
+                                                              .trainerPostList[
                                                                   index]
-                                                              .likes! -
-                                                          1);
+                                                              .likes =
+                                                          (_trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .likes! -
+                                                              1);
                                                       HomeService.unlikePost(
-                                                          postId: _homeController
-                                                              .trendingPostList[
-                                                                  index]
-                                                              .id!);
+                                                          postId:
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id!);
                                                     } else {
-                                                      _homeController
-                                                          .trendingPostList[
+                                                      _trainerController
+                                                          .trainerPostList[
                                                               index]
                                                           .isLiked = true;
-                                                      _homeController
-                                                          .trendingPostList[
-                                                              index]
-                                                          .likes = (_homeController
-                                                              .trendingPostList[
+                                                      _trainerController
+                                                              .trainerPostList[
                                                                   index]
-                                                              .likes! +
-                                                          1);
+                                                              .likes =
+                                                          (_trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .likes! +
+                                                              1);
                                                       HomeService.likePost(
-                                                          postId: _homeController
-                                                              .trendingPostList[
-                                                                  index]
-                                                              .id!);
+                                                          postId:
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id!);
                                                     }
                                                     setState(() {});
                                                   },
                                                   addComment: () {
                                                     HomeService.addComment(
-                                                        _homeController
-                                                            .trendingPostList[
+                                                        _trainerController
+                                                            .trainerPostList[
                                                                 index]
                                                             .id!,
                                                         _homeController
@@ -663,11 +670,11 @@ class _TrainerPageState extends State<TrainerPage> {
                                                         .commentController
                                                         .clear();
                                                   },
-                                                  postId: _homeController
-                                                      .trendingPostList[index]
+                                                  postId: _trainerController
+                                                      .trainerPostList[index]
                                                       .id!,
-                                                  isLiked: _homeController
-                                                      .trendingPostList[index]
+                                                  isLiked: _trainerController
+                                                      .trainerPostList[index]
                                                       .isLiked!,
                                                   onTap: () {
                                                     Navigator.push(
