@@ -109,6 +109,8 @@ class MenuScreen extends StatelessWidget {
                   await _controller.googleSignout();
                   Navigator.pushNamedAndRemoveUntil(
                       context, RouteName.loginScreen, (route) => false);
+
+                  Get.deleteAll();
                 })
           ],
         ));

@@ -1,23 +1,10 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
-import 'package:fitbasix/feature/Home/services/home_service.dart';
-import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
-import 'package:fitbasix/feature/Home/view/post_screen.dart';
-import 'package:fitbasix/feature/Home/view/tools_screen.dart';
-import 'package:fitbasix/feature/Home/view/widgets/caloriesDetails.dart';
-import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
-import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
-import 'package:fitbasix/feature/Home/view/widgets/menu_screen.dart';
-import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
-import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -25,11 +12,19 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
+import 'package:fitbasix/feature/Home/view/post_screen.dart';
+import 'package:fitbasix/feature/Home/view/tools_screen.dart';
+import 'package:fitbasix/feature/Home/view/widgets/caloriesDetails.dart';
+import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
 import 'package:fitbasix/feature/Home/view/widgets/green_circle_arrow_button.dart';
+import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
 import 'package:fitbasix/feature/Home/view/widgets/home_tile.dart';
-import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
+import 'package:fitbasix/feature/Home/view/widgets/menu_screen.dart';
+import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
-import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
@@ -78,9 +73,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final LoginController _controller = Get.put(LoginController());
 
-  final PostController _postController = Get.put(PostController());
-
-  final HomeController _homeController = Get.put(HomeController());
+  final HomeController _homeController = Get.find();
 
   final ScrollController _scrollController = ScrollController();
 
@@ -95,8 +88,8 @@ class _HomePageState extends State<HomePage> {
               _scrollController.position.pixels <
           MediaQuery.of(context).size.height * 0.30) {
         _homeController.showLoader.value = true;
-        final postQuery = await HomeService.getPosts2(
-            skip: _homeController.currentPage.value);
+        final postQuery =
+            await HomeService.getPosts(skip: _homeController.currentPage.value);
 
         if (postQuery.response!.data!.length < 5) {
           _homeController.trendingPostList.addAll(postQuery.response!.data!);
@@ -104,7 +97,11 @@ class _HomePageState extends State<HomePage> {
           return;
         } else {
           if (_homeController.trendingPostList.last.id ==
-              postQuery.response!.data!.last.id) return;
+              postQuery.response!.data!.last.id) {
+            _homeController.showLoader.value = false;
+            return;
+          }
+
           _homeController.trendingPostList.addAll(postQuery.response!.data!);
         }
 
@@ -168,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         30 * SizeConfig.widthMultiplier!),
-                                    child: CachedNetworkImage(
+                                    child: Obx(() => CachedNetworkImage(
                                         imageUrl: _homeController
                                             .userProfileData
                                             .value
@@ -181,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                                         height:
                                             60 * SizeConfig.widthMultiplier!,
                                         width:
-                                            60 * SizeConfig.widthMultiplier!),
+                                            60 * SizeConfig.widthMultiplier!)),
                                   ),
                                   SizedBox(
                                     width: 15,
