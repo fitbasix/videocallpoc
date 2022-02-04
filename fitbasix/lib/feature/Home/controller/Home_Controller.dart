@@ -25,6 +25,7 @@ class HomeController extends GetxController {
   RxInt currentPage = RxInt(1);
   Rx<WaterDetail> waterDetails = Rx(WaterDetail());
   RxDouble waterLevel = 0.0.obs;
+  RxDouble caloriesBurnt = 0.0.obs;
 
   Future<void> setup() async {
     isLoading.value = true;
