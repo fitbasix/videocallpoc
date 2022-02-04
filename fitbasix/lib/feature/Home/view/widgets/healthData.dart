@@ -1,8 +1,19 @@
+import 'dart:io';
+
+import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/image_path.dart';
+import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:health/health.dart';
+import 'package:intl/intl.dart';
 
 enum AppState {
   DATA_NOT_FETCHED,
@@ -22,6 +33,7 @@ class HealthApp extends StatefulWidget {
 
 class _HealthAppState extends State<HealthApp> {
   List<HealthDataPoint> _healthDataList = [];
+  final HomeController homeController = Get.find();
   AppState _state = AppState.DATA_NOT_FETCHED;
   int _nofSteps = 10;
   double _mgdl = 10.0;
@@ -41,13 +53,12 @@ class _HealthAppState extends State<HealthApp> {
     ];
 
     // with coresponsing permissions
-    final permissions = [
-      HealthDataAccess.READ
-    ];
+    final permissions = [HealthDataAccess.READ];
 
     // get data within the last 24 hours
     final now = DateTime.now();
-    final yesterday = now.subtract(Duration(days: 1));
+    final yesterday =
+        now.subtract(Duration(hours: int.parse(DateFormat('kk').format(now))));
 
     // requesting access to the data types before reading them
     // note that strictly speaking, the [permissions] are not
@@ -58,6 +69,8 @@ class _HealthAppState extends State<HealthApp> {
     if (requested) {
       try {
         // fetch health data
+        String time = DateFormat('kk').format(DateTime.now());
+        print(int.parse(time));
         List<HealthDataPoint> healthData =
             await health.getHealthDataFromTypes(yesterday, now, types);
 
@@ -71,9 +84,13 @@ class _HealthAppState extends State<HealthApp> {
 
       // filter out duplicates
       _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-
+      homeController.caloriesBurnt.value = 0.0;
       // print the results
-      _healthDataList.forEach((x) => print(x));
+      _healthDataList.forEach((x) {
+        homeController.caloriesBurnt.value =
+            x.value.toDouble() + homeController.caloriesBurnt.value;
+        print(homeController.caloriesBurnt.value);
+      });
 
       // update the UI to display the results
       setState(() {
@@ -134,9 +151,6 @@ class _HealthAppState extends State<HealthApp> {
       } catch (error) {
         print("Caught exception in getTotalStepsInInterval: $error");
       }
-
-      print('Total number of steps: $steps');
-
       setState(() {
         _nofSteps = (steps == null) ? 0 : steps;
         _state = (steps == null) ? AppState.NO_DATA : AppState.STEPS_READY;
@@ -208,9 +222,9 @@ class _HealthAppState extends State<HealthApp> {
   }
 
   Widget _content() {
-    if (_state == AppState.DATA_READY)
+    if (_state == AppState.DATA_READY) {
       return _contentDataReady();
-    else if (_state == AppState.NO_DATA)
+    } else if (_state == AppState.NO_DATA)
       return _contentNoData();
     else if (_state == AppState.FETCHING_DATA)
       return _contentFetchingData();
@@ -227,34 +241,114 @@ class _HealthAppState extends State<HealthApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Health Example'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.file_download),
-                onPressed: () {
+    return Dialog(
+        insetPadding: EdgeInsets.all(50 * SizeConfig.widthMultiplier!),
+        backgroundColor: Colors.white,
+        insetAnimationDuration: const Duration(milliseconds: 100),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 24 * SizeConfig.widthMultiplier!,
+              vertical: 30 * SizeConfig.heightMultiplier!),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'track_calories_heading'.tr,
+                style: AppTextStyle.boldBlackText
+                    .copyWith(fontSize: 18 * SizeConfig.textMultiplier!),
+              ),
+              SizedBox(
+                height: 12 * SizeConfig.heightMultiplier!,
+              ),
+              Text(
+                'calories_track_reson'.tr,
+                style: AppTextStyle.normalBlackText.copyWith(
+                    fontSize: 14 * SizeConfig.textMultiplier!, color: hintGrey),
+              ),
+              SizedBox(
+                height: 48 * SizeConfig.heightMultiplier!,
+              ),
+              GestureDetector(
+                onTap: () {
                   fetchData();
+                  Navigator.pop(context);
                 },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Platform.isIOS
+                      ? HealthTrackOptionTile(
+                          imagePath: ImagePath.appleHealth,
+                          applicationName: 'appleHealth'.tr,
+                        )
+                      : HealthTrackOptionTile(
+                          imagePath: ImagePath.googleFit,
+                          applicationName: 'googleFit'.tr,
+                        ),
+                ),
               ),
-              IconButton(
-                onPressed: () {
-                  addData();
-                },
-                icon: Icon(Icons.add),
+              SizedBox(
+                height: 30 * SizeConfig.heightMultiplier!,
               ),
-              IconButton(
-                onPressed: () {
-                  fetchStepData();
-                },
-                icon: Icon(Icons.nordic_walking),
-              )
+              HealthTrackOptionTile(
+                imagePath: ImagePath.fitBit,
+                applicationName: 'fitbit'.tr,
+              ),
+              SizedBox(
+                height: 15 * SizeConfig.heightMultiplier!,
+              ),
             ],
+
+            /*AppBar(
+              title: const Text('Health Example'),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.file_download),
+                  onPressed: () {
+                    fetchData();
+                  },
+                ),
+                IconButton(
+                  onPressed: () {
+                    addData();
+                  },
+                  icon: Icon(Icons.add),
+                ),
+                IconButton(
+                  onPressed: () {
+                    fetchStepData();
+                  },
+                  icon: Icon(Icons.nordic_walking),
+                )
+              ],
+            ),*/
+            // body: Center(
+            //   child: _content(),
+            // )),
           ),
-          body: Center(
-            child: _content(),
-          )),
+        ));
+  }
+}
+
+class HealthTrackOptionTile extends StatelessWidget {
+  String imagePath;
+  String applicationName;
+  HealthTrackOptionTile(
+      {required this.imagePath, required this.applicationName});
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SvgPicture.asset(imagePath,
+            width: 30 * SizeConfig.widthMultiplier!, fit: BoxFit.fitWidth),
+        SizedBox(
+          width: 11 * SizeConfig.widthMultiplier!,
+        ),
+        Text(applicationName,
+            style: AppTextStyle.boldBlackText
+                .copyWith(fontSize: 18 * SizeConfig.textMultiplier!))
+      ],
     );
   }
 }

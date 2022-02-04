@@ -52,7 +52,8 @@ Widget WaterConsumed(
                 height: 10 * SizeConfig.heightMultiplier!,
               ),
               CustomPaint(
-                foregroundPainter: CirclePainter(consumedWater / totalWater),
+                foregroundPainter:
+                    CirclePainter((consumedWater / totalWater) * 100),
                 child: Container(
                   width: 120,
                   height: 120,
@@ -264,7 +265,7 @@ class CirclePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-Widget CaloriesBurnt(double burntCalories) => Container(
+Widget CaloriesBurnt(double burntCalories, VoidCallback onTap) => Container(
       child: Container(
         decoration: BoxDecoration(
             borderRadius:
@@ -321,10 +322,16 @@ Widget CaloriesBurnt(double burntCalories) => Container(
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  SvgPicture.asset(
-                    ImagePath.power,
-                    height: 16 * SizeConfig.widthMultiplier!,
-                    width: 16 * SizeConfig.widthMultiplier!,
+                  GestureDetector(
+                    onTap: onTap,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: SvgPicture.asset(
+                        ImagePath.power,
+                        height: 16 * SizeConfig.widthMultiplier!,
+                        width: 16 * SizeConfig.widthMultiplier!,
+                      ),
+                    ),
                   )
                 ],
               )

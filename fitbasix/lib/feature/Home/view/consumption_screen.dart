@@ -116,7 +116,8 @@ class ConsumptionScreen extends StatelessWidget {
                       height: 190 * SizeConfig.heightMultiplier!,
                       child: Obx(() => ChartApp(
                             waterDetails: _homeController
-                                .waterDetails.value.response!.data!,
+                                .waterDetails.value.response!.data!.reversed
+                                .toList(),
                           ))),
                 ],
               ),

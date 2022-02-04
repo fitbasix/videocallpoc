@@ -50,4 +50,7 @@ class ImagePath {
   static const String fire = "assets/home/fire.svg";
   static const String power = "assets/home/power.svg";
   static const String add = "assets/home/add.svg";
+  static const String appleHealth = "assets/home/appleHealth.svg";
+  static const String googleFit = "assets/home/googleFit.svg";
+  static const String fitBit = "assets/home/fitbit.svg";
 }

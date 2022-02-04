@@ -58,23 +58,6 @@ class AnimatedLiquidCustomProgressIndicatorState
             ),
           ),
         ),
-        // RoundIconButton(
-        //     onPressed: () {
-        //       homeController.waterLevel.value =
-        //           homeController.waterLevel.value - 0.083;
-        //     },
-        //     color: lightGrey,
-        //     child: Center(
-        //       child: Padding(
-        //         padding:
-        //             EdgeInsets.only(bottom: 15 * SizeConfig.heightMultiplier!),
-        //         child: Icon(
-        //           Icons.minimize_sharp,
-        //           size: 20 * SizeConfig.heightMultiplier!,
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //     )),
         SizedBox(
           width: 20 * SizeConfig.widthMultiplier!,
         ),

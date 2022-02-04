@@ -9,6 +9,7 @@ import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/tools_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/caloriesDetails.dart';
 import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
+import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
 import 'package:fitbasix/feature/Home/view/widgets/menu_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
@@ -355,7 +356,16 @@ class _HomePageState extends State<HomePage> {
                                                   left: 8.0 *
                                                       SizeConfig
                                                           .widthMultiplier!),
-                                              child: CaloriesBurnt(20.0),
+                                              child: CaloriesBurnt(
+                                                  _homeController
+                                                      .caloriesBurnt.value
+                                                      .toInt()
+                                                      .toDouble(), () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (_) =>
+                                                        HealthApp());
+                                              }),
                                             ),
                                           )
                                         ],
