@@ -9,25 +9,12 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 
 class HomeService {
   static var dio = DioUtil().getInstance();
-  static Stream<List<PostsModel>> getPosts({int? skip}) async* {
+
+  static Future<PostsModel> getPosts({int? skip}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!
         .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
-
-    // log(response.toString());
-
-    yield [postsModelFromJson(response.toString())];
-  }
-
-  static Future<PostsModel> getPosts2({int? skip}) async {
-    print(skip);
-    dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!
-        .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
-
-    print(response.toString());
 
     return postsModelFromJson(response.toString());
   }
@@ -96,9 +83,6 @@ class HomeService {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getComment, data: {"postId": postId});
-
-    log(response.toString());
-    print(response.data['code']);
 
     yield commentModelFromJson(response.toString());
   }

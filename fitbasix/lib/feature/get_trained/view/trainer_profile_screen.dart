@@ -139,16 +139,24 @@ class _TrainerPageState extends State<TrainerPage> {
           return;
         } else {
           if (_trainerController.trainerPostList.last.id ==
-              postQuery.response!.data!.last.id) return;
+              postQuery.response!.data!.last.id) {
+            _homeController.showLoader.value = false;
+            return;
+          }
           _trainerController.trainerPostList.addAll(postQuery.response!.data!);
         }
 
-        // _homeController.currentPage.value++;
         _trainerController.currentPostPage.value++;
         _homeController.showLoader.value = false;
         setState(() {});
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override

@@ -1,22 +1,21 @@
-import 'package:fitbasix/core/routes/app_routes.dart';
-import 'package:fitbasix/core/universal_widgets/number_format.dart';
-import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/core/universal_widgets/number_format.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
-import 'package:shimmer/shimmer.dart';
 
 class AllTrainerScreen extends StatefulWidget {
   AllTrainerScreen({Key? key}) : super(key: key);
@@ -545,6 +544,9 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                 .trainerPostList.value =
                                             _trainerController.initialPostData
                                                 .value.response!.data!;
+                                      } else {
+                                        _trainerController.trainerPostList
+                                            .clear();
                                       }
                                       _trainerController
                                           .isProfileLoading.value = false;
