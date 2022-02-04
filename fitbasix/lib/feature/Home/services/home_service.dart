@@ -15,9 +15,21 @@ class HomeService {
     var response = await dio!
         .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
 
-    log(response.toString());
+    // log(response.toString());
 
     yield [postsModelFromJson(response.toString())];
+  }
+
+  static Future<PostsModel> getPosts2({int? skip}) async {
+    print(skip);
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!
+        .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
+
+    print(response.toString());
+
+    return postsModelFromJson(response.toString());
   }
 
   static Future<bool> likePost({String? postId, String? commentId}) async {
@@ -48,7 +60,8 @@ class HomeService {
     print(response.data['code']);
     if (response.data['code'] == 0) return true;
     return false;
-}
+  }
+
   static Future<WaterDetail> getWaterDetails() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();

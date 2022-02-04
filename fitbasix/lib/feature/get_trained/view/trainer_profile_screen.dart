@@ -4,6 +4,7 @@ import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.da
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
@@ -117,37 +118,37 @@ class _TrainerPageState extends State<TrainerPage> {
   final HomeController _homeController = Get.find();
   final ScrollController _scrollController = ScrollController();
   final TrainerController _trainerController = Get.find();
-  final List<PostsModel> _list = <PostsModel>[];
-  final StreamController<List<PostsModel>> postController =
-      StreamController<List<PostsModel>>.broadcast();
 
   @override
   void initState() {
-    var postQuery = HomeService.getPosts();
-    postQuery.listen((event) {
-      _list.addAll(event);
-      postController.sink.add(_list);
-    });
+    super.initState();
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        var postQuery = TrainerServices.getTrainerPosts(
+    _trainerController.currentPostPage.value = 1;
+
+    _scrollController.addListener(() async {
+      if (_scrollController.position.maxScrollExtent -
+              _scrollController.position.pixels <
+          MediaQuery.of(context).size.height * 0.30) {
+        _homeController.showLoader.value = true;
+        final postQuery = await TrainerServices.getTrainerPosts(
             _trainerController.atrainerDetail.value.user!.id!);
-        postQuery.listen((event) {
-          if (event[0].response!.data!.length < 5) {
-            _list.addAll(event);
-            postController.sink.add(_list);
-            return;
-          } else {
-            _list.addAll(event);
-            postController.sink.add(_list);
-          }
-        });
-        _trainerController.currentPage.value++;
+
+        if (postQuery.response!.data!.length < 5) {
+          _trainerController.trainerPostList.addAll(postQuery.response!.data!);
+          _homeController.showLoader.value = false;
+          return;
+        } else {
+          if (_trainerController.trainerPostList.last.id ==
+              postQuery.response!.data!.last.id) return;
+          _trainerController.trainerPostList.addAll(postQuery.response!.data!);
+        }
+
+        // _homeController.currentPage.value++;
+        _trainerController.currentPostPage.value++;
+        _homeController.showLoader.value = false;
+        setState(() {});
       }
     });
-    super.initState();
   }
 
   @override
@@ -534,129 +535,165 @@ class _TrainerPageState extends State<TrainerPage> {
                               height: 16 * SizeConfig.heightMultiplier!,
                               color: kBackgroundColor,
                             ),
-                            StreamBuilder<List<PostsModel>>(
-                                stream: postController.stream,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData)
-                                    return ListView.builder(
-                                        itemCount: snapshot.data!.length,
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          return ListView.builder(
-                                              itemCount: snapshot.data![index]
-                                                  .response!.data!.length,
-                                              shrinkWrap: true,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              itemBuilder: (_, index2) {
-                                                return Column(
-                                                  children: [
-                                                    PostTile(
-                                                      name: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .userId!
-                                                          .name!,
-                                                      profilePhoto: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
+                            Obx(
+                              () => _homeController.isLoading.value
+                                  ? CustomizedCircularProgress()
+                                  : ListView.builder(
+                                      itemCount: _trainerController
+                                                  .trainerPostList.length ==
+                                              0
+                                          ? 0
+                                          : _trainerController
+                                              .trainerPostList.length,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (_, index) {
+                                        return Obx(() => Column(
+                                              children: [
+                                                PostTile(
+                                                  name: _trainerController
+                                                      .trainerPostList[index]
+                                                      .userId!
+                                                      .name!,
+                                                  profilePhoto:
+                                                      _trainerController
+                                                          .trainerPostList[
+                                                              index]
                                                           .userId!
                                                           .profilePhoto!,
-                                                      category: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .postCategory![0]
-                                                          .name!,
-                                                      date: DateFormat.d()
-                                                          .add_MMM()
-                                                          .format(snapshot
-                                                              .data![index]
-                                                              .response!
-                                                              .data![index2]
-                                                              .updatedAt!),
-                                                      place: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
+                                                  category: _trainerController
+                                                      .trainerPostList[index]
+                                                      .postCategory![0]
+                                                      .name!,
+                                                  date: DateFormat.d()
+                                                      .add_MMM()
+                                                      .format(_trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .updatedAt!),
+                                                  place: _trainerController
+                                                              .trainerPostList[
+                                                                  index]
+                                                              .location!
+                                                              .placeName!
+                                                              .length ==
+                                                          0
+                                                      ? ''
+                                                      : _trainerController
+                                                          .trainerPostList[
+                                                              index]
                                                           .location!
                                                           .placeName![1]
                                                           .toString(),
-                                                      imageUrl: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .files![0],
-                                                      caption: snapshot
-                                                              .data![index]
-                                                              .response!
-                                                              .data![index2]
-                                                              .caption ??
-                                                          '',
-                                                      likes: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .likes
-                                                          .toString(),
-                                                      comments: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .comments
-                                                          .toString(),
-                                                      hitLike: () {
-                                                        HomeService.likePost(
-                                                            postId: snapshot
-                                                                .data![index]
-                                                                .response!
-                                                                .data![index2]
-                                                                .id!);
-                                                        setState(() {});
-                                                      },
-                                                      addComment: () {
-                                                        HomeService.addComment(
-                                                            snapshot
-                                                                .data![index]
-                                                                .response!
-                                                                .data![index2]
-                                                                .id!,
-                                                            _homeController
-                                                                .comment.value);
-
-                                                        setState(() {});
+                                                  imageUrl: _trainerController
+                                                              .trainerPostList[
+                                                                  index]
+                                                              .files!
+                                                              .length ==
+                                                          0
+                                                      ? []
+                                                      : _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .files!,
+                                                  caption: _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .caption ??
+                                                      '',
+                                                  likes: _trainerController
+                                                      .trainerPostList[index]
+                                                      .likes
+                                                      .toString(),
+                                                  comments: _trainerController
+                                                      .trainerPostList[index]
+                                                      .comments
+                                                      .toString(),
+                                                  hitLike: () async {
+                                                    if (_trainerController
+                                                        .trainerPostList[index]
+                                                        .isLiked!) {
+                                                      _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .isLiked = false;
+                                                      _trainerController
+                                                              .trainerPostList[
+                                                                  index]
+                                                              .likes =
+                                                          (_trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .likes! -
+                                                              1);
+                                                      HomeService.unlikePost(
+                                                          postId:
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id!);
+                                                    } else {
+                                                      _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .isLiked = true;
+                                                      _trainerController
+                                                              .trainerPostList[
+                                                                  index]
+                                                              .likes =
+                                                          (_trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .likes! +
+                                                              1);
+                                                      HomeService.likePost(
+                                                          postId:
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id!);
+                                                    }
+                                                    setState(() {});
+                                                  },
+                                                  addComment: () {
+                                                    HomeService.addComment(
+                                                        _trainerController
+                                                            .trainerPostList[
+                                                                index]
+                                                            .id!,
                                                         _homeController
-                                                            .commentController
-                                                            .clear();
-                                                      },
-                                                      postId: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .id!,
-                                                      isLiked: snapshot
-                                                          .data![index]
-                                                          .response!
-                                                          .data![index2]
-                                                          .isLiked!,
-                                                    ),
-                                                    Container(
-                                                      height: 16 *
-                                                          SizeConfig
-                                                              .heightMultiplier!,
-                                                      color: kBackgroundColor,
-                                                    )
-                                                  ],
-                                                );
-                                              });
-                                        });
-                                  return Center(
-                                    child: CustomizedCircularProgress(),
-                                  );
-                                }),
+                                                            .comment.value);
+
+                                                    setState(() {});
+
+                                                    _homeController
+                                                        .commentController
+                                                        .clear();
+                                                  },
+                                                  postId: _trainerController
+                                                      .trainerPostList[index]
+                                                      .id!,
+                                                  isLiked: _trainerController
+                                                      .trainerPostList[index]
+                                                      .isLiked!,
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                PostScreen()));
+                                                  },
+                                                ),
+                                                Container(
+                                                  height: 16 *
+                                                      SizeConfig
+                                                          .heightMultiplier!,
+                                                  color: kBackgroundColor,
+                                                )
+                                              ],
+                                            ));
+                                      }),
+                            ),
                             SizedBox(
                               height: 100 * SizeConfig.heightMultiplier!,
                             )

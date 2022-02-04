@@ -113,7 +113,7 @@ class TrainerServices {
     print(response.toString());
   }
 
-  static Stream<List<PostsModel>> getTrainerPosts(String userId) async* {
+  static Future<PostsModel> getTrainerPosts(String userId) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response =
@@ -121,6 +121,6 @@ class TrainerServices {
 
     log(response.toString());
 
-    yield [postsModelFromJson(response.toString())];
+    return postsModelFromJson(response.toString());
   }
 }

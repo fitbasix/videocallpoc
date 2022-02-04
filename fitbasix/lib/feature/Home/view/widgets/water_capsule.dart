@@ -2,6 +2,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
@@ -30,15 +31,19 @@ class AnimatedLiquidCustomProgressIndicatorState
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             homeController.waterLevel.value = homeController.waterLevel.value -
                 (1 /
                     (homeController.waterDetails.value.response!.data![0]
                             .totalWaterRequired! *
                         4));
-            HomeService.updateWaterDetails(homeController.waterLevel.value *
-                homeController
-                    .waterDetails.value.response!.data![0].totalWaterRequired!);
+            homeController.waterConsumedDataLoading.value = true;
+            await HomeService.updateWaterDetails(
+                homeController.waterLevel.value *
+                    homeController.waterDetails.value.response!.data![0]
+                        .totalWaterRequired!);
+                        homeController.userProfileData.value = await CreatePostService.getUserProfile();
+                        homeController.waterConsumedDataLoading.value=false;
           },
           child: Container(
             width: 27 * SizeConfig.heightMultiplier!,
@@ -83,15 +88,18 @@ class AnimatedLiquidCustomProgressIndicatorState
           width: 20 * SizeConfig.widthMultiplier!,
         ),
         GestureDetector(
-          onTap: () {
+          onTap: () async{
             homeController.waterLevel.value = homeController.waterLevel.value +
                 (1 /
                     (homeController.waterDetails.value.response!.data![0]
                             .totalWaterRequired! *
                         4));
-            HomeService.updateWaterDetails(homeController.waterLevel.value *
+                        homeController.waterConsumedDataLoading.value = true;
+            await HomeService.updateWaterDetails(homeController.waterLevel.value *
                 homeController
                     .waterDetails.value.response!.data![0].totalWaterRequired!);
+                    homeController.userProfileData.value = await CreatePostService.getUserProfile();
+                    homeController.waterConsumedDataLoading.value = false;
           },
           child: Container(
             width: 27 * SizeConfig.heightMultiplier!,
