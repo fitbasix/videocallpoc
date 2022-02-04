@@ -29,6 +29,8 @@ class HomeController extends GetxController {
   Rx<PostsModel> initialPostData = Rx(PostsModel());
   RxBool showLoader = RxBool(false);
   RxDouble caloriesBurnt = 0.0.obs;
+  RxBool waterConsumedDataLoading = false.obs;
+  RxBool isConsumptionLoading = false.obs;
 
   Future<void> setup() async {
     isLoading.value = true;
