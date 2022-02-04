@@ -87,7 +87,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> getTrendingPost({int? skip}) async {
-    initialPostData.value = await HomeService.getPosts2(skip: skip);
+    initialPostData.value = await HomeService.getPosts(skip: skip);
 
     if (initialPostData.value.response!.data!.length != 0) {
       trendingPostList.value = initialPostData.value.response!.data!;

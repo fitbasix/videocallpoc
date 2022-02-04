@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
-import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/custom_app_bar.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/trainer_card.dart';
-import 'package:shimmer/shimmer.dart';
 
 class GetTrainedScreen extends StatelessWidget {
   GetTrainedScreen({Key? key}) : super(key: key);
@@ -217,6 +217,16 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .trainers![index]
                                                 .user!
                                                 .id!);
+                                    if (_trainerController.initialPostData.value
+                                            .response!.data!.length !=
+                                        0) {
+                                      _trainerController.trainerPostList.value =
+                                          _trainerController.initialPostData
+                                              .value.response!.data!;
+                                    } else {
+                                      _trainerController.trainerPostList
+                                          .clear();
+                                    }
                                     _trainerController.isProfileLoading.value =
                                         false;
                                   },
@@ -416,6 +426,16 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .fitnessConsultant![index]
                                                 .user!
                                                 .id!);
+                                    if (_trainerController.initialPostData.value
+                                            .response!.data!.length !=
+                                        0) {
+                                      _trainerController.trainerPostList.value =
+                                          _trainerController.initialPostData
+                                              .value.response!.data!;
+                                    } else {
+                                      _trainerController.trainerPostList
+                                          .clear();
+                                    }
                                     _trainerController.isProfileLoading.value =
                                         false;
                                   },
@@ -614,6 +634,16 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .nutritionConsultant![index]
                                                 .user!
                                                 .id!);
+                                    if (_trainerController.initialPostData.value
+                                            .response!.data!.length !=
+                                        0) {
+                                      _trainerController.trainerPostList.value =
+                                          _trainerController.initialPostData
+                                              .value.response!.data!;
+                                    } else {
+                                      _trainerController.trainerPostList
+                                          .clear();
+                                    }
                                     _trainerController.isProfileLoading.value =
                                         false;
                                   },
