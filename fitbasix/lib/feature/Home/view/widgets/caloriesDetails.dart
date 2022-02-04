@@ -52,8 +52,8 @@ Widget WaterConsumed(
                 height: 10 * SizeConfig.heightMultiplier!,
               ),
               CustomPaint(
-                foregroundPainter:
-                    CirclePainter((consumedWater / totalWater) * 100),
+                foregroundPainter: CirclePainter(
+                    (consumedWater / totalWater) * 100, Colors.blue),
                 child: Container(
                   width: 120,
                   height: 120,
@@ -240,7 +240,8 @@ Widget CaloryConsumption(
 class CirclePainter extends CustomPainter {
   final strokeCircle = 7.0;
   double currentProgress;
-  CirclePainter(this.currentProgress);
+  Color color;
+  CirclePainter(this.currentProgress, this.color);
   @override
   void paint(Canvas canvas, Size size) {
     Paint circle = Paint()
@@ -253,7 +254,7 @@ class CirclePainter extends CustomPainter {
     // Animation
     Paint animationArc = Paint()
       ..strokeWidth = strokeCircle
-      ..color = Colors.blue
+      ..color = color
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
     double angle = (2 * (currentProgress / 100)) * pi;
@@ -299,7 +300,7 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap) => Container(
                 height: 10 * SizeConfig.heightMultiplier!,
               ),
               CustomPaint(
-                foregroundPainter: CirclePainter(0.0),
+                foregroundPainter: CirclePainter(100.0, lightGrey),
                 child: Container(
                   width: 120,
                   height: 120,
