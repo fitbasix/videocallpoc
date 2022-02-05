@@ -46,21 +46,23 @@ class HomeAndTrainerPage extends StatelessWidget {
 
       bottomNavigationBar: CustomBottomNavigationBar(),
       endDrawer: Drawer(
-        child: MenuScreen(
-            imageCoverPic: homeController.userProfileData.value.response == null
-                ? ""
-                : homeController
-                    .userProfileData.value.response!.data!.profile!.coverPhoto
-                    .toString(),
-            name: homeController.userProfileData.value.response == null
-                ? ""
-                : homeController
-                    .userProfileData.value.response!.data!.profile!.name!,
-            imageUrl: homeController.userProfileData.value.response == null
-                ? ""
-                : homeController
-                    .userProfileData.value.response!.data!.profile!.profilePhoto
-                    .toString()),
+        child: Obx(
+          ()=> MenuScreen(
+              imageCoverPic: homeController.userProfileData.value.response == null
+                  ? ""
+                  : homeController
+                      .userProfileData.value.response!.data!.profile!.coverPhoto
+                      .toString(),
+              name: homeController.userProfileData.value.response == null
+                  ? ""
+                  : homeController
+                      .userProfileData.value.response!.data!.profile!.name!,
+              imageUrl: homeController.userProfileData.value.response == null
+                  ? ""
+                  : homeController
+                      .userProfileData.value.response!.data!.profile!.profilePhoto
+                      .toString()),
+        ),
       ),
     );
   }
