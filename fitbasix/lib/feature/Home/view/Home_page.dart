@@ -72,8 +72,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final LoginController _controller = Get.put(LoginController());
-
   final HomeController _homeController = Get.find();
 
   final ScrollController _scrollController = ScrollController();
@@ -85,30 +83,34 @@ class _HomePageState extends State<HomePage> {
     _homeController.currentPage.value = 1;
 
     _scrollController.addListener(() async {
-      if (_scrollController.position.maxScrollExtent -
-              _scrollController.position.pixels <
-          MediaQuery.of(context).size.height * 0.30) {
-        _homeController.showLoader.value = true;
-        final postQuery =
-            await HomeService.getPosts(skip: _homeController.currentPage.value);
+      print(_homeController.isNeedToLoadData.value);
+      if (_homeController.isNeedToLoadData.value == true) {
+        if (_scrollController.position.maxScrollExtent ==
+            _scrollController.position.pixels) {
+          _homeController.showLoader.value = true;
+          print("call");
+          final postQuery = await HomeService.getPosts(
+              skip: _homeController.currentPage.value);
 
-        if (postQuery.response!.data!.length < 5) {
-          _homeController.trendingPostList.addAll(postQuery.response!.data!);
-          _homeController.showLoader.value = false;
-          return;
-        } else {
-          if (_homeController.trendingPostList.last.id ==
-              postQuery.response!.data!.last.id) {
-            _homeController.showLoader.value = false;
+          if (postQuery.response!.data!.length < 5) {
+            _homeController.isNeedToLoadData.value = false;
+            _homeController.trendingPostList.addAll(postQuery.response!.data!);
+
             return;
+          } else {
+            if (_homeController.trendingPostList.last.id ==
+                postQuery.response!.data!.last.id) {
+              return;
+            }
+
+            _homeController.trendingPostList.addAll(postQuery.response!.data!);
+            _homeController.showLoader.value = false;
           }
 
-          _homeController.trendingPostList.addAll(postQuery.response!.data!);
+          _homeController.currentPage.value++;
+          _homeController.showLoader.value = false;
+          setState(() {});
         }
-
-        _homeController.currentPage.value++;
-        _homeController.showLoader.value = false;
-        setState(() {});
       }
     });
   }
@@ -305,7 +307,8 @@ class _HomePageState extends State<HomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Obx(()=>_homeController.waterConsumedDataLoading
+                                          Obx(() => _homeController
+                                                  .waterConsumedDataLoading
                                                   .value
                                               ? Shimmer.fromColors(
                                                   child: Container(
@@ -349,12 +352,82 @@ class _HomePageState extends State<HomePage> {
                                                   _homeController
                                                       .isConsumptionLoading
                                                       .value = true;
-                                                      Navigator.pushNamed(context,
+                                                  Navigator.pushNamed(context,
                                                       RouteName.waterConsumed);
+                                                  _homeController
+                                                          .waterSource.value =
+                                                      await HomeService
+                                                          .fetchReminderData();
                                                   _homeController
                                                           .waterDetails.value =
                                                       await HomeService
                                                           .getWaterDetails();
+                                                  _homeController
+                                                          .goalWater.value =
+                                                      _homeController
+                                                          .waterDetails
+                                                          .value
+                                                          .response!
+                                                          .data![0]
+                                                          .totalWaterRequired!;
+                                                  _homeController
+                                                          .waterStatus.value =
+                                                      _homeController
+                                                          .waterDetails
+                                                          .value
+                                                          .response!
+                                                          .data![0]
+                                                          .status!;
+                                                  _homeController
+                                                          .waterTimingTo
+                                                          .value =
+                                                      TimeOfDay(
+                                                          hour: int.parse(_homeController
+                                                              .waterDetails
+                                                              .value
+                                                              .response!
+                                                              .data![0]
+                                                              .sleepTime!
+                                                              .split(":")[0]),
+                                                          minute: int.parse(
+                                                              _homeController
+                                                                  .waterDetails
+                                                                  .value
+                                                                  .response!
+                                                                  .data![0]
+                                                                  .sleepTime!
+                                                                  .split(
+                                                                      ":")[1]));
+                                                                      _homeController
+                                                          .waterTimingFrom
+                                                          .value =
+                                                      TimeOfDay(
+                                                          hour: int.parse(_homeController
+                                                              .waterDetails
+                                                              .value
+                                                              .response!
+                                                              .data![0]
+                                                              .wakeupTime!
+                                                              .split(":")[0]),
+                                                          minute: int.parse(
+                                                              _homeController
+                                                                  .waterDetails
+                                                                  .value
+                                                                  .response!
+                                                                  .data![0]
+                                                                  .wakeupTime!
+                                                                  .split(
+                                                                      ":")[1]));
+                                                  _homeController
+                                                          .waterReminder.value =
+                                                      _homeController
+                                                          .getWaterReminder(
+                                                              _homeController
+                                                                  .waterDetails
+                                                                  .value
+                                                                  .response!
+                                                                  .data![0]
+                                                                  .waterReminder!);
                                                   _homeController.waterLevel
                                                       .value = _homeController
                                                               .waterDetails
@@ -365,28 +438,25 @@ class _HomePageState extends State<HomePage> {
                                                           0.0
                                                       ? 0.0
                                                       : (_homeController
-                                                          .userProfileData
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .profile!
-                                                          .nutrition!
-                                                          .totalWaterConsumed! /
+                                                              .userProfileData
+                                                              .value
+                                                              .response!
+                                                              .data!
+                                                              .profile!
+                                                              .nutrition!
+                                                              .totalWaterConsumed! /
                                                           (_homeController
-                                                          .userProfileData
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .profile!
-                                                          .nutrition!
-                                                          .totalWaterRequired!
-                                                      ));
-                                                              _homeController
+                                                              .userProfileData
+                                                              .value
+                                                              .response!
+                                                              .data!
+                                                              .profile!
+                                                              .nutrition!
+                                                              .totalWaterRequired!));
+                                                  _homeController
                                                       .isConsumptionLoading
                                                       .value = false;
-                                                  
-                                                })))
-                                          ,
+                                                }))),
                                           SizedBox(
                                             width: 8.0 *
                                                 SizeConfig.widthMultiplier!,
@@ -771,6 +841,12 @@ class _HomePageState extends State<HomePage> {
                                           physics:
                                               NeverScrollableScrollPhysics(),
                                           itemBuilder: (_, index) {
+                                            if (_homeController
+                                                    .trendingPostList.length <
+                                                5) {
+                                              _homeController.isNeedToLoadData
+                                                  .value = false;
+                                            }
                                             return Obx(() => Column(
                                                   children: [
                                                     PostTile(
@@ -808,7 +884,7 @@ class _HomePageState extends State<HomePage> {
                                                               .trendingPostList[
                                                                   index]
                                                               .location!
-                                                              .placeName
+                                                              .placeName![1]
                                                               .toString(),
                                                       imageUrl: _homeController
                                                                   .trendingPostList[

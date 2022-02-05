@@ -262,6 +262,30 @@ class _PostTileState extends State<PostTile> {
                 ],
               ),
             ),
+              // CommentsTile(
+              //                     name: snapshot
+              //                         .data!.response!.data![index].user!.name!,
+              //                     profilePhoto: snapshot.data!.response!
+              //                         .data![index].user!.profilePhoto!,
+              //                     comment: snapshot
+              //                         .data!.response!.data![index].comment!,
+              //                     time: _homeController.timeAgoSinceDate(
+              //                         DateFormat.yMd().add_Hms().format(snapshot
+              //                             .data!
+              //                             .response!
+              //                             .data![index]
+              //                             .updatedAt!)),
+              //                     likes: snapshot
+              //                         .data!.response!.data![index].likes!,
+              //                     onReply: () {},
+              //                     onLikeComment: () {
+              //                       HomeService.likePost(
+              //                           commentId: snapshot
+              //                               .data!.response!.data![index].id!);
+
+              //                       setState(() {});
+              //                     },
+              //                   )
             StreamBuilder<CommentModel>(
                 stream: HomeService.fetchComment(widget.postId),
                 builder: (context, snapshot) {

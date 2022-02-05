@@ -41,7 +41,7 @@ class TagPeopleScreen extends StatelessWidget {
             leading: IconButton(
                 onPressed: () async {
                   Navigator.pop(context);
-                  _postController.isLoading.value == false;
+                  _postController.isLoading.value = false;
                 },
                 icon: SvgPicture.asset(
                   ImagePath.backIcon,

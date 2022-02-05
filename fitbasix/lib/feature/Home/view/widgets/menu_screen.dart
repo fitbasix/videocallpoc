@@ -22,7 +22,7 @@ class MenuScreen extends StatelessWidget {
       required this.name});
   @override
   Widget build(BuildContext context) {
-    final LoginController _controller = Get.find();
+    
     return Container(
         width: 300 * SizeConfig.widthMultiplier!,
         child: Column(
@@ -39,6 +39,8 @@ class MenuScreen extends StatelessWidget {
                   top: 0,
                   right: 0,
                   child: Container(
+                    height: 160 * SizeConfig.heightMultiplier!,
+                        width: 300 * SizeConfig.widthMultiplier!,
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
                       child: Container(
@@ -103,6 +105,7 @@ class MenuScreen extends StatelessWidget {
                 menuItemImage: ImagePath.logOut,
                 menuItemText: 'logOut'.tr,
                 onTap: () async {
+                  final LoginController _controller = Get.put(LoginController());
                   final SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   prefs.clear();

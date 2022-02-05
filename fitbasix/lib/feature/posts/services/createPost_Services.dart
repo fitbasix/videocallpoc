@@ -11,13 +11,13 @@ import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 
 class CreatePostService {
   static var dio = DioUtil().getInstance();
-  static Future<String> getPostId() async {
+  static Future<PostData> getPostId() async {
     dio!.options.headers["language"] = "1";
     print("lll");
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.createPost, data: {});
     print("kkk" + response.data['response']['data']["_id"]);
-    return response.data['response']['data']["_id"];
+    return postDataFromJson(response.toString());
   }
 
   static Future<PostData> createPost({

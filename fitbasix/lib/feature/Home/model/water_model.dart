@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
+
 WaterDetail waterDetailFromJson(String str) =>
     WaterDetail.fromJson(json.decode(str));
 
@@ -94,7 +96,7 @@ class ConsumedWater {
         totalWaterRequired: json["totalWaterRequired"].toDouble(),
         updatedAt: DateTime.parse(json["updatedAt"]),
         wakeupTime: json["wakeupTime"],
-        waterReminder: json["waterReminder"],
+        waterReminder: json["waterReminder"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -110,6 +112,7 @@ class ConsumedWater {
         "totalWaterRequired": totalWaterRequired,
         "updatedAt": updatedAt!.toIso8601String(),
         "wakeupTime": wakeupTime,
-        "waterReminder": waterReminder,
+        "waterReminder": waterReminder
       };
 }
+
