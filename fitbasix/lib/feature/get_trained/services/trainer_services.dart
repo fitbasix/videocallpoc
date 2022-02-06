@@ -113,11 +113,11 @@ class TrainerServices {
     print(response.toString());
   }
 
-  static Future<PostsModel> getTrainerPosts(String userId) async {
+  static Future<PostsModel> getTrainerPosts(String userId,int? skip) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response =
-        await dio!.post(ApiUrl.getTrainerPosts, data: {"userId": userId});
+        await dio!.post(ApiUrl.getTrainerPosts, data: {"userId": userId,"skip":skip});
 
     log(response.toString());
 

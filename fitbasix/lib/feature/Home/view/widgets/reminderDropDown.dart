@@ -46,7 +46,7 @@ Widget ReminderDropDown(
                 children: [
                   Text(hint.optionString.toString().split(" ")[0],style: AppTextStyle.normalBlackText),
               SizedBox(width: 4,),
-                   Text('hr'.tr,style: AppTextStyle.normalBlackText.copyWith(
+                   Text(hint.optionString.toString().split(" ")[1],style: AppTextStyle.normalBlackText.copyWith(
                      color: grey183
                    ),),
                 ],
@@ -66,7 +66,7 @@ Widget ReminderDropDown(
                     child: Padding(
                       padding:  EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),
                       child: Text(
-                        value.optionString!+" hr",
+                        value.optionString!,
                         style: AppTextStyle.boldBlackText.copyWith(
                           fontSize: 14*SizeConfig.textMultiplier!
                         ),

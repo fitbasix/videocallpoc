@@ -191,7 +191,7 @@ class PostController extends GetxController {
       postData.value = await CreatePostService.getPostId();
       postId.value = postData.value.response!.data!.id!;
     } else {
-      await getPostData();
+      // await getPostData();
     }
     iscreateingPost.value = false;
   }

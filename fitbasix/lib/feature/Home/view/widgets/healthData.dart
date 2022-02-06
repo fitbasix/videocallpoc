@@ -92,8 +92,9 @@ class _HealthAppState extends State<HealthApp> {
             x.value.toDouble() + homeController.caloriesBurnt.value;
         print(homeController.caloriesBurnt.value);
       });
-final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('caloriesBurnt', homeController.caloriesBurnt.value.toString());
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString(
+          'caloriesBurnt', homeController.caloriesBurnt.value.toString());
       // update the UI to display the results
       setState(() {
         _state =
@@ -104,8 +105,6 @@ final SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() => _state = AppState.DATA_NOT_FETCHED);
     }
   }
-
-
 
   /// Fetch steps from the health plugin and show them in the app.
   Future fetchStepData() async {
@@ -251,6 +250,7 @@ final SharedPreferences prefs = await SharedPreferences.getInstance();
                   color: Colors.transparent,
                   child: Platform.isIOS
                       ? HealthTrackOptionTile(
+                        widget: Container(),
                           imagePath: ImagePath.appleHealth,
                           applicationName: 'appleHealth'.tr,
                         )
@@ -306,13 +306,16 @@ final SharedPreferences prefs = await SharedPreferences.getInstance();
 class HealthTrackOptionTile extends StatelessWidget {
   String imagePath;
   String applicationName;
+  Widget? widget;
   HealthTrackOptionTile(
-      {required this.imagePath, required this.applicationName});
+      {required this.imagePath, required this.applicationName,this.widget});
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SvgPicture.asset(imagePath,
+       widget==null? SvgPicture.asset(imagePath,
+            width: 30 * SizeConfig.widthMultiplier!, fit: BoxFit.fitWidth):
+             Image.asset(imagePath,
             width: 30 * SizeConfig.widthMultiplier!, fit: BoxFit.fitWidth),
         SizedBox(
           width: 11 * SizeConfig.widthMultiplier!,

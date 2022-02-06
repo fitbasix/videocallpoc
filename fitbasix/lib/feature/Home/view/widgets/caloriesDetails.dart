@@ -289,8 +289,8 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap) => Container(
                     style: AppTextStyle.boldBlackText
                         .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
                   ),
-                  SvgPicture.asset(
-                    ImagePath.fire,
+                  Image.asset(
+                    ImagePath.fireIcon,
                     height: 20 * SizeConfig.heightMultiplier!,
                     width: 16 * SizeConfig.widthMultiplier!,
                   )

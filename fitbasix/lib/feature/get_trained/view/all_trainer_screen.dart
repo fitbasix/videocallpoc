@@ -536,7 +536,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                   .data!
                                                   .trainers![index]
                                                   .user!
-                                                  .id!);
+                                                  .id!,0);
                                       if (_trainerController.initialPostData
                                               .value.response!.data!.length !=
                                           0) {

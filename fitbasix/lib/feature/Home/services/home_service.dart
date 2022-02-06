@@ -89,15 +89,15 @@ class HomeService {
     print(response.data['code']);
   }
 
-  static Stream<CommentModel> fetchComment(
-    String postId,
-  ) async* {
-    dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.getComment, data: {"postId": postId});
+  // static Stream<CommentModel> fetchComment(
+  //   String postId,
+  // ) async* {
+  //   dio!.options.headers["language"] = "1";
+  //   dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+  //   var response = await dio!.post(ApiUrl.getComment, data: {"postId": postId});
 
-    yield commentModelFromJson(response.toString());
-  }
+  //   yield commentModelFromJson(response.toString());
+  // }
 
   static Future<ReminderSource> fetchReminderData() async {
     dio!.options.headers["language"] = "1";

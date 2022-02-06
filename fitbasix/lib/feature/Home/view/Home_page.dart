@@ -90,7 +90,6 @@ class _HomePageState extends State<HomePage> {
         if (_scrollController.position.maxScrollExtent ==
             _scrollController.position.pixels) {
           _homeController.showLoader.value = true;
-          print("call");
           final postQuery = await HomeService.getPosts(
               skip: _homeController.currentPage.value);
 
@@ -852,6 +851,9 @@ class _HomePageState extends State<HomePage> {
                                             return Obx(() => Column(
                                                   children: [
                                                     PostTile(
+                                                      comment: _homeController
+                                                          .trendingPostList[
+                                                              index].commentgiven,
                                                       name: _homeController
                                                           .trendingPostList[
                                                               index]
