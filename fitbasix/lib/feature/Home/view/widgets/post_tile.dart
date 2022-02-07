@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
+import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,26 +13,27 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/view/widgets/comments_tile.dart';
 import 'package:intl/intl.dart';
+import 'package:readmore/readmore.dart';
 
 class PostTile extends StatefulWidget {
-  PostTile({
-    Key? key,
-    required this.name,
-    required this.profilePhoto,
-    required this.imageUrl,
-    required this.category,
-    required this.date,
-    required this.place,
-    required this.caption,
-    required this.likes,
-    required this.hitLike,
-    required this.isLiked,
-    required this.comments,
-    required this.addComment,
-    required this.postId,
-    required this.onTap,
-    required this.comment
-  }) : super(key: key);
+  PostTile(
+      {Key? key,
+      required this.name,
+      required this.profilePhoto,
+      required this.imageUrl,
+      required this.category,
+      required this.date,
+      required this.place,
+      required this.caption,
+      required this.likes,
+      required this.hitLike,
+      required this.isLiked,
+      required this.comments,
+      required this.addComment,
+      required this.postId,
+      required this.onTap,
+      required this.comment})
+      : super(key: key);
   final String name;
   final String profilePhoto;
   final List<String> imageUrl;
@@ -135,8 +137,13 @@ class _PostTileState extends State<PostTile> {
                   left: 16 * SizeConfig.widthMultiplier!,
                   bottom: 16 * SizeConfig.heightMultiplier!,
                   right: 16 * SizeConfig.widthMultiplier!),
-              child: Text(
+              child: ReadMoreText(
                 widget.caption,
+                trimLines: 2,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: 'see_more'.tr,
+                trimExpandedText: 'see_less'.tr,
+                colorClickableText: hintGrey,
                 style: AppTextStyle.NormalText.copyWith(
                     fontSize: 14 * SizeConfig.textMultiplier!),
               ),
@@ -263,24 +270,26 @@ class _PostTileState extends State<PostTile> {
                 ],
               ),
             ),
-            widget.comment==null?
-            Container()
-            : CommentsTile(
-              name: widget.comment!.user!.name.toString(),
-              profilePhoto: widget.comment!.user!.profilePhoto.toString(),
-              comment: widget.comment!.comment.toString(),
-              time: _homeController.timeAgoSinceDate(
-                  DateFormat.yMd().add_Hms().format(widget.comment!.createdAt!)),
-              likes: widget.comment!.likes!,
-              onReply: () {},
-              onLikeComment: () {
-                // HomeService.likePost(
-                //     commentId: snapshot
-                //         .data!.response!.data![index].id!);
+            widget.comment == null
+                ? Container()
+                : CommentsTile(
+                    name: widget.comment!.user!.name.toString(),
+                    profilePhoto: widget.comment!.user!.profilePhoto.toString(),
+                    comment: widget.comment!.comment.toString(),
+                    time: _homeController.timeAgoSinceDate(DateFormat.yMd()
+                        .add_Hms()
+                        .format(widget.comment!.createdAt!)),
+                    likes: widget.comment!.likes!,
+                    onReply: () {},
+                    onLikeComment: () {
+                      HomeService.likePost(commentId: widget.comment!.id);
+                      // HomeService.likePost(
+                      //     commentId: snapshot
+                      //         .data!.response!.data![index].id!);
 
-                setState(() {});
-              },
-            ),
+                      setState(() {});
+                    },
+                  ),
             // StreamBuilder<CommentModel>(
             //     stream: HomeService.fetchComment(widget.postId),
             //     builder: (context, snapshot) {
