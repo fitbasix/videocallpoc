@@ -190,6 +190,7 @@ class PostController extends GetxController {
     if (postId.value == "") {
       postData.value = await CreatePostService.getPostId();
       postId.value = postData.value.response!.data!.id!;
+      getCategory();
     } else {
       // await getPostData();
     }
