@@ -34,3 +34,4 @@ const Blue = Color(0xFF3984FF);
 const LightGreen = Color.fromARGB(127, 235, 247, 235);
 const kBackgroundColor = Color(0x1A000000);
 const sliderColor = Color(0xFFF2F9F2);
+const grey183 =  Color.fromARGB(255, 183, 183, 183);

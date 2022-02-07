@@ -59,6 +59,7 @@ class PostController extends GetxController {
   RxBool isLoading = RxBool(false);
   RxList<File> selectedFiles = RxList<File>([]);
   RxBool deletingFile = RxBool(false);
+  RxBool iscreateingPost = RxBool(false);
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -184,11 +185,21 @@ class PostController extends GetxController {
     }
   }
 
+  Future<void> setUp() async {
+    iscreateingPost.value = true;
+    if (postId.value == "") {
+      postData.value = await CreatePostService.getPostId();
+      postId.value = postData.value.response!.data!.id!;
+    } else {
+      // await getPostData();
+    }
+    iscreateingPost.value = false;
+  }
+
   @override
   Future<void> onInit() async {
     assets.value = await fetchAssets(presentPage: currentPage.value);
-    postId.value = await CreatePostService.getPostId();
-    await getPostData();
+
     super.onInit();
   }
 }

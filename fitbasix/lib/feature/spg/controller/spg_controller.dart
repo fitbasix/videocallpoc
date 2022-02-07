@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/spg/model/PersonalGoalModel.dart';
 import 'package:fitbasix/feature/spg/model/spg_model.dart';
 import 'package:fitbasix/feature/spg/services/spg_service.dart';
@@ -28,6 +29,8 @@ class SPGController extends GetxController {
   Rx<Type> selectedFoodIndex = Type().obs;
   RxList<bool> foodSelection = <bool>[true].obs;
   RxDouble activityNumber = RxDouble(0);
+
+  final HomeController homeController = Get.find();
   // final DateTimeFormatter formatter =
   //     DateTimeFormatter.isDayFormat("'yyyy-MM-dd'");
 
@@ -65,7 +68,7 @@ class SPGController extends GetxController {
     isLoading.value = true;
     spgData.value = await SPGService.getSPGData();
     bodyFatData!.value = spgData.value.response!.data!.bodyTypeMale!;
-
+    await homeController.getspgData();
     isLoading.value = false;
   }
 

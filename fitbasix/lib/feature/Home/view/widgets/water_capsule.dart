@@ -1,3 +1,4 @@
+import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
@@ -64,25 +65,50 @@ class AnimatedLiquidCustomProgressIndicatorState
           ),
         ),
         SizedBox(
-          width: 20 * SizeConfig.widthMultiplier!,
+          width: 2 * SizeConfig.widthMultiplier!,
         ),
         Obx(() => Center(
-              child: SizedBox(
-                  width: 56 * SizeConfig.widthMultiplier!,
-                  height: 112 * SizeConfig.heightMultiplier!,
-                  //padding: const EdgeInsets.symmetric(vertical: 24.0),
-                  child: LiquidLinearProgressIndicator(
-                    value: homeController.waterLevel.value, // Defaults to 0.5.
-                    valueColor: const AlwaysStoppedAnimation(Colors
-                        .lightBlue), // Defaults to the current Theme's accentColor.
-                    backgroundColor: Colors.grey
-                        .shade200, // Defaults to the current Theme's backgroundColor.
-                    borderColor: Colors.blueAccent.shade100,
-                    borderWidth: 0,
-                    borderRadius: 30.0,
-                    direction: Axis
-                        .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
-                  )),
+              child: Row(
+                children: [
+                  SizedBox(
+                      height: 112 * SizeConfig.heightMultiplier!,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                      Text(homeController.waterDetails.value.response!.data![0]
+                            .totalWaterRequired!.toString()+ " "+'ltr'.tr,
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 12*SizeConfig.textMultiplier!
+                            ),
+                            
+                            ),
+                            Text("0 "+'ltr'.tr,
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 12*SizeConfig.textMultiplier!,
+                             color: grey183
+                            ))
+                            
+                    ],),
+                  ),
+                  SizedBox(width: 12*SizeConfig.widthMultiplier!),
+                  SizedBox(
+                      width: 56 * SizeConfig.widthMultiplier!,
+                      height: 112 * SizeConfig.heightMultiplier!,
+                      //padding: const EdgeInsets.symmetric(vertical: 24.0),
+                      child: LiquidLinearProgressIndicator(
+                        value: homeController.waterLevel.value, // Defaults to 0.5.
+                        valueColor: const AlwaysStoppedAnimation(Colors
+                            .lightBlue), // Defaults to the current Theme's accentColor.
+                        backgroundColor: Colors.grey
+                            .shade200, // Defaults to the current Theme's backgroundColor.
+                        borderColor: Colors.blueAccent.shade100,
+                        borderWidth: 0,
+                        borderRadius: 30.0,
+                        direction: Axis
+                            .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
+                      )),
+                ],
+              ),
             )),
         SizedBox(
           width: 20 * SizeConfig.widthMultiplier!,

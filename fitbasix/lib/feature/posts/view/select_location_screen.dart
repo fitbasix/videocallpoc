@@ -28,7 +28,7 @@ class SelectLocationScreen extends StatelessWidget {
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
-              _postController.isLoading.value == false;
+              _postController.isLoading.value = false;
             },
             icon: SvgPicture.asset(
               ImagePath.backIcon,

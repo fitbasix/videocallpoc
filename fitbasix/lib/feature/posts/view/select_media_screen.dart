@@ -83,7 +83,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
         elevation: 0,
         leading: IconButton(
             onPressed: () {
-              _postController.isLoading.value == false;
+              _postController.isLoading.value = false;
               Navigator.pop(context);
             },
             icon: SvgPicture.asset(

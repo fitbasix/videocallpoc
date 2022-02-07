@@ -216,7 +216,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .data!
                                                 .trainers![index]
                                                 .user!
-                                                .id!);
+                                                .id!,0);
                                     if (_trainerController.initialPostData.value
                                             .response!.data!.length !=
                                         0) {
@@ -425,7 +425,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .data!
                                                 .fitnessConsultant![index]
                                                 .user!
-                                                .id!);
+                                                .id!,0);
                                     if (_trainerController.initialPostData.value
                                             .response!.data!.length !=
                                         0) {
@@ -633,7 +633,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .data!
                                                 .nutritionConsultant![index]
                                                 .user!
-                                                .id!);
+                                                .id!,0);
                                     if (_trainerController.initialPostData.value
                                             .response!.data!.length !=
                                         0) {

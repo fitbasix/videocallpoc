@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,8 +10,6 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
-import 'package:fitbasix/feature/Home/model/comment_model.dart';
-import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/widgets/comments_tile.dart';
 import 'package:intl/intl.dart';
 
@@ -31,6 +30,7 @@ class PostTile extends StatefulWidget {
     required this.addComment,
     required this.postId,
     required this.onTap,
+    required this.comment
   }) : super(key: key);
   final String name;
   final String profilePhoto;
@@ -46,6 +46,7 @@ class PostTile extends StatefulWidget {
   final VoidCallback addComment;
   final String postId;
   final VoidCallback onTap;
+  final Comment? comment;
 
   @override
   State<PostTile> createState() => _PostTileState();
@@ -262,45 +263,63 @@ class _PostTileState extends State<PostTile> {
                 ],
               ),
             ),
-            StreamBuilder<CommentModel>(
-                stream: HomeService.fetchComment(widget.postId),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData &&
-                      snapshot.data!.response!.data!.length != 0)
-                    return ListView.builder(
-                        itemCount: 1,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (_, index) {
-                          return snapshot.data!.response!.data!.length == 0
-                              ? Container()
-                              : CommentsTile(
-                                  name: snapshot
-                                      .data!.response!.data![index].user!.name!,
-                                  profilePhoto: snapshot.data!.response!
-                                      .data![index].user!.profilePhoto!,
-                                  comment: snapshot
-                                      .data!.response!.data![index].comment!,
-                                  time: _homeController.timeAgoSinceDate(
-                                      DateFormat.yMd().add_Hms().format(snapshot
-                                          .data!
-                                          .response!
-                                          .data![index]
-                                          .updatedAt!)),
-                                  likes: snapshot
-                                      .data!.response!.data![index].likes!,
-                                  onReply: () {},
-                                  onLikeComment: () {
-                                    HomeService.likePost(
-                                        commentId: snapshot
-                                            .data!.response!.data![index].id!);
+            widget.comment==null?
+            Container()
+            : CommentsTile(
+              name: widget.comment!.user!.name.toString(),
+              profilePhoto: widget.comment!.user!.profilePhoto.toString(),
+              comment: widget.comment!.comment.toString(),
+              time: _homeController.timeAgoSinceDate(
+                  DateFormat.yMd().add_Hms().format(widget.comment!.createdAt!)),
+              likes: widget.comment!.likes!,
+              onReply: () {},
+              onLikeComment: () {
+                // HomeService.likePost(
+                //     commentId: snapshot
+                //         .data!.response!.data![index].id!);
 
-                                    setState(() {});
-                                  },
-                                );
-                        });
-                  return Container();
-                }),
+                setState(() {});
+              },
+            ),
+            // StreamBuilder<CommentModel>(
+            //     stream: HomeService.fetchComment(widget.postId),
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasData &&
+            //           snapshot.data!.response!.data!.length != 0)
+            //         return ListView.builder(
+            //             itemCount: 1,
+            //             shrinkWrap: true,
+            //             physics: NeverScrollableScrollPhysics(),
+            //             itemBuilder: (_, index) {
+            //               return snapshot.data!.response!.data!.length == 0
+            //                   ? Container()
+            //                   : CommentsTile(
+            //                       name: snapshot
+            //                           .data!.response!.data![index].user!.name!,
+            //                       profilePhoto: snapshot.data!.response!
+            //                           .data![index].user!.profilePhoto!,
+            //                       comment: snapshot
+            //                           .data!.response!.data![index].comment!,
+            //                       time: _homeController.timeAgoSinceDate(
+            //                           DateFormat.yMd().add_Hms().format(snapshot
+            //                               .data!
+            //                               .response!
+            //                               .data![index]
+            //                               .updatedAt!)),
+            //                       likes: snapshot
+            //                           .data!.response!.data![index].likes!,
+            //                       onReply: () {},
+            //                       onLikeComment: () {
+            //                         HomeService.likePost(
+            //                             commentId: snapshot
+            //                                 .data!.response!.data![index].id!);
+
+            //                         setState(() {});
+            //                       },
+            //                     );
+            //             });
+            //       return Container();
+            //     }),
             // CommentsTile(
             //   name: 'Percy Bysshe Shelley',
             //   comment: 'Thank you for the motivational thoughts!',

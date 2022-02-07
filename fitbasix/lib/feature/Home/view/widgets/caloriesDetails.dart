@@ -291,8 +291,8 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap) => Container(
                   ),
                   Image.asset(
                     ImagePath.fireIcon,
-                    height: 22 * SizeConfig.heightMultiplier!,
-                    width: 17 * SizeConfig.widthMultiplier!,
+                    height: 20 * SizeConfig.heightMultiplier!,
+                    width: 16 * SizeConfig.widthMultiplier!,
                   )
                 ],
               ),

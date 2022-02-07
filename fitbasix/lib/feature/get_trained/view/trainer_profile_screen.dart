@@ -126,16 +126,15 @@ class _TrainerPageState extends State<TrainerPage> {
     _trainerController.currentPostPage.value = 1;
 
     _scrollController.addListener(() async {
-      if (_scrollController.position.maxScrollExtent -
-              _scrollController.position.pixels <
-          MediaQuery.of(context).size.height * 0.30) {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
         _homeController.showLoader.value = true;
         final postQuery = await TrainerServices.getTrainerPosts(
-            _trainerController.atrainerDetail.value.user!.id!);
-
+            _trainerController.atrainerDetail.value.user!.id!,_trainerController.currentPostPage.value*5);
+            _trainerController.trainerPostList.addAll(postQuery.response!.data!);
+_trainerController.currentPostPage.value++;
         if (postQuery.response!.data!.length < 5) {
           _trainerController.trainerPostList.addAll(postQuery.response!.data!);
-          _homeController.showLoader.value = false;
           return;
         } else {
           if (_trainerController.trainerPostList.last.id ==
@@ -146,7 +145,6 @@ class _TrainerPageState extends State<TrainerPage> {
           _trainerController.trainerPostList.addAll(postQuery.response!.data!);
         }
 
-        _trainerController.currentPostPage.value++;
         _homeController.showLoader.value = false;
         setState(() {});
       }
@@ -170,6 +168,7 @@ class _TrainerPageState extends State<TrainerPage> {
             Container(
               width: double.infinity,
               child: SingleChildScrollView(
+                controller: _scrollController,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -559,6 +558,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                         return Obx(() => Column(
                                               children: [
                                                 PostTile(
+                                                  comment: _trainerController
+                                                      .trainerPostList[index]
+                                                      .commentgiven,
                                                   name: _trainerController
                                                       .trainerPostList[index]
                                                       .userId!
@@ -791,7 +793,8 @@ class _TrainerPageState extends State<TrainerPage> {
                             borderRadius: BorderRadius.circular(8.0)),
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 31.0 * SizeConfig.widthMultiplier!,
+                              horizontal:
+                                  31.0 * SizeConfig.widthMultiplier!,
                               vertical: 14 * SizeConfig.heightMultiplier!),
                           child: Text(
                             'enroll'.tr,

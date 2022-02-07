@@ -37,6 +37,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           backgroundColor: kPureWhite,
           leading: IconButton(
               onPressed: () {
+                 _postController.isLoading.value = false;
                 Navigator.pop(context);
               },
               icon: SvgPicture.asset(

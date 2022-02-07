@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +13,7 @@ import 'package:fitbasix/feature/spg/view/widgets/spg_app_bar.dart';
 
 class SetGoalScreen extends StatelessWidget {
   SetGoalScreen({Key? key}) : super(key: key);
-  final SPGController _spgController = Get.find();
+  final SPGController _spgController = Get.put(SPGController());
 
   @override
   Widget build(BuildContext context) {
@@ -29,78 +30,85 @@ class SetGoalScreen extends StatelessWidget {
           preferredSize: const Size(double.infinity, kToolbarHeight)),
       body: SafeArea(
           child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              color: kGreenColor,
-              height: 2 * SizeConfig.heightMultiplier!,
-              width: Get.width * (1 / 8),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 16 * SizeConfig.widthMultiplier!,
-                  right: 16 * SizeConfig.widthMultiplier!,
-                  top: 40 * SizeConfig.heightMultiplier!,
-                  bottom: 16 * SizeConfig.widthMultiplier!),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'what_is_your_goal'.tr,
-                    style: AppTextStyle.boldBlackText,
-                  ),
-                  SizedBox(
-                    height: 40 * SizeConfig.heightMultiplier!,
-                  ),
-                  ListView.builder(
-                      itemCount: _spgController
-                          .spgData.value.response!.data!.goalType!.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (_, index) {
-                        if (_spgController.selectedGoalIndex.value.serialId ==
-                            null) {
-                          _spgController.selectedGoalIndex.value =
-                              _spgController
-                                  .spgData.value.response!.data!.goalType![0];
-                        }
-                        return Obx(() => GoalCard(
-                              title: _spgController.spgData.value.response!
-                                  .data!.goalType![index].name!,
-                              imageUrl: _spgController.spgData.value.response!
-                                  .data!.goalType![index].image!,
-                              onTap: () {
-                                _spgController.selectedGoalIndex.value =
-                                    _spgController.spgData.value.response!.data!
-                                        .goalType![index];
-
-                                // _spgController.updatedGoalStatus(
-                                //     _spgController.selectedGoalIndex.value);
-                              },
-                              isSelected: _spgController.spgData.value.response!
-                                          .data!.goalType![index] ==
-                                      _spgController.selectedGoalIndex.value
-                                  ? true
-                                  : false,
-                            ));
-                      }),
-                  SizedBox(
-                    height: 32 * SizeConfig.heightMultiplier!,
-                  ),
-                  ProceedButton(
-                      title: 'proceed'.tr,
-                      onPressed: () {
-                        print(_spgController.selectedGoalIndex.value.serialId);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => SelectGenderScreen()));
-                      }),
-                ],
+        child: Obx(
+          ()=>_spgController.isLoading.value ?
+          Center(child: CustomizedCircularProgress())
+          : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                color: kGreenColor,
+                height: 2 * SizeConfig.heightMultiplier!,
+                width: Get.width * (1 / 8),
               ),
-            )
-          ],
+              Padding(
+                padding: EdgeInsets.only(
+                    left: 16 * SizeConfig.widthMultiplier!,
+                    right: 16 * SizeConfig.widthMultiplier!,
+                    top: 40 * SizeConfig.heightMultiplier!,
+                    bottom: 16 * SizeConfig.widthMultiplier!),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'what_is_your_goal'.tr,
+                      style: AppTextStyle.boldBlackText,
+                    ),
+                    SizedBox(
+                      height: 40 * SizeConfig.heightMultiplier!,
+                    ),
+                    _spgController
+                            .spgData.value.response==null?
+                            Container()
+                            :ListView.builder(
+                        itemCount: _spgController
+                            .spgData.value.response!.data!.goalType!.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (_, index) {
+                          if (_spgController.selectedGoalIndex.value.serialId ==
+                              null) {
+                            _spgController.selectedGoalIndex.value =
+                                _spgController
+                                    .spgData.value.response!.data!.goalType![0];
+                          }
+                          return Obx(() => GoalCard(
+                                title: _spgController.spgData.value.response!
+                                    .data!.goalType![index].name!,
+                                imageUrl: _spgController.spgData.value.response!
+                                    .data!.goalType![index].image!,
+                                onTap: () {
+                                  _spgController.selectedGoalIndex.value =
+                                      _spgController.spgData.value.response!.data!
+                                          .goalType![index];
+        
+                                  // _spgController.updatedGoalStatus(
+                                  //     _spgController.selectedGoalIndex.value);
+                                },
+                                isSelected: _spgController.spgData.value.response!
+                                            .data!.goalType![index] ==
+                                        _spgController.selectedGoalIndex.value
+                                    ? true
+                                    : false,
+                              ));
+                        }),
+                    SizedBox(
+                      height: 32 * SizeConfig.heightMultiplier!,
+                    ),
+                    ProceedButton(
+                        title: 'proceed'.tr,
+                        onPressed: () {
+                          print(_spgController.selectedGoalIndex.value.serialId);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => SelectGenderScreen()));
+                        }),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       )),
     );

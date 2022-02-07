@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:health/health.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AppState {
   DATA_NOT_FETCHED,
@@ -91,7 +92,9 @@ class _HealthAppState extends State<HealthApp> {
             x.value.toDouble() + homeController.caloriesBurnt.value;
         print(homeController.caloriesBurnt.value);
       });
-
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString(
+          'caloriesBurnt', homeController.caloriesBurnt.value.toString());
       // update the UI to display the results
       setState(() {
         _state =
@@ -101,38 +104,6 @@ class _HealthAppState extends State<HealthApp> {
       print("Authorization not granted");
       setState(() => _state = AppState.DATA_NOT_FETCHED);
     }
-  }
-
-  /// Add some random health data.
-  Future addData() async {
-    final now = DateTime.now();
-    final earlier = now.subtract(Duration(minutes: 5));
-
-    _nofSteps = Random().nextInt(10);
-    final types = [HealthDataType.STEPS, HealthDataType.BLOOD_GLUCOSE];
-    final rights = [HealthDataAccess.WRITE, HealthDataAccess.WRITE];
-    final permissions = [
-      HealthDataAccess.READ_WRITE,
-      HealthDataAccess.READ_WRITE
-    ];
-    bool? hasPermissions =
-        await HealthFactory.hasPermissions(types, permissions: rights);
-    if (hasPermissions == false) {
-      await health.requestAuthorization(types, permissions: permissions);
-    }
-
-    _mgdl = Random().nextInt(10) * 1.0;
-    bool success = await health.writeHealthData(
-        _nofSteps.toDouble(), HealthDataType.STEPS, earlier, now);
-
-    if (success) {
-      success = await health.writeHealthData(
-          _mgdl, HealthDataType.BLOOD_GLUCOSE, now, now);
-    }
-
-    setState(() {
-      _state = success ? AppState.DATA_ADDED : AppState.DATA_NOT_ADDED;
-    });
   }
 
   /// Fetch steps from the health plugin and show them in the app.
@@ -279,6 +250,7 @@ class _HealthAppState extends State<HealthApp> {
                   color: Colors.transparent,
                   child: Platform.isIOS
                       ? HealthTrackOptionTile(
+                        widget: Container(),
                           imagePath: ImagePath.appleHealth,
                           applicationName: 'appleHealth'.tr,
                         )
@@ -334,13 +306,16 @@ class _HealthAppState extends State<HealthApp> {
 class HealthTrackOptionTile extends StatelessWidget {
   String imagePath;
   String applicationName;
+  Widget? widget;
   HealthTrackOptionTile(
-      {required this.imagePath, required this.applicationName});
+      {required this.imagePath, required this.applicationName,this.widget});
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SvgPicture.asset(imagePath,
+       widget==null? SvgPicture.asset(imagePath,
+            width: 30 * SizeConfig.widthMultiplier!, fit: BoxFit.fitWidth):
+             Image.asset(imagePath,
             width: 30 * SizeConfig.widthMultiplier!, fit: BoxFit.fitWidth),
         SizedBox(
           width: 11 * SizeConfig.widthMultiplier!,
