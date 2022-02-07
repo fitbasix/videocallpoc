@@ -41,10 +41,10 @@ Widget WaterConsumed(
                     style: AppTextStyle.boldBlackText
                         .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
                   ),
-                  SvgPicture.asset(
-                    ImagePath.water,
-                    height: 20 * SizeConfig.heightMultiplier!,
-                    width: 16 * SizeConfig.widthMultiplier!,
+                  Image.asset(
+                    ImagePath.dropIcon,
+                    height: 22 * SizeConfig.heightMultiplier!,
+                    width: 17 * SizeConfig.widthMultiplier!,
                   )
                 ],
               ),
