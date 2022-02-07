@@ -93,6 +93,7 @@ class Trainer {
     this.isFitnessConsultant,
     this.isNutritionConsultant,
     this.certificates,
+    this.isFollowing,
   });
 
   final String? followers;
@@ -114,39 +115,37 @@ class Trainer {
   final bool? isFitnessConsultant;
   final bool? isNutritionConsultant;
   final List<Certificate>? certificates;
+  bool? isFollowing;
 
   factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
-        followers: json["followers"].toString(),
-        following: json["following"].toString(),
-        trainees: json["trainees"],
-        slotsFeft: json["slotsLeft"],
-        totalRating: json["totalRating"],
-        rating: json["rating"],
-        id: json["_id"],
-        about: json["about"],
-        trainerType: List<dynamic>.from(json["trainerType"] == null
-            ? []
-            : json["trainerType"].map((x) => x)),
-        strength: List<StrengthElement>.from(
-            json["strengths"].map((x) => StrengthElement.fromJson(x))),
-        user: json["users"] == null ? null : User.fromJson(json["users"]),
-        numOfCertificates: json["numOfCertificates"],
-        // tags:
-        //     List<Strength>.from(json["strength"].map((x) => Strength.fromJson(x))),
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? null
-            : DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
-        isFitnessConsultant: json["isFitnessConsultant"],
-        isNutritionConsultant: json["isNutritionConsultant"],
-        certificates: json["certificate"] == null
-            ? []
-            : List<Certificate>.from(json["certificate"]["certificates"]
-                .map((x) => Certificate.fromJson(x))),
-      );
+      followers: json["followers"].toString(),
+      following: json["following"].toString(),
+      trainees: json["trainees"],
+      slotsFeft: json["slotsLeft"],
+      totalRating: json["totalRating"],
+      rating: json["rating"],
+      id: json["_id"],
+      about: json["about"],
+      trainerType: List<dynamic>.from(
+          json["trainerType"] == null ? [] : json["trainerType"].map((x) => x)),
+      strength: List<StrengthElement>.from(
+          json["strengths"].map((x) => StrengthElement.fromJson(x))),
+      user: json["users"] == null ? null : User.fromJson(json["users"]),
+      numOfCertificates: json["numOfCertificates"],
+      // tags:
+      //     List<Strength>.from(json["strength"].map((x) => Strength.fromJson(x))),
+      createdAt:
+          json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+      updatedAt:
+          json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+      v: json["__v"],
+      isFitnessConsultant: json["isFitnessConsultant"],
+      isNutritionConsultant: json["isNutritionConsultant"],
+      certificates: json["certificate"] == null
+          ? []
+          : List<Certificate>.from(json["certificate"]["certificates"]
+              .map((x) => Certificate.fromJson(x))),
+      isFollowing: json["isFollowing"]);
 
   Map<String, dynamic> toJson() => {
         "followers": followers,
