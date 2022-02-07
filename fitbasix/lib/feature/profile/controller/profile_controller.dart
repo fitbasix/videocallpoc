@@ -4,7 +4,7 @@ class PostController extends GetxController{
    
 @override
   Future<void> onInit() async {
-  //test
+  //testtest
     super.onInit();
   }
 }
