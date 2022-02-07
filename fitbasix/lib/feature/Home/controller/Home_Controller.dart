@@ -47,7 +47,7 @@ class HomeController extends GetxController {
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.now(),
+        initialTime: waterTimingFrom.value,
         builder: (BuildContext context, Widget? child) {
           return Theme(
               data: ThemeData.light().copyWith(
@@ -68,7 +68,7 @@ class HomeController extends GetxController {
   Future<void> selectTime2(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.now(),
+        initialTime: waterTimingTo.value,
         builder: (BuildContext context, Widget? child) {
           return Theme(
               data: ThemeData.light().copyWith(

@@ -57,7 +57,7 @@ Widget DailyGoalDropDown(
                     borderRadius: BorderRadius.circular(8)
                   ),
                   child: Padding(
-                    padding:  EdgeInsets.symmetric(horizontal:16.0*SizeConfig.widthMultiplier!,vertical: 16*SizeConfig.widthMultiplier!),
+                    padding:  EdgeInsets.symmetric(horizontal:16.0*SizeConfig.widthMultiplier!),
                     child: Padding(
                       padding:  EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),
                       child: Text(

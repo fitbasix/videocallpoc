@@ -3,9 +3,6 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:get/get.dart';
 
 Widget ReminderDropDown(
@@ -62,7 +59,7 @@ Widget ReminderDropDown(
                     borderRadius: BorderRadius.circular(8)
                   ),
                   child: Padding(
-                    padding:  EdgeInsets.symmetric(horizontal:16.0*SizeConfig.widthMultiplier!,vertical: 16*SizeConfig.widthMultiplier!),
+                    padding:  EdgeInsets.symmetric(horizontal:16.0*SizeConfig.widthMultiplier!),
                     child: Padding(
                       padding:  EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),
                       child: Text(

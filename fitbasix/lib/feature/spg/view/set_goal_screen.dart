@@ -31,7 +31,7 @@ class SetGoalScreen extends StatelessWidget {
       body: SafeArea(
           child: SingleChildScrollView(
         child: Obx(
-          ()=>_spgController.isLoading.value?
+          ()=>_spgController.isLoading.value ?
           Center(child: CustomizedCircularProgress())
           : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,10 @@ class SetGoalScreen extends StatelessWidget {
                     SizedBox(
                       height: 40 * SizeConfig.heightMultiplier!,
                     ),
-                    ListView.builder(
+                    _spgController
+                            .spgData.value.response==null?
+                            Container()
+                            :ListView.builder(
                         itemCount: _spgController
                             .spgData.value.response!.data!.goalType!.length,
                         shrinkWrap: true,
