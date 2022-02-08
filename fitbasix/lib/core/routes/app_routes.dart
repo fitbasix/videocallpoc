@@ -1,5 +1,6 @@
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
+import 'package:fitbasix/feature/Home/view/explore.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
@@ -52,6 +53,7 @@ abstract class RouteName {
   static const setActivity = '/set_activity';
   static const getTrainedScreen = '/get_trained';
   static const waterConsumed = "/water_consumed";
+  static const exploreSearch = "/explore_search";
   RouteName._();
 }
 
@@ -61,38 +63,35 @@ class GenerateRoute {
 
     if (route == RouteName.loginScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             LoginScreen(),
       );
     }
     if (route == RouteName.otpScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            OtpScreen(),
+        builder: (BuildContext context) => OtpScreen(),
       );
     }
     if (route == RouteName.enterDetails) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnterDetailsPage(),
+        builder: (BuildContext context) => EnterDetailsPage(),
       );
     }
     if (route == RouteName.homePage) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            HomeAndTrainerPage(),
+        builder: (BuildContext context) => HomeAndTrainerPage(),
       );
     }
     if (route == RouteName.enterMobileGoogle) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnterMobileDetailsGoogle(),
+        builder: (BuildContext context) => EnterMobileDetailsGoogle(),
       );
     }
     if (route == RouteName.enterOTPGoogle) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnterOTPGoogle(),
+        builder: (BuildContext context) => EnterOTPGoogle(),
       );
     }
     if (route == RouteName.customGallery) {
@@ -107,51 +106,46 @@ class GenerateRoute {
     }
     if (route == RouteName.enterPasswordPage) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnterPassword(),
+        builder: (BuildContext context) => EnterPassword(),
       );
     }
     if (route == RouteName.forgotPassword) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            ForgotPassword(),
+        builder: (BuildContext context) => ForgotPassword(),
       );
     }
     if (route == RouteName.resetPassword) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             ResetPassword(),
       );
     }
     if (route == RouteName.allTrainerScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            AllTrainerScreen(),
+        builder: (BuildContext context) => AllTrainerScreen(),
       );
     }
     if (route == RouteName.trainerProfileScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            TrainerProfileScreen(),
+        builder: (BuildContext context) => TrainerProfileScreen(),
       );
     }
 
     if (route == RouteName.waterConsumed) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            ConsumptionScreen(),
+        builder: (BuildContext context) => ConsumptionScreen(),
       );
     }
     if (route == RouteName.selectLocationScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SelectLocationScreen(),
+        builder: (BuildContext context) => SelectLocationScreen(),
       );
     }
     if (route == RouteName.tagPeopleScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            TagPeopleScreen(),
+        builder: (BuildContext context) => TagPeopleScreen(),
       );
     }
     if (route == RouteName.setGoalIntro) {
@@ -184,30 +178,31 @@ class GenerateRoute {
         builder: (BuildContext context) => SetBodyFat(),
       );
     }
+    if (route == RouteName.exploreSearch) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => ExploreFeed(),
+      );
+    }
     if (route == RouteName.customGallery) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SelectMediaScreen(),
+        builder: (BuildContext context) => SelectMediaScreen(),
       );
     }
     if (route == RouteName.setFoodType) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SetFoodType(),
+        builder: (BuildContext context) => SetFoodType(),
       );
     }
 
     if (route == RouteName.setActivity) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SetActivity(),
+        builder: (BuildContext context) => SetActivity(),
       );
     }
 
     if (route == RouteName.getTrainedScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            GetTrainedScreen(),
+        builder: (BuildContext context) => GetTrainedScreen(),
       );
     } else {
       return PageRouteBuilder(
