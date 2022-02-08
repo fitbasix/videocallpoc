@@ -738,6 +738,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                                             builder: (_) =>
                                                                 PostScreen()));
                                                   },
+                                                  people: _trainerController
+                                                      .trainerPostList[index]
+                                                      .people!,
                                                 ),
                                               ],
                                             ));

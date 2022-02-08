@@ -1002,7 +1002,7 @@ class _HomePageState extends State<HomePage> {
                                                             MaterialPageRoute(
                                                                 builder: (_) =>
                                                                     PostScreen()));
-                                                      },
+                                                      }, people: _homeController.trendingPostList[index].people!,
                                                     ),
                                                     Container(
                                                       height: 16 *
