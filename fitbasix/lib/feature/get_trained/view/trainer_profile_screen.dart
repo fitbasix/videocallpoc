@@ -24,9 +24,14 @@ import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
-class TrainerProfileScreen extends StatelessWidget {
+class TrainerProfileScreen extends StatefulWidget {
   const TrainerProfileScreen({Key? key}) : super(key: key);
 
+  @override
+  State<TrainerProfileScreen> createState() => _TrainerProfileScreenState();
+}
+
+class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final TrainerController trainerController = Get.put(TrainerController());
@@ -40,8 +45,17 @@ class TrainerProfileScreen extends StatelessWidget {
                 .atrainerDetail.value.user!.coverPhoto!
                 .toString(),
             onFollow: () {
-              TrainerServices.followTrainer(
-                  trainerController.atrainerDetail.value.user!.id!);
+              if (trainerController.atrainerDetail.value.isFollowing!) {
+                trainerController.atrainerDetail.value.isFollowing = false;
+                TrainerServices.unFollowTrainer(
+                    trainerController.atrainerDetail.value.user!.id!);
+              } else {
+                trainerController.atrainerDetail.value.isFollowing = true;
+                TrainerServices.followTrainer(
+                    trainerController.atrainerDetail.value.user!.id!);
+              }
+
+              setState(() {});
             },
             onMessage: () {},
             onEnroll: () {},
@@ -66,6 +80,7 @@ class TrainerProfileScreen extends StatelessWidget {
             allPlans: trainerController.isProfileLoading.value
                 ? []
                 : trainerController.planModel.value.response!.data!,
+            isFollowing: trainerController.atrainerDetail.value.isFollowing!,
           ),
         ),
       ),
@@ -91,6 +106,7 @@ class TrainerPage extends StatefulWidget {
       required this.onEnroll,
       required this.name,
       required this.allPlans,
+      required this.isFollowing,
       Key? key})
       : super(key: key);
   final String trainerImage;
@@ -109,6 +125,7 @@ class TrainerPage extends StatefulWidget {
   final List<Certificate> certifcateTitle;
   final String aboutTrainer;
   final List<Plan> allPlans;
+  final bool isFollowing;
 
   @override
   State<TrainerPage> createState() => _TrainerPageState();
@@ -128,24 +145,26 @@ class _TrainerPageState extends State<TrainerPage> {
     _scrollController.addListener(() async {
       if (_scrollController.position.maxScrollExtent ==
           _scrollController.position.pixels) {
-        _homeController.showLoader.value = true;
+        _trainerController.loadingIndicator.value = true;
         final postQuery = await TrainerServices.getTrainerPosts(
-            _trainerController.atrainerDetail.value.user!.id!,_trainerController.currentPostPage.value*5);
-            _trainerController.trainerPostList.addAll(postQuery.response!.data!);
-_trainerController.currentPostPage.value++;
+            _trainerController.atrainerDetail.value.user!.id!,
+            _trainerController.currentPostPage.value * 5);
+        _trainerController.trainerPostList.addAll(postQuery.response!.data!);
+        _trainerController.currentPostPage.value++;
         if (postQuery.response!.data!.length < 5) {
           _trainerController.trainerPostList.addAll(postQuery.response!.data!);
+          _trainerController.loadingIndicator.value = false;
           return;
         } else {
           if (_trainerController.trainerPostList.last.id ==
               postQuery.response!.data!.last.id) {
-            _homeController.showLoader.value = false;
+            _trainerController.loadingIndicator.value = false;
             return;
           }
           _trainerController.trainerPostList.addAll(postQuery.response!.data!);
         }
 
-        _homeController.showLoader.value = false;
+        _trainerController.loadingIndicator.value = false;
         setState(() {});
       }
     });
@@ -181,7 +200,7 @@ _trainerController.currentPostPage.value++;
                               margin: EdgeInsets.only(
                                   left: 152 * SizeConfig.widthMultiplier!),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
                                     height: 187 * SizeConfig.heightMultiplier!,
@@ -195,10 +214,34 @@ _trainerController.currentPostPage.value++;
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,
                                   ),
-                                  CustomButton(
-                                    title: 'send_a_message'.tr,
-                                    onPress: widget.onFollow,
-                                    color: kGreenColor,
+                                  Row(
+                                    children: [
+                                      Obx(
+                                        () => trainerController.atrainerDetail
+                                                .value.isFollowing!
+                                            ? CustomButton(
+                                                title: 'following'.tr,
+                                                onPress: widget.onFollow,
+                                                color: kPureWhite,
+                                                textColor: kGreenColor,
+                                              )
+                                            : CustomButton(
+                                                title: 'follow'.tr,
+                                                onPress: widget.onFollow,
+                                                color: kGreenColor,
+                                                textColor: kPureWhite,
+                                              ),
+                                      ),
+                                      SizedBox(
+                                        width: 8 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      CustomButton(
+                                        title: 'message'.tr,
+                                        onPress: widget.onMessage,
+                                        color: kPureWhite,
+                                        textColor: kGreenColor,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -538,10 +581,6 @@ _trainerController.currentPostPage.value++;
                                 ],
                               ),
                             ),
-                            Container(
-                              height: 16 * SizeConfig.heightMultiplier!,
-                              color: kBackgroundColor,
-                            ),
                             Obx(
                               () => _homeController.isLoading.value
                                   ? CustomizedCircularProgress()
@@ -557,6 +596,12 @@ _trainerController.currentPostPage.value++;
                                       itemBuilder: (_, index) {
                                         return Obx(() => Column(
                                               children: [
+                                                Container(
+                                                  height: 16 *
+                                                      SizeConfig
+                                                          .heightMultiplier!,
+                                                  color: kBackgroundColor,
+                                                ),
                                                 PostTile(
                                                   comment: _trainerController
                                                       .trainerPostList[index]
@@ -694,12 +739,6 @@ _trainerController.currentPostPage.value++;
                                                                 PostScreen()));
                                                   },
                                                 ),
-                                                Container(
-                                                  height: 16 *
-                                                      SizeConfig
-                                                          .heightMultiplier!,
-                                                  color: kBackgroundColor,
-                                                )
                                               ],
                                             ));
                                       }),
@@ -762,50 +801,43 @@ _trainerController.currentPostPage.value++;
               ),
             ),
 
+            Obx(() => _trainerController.loadingIndicator.value
+                ? Positioned(
+                    bottom: 90 * SizeConfig.heightMultiplier!,
+                    left: Get.width / 2 - 10,
+                    child: Center(child: CustomizedCircularProgress()))
+                : SizedBox()),
+
             //To be docked at bottom center
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
                 color: kPureWhite,
-                padding: EdgeInsets.symmetric(
-                    vertical: 8 * SizeConfig.heightMultiplier!,
-                    horizontal: 16 * SizeConfig.widthMultiplier!),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    TextButton.icon(
-                        onPressed: widget.onFollow,
-                        icon: Icon(
-                          Icons.person_add,
-                          color: kGreenColor,
-                        ),
-                        label: Text(
-                          'follow'.tr,
-                          style: AppTextStyle.titleText.copyWith(
-                              fontSize: 18 * SizeConfig.textMultiplier!,
-                              color: kGreenColor),
-                        )),
-                    GestureDetector(
-                      onTap: widget.onEnroll,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: kGreenColor,
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  31.0 * SizeConfig.widthMultiplier!,
-                              vertical: 14 * SizeConfig.heightMultiplier!),
-                          child: Text(
-                            'enroll'.tr,
-                            style: AppTextStyle.titleText.copyWith(
-                                fontSize: 18 * SizeConfig.textMultiplier!,
-                                color: kPureWhite),
-                          ),
-                        ),
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                    top: 8 * SizeConfig.heightMultiplier!,
+                    bottom: 16 * SizeConfig.heightMultiplier!,
+                    left: 24 * SizeConfig.widthMultiplier!,
+                    right: 24 * SizeConfig.widthMultiplier!),
+                child: GestureDetector(
+                  onTap: widget.onEnroll,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: kGreenColor,
+                        borderRadius: BorderRadius.circular(8.0)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 31.0 * SizeConfig.widthMultiplier!,
+                          vertical: 14 * SizeConfig.heightMultiplier!),
+                      child: Text(
+                        'enroll'.tr,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.titleText.copyWith(
+                            fontSize: 18 * SizeConfig.textMultiplier!,
+                            color: kPureWhite),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             )
@@ -821,12 +853,14 @@ class CustomButton extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.onPress,
-      required this.color})
+      required this.color,
+      required this.textColor})
       : super(key: key);
 
   final String title;
   final VoidCallback onPress;
   final Color color;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -834,16 +868,17 @@ class CustomButton extends StatelessWidget {
       onTap: onPress,
       child: Container(
           height: 28 * SizeConfig.heightMultiplier!,
-          width: 140 * SizeConfig.widthMultiplier!,
           padding: EdgeInsets.symmetric(
-            vertical: 4 * SizeConfig.heightMultiplier!,
-          ),
+              vertical: 4 * SizeConfig.heightMultiplier!,
+              horizontal: 12 * SizeConfig.widthMultiplier!),
           decoration: BoxDecoration(
-              color: color, borderRadius: BorderRadius.circular(8.0)),
+              color: color,
+              border: Border.all(color: kGreenColor),
+              borderRadius: BorderRadius.circular(8.0)),
           child: Center(
             child: Text(
               title,
-              style: AppTextStyle.greenSemiBoldText.copyWith(color: kPureWhite),
+              style: AppTextStyle.greenSemiBoldText.copyWith(color: textColor),
             ),
           )),
     );

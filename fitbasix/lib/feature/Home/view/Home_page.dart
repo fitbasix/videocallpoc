@@ -47,20 +47,21 @@ class HomeAndTrainerPage extends StatelessWidget {
       bottomNavigationBar: CustomBottomNavigationBar(),
       endDrawer: Drawer(
         child: Obx(
-          ()=> MenuScreen(
-              imageCoverPic: homeController.userProfileData.value.response == null
-                  ? ""
-                  : homeController
-                      .userProfileData.value.response!.data!.profile!.coverPhoto
-                      .toString(),
+          () => MenuScreen(
+              imageCoverPic:
+                  homeController.userProfileData.value.response == null
+                      ? ""
+                      : homeController.userProfileData.value.response!.data!
+                          .profile!.coverPhoto
+                          .toString(),
               name: homeController.userProfileData.value.response == null
                   ? ""
                   : homeController
                       .userProfileData.value.response!.data!.profile!.name!,
               imageUrl: homeController.userProfileData.value.response == null
                   ? ""
-                  : homeController
-                      .userProfileData.value.response!.data!.profile!.profilePhoto
+                  : homeController.userProfileData.value.response!.data!
+                      .profile!.profilePhoto
                       .toString()),
         ),
       ),
@@ -96,11 +97,13 @@ class _HomePageState extends State<HomePage> {
           if (postQuery.response!.data!.length < 5) {
             _homeController.isNeedToLoadData.value = false;
             _homeController.trendingPostList.addAll(postQuery.response!.data!);
+            _homeController.showLoader.value = false;
 
             return;
           } else {
             if (_homeController.trendingPostList.last.id ==
                 postQuery.response!.data!.last.id) {
+              _homeController.showLoader.value = false;
               return;
             }
 
@@ -380,17 +383,9 @@ class _HomePageState extends State<HomePage> {
                                                           .data![0]
                                                           .status!;
                                                   _homeController
-                                                          .waterTimingTo
-                                                          .value =
+                                                          .waterTimingTo.value =
                                                       TimeOfDay(
-                                                          hour: int.parse(_homeController
-                                                              .waterDetails
-                                                              .value
-                                                              .response!
-                                                              .data![0]
-                                                              .sleepTime!
-                                                              .split(":")[0]),
-                                                          minute: int.parse(
+                                                          hour: int.parse(
                                                               _homeController
                                                                   .waterDetails
                                                                   .value
@@ -398,8 +393,16 @@ class _HomePageState extends State<HomePage> {
                                                                   .data![0]
                                                                   .sleepTime!
                                                                   .split(
-                                                                      ":")[1]));
-                                                                      _homeController
+                                                                      ":")[0]),
+                                                          minute: int.parse(
+                                                              _homeController
+                                                                  .waterDetails
+                                                                  .value
+                                                                  .response!
+                                                                  .data![0]
+                                                                  .sleepTime!
+                                                                  .split(":")[1]));
+                                                  _homeController
                                                           .waterTimingFrom
                                                           .value =
                                                       TimeOfDay(
@@ -853,7 +856,8 @@ class _HomePageState extends State<HomePage> {
                                                     PostTile(
                                                       comment: _homeController
                                                           .trendingPostList[
-                                                              index].commentgiven,
+                                                              index]
+                                                          .commentgiven,
                                                       name: _homeController
                                                           .trendingPostList[
                                                               index]
