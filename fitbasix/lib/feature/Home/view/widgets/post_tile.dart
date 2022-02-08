@@ -32,7 +32,8 @@ class PostTile extends StatefulWidget {
       required this.addComment,
       required this.postId,
       required this.onTap,
-      required this.comment})
+      required this.comment,
+      required this.people})
       : super(key: key);
   final String name;
   final String profilePhoto;
@@ -49,6 +50,7 @@ class PostTile extends StatefulWidget {
   final String postId;
   final VoidCallback onTap;
   final Comment? comment;
+  final List<Person> people;
 
   @override
   State<PostTile> createState() => _PostTileState();
@@ -84,11 +86,116 @@ class _PostTileState extends State<PostTile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.name,
-                        style: AppTextStyle.boldBlackText.copyWith(
-                            fontSize: 14 * SizeConfig.textMultiplier!),
-                      ),
+                      widget.people.length == 0
+                          ? Text(
+                              widget.name,
+                              style: AppTextStyle.boldBlackText.copyWith(
+                                  fontSize: 14 * SizeConfig.textMultiplier!),
+                            )
+                          : widget.people.length == 1
+                              ? Container(
+                                  width: 276 * SizeConfig.widthMultiplier!,
+                                  child: Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Text(
+                                        widget.name,
+                                        style: AppTextStyle.boldBlackText
+                                            .copyWith(
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        width: 15,
+                                        color: kPureBlack,
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text('with'.tr),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        widget.people[0].name!,
+                                        style: AppTextStyle.boldBlackText
+                                            .copyWith(
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  width: 276 * SizeConfig.widthMultiplier!,
+                                  child: Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Text(
+                                        widget.name,
+                                        style: AppTextStyle.boldBlackText
+                                            .copyWith(
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        width: 15,
+                                        color: kPureBlack,
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        'with'.tr,
+                                        style: AppTextStyle.normalBlackText
+                                            .copyWith(
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        widget.people[0].name!,
+                                        style: AppTextStyle.boldBlackText
+                                            .copyWith(
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        'and'.tr,
+                                        style: AppTextStyle.normalBlackText
+                                            .copyWith(
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      ),
+                                      Text(
+                                        'others'.trParams({
+                                          "no_people":
+                                              (widget.people.length - 1)
+                                                  .toString()
+                                        }),
+                                        style: AppTextStyle.boldBlackText
+                                            .copyWith(
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      )
+                                    ],
+                                  ),
+                                ),
                       Row(
                         children: [
                           Text(widget.category,
@@ -282,10 +389,15 @@ class _PostTileState extends State<PostTile> {
                     likes: widget.comment!.likes!,
                     onReply: () {},
                     onLikeComment: () {
-                      HomeService.likePost(commentId: widget.comment!.id);
-                      // HomeService.likePost(
-                      //     commentId: snapshot
-                      //         .data!.response!.data![index].id!);
+                      if (widget.comment!.isLiked!) {
+                        widget.comment!.isLiked = false;
+                        widget.comment!.likes = widget.comment!.likes! - 1;
+                        HomeService.unlikePost(commentId: widget.comment!.id);
+                      } else {
+                        widget.comment!.isLiked = true;
+                        widget.comment!.likes = widget.comment!.likes! + 1;
+                        HomeService.likePost(commentId: widget.comment!.id);
+                      }
 
                       setState(() {});
                     },

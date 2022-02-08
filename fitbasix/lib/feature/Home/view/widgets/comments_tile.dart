@@ -8,7 +8,7 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:readmore/readmore.dart';
 
 class CommentsTile extends StatelessWidget {
-  const CommentsTile({
+  CommentsTile({
     Key? key,
     required this.name,
     required this.comment,
@@ -22,7 +22,7 @@ class CommentsTile extends StatelessWidget {
   final String name;
   final String comment;
   final String time;
-  final int likes;
+  int likes;
   final String profilePhoto;
   final VoidCallback onReply;
   final VoidCallback onLikeComment;
