@@ -22,9 +22,10 @@ class ApiUrl {
   static String getSPGData = liveBaseURL + '/api/goal/getAll';
   static String updateGoal = liveBaseURL + '/api/goal/updateGoalDetails';
   static String getWater = liveBaseURL + '/api/nutrition/water/get';
- static String updateWater = liveBaseURL + '/api/nutrition/water/update';
+  static String updateWater = liveBaseURL + '/api/nutrition/water/update';
   static String waterReminderData =
       liveBaseURL + '/api/nutrition/water/getOptions';
+  static String doUnfollow = liveBaseURL + '/api/follow/doUnfollow';
 
   ///create post
   static String createPost = liveBaseURL + '/api/posts/create';
