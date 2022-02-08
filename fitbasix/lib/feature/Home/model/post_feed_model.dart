@@ -54,21 +54,20 @@ class Response {
 }
 
 class Post {
-  Post({
-    this.id,
-    this.caption,
-    this.files,
-    this.location,
-    this.people,
-    this.updatedAt,
-    this.userId,
-    this.category,
-    this.isLiked,
-    this.postCategory,
-    this.likes,
-    this.comments,
-    this.commentgiven
-  });
+  Post(
+      {this.id,
+      this.caption,
+      this.files,
+      this.location,
+      this.people,
+      this.updatedAt,
+      this.userId,
+      this.category,
+      this.isLiked,
+      this.postCategory,
+      this.likes,
+      this.comments,
+      this.commentgiven});
 
   final String? id;
   final String? caption;
@@ -101,7 +100,6 @@ class Post {
         comments: json["comments"],
         commentgiven:
             json["comment"] == null ? null : Comment.fromJson(json["comment"]),
-            
       );
 
   Map<String, dynamic> toJson() => {
@@ -134,6 +132,7 @@ class Comment {
     this.reply,
     this.likes,
     this.commentId,
+    this.isLiked,
   });
 
   String? id;
@@ -146,19 +145,20 @@ class Comment {
   int? reply;
   int? likes;
   String? commentId;
+  bool? isLiked;
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-        id: json["_id"],
-        postId: json["postId"],
-        comment: json["comment"],
-        user: UserId.fromJson(json["user"]),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
-        reply: json["reply"],
-        likes: json["likes"],
-        commentId: json["id"],
-      );
+      id: json["_id"],
+      postId: json["postId"],
+      comment: json["comment"],
+      user: UserId.fromJson(json["user"]),
+      createdAt: DateTime.parse(json["createdAt"]),
+      updatedAt: DateTime.parse(json["updatedAt"]),
+      v: json["__v"],
+      reply: json["reply"],
+      likes: json["likes"],
+      commentId: json["id"],
+      isLiked: json['isLiked']);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
