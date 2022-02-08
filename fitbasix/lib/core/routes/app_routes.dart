@@ -3,6 +3,9 @@ import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
+import 'package:fitbasix/feature/help_and_support/view/help_and_support_screen.dart';
+import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/privacy_policy_screen.dart';
+import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/term_of_use_screen.dart';
 import 'package:fitbasix/feature/log_in/view/enter_details_page.dart';
 import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
 import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
@@ -15,6 +18,8 @@ import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
+import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
+import 'package:fitbasix/feature/profile/view/edit_personal_info_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_activity.dart';
 import 'package:fitbasix/feature/spg/view/set_bodyFat.dart';
 import 'package:fitbasix/feature/spg/view/set_foodType.dart';
@@ -52,6 +57,13 @@ abstract class RouteName {
   static const setActivity = '/set_activity';
   static const getTrainedScreen = '/get_trained';
   static const waterConsumed = "/water_consumed";
+  static const accountAndSubscription = "/account_and_subscription_screen";
+  static const editPersonalInfo = "/edit_personal_info_screen";
+  static const helpAndSupport = "/help_and_support_screen";
+  static const privacyAndPolicy = "/privacy_policy_screen";
+  static const termOfUse = "/term_of_use_screen";
+
+
   RouteName._();
 }
 
@@ -63,6 +75,24 @@ class GenerateRoute {
       return MaterialPageRoute(
         builder: (BuildContext context,) =>
             LoginScreen(),
+      );
+    }
+    if (route == RouteName.termOfUse) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            TermOfUseScreen(),
+      );
+    }
+    if (route == RouteName.privacyAndPolicy) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            PrivacyPolicyScreen(),
+      );
+    }
+    if (route == RouteName.helpAndSupport) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            HelpAndSupportScreen(),
       );
     }
     if (route == RouteName.otpScreen) {
@@ -209,7 +239,18 @@ class GenerateRoute {
         builder: (BuildContext context) =>
             GetTrainedScreen(),
       );
-    } else {
+    }
+    if (route == RouteName.accountAndSubscription) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => AccountAndSubscriptionScreen(),
+      );
+    }
+    if (route == RouteName.editPersonalInfo) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => EditPersonalInfoScreen(),
+      );
+    }
+    else {
       return PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
