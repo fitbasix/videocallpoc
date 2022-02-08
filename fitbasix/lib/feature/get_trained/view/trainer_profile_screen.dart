@@ -153,6 +153,7 @@ class _TrainerPageState extends State<TrainerPage> {
         _trainerController.currentPostPage.value++;
         if (postQuery.response!.data!.length < 5) {
           _trainerController.trainerPostList.addAll(postQuery.response!.data!);
+          _trainerController.loadingIndicator.value = false;
           return;
         } else {
           if (_trainerController.trainerPostList.last.id ==
@@ -799,6 +800,13 @@ class _TrainerPageState extends State<TrainerPage> {
                 ),
               ),
             ),
+
+            Obx(() => _trainerController.loadingIndicator.value
+                ? Positioned(
+                    bottom: 90 * SizeConfig.heightMultiplier!,
+                    left: Get.width / 2 - 10,
+                    child: Center(child: CustomizedCircularProgress()))
+                : SizedBox()),
 
             //To be docked at bottom center
             Align(
