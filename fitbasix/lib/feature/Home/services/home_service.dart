@@ -67,18 +67,21 @@ class HomeService {
         .post(ApiUrl.updateWater, data: {"totalWaterConsumed": waterLevel});
     print(response.data.toString());
   }
- static Future<void> updateWaterNotificationDetails(double waterGoal,String? wakeUpTime,String? sleepTime, int WaterReminder) async {
+
+  static Future<void> updateWaterNotificationDetails(double waterGoal,
+      String? wakeUpTime, String? sleepTime, int WaterReminder) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
 
-    var response = await dio!
-        .post(ApiUrl.updateWater, data: { 
-          "sleepTime":sleepTime,
-    "totalWaterRequired": waterGoal,
-    "wakeupTime": wakeUpTime,
-    "waterReminder": WaterReminder});
+    var response = await dio!.post(ApiUrl.updateWater, data: {
+      "sleepTime": sleepTime,
+      "totalWaterRequired": waterGoal,
+      "wakeupTime": wakeUpTime,
+      "waterReminder": WaterReminder
+    });
     print(response.data.toString());
   }
+
   static Future<void> addComment(String postId, String comment) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
@@ -89,15 +92,20 @@ class HomeService {
     print(response.data['code']);
   }
 
-  // static Stream<CommentModel> fetchComment(
-  //   String postId,
-  // ) async* {
-  //   dio!.options.headers["language"] = "1";
-  //   dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-  //   var response = await dio!.post(ApiUrl.getComment, data: {"postId": postId});
+  static Future<CommentModel> fetchComment(
+    String postId,
+  ) async {
+    print(postId);
+    var access = await LogInService.getAccessToken();
+    print(access);
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.post(ApiUrl.getComment, data: {"postId": postId});
 
-  //   yield commentModelFromJson(response.toString());
-  // }
+    log(response.toString());
+
+    return commentModelFromJson(response.toString());
+  }
 
   static Future<ReminderSource> fetchReminderData() async {
     dio!.options.headers["language"] = "1";
