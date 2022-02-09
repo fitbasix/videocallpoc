@@ -808,10 +808,17 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Spacer(),
                                   GreenCircleArrowButton(
-                                    onTap: () {
-
+                                    onTap: () async{
+                                      _homeController.explorePageCount.value = 0;
                                       Navigator.pushNamed(context, RouteName.exploreSearch);
                                       postController.getCategory();
+                                      _homeController.isExploreDataLoading.value=true;
+                                     _homeController.explorePostModel.value= await HomeService.getExplorePosts(
+                                       skip: 0,
+                                     );
+                                     _homeController.explorePostList.value=_homeController.explorePostModel.value.response!.data!;
+                                      _homeController.isExploreDataLoading.value=false;
+
                                     },
                                   )
                                 ],
