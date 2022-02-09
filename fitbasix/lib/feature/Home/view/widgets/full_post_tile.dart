@@ -381,31 +381,6 @@ class _FullPostTileState extends State<FullPostTile> {
                 ],
               ),
             ),
-            // widget.comment == null
-            //     ? Container()
-            //     : CommentsTile(
-            //         name: widget.comment!.user!.name.toString(),
-            //         profilePhoto: widget.comment!.user!.profilePhoto.toString(),
-            //         comment: widget.comment!.comment.toString(),
-            //         time: _homeController.timeAgoSinceDate(DateFormat.yMd()
-            //             .add_Hms()
-            //             .format(widget.comment!.createdAt!)),
-            //         likes: widget.comment!.likes!,
-            //         onReply: () {},
-            //         onLikeComment: () {
-            //           if (widget.comment!.isLiked!) {
-            //             widget.comment!.isLiked = false;
-            //             widget.comment!.likes = widget.comment!.likes! - 1;
-            //             HomeService.unlikePost(commentId: widget.comment!.id);
-            //           } else {
-            //             widget.comment!.isLiked = true;
-            //             widget.comment!.likes = widget.comment!.likes! + 1;
-            //             HomeService.likePost(commentId: widget.comment!.id);
-            //           }
-
-            //           setState(() {});
-            //         },
-            //       ),
             Obx(() => _homeController.commentsLoading.value
                 ? Center(
                     child: CustomizedCircularProgress(),
@@ -416,97 +391,53 @@ class _FullPostTileState extends State<FullPostTile> {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (_, index) {
-                          return Obx(() => CommentsTile(
-                              name: widget.commentsList[index].user!.name!,
-                              comment: widget.commentsList[index].comment!,
-                              time: '1999',
-                              likes: widget.commentsList[index].likes!,
-                              profilePhoto: widget
-                                  .commentsList[index].user!.profilePhoto!,
-                              onReply: () {},
-                              onLikeComment: () {
-                                if (widget.commentsList[index].isLiked!) {
-                                  widget.commentsList[index].isLiked = false;
-                                  widget.commentsList[index].likes =
-                                      widget.commentsList[index].likes! - 1;
+                          return Obx(() => Column(
+                                children: [
+                                  CommentsTile(
+                                      name: widget
+                                              .commentsList[index].user!.name ??
+                                          '',
+                                      comment:
+                                          widget.commentsList[index].comment!,
+                                      time: _homeController.timeAgoSinceDate(
+                                          DateFormat.yMd().add_Hms().format(
+                                              widget.commentsList[index]
+                                                  .createdAt!)),
+                                      likes: widget.commentsList[index].likes!,
+                                      profilePhoto: widget.commentsList[index]
+                                          .user!.profilePhoto!,
+                                      onReply: () {},
+                                      onLikeComment: () {
+                                        if (widget
+                                            .commentsList[index].isLiked!) {
+                                          widget.commentsList[index].isLiked =
+                                              false;
+                                          widget.commentsList[index].likes =
+                                              widget.commentsList[index]
+                                                      .likes! -
+                                                  1;
 
-                                  HomeService.unlikePost(
-                                      commentId: widget.commentsList[index].id);
-                                } else {
-                                  widget.commentsList[index].isLiked = true;
-                                  widget.commentsList[index].likes =
-                                      widget.commentsList[index].likes! + 1;
+                                          HomeService.unlikePost(
+                                              commentId: widget
+                                                  .commentsList[index].id);
+                                        } else {
+                                          widget.commentsList[index].isLiked =
+                                              true;
+                                          widget.commentsList[index].likes =
+                                              widget.commentsList[index]
+                                                      .likes! +
+                                                  1;
 
-                                  HomeService.likePost(
-                                      commentId: widget.commentsList[index].id);
-                                }
-                                setState(() {});
-                              }));
+                                          HomeService.likePost(
+                                              commentId: widget
+                                                  .commentsList[index].id);
+                                        }
+                                        setState(() {});
+                                      }),
+                                ],
+                              ));
                         }),
                   )),
-            // FutureBuilder<CommentModel>(
-            //     future: HomeService.fetchComment(widget.postId),
-            //     builder: (context, snapshot) {
-            //       if (snapshot.hasData &&
-            //           snapshot.data!.response!.data!.length != 0)
-            //         return ListView.builder(
-            //             itemCount: snapshot.data!.response!.data!.length,
-            //             shrinkWrap: true,
-            //             physics: NeverScrollableScrollPhysics(),
-            //             itemBuilder: (_, index) {
-            //               return snapshot.data!.response!.data!.length == 0
-            //                   ? Container()
-            //                   : CommentsTile(
-            //                       name: snapshot.data!.response!.data![index]
-            //                               .user!.name ??
-            //                           '',
-            //                       profilePhoto: snapshot.data!.response!
-            //                           .data![index].user!.profilePhoto!,
-            //                       comment: snapshot
-            //                           .data!.response!.data![index].comment!,
-            //                       time: _homeController.timeAgoSinceDate(
-            //                           DateFormat.yMd().add_Hms().format(snapshot
-            //                               .data!
-            //                               .response!
-            //                               .data![index]
-            //                               .createdAt!)),
-            //                       likes: snapshot
-            //                           .data!.response!.data![index].likes!,
-            //                       onReply: () {},
-            //                       onLikeComment: () {
-            //                         if (snapshot.data!.response!.data![index]
-            //                             .isLiked!) {
-            //                           // widget.comment!.isLiked = false;
-            //                           // widget.comment!.likes =
-            //                           //     widget.comment!.likes! - 1;
-            //                           HomeService.unlikePost(
-            //                               commentId: snapshot.data!.response!
-            //                                   .data![index].id!);
-            //                         } else {
-            //                           // widget.comment!.isLiked = true;
-            //                           // widget.comment!.likes =
-            //                           //     widget.comment!.likes! + 1;
-            //                           HomeService.likePost(
-            //                               commentId: snapshot.data!.response!
-            //                                   .data![index].id!);
-            //                         }
-            //                         // HomeService.likePost(
-            //                         //     commentId: snapshot.data!.response!
-            //                         //         .data![index].id!);
-
-            //                         setState(() {});
-            //                       },
-            //                     );
-            //             });
-            //       return Container();
-            //     }),
-            // CommentsTile(
-            //   name: 'Percy Bysshe Shelley',
-            //   comment: 'Thank you for the motivational thoughts!',
-            //   time: '26',
-            //   likes: 214,
-            //   onReply: () {},
-            // ),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
