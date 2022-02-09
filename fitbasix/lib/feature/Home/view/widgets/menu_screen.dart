@@ -7,6 +7,7 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -91,7 +92,9 @@ class MenuScreen extends StatelessWidget {
             MenuItem(
                 menuItemImage: ImagePath.account,
                 menuItemText: 'account'.tr,
-                onTap: () {}),
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.accountAndSubscription);
+                }),
             MenuItem(
                 menuItemImage: ImagePath.settings,
                 menuItemText: 'settings'.tr,
@@ -99,7 +102,9 @@ class MenuScreen extends StatelessWidget {
             MenuItem(
                 menuItemImage: ImagePath.support,
                 menuItemText: 'help'.tr,
-                onTap: () {}),
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.helpAndSupport);
+                }),
             MenuItem(
                 menuItemImage: ImagePath.feedback,
                 menuItemText: 'feedback'.tr,

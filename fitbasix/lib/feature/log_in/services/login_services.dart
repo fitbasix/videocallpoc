@@ -71,12 +71,13 @@ class LogInService {
   }
 
   static Future updateToken() async {
-    var refreshToken = getRefreshToken();
+    var refreshToken = await getRefreshToken();
+    print(refreshToken);
     dio!.options.headers["language"] = "1";
     var response = await dio!.post(ApiUrl.updateToken, data: {
       "refreshToken": refreshToken,
     });
-
+    print("response" + response.toString());
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('AccessToken', response.data['response']['token']);
     prefs.setString('RefreshToken', response.data['response']['refreshToken']);
@@ -106,6 +107,9 @@ class LogInService {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString(
             'AccessToken', responseData['response']['user']['token']);
+        prefs.setString(
+            'RefreshToken', responseData['response']['refreshToken']);
+        print(responseData['response']['refreshToken']);
       } else {
         loginController.otpErrorMessage.value =
             responseData['response']['message'];

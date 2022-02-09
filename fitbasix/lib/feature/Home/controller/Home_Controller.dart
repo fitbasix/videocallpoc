@@ -48,7 +48,15 @@ class HomeController extends GetxController {
   Rx<CommentModel> postComments = Rx(CommentModel());
   RxList<Comments> commentsList = RxList<Comments>([]);
   RxBool commentsLoading = RxBool(false);
-
+  RxBool isExploreSearch = false.obs;
+  final TextEditingController searchController = TextEditingController();
+  RxString exploreSearchText = "".obs;
+  Rx<int> selectedPostCategoryIndex = (-1).obs;
+  RxBool isExploreDataLoading = false.obs;
+  Rx<PostsModel> explorePostModel = Rx(PostsModel());
+  RxList<Post> explorePostList = RxList<Post>([]);
+  RxBool nextDataLoad = false.obs;
+  RxInt explorePageCount = 0.obs;
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,

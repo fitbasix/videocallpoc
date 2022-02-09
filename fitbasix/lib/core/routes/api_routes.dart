@@ -36,6 +36,7 @@ class ApiUrl {
   static String addComment = liveBaseURL + '/api/comment/add';
   static String getComment = liveBaseURL + '/api/comment/getCommentByPost';
   static String unlike = liveBaseURL + '/api/like/disLike';
+  static String explorePost = liveBaseURL + '/api/posts/explorePage';
 
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';

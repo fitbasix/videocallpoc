@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 class CutomizedTextField extends StatelessWidget {
   final Color color;
   final Widget child;
-  CutomizedTextField({required this.color, required this.child});
+  bool? wantWhiteBG;
+
+  CutomizedTextField({required this.color, required this.child, this.wantWhiteBG});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -15,7 +17,7 @@ class CutomizedTextField extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
         border: Border.all(color: color),
-        color: lightGrey,
+        color: wantWhiteBG!=null?Colors.white:lightGrey,
         borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
       ),
       child: Center(child: child),
