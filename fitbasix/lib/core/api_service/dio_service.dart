@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DioUtil {
   Dio? _instance;
@@ -33,10 +34,13 @@ class DioUtil {
           dio.interceptors.responseLock.lock();
           RequestOptions requestOptions = e.requestOptions;
           await LogInService.updateToken();
-          var accessToken = await LogInService.getAccessToken();
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          var accessToken = prefs.getString('AccessToken').toString();
+          print("updated Access token" + accessToken.toString());
           final opts = new Options(method: requestOptions.method);
           dio.options.headers["language"] = "1";
           dio.options.headers["Accept"] = "*/*";
+          dio.options.headers['Authorization'] = accessToken;
           dio.interceptors.requestLock.unlock();
           dio.interceptors.responseLock.unlock();
           final response = await dio.request(requestOptions.path,

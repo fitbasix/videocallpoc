@@ -43,6 +43,15 @@ class HomeController extends GetxController {
   Rx<WaterReminder> waterReminder = WaterReminder().obs;
   RxString waterStatus = "".obs;
   RxBool iswaterNotificationDataUpdating = false.obs;
+  RxBool isExploreSearch = false.obs;
+  final TextEditingController searchController = TextEditingController();
+  RxString exploreSearchText = "".obs;
+  Rx<int> selectedPostCategoryIndex = (-1).obs;
+  RxBool isExploreDataLoading = false.obs;
+  Rx<PostsModel> explorePostModel = Rx(PostsModel());
+  RxList<Post> explorePostList = RxList<Post>([]);
+  RxBool nextDataLoad = false.obs;
+  RxInt explorePageCount = 0.obs;
 
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(

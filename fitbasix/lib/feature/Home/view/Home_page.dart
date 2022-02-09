@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -76,7 +77,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController _homeController = Get.find();
-
+  final PostController postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -199,7 +200,12 @@ class _HomePageState extends State<HomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
+                                          _homeController
+                                              .userProfileData
+                                              .value
+                                              .response ==null?
+                                              Container()
+                                              :Text(
                                             'hi_name'.trParams({
                                               'name': _homeController
                                                   .userProfileData
@@ -802,7 +808,18 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Spacer(),
                                   GreenCircleArrowButton(
-                                    onTap: () {},
+                                    onTap: () async{
+                                      _homeController.explorePageCount.value = 0;
+                                      Navigator.pushNamed(context, RouteName.exploreSearch);
+                                      postController.getCategory();
+                                      _homeController.isExploreDataLoading.value=true;
+                                     _homeController.explorePostModel.value= await HomeService.getExplorePosts(
+                                       skip: 0,
+                                     );
+                                     _homeController.explorePostList.value=_homeController.explorePostModel.value.response!.data!;
+                                      _homeController.isExploreDataLoading.value=false;
+
+                                    },
                                   )
                                 ],
                               ),
