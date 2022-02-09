@@ -261,13 +261,7 @@ class _HomePageState extends State<HomePage> {
                                   color: kLightGreen,
                                   title: 'my_plan'.tr,
                                   icon: Icons.list_alt,
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                SetGoalIntroScreen()));
-                                  },
+                                  onTap: () {},
                                 )
                               ],
                             ),
