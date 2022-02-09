@@ -267,13 +267,7 @@ class _HomePageState extends State<HomePage> {
                                   color: kLightGreen,
                                   title: 'my_plan'.tr,
                                   icon: Icons.list_alt,
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                SetGoalIntroScreen()));
-                                  },
+                                  onTap: () {},
                                 )
                               ],
                             ),
@@ -1003,13 +997,55 @@ class _HomePageState extends State<HomePage> {
                                                           .trendingPostList[
                                                               index]
                                                           .isLiked!,
-                                                      onTap: () {
-                                                        Navigator.push(
+                                                      onTap: () async {
+                                                        _homeController
+                                                            .commentsList
+                                                            .clear();
+                                                        Navigator.pushNamed(
                                                             context,
-                                                            MaterialPageRoute(
-                                                                builder: (_) =>
-                                                                    PostScreen()));
-                                                      }, people: _homeController.trendingPostList[index].people!,
+                                                            RouteName
+                                                                .postScreen);
+                                                        _homeController.post
+                                                            .value = _homeController
+                                                                .trendingPostList[
+                                                            index];
+                                                        _homeController
+                                                            .commentsLoading
+                                                            .value = true;
+                                                        _homeController
+                                                                .postComments
+                                                                .value =
+                                                            await HomeService
+                                                                .fetchComment(
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!);
+
+                                                        if (_homeController
+                                                                .postComments
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .length !=
+                                                            0) {
+                                                          _homeController
+                                                                  .commentsList
+                                                                  .value =
+                                                              _homeController
+                                                                  .postComments
+                                                                  .value
+                                                                  .response!
+                                                                  .data!;
+                                                        }
+                                                        _homeController
+                                                            .commentsLoading
+                                                            .value = false;
+                                                      },
+                                                      people: _homeController
+                                                          .trendingPostList[
+                                                              index]
+                                                          .people!,
                                                     ),
                                                     Container(
                                                       height: 16 *

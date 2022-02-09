@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
@@ -43,6 +44,10 @@ class HomeController extends GetxController {
   Rx<WaterReminder> waterReminder = WaterReminder().obs;
   RxString waterStatus = "".obs;
   RxBool iswaterNotificationDataUpdating = false.obs;
+  Rx<Post> post = Rx(Post());
+  Rx<CommentModel> postComments = Rx(CommentModel());
+  RxList<Comments> commentsList = RxList<Comments>([]);
+  RxBool commentsLoading = RxBool(false);
   RxBool isExploreSearch = false.obs;
   final TextEditingController searchController = TextEditingController();
   RxString exploreSearchText = "".obs;
@@ -52,7 +57,6 @@ class HomeController extends GetxController {
   RxList<Post> explorePostList = RxList<Post>([]);
   RxBool nextDataLoad = false.obs;
   RxInt explorePageCount = 0.obs;
-
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,

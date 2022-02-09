@@ -1,5 +1,6 @@
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
+import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/explore.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
@@ -58,6 +59,7 @@ abstract class RouteName {
   static const setActivity = '/set_activity';
   static const getTrainedScreen = '/get_trained';
   static const waterConsumed = "/water_consumed";
+  static const postScreen = '/post_screen';
   static const exploreSearch = "/explore_search";
   static const accountAndSubscription = "/account_and_subscription_screen";
   static const editPersonalInfo = "/edit_personal_info_screen";
@@ -226,6 +228,13 @@ class GenerateRoute {
     if (route == RouteName.setActivity) {
       return MaterialPageRoute(
         builder: (BuildContext context) => SetActivity(),
+      );
+    }
+
+    if (route == RouteName.postScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => PostScreen(),
+
       );
     }
 
