@@ -24,10 +24,7 @@ class HelpAndSupportScreen extends StatelessWidget {
     
     
     
-
-  
-
-  @override
+    @override
   Widget build(BuildContext context) {
     if(_helpAndSupportController.isLoading.value){
       _helpAndSupportController.getAllHelpAndSupportContent();
@@ -53,9 +50,8 @@ class HelpAndSupportScreen extends StatelessWidget {
                       Expanded(
                         child:InkWell(
                           onTap: (){
-                            //todo add whatsapp functionality
-
-                          },
+                            launch("https://Wa.me/${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.whatsAppNo}");
+                            },
                           child: Container(
                             height: 48*SizeConfig.heightMultiplier!,
                             decoration: BoxDecoration(
@@ -75,7 +71,7 @@ class HelpAndSupportScreen extends StatelessWidget {
                           onTap: (){
                             ///launch call with help no
                             launch("tel://${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.callingNo}");
-                            debugPrint("kashif");
+
                             },
                           child: Container(
                             height: 48*SizeConfig.heightMultiplier!,
@@ -104,7 +100,6 @@ class HelpAndSupportScreen extends StatelessWidget {
             Padding(
                 padding: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 16*SizeConfig.heightMultiplier!),
                 child: Text("FAQs".tr,style: AppTextStyle.boldBlackText,)),
-            //todo add all the FAQ from cloud
             Column(
               mainAxisSize: MainAxisSize.min,
               children: List.generate(_helpAndSupportController.helpAndSupportDataModel!.response!.data!.questionsAndAnswers!.length, (FAQIndex) {
