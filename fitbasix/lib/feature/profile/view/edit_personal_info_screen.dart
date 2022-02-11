@@ -1,6 +1,7 @@
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/view/appbar_for_account.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
@@ -77,9 +78,13 @@ class EditPersonalInfoScreen extends StatelessWidget {
             //text field Phone no
             Obx(
                   () => CutomizedTextField(
+
                     wantWhiteBG: true,
                 color: kLightGrey,
                 child: TextFieldContainer(
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(10),
+                  ],
                     onChanged: (value) {
                       _mobileNoController.mobile.value = value;
                     },
@@ -164,7 +169,6 @@ class EditPersonalInfoScreen extends StatelessWidget {
               ],
             ),
 
-            
             Container(
               margin: EdgeInsets.only(top: 32*SizeConfig.heightMultiplier!),
                 width: double.infinity,

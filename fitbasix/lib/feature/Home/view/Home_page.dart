@@ -246,7 +246,9 @@ class _HomePageState extends State<HomePage> {
                                   color: kPurple,
                                   title: 'live_stream'.tr,
                                   icon: Icons.videocam,
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pushNamed(context, RouteName.liveStream);
+                                  },
                                 ),
                                 HomeTile(
                                   color: kBlue,

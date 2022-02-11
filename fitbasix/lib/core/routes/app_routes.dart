@@ -4,8 +4,11 @@ import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/help_and_support/view/help_and_support_screen.dart';
+import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/legal_screen.dart';
 import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/privacy_policy_screen.dart';
 import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/term_of_use_screen.dart';
+import 'package:fitbasix/feature/live_stream/view/live_stream_screen.dart';
+import 'package:fitbasix/feature/live_stream/view/scheduled_live_information_screen.dart';
 import 'package:fitbasix/feature/log_in/view/enter_details_page.dart';
 import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
 import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
@@ -60,8 +63,12 @@ abstract class RouteName {
   static const accountAndSubscription = "/account_and_subscription_screen";
   static const editPersonalInfo = "/edit_personal_info_screen";
   static const helpAndSupport = "/help_and_support_screen";
+  static const legal = "/legal_screen";
   static const privacyAndPolicy = "/privacy_policy_screen";
   static const termOfUse = "/term_of_use_screen";
+  static const liveStream = "/live_stream_screen";
+  static const scheduledLiveStreamInformation = "/scheduled_live_information_screen";
+
 
 
   RouteName._();
@@ -75,6 +82,24 @@ class GenerateRoute {
       return MaterialPageRoute(
         builder: (BuildContext context,) =>
             LoginScreen(),
+      );
+    }
+    if (route == RouteName.legal) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            LegalScreen(),
+      );
+    }
+    if (route == RouteName.scheduledLiveStreamInformation) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            ScheduledLiveInformationScreen(),
+      );
+    }
+    if (route == RouteName.liveStream) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            LiveStreamScreen(),
       );
     }
     if (route == RouteName.termOfUse) {

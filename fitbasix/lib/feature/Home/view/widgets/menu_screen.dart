@@ -112,7 +112,9 @@ class MenuScreen extends StatelessWidget {
             MenuItem(
                 menuItemImage: ImagePath.legal,
                 menuItemText: 'legal'.tr,
-                onTap: () {}),
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.legal);
+                }),
             MenuItem(
                 menuItemImage: ImagePath.logOut,
                 menuItemText: 'logOut'.tr,
