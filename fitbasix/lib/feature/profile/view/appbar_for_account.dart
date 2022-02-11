@@ -24,7 +24,9 @@ class AppBarForAccount extends StatelessWidget with PreferredSizeWidget{
               onTap: (){
                 Navigator.pop(parentContext!);
               },
-              child: SvgPicture.asset(ImagePath.backIcon,width: 7.41*SizeConfig.widthMultiplier!,height: 12*SizeConfig.heightMultiplier!,fit: BoxFit.contain,)),
+              child: Container(
+                  color: Colors.transparent,
+                  child: SvgPicture.asset(ImagePath.backIcon,width: 7.41*SizeConfig.widthMultiplier!,height: 12*SizeConfig.heightMultiplier!,fit: BoxFit.contain,))),
           SizedBox(width: 16.59*SizeConfig.widthMultiplier!,),
           Text(title!,style: AppTextStyle.NormalBlackTitleText,),
         ],
