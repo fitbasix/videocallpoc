@@ -37,11 +37,11 @@ class Response {
   });
 
   String? message;
-  Data? data;
+  HelpAndSupportData? data;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
     message: json["message"],
-    data: Data.fromJson(json["data"]),
+    data: HelpAndSupportData.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -50,8 +50,8 @@ class Response {
   };
 }
 
-class Data {
-  Data({
+class HelpAndSupportData {
+  HelpAndSupportData({
     this.id,
     this.title,
     this.description,
@@ -75,7 +75,7 @@ class Data {
   DateTime? updatedAt;
   int? v;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory HelpAndSupportData.fromJson(Map<String, dynamic> json) => HelpAndSupportData(
     id: json["_id"],
     title: json["title"],
     description: json["description"],

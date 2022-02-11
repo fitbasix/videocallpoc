@@ -39,11 +39,11 @@ class Response {
   });
 
   String? message;
-  Data? data;
+  TermOfUseData? data;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
     message: json["message"],
-    data: Data.fromJson(json["data"]),
+    data: TermOfUseData.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -52,8 +52,8 @@ class Response {
   };
 }
 
-class Data {
-  Data({
+class TermOfUseData {
+  TermOfUseData({
     this.id,
     this.introduction,
     this.sections,
@@ -73,7 +73,7 @@ class Data {
   int? v;
   String? description;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory TermOfUseData.fromJson(Map<String, dynamic> json) => TermOfUseData(
     id: json["_id"],
     introduction: json["introduction"],
     sections: List<Section>.from(json["sections"].map((x) => Section.fromJson(x))),
