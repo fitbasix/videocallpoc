@@ -103,6 +103,8 @@ flutter:
     - assets/get_trained/
     - assets/menuSlider/
     - assets/home/
+    - assets/settings/
+    - assets/message/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

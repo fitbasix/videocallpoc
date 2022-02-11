@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
@@ -43,7 +44,10 @@ class TrainerProfileScreen extends StatelessWidget {
               TrainerServices.followTrainer(
                   trainerController.atrainerDetail.value.user!.id!);
             },
-            onMessage: () {},
+            onMessage: () {
+              print('message pressed');
+              Navigator.pushNamed(context, RouteName.messageTrainer);
+            },
             onEnroll: () {},
             onBack: () {
               Navigator.pop(context);
@@ -197,7 +201,7 @@ _trainerController.currentPostPage.value++;
                                   ),
                                   CustomButton(
                                     title: 'send_a_message'.tr,
-                                    onPress: widget.onFollow,
+                                    onPress: widget.onMessage,
                                     color: kGreenColor,
                                   ),
                                 ],

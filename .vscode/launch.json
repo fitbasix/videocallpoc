@@ -12,7 +12,9 @@
             "program": "lib/main_dev.dart",
             "args": [
                 "--flavor ",
-                "dev"
+                "dev",
+                "--target",
+                "lib/main_dev.dart"
             ]
         },
         {

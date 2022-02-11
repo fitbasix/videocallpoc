@@ -11,10 +11,13 @@ import 'package:fitbasix/feature/log_in/view/forgot_password.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:fitbasix/feature/log_in/view/reset_password.dart';
+import 'package:fitbasix/feature/message/view/enroll_screen.dart';
+import 'package:fitbasix/feature/message/view/message.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
+import 'package:fitbasix/feature/settings/view/settings.dart';
 import 'package:fitbasix/feature/spg/view/set_activity.dart';
 import 'package:fitbasix/feature/spg/view/set_bodyFat.dart';
 import 'package:fitbasix/feature/spg/view/set_foodType.dart';
@@ -52,6 +55,9 @@ abstract class RouteName {
   static const setActivity = '/set_activity';
   static const getTrainedScreen = '/get_trained';
   static const waterConsumed = "/water_consumed";
+  static const userSetting = "/settings";
+  static const messageTrainer = "/message";
+  static const enrolltrainerscreen = "/enroll_screen";
   RouteName._();
 }
 
@@ -204,6 +210,28 @@ class GenerateRoute {
       );
     }
 
+    if (route == RouteName.userSetting) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
+            SettingScreen(),
+      );
+    }
+
+    if (route == RouteName.messageTrainer) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
+            MessageTrainerScreen(),
+      );
+    }
+
+    if (route == RouteName.enrolltrainerscreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) =>
+            EnrollTrainer(),
+      );
+    }
+
+
     if (route == RouteName.getTrainedScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) =>
@@ -215,5 +243,6 @@ class GenerateRoute {
                   Animation<double> secondaryAnimation) =>
               LoginScreen());
     }
+
   }
 }

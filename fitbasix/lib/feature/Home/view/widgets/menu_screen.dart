@@ -10,7 +10,6 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -95,7 +94,9 @@ class MenuScreen extends StatelessWidget {
             MenuItem(
                 menuItemImage: ImagePath.settings,
                 menuItemText: 'settings'.tr,
-                onTap: () {}),
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.userSetting);
+                }),
             MenuItem(
                 menuItemImage: ImagePath.support,
                 menuItemText: 'help'.tr,
