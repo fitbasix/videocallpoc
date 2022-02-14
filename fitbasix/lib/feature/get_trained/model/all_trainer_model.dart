@@ -96,7 +96,7 @@ class Trainer {
     this.isFollowing,
   });
 
-  final String? followers;
+  String? followers;
   final String? following;
   final String? trainees;
   final String? slotsFeft;
