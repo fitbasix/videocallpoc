@@ -2,6 +2,7 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CutomizedTextField extends StatelessWidget {
   final Color color;
@@ -26,8 +27,10 @@ class CutomizedTextField extends StatelessWidget {
 }
 
 Widget TextFieldContainer(
-    {required TextEditingController textEditingController,
+    {
+      required TextEditingController textEditingController,
     required Function onChanged,
+      List<TextInputFormatter>? inputFormatters,
     required bool isNumber,
     bool? isObsecure,
     bool? readOnly,
@@ -38,6 +41,7 @@ Widget TextFieldContainer(
     Widget? suffixWidget}) {
   return Container(
     child: TextField(
+      inputFormatters: inputFormatters!=null?inputFormatters:null,
       controller: textEditingController,
       onChanged: (value) {
         onChanged(value);
@@ -49,6 +53,7 @@ Widget TextFieldContainer(
       textAlignVertical: TextAlignVertical.bottom,
       obscureText: isObsecure == null ? false : isObsecure,
       decoration: InputDecoration(
+
           isDense: true,
           counter: Container(
             height: 0,

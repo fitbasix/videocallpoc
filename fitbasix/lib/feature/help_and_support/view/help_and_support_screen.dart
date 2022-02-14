@@ -2,6 +2,8 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/help_and_support/controller/help_support_controller.dart';
 import 'package:fitbasix/feature/profile/view/appbar_for_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,17 +11,29 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/accordion/gf_accordion.dart';
 
 import '../../../core/constants/color_palette.dart';
+import '../model/help_support_model.dart';
+import '../services/help_and_support_services.dart';
 import '../widgets/enpandableWidget.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class HelpAndSupportScreen extends StatelessWidget {
-  const HelpAndSupportScreen({Key? key}) : super(key: key);
-
-  @override
+   HelpAndSupportScreen({Key? key}) : super(key: key);
+    HelpAndSupportConroller _helpAndSupportController = Get.put(HelpAndSupportConroller());
+    
+    
+    
+    @override
   Widget build(BuildContext context) {
+    if(_helpAndSupportController.isLoading.value){
+      _helpAndSupportController.getAllHelpAndSupportContent();
+    }
+    
     return Scaffold(
       backgroundColor: kPureWhite,
       appBar: AppBarForAccount(title: "help_support".tr,parentContext: context,),
-      body: ListView(
+      body: Obx(()=>_helpAndSupportController.isLoading.value?Center(child: CustomizedCircularProgress()):ListView(
         physics: const BouncingScrollPhysics(),
         children: [
           //whatsapp and call buttons
@@ -28,7 +42,7 @@ class HelpAndSupportScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("help_support_description".tr,style: AppTextStyle.black400Text,),
+                  Text(_helpAndSupportController.helpAndSupportDataModel!.response!.data!.description!,style: AppTextStyle.black400Text,),
                   SizedBox(height: 16*SizeConfig.heightMultiplier!,),
                   Row(
                     children: [
@@ -36,9 +50,8 @@ class HelpAndSupportScreen extends StatelessWidget {
                       Expanded(
                         child:InkWell(
                           onTap: (){
-                            //todo add whatsapp functionality
-                            Navigator.pushNamed(context, RouteName.privacyAndPolicy);
-                          },
+                            launch("https://Wa.me/${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.whatsAppNo}");
+                            },
                           child: Container(
                             height: 48*SizeConfig.heightMultiplier!,
                             decoration: BoxDecoration(
@@ -56,9 +69,10 @@ class HelpAndSupportScreen extends StatelessWidget {
                       Expanded(
                         child:InkWell(
                           onTap: (){
-                            //todo add call functionality
-                            Navigator.pushNamed(context, RouteName.termOfUse);
-                          },
+                            ///launch call with help no
+                            launch("tel://${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.callingNo}");
+
+                            },
                           child: Container(
                             height: 48*SizeConfig.heightMultiplier!,
                             decoration: BoxDecoration(
@@ -86,16 +100,17 @@ class HelpAndSupportScreen extends StatelessWidget {
             Padding(
                 padding: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 16*SizeConfig.heightMultiplier!),
                 child: Text("FAQs".tr,style: AppTextStyle.boldBlackText,)),
-            //todo add all the FAQ from cloud
-            ExpandableWidget(title: "How do I cancel my subscription?",content: "It stands for frequently-asked questions, and it’s a page on a website that gives quick answers to customer questions. The idea is to keep the answers short and direct so that people find info quickly."),
-          ExpandableWidget(title:"What is FitBasix?",content:"It stands for frequently-asked questions, and it’s a page on a website that gives quick answers to customer questions. The idea is to keep the answers short and direct so that people find info quickly."),
-          ExpandableWidget(title:"Are the program results guaranteed?",content:"It stands for frequently-asked questions, and it’s a page on a website that gives quick answers to customer questions. The idea is to keep the answers short and direct so that people find info quickly."),
-          ExpandableWidget(title:"How do I choose a Nutrition & Training coach?",content:"It stands for frequently-asked questions, and it’s a page on a website that gives quick answers to customer questions. The idea is to keep the answers short and direct so that people find info quickly."),
-          ExpandableWidget(title:"How do I connect with my Nutrition & Training coach?",content:"It stands for frequently-asked questions, and it’s a page on a website that gives quick answers to customer questions. The idea is to keep the answers short and direct so that people find info quickly."),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(_helpAndSupportController.helpAndSupportDataModel!.response!.data!.questionsAndAnswers!.length, (FAQIndex) {
+                return ExpandableWidget(title: _helpAndSupportController.helpAndSupportDataModel!.response!.data!.questionsAndAnswers![FAQIndex].question,content: _helpAndSupportController.helpAndSupportDataModel!.response!.data!.questionsAndAnswers![FAQIndex].answer,);
+              }
+              )
+            )
 
 
           ],
-      ),
+      ),)
 
     );
   }

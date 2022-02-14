@@ -1,24 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/cancelEnrollmentIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/enrollFrame.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/penicon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/sharefeedbackIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/trainerAvatar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/unmuteicon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/settings/deactivate.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/settings/delete.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/settings/notification.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/settings/private.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/enroll_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/message.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/settings/controller/setting_controller.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/settings/view/settings.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/fitbasix-flutter-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fitbasix-flutter-app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/constants/image_path.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/constants/image_path.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/routes/app_routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/routes/app_routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/menu_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/menu_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/trainer_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/trainer_profile_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="dart.analysis.tool.window.visible" value="false" />
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
+  <component name="ProjectId" id="24mPLy4VzjnlI5BzCMuVI6q2iAf" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="ToolWindowEmulator.ShowToolbar" value="false" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="com.android.tools.idea.emulator.frame.visible" value="false" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="D:/Flutter projects/Antino/furnkart" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\himan\OneDrive\Documents\GitHub\fitbasix-flutter-app\fitbasix\assets\message" />
+      <recent name="C:\Users\himan\OneDrive\Documents\GitHub\fitbasix-flutter-app\fitbasix\assets\settings" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Flavor: dev" type="FlutterRunConfigurationType" factoryName="Flutter" temporary="true">
+      <option name="additionalArgs" value="--flavor dev" />
+      <option name="buildFlavor" value="dev" />
+      <option name="filePath" value="$PROJECT_DIR$/fitbasix/lib/main_dev.dart" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Flutter.Flavor: dev" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="" />
+      <created>1644232740708</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1644232740708</updated>
+    </task>
     <servers />
   </component>
 </project>

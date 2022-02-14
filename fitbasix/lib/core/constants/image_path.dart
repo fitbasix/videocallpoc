@@ -1,7 +1,11 @@
 class ImagePath {
   static const String arrowRightIcon = "assets/Icons/arrow-right.svg";
+  static const String commentIcon = "assets/Icons/comment_icon.svg";
+  static const String privacyPolicyIcon = "assets/Icons/privacy_policy_icon.svg";
+  static const String termOfUseIcon = "assets/Icons/term_of_use_icon.svg";
+  static const String LiveIcon = "assets/Icons/live_icon.svg";
   static const String addPersonIcon = "assets/Icons/add_person_icon.svg";
-  static const String calanderIcon = "assets/Icons/calander_icon.svg";
+  static const String calanderIcon = "assets/Icons/calender_icon.svg";
   static const String personAddIcon = "assets/Icons/person_add_icon.svg";
   static const String fitBasixIcon = "assets/Icons/Fitbasix.svg";
   static const String whatsAppIcon = "assets/Icons/whatsapp_icon.svg";
@@ -58,4 +62,23 @@ class ImagePath {
   static const String appleHealth = "assets/home/appleHealth.png";
   static const String googleFit = "assets/home/googleFit.svg";
   static const String fitBit = "assets/home/fitbit.svg";
+
+  ///settings
+  static const String notificationIcon = "assets/settings/notification.svg";
+  static const String privateAccountIcon = "assets/settings/private.svg";
+  static const String deactivateAccountIcon = "assets/settings/deactivate.svg";
+  static const String deleteAccountIcon = "assets/settings/delete.svg";
+
+  ///message
+  static const String trainerAvatar = "assets/message/trainerAvatar.png";
+  static const String penIcon= "assets/message/penicon.svg";
+  static const String unmuteIcon = "assets/message/unmuteicon.svg";
+  static const String enrolltrainerFrame = "assets/message/enrollFrame.svg";
+  static const String cancelEnrollmentIcon = "assets/message/cancelEnrollmentIcon.svg";
+  static const String sharefeedbackIcon = "assets/message/sharefeedbackIcon.svg";
+
+  ///my trainer
+  static const String notrainerenrollframe = "assets/mytrainers/notrainerframe.svg";
+  static const String closedialogIcon = "assets/mytrainers/closedialogicon.svg";
 }
+

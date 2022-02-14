@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
@@ -23,6 +24,9 @@ import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart'
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
+
+import '../../Home/view/my_trainers_screen.dart';
+
 
 class TrainerProfileScreen extends StatefulWidget {
   const TrainerProfileScreen({Key? key}) : super(key: key);
@@ -67,8 +71,15 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
               setState(() {});
             },
-            onMessage: () {},
-            onEnroll: () {},
+            onMessage: () {
+              print('message pressed');
+              Navigator.pushNamed(context, RouteName.messageTrainer);
+            },
+            onEnroll: () {
+              showDialog(context: context,
+                  builder: (BuildContext context) => EnrollTrainerDialog());
+
+            },
             onBack: () {
               Navigator.pop(context);
             },
@@ -224,6 +235,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,
                                   ),
+
                                   Row(
                                     children: [
                                       Obx(

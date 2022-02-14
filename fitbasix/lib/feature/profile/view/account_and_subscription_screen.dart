@@ -5,6 +5,7 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import 'appbar_for_account.dart';
 
@@ -31,7 +32,7 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                     GestureDetector(
                         child: SvgPicture.asset(ImagePath.addPersonIcon,width: 16*SizeConfig.widthMultiplier!,height: 16*SizeConfig.heightMultiplier!,fit: BoxFit.contain,)),
                     SizedBox(width: 16.59*SizeConfig.widthMultiplier!,),
-                    Text("Edit Personal Information",style: AppTextStyle.NormalBlackTitleText,),
+                    Text("Edit_personal_info".tr,style: AppTextStyle.NormalBlackTitleText,),
                   ],
                 ),
               ),
@@ -44,7 +45,7 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                   GestureDetector(
                       child: SvgPicture.asset(ImagePath.personAddIcon,width: 24*SizeConfig.imageSizeMultiplier!,height: 24*SizeConfig.imageSizeMultiplier!,fit: BoxFit.contain,)),
                   SizedBox(width: 12*SizeConfig.widthMultiplier!,),
-                  Text("Subscription Details",style: AppTextStyle.NormalBlackTitleText,),
+                  Text("subscription_details".tr,style: AppTextStyle.NormalBlackTitleText,),
                 ],
               ),
             ),
