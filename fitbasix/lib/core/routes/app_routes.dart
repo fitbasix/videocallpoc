@@ -11,7 +11,6 @@ import 'package:fitbasix/feature/log_in/view/forgot_password.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:fitbasix/feature/log_in/view/reset_password.dart';
-import 'package:fitbasix/feature/message/view/enroll_screen.dart';
 import 'package:fitbasix/feature/message/view/message.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
@@ -57,7 +56,6 @@ abstract class RouteName {
   static const waterConsumed = "/water_consumed";
   static const userSetting = "/settings";
   static const messageTrainer = "/message";
-  static const enrolltrainerscreen = "/enroll_screen";
   RouteName._();
 }
 
@@ -223,15 +221,6 @@ class GenerateRoute {
             MessageTrainerScreen(),
       );
     }
-
-    if (route == RouteName.enrolltrainerscreen) {
-      return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnrollTrainer(),
-      );
-    }
-
-
     if (route == RouteName.getTrainedScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) =>

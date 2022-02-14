@@ -1,3 +1,4 @@
+import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/feature/settings/controller/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -82,7 +83,8 @@ class _SettingScreenState extends State<SettingScreen>  {
     return Container(
       width: 360 * SizeConfig.widthMultiplier!,
       //  height: 94 * SizeConfig.heightMultiplier!,
-      padding: EdgeInsets.fromLTRB(16 * SizeConfig.widthMultiplier!, 10 * SizeConfig.heightMultiplier!,
+      padding: EdgeInsets.fromLTRB(
+          16 * SizeConfig.widthMultiplier!, 10 * SizeConfig.heightMultiplier!,
           16 * SizeConfig.widthMultiplier!, 16 * SizeConfig.heightMultiplier!),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +96,7 @@ class _SettingScreenState extends State<SettingScreen>  {
             svgicon!,
              width: 16 * SizeConfig.widthMultiplier!,
             height: 19.5 * SizeConfig.heightMultiplier!,
-        fit: BoxFit.contain,
+            fit: BoxFit.contain,
        ),
           SizedBox(
             width: 16.59 * SizeConfig.widthMultiplier!,
@@ -116,11 +118,7 @@ class _SettingScreenState extends State<SettingScreen>  {
                 width: (wantbutton!)?230 * SizeConfig.widthMultiplier!: 285 * SizeConfig.widthMultiplier!,
                 //  height: 32 * SizeConfig.heightMultiplier!,
                 child: Text( description!,
-                  style: GoogleFonts.openSans(
-                    fontSize: (12) * SizeConfig.textMultiplier!,
-                    fontWeight: FontWeight.w400,
-                    color: kPureBlack,
-                  ),),
+                  style: AppTextStyle.hmediumBlackText),
               )
             ],
           ),
@@ -174,11 +172,7 @@ class AppBarForAccount extends StatelessWidget with PreferredSizeWidget {
             width: 16.59 * SizeConfig.widthMultiplier!,
           ),
           Text(title ?? "",
-              style: GoogleFonts.openSans(
-                fontSize: (16) * SizeConfig.textMultiplier!,
-                fontWeight: FontWeight.w600,
-                color: kPureBlack,
-              ))
+              style: AppTextStyle.hblack600Text)
         ],
       ),
     );

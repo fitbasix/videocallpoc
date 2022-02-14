@@ -25,6 +25,8 @@ import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
+import '../../Home/view/my_trainers_screen.dart';
+
 class TrainerProfileScreen extends StatelessWidget {
   const TrainerProfileScreen({Key? key}) : super(key: key);
 
@@ -48,7 +50,11 @@ class TrainerProfileScreen extends StatelessWidget {
               print('message pressed');
               Navigator.pushNamed(context, RouteName.messageTrainer);
             },
-            onEnroll: () {},
+            onEnroll: () {
+              showDialog(context: context,
+                  builder: (BuildContext context) => EnrollTrainerDialog());
+
+            },
             onBack: () {
               Navigator.pop(context);
             },

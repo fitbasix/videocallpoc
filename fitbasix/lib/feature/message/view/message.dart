@@ -1,9 +1,7 @@
 import 'package:fitbasix/core/constants/color_palette.dart';
-import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
@@ -20,7 +18,7 @@ class MessageTrainerScreen extends StatelessWidget {
 
   var trainerName = 'Jonathan Swift';
   var trainerStatus = 'Hey, please to meet you 👋 You can always text me if you have any questions.';
-
+  String trainerProfilePicUrl = 'http://www.pixelmator.com/community/download/file.php?avatar=17785_1569233053.png';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,11 +36,7 @@ class MessageTrainerScreen extends StatelessWidget {
               height: 12 * SizeConfig.heightMultiplier!,
             )),
         title: Text('my_trainer'.tr,
-            style: GoogleFonts.openSans(
-              fontSize: 16 * SizeConfig.textMultiplier!,
-              fontWeight: FontWeight.w600,
-              color: kPureBlack,
-            )),
+            style: AppTextStyle.hblack600Text),
         actions: [
           IconButton(
               onPressed: () {
@@ -61,21 +55,14 @@ class MessageTrainerScreen extends StatelessWidget {
                                   bottom: 30 * SizeConfig.heightMultiplier!),
                               child: Text(
                                 trainerName,
-                                style: GoogleFonts.openSans(
-                                  fontSize: (14) * SizeConfig.textMultiplier!,
-                                  fontWeight: FontWeight.w600,
-                                  color: kBlack,
-                                ),
+                                style: AppTextStyle.hblackSemiBoldText,
                               ),
                             ),
                             //bottomsheet open profile
                             BottomSheetField(
                               BottomFieldImage: ImagePath.penIcon,
                               BottomFieldText: 'open_profile'.tr,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, RouteName.enrolltrainerscreen);
-                              },
+                              onTap: () {},
                             ),
                             //bottomsheet mute notification
                             BottomSheetField(
@@ -128,15 +115,18 @@ class MessageTrainerScreen extends StatelessWidget {
                     SizedBox(
                       width: 24 * SizeConfig.widthMultiplier!,
                     ),
+                    // TrainerAvatar
                     Container(
                         width: 40 * SizeConfig.widthMultiplier!,
                         height: 40 * SizeConfig.heightMultiplier!,
                         child: InkWell(
                           onTap: null,
-                          child: Image.asset(
-                            ImagePath.trainerAvatar,
-                            width: 40 * SizeConfig.widthMultiplier!,
-                            height: 40 * SizeConfig.heightMultiplier!,
+                          child: CircleAvatar(
+                            child: Image.network(
+                              trainerProfilePicUrl,
+                              width: 40 * SizeConfig.widthMultiplier!,
+                              height: 40 * SizeConfig.heightMultiplier!,
+                            ),
                           ),
                         )),
                     SizedBox(
@@ -147,11 +137,7 @@ class MessageTrainerScreen extends StatelessWidget {
                       children: [
                         Text(
                           trainerName,
-                          style: GoogleFonts.openSans(
-                            fontSize: (14) * SizeConfig.textMultiplier!,
-                            fontWeight: FontWeight.w600,
-                            color: kPureBlack,
-                          ),
+                          style: AppTextStyle.hnormal600BlackText
                         ),
                         //_taggedBar Widget
                         _taggedBar(list: taggedPersonList)
@@ -162,11 +148,7 @@ class MessageTrainerScreen extends StatelessWidget {
                       padding: EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
                       child: Text(
                         '1:29 pm'.tr,
-                        style: GoogleFonts.openSans(
-                          fontSize: (12) * SizeConfig.textMultiplier!,
-                          fontWeight: FontWeight.w400,
-                          color: hintGrey,
-                        ),
+                        style: AppTextStyle.hsmallhintText
                       ),
                     )
                   ],
@@ -180,11 +162,7 @@ class MessageTrainerScreen extends StatelessWidget {
                         bottom: 16 * SizeConfig.heightMultiplier!),
                     child: Text(
                         trainerStatus,
-                        style: GoogleFonts.openSans(
-                          fontSize: (13) * SizeConfig.textMultiplier!,
-                          fontWeight: FontWeight.w600,
-                          color: kPureBlack,
-                        )),
+                        style: AppTextStyle.hmedium13Text),
                   ),
                 ),
                 Container(
@@ -195,20 +173,12 @@ class MessageTrainerScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Text('enrolled_on'.tr,
-                            style: GoogleFonts.openSans(
-                              fontSize: (12) * SizeConfig.textMultiplier!,
-                              fontWeight: FontWeight.w400,
-                              color: hintGrey,
-                            )),
+                            style: AppTextStyle.hsmallhintText),
                         SizedBox(
                           width: 4 * SizeConfig.widthMultiplier!,
                         ),
                         Text('7 Nov 2021'.tr,
-                            style: GoogleFonts.openSans(
-                              fontSize: (12) * SizeConfig.textMultiplier!,
-                              fontWeight: FontWeight.w600,
-                              color: kGreenColor,
-                            ))
+                            style: AppTextStyle.hsmallGreenText)
                       ],
                     ),
                   ),
@@ -256,7 +226,8 @@ class MessageTrainerScreen extends StatelessWidget {
                   BorderRadius.circular(28 * SizeConfig.heightMultiplier!)),
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: 12 * SizeConfig.widthMultiplier!),
+                horizontal: 12 * SizeConfig.widthMultiplier!
+            ),
             child: Center(
               child: Text(
                 '+' + (list.length - 1).toString().tr,
@@ -282,23 +253,22 @@ class BottomSheetField extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(
             bottom: 34 * SizeConfig.heightMultiplier!,
-            left: 18.5 * SizeConfig.widthMultiplier!),
+            left: 18.5 * SizeConfig.widthMultiplier!
+        ),
         child: GestureDetector(
           onTap: onTap,
           child: Container(
             color: Colors.transparent,
             child: Row(
               children: [
-                SvgPicture.asset(BottomFieldImage!,
+                SvgPicture.asset(
+                    BottomFieldImage!,
                     width: 16 * SizeConfig.widthMultiplier!,
-                    fit: BoxFit.contain),
+                    fit: BoxFit.contain
+                ),
                 SizedBox(width: 10.5 * SizeConfig.widthMultiplier!),
                 Text(BottomFieldText!,
-                    style: GoogleFonts.openSans(
-                      fontSize: (14) * SizeConfig.textMultiplier!,
-                      fontWeight: FontWeight.w600,
-                      color: kBlack,
-                    ))
+                    style: AppTextStyle.hblackSemiBoldText)
               ],
             ),
           ),

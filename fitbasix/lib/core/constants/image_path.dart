@@ -68,4 +68,8 @@ class ImagePath {
   static const String cancelEnrollmentIcon = "assets/message/cancelEnrollmentIcon.svg";
   static const String sharefeedbackIcon = "assets/message/sharefeedbackIcon.svg";
 
+  ///my trainer
+  static const String notrainerenrollframe = "assets/mytrainers/notrainerframe.svg";
+  static const String closedialogIcon = "assets/mytrainers/closedialogicon.svg";
 }
+
