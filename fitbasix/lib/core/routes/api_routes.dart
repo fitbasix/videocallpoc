@@ -3,6 +3,10 @@ class ApiUrl {
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
+  static String getTermOfUseContents = liveBaseURL + '/api/auth/termsOfService';
+  static String getPrivacyPolicyContents = liveBaseURL + '/api/auth/privacyPolicy';
+
+  static String getHelpAndSupportContents = liveBaseURL+'/api/auth/helpAndSupport';
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
   static String loginAndSignup = liveBaseURL + '/api/auth/login';
   static String registerUser = liveBaseURL + '/api/auth/create';
@@ -22,9 +26,10 @@ class ApiUrl {
   static String getSPGData = liveBaseURL + '/api/goal/getAll';
   static String updateGoal = liveBaseURL + '/api/goal/updateGoalDetails';
   static String getWater = liveBaseURL + '/api/nutrition/water/get';
- static String updateWater = liveBaseURL + '/api/nutrition/water/update';
+  static String updateWater = liveBaseURL + '/api/nutrition/water/update';
   static String waterReminderData =
       liveBaseURL + '/api/nutrition/water/getOptions';
+  static String doUnfollow = liveBaseURL + '/api/follow/doUnfollow';
 
   ///create post
   static String createPost = liveBaseURL + '/api/posts/create';
@@ -35,6 +40,7 @@ class ApiUrl {
   static String addComment = liveBaseURL + '/api/comment/add';
   static String getComment = liveBaseURL + '/api/comment/getCommentByPost';
   static String unlike = liveBaseURL + '/api/like/disLike';
+  static String explorePost = liveBaseURL + '/api/posts/explorePage';
 
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';

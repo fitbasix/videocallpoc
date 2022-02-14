@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -47,20 +48,21 @@ class HomeAndTrainerPage extends StatelessWidget {
       bottomNavigationBar: CustomBottomNavigationBar(),
       endDrawer: Drawer(
         child: Obx(
-          ()=> MenuScreen(
-              imageCoverPic: homeController.userProfileData.value.response == null
-                  ? ""
-                  : homeController
-                      .userProfileData.value.response!.data!.profile!.coverPhoto
-                      .toString(),
+          () => MenuScreen(
+              imageCoverPic:
+                  homeController.userProfileData.value.response == null
+                      ? ""
+                      : homeController.userProfileData.value.response!.data!
+                          .profile!.coverPhoto
+                          .toString(),
               name: homeController.userProfileData.value.response == null
                   ? ""
                   : homeController
                       .userProfileData.value.response!.data!.profile!.name!,
               imageUrl: homeController.userProfileData.value.response == null
                   ? ""
-                  : homeController
-                      .userProfileData.value.response!.data!.profile!.profilePhoto
+                  : homeController.userProfileData.value.response!.data!
+                      .profile!.profilePhoto
                       .toString()),
         ),
       ),
@@ -75,7 +77,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController _homeController = Get.find();
-
+  final PostController postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -96,11 +98,13 @@ class _HomePageState extends State<HomePage> {
           if (postQuery.response!.data!.length < 5) {
             _homeController.isNeedToLoadData.value = false;
             _homeController.trendingPostList.addAll(postQuery.response!.data!);
+            _homeController.showLoader.value = false;
 
             return;
           } else {
             if (_homeController.trendingPostList.last.id ==
                 postQuery.response!.data!.last.id) {
+              _homeController.showLoader.value = false;
               return;
             }
 
@@ -196,7 +200,12 @@ class _HomePageState extends State<HomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
+                                          _homeController
+                                              .userProfileData
+                                              .value
+                                              .response ==null?
+                                              Container()
+                                              :Text(
                                             'hi_name'.trParams({
                                               'name': _homeController
                                                   .userProfileData
@@ -243,7 +252,9 @@ class _HomePageState extends State<HomePage> {
                                   color: kPurple,
                                   title: 'live_stream'.tr,
                                   icon: Icons.videocam,
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pushNamed(context, RouteName.liveStream);
+                                  },
                                 ),
                                 HomeTile(
                                   color: kBlue,
@@ -258,13 +269,7 @@ class _HomePageState extends State<HomePage> {
                                   color: kLightGreen,
                                   title: 'my_plan'.tr,
                                   icon: Icons.list_alt,
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) =>
-                                                SetGoalIntroScreen()));
-                                  },
+                                  onTap: () {},
                                 )
                               ],
                             ),
@@ -380,17 +385,9 @@ class _HomePageState extends State<HomePage> {
                                                           .data![0]
                                                           .status!;
                                                   _homeController
-                                                          .waterTimingTo
-                                                          .value =
+                                                          .waterTimingTo.value =
                                                       TimeOfDay(
-                                                          hour: int.parse(_homeController
-                                                              .waterDetails
-                                                              .value
-                                                              .response!
-                                                              .data![0]
-                                                              .sleepTime!
-                                                              .split(":")[0]),
-                                                          minute: int.parse(
+                                                          hour: int.parse(
                                                               _homeController
                                                                   .waterDetails
                                                                   .value
@@ -398,8 +395,16 @@ class _HomePageState extends State<HomePage> {
                                                                   .data![0]
                                                                   .sleepTime!
                                                                   .split(
-                                                                      ":")[1]));
-                                                                      _homeController
+                                                                      ":")[0]),
+                                                          minute: int.parse(
+                                                              _homeController
+                                                                  .waterDetails
+                                                                  .value
+                                                                  .response!
+                                                                  .data![0]
+                                                                  .sleepTime!
+                                                                  .split(":")[1]));
+                                                  _homeController
                                                           .waterTimingFrom
                                                           .value =
                                                       TimeOfDay(
@@ -799,7 +804,18 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Spacer(),
                                   GreenCircleArrowButton(
-                                    onTap: () {},
+                                    onTap: () async{
+                                      _homeController.explorePageCount.value = 0;
+                                      Navigator.pushNamed(context, RouteName.exploreSearch);
+                                      postController.getCategory();
+                                      _homeController.isExploreDataLoading.value=true;
+                                     _homeController.explorePostModel.value= await HomeService.getExplorePosts(
+                                       skip: 0,
+                                     );
+                                     _homeController.explorePostList.value=_homeController.explorePostModel.value.response!.data!;
+                                      _homeController.isExploreDataLoading.value=false;
+
+                                    },
                                   )
                                 ],
                               ),
@@ -853,7 +869,8 @@ class _HomePageState extends State<HomePage> {
                                                     PostTile(
                                                       comment: _homeController
                                                           .trendingPostList[
-                                                              index].commentgiven,
+                                                              index]
+                                                          .commentgiven,
                                                       name: _homeController
                                                           .trendingPostList[
                                                               index]
@@ -982,13 +999,55 @@ class _HomePageState extends State<HomePage> {
                                                           .trendingPostList[
                                                               index]
                                                           .isLiked!,
-                                                      onTap: () {
-                                                        Navigator.push(
+                                                      onTap: () async {
+                                                        _homeController
+                                                            .commentsList
+                                                            .clear();
+                                                        Navigator.pushNamed(
                                                             context,
-                                                            MaterialPageRoute(
-                                                                builder: (_) =>
-                                                                    PostScreen()));
+                                                            RouteName
+                                                                .postScreen);
+                                                        _homeController.post
+                                                            .value = _homeController
+                                                                .trendingPostList[
+                                                            index];
+                                                        _homeController
+                                                            .commentsLoading
+                                                            .value = true;
+                                                        _homeController
+                                                                .postComments
+                                                                .value =
+                                                            await HomeService
+                                                                .fetchComment(
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!);
+
+                                                        if (_homeController
+                                                                .postComments
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .length !=
+                                                            0) {
+                                                          _homeController
+                                                                  .commentsList
+                                                                  .value =
+                                                              _homeController
+                                                                  .postComments
+                                                                  .value
+                                                                  .response!
+                                                                  .data!;
+                                                        }
+                                                        _homeController
+                                                            .commentsLoading
+                                                            .value = false;
                                                       },
+                                                      people: _homeController
+                                                          .trendingPostList[
+                                                              index]
+                                                          .people!,
                                                     ),
                                                     Container(
                                                       height: 16 *

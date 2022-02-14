@@ -207,6 +207,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                     .trainers![index]
                                                     .user!
                                                     .id!);
+                                    _trainerController.loadingIndicator.value =
+                                        false;
                                     _trainerController.initialPostData.value =
                                         await TrainerServices.getTrainerPosts(
                                             _trainerController
@@ -216,7 +218,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .data!
                                                 .trainers![index]
                                                 .user!
-                                                .id!,0);
+                                                .id!,
+                                            0);
                                     if (_trainerController.initialPostData.value
                                             .response!.data!.length !=
                                         0) {
@@ -416,6 +419,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                     .fitnessConsultant![index]
                                                     .user!
                                                     .id!);
+                                    _trainerController.loadingIndicator.value =
+                                        false;
                                     _trainerController.initialPostData.value =
                                         await TrainerServices.getTrainerPosts(
                                             _trainerController
@@ -425,7 +430,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .data!
                                                 .fitnessConsultant![index]
                                                 .user!
-                                                .id!,0);
+                                                .id!,
+                                            0);
                                     if (_trainerController.initialPostData.value
                                             .response!.data!.length !=
                                         0) {
@@ -624,6 +630,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                     .nutritionConsultant![index]
                                                     .user!
                                                     .id!);
+                                    _trainerController.loadingIndicator.value =
+                                        false;
                                     _trainerController.initialPostData.value =
                                         await TrainerServices.getTrainerPosts(
                                             _trainerController
@@ -633,7 +641,8 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .data!
                                                 .nutritionConsultant![index]
                                                 .user!
-                                                .id!,0);
+                                                .id!,
+                                            0);
                                     if (_trainerController.initialPostData.value
                                             .response!.data!.length !=
                                         0) {

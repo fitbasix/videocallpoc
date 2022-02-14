@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyle {
+
+
   static TextStyle italicWelcomeText = GoogleFonts.openSans(
     fontSize: (16) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w400,
@@ -15,10 +17,36 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     color: kPureWhite,
   );
+  static TextStyle NormalBlackTitleText = GoogleFonts.openSans(
+    fontSize: (16) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kPureBlack,
+  );
+
   static TextStyle white400Text = GoogleFonts.openSans(
     fontSize: (14) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w400,
     color: kPureWhite,
+  );
+  static TextStyle lightBlack400Text = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: lightBlack,
+  );
+  static TextStyle black600Text = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kPureBlack,
+  );
+  static TextStyle grey400Text = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: hintGrey,
+  );
+  static TextStyle black400Text = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w400,
+    color: kPureBlack,
   );
   static TextStyle NormalText = GoogleFonts.openSans(
     fontSize: (16) * SizeConfig.textMultiplier!,
@@ -44,6 +72,11 @@ class AppTextStyle {
     fontWeight: FontWeight.w400,
     color: darkGreyColor,
   );
+  static TextStyle smallWhiteText600 = GoogleFonts.openSans(
+    fontSize: (12) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kPureWhite,
+  );
   static TextStyle smallBlackText = GoogleFonts.openSans(
     fontSize: (10) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w400,
@@ -53,6 +86,11 @@ class AppTextStyle {
     fontSize: (18) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w600,
     color: lightBlack,
+  );
+  static TextStyle boldWhiteText = GoogleFonts.openSans(
+    fontSize: (17) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kPureWhite,
   );
   static TextStyle greenSemiBoldText = GoogleFonts.openSans(
     fontSize: (14) * SizeConfig.textMultiplier!,
@@ -68,6 +106,21 @@ class AppTextStyle {
     fontSize: (14) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w500,
     color: kPureBlack,
+  );
+  static TextStyle normalPureBlackTextWithWeight600 = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kPureBlack,
+  );
+  static TextStyle greyTextWithWeight600 = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: hintGrey,
+  );
+  static TextStyle whiteTextWithWeight600 = GoogleFonts.openSans(
+    fontSize: (14) * SizeConfig.textMultiplier!,
+    fontWeight: FontWeight.w600,
+    color: kPureWhite,
   );
   static TextStyle normalGreenText = GoogleFonts.openSans(
     fontSize: (14) * SizeConfig.textMultiplier!,

@@ -40,11 +40,12 @@ class Response {
   });
 
   final String? message;
-  final List<Comment>? data;
+  final List<Comments>? data;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
         message: json["message"],
-        data: List<Comment>.from(json["data"].map((x) => Comment.fromJson(x))),
+        data:
+            List<Comments>.from(json["data"].map((x) => Comments.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -53,19 +54,19 @@ class Response {
       };
 }
 
-class Comment {
-  Comment({
-    this.id,
-    this.postId,
-    this.comment,
-    this.user,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
-    this.reply,
-    this.likes,
-    this.datumId,
-  });
+class Comments {
+  Comments(
+      {this.id,
+      this.postId,
+      this.comment,
+      this.user,
+      this.createdAt,
+      this.updatedAt,
+      this.v,
+      this.reply,
+      this.likes,
+      this.datumId,
+      this.isLiked});
 
   final String? id;
   final String? postId;
@@ -75,21 +76,24 @@ class Comment {
   final DateTime? updatedAt;
   final int? v;
   final int? reply;
-  final int? likes;
+  int? likes;
   final String? datumId;
+  bool? isLiked;
 
-  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-        id: json["_id"],
-        postId: json["postId"],
-        comment: json["comment"],
-        user: User.fromJson(json["user"]),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
-        reply: json["reply"],
-        likes: json["likes"],
-        datumId: json["id"],
-      );
+  factory Comments.fromJson(Map<String, dynamic> json) => Comments(
+      id: json["_id"],
+      postId: json["postId"],
+      comment: json["comment"],
+      user: User.fromJson(json["user"]),
+      createdAt: DateTime.parse(json["createdAt"]),
+      updatedAt: json["updatedAt"] == null
+          ? DateTime(1991)
+          : DateTime.parse(json["updatedAt"]),
+      v: json["__v"],
+      reply: json["reply"],
+      likes: json["likes"],
+      datumId: json["id"],
+      isLiked: json["isLiked"]);
 
   Map<String, dynamic> toJson() => {
         "_id": id,

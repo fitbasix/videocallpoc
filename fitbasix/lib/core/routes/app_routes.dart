@@ -1,8 +1,16 @@
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
+import 'package:fitbasix/feature/Home/view/post_screen.dart';
+import 'package:fitbasix/feature/Home/view/explore.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
+import 'package:fitbasix/feature/help_and_support/view/help_and_support_screen.dart';
+import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/legal_screen.dart';
+import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/privacy_policy_screen.dart';
+import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/term_of_use_screen.dart';
+import 'package:fitbasix/feature/live_stream/view/live_stream_screen.dart';
+import 'package:fitbasix/feature/live_stream/view/scheduled_live_information_screen.dart';
 import 'package:fitbasix/feature/log_in/view/enter_details_page.dart';
 import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
 import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
@@ -17,6 +25,8 @@ import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:fitbasix/feature/settings/view/settings.dart';
+import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
+import 'package:fitbasix/feature/profile/view/edit_personal_info_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_activity.dart';
 import 'package:fitbasix/feature/spg/view/set_bodyFat.dart';
 import 'package:fitbasix/feature/spg/view/set_foodType.dart';
@@ -56,6 +66,16 @@ abstract class RouteName {
   static const waterConsumed = "/water_consumed";
   static const userSetting = "/settings";
   static const messageTrainer = "/message";
+  static const postScreen = '/post_screen';
+  static const exploreSearch = "/explore_search";
+  static const accountAndSubscription = "/account_and_subscription_screen";
+  static const editPersonalInfo = "/edit_personal_info_screen";
+  static const helpAndSupport = "/help_and_support_screen";
+  static const legal = "/legal_screen";
+  static const privacyAndPolicy = "/privacy_policy_screen";
+  static const termOfUse = "/term_of_use_screen";
+  static const liveStream = "/live_stream_screen";
+  static const scheduledLiveStreamInformation = "/scheduled_live_information_screen";
   RouteName._();
 }
 
@@ -65,38 +85,71 @@ class GenerateRoute {
 
     if (route == RouteName.loginScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             LoginScreen(),
+      );
+    }
+    if (route == RouteName.legal) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            LegalScreen(),
+      );
+    }
+    if (route == RouteName.scheduledLiveStreamInformation) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            ScheduledLiveInformationScreen(),
+      );
+    }
+    if (route == RouteName.liveStream) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            LiveStreamScreen(),
+      );
+    }
+    if (route == RouteName.termOfUse) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            TermOfUseScreen(),
+      );
+    }
+    if (route == RouteName.privacyAndPolicy) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            PrivacyPolicyScreen(),
+      );
+    }
+    if (route == RouteName.helpAndSupport) {
+      return MaterialPageRoute(
+        builder: (BuildContext context,) =>
+            HelpAndSupportScreen(),
       );
     }
     if (route == RouteName.otpScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            OtpScreen(),
+        builder: (BuildContext context) => OtpScreen(),
       );
     }
     if (route == RouteName.enterDetails) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnterDetailsPage(),
+        builder: (BuildContext context) => EnterDetailsPage(),
       );
     }
     if (route == RouteName.homePage) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            HomeAndTrainerPage(),
+        builder: (BuildContext context) => HomeAndTrainerPage(),
       );
     }
     if (route == RouteName.enterMobileGoogle) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnterMobileDetailsGoogle(),
+        builder: (BuildContext context) => EnterMobileDetailsGoogle(),
       );
     }
     if (route == RouteName.enterOTPGoogle) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnterOTPGoogle(),
+        builder: (BuildContext context) => EnterOTPGoogle(),
       );
     }
     if (route == RouteName.customGallery) {
@@ -111,51 +164,46 @@ class GenerateRoute {
     }
     if (route == RouteName.enterPasswordPage) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            EnterPassword(),
+        builder: (BuildContext context) => EnterPassword(),
       );
     }
     if (route == RouteName.forgotPassword) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            ForgotPassword(),
+        builder: (BuildContext context) => ForgotPassword(),
       );
     }
     if (route == RouteName.resetPassword) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             ResetPassword(),
       );
     }
     if (route == RouteName.allTrainerScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            AllTrainerScreen(),
+        builder: (BuildContext context) => AllTrainerScreen(),
       );
     }
     if (route == RouteName.trainerProfileScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            TrainerProfileScreen(),
+        builder: (BuildContext context) => TrainerProfileScreen(),
       );
     }
 
     if (route == RouteName.waterConsumed) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            ConsumptionScreen(),
+        builder: (BuildContext context) => ConsumptionScreen(),
       );
     }
     if (route == RouteName.selectLocationScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SelectLocationScreen(),
+        builder: (BuildContext context) => SelectLocationScreen(),
       );
     }
     if (route == RouteName.tagPeopleScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            TagPeopleScreen(),
+        builder: (BuildContext context) => TagPeopleScreen(),
       );
     }
     if (route == RouteName.setGoalIntro) {
@@ -188,23 +236,32 @@ class GenerateRoute {
         builder: (BuildContext context) => SetBodyFat(),
       );
     }
+    if (route == RouteName.exploreSearch) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => ExploreFeed(),
+      );
+    }
     if (route == RouteName.customGallery) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SelectMediaScreen(),
+        builder: (BuildContext context) => SelectMediaScreen(),
       );
     }
     if (route == RouteName.setFoodType) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SetFoodType(),
+        builder: (BuildContext context) => SetFoodType(),
       );
     }
 
     if (route == RouteName.setActivity) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SetActivity(),
+        builder: (BuildContext context) => SetActivity(),
+      );
+    }
+
+    if (route == RouteName.postScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => PostScreen(),
+
       );
     }
 
@@ -223,10 +280,20 @@ class GenerateRoute {
     }
     if (route == RouteName.getTrainedScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            GetTrainedScreen(),
+        builder: (BuildContext context) => GetTrainedScreen(),
       );
-    } else {
+    }
+    if (route == RouteName.accountAndSubscription) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => AccountAndSubscriptionScreen(),
+      );
+    }
+    if (route == RouteName.editPersonalInfo) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => EditPersonalInfoScreen(),
+      );
+    }
+    else {
       return PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>

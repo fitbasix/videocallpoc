@@ -163,18 +163,18 @@ class _DropDownTopHeader extends StatelessWidget {
             SizedBox(
               width: 12,
             ),
-            if (isExpanded)
-              Icon(
-                Icons.keyboard_arrow_up_rounded,
-                color: Colors.black,
-                size: 36,
-              )
-            else
-              Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Colors.black,
-                size: 36,
-              ),
+            // if (isExpanded)
+            //   Icon(
+            //     Icons.keyboard_arrow_up_rounded,
+            //     color: Colors.black,
+            //     size: 36,
+            //   )
+            // else
+            //   Icon(
+            //     Icons.keyboard_arrow_down_rounded,
+            //     color: Colors.black,
+            //     size: 36,
+            //   ),
           ],
         ),
       ),

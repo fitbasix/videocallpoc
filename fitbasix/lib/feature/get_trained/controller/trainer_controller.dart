@@ -35,6 +35,7 @@ class TrainerController extends GetxController {
   RxInt currentPostPage = RxInt(1);
   RxList<Post> trainerPostList = RxList<Post>([]);
   Rx<PostsModel> initialPostData = Rx(PostsModel());
+  RxBool loadingIndicator = RxBool(false);
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;

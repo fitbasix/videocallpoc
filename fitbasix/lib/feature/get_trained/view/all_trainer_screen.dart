@@ -527,6 +527,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                       .trainers![index]
                                                       .user!
                                                       .id!);
+                                      _trainerController
+                                          .loadingIndicator.value = false;
                                       _trainerController.initialPostData.value =
                                           await TrainerServices.getTrainerPosts(
                                               _trainerController
@@ -536,7 +538,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                   .data!
                                                   .trainers![index]
                                                   .user!
-                                                  .id!,0);
+                                                  .id!,
+                                              0);
                                       if (_trainerController.initialPostData
                                               .value.response!.data!.length !=
                                           0) {

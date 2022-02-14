@@ -1,6 +1,15 @@
 class ImagePath {
   static const String arrowRightIcon = "assets/Icons/arrow-right.svg";
+  static const String commentIcon = "assets/Icons/comment_icon.svg";
+  static const String privacyPolicyIcon = "assets/Icons/privacy_policy_icon.svg";
+  static const String termOfUseIcon = "assets/Icons/term_of_use_icon.svg";
+  static const String LiveIcon = "assets/Icons/live_icon.svg";
+  static const String addPersonIcon = "assets/Icons/add_person_icon.svg";
+  static const String calanderIcon = "assets/Icons/calender_icon.svg";
+  static const String personAddIcon = "assets/Icons/person_add_icon.svg";
   static const String fitBasixIcon = "assets/Icons/Fitbasix.svg";
+  static const String whatsAppIcon = "assets/Icons/whatsapp_icon.svg";
+  static const String phoneCallIcon = "assets/Icons/phone_call_icon.svg";
   static const String fitBasixIconBlack = "assets/Icons/Fitbasix-black.svg";
   static const String googleICon = "assets/Icons/google-icon.svg";
   static const String appleIcon = "assets/Icons/apple-icon.svg";
