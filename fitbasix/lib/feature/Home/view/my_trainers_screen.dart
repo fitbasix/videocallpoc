@@ -5,6 +5,7 @@ import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
+import '../../../core/routes/app_routes.dart';
 
 class MyTrainersScreen extends StatelessWidget {
   const MyTrainersScreen({Key? key}) : super(key: key);
@@ -86,7 +87,9 @@ class NoTrainerScreen extends StatelessWidget {
                 width: double.infinity * SizeConfig.widthMultiplier!,
                 height: 48 * SizeConfig.heightMultiplier!,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteName.myTrainer);
+                  },
                   child: Text('enroll_now'.tr,
                       style: AppTextStyle.hboldWhiteText),
                 ),
@@ -187,3 +190,4 @@ class EnrollTrainerDialog extends StatelessWidget {
     );
   }
 }
+

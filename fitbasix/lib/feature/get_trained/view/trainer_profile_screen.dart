@@ -73,7 +73,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             },
             onMessage: () {
               print('message pressed');
-              Navigator.pushNamed(context, RouteName.messageTrainer);
+             // Navigator.pushNamed(context, RouteName.trainerchatscreen);
             },
             onEnroll: () {
               showDialog(context: context,

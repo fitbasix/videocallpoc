@@ -69,7 +69,7 @@ class ImagePath {
   static const String deactivateAccountIcon = "assets/settings/deactivate.svg";
   static const String deleteAccountIcon = "assets/settings/delete.svg";
 
-  ///message
+  ///mytrainertile
   static const String trainerAvatar = "assets/message/trainerAvatar.png";
   static const String penIcon= "assets/message/penicon.svg";
   static const String unmuteIcon = "assets/message/unmuteicon.svg";
@@ -80,5 +80,12 @@ class ImagePath {
   ///my trainer
   static const String notrainerenrollframe = "assets/mytrainers/notrainerframe.svg";
   static const String closedialogIcon = "assets/mytrainers/closedialogicon.svg";
+
+  ///UI chat
+  static const String chatdocumentIcon = "assets/message/documentIcon.svg";
+  static const String chatpopupmenuIcon = "assets/message/popmenuitem.svg";
+  static const String attachdocumentIcon = "assets/message/attachdocumentIcon.svg";
+  static const String openCameraIcon = "assets/message/opencameraIcon.svg";
+  static const String chatMicIcon = "assets/message/chatMicIcon.svg";
 }
 
