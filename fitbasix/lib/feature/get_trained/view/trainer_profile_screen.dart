@@ -51,10 +51,20 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             onFollow: () {
               if (trainerController.atrainerDetail.value.isFollowing!) {
                 trainerController.atrainerDetail.value.isFollowing = false;
+                trainerController.atrainerDetail.value.followers =
+                    (int.tryParse(trainerController
+                                .atrainerDetail.value.followers!)! -
+                            1)
+                        .toString();
                 TrainerServices.unFollowTrainer(
                     trainerController.atrainerDetail.value.user!.id!);
               } else {
                 trainerController.atrainerDetail.value.isFollowing = true;
+                trainerController.atrainerDetail.value.followers =
+                    (int.tryParse(trainerController
+                                .atrainerDetail.value.followers!)! +
+                            1)
+                        .toString();
                 TrainerServices.followTrainer(
                     trainerController.atrainerDetail.value.user!.id!);
               }
