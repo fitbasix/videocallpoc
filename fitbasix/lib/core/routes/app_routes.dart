@@ -19,7 +19,8 @@ import 'package:fitbasix/feature/log_in/view/forgot_password.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:fitbasix/feature/log_in/view/reset_password.dart';
-import 'package:fitbasix/feature/message/view/message.dart';
+import 'package:fitbasix/feature/message/view/chat_ui.dart';
+import 'package:fitbasix/feature/message/view/my_trainer_tile.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
@@ -65,7 +66,7 @@ abstract class RouteName {
   static const getTrainedScreen = '/get_trained';
   static const waterConsumed = "/water_consumed";
   static const userSetting = "/settings";
-  static const messageTrainer = "/message";
+  static const myTrainer = "/my_trainer_tile.dart";
   static const postScreen = '/post_screen';
   static const exploreSearch = "/explore_search";
   static const accountAndSubscription = "/account_and_subscription_screen";
@@ -76,6 +77,7 @@ abstract class RouteName {
   static const termOfUse = "/term_of_use_screen";
   static const liveStream = "/live_stream_screen";
   static const scheduledLiveStreamInformation = "/scheduled_live_information_screen";
+  static const trainerchatscreen = "/chat_ui";
   RouteName._();
 }
 
@@ -272,10 +274,10 @@ class GenerateRoute {
       );
     }
 
-    if (route == RouteName.messageTrainer) {
+    if (route == RouteName.myTrainer) {
       return MaterialPageRoute(
         builder: (BuildContext context) =>
-            MessageTrainerScreen(),
+            MyTrainerTileScreen(),
       );
     }
     if (route == RouteName.getTrainedScreen) {
@@ -286,6 +288,11 @@ class GenerateRoute {
     if (route == RouteName.accountAndSubscription) {
       return MaterialPageRoute(
         builder: (BuildContext context) => AccountAndSubscriptionScreen(),
+      );
+    }
+    if (route == RouteName.trainerchatscreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => ChatScreen(),
       );
     }
     if (route == RouteName.editPersonalInfo) {

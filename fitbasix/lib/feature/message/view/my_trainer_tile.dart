@@ -5,8 +5,9 @@ import 'package:get/get.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
+import '../../../core/routes/app_routes.dart';
 
-class MessageTrainerScreen extends StatelessWidget {
+class MyTrainerTileScreen extends StatelessWidget {
 
   List<String> taggedPersonList = [
     "Sports Nutrition",
@@ -62,7 +63,8 @@ class MessageTrainerScreen extends StatelessWidget {
                             BottomSheetField(
                               BottomFieldImage: ImagePath.penIcon,
                               BottomFieldText: 'open_profile'.tr,
-                              onTap: () {},
+                              onTap: () {
+                              },
                             ),
                             //bottomsheet mute notification
                             BottomSheetField(
