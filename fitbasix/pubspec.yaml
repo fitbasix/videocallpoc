@@ -61,6 +61,8 @@ dependencies:
   flutter_holo_date_picker: ^1.0.1+2
   flutter_ruler_picker: ^1.0.2
   intl: ^0.17.0
+  quickblox_sdk: ^0.6.5-beta
+  crypt: ^4.2.1
   readmore: ^2.1.0
   health: ^3.4.3
   syncfusion_flutter_charts: ^19.4.48
