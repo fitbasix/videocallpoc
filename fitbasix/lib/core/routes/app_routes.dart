@@ -25,6 +25,8 @@ import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
+import 'package:fitbasix/feature/profile/view/edit_userprofile_info.dart';
+import 'package:fitbasix/feature/profile/view/user_profile_info.dart';
 import 'package:fitbasix/feature/settings/view/settings.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
 import 'package:fitbasix/feature/profile/view/edit_personal_info_screen.dart';
@@ -78,6 +80,9 @@ abstract class RouteName {
   static const liveStream = "/live_stream_screen";
   static const scheduledLiveStreamInformation = "/scheduled_live_information_screen";
   static const trainerchatscreen = "/chat_ui";
+  static const userprofileinfo = "/user_profile_info";
+  static const edituserProfileScreen = "/edit_userprofile_info";
+
   RouteName._();
 }
 
@@ -295,6 +300,16 @@ class GenerateRoute {
         builder: (BuildContext context) => ChatScreen(),
       );
     }
+    if (route == RouteName.userprofileinfo) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => UserProfileScreen(),
+      );
+    }
+    if (route == RouteName.edituserProfileScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => EditProfileScreen(),
+      );
+    }
     if (route == RouteName.editPersonalInfo) {
       return MaterialPageRoute(
         builder: (BuildContext context) => EditPersonalInfoScreen(),
@@ -306,6 +321,5 @@ class GenerateRoute {
                   Animation<double> secondaryAnimation) =>
               LoginScreen());
     }
-
   }
 }

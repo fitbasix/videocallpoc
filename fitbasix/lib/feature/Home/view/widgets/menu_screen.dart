@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -29,63 +28,69 @@ class MenuScreen extends StatelessWidget {
         width: 300 * SizeConfig.widthMultiplier!,
         child: Column(
           children: [
-            Container(
-              height: 160 * SizeConfig.heightMultiplier!,
-              width: 300 * SizeConfig.widthMultiplier!,
-              child: Stack(
-                children: [
-                  Image.network(
-                    imageCoverPic,
-                    height: 160 * SizeConfig.heightMultiplier!,
-                    width: 300 * SizeConfig.widthMultiplier!,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
+            GestureDetector(
+              onTap: (){
+                Navigator.pushNamed(
+                    context, RouteName.userprofileinfo);
+              },
+              child: Container(
+                height: 160 * SizeConfig.heightMultiplier!,
+                width: 300 * SizeConfig.widthMultiplier!,
+                child: Stack(
+                  children: [
+                    Image.network(
+                      imageCoverPic,
                       height: 160 * SizeConfig.heightMultiplier!,
                       width: 300 * SizeConfig.widthMultiplier!,
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-                        child: Container(
-                          height: 160 * SizeConfig.heightMultiplier!,
-                          width: 300 * SizeConfig.widthMultiplier!,
-                          color: Colors.black.withOpacity(0.5),
+                      fit: BoxFit.cover,
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        height: 160 * SizeConfig.heightMultiplier!,
+                        width: 300 * SizeConfig.widthMultiplier!,
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+                          child: Container(
+                            height: 160 * SizeConfig.heightMultiplier!,
+                            width: 300 * SizeConfig.widthMultiplier!,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    left: 18 * SizeConfig.widthMultiplier!,
-                    bottom: 16 * SizeConfig.heightMultiplier!,
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              30 * SizeConfig.widthMultiplier!),
-                          child: CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              fit: BoxFit.cover,
-                              height: 64 * SizeConfig.widthMultiplier!,
-                              width: 64 * SizeConfig.widthMultiplier!),
-                        ),
-                        SizedBox(height: 8 * SizeConfig.widthMultiplier!),
-                        Text(
-                          name.toString(),
-                          style: AppTextStyle.normalWhiteText.copyWith(
-                              color: kPureWhite,
-                              fontSize: 18 * SizeConfig.textMultiplier!),
-                        )
-                      ],
-                    ),
-                  )
-                  // Container(
-                  //   height: 160 * SizeConfig.heightMultiplier!,
-                  //   width: 300 * SizeConfig.widthMultiplier!,
-                  //   color: Colors.black.withOpacity(0.55),
-                  // )
-                ],
+                    Positioned(
+                      left: 18 * SizeConfig.widthMultiplier!,
+                      bottom: 16 * SizeConfig.heightMultiplier!,
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                30 * SizeConfig.widthMultiplier!),
+                            child: CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.cover,
+                                height: 64 * SizeConfig.widthMultiplier!,
+                                width: 64 * SizeConfig.widthMultiplier!),
+                          ),
+                          SizedBox(height: 8 * SizeConfig.widthMultiplier!),
+                          Text(
+                            name.toString(),
+                            style: AppTextStyle.normalWhiteText.copyWith(
+                                color: kPureWhite,
+                                fontSize: 18 * SizeConfig.textMultiplier!),
+                          )
+                        ],
+                      ),
+                    )
+                    // Container(
+                    //   height: 160 * SizeConfig.heightMultiplier!,
+                    //   width: 300 * SizeConfig.widthMultiplier!,
+                    //   color: Colors.black.withOpacity(0.55),
+                    // )
+                  ],
+                ),
               ),
             ),
             MenuItem(
