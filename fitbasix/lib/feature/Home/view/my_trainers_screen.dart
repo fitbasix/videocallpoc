@@ -88,7 +88,6 @@ class NoTrainerScreen extends StatelessWidget {
                 height: 48 * SizeConfig.heightMultiplier!,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, RouteName.myTrainer);
                   },
                   child: Text('enroll_now'.tr,
                       style: AppTextStyle.hboldWhiteText),

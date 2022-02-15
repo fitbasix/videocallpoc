@@ -64,7 +64,6 @@ class MyTrainerTileScreen extends StatelessWidget {
                               BottomFieldImage: ImagePath.penIcon,
                               BottomFieldText: 'open_profile'.tr,
                               onTap: () {
-                                Navigator.pushNamed(context, RouteName.trainerchatscreen);
                               },
                             ),
                             //bottomsheet mute notification
