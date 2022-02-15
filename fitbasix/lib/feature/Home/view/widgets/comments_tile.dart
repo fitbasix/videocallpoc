@@ -17,6 +17,8 @@ class CommentsTile extends StatelessWidget {
     required this.profilePhoto,
     required this.onReply,
     required this.onLikeComment,
+    this.replyCount,
+    required this.minWidth,
   }) : super(key: key);
 
   final String name;
@@ -26,6 +28,8 @@ class CommentsTile extends StatelessWidget {
   final String profilePhoto;
   final VoidCallback onReply;
   final VoidCallback onLikeComment;
+  final int? replyCount;
+  final double minWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,10 @@ class CommentsTile extends StatelessWidget {
             children: [
               Container(
                 // height: 84 * SizeConfig.heightMultiplier!,
-                width: Get.width - 80 * SizeConfig.widthMultiplier!,
+                // width: Get.width - 80 * SizeConfig.widthMultiplier!,
+                constraints:
+                    BoxConstraints(minWidth: minWidth, maxWidth: Get.width),
+
                 padding: EdgeInsets.only(
                     top: 12 * SizeConfig.heightMultiplier!,
                     left: 12 * SizeConfig.widthMultiplier!,

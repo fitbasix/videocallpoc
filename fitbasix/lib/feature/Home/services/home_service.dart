@@ -5,6 +5,7 @@ import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
+import 'package:fitbasix/feature/Home/model/post_model.dart';
 import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
 import 'package:fitbasix/feature/Home/model/water_model.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
@@ -110,15 +111,34 @@ class HomeService {
     print(response.data['code']);
   }
 
+  static Future<void> replyComment(String commentId, String comment) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.post(ApiUrl.replyComment,
+        data: {"commentId": commentId, "comment": comment});
+
+    log(response.toString());
+    print(response.data['code']);
+  }
+
   static Future<CommentModel> fetchComment(
-    String postId,
-  ) async {
+      {String? postId, String? commentId, int? skip, int? limit}) async {
     print(postId);
     var access = await LogInService.getAccessToken();
     print(access);
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.getComment, data: {"postId": postId});
+    Map getPostComment = {
+      "postId": postId,
+      "skip": skip == null ? 0 : skip * 5
+    };
+    Map getCommentReply = {
+      "commentId": commentId,
+      "skipReply": skip == null ? 0 : skip * 3,
+      "limitReply": limit
+    };
+    var response = await dio!.post(ApiUrl.getComment,
+        data: postId == null ? getCommentReply : getPostComment);
 
     log(response.toString());
 
@@ -131,5 +151,17 @@ class HomeService {
 
     var response = await dio!.post(ApiUrl.waterReminderData, data: {});
     return reminderSourceFromJson(response.toString());
+  }
+
+  static Future<PostModel> getPostById(String postId) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response =
+        await dio!.post(ApiUrl.getPostById, data: {"postId": postId});
+
+    log(response.toString());
+
+    return postModelFromJson(response.toString());
   }
 }

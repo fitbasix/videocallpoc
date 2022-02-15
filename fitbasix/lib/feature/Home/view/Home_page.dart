@@ -200,23 +200,23 @@ class _HomePageState extends State<HomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          _homeController
-                                              .userProfileData
-                                              .value
-                                              .response ==null?
-                                              Container()
-                                              :Text(
-                                            'hi_name'.trParams({
-                                              'name': _homeController
-                                                  .userProfileData
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .profile!
-                                                  .name!
-                                            }),
-                                            style: AppTextStyle.boldBlackText,
-                                          ),
+                                          _homeController.userProfileData.value
+                                                      .response ==
+                                                  null
+                                              ? Container()
+                                              : Text(
+                                                  'hi_name'.trParams({
+                                                    'name': _homeController
+                                                        .userProfileData
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .profile!
+                                                        .name!
+                                                  }),
+                                                  style: AppTextStyle
+                                                      .boldBlackText,
+                                                ),
                                           // SizedBox(
                                           //   width: 31 *
                                           //       SizeConfig.widthMultiplier!,
@@ -253,7 +253,8 @@ class _HomePageState extends State<HomePage> {
                                   title: 'live_stream'.tr,
                                   icon: Icons.videocam,
                                   onTap: () {
-                                    Navigator.pushNamed(context, RouteName.liveStream);
+                                    Navigator.pushNamed(
+                                        context, RouteName.liveStream);
                                   },
                                 ),
                                 HomeTile(
@@ -804,17 +805,23 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Spacer(),
                                   GreenCircleArrowButton(
-                                    onTap: () async{
-                                      _homeController.explorePageCount.value = 0;
-                                      Navigator.pushNamed(context, RouteName.exploreSearch);
+                                    onTap: () async {
+                                      _homeController.explorePageCount.value =
+                                          0;
+                                      Navigator.pushNamed(
+                                          context, RouteName.exploreSearch);
                                       postController.getCategory();
-                                      _homeController.isExploreDataLoading.value=true;
-                                     _homeController.explorePostModel.value= await HomeService.getExplorePosts(
-                                       skip: 0,
-                                     );
-                                     _homeController.explorePostList.value=_homeController.explorePostModel.value.response!.data!;
-                                      _homeController.isExploreDataLoading.value=false;
-
+                                      _homeController
+                                          .isExploreDataLoading.value = true;
+                                      _homeController.explorePostModel.value =
+                                          await HomeService.getExplorePosts(
+                                        skip: 0,
+                                      );
+                                      _homeController.explorePostList.value =
+                                          _homeController.explorePostModel.value
+                                              .response!.data!;
+                                      _homeController
+                                          .isExploreDataLoading.value = false;
                                     },
                                   )
                                 ],
@@ -1007,10 +1014,24 @@ class _HomePageState extends State<HomePage> {
                                                             context,
                                                             RouteName
                                                                 .postScreen);
-                                                        _homeController.post
-                                                            .value = _homeController
-                                                                .trendingPostList[
-                                                            index];
+                                                        _homeController
+                                                            .postLoading
+                                                            .value = true;
+                                                        var postData = await HomeService
+                                                            .getPostById(
+                                                                _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .id!);
+
+                                                        _homeController
+                                                                .post.value =
+                                                            postData.response!
+                                                                .data!;
+
+                                                        _homeController
+                                                            .postLoading
+                                                            .value = false;
                                                         _homeController
                                                             .commentsLoading
                                                             .value = true;
@@ -1019,7 +1040,7 @@ class _HomePageState extends State<HomePage> {
                                                                 .value =
                                                             await HomeService
                                                                 .fetchComment(
-                                                                    _homeController
+                                                                    postId: _homeController
                                                                         .trendingPostList[
                                                                             index]
                                                                         .id!);

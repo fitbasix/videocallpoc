@@ -68,7 +68,7 @@ dependencies:
   getwidget: ^2.0.4
   dropdown_button2: ^1.1.1
   video_player: ^2.2.18
-  url_launcher:
+  url_launcher: ^6.0.20
 
 
 dev_dependencies:
