@@ -35,3 +35,10 @@ const LightGreen = Color.fromARGB(127, 235, 247, 235);
 const kBackgroundColor = Color(0x1A000000);
 const sliderColor = Color(0xFFF2F9F2);
 const grey183 =  Color.fromARGB(255, 183, 183, 183);
+const grey34 =  Color.fromARGB(1, 34, 34, 34);
+const greyB7 =  Color(0xFFB7B7B7);
+const greyF6 =  Color(0xFFF6F6F6);
+const kgreen49 = Color(0xFF49AE50);
+const kgreen4F = Color(0xFF4FC24C);
+
+

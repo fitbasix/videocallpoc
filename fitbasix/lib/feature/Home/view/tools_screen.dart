@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Bmr_calculator/view/bmr_homepage.dart';
 import 'package:flutter/material.dart';
 
 class ToolsScreen extends StatelessWidget {
@@ -7,7 +8,8 @@ class ToolsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Tools Screen'),
+        child: BMRHomeScreen(),
+        //Text('Tools Screen'),
       ),
     );
   }
