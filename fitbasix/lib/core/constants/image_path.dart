@@ -87,5 +87,8 @@ class ImagePath {
   static const String attachdocumentIcon = "assets/message/attachdocumentIcon.svg";
   static const String openCameraIcon = "assets/message/opencameraIcon.svg";
   static const String chatMicIcon = "assets/message/chatMicIcon.svg";
+
+  ///BMR chat
+  static const String circlequestionmarkIcon = "assets/message/circlequestionmark.svg";
 }
 
