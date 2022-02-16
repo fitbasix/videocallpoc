@@ -111,11 +111,17 @@ class HomeService {
     print(response.data['code']);
   }
 
-  static Future<void> replyComment(String commentId, String comment) async {
+  static Future<void> replyComment(
+      {required String commentId,
+      String? taggedPerson,
+      required String comment}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.replyComment,
-        data: {"commentId": commentId, "comment": comment});
+    var response = await dio!.post(ApiUrl.replyComment, data: {
+      "commentId": commentId,
+      "taggedPerson": taggedPerson,
+      "comment": comment
+    });
 
     log(response.toString());
     print(response.data['code']);

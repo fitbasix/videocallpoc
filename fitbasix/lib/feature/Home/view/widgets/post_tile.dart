@@ -423,6 +423,8 @@ class _PostTileState extends State<PostTile> {
                       setState(() {});
                     },
                     minWidth: Get.width - 80 * SizeConfig.widthMultiplier!,
+                    taggedPersonName: '',
+                    maxWidth: Get.width,
                   ),
             // StreamBuilder<CommentModel>(
             //     stream: HomeService.fetchComment(widget.postId),
