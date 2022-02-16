@@ -78,12 +78,16 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               setState(() {});
             },
             onMessage: () async {
-              int UserQuickBloxId = 133489433;
+              int UserQuickBloxId = 133502596;
+              //vartika id : 133502596
+              //kashif id : 133502503
 
+              print(_homeController.userQuickBloxId.value.toString()+"quickS");
               print("$UserQuickBloxId idIs");
                 List<int> occupantsIds = [_homeController.userQuickBloxId.value,UserQuickBloxId];
                 String dialogName =  "someone chat" + DateTime.now().millisecond.toString();
                 int dialogType = QBChatDialogTypes.CHAT;
+
                 try {
                   QBDialog? createdDialog = await QB.chat.createDialog(
                       occupantsIds, dialogName,
