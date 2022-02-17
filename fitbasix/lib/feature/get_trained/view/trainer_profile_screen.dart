@@ -42,8 +42,10 @@ class TrainerProfileScreen extends StatefulWidget {
 
 class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   HomeController _homeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
+
     final TrainerController trainerController = Get.put(TrainerController());
     return Scaffold(
       body: SafeArea(
@@ -78,24 +80,21 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               setState(() {});
             },
             onMessage: () async {
-              int UserQuickBloxId = 133502596;
-              //vartika id : 133502596
-              //kashif id : 133502503
+              int UserQuickBloxId = 133520199;
+              //user id : 133520141
+              //trainer id : 133520199
+              debugPrint(_homeController.userQuickBloxId.value.toString()+"HomeControllervalue");
 
-              print(_homeController.userQuickBloxId.value.toString()+"quickS");
               print("$UserQuickBloxId idIs");
-                List<int> occupantsIds = [_homeController.userQuickBloxId.value,UserQuickBloxId];
+                List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
                 String dialogName =  "someone chat" + DateTime.now().millisecond.toString();
                 int dialogType = QBChatDialogTypes.CHAT;
-
                 try {
                   QBDialog? createdDialog = await QB.chat.createDialog(
                       occupantsIds, dialogName,
                       dialogType: dialogType, ).then((value)
                   {
-                    // Navigator.pushNamed(context, RouteName.trainerchatscreen,arguments: {
-                    //   "dialogId":value
-                    // });
+                    print("dialog id is:"+value!.id!);
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: value,)));
                   });
                 } on PlatformException catch (e) {

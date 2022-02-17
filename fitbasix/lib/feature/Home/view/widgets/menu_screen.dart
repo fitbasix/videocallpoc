@@ -13,6 +13,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/constants/credentials.dart';
+
 class MenuScreen extends StatelessWidget {
   final String imageCoverPic;
   final String imageUrl;
@@ -130,6 +132,7 @@ class MenuScreen extends StatelessWidget {
                       context, RouteName.loginScreen, (route) => false);
 
                   Get.deleteAll();
+                  InitializeQuickBlox().logOutUserSession();
                 })
           ],
         ));

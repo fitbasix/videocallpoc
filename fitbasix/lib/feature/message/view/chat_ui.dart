@@ -27,6 +27,8 @@ class ChatScreen extends StatefulWidget {
 
   ChatScreen({Key? key, this.userDialogForChat}) : super(key: key);
 
+
+
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -35,6 +37,26 @@ class _ChatScreenState extends State<ChatScreen> {
   HomeController _homeController = Get.find();
   QBDialog? userDialogForChat;
   final TextEditingController _massageController = TextEditingController();
+
+  checkUserConnection()async {
+    try {
+      bool? connected = await QB.chat.isConnected();
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+
+  }
+
+  connectionEvent() async {
+    String event = QBChatEvents.CONNECTED;
+    try {
+      _connectionStreamSubscription = await QB.chat.subscribeChatEvent(QBChatEvents.CONNECTED, (data) {
+        }, onErrorMethod: (error) {
+      });
+    } on PlatformException catch (e) {
+    }
+  }
+
 
   @override
   void dispose() {
@@ -48,6 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void sendMsg(String messageBody) async {
     String dialogId = widget.userDialogForChat!.id!;
+    print("massage dialog id is: "+widget.userDialogForChat!.id!);
     bool saveToHistory = true;
     try {
       await QB.chat
@@ -78,17 +101,20 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   StreamSubscription? _massageStreamSubscription;
+  StreamSubscription? _connectionStreamSubscription;
   String event = QBChatEvents.RECEIVED_NEW_MESSAGE;
 
   @override
   void initState() {
     userDialogForChat = widget.userDialogForChat;
     initMassage();
+    connectionEvent();
     getMassageFromHistory();
     super.initState();
   }
 
   void initMassage() async {
+    checkUserConnection();
     try {
       _massageStreamSubscription =
           await QB.chat.subscribeChatEvent(event, (data) {

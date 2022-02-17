@@ -22,4 +22,12 @@ class InitializeQuickBlox{
       // DialogUtils.showError(context!, e);
     }
   }
+
+  Future<void> logOutUserSession() async{
+    try {
+      await QB.auth.logout();
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
 }
