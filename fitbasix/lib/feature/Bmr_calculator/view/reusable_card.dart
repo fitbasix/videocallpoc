@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+import '../../../core/reponsive/SizeConfig.dart';
+
 class Reusablecard extends StatelessWidget {
   Reusablecard({this.colour, this.cardwidget, this.onpress});
   final Color? colour;
@@ -10,10 +12,11 @@ class Reusablecard extends StatelessWidget {
     return GestureDetector(
       onTap: onpress,
       child: Container(
+        height: 52*SizeConfig.heightMultiplier!,
         child: cardwidget,
-        margin: EdgeInsets.all(8),
+      //  margin: EdgeInsets.all(0),
         decoration:
-        BoxDecoration(color: colour, borderRadius: BorderRadius.circular(8)),
+        BoxDecoration(color: colour),
       ),
     );
   }

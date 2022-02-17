@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Bmr_calculator/view/bmr_resultpage.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
@@ -82,7 +83,7 @@ abstract class RouteName {
   static const trainerchatscreen = "/chat_ui";
   static const userprofileinfo = "/user_profile_info";
   static const edituserProfileScreen = "/edit_userprofile_info";
-
+  static const bmrresultScreen = "/bmr_resultpage.dart";
   RouteName._();
 }
 
@@ -308,6 +309,11 @@ class GenerateRoute {
     if (route == RouteName.edituserProfileScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) => EditProfileScreen(),
+      );
+    }
+    if (route == RouteName.bmrresultScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => BMRResultScreen(),
       );
     }
     if (route == RouteName.editPersonalInfo) {

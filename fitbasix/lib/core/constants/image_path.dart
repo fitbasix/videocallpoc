@@ -90,5 +90,8 @@ class ImagePath {
 
   ///BMR chat
   static const String circlequestionmarkIcon = "assets/message/circlequestionmark.svg";
+  static const String plusIconbmr = "assets/bmrscreen/plusIconbmr.svg";
+  static const String minuscircleIcon = "assets/bmrscreen/minuscirlceIcon.svg";
+  static const String bmrinfoImage = "assets/bmrscreen/bmrimage.svg";
 }
 
