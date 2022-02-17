@@ -10,15 +10,25 @@ import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
 import 'package:fitbasix/feature/Home/model/water_model.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class HomeService {
   static var dio = DioUtil().getInstance();
   static HomeController homeController = Get.find();
 
   static Future<PostsModel> getPosts({int? skip}) async {
+    // var response = http.post(
+    //   Uri.parse(ApiUrl.getPosts),
+    //   headers: {
+    //     'Authorization': 'application/json; charset=UTF-8',
+    //     'language': '1'
+    //   },
+    // );
+    var dio = DioUtil().getInstance();
     dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!
+    var token = await LogInService.getAccessToken();
+    dio.options.headers['Authorization'] = token;
+    var response = await dio
         .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
     print(response.toString());
     return postsModelFromJson(response.toString());
