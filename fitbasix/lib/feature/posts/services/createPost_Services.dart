@@ -82,9 +82,11 @@ class CreatePostService {
   }
 
   static Future<UserProfileModel> getUserProfile() async {
+    var dio = DioUtil().getInstance();
     dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.get(ApiUrl.getUserProfile);
+    dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+    print("user profile");
+    var response = await dio.get(ApiUrl.getUserProfile);
     log(response.data.toString());
     return userProfileModelFromJson(response.toString());
   }
