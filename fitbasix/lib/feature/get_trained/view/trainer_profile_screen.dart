@@ -27,7 +27,6 @@ import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
 import '../../Home/view/my_trainers_screen.dart';
 
-
 class TrainerProfileScreen extends StatefulWidget {
   const TrainerProfileScreen({Key? key}) : super(key: key);
 
@@ -76,9 +75,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               Navigator.pushNamed(context, RouteName.trainerchatscreen);
             },
             onEnroll: () {
-              showDialog(context: context,
+              showDialog(
+                  context: context,
                   builder: (BuildContext context) => EnrollTrainerDialog());
-
             },
             onBack: () {
               Navigator.pop(context);
@@ -235,7 +234,6 @@ class _TrainerPageState extends State<TrainerPage> {
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,
                                   ),
-
                                   Row(
                                     children: [
                                       Obx(
@@ -287,8 +285,11 @@ class _TrainerPageState extends State<TrainerPage> {
                                               style:
                                                   AppTextStyle.boldBlackText),
                                           Text('follower'.tr,
-                                              style:
-                                                  AppTextStyle.smallBlackText)
+                                              style: AppTextStyle.smallBlackText
+                                                  .copyWith(
+                                                      fontSize: 12 *
+                                                          SizeConfig
+                                                              .textMultiplier!))
                                         ],
                                       ),
                                       SizedBox(
@@ -300,8 +301,11 @@ class _TrainerPageState extends State<TrainerPage> {
                                               style:
                                                   AppTextStyle.boldBlackText),
                                           Text('following'.tr,
-                                              style:
-                                                  AppTextStyle.smallBlackText)
+                                              style: AppTextStyle.smallBlackText
+                                                  .copyWith(
+                                                      fontSize: 12 *
+                                                          SizeConfig
+                                                              .textMultiplier!))
                                         ],
                                       ),
                                     ],

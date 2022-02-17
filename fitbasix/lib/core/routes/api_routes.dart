@@ -4,9 +4,11 @@ class ApiUrl {
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getTermOfUseContents = liveBaseURL + '/api/auth/termsOfService';
-  static String getPrivacyPolicyContents = liveBaseURL + '/api/auth/privacyPolicy';
+  static String getPrivacyPolicyContents =
+      liveBaseURL + '/api/auth/privacyPolicy';
 
-  static String getHelpAndSupportContents = liveBaseURL+'/api/auth/helpAndSupport';
+  static String getHelpAndSupportContents =
+      liveBaseURL + '/api/auth/helpAndSupport';
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
   static String loginAndSignup = liveBaseURL + '/api/auth/login';
   static String registerUser = liveBaseURL + '/api/auth/create';
@@ -41,6 +43,8 @@ class ApiUrl {
   static String getComment = liveBaseURL + '/api/comment/getCommentByPost';
   static String unlike = liveBaseURL + '/api/like/disLike';
   static String explorePost = liveBaseURL + '/api/posts/explorePage';
+  static String getPostById = liveBaseURL + '/api/posts/getPostById';
+  static String replyComment = liveBaseURL + '/api/comment/reply';
 
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';

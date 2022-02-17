@@ -57,6 +57,14 @@ class HomeController extends GetxController {
   RxList<Post> explorePostList = RxList<Post>([]);
   RxBool nextDataLoad = false.obs;
   RxInt explorePageCount = 0.obs;
+  RxBool postLoading = RxBool(false);
+  RxInt skipCommentCount = RxInt(1);
+  final TextEditingController replyController = TextEditingController();
+  RxString reply = RxString('');
+  RxList<Comments> replyList = RxList<Comments>([]);
+  RxList<bool>? viewReplies = RxList<bool>([]);
+  RxList<int> skipReplyList = RxList<int>([]);
+  Future<List<Comments>>? future;
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,
@@ -229,6 +237,20 @@ class HomeController extends GetxController {
     } else {
       return 'Just now';
     }
+  }
+
+  Future<List<Comments>> fetchReplyComment(
+      {required String commentId, int? skip, int? limit}) async {
+    var replyData = await HomeService.fetchComment(
+        commentId: commentId, skip: skip, limit: limit);
+
+    if (replyData.response!.data!.length != 0) {
+      for (var item in replyData.response!.data!) {
+        replyList.add(item);
+      }
+      // replyList.addAll(replyData.response!.data!);
+    }
+    return replyList;
   }
 
   @override

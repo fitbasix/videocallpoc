@@ -406,7 +406,7 @@ class _PostTileState extends State<PostTile> {
                     comment: widget.comment!.comment.toString(),
                     time: _homeController.timeAgoSinceDate(DateFormat.yMd()
                         .add_Hms()
-                        .format(widget.comment!.createdAt!)),
+                        .format(widget.comment!.createdAt!.toLocal())),
                     likes: widget.comment!.likes!,
                     onReply: () {},
                     onLikeComment: () {
@@ -422,6 +422,9 @@ class _PostTileState extends State<PostTile> {
 
                       setState(() {});
                     },
+                    minWidth: Get.width - 80 * SizeConfig.widthMultiplier!,
+                    taggedPersonName: '',
+                    maxWidth: Get.width,
                   ),
             // StreamBuilder<CommentModel>(
             //     stream: HomeService.fetchComment(widget.postId),
