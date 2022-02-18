@@ -1,4 +1,5 @@
 import 'package:fitbasix/core/constants/image_path.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -226,7 +227,9 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
       actions: [
         //document icon
           IconButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.pushNamed(context, RouteName.trainerdocumentScreen);
+              },
               icon: SvgPicture.asset(
              ImagePath.chatdocumentIcon,
              width: 16 * SizeConfig.widthMultiplier!,

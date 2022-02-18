@@ -12,6 +12,10 @@ class BMRDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: EdgeInsets.only(
+        left: 32 * SizeConfig.widthMultiplier!,
+        right: 32 * SizeConfig.widthMultiplier!,
+      ),
       backgroundColor: kPureWhite,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8.0))),
