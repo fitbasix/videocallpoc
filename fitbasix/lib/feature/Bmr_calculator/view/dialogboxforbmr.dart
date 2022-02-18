@@ -1,6 +1,7 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
@@ -30,7 +31,7 @@ class BMRDialog extends StatelessWidget {
                   height: 24*SizeConfig.heightMultiplier!,
                 ),
                 Center(
-                  child: Text('What is BMR?',
+                  child: Text('what_bmr'.tr,
                   style: AppTextStyle.hblack600Text,),
                 ),
                 SizedBox(
@@ -41,9 +42,7 @@ class BMRDialog extends StatelessWidget {
                     left: 31* SizeConfig.widthMultiplier!,
                     right: 31* SizeConfig.widthMultiplier!,
                   ),
-                  child: Text('Basal metabolic rate is the number'
-                      ' of calories your body needs to accomplish its '
-                      'most basic (basal) life-sustaining functions.',
+                  child: Text('answer_bmr'.tr,
                   style: AppTextStyle.hnormal600BlackText.copyWith(
                     fontWeight: FontWeight.w400,
                   ),

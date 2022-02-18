@@ -1,7 +1,6 @@
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/Bmr_calculator/view/Appbar_forBmr.dart';
-import 'package:fitbasix/feature/Bmr_calculator/view/reusable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -29,7 +28,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
     return Scaffold(
       backgroundColor: greyF6,
       appBar: AppbarforBMRScreen(
-        title: 'BMR Calculator',
+        title: 'bmr_calc'.tr,
         parentContext: context,
       ),
       body: SafeArea(
@@ -49,6 +48,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                               EdgeInsets.all(8 * SizeConfig.widthMultiplier!),
                           height: 180 * SizeConfig.heightMultiplier!,
                           decoration: BoxDecoration(
+                            border: Border.all(color: lightGrey),
                             color: kPureWhite,
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -65,7 +65,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                       top: 12 * SizeConfig.heightMultiplier!,
                                     ),
                                     child: Text(
-                                      'Age',
+                                      'age'.tr,
                                       style: AppTextStyle.hblack400Text
                                           .copyWith(color: kBlack),
                                     ),
@@ -116,7 +116,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                 ),
                                 Center(
                                   child: Text(
-                                    'Years',
+                                    'year'.tr,
                                     style: AppTextStyle.hsmallGreenText
                                         .copyWith(color: kBlack),
                                   ),
@@ -130,6 +130,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                           margin:
                               EdgeInsets.all(8 * SizeConfig.widthMultiplier!),
                           decoration: BoxDecoration(
+                            border: Border.all(color: lightGrey),
                             color: kPureWhite,
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -147,7 +148,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                       top: 12 * SizeConfig.heightMultiplier!,
                                     ),
                                     child: Text(
-                                      'Bodyweight (Kg)',
+                                      'body_weight'.tr,
                                       style: AppTextStyle.hblack400Text
                                           .copyWith(color: kBlack),
                                     ),
@@ -198,7 +199,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                 ),
                                 Center(
                                   child: Text(
-                                    'Kg',
+                                    'kg'.tr,
                                     style: AppTextStyle.hsmallGreenText
                                         .copyWith(color: kBlack),
                                   ),
@@ -212,6 +213,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                   Container(
                     margin: EdgeInsets.all(8 * SizeConfig.widthMultiplier!),
                     decoration: BoxDecoration(
+                      border: Border.all(color: lightGrey),
                       color: kPureWhite,
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -223,13 +225,13 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                           Row(
                             children: [
                               Text(
-                                'Height'.tr,
+                                'height'.tr,
                                 style: AppTextStyle.hblack400Text
                                     .copyWith(color: kBlack),
                               ),
                               Spacer(),
                               Text(
-                                'Feet & Inches'.tr,
+                                'feet_inches'.tr,
                                 style: AppTextStyle.hblack400Text
                                     .copyWith(color: kBlack),
                               ),
@@ -239,16 +241,15 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                             height: 25 * SizeConfig.heightMultiplier!,
                           ),
                           Text(
-                            (height*
-                                0.0328084).toString()
-                                .split(".")[0]+'.'+(int.parse((height *
-                                0.0328084)
-                                .toString()
-                                .substring(2, 4)) *
-                                0.12)
-                                .toString()
-                                .substring(0, 2)
-                                .replaceAll(".", ""),
+                            (height * 0.0328084).toString().split(".")[0] +
+                                '.' +
+                                (int.parse((height * 0.0328084)
+                                            .toString()
+                                            .substring(2, 4)) *
+                                        0.12)
+                                    .toString()
+                                    .substring(0, 2)
+                                    .replaceAll(".", ""),
                             style: AppTextStyle.hblackSemiBoldText.copyWith(
                                 fontSize: 32 * SizeConfig.textMultiplier!),
                           ),
@@ -271,61 +272,80 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 8 * SizeConfig.heightMultiplier!,
+                  ),
                   //gender selector
-                  Container(
-                    margin: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        color: selectedgender == Gender.male
-                        ? kgreen4F
-                        : kPureWhite,
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8)
-                            ),
-                            child: Reusablecard(
-                              onpress: () {
-                                setState(() {
-                                  selectedgender = Gender.male;
-                                });
-                              },
-                              colour: selectedgender == Gender.male
-                                  ? kgreen4F
-                                  : Colors.transparent,
-                              cardwidget: Center(
-                                child: Text(
-                                  'Male'.tr,
-                                  style: AppTextStyle.normalBlackText
-                                      .copyWith(color: kPureBlack),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Reusablecard(
-                            onpress: () {
-                              setState(() {
-                                selectedgender = Gender.female;
-                              });
-                            },
-                            colour: selectedgender == Gender.female
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedgender = Gender.male;
+                          });
+                        },
+                        child: Container(
+                          height: 52 * SizeConfig.heightMultiplier!,
+                          width: 164 * SizeConfig.widthMultiplier!,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: selectedgender == Gender.male
+                                    ? kgreen4F
+                                    : lightGrey),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomLeft: Radius.circular(8)),
+                            color: selectedgender == Gender.male
                                 ? kgreen4F
                                 : kPureWhite,
-                            cardwidget: Center(
-                              child: Text(
-                                'Female'.tr,
-                                style: AppTextStyle.normalBlackText
-                                    .copyWith(color: kPureBlack),
-                              ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'male'.tr,
+                              style: selectedgender == Gender.male
+                                  ? AppTextStyle.normalBlackText
+                                      .copyWith(color: kPureWhite)
+                                  : AppTextStyle.normalBlackText.copyWith(
+                                      color: kPureBlack,
+                                    ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedgender = Gender.female;
+                            });
+                          },
+                          child: Container(
+                            height: 52 * SizeConfig.heightMultiplier!,
+                            width: 164 * SizeConfig.widthMultiplier!,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: selectedgender == Gender.female
+                                        ? kgreen4F
+                                        : lightGrey),
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    bottomRight: Radius.circular(8)),
+                                color: selectedgender == Gender.female
+                                    ? kgreen4F
+                                    : kPureWhite),
+                            child: Center(
+                              child: Text(
+                                'female'.tr,
+                                style: selectedgender == Gender.female
+                                    ? AppTextStyle.normalBlackText
+                                        .copyWith(color: kPureWhite)
+                                    : AppTextStyle.normalBlackText.copyWith(
+                                        color: kPureBlack,
+                                      ),
+                              ),
+                            ),
+                          ))
+                    ],
                   )
                 ],
               ),
@@ -360,10 +380,10 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                       8 * SizeConfig.widthMultiplier!)))),
                       onPressed: () {
                         // Calculate BMR button
-                          Navigator.pushNamed(context, RouteName.bmrresultScreen);
+                        Navigator.pushNamed(context, RouteName.bmrresultScreen);
                       },
                       child: Text(
-                        "Calculate BMR".tr,
+                        "calcuale_bmr".tr,
                         style: AppTextStyle.hboldWhiteText,
                       )),
                 ),

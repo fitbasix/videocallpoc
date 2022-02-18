@@ -222,7 +222,7 @@ class UserHeightDialog extends StatelessWidget {
                     onBuildRulerScalueText: (index, scaleValue) {
                       return scaleValue.toString() + "cm";
                     },
-                    width: Get.width - 48 * SizeConfig.widthMultiplier!,
+                    width: Get.width - 132 * SizeConfig.widthMultiplier!,
                     height: 96 * SizeConfig.heightMultiplier!,
                     rulerScaleTextStyle: AppTextStyle.normalGreenText,
                     rulerBackgroundColor: LightGreen,
