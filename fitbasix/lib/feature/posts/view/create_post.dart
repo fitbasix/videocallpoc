@@ -40,10 +40,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(_postController.selectedCategory.value.name);
     return GestureDetector(
       onTap: () async {
         FocusScope.of(context).unfocus();
-        if (_postController.postText.value.length > 0) {
+        if (_postController.postText.value != "") {
           _postController.postData.value = await CreatePostService.createPost(
               postId: _postController.postId.value,
               caption: _postController.postText.value);
@@ -80,9 +81,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     Obx(() => (_postController.postData.value.response!.data!
                                         .files!.length >
                                     0 ||
-                                _postController.postData.value.response!.data!
-                                        .caption !=
-                                    null) &&
+                                (_postController.postData.value.response!.data!
+                                            .caption !=
+                                        null &&
+                                    _postController.postData.value.response!
+                                            .data!.caption !=
+                                        "" &&
+                                    _postController.postText.value != "")) &&
                             _postController
                                     .postData.value.response!.data!.category !=
                                 null
@@ -395,6 +400,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                   hint: _postController.selectedCategory.value,
                                   listofItems: _postController.categories,
                                   onChanged: (value) async {
+                                    print(_postController.postData.value
+                                        .response!.data!.category);
                                     _postController.selectedCategory.value =
                                         value;
 

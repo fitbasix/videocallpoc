@@ -3,6 +3,7 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../feature/log_in/controller/login_controller.dart';
 import '../../feature/log_in/view/login_screen.dart';
 
 class DioUtil {
@@ -58,10 +59,10 @@ class DioUtil {
           }
         } else {
           if (e.response!.statusCode == 444) {
-            // final LoginController _controller = Get.put(LoginController());
+            final LoginController _controller = Get.put(LoginController());
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.clear();
-            // await _controller.googleSignout();
+            await _controller.googleSignout();
             navigator!.pushAndRemoveUntil<void>(
               MaterialPageRoute<void>(
                   builder: (BuildContext context) => LoginScreen()),
