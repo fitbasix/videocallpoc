@@ -19,48 +19,49 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         ? _homeController.drawerKey.currentState!.openEndDrawer()
         : setState(() {
             _homeController.selectedIndex.value = index;
+            print('object');
           });
   }
 
   final HomeController _homeController = Get.put(HomeController());
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: kPureWhite,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: kGreenColor,
-      unselectedItemColor: hintGrey,
-      currentIndex: _homeController.selectedIndex.value,
-      items: [
-        BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.home,
-            ),
-            label: 'home'.tr),
-        BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.chat_bubble_outline,
-            ),
-            label: 'my_trainers'.tr),
-        BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.add_circle,
-            ),
-            label: 'post'.tr),
-        BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.calculate_outlined,
-            ),
-            label: 'tools'.tr),
-        BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.more_horiz,
-            ),
-            label: 'more'.tr)
-      ],
-      onTap: (value) {
-        onTapped(value);
-      },
-    );
+    return Obx(() => BottomNavigationBar(
+          backgroundColor: kPureWhite,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: kGreenColor,
+          unselectedItemColor: hintGrey,
+          currentIndex: _homeController.selectedIndex.value,
+          items: [
+            BottomNavigationBarItem(
+                icon: new Icon(
+                  Icons.home,
+                ),
+                label: 'home'.tr),
+            BottomNavigationBarItem(
+                icon: new Icon(
+                  Icons.chat_bubble_outline,
+                ),
+                label: 'my_trainers'.tr),
+            BottomNavigationBarItem(
+                icon: new Icon(
+                  Icons.add_circle,
+                ),
+                label: 'post'.tr),
+            BottomNavigationBarItem(
+                icon: new Icon(
+                  Icons.calculate_outlined,
+                ),
+                label: 'tools'.tr),
+            BottomNavigationBarItem(
+                icon: new Icon(
+                  Icons.more_horiz,
+                ),
+                label: 'more'.tr)
+          ],
+          onTap: (value) {
+            onTapped(value);
+          },
+        ));
   }
 }

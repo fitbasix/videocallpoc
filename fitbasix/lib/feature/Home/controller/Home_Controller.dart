@@ -56,7 +56,7 @@ class HomeController extends GetxController {
   Rx<PostsModel> explorePostModel = Rx(PostsModel());
   RxList<Post> explorePostList = RxList<Post>([]);
   RxBool nextDataLoad = false.obs;
-  RxInt explorePageCount = 0.obs;
+  RxInt explorePageCount = 1.obs;
   RxBool postLoading = RxBool(false);
   RxInt skipCommentCount = RxInt(1);
   final TextEditingController replyController = TextEditingController();
@@ -65,6 +65,7 @@ class HomeController extends GetxController {
   RxList<bool>? viewReplies = RxList<bool>([]);
   RxList<int> skipReplyList = RxList<int>([]);
   Future<List<Comments>>? future;
+  RxList<String> likedPost = RxList<String>([]);
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,
