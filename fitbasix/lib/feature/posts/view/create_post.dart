@@ -124,6 +124,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       _postController.imageFile = null;
                                       _postController.selectedFiles.clear();
                                       _homeController.selectedIndex.value = 0;
+                                      _postController.postId.value = '';
                                     }
                                   },
                                   child: Text(

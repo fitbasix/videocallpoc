@@ -757,12 +757,57 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   isLiked: _trainerController
                                                       .trainerPostList[index]
                                                       .isLiked!,
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (_) =>
-                                                                PostScreen()));
+                                                  onTap: () async {
+                                                    _homeController.commentsList
+                                                        .clear();
+                                                    Navigator.pushNamed(context,
+                                                        RouteName.postScreen);
+
+                                                    _homeController.postLoading
+                                                        .value = true;
+                                                    var postData = await HomeService
+                                                        .getPostById(
+                                                            _trainerController
+                                                                .trainerPostList[
+                                                                    index]
+                                                                .id!);
+
+                                                    _homeController.post.value =
+                                                        postData
+                                                            .response!.data!;
+
+                                                    _homeController.postLoading
+                                                        .value = false;
+                                                    _homeController
+                                                        .commentsLoading
+                                                        .value = true;
+                                                    _homeController.postComments
+                                                            .value =
+                                                        await HomeService.fetchComment(
+                                                            postId: _trainerController
+                                                                .trainerPostList[
+                                                                    index]
+                                                                .id!);
+
+                                                    if (_homeController
+                                                            .postComments
+                                                            .value
+                                                            .response!
+                                                            .data!
+                                                            .length !=
+                                                        0) {
+                                                      _homeController
+                                                              .commentsList
+                                                              .value =
+                                                          _homeController
+                                                              .postComments
+                                                              .value
+                                                              .response!
+                                                              .data!;
+                                                    }
+                                                    _homeController
+                                                        .commentsLoading
+                                                        .value = false;
                                                   },
                                                   people: _trainerController
                                                       .trainerPostList[index]

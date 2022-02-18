@@ -475,46 +475,39 @@ class _PostTileState extends State<PostTile> {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => PostScreen()));
-              },
-              child: Row(
-                // mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 40,
-                      // width: 260 * SizeConfig.widthMultiplier!,
-                      margin: EdgeInsets.only(left: 16, right: 16),
-                      decoration: BoxDecoration(
-                        color: lightGrey,
-                        borderRadius: BorderRadius.circular(
-                            8 * SizeConfig.widthMultiplier!),
-                      ),
-                      child: TextField(
-                        controller: _homeController.commentController,
-                        onChanged: (value) {
-                          _homeController.comment.value = value;
-                        },
-                        decoration: InputDecoration(
-                            enabled: false,
-                            border: InputBorder.none,
-                            hintText: 'add_comment'.tr,
-                            hintStyle: AppTextStyle.smallGreyText.copyWith(
-                                fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: hintGrey),
-                            contentPadding: EdgeInsets.only(
-                                bottom: 10,
-                                left: 16 * SizeConfig.widthMultiplier!)),
-                      ),
+            Row(
+              // mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 40,
+                    // width: 260 * SizeConfig.widthMultiplier!,
+                    margin: EdgeInsets.only(left: 16, right: 16),
+                    decoration: BoxDecoration(
+                      color: lightGrey,
+                      borderRadius: BorderRadius.circular(
+                          8 * SizeConfig.widthMultiplier!),
+                    ),
+                    child: TextField(
+                      controller: _homeController.commentController,
+                      onChanged: (value) {
+                        _homeController.comment.value = value;
+                      },
+                      decoration: InputDecoration(
+                          enabled: false,
+                          border: InputBorder.none,
+                          hintText: 'add_comment'.tr,
+                          hintStyle: AppTextStyle.smallGreyText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: hintGrey),
+                          contentPadding: EdgeInsets.only(
+                              bottom: 10,
+                              left: 16 * SizeConfig.widthMultiplier!)),
                     ),
                   ),
-                  IconButton(
-                      onPressed: widget.addComment, icon: Icon(Icons.send))
-                ],
-              ),
+                ),
+                IconButton(onPressed: widget.onTap, icon: Icon(Icons.send))
+              ],
             ),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,

@@ -765,7 +765,20 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                                         );
                                                                                       });
                                                                                 },
-                                                                                onLikeComment: () {},
+                                                                                onLikeComment: () {
+                                                                                  if (snapshot.data![index2].isLiked!) {
+                                                                                    snapshot.data![index2].isLiked = false;
+                                                                                    snapshot.data![index2].likes = snapshot.data![index2].likes! - 1;
+
+                                                                                    HomeService.unlikePost(commentId: snapshot.data![index2].id);
+                                                                                  } else {
+                                                                                    snapshot.data![index2].isLiked = true;
+                                                                                    snapshot.data![index2].likes = snapshot.data![index2].likes! + 1;
+
+                                                                                    HomeService.likePost(commentId: snapshot.data![index2].id);
+                                                                                  }
+                                                                                  setState(() {});
+                                                                                },
                                                                                 minWidth: Get.width - 128 * SizeConfig.widthMultiplier!,
                                                                                 maxWidth: 236 * SizeConfig.widthMultiplier!,
                                                                               ),
