@@ -40,5 +40,6 @@ const greyB7 =  Color(0xFFB7B7B7);
 const greyF6 =  Color(0xFFF6F6F6);
 const kgreen49 = Color(0xFF49AE50);
 const kgreen4F = Color(0xFF4FC24C);
+const klightgreenEB = Color(0xFFEBF7EB);
 
 

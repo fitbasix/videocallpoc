@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Bmr_calculator/view/dialogboxforbmr.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,7 +11,8 @@ import '../../../core/reponsive/SizeConfig.dart';
 class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
   String? title;
   BuildContext? parentContext;
-  AppbarforBMRScreen({this.title, this.parentContext, Key? key})
+  VoidCallback? onRoute;
+  AppbarforBMRScreen({this.onRoute,this.title, this.parentContext, Key? key})
       : super(key: key);
 
   @override
@@ -25,9 +27,7 @@ class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
             width: 7 * SizeConfig.widthMultiplier!,
           ),
           GestureDetector(
-              onTap: () {
-             //   Navigator.pop(parentContext!);
-              },
+              onTap: onRoute,
               child: Container(
                   color: Colors.transparent,
                   child: SvgPicture.asset(
@@ -47,7 +47,11 @@ class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-            onPressed: (){},
+            onPressed: (){
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => BMRDialog());
+            },
             icon: SvgPicture.asset(
               ImagePath.circlequestionmarkIcon,
               width: 20 * SizeConfig.widthMultiplier!,

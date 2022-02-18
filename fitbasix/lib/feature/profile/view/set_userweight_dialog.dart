@@ -18,6 +18,12 @@ class UserWeightDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProfileController _weightController = Get.put(ProfileController());
     return Dialog(
+      insetPadding: EdgeInsets.fromLTRB(
+        32 * SizeConfig.widthMultiplier!,
+        48 * SizeConfig.heightMultiplier!,
+        32 * SizeConfig.widthMultiplier!,
+        48 * SizeConfig.heightMultiplier!,
+      ),
       backgroundColor: kPureWhite,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
@@ -180,7 +186,7 @@ class UserWeightDialog extends StatelessWidget {
                               _weightController.currentWeight.value = value * 2;
                             },
                             width: MediaQuery.of(context).size.width -
-                                48 * SizeConfig.widthMultiplier!,
+                                132 * SizeConfig.widthMultiplier!,
                             height: 100 * SizeConfig.heightMultiplier!,
                             rulerScaleTextStyle: AppTextStyle.normalGreenText,
                             rulerBackgroundColor: LightGreen,
@@ -210,7 +216,7 @@ class UserWeightDialog extends StatelessWidget {
                               _weightController.currentWeight.value = value;
                             },
                             width: MediaQuery.of(context).size.width -
-                                48 * SizeConfig.widthMultiplier!,
+                                132 * SizeConfig.widthMultiplier!,
                             height: 100 * SizeConfig.heightMultiplier!,
                             rulerScaleTextStyle: AppTextStyle.normalGreenText,
                             rulerBackgroundColor: LightGreen,
