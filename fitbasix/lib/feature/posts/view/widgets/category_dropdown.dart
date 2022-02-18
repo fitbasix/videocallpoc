@@ -61,10 +61,12 @@ Widget CategoryDropDown(
                           style: AppTextStyle.smallGreyText
                               .copyWith(color: hintGrey),
                         )
-                      : Text(
-                          hint.name.toString(),
-                          style: AppTextStyle.smallGreyText
-                              .copyWith(color: lightBlack),
+                      : Center(
+                          child: Text(
+                            hint.name.toString(),
+                            style: AppTextStyle.smallGreyText
+                                .copyWith(color: lightBlack),
+                          ),
                         ),
                   underline: Container(),
                   items: listofItems.map((Category value) {
