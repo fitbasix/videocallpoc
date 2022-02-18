@@ -71,6 +71,7 @@ dependencies:
   dropdown_button2: ^1.1.1
   video_player: ^2.2.18
   url_launcher:
+  file_picker: ^4.4.0
 
 
 dev_dependencies:

@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:quickblox_sdk/models/qb_settings.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 
 
@@ -21,6 +22,32 @@ class InitializeQuickBlox{
       print("error $e");
       // DialogUtils.showError(context!, e);
     }
+
+    try {
+      QBSettings? settings = await QB.settings.get();
+
+    } on PlatformException catch (e) {
+    }
+    enableAutoReconnect();
+  }
+
+  Future<void> enableAutoReconnect() async {
+
+    bool enable = true;
+
+
+
+    try {
+
+      await QB.settings.enableAutoReconnect(enable);
+
+
+
+    } on PlatformException catch (e) {
+
+
+    }
+
   }
 
   Future<void> logOutUserSession() async{

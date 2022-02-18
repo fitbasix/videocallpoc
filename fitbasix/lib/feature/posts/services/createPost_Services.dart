@@ -141,6 +141,7 @@ class CreatePostService {
   static getSessionQB() async {
     try {
       QBSession? session = await QB.auth.getSession();
+
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
     }

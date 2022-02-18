@@ -80,7 +80,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               setState(() {});
             },
             onMessage: () async {
-              int UserQuickBloxId = 133520199;
+              int UserQuickBloxId = 133536465;
               //user id : 133520141
               //trainer id : 133520199
               debugPrint(_homeController.userQuickBloxId.value.toString()+"HomeControllervalue");
@@ -89,6 +89,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
                 String dialogName =  "someone chat" + DateTime.now().millisecond.toString();
                 int dialogType = QBChatDialogTypes.CHAT;
+
                 try {
                   QBDialog? createdDialog = await QB.chat.createDialog(
                       occupantsIds, dialogName,
@@ -99,11 +100,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   });
                 } on PlatformException catch (e) {
                   print(e.toString());
-                }
-
-
-
-              //Navigator.pushNamed(context, RouteName.trainerchatscreen);
+                }//Navigator.pushNamed(context, RouteName.trainerchatscreen);
             },
             onEnroll: () {
               showDialog(context: context,

@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/message/model/reciever_message_model.dart';
+import 'package:fitbasix/feature/message/view/documents_view_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,13 +25,23 @@ import 'package:quickblox_sdk/quickblox_sdk.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/reponsive/SizeConfig.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter/services.dart';
+
+import 'package:quickblox_sdk/models/qb_rtc_session.dart';
+
+import 'package:quickblox_sdk/quickblox_sdk.dart';
+
+import 'package:quickblox_sdk/webrtc/constants.dart';
+
+import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
 class ChatScreen extends StatefulWidget {
   QBDialog? userDialogForChat;
+  String trainerTitle = 'Jonathan Swift'.tr;
 
   ChatScreen({Key? key, this.userDialogForChat}) : super(key: key);
-
-
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -37,26 +51,26 @@ class _ChatScreenState extends State<ChatScreen> {
   HomeController _homeController = Get.find();
   QBDialog? userDialogForChat;
   final TextEditingController _massageController = TextEditingController();
+  StreamSubscription? _massageStreamSubscription;
+  StreamSubscription? _connectionStreamSubscription;
+  String event = QBChatEvents.RECEIVED_NEW_MESSAGE;
+  List<QBMessage?>? messages;
+  DateTime? messageDate = DateTime(2015, 5, 5);
+  StreamSubscription? _callSubscription;
 
-  checkUserConnection()async {
-    try {
-      bool? connected = await QB.chat.isConnected();
-    } on PlatformException catch (e) {
-      // Some error occurred, look at the exception message for more details
-    }
+  StreamSubscription? _callEndSubscription;
 
-  }
+  StreamSubscription? _rejectSubscription;
 
-  connectionEvent() async {
-    String event = QBChatEvents.CONNECTED;
-    try {
-      _connectionStreamSubscription = await QB.chat.subscribeChatEvent(QBChatEvents.CONNECTED, (data) {
-        }, onErrorMethod: (error) {
-      });
-    } on PlatformException catch (e) {
-    }
-  }
+  StreamSubscription? _acceptSubscription;
 
+  StreamSubscription? _hangUpSubscription;
+
+  StreamSubscription? _videoTrackSubscription;
+
+  StreamSubscription? _notAnswerSubscription;
+
+  StreamSubscription? _peerConnectionSubscription;
 
   @override
   void dispose() {
@@ -68,72 +82,40 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-  void sendMsg(String messageBody) async {
-    String dialogId = widget.userDialogForChat!.id!;
-    print("massage dialog id is: "+widget.userDialogForChat!.id!);
-    bool saveToHistory = true;
+  initWebRTC()async{
     try {
-      await QB.chat
-          .sendMessage(dialogId,
-              body: messageBody, saveToHistory: saveToHistory)
-          .then((value) {
-        print("msg send");
-      });
+      await QB.webrtc.init();
+      print("webINIT");
     } on PlatformException catch (e) {
-      print(e);
+      print(e.toString() +"init error");
     }
+    subscribeCall();
+    print("subscribeCall demmm");
+    subscribeCallEnd();
+    print("subscribeCallEnd demmm");
+    subscribeReject();
+    print("subscribeReject demmm");
+    subscribeAccept();
+    print("subscribeAccept demmm");
+    subscribeHangUp();
+    print("subscribeHangUp demmm");
+    subscribeVideoTrack();
+    print("subscribeVideoTrack demmm");
+    subscribeNotAnswer();
+    print("subscribeNotAnswer demmm");
+    subscribePeerConnection();
+    print("subscribePeerConnection demmm");
   }
-
-  getMassageFromHistory() async {
-    QBSort sort = QBSort();
-    sort.field = QBChatMessageSorts.DATE_SENT;
-    sort.ascending = false;
-
-    try {
-      List<QBMessage?>? messageslist =
-          await QB.chat.getDialogMessages(userDialogForChat!.id!, sort: sort);
-      setState(() {
-        messages = messageslist;
-      });
-    } on PlatformException catch (e) {
-      // Some error occurred, look at the exception message for more details
-    }
-  }
-
-  StreamSubscription? _massageStreamSubscription;
-  StreamSubscription? _connectionStreamSubscription;
-  String event = QBChatEvents.RECEIVED_NEW_MESSAGE;
 
   @override
   void initState() {
+    initWebRTC();
     userDialogForChat = widget.userDialogForChat;
     initMassage();
     connectionEvent();
     getMassageFromHistory();
     super.initState();
   }
-
-  void initMassage() async {
-    checkUserConnection();
-    try {
-      _massageStreamSubscription =
-          await QB.chat.subscribeChatEvent(event, (data) {
-        Map<dynamic, dynamic> map = Map<dynamic, dynamic>.from(data);
-        Map<dynamic, dynamic> payload =
-            Map<dynamic, dynamic>.from(map["payload"]);
-        String? messageId = payload["id"];
-        print(payload.toString() + "Kashif msg");
-        getMassageFromHistory();
-
-        //messages!.add(payload);
-      });
-    } on PlatformException catch (e) {
-      // Some error occurred, look at the exception message for more details
-    }
-  }
-
-  List<QBMessage?>? messages;
-  DateTime? messageDate = DateTime(2015,5,5);
 
   @override
   Widget build(BuildContext context) {
@@ -142,13 +124,19 @@ class _ChatScreenState extends State<ChatScreen> {
     //   userDialogForChat = arguments["dialogId"];
     //
     // }
-    if(messages!=null){
-
-    }
+    if (messages != null) {}
     return Scaffold(
       appBar: AppbarforChat(
+        onDocumentsTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DocumentsViewerScreen(
+                        messages: messages,
+                      )));
+        },
         parentContext: context,
-        trainertitle: 'Jonathan Swift'.tr,
+        trainertitle: widget.trainerTitle,
         trainerstatus: 'Online'.tr,
       ),
       body: SafeArea(
@@ -164,20 +152,21 @@ class _ChatScreenState extends State<ChatScreen> {
                           itemCount: messages!.length,
                           itemBuilder: (context, index) {
                             String? showDate;
-                            var date = new DateTime.fromMicrosecondsSinceEpoch(messages![index]!.dateSent!* 1000);
-                            if(messageDate!.day != date.day){
+                            var date = new DateTime.fromMicrosecondsSinceEpoch(
+                                messages![index]!.dateSent! * 1000);
+                            if (messageDate!.day != date.day) {
                               messageDate = date;
-                              print(date.toString()+"kashif");
-                              showDate = DateFormat("yyyy MMMM dd").format(date);
-                            }
-                            else{
+                              print(date.toString() + "kashif");
+                              showDate =
+                                  DateFormat("yyyy MMMM dd").format(date);
+                            } else {
                               showDate = "";
                             }
 
                             if (messages![index]!.senderId ==
                                 _homeController.userQuickBloxId.value) {
                               return MessageBubbleSender(
-                                message:messages![index],
+                                message: messages![index],
                               );
                             } else {
                               return MessageBubbleOpponent(
@@ -223,7 +212,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     SizedBox(
-                                      width: 30*SizeConfig.widthMultiplier!,
+                                      width: 30 * SizeConfig.widthMultiplier!,
                                       child: IconButton(
                                           onPressed: () {},
                                           icon: SvgPicture.asset(
@@ -235,20 +224,22 @@ class _ChatScreenState extends State<ChatScreen> {
                                           )),
                                     ),
                                     SizedBox(
-                                      width: 30*SizeConfig.widthMultiplier!,
+                                      width: 30 * SizeConfig.widthMultiplier!,
                                       child: IconButton(
                                           onPressed: () {
                                             sendImageFromCamera();
                                           },
                                           icon: SvgPicture.asset(
                                             ImagePath.openCameraIcon,
-                                            width:
-                                                15 * SizeConfig.widthMultiplier!,
+                                            width: 15 *
+                                                SizeConfig.widthMultiplier!,
                                             height: 13.57 *
                                                 SizeConfig.heightMultiplier!,
                                           )),
                                     ),
-                                    SizedBox(width: 5*SizeConfig.widthMultiplier!,),
+                                    SizedBox(
+                                      width: 5 * SizeConfig.widthMultiplier!,
+                                    ),
                                   ],
                                 )),
                             // maxLines: 3,
@@ -269,7 +260,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                     color: Colors.white,
                                   ))
                               : IconButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    callWebRTC(QBRTCSessionTypes.VIDEO);
+
+                                  },
                                   icon: SvgPicture.asset(
                                     ImagePath.chatMicIcon,
                                     width: 16 * SizeConfig.widthMultiplier!,
@@ -287,32 +281,343 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-  Future<XFile?> pickFromCamera() async {
-    final ImagePicker picker = ImagePicker();
-    XFile? file =
-    await picker.pickImage(source: ImageSource.camera);
-    if (file != null) {
-      return file;
 
+  String? _sessionId;
+
+
+
+  RTCVideoViewController? _localVideoViewController;
+
+  RTCVideoViewController? _remoteVideoViewController;
+
+  Future<void> subscribeHangUp() async {
+    if (_hangUpSubscription != null) {
+      return;
     }
-    else return null;
+    try {
+      _hangUpSubscription =
+          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.HANG_UP, (data) {
+        int userId = data["payload"]["userId"];
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
   }
 
-  void sendImageFromCamera() async{
+  Future<void> subscribePeerConnection() async {
+    if (_peerConnectionSubscription != null) {
+      return;
+    }
+    try {
+      _peerConnectionSubscription = await QB.webrtc.subscribeRTCEvent(
+          QBRTCEventTypes.PEER_CONNECTION_STATE_CHANGED, (data) {
+        int state = data["payload"]["state"];
+        String parsedState = parseState(state);
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+
+  String parseState(int state) {
+    String parsedState = "";
+
+    switch (state) {
+      case QBRTCPeerConnectionStates.NEW:
+        parsedState = "NEW";
+
+        break;
+
+      case QBRTCPeerConnectionStates.FAILED:
+        parsedState = "FAILED";
+
+        break;
+
+      case QBRTCPeerConnectionStates.DISCONNECTED:
+        parsedState = "DISCONNECTED";
+
+        break;
+
+      case QBRTCPeerConnectionStates.CLOSED:
+        parsedState = "CLOSED";
+
+        break;
+
+      case QBRTCPeerConnectionStates.CONNECTED:
+        parsedState = "CONNECTED";
+
+        break;
+    }
+
+    return parsedState;
+  }
+
+  Future<void> subscribeCall() async {
+    if (_callSubscription != null) {
+      print("call subscribed");
+      return;
+    }
+    try {
+      _callSubscription =
+          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL, (data) {
+        Map<dynamic, dynamic> payloadMap =
+            Map<dynamic, dynamic>.from(data["payload"]);
+        Map<dynamic, dynamic> sessionMap =
+            Map<dynamic, dynamic>.from(payloadMap["session"]);
+        String sessionId = sessionMap["id"];
+        int initiatorId = sessionMap["initiatorId"];
+        int callType = sessionMap["type"];
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+
+  Future<void> subscribeCallEnd() async {
+    if (_callEndSubscription != null) {
+      return;
+    }
+
+    try {
+      _callEndSubscription =
+          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL_END, (data) {
+        Map<dynamic, dynamic> payloadMap =
+            Map<dynamic, dynamic>.from(data["payload"]);
+
+        Map<dynamic, dynamic> sessionMap =
+            Map<dynamic, dynamic>.from(payloadMap["session"]);
+
+        String sessionId = sessionMap["id"];
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+
+  Future<void> subscribeReject() async {
+    if (_rejectSubscription != null) {
+      return;
+    }
+
+    try {
+      _rejectSubscription =
+          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.REJECT, (data) {
+        int userId = data["payload"]["userId"];
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+
+  Future<void> subscribeAccept() async {
+    if (_acceptSubscription != null) {
+      return;
+    }
+
+    try {
+      _acceptSubscription =
+          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.ACCEPT, (data) {
+        int userId = data["payload"]["userId"];
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+
+  Future<void> subscribeVideoTrack() async {
+    if (_videoTrackSubscription != null) {
+      return;
+    }
+
+    try {
+      _videoTrackSubscription = await QB.webrtc
+          .subscribeRTCEvent(QBRTCEventTypes.RECEIVED_VIDEO_TRACK, (data) {
+        Map<dynamic, dynamic> payloadMap =
+            Map<dynamic, dynamic>.from(data["payload"]);
+
+        int opponentId = payloadMap["userId"];
+
+        if (opponentId == _homeController.userQuickBloxId.value) {
+          startRenderingLocal();
+        } else {
+          startRenderingRemote(opponentId);
+        }
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+
+  Future<void> startRenderingLocal() async {
+
+    try {
+
+      await _localVideoViewController!.play(_sessionId!, _homeController.userQuickBloxId.value);
+
+    } on PlatformException catch (e) {
+
+
+
+    }
+
+  }
+
+  Future<void> startRenderingRemote(int opponentId) async {
+
+    try {
+
+      await _remoteVideoViewController!.play(_sessionId!, opponentId);
+
+    } on PlatformException catch (e) {
+
+
+
+    }
+
+  }
+
+  Future<void> subscribeNotAnswer() async {
+    if (_notAnswerSubscription != null) {
+      return;
+    }
+
+    try {
+      _notAnswerSubscription =
+          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.NOT_ANSWER, (data) {
+        int userId = data["payload"]["userId"];
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+  Future<void> callWebRTC(int sessionType) async {
+    try {
+      QBRTCSession? session = await QB.webrtc.call([133536465], sessionType);
+      _sessionId = session!.id;
+    } on PlatformException catch (e) {
+    }
+
+  }
+
+
+
+
+
+
+
+
+  void initMassage() async {
+    checkUserConnection();
+    try {
+      _massageStreamSubscription =
+          await QB.chat.subscribeChatEvent(event, (data) {
+        Map<String, dynamic> map = Map<String, dynamic>.from(data);
+        Map<String, dynamic> payload =
+            Map<String, dynamic>.from(map["payload"]);
+        List<Attachment>? attachmentsFromJson;
+        if (payload["attachments"] != null) {
+          attachmentsFromJson =
+              (json.decode(json.encode(payload["attachments"])) as List)
+                  .map((data) => Attachment.fromJson(data))
+                  .toList();
+        }
+
+        String? messageId = payload["id"];
+        QBMessage newMessage = QBMessage();
+
+        List<QBAttachment?>? getAttachments() {
+          List<QBAttachment?>? attachments = [];
+          if (attachmentsFromJson != null) {
+            attachmentsFromJson.forEach((element) {
+              QBAttachment attachment = QBAttachment();
+              attachment.id = element.id!;
+              attachment.url = element.url;
+              attachment.type = element.type;
+              attachment.contentType = element.contentType;
+              attachments.add(attachment);
+            });
+            return attachments;
+          }
+          return null;
+        }
+
+        // print(payload["attachments"]);
+        newMessage.id = payload["id"];
+        newMessage.dialogId = payload["dialogId"];
+        newMessage.attachments = getAttachments();
+        newMessage.senderId = payload["senderId"];
+        newMessage.recipientId = payload["recipientId"];
+        newMessage.body = payload["body"];
+        newMessage.dateSent = payload["dateSent"];
+        newMessage.markable = payload["markable"];
+        setState(() {
+          messages!.insert(0, newMessage);
+        });
+
+        //messages!.add(payload);
+      });
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
+
+  checkUserConnection() async {
+    try {
+      bool? connected = await QB.chat.isConnected();
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
+
+  connectionEvent() async {
+    String event = QBChatEvents.CONNECTED;
+    try {
+      _connectionStreamSubscription = await QB.chat.subscribeChatEvent(
+          QBChatEvents.CONNECTED, (data) {},
+          onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+
+  void sendMsg(String messageBody) async {
+    String dialogId = widget.userDialogForChat!.id!;
+    print("massage dialog id is: " + widget.userDialogForChat!.id!);
+    bool saveToHistory = true;
+    try {
+      await QB.chat
+          .sendMessage(dialogId,
+              body: messageBody, saveToHistory: saveToHistory)
+          .then((value) {
+        print("msg send");
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
+
+  getMassageFromHistory() async {
+    QBSort sort = QBSort();
+    sort.field = QBChatMessageSorts.DATE_SENT;
+    sort.ascending = false;
+
+    try {
+      List<QBMessage?>? messageslist =
+          await QB.chat.getDialogMessages(userDialogForChat!.id!, sort: sort);
+      setState(() {
+        messages = messageslist;
+      });
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
+
+  Future<XFile?> pickFromCamera() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? file = await picker.pickImage(source: ImageSource.camera);
+    if (file != null) {
+      return file;
+    } else
+      return null;
+  }
+
+  void sendImageFromCamera() async {
     XFile? pickedFile = await pickFromCamera();
-    if(pickedFile!=null){
+    if (pickedFile != null) {
       try {
         QBFile? file = await QB.content.upload(pickedFile.path, public: false);
-        if(file != null) {
+        if (file != null) {
           int? id = file.id;
-          print("image id "+file.uid!);
+          print("image id " + file.uid!);
           String? contentType = file.contentType;
 
           QBAttachment attachment = QBAttachment();
           attachment.id = id.toString();
           attachment.contentType = contentType;
           attachment.url = file.uid;
-
+          attachment.name = file.name;
 
           //Required parameter
           attachment.type = "PHOTO";
@@ -323,26 +628,23 @@ class _ChatScreenState extends State<ChatScreen> {
           QBMessage message = QBMessage();
           message.attachments = attachmentsList;
           message.body = "test attachment";
-          QB.chat.sendMessage(widget.userDialogForChat!.id!,attachments: attachmentsList,body: "imageTest",saveToHistory: true).then((value){
+          QB.chat
+              .sendMessage(widget.userDialogForChat!.id!,
+                  attachments: attachmentsList,
+                  body: "imageTest",
+                  saveToHistory: true)
+              .then((value) {
             print("demo msg send");
           });
-
-
-
-
-
           // Send a message logic
         }
       } on PlatformException catch (e) {
         // Some error occurred, look at the exception message for more details
       }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("pick a image first")));
     }
-    else{
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("pick a image first")));
-
-    }
-
   }
 }
 
@@ -354,7 +656,7 @@ class MessageBubbleSender extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(message!.attachments == null){
+    if (message!.attachments == null) {
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -380,8 +682,7 @@ class MessageBubbleSender extends StatelessWidget {
           ],
         ),
       );
-    }
-    else{
+    } else {
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -390,42 +691,43 @@ class MessageBubbleSender extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              constraints: BoxConstraints(
-                maxWidth: 200 * SizeConfig.widthMultiplier!,
-                maxHeight: 250*SizeConfig.heightMultiplier!
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: 3.0 * SizeConfig.heightMultiplier!,
-                horizontal: 3.0 * SizeConfig.widthMultiplier!,
-              ),
-              decoration: BoxDecoration(
-                color: greenChatColor,
-                borderRadius: BorderRadius.circular(8*SizeConfig.widthMultiplier!),
-              ),
-              child: FutureBuilder(
-                future: _getImageUrl(message!.attachments![0]!.url!),
-                builder: (context,AsyncSnapshot<String?> snapshot){
-                  if(snapshot.hasData){
-                    return ClipRRect(
-                        borderRadius: BorderRadius.circular(8*SizeConfig.widthMultiplier!),
-                        child: Image.network(snapshot.data!));
-                  }
-                  else{
-                    return Container(
-                      height: 100*SizeConfig.heightMultiplier!,
-                      width: 100*SizeConfig.widthMultiplier!,
-                      child: Center(child: CustomizedCircularProgress(),),
-                    );
-                  }
-                },
-
-              )
-            )
+                constraints: BoxConstraints(
+                    maxWidth: 200 * SizeConfig.widthMultiplier!,
+                    maxHeight: 250 * SizeConfig.heightMultiplier!),
+                padding: EdgeInsets.symmetric(
+                  vertical: 3.0 * SizeConfig.heightMultiplier!,
+                  horizontal: 3.0 * SizeConfig.widthMultiplier!,
+                ),
+                decoration: BoxDecoration(
+                  color: greenChatColor,
+                  borderRadius:
+                      BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                ),
+                child: FutureBuilder(
+                  future: _getImageUrl(message!.attachments![0]!.url!),
+                  builder: (context, AsyncSnapshot<String?> snapshot) {
+                    if (snapshot.hasData) {
+                      return ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              8 * SizeConfig.widthMultiplier!),
+                          child: Image.network(snapshot.data!));
+                    } else {
+                      return Container(
+                        height: 100 * SizeConfig.heightMultiplier!,
+                        width: 100 * SizeConfig.widthMultiplier!,
+                        child: Center(
+                          child: CustomizedCircularProgress(),
+                        ),
+                      );
+                    }
+                  },
+                ))
           ],
         ),
       );
     }
   }
+
   Future<String?> _getImageUrl(String id) async {
     try {
       String? url = await QB.content.getPrivateURL(id);
@@ -438,12 +740,16 @@ class MessageBubbleSender extends StatelessWidget {
 
 //  Message Bubble
 class MessageBubbleOpponent extends StatelessWidget {
-  MessageBubbleOpponent({Key? key, this.message,}) : super(key: key);
+  MessageBubbleOpponent({
+    Key? key,
+    this.message,
+  }) : super(key: key);
 
   final QBMessage? message;
+
   @override
   Widget build(BuildContext context) {
-    if(message!.attachments == null){
+    if (message!.attachments == null) {
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -469,8 +775,7 @@ class MessageBubbleOpponent extends StatelessWidget {
           ],
         ),
       );
-    }
-    else{
+    } else {
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -479,38 +784,38 @@ class MessageBubbleOpponent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              constraints: BoxConstraints(
-                  maxWidth: 200 * SizeConfig.widthMultiplier!,
-                  maxHeight: 250*SizeConfig.heightMultiplier!
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: 3.0 * SizeConfig.heightMultiplier!,
-                horizontal: 3.0 * SizeConfig.widthMultiplier!,
-              ),
-              decoration: BoxDecoration(
-                color: kPureWhite,
-                borderRadius: BorderRadius.circular(8*SizeConfig.widthMultiplier!),
-              ),
-              child: FutureBuilder(
-                future: _getImageUrl(message!.attachments![0]!.url!),
-                builder: (context,AsyncSnapshot<String?> snapshot){
-                  if(snapshot.hasData){
-                    return ClipRRect(
-                        borderRadius: BorderRadius.circular(8*SizeConfig.widthMultiplier!),
-                        child: Image.network(snapshot.data!));
-                  }
-                  else{
-                    return Container(
-                     height: 100*SizeConfig.heightMultiplier!,
-                     width: 100*SizeConfig.widthMultiplier!,
-                      color: Colors.white,
-                      child: Center(child: CustomizedCircularProgress(),),
-                    );
-                  }
-                },
-
-              )
-            )
+                constraints: BoxConstraints(
+                    maxWidth: 200 * SizeConfig.widthMultiplier!,
+                    maxHeight: 250 * SizeConfig.heightMultiplier!),
+                padding: EdgeInsets.symmetric(
+                  vertical: 3.0 * SizeConfig.heightMultiplier!,
+                  horizontal: 3.0 * SizeConfig.widthMultiplier!,
+                ),
+                decoration: BoxDecoration(
+                  color: kPureWhite,
+                  borderRadius:
+                      BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                ),
+                child: FutureBuilder(
+                  future: _getImageUrl(message!.attachments![0]!.url!),
+                  builder: (context, AsyncSnapshot<String?> snapshot) {
+                    if (snapshot.hasData) {
+                      return ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              8 * SizeConfig.widthMultiplier!),
+                          child: Image.network(snapshot.data!));
+                    } else {
+                      return Container(
+                        height: 100 * SizeConfig.heightMultiplier!,
+                        width: 100 * SizeConfig.widthMultiplier!,
+                        color: Colors.white,
+                        child: Center(
+                          child: CustomizedCircularProgress(),
+                        ),
+                      );
+                    }
+                  },
+                ))
           ],
         ),
       );
@@ -527,16 +832,6 @@ class MessageBubbleOpponent extends StatelessWidget {
   }
 }
 
-
-
-
-// demo message list class
-class ChatMessage {
-  final String? text;
-
-  ChatMessage({this.text});
-}
-
 // Appbar
 class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   String trainerProfilePicUrl =
@@ -544,9 +839,14 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   String? trainertitle;
   String? trainerstatus;
   BuildContext? parentContext;
+  GestureTapCallback? onDocumentsTap;
 
   AppbarforChat(
-      {Key? key, this.trainertitle, this.parentContext, this.trainerstatus})
+      {Key? key,
+      this.trainertitle,
+      this.parentContext,
+      this.trainerstatus,
+      this.onDocumentsTap})
       : super(key: key);
 
   @override
@@ -595,7 +895,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
       actions: [
         //document icon
         IconButton(
-            onPressed: () {},
+            onPressed: onDocumentsTap,
             icon: SvgPicture.asset(
               ImagePath.chatdocumentIcon,
               width: 16 * SizeConfig.widthMultiplier!,
@@ -618,3 +918,50 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
 }
 
 
+class RTCVideoViewController {
+
+//WebRTCVideoView Methods
+
+  static const SET_MIRROR_METHOD = "mirror";
+
+  static const SET_SCALE_TYPE_METHOD = "scaleType";
+
+  static const PLAY_METHOD = "play";
+
+  static const RELEASE_METHOD = "release";
+
+
+
+  RTCVideoViewController._(int id)
+
+      : _channel = MethodChannel('QBWebRTCFlutterVideoViewChannel/$id');
+
+
+
+  final MethodChannel _channel;
+
+
+
+  Future<void> setMirror(bool mirror) async {
+
+    Map<String, Object> values = Map();
+
+
+
+    values["mirror"] = mirror;
+
+
+
+    return _channel.invokeMethod(SET_MIRROR_METHOD, values);
+
+  }
+  Future<void> play(String sessionId, int userId) async {
+
+    Map<String, Object> values = Map();
+    values["sessionId"] = sessionId;
+    values["userId"] = userId;
+    await _channel.invokeMethod(PLAY_METHOD, values);
+
+  }
+
+}
