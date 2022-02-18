@@ -69,18 +69,25 @@ dependencies:
   dropdown_button2: ^1.1.1
   video_player: ^2.2.18
   url_launcher: ^6.0.20
+  flutter_native_splash: ^2.0.4
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^1.3.2
+ 
 
 flutter_native_splash:
-  background_image: "assets/images/splash.png"
+  background_image: "assets/images/welcome_image.png"
+  background_image_dark: "assets/images/welcome_image.png"
+  branding: assets/images/logo.png
+  branding_dark: assets/images/logo.png
+  branding_mode: bottom
+  android_gravity: center
+  fullscreen: true
   android: true
   ios: true
-  fullscreen: true
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
