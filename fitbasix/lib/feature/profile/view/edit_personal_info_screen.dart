@@ -21,8 +21,10 @@ class EditPersonalInfoScreen extends StatelessWidget {
 
   EditPersonalInfoScreen({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+
     _profileController.mobileNoController = _mobileNoController;
     return Scaffold(
       backgroundColor: kPureWhite,

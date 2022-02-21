@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
@@ -10,10 +12,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quickblox_sdk/chat/constants.dart';
 import 'package:quickblox_sdk/models/qb_attachment.dart';
 import 'package:quickblox_sdk/models/qb_dialog.dart';
@@ -25,7 +30,11 @@ import 'package:quickblox_sdk/quickblox_sdk.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/reponsive/SizeConfig.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+
 
 import 'package:flutter/services.dart';
 
@@ -56,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String event = QBChatEvents.RECEIVED_NEW_MESSAGE;
   List<QBMessage?>? messages;
   DateTime? messageDate = DateTime(2015, 5, 5);
-  StreamSubscription? _callSubscription;
+
 
   StreamSubscription? _callEndSubscription;
 
@@ -82,17 +91,9 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-  initWebRTC()async{
-    try {
-      await QB.webrtc.init();
-      print("webINIT");
-    } on PlatformException catch (e) {
-      print(e.toString() +"init error");
-    }
-    subscribeCall();
-    print("subscribeCall demmm");
-    subscribeCallEnd();
-    print("subscribeCallEnd demmm");
+
+  @override
+  void initState() {
     subscribeReject();
     print("subscribeReject demmm");
     subscribeAccept();
@@ -105,11 +106,6 @@ class _ChatScreenState extends State<ChatScreen> {
     print("subscribeNotAnswer demmm");
     subscribePeerConnection();
     print("subscribePeerConnection demmm");
-  }
-
-  @override
-  void initState() {
-    initWebRTC();
     userDialogForChat = widget.userDialogForChat;
     initMassage();
     connectionEvent();
@@ -119,11 +115,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    // if (arguments.containsKey("dialogId")) {
-    //   userDialogForChat = arguments["dialogId"];
-    //
-    // }
     if (messages != null) {}
     return Scaffold(
       appBar: AppbarforChat(
@@ -214,7 +205,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                     SizedBox(
                                       width: 30 * SizeConfig.widthMultiplier!,
                                       child: IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            sendAttachmentsFromDevice();
+                                          },
                                           icon: SvgPicture.asset(
                                             ImagePath.attachdocumentIcon,
                                             width: 9.17 *
@@ -282,9 +275,14 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+
+
+
+
+
+
+  ///related to video call
   String? _sessionId;
-
-
 
   RTCVideoViewController? _localVideoViewController;
 
@@ -348,25 +346,18 @@ class _ChatScreenState extends State<ChatScreen> {
     return parsedState;
   }
 
-  Future<void> subscribeCall() async {
-    if (_callSubscription != null) {
-      print("call subscribed");
+  Future<void> subscribeAccept() async {
+    if (_acceptSubscription != null) {
       return;
     }
+
     try {
-      _callSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL, (data) {
-        Map<dynamic, dynamic> payloadMap =
-            Map<dynamic, dynamic>.from(data["payload"]);
-        Map<dynamic, dynamic> sessionMap =
-            Map<dynamic, dynamic>.from(payloadMap["session"]);
-        String sessionId = sessionMap["id"];
-        int initiatorId = sessionMap["initiatorId"];
-        int callType = sessionMap["type"];
+      _acceptSubscription =
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.ACCEPT, (data) {
+        int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
-
   Future<void> subscribeCallEnd() async {
     if (_callEndSubscription != null) {
       return;
@@ -385,7 +376,6 @@ class _ChatScreenState extends State<ChatScreen> {
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
-
   Future<void> subscribeReject() async {
     if (_rejectSubscription != null) {
       return;
@@ -398,20 +388,31 @@ class _ChatScreenState extends State<ChatScreen> {
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
+  Future<void> startRenderingLocal() async {
 
-  Future<void> subscribeAccept() async {
-    if (_acceptSubscription != null) {
+    try {
+
+      await _localVideoViewController!.play(_sessionId!, _homeController.userQuickBloxId.value);
+
+    } on PlatformException catch (e) {
+
+
+
+    }
+
+  }
+  Future<void> subscribeNotAnswer() async {
+    if (_notAnswerSubscription != null) {
       return;
     }
 
     try {
-      _acceptSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.ACCEPT, (data) {
+      _notAnswerSubscription =
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.NOT_ANSWER, (data) {
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
-
   Future<void> subscribeVideoTrack() async {
     if (_videoTrackSubscription != null) {
       return;
@@ -433,21 +434,6 @@ class _ChatScreenState extends State<ChatScreen> {
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
-
-  Future<void> startRenderingLocal() async {
-
-    try {
-
-      await _localVideoViewController!.play(_sessionId!, _homeController.userQuickBloxId.value);
-
-    } on PlatformException catch (e) {
-
-
-
-    }
-
-  }
-
   Future<void> startRenderingRemote(int opponentId) async {
 
     try {
@@ -461,22 +447,9 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
   }
-
-  Future<void> subscribeNotAnswer() async {
-    if (_notAnswerSubscription != null) {
-      return;
-    }
-
-    try {
-      _notAnswerSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.NOT_ANSWER, (data) {
-        int userId = data["payload"]["userId"];
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
   Future<void> callWebRTC(int sessionType) async {
     try {
-      QBRTCSession? session = await QB.webrtc.call([133536465], sessionType);
+      QBRTCSession? session = await QB.webrtc.call([133536465], sessionType,userInfo: {"userName":"Kashif Ahmad"});
       _sessionId = session!.id;
     } on PlatformException catch (e) {
     }
@@ -484,14 +457,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
 
-
-
-
-
-
-
   void initMassage() async {
-    checkUserConnection();
     try {
       _massageStreamSubscription =
           await QB.chat.subscribeChatEvent(event, (data) {
@@ -505,7 +471,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   .map((data) => Attachment.fromJson(data))
                   .toList();
         }
-
         String? messageId = payload["id"];
         QBMessage newMessage = QBMessage();
 
@@ -646,11 +611,70 @@ class _ChatScreenState extends State<ChatScreen> {
           .showSnackBar(SnackBar(content: Text("pick a image first")));
     }
   }
+
+
+  Future<FilePickerResult?> pickAttachments() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'doc','png','jpeg','mp3','mp4','mkv'],
+    );
+
+    if (result != null) {
+      return result;
+    } else {
+      return null;
+    }
+  }
+
+  void sendAttachmentsFromDevice() async {
+    FilePickerResult? pickedFiles = await pickAttachments();
+    if (pickedFiles != null) {
+      try {
+        List<QBAttachment>? attachmentsList = [];
+        for(int i =0;i<pickedFiles.files.length;i++){
+          QBFile? file = await QB.content.upload(pickedFiles.files[i].path!, public: false);
+          if (file != null) {
+            int? id = file.id;
+            String? contentType = pickedFiles.files[i].path!.split('.').last;
+            QBAttachment attachment = QBAttachment();
+            attachment.id = id.toString();
+            attachment.contentType = contentType;
+            print(contentType+" dddd");
+            attachment.url = file.uid;
+            attachment.name = file.name;
+            //Required parameter
+            attachment.type = "PHOTO";
+            attachmentsList.add(attachment);
+            QBMessage message = QBMessage();
+            message.attachments = attachmentsList;
+            message.body = "test attachment";
+
+            // Send a message logic
+          }
+        }
+        QB.chat
+            .sendMessage(widget.userDialogForChat!.id!,
+            attachments: attachmentsList,
+            body: "imageTest",
+            saveToHistory: true)
+            .then((value) {
+          print("demo msg send");
+        });
+      } on PlatformException catch (e) {
+        // Some error occurred, look at the exception message for more details
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("pick a some file to upload")));
+    }
+  }
 }
 
 //  Message Bubble
 class MessageBubbleSender extends StatelessWidget {
-  const MessageBubbleSender({Key? key, this.message}) : super(key: key);
+  var isDownloaded = false.obs;
+  MessageBubbleSender({Key? key, this.message}) : super(key: key);
 
   final QBMessage? message;
 
@@ -703,40 +727,95 @@ class MessageBubbleSender extends StatelessWidget {
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                 ),
-                child: FutureBuilder(
-                  future: _getImageUrl(message!.attachments![0]!.url!),
-                  builder: (context, AsyncSnapshot<String?> snapshot) {
-                    if (snapshot.hasData) {
-                      return ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              8 * SizeConfig.widthMultiplier!),
-                          child: Image.network(snapshot.data!));
-                    } else {
-                      return Container(
-                        height: 100 * SizeConfig.heightMultiplier!,
-                        width: 100 * SizeConfig.widthMultiplier!,
-                        child: Center(
-                          child: CustomizedCircularProgress(),
-                        ),
-                      );
-                    }
-                  },
+                child:Obx(()=>isDownloaded == false?Container(
+                  child:GestureDetector(
+                      onTap: ()async {
+                        isDownloaded.value = await _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.url!);
+                      },
+                      child: Text("download")),
+                ):Container(child: Text("storage/emulated/0/fitBasix/media/${message!.attachments![0]!.url!}"),)
                 ))
+
+
+                // FutureBuilder(
+                //   future: _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.url!),
+                //   builder: (context, AsyncSnapshot<String?> snapshot) {
+                //     if (snapshot.hasData) {
+                //       return ClipRRect(
+                //           borderRadius: BorderRadius.circular(
+                //               8 * SizeConfig.widthMultiplier!),
+                //           child: Image.network(snapshot.data!));
+                //     } else {
+                //       return Container(
+                //         height: 100 * SizeConfig.heightMultiplier!,
+                //         width: 100 * SizeConfig.widthMultiplier!,
+                //         child: Center(
+                //           child: CustomizedCircularProgress(),
+                //         ),
+                //       );
+                //     }
+                //   },
+                // ))
           ],
         ),
       );
     }
   }
 
-  Future<String?> _getImageUrl(String id) async {
+
+  Future<bool> _getImageUrl(String id,String fileName) async {
     try {
       String? url = await QB.content.getPrivateURL(id);
-      return url;
+      // String localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download';
+      // final savedDir = Directory(localPath);
+      // bool hasExisted = await savedDir.exists();
+      // if (!hasExisted) {
+      //   savedDir.create();
+      // }
+      //Directory("storage/emulated/0/downloads/").existsSync();
+      // final taskId = await FlutterDownloader.enqueue(
+      //   url: url!,
+      //   fileName: fileName,
+      //   savedDir: "storage/emulated/0/Download/",
+      //   showNotification: false, // show download progress in status bar (for Android)
+      //   openFileFromNotification: false, // click on notification to open downloaded file (for Android)
+      // ).then((value) {
+      //   print("file downdloadeddd");
+      //   return true;
+      // });
+
+          try{
+        PermissionStatus status = await Permission.storage.request();
+
+        if (status == PermissionStatus.granted) {
+          Directory? dir = await getExternalStorageDirectory();
+          print(dir!.path + "pp dir");
+
+          final taskId = await FlutterDownloader.enqueue(
+              url: url!,
+              savedDir: dir!.path,
+              fileName: fileName,
+              showNotification: false,
+              // show download progress in status bar (for Android)
+              openFileFromNotification: false,
+              // click on notification to open downloaded file (for Android)
+              saveInPublicStorage: true);
+        }
+      }catch(e){
+
+          }
+
+     return false;
     } on PlatformException catch (e) {
+      return false;
       // Some error occurred, look at the exception message for more details
     }
+
+
   }
 }
+
+
 
 //  Message Bubble
 class MessageBubbleOpponent extends StatelessWidget {

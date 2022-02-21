@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:developer';
 
 import 'package:crypt/crypt.dart';
@@ -15,11 +15,13 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:quickblox_sdk/models/qb_session.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 
+import '../../../core/constants/credentials.dart';
 import '../../Home/controller/Home_Controller.dart';
 
 
 class CreatePostService {
   static var dio = DioUtil().getInstance();
+
   static HomeController _homeController = Get.find();
   static Future<PostData> getPostId() async {
     dio!.options.headers["language"] = "1";
@@ -99,15 +101,17 @@ class CreatePostService {
     log(response.data.toString());
     UserProfileModel _userProfileModel = userProfileModelFromJson(response.toString());
     if(_userProfileModel.response!.data!.profile!.quickBloxId != null) {
-      getSessionQB();
+
       String userId = _userProfileModel.response!.data!.profile!.id!;
       final password = Crypt.sha256(_userProfileModel.response!.data!.profile!.id!, salt: '10');
       bool loggedIn = await LogInUserToQuickBlox(userId,password.hash,_userProfileModel.response!.data!.profile!.quickBloxId!);
+      getSessionQB();
+      await InitializeQuickBlox().subscribeCall();
       connectUserToChat(password.hash,_userProfileModel.response!.data!.profile!.quickBloxId!);
     }
     else{
       try{
-        getSessionQB();
+
         String userId = _userProfileModel.response!.data!.profile!.id!;
         final password = Crypt.sha256(
             _userProfileModel.response!.data!.profile!.id!,
@@ -117,6 +121,8 @@ class CreatePostService {
             name: userName, loginId: userId, password: password.hash);
         int response = await updateUserQuickBloxId(userQuickBloxId!);
         bool loggedIn = await LogInUserToQuickBlox(userId, password.hash, userQuickBloxId);
+        getSessionQB();
+        await InitializeQuickBlox().subscribeCall();
         connectUserToChat(password.hash, userQuickBloxId);
       }catch(e){
         //todo handle if QBlox has some backend error
@@ -141,15 +147,18 @@ class CreatePostService {
   static getSessionQB() async {
     try {
       QBSession? session = await QB.auth.getSession();
+      QBSession? session2 = await QB.auth.setSession(session!);
 
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
+      print(e.toString());
     }
   }
 
 
   static Future<bool> LogInUserToQuickBlox(String logIn,String password,int userQuickBloxId ) async {
     var result = await QB.auth.login(logIn,password);
+
     if(_homeController.userQuickBloxId.value == 0){
       _homeController.userQuickBloxId.value = result.qbUser!.id!;
       print(_homeController.userQuickBloxId.value.toString()+" is stored in homecontroller");

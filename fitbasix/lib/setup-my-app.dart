@@ -18,6 +18,7 @@ import 'package:fitbasix/core/localization/translations.dart';
 import 'package:fitbasix/fitbasix_app.dart';
 
 import 'feature/Home/view/consumption_screen.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 Future<void> setupApp() async {
 
@@ -25,6 +26,9 @@ Future<void> setupApp() async {
   await RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   InitializeQuickBlox().init();
+  await FlutterDownloader.initialize(
+      debug: true // optional: set false to disable printing logs to console
+  );
   var accessToken = prefs.getString('AccessToken');
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
