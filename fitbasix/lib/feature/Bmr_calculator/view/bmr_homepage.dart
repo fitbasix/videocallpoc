@@ -1,5 +1,7 @@
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/Bmr_calculator/controller/bmr_controller.dart';
+import 'package:fitbasix/feature/Bmr_calculator/services/bmr_services.dart';
 import 'package:fitbasix/feature/Bmr_calculator/view/Appbar_forBmr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,8 +23,9 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
   // default values for design purpose
   Gender? selectedgender;
   int age = 1;
-  int bodyweight = 45;
-  int height = 180;
+  double bodyweight = 45.0;
+  double height = 180;
+  final BmrController bmrController = Get.put(BmrController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,7 +177,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                         )),
                                     Spacer(),
                                     Text(
-                                      '$bodyweight',
+                                      bodyweight.toString(),
                                       style: AppTextStyle.hblackSemiBoldText
                                           .copyWith(
                                               fontSize: 32 *
@@ -265,7 +268,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                               max: 300,
                               onChanged: (double newValue) {
                                 setState(() {
-                                  height = newValue.round();
+                                  height = newValue;
                                 });
                               }),
                         ],
@@ -371,21 +374,26 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: ElevatedButton(
-                      style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(0),
-                          backgroundColor: MaterialStateProperty.all(kgreen4F),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      8 * SizeConfig.widthMultiplier!)))),
-                      onPressed: () {
-                        // Calculate BMR button
-                        Navigator.pushNamed(context, RouteName.bmrresultScreen);
-                      },
-                      child: Text(
-                        "calcuale_bmr".tr,
-                        style: AppTextStyle.hboldWhiteText,
-                      )),
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0),
+                        backgroundColor: MaterialStateProperty.all(kgreen4F),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8 * SizeConfig.widthMultiplier!)))),
+                    onPressed: () async {
+                      // API Call
+                      bmrController.bmrresult.value = await BmrServices.getbmrCalculations(
+                          bodyweight,
+                          height,
+                          age,
+                          selectedgender == Gender.male ? 1 : 2);
+                      Navigator.pushNamed(context, RouteName.bmrresultScreen);
+                    },
+                    child: Text(
+                      "calcuale_bmr".tr,
+                      style: AppTextStyle.hboldWhiteText,
+                    ),
+                  ),
                 ),
               ),
             )

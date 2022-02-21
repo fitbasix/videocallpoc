@@ -283,10 +283,13 @@ class _TrainerPageState extends State<TrainerPage> {
                                         children: [
                                           Text(widget.followersCount,
                                               style:
-                                                  AppTextStyle.boldBlackText),
+                                                  AppTextStyle.boldBlackText.copyWith(
+                                                    color: kBlack
+                                                  )),
                                           Text('follower'.tr,
                                               style: AppTextStyle.smallBlackText
                                                   .copyWith(
+                                                  color: kBlack,
                                                       fontSize: 12 *
                                                           SizeConfig
                                                               .textMultiplier!))
@@ -299,10 +302,13 @@ class _TrainerPageState extends State<TrainerPage> {
                                         children: [
                                           Text(widget.followingCount,
                                               style:
-                                                  AppTextStyle.boldBlackText),
+                                                  AppTextStyle.boldBlackText.copyWith(
+                                                      color: kBlack
+                                                  )),
                                           Text('following'.tr,
                                               style: AppTextStyle.smallBlackText
                                                   .copyWith(
+                                                  color: kBlack,
                                                       fontSize: 12 *
                                                           SizeConfig
                                                               .textMultiplier!))
@@ -341,21 +347,26 @@ class _TrainerPageState extends State<TrainerPage> {
                                                 .toString(),
                                             style: AppTextStyle
                                                 .greenSemiBoldText
-                                                .copyWith(color: lightBlack),
+                                                .copyWith(color: kPureBlack),
                                           ),
                                           SizedBox(
                                               width: 8 *
                                                   SizeConfig.widthMultiplier!),
                                           Text(
                                             'people_trained'.tr,
-                                            style: AppTextStyle.smallBlackText,
+                                            style: AppTextStyle.smallBlackText.copyWith(
+                                              fontSize: (12) * SizeConfig.textMultiplier!,
+                                              color: kPureBlack
+                                            ),
                                           )
                                         ],
                                       ),
                                       Text(
+                                        //extra text
                                         'view_and_review'.tr,
                                         style: AppTextStyle.smallBlackText
                                             .copyWith(
+                                            fontSize: (12) * SizeConfig.textMultiplier!,
                                                 color: greyColor,
                                                 decoration:
                                                     TextDecoration.underline),
@@ -365,7 +376,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 24 * SizeConfig.heightMultiplier!),
+                            SizedBox(height: 28 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
                                   left: 24.0 * SizeConfig.widthMultiplier!,
@@ -376,7 +387,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                   Text(
                                     'strength'.tr,
                                     style: AppTextStyle.greenSemiBoldText
-                                        .copyWith(color: lightBlack),
+                                        .copyWith(color: kBlack),
                                   ),
                                   SizedBox(
                                       height:
@@ -435,14 +446,14 @@ class _TrainerPageState extends State<TrainerPage> {
                                             'achivement'.tr,
                                             style: AppTextStyle
                                                 .greenSemiBoldText
-                                                .copyWith(color: lightBlack),
+                                                .copyWith(color: kBlack),
                                           ),
                                         ),
                                   widget.certifcateTitle.length == 0
                                       ? Container()
                                       : Container(
                                           height:
-                                              79 * SizeConfig.heightMultiplier!,
+                                              81 * SizeConfig.heightMultiplier!,
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
                                               itemCount:
@@ -475,11 +486,11 @@ class _TrainerPageState extends State<TrainerPage> {
                                         ),
                                   SizedBox(
                                       height:
-                                          24 * SizeConfig.heightMultiplier!),
+                                          23 * SizeConfig.heightMultiplier!),
                                   Text(
                                     'about'.tr,
                                     style: AppTextStyle.greenSemiBoldText
-                                        .copyWith(color: lightBlack),
+                                        .copyWith(color: kBlack),
                                   ),
                                   SizedBox(
                                       height:
@@ -493,7 +504,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                       style: AppTextStyle.lightMediumBlackText
                                           .copyWith(
                                               fontSize: (14) *
-                                                  SizeConfig.textMultiplier!),
+                                                  SizeConfig.textMultiplier!,
+                                              color: kBlack),
                                     ),
                                   ),
                                   SizedBox(
@@ -972,8 +984,10 @@ class AchivementCertificateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 79 * SizeConfig.heightMultiplier!,
-      width: 222 * SizeConfig.widthMultiplier!,
+      //79
+      height: 81 * SizeConfig.heightMultiplier!,
+      //214
+      width: 214 * SizeConfig.widthMultiplier!,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0), color: color),
       child: Row(
