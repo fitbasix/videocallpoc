@@ -48,4 +48,5 @@ class ApiUrl {
 
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';
+  static String editProfile = liveBaseURL + '/api/auth/edit';
 }
