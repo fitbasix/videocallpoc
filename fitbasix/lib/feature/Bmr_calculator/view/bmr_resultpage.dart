@@ -93,7 +93,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: 24 *SizeConfig.heightMultiplier!,
+                    height: 24 * SizeConfig.heightMultiplier!,
                   ),
                   Padding(
                     padding: EdgeInsets.only(

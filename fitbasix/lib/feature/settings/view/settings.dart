@@ -139,7 +139,6 @@ class _SettingScreenState extends State<SettingScreen>  {
       ),
     );
   }
-
 }
 
 class AppBarForAccount extends StatelessWidget with PreferredSizeWidget {

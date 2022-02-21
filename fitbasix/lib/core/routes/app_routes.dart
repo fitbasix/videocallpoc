@@ -20,6 +20,7 @@ import 'package:fitbasix/feature/log_in/view/forgot_password.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:fitbasix/feature/log_in/view/reset_password.dart';
+import 'package:fitbasix/feature/message/view/chat_documentscreen.dart';
 import 'package:fitbasix/feature/message/view/chat_ui.dart';
 import 'package:fitbasix/feature/message/view/my_trainer_tile.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
@@ -84,6 +85,7 @@ abstract class RouteName {
   static const userprofileinfo = "/user_profile_info";
   static const edituserProfileScreen = "/edit_userprofile_info";
   static const bmrresultScreen = "/bmr_resultpage.dart";
+  static const trainerdocumentScreen = "chat_documentscreen.dart";
   RouteName._();
 }
 
@@ -314,6 +316,11 @@ class GenerateRoute {
     if (route == RouteName.bmrresultScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) => BMRResultScreen(),
+      );
+    }
+    if (route == RouteName.trainerdocumentScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => TrainerDocumentScreen(),
       );
     }
     if (route == RouteName.editPersonalInfo) {

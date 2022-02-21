@@ -50,6 +50,7 @@ class ImagePath {
   static const String logOut = "assets/menuSlider/logout.svg";
   static const String settings = "assets/menuSlider/settings.svg";
   static const String support = "assets/menuSlider/support.svg";
+  static const String feedbackdialogframe = "assets/menuSlider/feedbackdialogframe.svg";
 
   ///home healthImage
   static const String carbsIcon = "assets/home/carbs.svg";

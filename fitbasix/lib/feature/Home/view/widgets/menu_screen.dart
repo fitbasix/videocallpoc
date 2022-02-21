@@ -5,6 +5,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +115,11 @@ class MenuScreen extends StatelessWidget {
             MenuItem(
                 menuItemImage: ImagePath.feedback,
                 menuItemText: 'feedback'.tr,
-                onTap: () {}),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => DialogboxForFeedback());
+                }),
             MenuItem(
                 menuItemImage: ImagePath.legal,
                 menuItemText: 'legal'.tr,
