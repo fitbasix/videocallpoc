@@ -43,7 +43,11 @@ class CreatePostService {
     };
     Map updatePeople = {"postId": postId, "people": taggedPeople};
     Map updateCategory = {"postId": postId, "category": category};
-    Map publishPost = {"postId": postId, "isPublished": isPublish};
+    Map publishPost = {
+      "postId": postId,
+      "isPublished": isPublish,
+      "caption": caption
+    };
     Map getPostData = {"postId": postId};
     var response = await dio!.post(ApiUrl.createPost,
         data: caption != null

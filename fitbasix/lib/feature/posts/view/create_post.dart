@@ -104,7 +104,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                         await CreatePostService.createPost(
                                             postId:
                                                 _postController.postId.value,
-                                            isPublish: true);
+                                            isPublish: true,caption:_postController.postText.value);
                                     _postController.isLoading.value = false;
                                     if (_postController.postData.value.code ==
                                         0) {
