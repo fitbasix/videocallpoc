@@ -8,17 +8,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/attachdocumentIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/documentIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/opencameraIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/popmenuitem.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/videocameraOFF.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/videocameraON.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/videomicOFF.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/videomicON.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/videospeakerOFF.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/message/videospeakerON.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_videocallscreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/constants/image_path.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/constants/image_path.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/routes/app_routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/routes/app_routes.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/my_trainers_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/my_trainers_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/trainer_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/trainer_profile_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/my_trainer_tile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +98,15 @@
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

@@ -87,5 +87,17 @@ class ImagePath {
   static const String attachdocumentIcon = "assets/message/attachdocumentIcon.svg";
   static const String openCameraIcon = "assets/message/opencameraIcon.svg";
   static const String chatMicIcon = "assets/message/chatMicIcon.svg";
+  static const String videomicON = "assets/message/videomicON.svg";
+  static const String videocameraON = "assets/message/videocameraON.svg";
+  static const String videospeakerON = "assets/message/videospeakerON.svg";
+  static const String videomicOFF= "assets/message/videomicOFF.svg";
+  static const String videospeakerOFF= "assets/message/videospeakerOFF.svg";
+  static const String videocameraOFF= "assets/message/videocameraOFF.svg";
+
+  ///BMR chat
+  static const String circlequestionmarkIcon = "assets/message/circlequestionmark.svg";
+  static const String plusIconbmr = "assets/bmrscreen/plusIconbmr.svg";
+  static const String minuscircleIcon = "assets/bmrscreen/minuscirlceIcon.svg";
+  static const String bmrinfoImage = "assets/bmrscreen/bmrimage.svg";
 }
 
