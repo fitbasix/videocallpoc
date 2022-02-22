@@ -1,12 +1,12 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
+import '../controller/bmr_controller.dart';
 import 'Appbar_forBmr.dart';
 
 class BMRResultScreen extends StatefulWidget {
@@ -17,10 +17,13 @@ class BMRResultScreen extends StatefulWidget {
 }
 
 class _BMRResultScreenState extends State<BMRResultScreen> {
-  var bmrresult = '1346';
+ // var bmrresult = '1346';
   bool isReadmore = false;
+  // final BmrController bmrController = Get.find(BmrController());
+  final BmrController bmrcontroller = Get.put(BmrController());
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: greyF6,
       appBar: AppbarforBMRScreen(
@@ -71,7 +74,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                             // result
                             Text(
                               NumberFormat("#,###")
-                                  .format(double.parse(bmrresult)),
+                                  .format(double.parse(bmrcontroller.bmrresult.value.response!.data!.bmr.toString())),
                               style: AppTextStyle.hblackSemiBoldText.copyWith(
                                 fontSize: 32 * SizeConfig.textMultiplier!,
                                 fontWeight: FontWeight.w400,
@@ -105,7 +108,9 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                       color: greyF6,
                     ),
                   ),
-                  isReadmore ? buildText() : Container(),
+                  isReadmore ? buildText(
+                      bmrcontroller.bmrresult.value.response!.data!.data!.littleNoExerciseEn.toString()
+                  ) : Container(),
                   Container(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -136,7 +141,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
     );
   }
 
-  Widget buildText() {
+  Widget buildText(String calories) {
     return Padding(
       padding: EdgeInsets.only(
         //  top: 24*SizeConfig.heightMultiplier!,
@@ -169,7 +174,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                   style: AppTextStyle.black400Text,
                 ),
                 Text(
-                  '1,333',
+                  calories,
                   style: AppTextStyle.hnormal600BlackText,
                 )
               ],

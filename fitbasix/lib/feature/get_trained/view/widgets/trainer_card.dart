@@ -36,7 +36,7 @@ class TrainerCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 250 * SizeConfig.heightMultiplier!,
+        height: 242 * SizeConfig.heightMultiplier!,
         width: 164 * SizeConfig.widthMultiplier!,
         margin: EdgeInsets.only(
           right: 8 * SizeConfig.widthMultiplier!,

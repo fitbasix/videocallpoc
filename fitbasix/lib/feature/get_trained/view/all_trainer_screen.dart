@@ -699,7 +699,8 @@ class TrainerTile extends StatelessWidget {
             certifcateTitle!.isEmpty
                 ? Container()
                 : Container(
-                    height: 79 * SizeConfig.heightMultiplier!,
+              //79
+                    height: 81 * SizeConfig.heightMultiplier!,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: certifcateTitle!.length,
@@ -707,7 +708,9 @@ class TrainerTile extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           return Padding(
                             padding: EdgeInsets.only(
-                                right: 8.0 * SizeConfig.widthMultiplier!),
+                            //  left: 12.0 * SizeConfig.widthMultiplier!,
+                                right: 12.0 * SizeConfig.widthMultiplier!,
+                            ),
                             child: AchivementCertificateTile(
                               certificateDescription:
                                   certifcateTitle![index].certificateName!,

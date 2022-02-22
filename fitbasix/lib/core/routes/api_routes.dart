@@ -9,6 +9,7 @@ class ApiUrl {
 
   static String getHelpAndSupportContents =
       liveBaseURL + '/api/auth/helpAndSupport';
+  static String bmrcalculation = liveBaseURL + '/api/nutritions/getbmr';
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
   static String loginAndSignup = liveBaseURL + '/api/auth/login';
   static String registerUser = liveBaseURL + '/api/auth/create';
