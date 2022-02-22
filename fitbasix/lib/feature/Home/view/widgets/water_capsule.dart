@@ -31,48 +31,47 @@ class AnimatedLiquidCustomProgressIndicatorState
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Obx(() => GestureDetector(
-              onTap: () async {
-                homeController.waterLevel.value =
-                    (homeController.waterLevel.value -
-                                (1 /
-                                    (homeController.waterDetails.value.response!
-                                            .data![0].totalWaterRequired! *
-                                        4)) <=
-                            0.0)
-                        ? 0.0
-                        : homeController.waterLevel.value -
-                            (1 /
-                                (homeController.waterDetails.value.response!
-                                        .data![0].totalWaterRequired! *
-                                    4));
-                homeController.waterConsumedDataLoading.value = true;
-                await HomeService.updateWaterDetails(
-                    homeController.waterLevel.value *
-                        homeController.waterDetails.value.response!.data![0]
-                            .totalWaterRequired!);
-                homeController.userProfileData.value =
-                    await CreatePostService.getUserProfile();
-                homeController.waterConsumedDataLoading.value = false;
-              },
-              child: Container(
-                width: 27 * SizeConfig.heightMultiplier!,
-                height: 27 * SizeConfig.heightMultiplier!,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: lightGrey,
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 15 * SizeConfig.heightMultiplier!),
-                  child: Icon(
-                    Icons.minimize_sharp,
-                    size: 18 * SizeConfig.heightMultiplier!,
-                    color: Colors.white,
-                  ),
-                ),
+        GestureDetector(
+          onTap: () async {
+            homeController.waterLevel.value = (homeController.waterLevel.value -
+                        (1 /
+                            (homeController.waterDetails.value.response!
+                                    .data![0].totalWaterRequired! *
+                                4)) <=
+                    0.0)
+                ? 0.0
+                : homeController.waterLevel.value -
+                    (1 /
+                        (homeController.waterDetails.value.response!.data![0]
+                                .totalWaterRequired! *
+                            4));
+            homeController.waterConsumedDataLoading.value = true;
+            await HomeService.updateWaterDetails(
+                homeController.waterLevel.value *
+                    homeController.waterDetails.value.response!.data![0]
+                        .totalWaterRequired!);
+            homeController.userProfileData.value =
+                await CreatePostService.getUserProfile();
+            homeController.waterConsumedDataLoading.value = false;
+          },
+          child: Container(
+            width: 27 * SizeConfig.heightMultiplier!,
+            height: 27 * SizeConfig.heightMultiplier!,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: lightGrey,
+            ),
+            child: Padding(
+              padding:
+                  EdgeInsets.only(bottom: 15 * SizeConfig.heightMultiplier!),
+              child: Icon(
+                Icons.minimize_sharp,
+                size: 18 * SizeConfig.heightMultiplier!,
+                color: Colors.white,
               ),
-            )),
+            ),
+          ),
+        ),
         SizedBox(
           width: 2 * SizeConfig.widthMultiplier!,
         ),
