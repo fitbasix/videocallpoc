@@ -16,6 +16,7 @@ class SetBodyFat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kPureWhite,
       appBar: PreferredSize(
           child: SPGAppBar(
               title:

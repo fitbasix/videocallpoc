@@ -29,10 +29,16 @@ class ConsumptionScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: SvgPicture.asset(
-              ImagePath.backIcon,
-              width: 7 * SizeConfig.widthMultiplier!,
-              height: 12 * SizeConfig.heightMultiplier!,
+            icon: Container(
+              color: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: SvgPicture.asset(
+                  ImagePath.backIcon,
+                  width: 7 * SizeConfig.widthMultiplier!,
+                  height: 12 * SizeConfig.heightMultiplier!,
+                ),
+              ),
             )),
         title: Text(
           'today_consumption'.tr,
@@ -233,7 +239,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                 _homeController.formatedTime(_homeController
+                                                _homeController.formatedTime(
+                                                    _homeController
                                                         .waterTimingFrom.value),
                                                 style: AppTextStyle.NormalText,
                                               ),
@@ -281,7 +288,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                _homeController.formatedTime(_homeController
+                                                _homeController.formatedTime(
+                                                    _homeController
                                                         .waterTimingTo.value),
                                                 style: AppTextStyle.NormalText,
                                               ),
@@ -346,19 +354,36 @@ class ConsumptionScreen extends StatelessWidget {
                                   height: 12 * SizeConfig.heightMultiplier!,
                                 ),
                                 GestureDetector(
-                                  onTap: () async{
+                                  onTap: () async {
                                     String s = "12:24";
                                     _homeController
-                                        .iswaterNotificationDataUpdating.value = true;
-                                    await HomeService.updateWaterNotificationDetails(
-                                        _homeController.goalWater.value,
-                                       _homeController.waterTimingFrom.value.hour.toString()+":"+_homeController.waterTimingFrom.value.minute.toString(),
-                                        _homeController.waterTimingTo.value.hour.toString()+":"+_homeController.waterTimingTo.value.minute.toString(),
-                                        _homeController
-                                            .waterReminder.value.serialId!);
-                                            _homeController.userProfileData.value = await CreatePostService.getUserProfile();
+                                        .iswaterNotificationDataUpdating
+                                        .value = true;
+                                    await HomeService
+                                        .updateWaterNotificationDetails(
+                                            _homeController.goalWater.value,
+                                            _homeController
+                                                    .waterTimingFrom.value.hour
+                                                    .toString() +
+                                                ":" +
+                                                _homeController.waterTimingFrom
+                                                    .value.minute
+                                                    .toString(),
+                                            _homeController
+                                                    .waterTimingTo.value.hour
+                                                    .toString() +
+                                                ":" +
+                                                _homeController
+                                                    .waterTimingTo.value.minute
+                                                    .toString(),
+                                            _homeController
+                                                .waterReminder.value.serialId!);
+                                    _homeController.userProfileData.value =
+                                        await CreatePostService
+                                            .getUserProfile();
                                     _homeController
-                                        .iswaterNotificationDataUpdating.value = false;
+                                        .iswaterNotificationDataUpdating
+                                        .value = false;
                                   },
                                   child: Container(
                                       width: Get.width -
@@ -367,12 +392,18 @@ class ConsumptionScreen extends StatelessWidget {
                                       color: kGreenColor,
                                       child: Center(
                                         child: _homeController
-                                        .iswaterNotificationDataUpdating.value?
-                                        Center(child: CircularProgressIndicator(color: Colors.white),)
-                                        :Text(
-                                          "Save Changes",
-                                          style: AppTextStyle.white400Text,
-                                        ),
+                                                .iswaterNotificationDataUpdating
+                                                .value
+                                            ? Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                        color: Colors.white),
+                                              )
+                                            : Text(
+                                                "Save Changes",
+                                                style:
+                                                    AppTextStyle.white400Text,
+                                              ),
                                       )),
                                 ),
                                 SizedBox(

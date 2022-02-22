@@ -282,14 +282,12 @@ class _TrainerPageState extends State<TrainerPage> {
                                       Column(
                                         children: [
                                           Text(widget.followersCount,
-                                              style:
-                                                  AppTextStyle.boldBlackText.copyWith(
-                                                    color: kBlack
-                                                  )),
+                                              style: AppTextStyle.boldBlackText
+                                                  .copyWith(color: kBlack)),
                                           Text('follower'.tr,
                                               style: AppTextStyle.smallBlackText
                                                   .copyWith(
-                                                  color: kBlack,
+                                                      color: kBlack,
                                                       fontSize: 12 *
                                                           SizeConfig
                                                               .textMultiplier!))
@@ -301,14 +299,12 @@ class _TrainerPageState extends State<TrainerPage> {
                                       Column(
                                         children: [
                                           Text(widget.followingCount,
-                                              style:
-                                                  AppTextStyle.boldBlackText.copyWith(
-                                                      color: kBlack
-                                                  )),
+                                              style: AppTextStyle.boldBlackText
+                                                  .copyWith(color: kBlack)),
                                           Text('following'.tr,
                                               style: AppTextStyle.smallBlackText
                                                   .copyWith(
-                                                  color: kBlack,
+                                                      color: kBlack,
                                                       fontSize: 12 *
                                                           SizeConfig
                                                               .textMultiplier!))
@@ -354,19 +350,23 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   SizeConfig.widthMultiplier!),
                                           Text(
                                             'people_trained'.tr,
-                                            style: AppTextStyle.smallBlackText.copyWith(
-                                              fontSize: (12) * SizeConfig.textMultiplier!,
-                                              color: kPureBlack
-                                            ),
+                                            style: AppTextStyle.smallBlackText
+                                                .copyWith(
+                                                    fontSize: (12) *
+                                                        SizeConfig
+                                                            .textMultiplier!,
+                                                    color: kPureBlack),
                                           )
                                         ],
                                       ),
                                       Text(
                                         //extra text
                                         'view_and_review'.tr,
-                                        style: AppTextStyle.smallBlackText
+                                        style: AppTextStyle
+                                            .smallBlackText
                                             .copyWith(
-                                            fontSize: (12) * SizeConfig.textMultiplier!,
+                                                fontSize: (12) *
+                                                    SizeConfig.textMultiplier!,
                                                 color: greyColor,
                                                 decoration:
                                                     TextDecoration.underline),
@@ -379,15 +379,19 @@ class _TrainerPageState extends State<TrainerPage> {
                             SizedBox(height: 28 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: 24.0 * SizeConfig.widthMultiplier!,
                                   bottom: 24 * SizeConfig.heightMultiplier!),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'strength'.tr,
-                                    style: AppTextStyle.greenSemiBoldText
-                                        .copyWith(color: kBlack),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            24.0 * SizeConfig.widthMultiplier!),
+                                    child: Text(
+                                      'strength'.tr,
+                                      style: AppTextStyle.greenSemiBoldText
+                                          .copyWith(color: kBlack),
+                                    ),
                                   ),
                                   SizedBox(
                                       height:
@@ -402,7 +406,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                             (BuildContext context, int index) {
                                           return Padding(
                                             padding: index == 0
-                                                ? EdgeInsets.all(0)
+                                                ? EdgeInsets.only(
+                                                    left: 24.0 *
+                                                        SizeConfig
+                                                            .widthMultiplier!)
                                                 : EdgeInsets.only(
                                                     left: 8.0 *
                                                         SizeConfig
@@ -438,6 +445,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                       ? Container()
                                       : Padding(
                                           padding: EdgeInsets.only(
+                                              left: 24.0 *
+                                                  SizeConfig.widthMultiplier!,
                                               top: 24 *
                                                   SizeConfig.heightMultiplier!,
                                               bottom: 12 *
@@ -463,23 +472,32 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   (BuildContext context,
                                                       int index) {
                                                 return Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 8.0 *
-                                                          SizeConfig
-                                                              .widthMultiplier!),
-                                                  child:
-                                                      AchivementCertificateTile(
-                                                    certificateDescription:
-                                                        widget
-                                                            .certifcateTitle[
-                                                                index]
-                                                            .certificateName!,
-                                                    certificateIcon: widget
-                                                        .certifcateTitle[index]
-                                                        .url!,
-                                                    color: index % 2 == 0
-                                                        ? oceanBlue
-                                                        : lightOrange,
+                                                  padding: index == 0
+                                                      ? EdgeInsets.only(
+                                                          left: 24.0 *
+                                                              SizeConfig
+                                                                  .widthMultiplier!)
+                                                      : EdgeInsets.only(),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 12.0 *
+                                                            SizeConfig
+                                                                .widthMultiplier!),
+                                                    child:
+                                                        AchivementCertificateTile(
+                                                      certificateDescription:
+                                                          widget
+                                                              .certifcateTitle[
+                                                                  index]
+                                                              .certificateName!,
+                                                      certificateIcon: widget
+                                                          .certifcateTitle[
+                                                              index]
+                                                          .url!,
+                                                      color: index % 2 == 0
+                                                          ? oceanBlue
+                                                          : lightOrange,
+                                                    ),
                                                   ),
                                                 );
                                               }),
@@ -487,16 +505,23 @@ class _TrainerPageState extends State<TrainerPage> {
                                   SizedBox(
                                       height:
                                           23 * SizeConfig.heightMultiplier!),
-                                  Text(
-                                    'about'.tr,
-                                    style: AppTextStyle.greenSemiBoldText
-                                        .copyWith(color: kBlack),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            24.0 * SizeConfig.widthMultiplier!),
+                                    child: Text(
+                                      'about'.tr,
+                                      style: AppTextStyle.greenSemiBoldText
+                                          .copyWith(color: kBlack),
+                                    ),
                                   ),
                                   SizedBox(
                                       height:
                                           12 * SizeConfig.heightMultiplier!),
                                   Padding(
                                     padding: EdgeInsets.only(
+                                        left:
+                                            24.0 * SizeConfig.widthMultiplier!,
                                         right:
                                             24.0 * SizeConfig.widthMultiplier!),
                                     child: Text(
@@ -511,17 +536,24 @@ class _TrainerPageState extends State<TrainerPage> {
                                   SizedBox(
                                       height:
                                           24 * SizeConfig.heightMultiplier!),
-                                  Obx(() => trainerController
-                                          .isProfileLoading.value
-                                      ? Text('plan'.tr,
-                                          style: AppTextStyle.greenSemiBoldText
-                                              .copyWith(color: lightBlack))
-                                      : widget.allPlans.length != 0
-                                          ? Text('plan'.tr,
-                                              style: AppTextStyle
-                                                  .greenSemiBoldText
-                                                  .copyWith(color: lightBlack))
-                                          : SizedBox()),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      left: 24.0 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    child: Obx(() => trainerController
+                                            .isProfileLoading.value
+                                        ? Text('plan'.tr,
+                                            style: AppTextStyle
+                                                .greenSemiBoldText
+                                                .copyWith(color: lightBlack))
+                                        : widget.allPlans.length != 0
+                                            ? Text('plan'.tr,
+                                                style: AppTextStyle
+                                                    .greenSemiBoldText
+                                                    .copyWith(
+                                                        color: lightBlack))
+                                            : SizedBox()),
+                                  ),
                                   SizedBox(
                                       height:
                                           12 * SizeConfig.heightMultiplier!),
@@ -545,10 +577,15 @@ class _TrainerPageState extends State<TrainerPage> {
                                                       const Color.fromRGBO(
                                                           242, 245, 245, 1),
                                                   child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 8.0 *
-                                                            SizeConfig
-                                                                .widthMultiplier!),
+                                                    padding: index == 0
+                                                        ? EdgeInsets.only(
+                                                            left: 24.0 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!)
+                                                        : EdgeInsets.only(
+                                                            right: 8.0 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!),
                                                     child: PlanTile(
                                                       rating: double.parse("2"),
                                                       planTitle: "",
@@ -576,10 +613,18 @@ class _TrainerPageState extends State<TrainerPage> {
                                                       (BuildContext context,
                                                           int index) {
                                                     return Padding(
-                                                      padding: EdgeInsets.only(
-                                                          right: 8.0 *
-                                                              SizeConfig
-                                                                  .widthMultiplier!),
+                                                      padding: index == 0
+                                                          ? EdgeInsets.only(
+                                                              left: 24.0 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!,
+                                                              right: 8.0 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!)
+                                                          : EdgeInsets.only(
+                                                              right: 8.0 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!),
                                                       child: PlanTile(
                                                         rating: double.parse(
                                                             widget

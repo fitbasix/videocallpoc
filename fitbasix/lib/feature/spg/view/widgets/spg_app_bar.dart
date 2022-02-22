@@ -26,10 +26,13 @@ class SPGAppBar extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
             onPressed: onBack,
-            icon: SvgPicture.asset(
-              ImagePath.backIcon,
-              width: 7 * SizeConfig.widthMultiplier!,
-              height: 12 * SizeConfig.heightMultiplier!,
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                ImagePath.backIcon,
+                width: 7 * SizeConfig.widthMultiplier!,
+                height: 12 * SizeConfig.heightMultiplier!,
+              ),
             )),
         title: Text(
           title,

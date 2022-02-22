@@ -3,6 +3,7 @@ import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/Bmr_calculator/controller/bmr_controller.dart';
 import 'package:fitbasix/feature/Bmr_calculator/services/bmr_services.dart';
 import 'package:fitbasix/feature/Bmr_calculator/view/Appbar_forBmr.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -21,16 +22,20 @@ class BMRHomeScreen extends StatefulWidget {
 
 class _BMRHomeScreenState extends State<BMRHomeScreen> {
   // default values for design purpose
-  Gender? selectedgender;
+  Gender selectedgender = Gender.male;
   int age = 1;
   double bodyweight = 45.0;
   double height = 180;
   final BmrController bmrController = Get.put(BmrController());
+  final HomeController _homeController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: greyF6,
       appBar: AppbarforBMRScreen(
+        onRoute: () {
+          _homeController.selectedIndex.value = 0;
+        },
         title: 'bmr_calc'.tr,
         parentContext: context,
       ),
@@ -220,7 +225,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                       color: kPureWhite,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    height: 195 * SizeConfig.heightMultiplier!,
+                    // height: 195 * SizeConfig.heightMultiplier!,
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Column(
@@ -382,11 +387,12 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                 8 * SizeConfig.widthMultiplier!)))),
                     onPressed: () async {
                       // API Call
-                      bmrController.bmrresult.value = await BmrServices.getbmrCalculations(
-                          bodyweight,
-                          height,
-                          age,
-                          selectedgender == Gender.male ? 1 : 2);
+                      bmrController.bmrresult.value =
+                          await BmrServices.getbmrCalculations(
+                              bodyweight,
+                              height,
+                              age,
+                              selectedgender == Gender.male ? 1 : 2);
                       Navigator.pushNamed(context, RouteName.bmrresultScreen);
                     },
                     child: Text(

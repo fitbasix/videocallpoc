@@ -75,15 +75,10 @@ class PostController extends GetxController {
 //         foldersAvailable.singleWhere(
 //             (element) => element.name.toLowerCase().contains("all photos")));
 //     }
-    final assetList = <AssetEntity>[];
-    try {
-      await foldersAvailable[0].getAssetListPaged(currentPage.value, 100);
-    } catch (e) {}
+    var assetList = <AssetEntity>[];
+    assetList =
+        await foldersAvailable[0].getAssetListPaged(currentPage.value, 100);
 
-    // final assetList = await recentAlbum.getAssetListRange(
-    //   start: start,
-    //   end: end,
-    // );
     currentPage++;
 
     return assetList;

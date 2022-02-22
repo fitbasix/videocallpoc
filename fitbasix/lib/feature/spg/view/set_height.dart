@@ -17,6 +17,7 @@ class SetHeight extends StatelessWidget {
   Widget build(BuildContext context) {
     final SPGController _spgController = Get.find();
     return Scaffold(
+      backgroundColor: kPureWhite,
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
@@ -179,37 +180,91 @@ class SetHeight extends StatelessWidget {
           SizedBox(
             height: 80 * SizeConfig.heightMultiplier!,
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 24 * SizeConfig.widthMultiplier!),
-            child: RulerPicker(
-              controller: _spgController.heightRulerPickerController,
-              beginValue: 120,
-              endValue: 250,
-              initValue: _spgController.currentHeight.value,
-              scaleLineStyleList: const [
-                ScaleLineStyle(
-                    color: kGreenColor, width: 1.5, height: 30, scale: 0),
-                ScaleLineStyle(
-                    color: kGreenColor, width: 1, height: 15, scale: -1)
-              ],
-              marker: Container(
-                  width: 1.5 * SizeConfig.widthMultiplier!,
-                  height: 50 * SizeConfig.heightMultiplier!,
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(5))),
-              onValueChange: (value) {
-                _spgController.currentHeight.value = value;
-              },
-              onBuildRulerScalueText: (index, scaleValue) {
-                return scaleValue.toString() + "cm";
-              },
-              width: Get.width - 48 * SizeConfig.widthMultiplier!,
-              height: 100 * SizeConfig.heightMultiplier!,
-              rulerScaleTextStyle: AppTextStyle.normalGreenText,
-              rulerBackgroundColor: LightGreen,
-              rulerMarginTop: 25,
-            ),
+          Obx(
+            () => _spgController.heightType.value == "inch"
+                ? Padding(
+                    padding:
+                        EdgeInsets.only(left: 24 * SizeConfig.widthMultiplier!),
+                    child: RulerPicker(
+                      controller: _spgController.heightRulerPickerController,
+                      beginValue: 120,
+                      endValue: 250,
+                      initValue: _spgController.currentHeight.value,
+                      scaleLineStyleList: const [
+                        ScaleLineStyle(
+                            color: kGreenColor,
+                            width: 1.5,
+                            height: 30,
+                            scale: 0),
+                        ScaleLineStyle(
+                            color: kGreenColor, width: 1, height: 15, scale: -1)
+                      ],
+                      marker: Container(
+                          width: 1.5 * SizeConfig.widthMultiplier!,
+                          height: 50 * SizeConfig.heightMultiplier!,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(5))),
+                      onValueChange: (value) {
+                        _spgController.currentHeight.value = value;
+                      },
+                      onBuildRulerScalueText: (index, scaleValue) {
+                        return (scaleValue * 0.0328084)
+                                .toString()
+                                .split(".")[0] +
+                            "'" +
+                            (int.parse((scaleValue * 0.0328084)
+                                        .toString()
+                                        .substring(2, 4)) *
+                                    0.12)
+                                .toString()
+                                .substring(0, 2)
+                                .replaceAll(".", "") +
+                            "''";
+                      },
+                      width: Get.width - 48 * SizeConfig.widthMultiplier!,
+                      height: 100 * SizeConfig.heightMultiplier!,
+                      rulerScaleTextStyle: AppTextStyle.normalGreenText,
+                      rulerBackgroundColor: LightGreen,
+                      rulerMarginTop: 25,
+                    ),
+                  )
+                : Padding(
+                    padding:
+                        EdgeInsets.only(left: 24 * SizeConfig.widthMultiplier!),
+                    child: RulerPicker(
+                      controller: _spgController.heightRulerPickerController,
+                      beginValue: 120,
+                      endValue: 250,
+                      initValue: _spgController.currentHeight.value,
+                      scaleLineStyleList: const [
+                        ScaleLineStyle(
+                            color: kGreenColor,
+                            width: 1.5,
+                            height: 30,
+                            scale: 0),
+                        ScaleLineStyle(
+                            color: kGreenColor, width: 1, height: 15, scale: -1)
+                      ],
+                      marker: Container(
+                          width: 1.5 * SizeConfig.widthMultiplier!,
+                          height: 50 * SizeConfig.heightMultiplier!,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(5))),
+                      onValueChange: (value) {
+                        _spgController.currentHeight.value = value;
+                      },
+                      onBuildRulerScalueText: (index, scaleValue) {
+                        return (scaleValue.toString() + "cm");
+                      },
+                      width: Get.width - 48 * SizeConfig.widthMultiplier!,
+                      height: 100 * SizeConfig.heightMultiplier!,
+                      rulerScaleTextStyle: AppTextStyle.normalGreenText,
+                      rulerBackgroundColor: LightGreen,
+                      rulerMarginTop: 25,
+                    ),
+                  ),
           ),
           Spacer(),
           Padding(

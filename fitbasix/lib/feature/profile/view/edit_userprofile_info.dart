@@ -53,7 +53,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         backgroundColor: kPureWhite,
         appBar: AppBarForAccount(
           title: 'edit_profile'.tr,
-          parentContext: context,
+          onback: () {
+            Navigator.pop(context);
+          },
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -127,9 +129,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   onChanged: (value) {
                     //implement controller for storing user full name
                   },
-                  style: AppTextStyle.normalBlackText.copyWith(
-                    color: kBlack
-                  ),
+                  style: AppTextStyle.normalBlackText.copyWith(color: kBlack),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(
                         12 * SizeConfig.widthMultiplier!,
@@ -174,9 +174,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   onChanged: (value) {
                     //implement controller for storing user bio
                   },
-                  style: AppTextStyle.normalBlackText.copyWith(
-                    color: kBlack
-                  ),
+                  style: AppTextStyle.normalBlackText.copyWith(color: kBlack),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(
                         12 * SizeConfig.widthMultiplier!,
@@ -297,8 +295,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                 .currentHeight.value
                                                 .toString(),
                                             style: AppTextStyle.normalBlackText
-                                                .copyWith(
-                                                    color: kBlack),
+                                                .copyWith(color: kBlack),
                                           ),
                                           SizedBox(
                                               width: 4 *
@@ -308,7 +305,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               style: AppTextStyle
                                                   .normalBlackText
                                                   .copyWith(
-                                                      color: greyB7,))
+                                                color: greyB7,
+                                              ))
                                         ],
                                       )
                                     : Row(
@@ -325,8 +323,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                 .toString()
                                                 .split(".")[0],
                                             style: AppTextStyle.normalBlackText
-                                                .copyWith(
-                                                color: kBlack),
+                                                .copyWith(color: kBlack),
                                           ),
                                           SizedBox(
                                               width: 4 *
@@ -335,8 +332,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               textAlign: TextAlign.start,
                                               style: AppTextStyle
                                                   .normalBlackText
-                                                  .copyWith(
-                                                      color: greyB7)),
+                                                  .copyWith(color: greyB7)),
                                           SizedBox(
                                               width: 7 *
                                                   SizeConfig.widthMultiplier!),
@@ -351,9 +347,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                 .toString()
                                                 .substring(0, 2)
                                                 .replaceAll(".", ""),
-                                            style: AppTextStyle.normalBlackText.copyWith(
-                                              color: kBlack
-                                            ),
+                                            style: AppTextStyle.normalBlackText
+                                                .copyWith(color: kBlack),
                                           ),
                                           SizedBox(
                                               width: 4 *
@@ -362,8 +357,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               textAlign: TextAlign.start,
                                               style: AppTextStyle
                                                   .normalBlackText
-                                                  .copyWith(
-                                                      color: greyB7))
+                                                  .copyWith(color: greyB7))
                                         ],
                                       ),
                               ),
@@ -411,13 +405,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     Text(
                                       _weightController.currentWeight.value
                                           .toString(),
-                                      style: AppTextStyle.normalBlackText.copyWith(
-                                        color: kBlack
-                                      )
+                                      style: AppTextStyle.normalBlackText
+                                          .copyWith(color: kBlack)
                                           .copyWith(
-                                              fontSize: 16 *
-                                                  SizeConfig.textMultiplier!,
-                                              ),
+                                            fontSize:
+                                                16 * SizeConfig.textMultiplier!,
+                                          ),
                                       textAlign: TextAlign.center,
                                     ),
                                     SizedBox(
