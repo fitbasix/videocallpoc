@@ -894,6 +894,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                             RouteName.selectLocationScreen);
                                       },
                                       child: Container(
+                                        width: double.infinity,
                                         color: Colors.transparent,
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -927,6 +928,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                             RouteName.selectLocationScreen);
                                       },
                                       child: Container(
+                                        width: double.infinity,
                                         color: Colors.transparent,
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -979,6 +981,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       context, RouteName.customGallery);
                                 },
                                 child: Container(
+                                  width: double.infinity,
                                   color: Colors.transparent,
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -1020,6 +1023,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       context, RouteName.tagPeopleScreen);
                                 },
                                 child: Container(
+                                  width: double.infinity,
                                   color: Colors.transparent,
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,

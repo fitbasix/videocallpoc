@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
+import 'package:fitbasix/feature/Home/view/widgets/video_player.dart';
+import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -58,6 +60,7 @@ class ExplorePostTile extends StatefulWidget {
 
 class _ExplorePostTileState extends State<ExplorePostTile> {
   final HomeController _homeController = Get.find();
+  final PostController _postController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -293,12 +296,21 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                         itemBuilder: (context, index) {
                           return Stack(
                             children: [
-                              CachedNetworkImage(
-                                imageUrl: widget.imageUrl[index],
-                                height: 360 * SizeConfig.widthMultiplier!,
-                                width: 360 * SizeConfig.widthMultiplier!,
-                                fit: BoxFit.cover,
-                              ),
+                              _postController
+                                          .getUrlType(widget.imageUrl[index]) ==
+                                      0
+                                  ? CachedNetworkImage(
+                                      imageUrl: widget.imageUrl[index],
+                                      height: 360 * SizeConfig.widthMultiplier!,
+                                      width: 360 * SizeConfig.widthMultiplier!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Container(
+                                      height: 360 * SizeConfig.widthMultiplier!,
+                                      width: 360 * SizeConfig.widthMultiplier!,
+                                      // child: VideoPlayerContainer(
+                                      //     videoUrl: widget.imageUrl[index]),
+                                    ),
                               ClipRect(
                                 child: BackdropFilter(
                                   filter: ImageFilter.blur(
@@ -311,12 +323,21 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                   ),
                                 ),
                               ),
-                              CachedNetworkImage(
-                                imageUrl: widget.imageUrl[index],
-                                height: 360 * SizeConfig.widthMultiplier!,
-                                width: 360 * SizeConfig.widthMultiplier!,
-                                fit: BoxFit.contain,
-                              ),
+                              _postController
+                                          .getUrlType(widget.imageUrl[index]) ==
+                                      0
+                                  ? CachedNetworkImage(
+                                      imageUrl: widget.imageUrl[index],
+                                      height: 360 * SizeConfig.widthMultiplier!,
+                                      width: 360 * SizeConfig.widthMultiplier!,
+                                      fit: BoxFit.contain,
+                                    )
+                                  : Container(
+                                      height: 360 * SizeConfig.widthMultiplier!,
+                                      width: 360 * SizeConfig.widthMultiplier!,
+                                      child: VideoPlayerContainer(
+                                          videoUrl: widget.imageUrl[index]),
+                                    ),
                               // Positioned(
                               //   top: 0,
                               //   right: 0,

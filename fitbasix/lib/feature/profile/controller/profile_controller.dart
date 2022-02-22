@@ -5,13 +5,14 @@ import 'package:intl/intl.dart';
 
 import '../../log_in/controller/login_controller.dart';
 
-class ProfileController extends GetxController{
+class ProfileController extends GetxController {
   var val = 0.obs;
   LoginController? mobileNoController;
-TextEditingController emailController = TextEditingController();
-TextEditingController DOBController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController DOBController = TextEditingController();
+  RxString selectedDate = DateTime(1999).toString().obs;
 // height controller for dialog box
-RxString heightType = "inch".obs;
+  RxString heightType = "inch".obs;
   RxInt currentHeight = 170.obs;
   final heightRulerPickerController = RulerPickerController(value: 0);
 // weight controller for dialog box
@@ -19,29 +20,21 @@ RxString heightType = "inch".obs;
   RxString weightType = "kg".obs;
   final rulerPickerController = RulerPickerController(value: 2);
 
+  void editUserPersonalInfo() {
+    //todo import API for user data updating
+    //user email
+    emailController.text;
+    //user dob
+    DOBController.text;
+    //mobile no
+    mobileNoController?.mobile.value;
+    //country code
+    mobileNoController?.selectedCountry.value;
+  }
 
-
-void editUserPersonalInfo(){
-  //todo import API for user data updating
-  //user email
-  emailController.text;
-  //user dob
-  DOBController.text;
-  //mobile no
-  mobileNoController?.mobile.value;
-  //country code
-  mobileNoController?.selectedCountry.value;
-
-
-
-
-}
-
-
-   
-@override
+  @override
   Future<void> onInit() async {
-  DOBController.text = DateFormat("dd/mm/yyyy").format(DateTime.now());
+    DOBController.text = DateFormat("dd/LL/yyyy").format(DateTime.now());
 
     super.onInit();
   }

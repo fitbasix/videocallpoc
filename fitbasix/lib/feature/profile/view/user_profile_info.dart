@@ -1,4 +1,5 @@
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,44 +16,53 @@ class UserProfileScreen extends StatefulWidget {
   State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-String name = 'Veronica Taylor';
-String followerscount = '345';
-String followingcount = '52';
-String about_user = 'Hi, This is Jonathan. I am certified by Institute Viverra cras facilisis massa amet,'
+String about_user =
+    'Hi, This is Jonathan. I am certified by Institute Viverra cras facilisis massa amet,'
     ' hendrerit nunc. Tristique tellus, massa scelerisque tincidunt neque dui metus,'
     ' id pellentesque.'
-
     'Let’s start your fitness journey!!!';
-String Imageurl = 'http://www.pixelmator.com/community/download/file.php?avatar=17785_1569233053.png';
-String coverimageUrl = 'https://media.istockphoto.com/photos/blue-sky-with-scattered-clouds-picture-id106577335?k=20&m=106577335&s=170667a&w=0&h=ezJ6lRDtUbLfc5nZDJNNudEJdGBK2JCEPGFIiQnzZyY=';
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  final HomeController _homeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: UserPageInfo(
-        username: name.tr,
-        userfollowerscount: followerscount,
-        userfollowingscount: followingcount,
+        username:
+            _homeController.userProfileData.value.response!.data!.profile!.name,
+        userfollowerscount: _homeController
+            .userProfileData.value.response!.data!.profile!.followers
+            .toString(),
+        userfollowingscount: _homeController
+            .userProfileData.value.response!.data!.profile!.following
+            .toString(),
         aboutuser: about_user.tr,
-        userImage: Imageurl,
-        userCoverImage: coverimageUrl,
-        oneditprofile: (){
-          Navigator.pushNamed(
-              context, RouteName.edituserProfileScreen);
+        userImage: _homeController
+            .userProfileData.value.response!.data!.profile!.profilePhoto,
+        userCoverImage: _homeController
+            .userProfileData.value.response!.data!.profile!.coverPhoto,
+        oneditprofile: () {
+          Navigator.pushNamed(context, RouteName.edituserProfileScreen);
         },
-        oneditcoverimage: (){},
+        oneditcoverimage: () {},
       ),
     );
   }
 }
 
 class UserPageInfo extends StatefulWidget {
-  const UserPageInfo({
-    this.username,this.userImage,this.userCoverImage,
-    this.userfollowerscount,this.userfollowingscount,
-    this.aboutuser,this.oneditprofile,this.oneditcoverimage,
-    Key? key}) : super(key: key);
+  const UserPageInfo(
+      {this.username,
+      this.userImage,
+      this.userCoverImage,
+      this.userfollowerscount,
+      this.userfollowingscount,
+      this.aboutuser,
+      this.oneditprofile,
+      this.oneditcoverimage,
+      Key? key})
+      : super(key: key);
 
   final String? username;
   final String? userImage;
@@ -67,7 +77,6 @@ class UserPageInfo extends StatefulWidget {
 }
 
 class _UserPageInfoState extends State<UserPageInfo> {
-
   //demo user interest list for design purpose
   List<String> userinterestlist = [
     "Sports Nutrition",
@@ -115,8 +124,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                 GestureDetector(
                                   onTap: widget.oneditprofile!,
                                   child: Container(
+                                    margin: EdgeInsets.only(
+                                        right:
+                                            50 * SizeConfig.widthMultiplier!),
                                     height: 28 * SizeConfig.heightMultiplier!,
-                                    width: 141 * SizeConfig.widthMultiplier!,
                                     padding: EdgeInsets.symmetric(
                                         vertical:
                                             4 * SizeConfig.heightMultiplier!,
@@ -124,13 +135,12 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                             16 * SizeConfig.widthMultiplier!),
                                     decoration: BoxDecoration(
                                         color: greyB7,
-                                        borderRadius: BorderRadius.circular(8.0)),
-                                    child: Center(
-                                      child: Text(
-                                        'edit_yourprofile'.tr,
-                                        style: AppTextStyle.greenSemiBoldText
-                                            .copyWith(color: kPureWhite),
-                                      ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0)),
+                                    child: Text(
+                                      'edit_yourprofile'.tr,
+                                      style: AppTextStyle.greenSemiBoldText
+                                          .copyWith(color: kPureWhite),
                                     ),
                                   ),
                                 )
@@ -143,7 +153,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                           //Follwers & followimg
                           Padding(
                             padding: EdgeInsets.only(
-                              top: 11 * SizeConfig.heightMultiplier!,
+                                top: 11 * SizeConfig.heightMultiplier!,
                                 left: 16.0 * SizeConfig.widthMultiplier!,
                                 right: 27 * SizeConfig.widthMultiplier!),
                             child: Row(
@@ -209,10 +219,13 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                 SizedBox(
                                   height: 12 * SizeConfig.heightMultiplier!,
                                 ),
-                                Text( widget.aboutuser!,
-                              style: AppTextStyle.hblackSemiBoldText.copyWith(
-                                fontWeight: FontWeight.w400,),
-                                 ),
+                                Text(
+                                  widget.aboutuser!,
+                                  style:
+                                      AppTextStyle.hblackSemiBoldText.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 24 * SizeConfig.heightMultiplier!,
                                 ),
@@ -223,11 +236,11 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                 SizedBox(
                                   height: 12 * SizeConfig.heightMultiplier!,
                                 ),
-                              // common user interest list using a demo list
-                              _userinterestBar(list: userinterestlist),
+                                // common user interest list using a demo list
+                                _userinterestBar(list: userinterestlist),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                       Container(
@@ -250,10 +263,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                           height: 120 * SizeConfig.widthMultiplier!,
                           width: 120 * SizeConfig.widthMultiplier!,
                           child: CircleAvatar(
-                          //  radius: 60 * SizeConfig.heightMultiplier!,
-                            backgroundImage: NetworkImage(
-                                widget.userImage!
-                            ),
+                            //  radius: 60 * SizeConfig.heightMultiplier!,
+                            backgroundImage: NetworkImage(widget.userImage!),
                           ),
                         ),
                       ),
@@ -312,31 +323,27 @@ class _UserPageInfoState extends State<UserPageInfo> {
   }
 
 // user interest listview using demo list
-  Widget _userinterestBar({List<String>? list}){
+  Widget _userinterestBar({List<String>? list}) {
     return Container(
-      height: 28 *
-          SizeConfig.heightMultiplier!,
+      height: 28 * SizeConfig.heightMultiplier!,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: list!.length,
-          itemBuilder: (BuildContext context, int index){
+          itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: EdgeInsets.only(
-                  left: 8.0 * SizeConfig.widthMultiplier!),
+              padding: EdgeInsets.only(left: 8.0 * SizeConfig.widthMultiplier!),
               child: Container(
                 decoration: BoxDecoration(
                     color: greyF6,
                     borderRadius: BorderRadius.circular(
-                        14 * SizeConfig.heightMultiplier!)
-                ),
+                        14 * SizeConfig.heightMultiplier!)),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: 12 * SizeConfig.widthMultiplier!),
                   child: Center(
                     child: Text(
                       list[index],
-                      style: AppTextStyle
-                          .lightMediumBlackText.copyWith(
+                      style: AppTextStyle.lightMediumBlackText.copyWith(
                         color: kBlack,
                       ),
                     ),
@@ -344,8 +351,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                 ),
               ),
             );
-      }),
+          }),
     );
   }
-
 }
