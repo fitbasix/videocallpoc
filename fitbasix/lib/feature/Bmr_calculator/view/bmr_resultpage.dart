@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
 import '../controller/bmr_controller.dart';
+import '../model/bmr_calculation_model.dart';
 import 'Appbar_forBmr.dart';
 
 class BMRResultScreen extends StatefulWidget {
@@ -17,13 +18,12 @@ class BMRResultScreen extends StatefulWidget {
 }
 
 class _BMRResultScreenState extends State<BMRResultScreen> {
- // var bmrresult = '1346';
+  // var bmrresult = '1346';
   bool isReadmore = false;
   // final BmrController bmrController = Get.find(BmrController());
   final BmrController bmrcontroller = Get.put(BmrController());
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: greyF6,
       appBar: AppbarforBMRScreen(
@@ -73,8 +73,10 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                             ),
                             // result
                             Text(
-                              NumberFormat("#,###")
-                                  .format(double.parse(bmrcontroller.bmrresult.value.response!.data!.bmr.toString())),
+                              NumberFormat("#,###").format(double.parse(
+                                  bmrcontroller
+                                      .bmrresult.value.response!.data!.bmr
+                                      .toString())),
                               style: AppTextStyle.hblackSemiBoldText.copyWith(
                                 fontSize: 32 * SizeConfig.textMultiplier!,
                                 fontWeight: FontWeight.w400,
@@ -108,9 +110,10 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                       color: greyF6,
                     ),
                   ),
-                  isReadmore ? buildText(
-                      bmrcontroller.bmrresult.value.response!.data!.data!.littleNoExerciseEn.toString()
-                  ) : Container(),
+                  isReadmore
+                      ? buildText(
+                          bmrcontroller.bmrresult.value.response!.data!.data!)
+                      : Container(),
                   Container(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -141,7 +144,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
     );
   }
 
-  Widget buildText(String calories) {
+  Widget buildText(List<BmrResult> calories) {
     return Padding(
       padding: EdgeInsets.only(
         //  top: 24*SizeConfig.heightMultiplier!,
@@ -161,25 +164,33 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
               // maxLines: lines,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: 16 * SizeConfig.heightMultiplier!,
-              // bottom: 16*SizeConfig.heightMultiplier!,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Little/ no exercise',
-                  style: AppTextStyle.black400Text,
-                ),
-                Text(
-                  calories,
-                  style: AppTextStyle.hnormal600BlackText,
-                )
-              ],
-            ),
-          ),
+          ListView.builder(
+              itemCount: calories.length,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    top: 16 * SizeConfig.heightMultiplier!,
+                    // bottom: 16*SizeConfig.heightMultiplier!,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: 168 * SizeConfig.widthMultiplier!,
+                        child: Text(
+                          calories[index].name.toString(),
+                          style: AppTextStyle.black400Text,
+                        ),
+                      ),
+                      Text(
+                        calories[index].value!.toInt().toString(),
+                        style: AppTextStyle.hnormal600BlackText,
+                      )
+                    ],
+                  ),
+                );
+              }),
           SizedBox(
             height: 24 * SizeConfig.heightMultiplier!,
           ),

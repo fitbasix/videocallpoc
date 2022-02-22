@@ -12,40 +12,66 @@ import 'package:get/get.dart';
 import '../../widgets/enpandableWidget.dart';
 
 class TermOfUseScreen extends StatelessWidget {
-   TermOfUseScreen({Key? key}) : super(key: key);
-  HelpAndSupportConroller _termOfUseController = Get.put(HelpAndSupportConroller());
+  TermOfUseScreen({Key? key}) : super(key: key);
+  HelpAndSupportConroller _termOfUseController =
+      Get.put(HelpAndSupportConroller());
 
-   @override
-   Widget build(BuildContext context) {
-    if(_termOfUseController.termOfUseIsLoading.value){
+  @override
+  Widget build(BuildContext context) {
+    if (_termOfUseController.termOfUseIsLoading.value) {
       _termOfUseController.getTermOfUseContent();
     }
     return Scaffold(
-      backgroundColor: kPureWhite,
-      appBar: AppBarForAccount(title: "term_of_use".tr,parentContext: context,),
-      body: Obx(()=>(_termOfUseController.termOfUseIsLoading.value)?Center(child: CustomizedCircularProgress(),):ListView(
-        physics: const BouncingScrollPhysics(),
-
-        children: [
-
-          //Last updated text
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!,vertical: 14*SizeConfig.heightMultiplier!),
-              child: Text("last_updated".tr+DateFormat(" dd MMM yy").format(_termOfUseController.termOfUseModel!.response!.data!.updatedAt!),style: AppTextStyle.grey400Text,)),
-
-
-          SizedBox(height:  25*SizeConfig.heightMultiplier!,),
-          //all privacy policy
-          ExpandableWidget(title: _termOfUseController.termOfUseModel!.response!.data!.introduction,content: _termOfUseController.termOfUseModel!.response!.data!.description!),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(_termOfUseController.termOfUseModel!.response!.data!.sections!.length, (index) {
-              return ExpandableWidget(title: _termOfUseController.termOfUseModel!.response!.data!.sections![index].title,content: _termOfUseController.termOfUseModel!.response!.data!.sections![index].description);
+        backgroundColor: kPureWhite,
+        appBar: AppBarForAccount(
+            title: "term_of_use".tr,
+            onback: () {
+              Navigator.pop(context);
             }),
-          ),
-          SizedBox(height: 50*SizeConfig.heightMultiplier!,),
-        ],
-      ))
-    );
+        body: Obx(() => (_termOfUseController.termOfUseIsLoading.value)
+            ? Center(
+                child: CustomizedCircularProgress(),
+              )
+            : ListView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  //Last updated text
+                  Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16 * SizeConfig.widthMultiplier!,
+                          vertical: 14 * SizeConfig.heightMultiplier!),
+                      child: Text(
+                        "last_updated".tr +
+                            DateFormat(" dd MMM yy").format(_termOfUseController
+                                .termOfUseModel!.response!.data!.updatedAt!),
+                        style: AppTextStyle.grey400Text,
+                      )),
+
+                  SizedBox(
+                    height: 25 * SizeConfig.heightMultiplier!,
+                  ),
+                  //all privacy policy
+                  ExpandableWidget(
+                      title: _termOfUseController
+                          .termOfUseModel!.response!.data!.introduction,
+                      content: _termOfUseController
+                          .termOfUseModel!.response!.data!.description!),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(
+                        _termOfUseController.termOfUseModel!.response!.data!
+                            .sections!.length, (index) {
+                      return ExpandableWidget(
+                          title: _termOfUseController.termOfUseModel!.response!
+                              .data!.sections![index].title,
+                          content: _termOfUseController.termOfUseModel!
+                              .response!.data!.sections![index].description);
+                    }),
+                  ),
+                  SizedBox(
+                    height: 50 * SizeConfig.heightMultiplier!,
+                  ),
+                ],
+              )));
   }
 }

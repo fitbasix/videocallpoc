@@ -31,7 +31,9 @@ class EditPersonalInfoScreen extends StatelessWidget {
       backgroundColor: kPureWhite,
       appBar: AppBarForAccount(
         title: "Personal Information",
-        parentContext: context,
+        onback: () {
+          Navigator.pop(context);
+        },
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(

@@ -690,6 +690,7 @@ class TrainerTile extends StatelessWidget {
                 style: AppTextStyle.NormalText.copyWith(
                     fontSize: 12 * SizeConfig.textMultiplier!),
                 maxLines: 2,
+                textAlign: TextAlign.left,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -699,7 +700,7 @@ class TrainerTile extends StatelessWidget {
             certifcateTitle!.isEmpty
                 ? Container()
                 : Container(
-              //79
+                    //79
                     height: 81 * SizeConfig.heightMultiplier!,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -708,8 +709,8 @@ class TrainerTile extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           return Padding(
                             padding: EdgeInsets.only(
-                            //  left: 12.0 * SizeConfig.widthMultiplier!,
-                                right: 12.0 * SizeConfig.widthMultiplier!,
+                              //  left: 12.0 * SizeConfig.widthMultiplier!,
+                              right: 12.0 * SizeConfig.widthMultiplier!,
                             ),
                             child: AchivementCertificateTile(
                               certificateDescription:

@@ -12,7 +12,7 @@ class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
   String? title;
   BuildContext? parentContext;
   VoidCallback? onRoute;
-  AppbarforBMRScreen({this.onRoute,this.title, this.parentContext, Key? key})
+  AppbarforBMRScreen({this.onRoute, this.title, this.parentContext, Key? key})
       : super(key: key);
 
   @override
@@ -23,19 +23,23 @@ class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       title: Row(
         children: [
-          SizedBox(
-            width: 7 * SizeConfig.widthMultiplier!,
-          ),
+          // SizedBox(
+          //   width: 7 * SizeConfig.widthMultiplier!,
+          // ),
           GestureDetector(
               onTap: onRoute,
               child: Container(
-                  color: Colors.transparent,
+                color: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: SvgPicture.asset(
                     ImagePath.backIcon,
                     width: 7.41 * SizeConfig.widthMultiplier!,
                     height: 12 * SizeConfig.heightMultiplier!,
                     fit: BoxFit.contain,
-                  ))),
+                  ),
+                ),
+              )),
           SizedBox(
             width: 20.59 * SizeConfig.widthMultiplier!,
           ),
@@ -47,7 +51,7 @@ class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-            onPressed: (){
+            onPressed: () {
               showDialog(
                   context: context,
                   builder: (BuildContext context) => BMRDialog());

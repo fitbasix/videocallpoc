@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,6 +14,7 @@ class DialogboxForFeedback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeController _homeController = Get.find();
     return Dialog(
       insetPadding: EdgeInsets.only(
         left: 32 * SizeConfig.widthMultiplier!,
@@ -28,32 +30,33 @@ class DialogboxForFeedback extends StatelessWidget {
             Column(
               children: [
                 SizedBox(
-                  height: 32*SizeConfig.heightMultiplier!,
+                  height: 32 * SizeConfig.heightMultiplier!,
                 ),
                 SvgPicture.asset(ImagePath.feedbackdialogframe,
                     height: 223 * SizeConfig.heightMultiplier!),
                 SizedBox(
-                  height: 16*SizeConfig.heightMultiplier!,
+                  height: 16 * SizeConfig.heightMultiplier!,
                 ),
                 Center(
-                  child: Text('Your opinion matters to us!'.tr,
-                    style: AppTextStyle.hblack600Text,),
+                  child: Text(
+                    'Your opinion matters to us!'.tr,
+                    style: AppTextStyle.hblack600Text,
+                  ),
                 ),
                 SizedBox(
-                  height: 16*SizeConfig.heightMultiplier!,
+                  height: 16 * SizeConfig.heightMultiplier!,
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    left: 31* SizeConfig.widthMultiplier!,
-                    right: 31* SizeConfig.widthMultiplier!,
+                    left: 31 * SizeConfig.widthMultiplier!,
+                    right: 31 * SizeConfig.widthMultiplier!,
                   ),
                   child: Text(
                       'Rate us on the App Store and send us your feedback ⭐'.tr,
                       style: AppTextStyle.hnormal600BlackText.copyWith(
                         fontWeight: FontWeight.w400,
                       ),
-                      textAlign: TextAlign.center
-                  ),
+                      textAlign: TextAlign.center),
                 ),
                 // SizedBox(
                 //   height: 24*SizeConfig.heightMultiplier!,
@@ -72,7 +75,7 @@ class DialogboxForFeedback extends StatelessWidget {
                           style: ButtonStyle(
                               elevation: MaterialStateProperty.all(0),
                               backgroundColor:
-                              MaterialStateProperty.all(kgreen49),
+                                  MaterialStateProperty.all(kgreen49),
                               shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
@@ -85,14 +88,14 @@ class DialogboxForFeedback extends StatelessWidget {
                             style: AppTextStyle.hboldWhiteText,
                           ))),
                 ),
-
               ],
             ),
-
             Align(
               alignment: Alignment.topRight,
               child: IconButton(
                 onPressed: () {
+                  _homeController.selectedIndex.value = 0;
+                  Navigator.pop(context);
                   Navigator.pop(context);
                 },
                 icon: SvgPicture.asset(
