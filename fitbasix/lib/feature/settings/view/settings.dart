@@ -24,59 +24,66 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     final HomeController _homeController = Get.find();
-    return Scaffold(
-      backgroundColor: kPureWhite,
-      appBar: AppBarForAccount(
-        title: 'setting'.tr,
-        onback: () {
-          _homeController.selectedIndex.value = 0;
-          Navigator.pop(context);
-          Navigator.pop(context);
-        },
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            //notification
-            _settingField(
-                svgicon: ImagePath.notificationIcon,
-                title: 'notification'.tr,
-                description: 'notification_subtitle'.tr,
+    return WillPopScope(
+      onWillPop: () async{
+        Navigator.pop(context);
+        Navigator.pop(context);
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: kPureWhite,
+        appBar: AppBarForAccount(
+          title: 'setting'.tr,
+          onback: () {
+            _homeController.selectedIndex.value = 0;
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              //notification
+              _settingField(
+                  svgicon: ImagePath.notificationIcon,
+                  title: 'notification'.tr,
+                  description: 'notification_subtitle'.tr,
+                  onchange: (value) {
+                    _settingController.notificationSwitch.value = value;
+                  },
+                  switchcontroller: _settingController.notificationSwitch,
+                  wantbutton: true),
+              //private account
+              _settingField(
+                svgicon: ImagePath.privateAccountIcon,
+                title: 'private_account'.tr,
+                description: 'private_subtitle'.tr,
                 onchange: (value) {
-                  _settingController.notificationSwitch.value = value;
+                  _settingController.privacyAccount.value = value;
                 },
+                wantbutton: true,
+                switchcontroller: _settingController.privacyAccount,
+              ),
+              //deactivate account
+              _settingField(
+                svgicon: ImagePath.deactivateAccountIcon,
+                title: 'deactivate_account'.tr,
+                description: 'deactivate_subtitle'.tr,
+                wantbutton: false,
                 switchcontroller: _settingController.notificationSwitch,
-                wantbutton: true),
-            //private account
-            _settingField(
-              svgicon: ImagePath.privateAccountIcon,
-              title: 'private_account'.tr,
-              description: 'private_subtitle'.tr,
-              onchange: (value) {
-                _settingController.privacyAccount.value = value;
-              },
-              wantbutton: true,
-              switchcontroller: _settingController.privacyAccount,
-            ),
-            //deactivate account
-            _settingField(
-              svgicon: ImagePath.deactivateAccountIcon,
-              title: 'deactivate_account'.tr,
-              description: 'deactivate_subtitle'.tr,
-              wantbutton: false,
-              switchcontroller: _settingController.notificationSwitch,
-            ),
-            // delete account
-            _settingField(
-              svgicon: ImagePath.deleteAccountIcon,
-              title: 'delete_account'.tr,
-              textcolor: kRed,
-              description: 'delete_subtitle'.tr,
-              wantbutton: false,
-              switchcontroller: _settingController.notificationSwitch,
-            ),
-          ],
+              ),
+              // delete account
+              _settingField(
+                svgicon: ImagePath.deleteAccountIcon,
+                title: 'delete_account'.tr,
+                textcolor: kRed,
+                description: 'delete_subtitle'.tr,
+                wantbutton: false,
+                switchcontroller: _settingController.notificationSwitch,
+              ),
+            ],
+          ),
         ),
       ),
     );
