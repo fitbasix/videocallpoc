@@ -133,6 +133,7 @@ class MenuScreen extends StatelessWidget {
 
                   Get.deleteAll();
                   InitializeQuickBlox().logOutUserSession();
+                  InitializeQuickBlox().logOutFromVideoCall();
                 })
           ],
         ));

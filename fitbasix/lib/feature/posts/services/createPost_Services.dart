@@ -12,6 +12,7 @@ import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quickblox_sdk/models/qb_session.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 
@@ -101,17 +102,15 @@ class CreatePostService {
     log(response.data.toString());
     UserProfileModel _userProfileModel = userProfileModelFromJson(response.toString());
     if(_userProfileModel.response!.data!.profile!.quickBloxId != null) {
-
       String userId = _userProfileModel.response!.data!.profile!.id!;
       final password = Crypt.sha256(_userProfileModel.response!.data!.profile!.id!, salt: '10');
       bool loggedIn = await LogInUserToQuickBlox(userId,password.hash,_userProfileModel.response!.data!.profile!.quickBloxId!);
-      getSessionQB();
-      await InitializeQuickBlox().subscribeCall();
-      connectUserToChat(password.hash,_userProfileModel.response!.data!.profile!.quickBloxId!);
+      //await InitializeQuickBlox().initWebRTC();
+      // InitializeQuickBlox().subscribeCall();
+
     }
     else{
       try{
-
         String userId = _userProfileModel.response!.data!.profile!.id!;
         final password = Crypt.sha256(
             _userProfileModel.response!.data!.profile!.id!,
@@ -121,9 +120,11 @@ class CreatePostService {
             name: userName, loginId: userId, password: password.hash);
         int response = await updateUserQuickBloxId(userQuickBloxId!);
         bool loggedIn = await LogInUserToQuickBlox(userId, password.hash, userQuickBloxId);
-        getSessionQB();
-        await InitializeQuickBlox().subscribeCall();
-        connectUserToChat(password.hash, userQuickBloxId);
+
+        //await InitializeQuickBlox().initWebRTC();
+       // await InitializeQuickBlox().subscribeCall();
+
+
       }catch(e){
         //todo handle if QBlox has some backend error
 
@@ -138,17 +139,17 @@ class CreatePostService {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.get(ApiUrl.getAllCategory);
-
     log(response.data.toString());
     return categoryModelFromJson(response.toString());
+
   }
 
 
-  static getSessionQB() async {
+  static void getSessionQB() async {
     try {
-      QBSession? session = await QB.auth.getSession();
-      QBSession? session2 = await QB.auth.setSession(session!);
-
+      QBSession? session = await QB.auth.getSession().then((value)async {
+        QBSession? session2 = await QB.auth.setSession(value!);
+      });
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
       print(e.toString());
@@ -156,28 +157,52 @@ class CreatePostService {
   }
 
 
-  static Future<bool> LogInUserToQuickBlox(String logIn,String password,int userQuickBloxId ) async {
-    var result = await QB.auth.login(logIn,password);
-
-    if(_homeController.userQuickBloxId.value == 0){
-      _homeController.userQuickBloxId.value = result.qbUser!.id!;
-      print(_homeController.userQuickBloxId.value.toString()+" is stored in homecontroller");
+  static Future<bool> LogInUserToQuickBlox(String logIn,String password,int userQuickBloxId) async {
+    print("called login");
+    var connected = await QB.chat.isConnected();
+    if(connected!){
+      print("called cat connected");
+      InitializeQuickBlox().initWebRTC();
+      //InitializeQuickBlox().subscribeCall();
     }
+    var result = await QB.auth.login(logIn,password).then((value){
+      print("user logged in");
+      if(_homeController.userQuickBloxId.value == 0){
+        print("userId stored");
+        _homeController.userQuickBloxId.value = value.qbUser!.id!;
+        print(_homeController.userQuickBloxId.value.toString()+" is stored in homecontroller");
+      }
+      connectUserToChat(password,userQuickBloxId);
+      if(value.qbUser != null){
+        return true;
+      }
+      else{
+        return false;
+      }
+    });
+      ///connect user to chat
 
-    ///connect user to chat
-
-    if(result.qbUser != null){
-      return true;
-    }
-    else{
-      return false;
-    }
+    return false;
   }
 
   static connectUserToChat(String password,int userQuickBloxId) async {
+    var chatConnect = await QB.chat.isConnected();
+    if(chatConnect!){
+      InitializeQuickBlox().initWebRTC();
+      InitializeQuickBlox().subscribeCall();
+    }
+    print("called connect user to chat");
     try {
-      var result = await QB.chat.connect(userQuickBloxId, password);
+      var result = await QB.chat.connect(userQuickBloxId, password).then((value) async {
+        var chatConnect = await QB.chat.isConnected();
+        if(chatConnect!){
+          InitializeQuickBlox().initWebRTC();
+          InitializeQuickBlox().subscribeCall();
+        }
+      });
+
     } on PlatformException catch (e) {
+      print(e.toString());
       // Some error occurred, look at the exception message for more details
     }
   }

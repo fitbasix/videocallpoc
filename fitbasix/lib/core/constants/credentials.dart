@@ -1,18 +1,21 @@
 import 'dart:async';
 
+import 'package:fitbasix/feature/message/view/accepted_video_call_screen.dart';
+import 'package:fitbasix/feature/message/view/chat_videocallscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quickblox_sdk/models/qb_rtc_session.dart';
 import 'package:quickblox_sdk/models/qb_settings.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'package:quickblox_sdk/webrtc/constants.dart';
 import 'package:get/get.dart';
 
 
-const String APP_ID = "95622";
-const String AUTH_KEY = "JeSeKeyEkEMBFps";
-const String AUTH_SECRET = "bY-YdQQPDvuZZWa";
-const String ACCOUNT_KEY = "RxbHctz7wFyZ8sWW67rY";
+const String APP_ID = "95666";
+const String AUTH_KEY = "LPzPYnqdOn9z2bv";
+const String AUTH_SECRET = "3ySZKwqBaDr-9aS";
+const String ACCOUNT_KEY = "aA9iRn_JXuj4i8TXLCxw";
 const String API_ENDPOINT = "";
 const String CHAT_ENDPOINT = "";
 
@@ -29,45 +32,37 @@ class InitializeQuickBlox{
       print("error $e");
       // DialogUtils.showError(context!, e);
     }
-
     try {
       QBSettings? settings = await QB.settings.get();
+      enableAutoReconnect();
 
     } on PlatformException catch (e) {
+      print(e);
     }
 
+    //todo initialize web rtc after log in
+
+  }
+  Future<void> initWebRTC() async {
+    print("called web RTC");
     ///init web RTC
     try {
-      await QB.webrtc.init();
-      print("webINIT");
+      await QB.webrtc.init().then((value) {
+        subscribeCall();
+      });
 
+      print("webINIT");
     } on PlatformException catch (e) {
       print(e.toString() +"init error");
     }
 
-    enableAutoReconnect();
-
   }
-
   Future<void> enableAutoReconnect() async {
-
     bool enable = true;
-
-
-
     try {
-
-      await QB.settings.enableAutoReconnect(enable);
-
-
-
-    } on PlatformException catch (e) {
-
-
-    }
-
+      await QB.settings.enableAutoReconnect(enable);}
+    on PlatformException catch (e) {}
   }
-
   Future<void> logOutUserSession() async{
     try {
       await QB.auth.logout();
@@ -75,7 +70,13 @@ class InitializeQuickBlox{
       // Some error occurred, look at the exception message for more details
     }
   }
-
+  Future<void>logOutFromVideoCall() async {
+    try {
+      await QB.webrtc.release();
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
   Future<void> subscribeCall() async {
     if (_callSubscription != null) {
       print("call subscribed");
@@ -97,13 +98,27 @@ class InitializeQuickBlox{
           title: "call incoming",
           content: Row(
             children: [
-              ElevatedButton(onPressed: (){
+              ElevatedButton(onPressed: () async{
+                try {
+                  QBRTCSession? session = await QB.webrtc.accept(sessionId).then((value){
+                    Navigator.of(Get.overlayContext!).pop();
+                    Get.to(()=>AcceptedVideoCallScreen(sessionIdForVideoCall: sessionId,));
+                  });
+                } on PlatformException catch (e) {
+                  // Some error occurred, look at the exception message for more details
+                }
 
               }, child: Text("Accept")),
               SizedBox(width: 10,),
-              ElevatedButton(onPressed: (){
-
-              }, child: Text("Decline"))
+              ElevatedButton(onPressed: () async {
+                try {
+                  QBRTCSession? session = await QB.webrtc.reject(sessionId,).then((value){
+                    Navigator.of(Get.overlayContext!).pop();
+                  });
+                } on PlatformException catch (e) {
+                  // Some error occurred, look at the exception message for more details
+                }
+                }, child: Text("Decline")),
             ],
           )
         );

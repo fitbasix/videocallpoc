@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/message/model/reciever_message_model.dart';
+import 'package:fitbasix/feature/message/view/chat_videocallscreen.dart';
 import 'package:fitbasix/feature/message/view/documents_view_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -61,11 +64,10 @@ class _ChatScreenState extends State<ChatScreen> {
   QBDialog? userDialogForChat;
   final TextEditingController _massageController = TextEditingController();
   StreamSubscription? _massageStreamSubscription;
-  StreamSubscription? _connectionStreamSubscription;
   String event = QBChatEvents.RECEIVED_NEW_MESSAGE;
   List<QBMessage?>? messages;
   DateTime? messageDate = DateTime(2015, 5, 5);
-
+  StreamSubscription? _connectionStreamSubscription;
 
   StreamSubscription? _callEndSubscription;
 
@@ -80,6 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
   StreamSubscription? _notAnswerSubscription;
 
   StreamSubscription? _peerConnectionSubscription;
+  ReceivePort _port = ReceivePort();
 
   @override
   void dispose() {
@@ -94,18 +97,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    subscribeCall();
     subscribeReject();
-    print("subscribeReject demmm");
     subscribeAccept();
-    print("subscribeAccept demmm");
     subscribeHangUp();
-    print("subscribeHangUp demmm");
     subscribeVideoTrack();
-    print("subscribeVideoTrack demmm");
     subscribeNotAnswer();
-    print("subscribeNotAnswer demmm");
     subscribePeerConnection();
-    print("subscribePeerConnection demmm");
+    subscribeCallEnd();
+
+    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+    });
+
     userDialogForChat = widget.userDialogForChat;
     initMassage();
     connectionEvent();
@@ -254,7 +261,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ))
                               : IconButton(
                                   onPressed: () async {
-                                    callWebRTC(QBRTCSessionTypes.VIDEO);
+                                    //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
+                                   callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
+                                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: value!,)));
+                                   });
 
                                   },
                                   icon: SvgPicture.asset(
@@ -275,32 +285,42 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-
-
-
-
-
-
-  ///related to video call
-  String? _sessionId;
-
   RTCVideoViewController? _localVideoViewController;
 
   RTCVideoViewController? _remoteVideoViewController;
 
+
+
+  void _onLocalVideoViewCreated(RTCVideoViewController controller) {
+    _localVideoViewController = controller;
+  }
+
+  void _onRemoteVideoViewCreated(RTCVideoViewController controller){
+    _remoteVideoViewController = controller;
+  }
+
+
+  ///related to video call
+  String? _sessionId;
+  StreamSubscription? _callSubscription;
+
+
+
   Future<void> subscribeHangUp() async {
+    print("hangup lllllll");
     if (_hangUpSubscription != null) {
       return;
     }
     try {
       _hangUpSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.HANG_UP, (data) {
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.HANG_UP, (data) {
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
 
   Future<void> subscribePeerConnection() async {
+    print("peerconnec lllllll");
     if (_peerConnectionSubscription != null) {
       return;
     }
@@ -314,6 +334,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   String parseState(int state) {
+    print("parsestate lllllll");
     String parsedState = "";
 
     switch (state) {
@@ -347,6 +368,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> subscribeAccept() async {
+    print("accept lllllll");
     if (_acceptSubscription != null) {
       return;
     }
@@ -359,49 +381,46 @@ class _ChatScreenState extends State<ChatScreen> {
     } on PlatformException catch (e) {}
   }
   Future<void> subscribeCallEnd() async {
+    print("end lllllll");
     if (_callEndSubscription != null) {
       return;
     }
 
     try {
       _callEndSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL_END, (data) {
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL_END, (data) {
         Map<dynamic, dynamic> payloadMap =
-            Map<dynamic, dynamic>.from(data["payload"]);
+        Map<dynamic, dynamic>.from(data["payload"]);
 
         Map<dynamic, dynamic> sessionMap =
-            Map<dynamic, dynamic>.from(payloadMap["session"]);
+        Map<dynamic, dynamic>.from(payloadMap["session"]);
 
         String sessionId = sessionMap["id"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
   Future<void> subscribeReject() async {
+    print("reject lllllll");
     if (_rejectSubscription != null) {
       return;
     }
 
     try {
       _rejectSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.REJECT, (data) {
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.REJECT, (data) {
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
   Future<void> startRenderingLocal() async {
-
+    print("rendering local lllllll");
     try {
-
       await _localVideoViewController!.play(_sessionId!, _homeController.userQuickBloxId.value);
-
     } on PlatformException catch (e) {
-
-
-
     }
-
   }
   Future<void> subscribeNotAnswer() async {
+    print("not answered lllllll");
     if (_notAnswerSubscription != null) {
       return;
     }
@@ -414,6 +433,7 @@ class _ChatScreenState extends State<ChatScreen> {
     } on PlatformException catch (e) {}
   }
   Future<void> subscribeVideoTrack() async {
+    print("subs video track lllllll");
     if (_videoTrackSubscription != null) {
       return;
     }
@@ -422,7 +442,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _videoTrackSubscription = await QB.webrtc
           .subscribeRTCEvent(QBRTCEventTypes.RECEIVED_VIDEO_TRACK, (data) {
         Map<dynamic, dynamic> payloadMap =
-            Map<dynamic, dynamic>.from(data["payload"]);
+        Map<dynamic, dynamic>.from(data["payload"]);
 
         int opponentId = payloadMap["userId"];
 
@@ -435,26 +455,66 @@ class _ChatScreenState extends State<ChatScreen> {
     } on PlatformException catch (e) {}
   }
   Future<void> startRenderingRemote(int opponentId) async {
+    print("renderingRemote lllllll");
 
     try {
-
       await _remoteVideoViewController!.play(_sessionId!, opponentId);
-
     } on PlatformException catch (e) {
-
-
-
     }
-
   }
-  Future<void> callWebRTC(int sessionType) async {
+  Future<void> subscribeCall() async {
+    if (_callSubscription != null) {
+      print("call subscribed");
+      return;
+    }
     try {
-      QBRTCSession? session = await QB.webrtc.call([133536465], sessionType,userInfo: {"userName":"Kashif Ahmad"});
+      print("demo subs");
+      _callSubscription =
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL, (data) {
+        Map<dynamic, dynamic> payloadMap =
+        Map<dynamic, dynamic>.from(data["payload"]);
+        Map<dynamic, dynamic> sessionMap =
+        Map<dynamic, dynamic>.from(payloadMap["session"]);
+        String sessionId = sessionMap["id"];
+        int initiatorId = sessionMap["initiatorId"];
+        int callType = sessionMap["type"];
+        print("demo sub pay "+payloadMap.toString());
+        Get.defaultDialog(
+            title: "call incoming",
+            content: Row(
+              children: [
+                ElevatedButton(onPressed: (){
+                  Get.to(()=>VideoCallScreen(sessionIdForVideoCall: sessionId,));
+                }, child: Text("Accept")),
+                SizedBox(width: 10,),
+                ElevatedButton(onPressed: (){
+                  Navigator.of(Get.overlayContext!).pop();
+
+                }, child: Text("Decline"))
+              ],
+            )
+        );
+      }, onErrorMethod: (error) {});
+    } on PlatformException catch (e) {}
+  }
+  Future<String?> callWebRTC(int sessionType) async {
+    print("call webRTC lllllll");
+    try {
+      QBRTCSession? session = await QB.webrtc.call([133613623,_homeController.userQuickBloxId.value], sessionType,userInfo: {"userName":"Kashif Ahmad"});
       _sessionId = session!.id;
+      return _sessionId!;
     } on PlatformException catch (e) {
+      return null;
     }
 
   }
+
+
+
+
+
+
+
 
 
   void initMassage() async {
@@ -523,7 +583,9 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       _connectionStreamSubscription = await QB.chat.subscribeChatEvent(
           QBChatEvents.CONNECTED, (data) {},
-          onErrorMethod: (error) {});
+          onErrorMethod: (error) {
+
+          });
     } on PlatformException catch (e) {}
   }
 
@@ -675,12 +737,14 @@ class _ChatScreenState extends State<ChatScreen> {
 class MessageBubbleSender extends StatelessWidget {
   var isDownloaded = false.obs;
   MessageBubbleSender({Key? key, this.message}) : super(key: key);
+  var filePath = "".obs;
 
   final QBMessage? message;
 
   @override
   Widget build(BuildContext context) {
-    if (message!.attachments == null) {
+
+    if (message!.attachments == null)  {
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -707,6 +771,7 @@ class MessageBubbleSender extends StatelessWidget {
         ),
       );
     } else {
+      checkFileExistense(message!.attachments![0]!.name);
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -727,13 +792,14 @@ class MessageBubbleSender extends StatelessWidget {
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                 ),
-                child:Obx(()=>isDownloaded == false?Container(
+                child:Obx(()=>filePath.value.isEmpty ?Container(
                   child:GestureDetector(
                       onTap: ()async {
-                        isDownloaded.value = await _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.url!);
+                        isDownloaded.value = await _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.name!);
+
                       },
                       child: Text("download")),
-                ):Container(child: Text("storage/emulated/0/fitBasix/media/${message!.attachments![0]!.url!}"),)
+                ):Container(child: Text("${filePath.value}"),)
                 ))
 
 
@@ -763,56 +829,90 @@ class MessageBubbleSender extends StatelessWidget {
   }
 
 
+
+
   Future<bool> _getImageUrl(String id,String fileName) async {
+    print(fileName+"this is the file name");
     try {
       String? url = await QB.content.getPrivateURL(id);
-      // String localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download';
-      // final savedDir = Directory(localPath);
-      // bool hasExisted = await savedDir.exists();
-      // if (!hasExisted) {
-      //   savedDir.create();
-      // }
-      //Directory("storage/emulated/0/downloads/").existsSync();
-      // final taskId = await FlutterDownloader.enqueue(
-      //   url: url!,
-      //   fileName: fileName,
-      //   savedDir: "storage/emulated/0/Download/",
-      //   showNotification: false, // show download progress in status bar (for Android)
-      //   openFileFromNotification: false, // click on notification to open downloaded file (for Android)
-      // ).then((value) {
-      //   print("file downdloadeddd");
-      //   return true;
-      // });
+      bool flag = false;
 
-          try{
+      FlutterDownloader.registerCallback(downloadCallback);
+      try{
         PermissionStatus status = await Permission.storage.request();
-
         if (status == PermissionStatus.granted) {
-          Directory? dir = await getExternalStorageDirectory();
-          print(dir!.path + "pp dir");
-
+          String? path;
+          final Directory _appDocDir = await getApplicationDocumentsDirectory();
+          //App Document Directory + folder name
+          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+          if (await _appDocDirFolder.exists()) {
+            //if folder already exists return path
+            path = _appDocDirFolder.path;
+          } else {
+            //if folder not exists create folder and then return its path
+            final Directory _appDocDirNewFolder =
+            await _appDocDirFolder.create(recursive: true);
+            path =  _appDocDirNewFolder.path;
+          }
+          print(path + "pp dir");
           final taskId = await FlutterDownloader.enqueue(
               url: url!,
-              savedDir: dir!.path,
+              savedDir: path,
               fileName: fileName,
               showNotification: false,
               // show download progress in status bar (for Android)
               openFileFromNotification: false,
               // click on notification to open downloaded file (for Android)
-              saveInPublicStorage: true);
+              saveInPublicStorage: false);
         }
       }catch(e){
-
-          }
+        print(e.toString());
+      }
 
      return false;
     } on PlatformException catch (e) {
+      print(e);
       return false;
       // Some error occurred, look at the exception message for more details
     }
 
 
   }
+
+  void checkFileExistense(String? fileName) async {
+    PermissionStatus status = await Permission.storage.request();
+    if (status == PermissionStatus.granted) {
+      String? path;
+      final downloadsPath = Directory('/storage/emulated/0/Download');
+
+      final Directory _appDocDir = await getApplicationDocumentsDirectory();
+      final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+      if (await _appDocDirFolder.exists()) {
+        path = _appDocDirFolder.path;
+      }
+      else{
+        //if folder not exists create folder and then return its path
+        final Directory _appDocDirNewFolder = await _appDocDirFolder.create(recursive: true);
+        path =  _appDocDirNewFolder.path;
+      }
+
+      if(File(path+"/"+fileName!).existsSync()){
+        print("file exists in "+path+"/$fileName");
+        filePath.value = path+"/$fileName";
+      }
+
+      if(File(downloadsPath.path +"/"+fileName).existsSync()){
+        print("file exists in "+downloadsPath.path+"/$fileName");
+        filePath.value = downloadsPath.path +"/"+fileName;
+      }
+    }
+  }
+}
+
+void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+  final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
+  send.send([id, status, progress]);
+
 }
 
 
@@ -997,50 +1097,3 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
 }
 
 
-class RTCVideoViewController {
-
-//WebRTCVideoView Methods
-
-  static const SET_MIRROR_METHOD = "mirror";
-
-  static const SET_SCALE_TYPE_METHOD = "scaleType";
-
-  static const PLAY_METHOD = "play";
-
-  static const RELEASE_METHOD = "release";
-
-
-
-  RTCVideoViewController._(int id)
-
-      : _channel = MethodChannel('QBWebRTCFlutterVideoViewChannel/$id');
-
-
-
-  final MethodChannel _channel;
-
-
-
-  Future<void> setMirror(bool mirror) async {
-
-    Map<String, Object> values = Map();
-
-
-
-    values["mirror"] = mirror;
-
-
-
-    return _channel.invokeMethod(SET_MIRROR_METHOD, values);
-
-  }
-  Future<void> play(String sessionId, int userId) async {
-
-    Map<String, Object> values = Map();
-    values["sessionId"] = sessionId;
-    values["userId"] = userId;
-    await _channel.invokeMethod(PLAY_METHOD, values);
-
-  }
-
-}

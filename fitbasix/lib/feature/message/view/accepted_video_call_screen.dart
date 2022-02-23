@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -23,17 +24,16 @@ import 'package:quickblox_sdk/webrtc/constants.dart';
 
 import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
-class VideoCallScreen extends StatefulWidget {
-  String? sessionIdForVideoCall;
 
-  VideoCallScreen({Key? key, this.sessionIdForVideoCall}) : super(key: key);
+class AcceptedVideoCallScreen extends StatefulWidget {
+  String? sessionIdForVideoCall;
+  AcceptedVideoCallScreen({Key? key,this.sessionIdForVideoCall}) : super(key: key);
 
   @override
-  _VideoCallScreenState createState() => _VideoCallScreenState();
+  _AcceptedVideoCallScreenState createState() => _AcceptedVideoCallScreenState();
 }
 
-class _VideoCallScreenState extends State<VideoCallScreen> {
-
+class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
   var _isCallPicked = false.obs;
   final panelController = PanelController();
 
@@ -56,8 +56,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   StreamSubscription? _peerConnectionSubscription;
   StreamSubscription? _connectionStreamSubscription;
-  HomeController _homeController = Get.find();
 
+  HomeController _homeController = Get.find();
   RTCVideoViewController? _localVideoViewController;
 
   RTCVideoViewController? _remoteVideoViewController;
@@ -104,96 +104,24 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           controller: controller,
         ),
         //body
-        body: Obx(()=> Stack(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: double.infinity,
-                child: RTCVideoView(
-                    onVideoViewCreated:_onRemoteVideoViewCreated
-                ),
+        body:Stack(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: RTCVideoView(
+                  onVideoViewCreated:_onRemoteVideoViewCreated
               ),
-              Container(
-                margin: (_isCallPicked.value)?EdgeInsets.only(top: 38*SizeConfig.heightMultiplier!,left: 16*SizeConfig.widthMultiplier!):EdgeInsets.zero,
-                width: (_isCallPicked.value)?90*SizeConfig.widthMultiplier!:double.infinity,
-                height: (_isCallPicked.value)?160*SizeConfig.heightMultiplier!:double.infinity,
-                child: RTCVideoView(onVideoViewCreated: _onLocalVideoViewCreated),
-              ),
-              Visibility(
-                visible: !_isCallPicked.value,
-                child: Positioned(
-                  top: 81 * SizeConfig.heightMultiplier!,
-                  left: 130 * SizeConfig.widthMultiplier!,
-                  right: 130 * SizeConfig.widthMultiplier!,
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(
-                          avatarImage,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15 * SizeConfig.heightMultiplier!,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: !_isCallPicked.value,
-                child: Positioned(
-                  top: 196 * SizeConfig.heightMultiplier!,
-                  left: 70 * SizeConfig.widthMultiplier!,
-                  right: 70 * SizeConfig.widthMultiplier!,
-                  child: Text(
-                    'Waiting for Jonathan Swift '
-                    'to join...',
-                    style: AppTextStyle.hboldWhiteText,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-
-              // Visibility(
-              //   visible: true,
-              //   child: OrientationBuilder(builder: (context, orientation) {
-              //     return Container(
-              //       decoration: BoxDecoration(color: Colors.white),
-              //       child: Stack(
-              //         children: <Widget>[
-              //           Align(
-              //             alignment: orientation == Orientation.landscape
-              //                 ? const FractionalOffset(0.5, 0.1)
-              //                 : const FractionalOffset(0.0, 0.5),
-              //             child: Container(
-              //               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              //               width: 160.0,
-              //               height: 160.0,
-              //               child:
-              //               decoration: BoxDecoration(color: Colors.black54),
-              //             ),
-              //           ),
-              //           Align(
-              //             alignment: orientation == Orientation.landscape
-              //                 ? const FractionalOffset(0.5, 0.5)
-              //                 : const FractionalOffset(1.0, 0.5),
-              //             child: Container(
-              //               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              //               width: 160.0,
-              //               height: 160.0,
-              //               child:
-              //               decoration: BoxDecoration(color: Colors.black54),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     );
-              //   }),
-              // ),
-            ],
-          ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 38*SizeConfig.heightMultiplier!,left: 16*SizeConfig.widthMultiplier!),
+              width: 90*SizeConfig.widthMultiplier!,
+              height: 160*SizeConfig.heightMultiplier!,
+              child: RTCVideoView(onVideoViewCreated: _onLocalVideoViewCreated),
+            ),
+          ],
         ),
+
       ),
     );
   }
@@ -226,12 +154,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
     try {
       _hangUpSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.HANG_UP, (data) {
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.HANG_UP, (data) {
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
-
   Future<void> subscribePeerConnection() async {
     if (_peerConnectionSubscription != null) {
       return;
@@ -244,7 +171,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
-
   String parseState(int state) {
     String parsedState = "";
 
@@ -277,7 +203,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     return parsedState;
   }
-
   Future<void> subscribeAccept() async {
     print("call pick mmmm");
     if (_acceptSubscription != null) {
@@ -285,7 +210,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
     try {
       _acceptSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.ACCEPT, (data) {
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.ACCEPT, (data) {
         _isCallPicked.value = true;
         int userId = data["payload"]["userId"];
         print(data["payload"] + "got this on accept triggeed");
@@ -299,13 +224,13 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     try {
       _callEndSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL_END, (data) {
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL_END, (data) {
         print("video end triggeed");
         Map<dynamic, dynamic> payloadMap =
-            Map<dynamic, dynamic>.from(data["payload"]);
+        Map<dynamic, dynamic>.from(data["payload"]);
 
         Map<dynamic, dynamic> sessionMap =
-            Map<dynamic, dynamic>.from(payloadMap["session"]);
+        Map<dynamic, dynamic>.from(payloadMap["session"]);
 
         String sessionId = sessionMap["id"];
       }, onErrorMethod: (error) {});
@@ -319,7 +244,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     try {
       print("video reject triggeed");
       _rejectSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.REJECT, (data) {
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.REJECT, (data) {
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
@@ -332,7 +257,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     try {
       print("video not answered triggeed");
       _notAnswerSubscription =
-          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.NOT_ANSWER, (data) {
+      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.NOT_ANSWER, (data) {
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
@@ -348,40 +273,31 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           .subscribeRTCEvent(QBRTCEventTypes.RECEIVED_VIDEO_TRACK, (data) {
         print("video track triggeed");
         Map<dynamic, dynamic> payloadMap =
-            Map<dynamic, dynamic>.from(data["payload"]);
+        Map<dynamic, dynamic>.from(data["payload"]);
         int opponentId = payloadMap["userId"];
         if (opponentId == _homeController.userQuickBloxId.value) {
-          print("local rendring started");
           startRenderingLocal();
         } else {
-          print("remote rendering started");
           startRenderingRemote(opponentId);
         }
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
-
   Future<void> startRenderingLocal() async {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
       print("started rendering local");
       print(widget.sessionIdForVideoCall!.toString() + "session id check");
       try {
-        await _localVideoViewController!.play(widget.sessionIdForVideoCall!,
-            _homeController.userQuickBloxId.value);
-      } on PlatformException catch (e) {
-
-      }
+        await _localVideoViewController!.play(widget.sessionIdForVideoCall!, _homeController.userQuickBloxId.value);
+      } on PlatformException catch (e) {}
     });
   }
-
   Future<void> startRenderingRemote(int opponentId) async {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
       print("redering started mmmm");
       try {
         await _remoteVideoViewController!.play(widget.sessionIdForVideoCall!, opponentId);
-      } on PlatformException catch (e) {
-
-      }
+      } on PlatformException catch (e) {}
     });
   }
   Future<void> callWebRTC(int sessionType) async {
@@ -400,9 +316,9 @@ class PanelWidget extends StatefulWidget {
 
   PanelWidget(
       {Key? key,
-      this.controller,
-      required this.panelController,
-      this.onHangUpTapped})
+        this.controller,
+        required this.panelController,
+        this.onHangUpTapped})
       : super(key: key);
 
   @override
@@ -436,98 +352,98 @@ class _PanelWidgetState extends State<PanelWidget> {
               // mic
               ismicon!
                   ? IconButton(
-                      icon: SvgPicture.asset(
-                        ImagePath.videomicON,
-                        width: 18.67 * SizeConfig.widthMultiplier!,
-                        height: 25.33 * SizeConfig.heightMultiplier!,
-                        fit: BoxFit.contain,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          ismicon = !ismicon!;
-                        });
-                      },
-                    )
+                icon: SvgPicture.asset(
+                  ImagePath.videomicON,
+                  width: 18.67 * SizeConfig.widthMultiplier!,
+                  height: 25.33 * SizeConfig.heightMultiplier!,
+                  fit: BoxFit.contain,
+                ),
+                onPressed: () {
+                  setState(() {
+                    ismicon = !ismicon!;
+                  });
+                },
+              )
                   : CircleAvatar(
-                      backgroundColor: kPureWhite,
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            ismicon = !ismicon!;
-                          });
-                        },
-                        icon: SvgPicture.asset(
-                          ImagePath.videomicOFF,
-                          width: 24 * SizeConfig.widthMultiplier!,
-                          height: 25.33 * SizeConfig.heightMultiplier!,
-                          color: kPureBlack,
-                        ),
-                      ),
-                    ),
+                backgroundColor: kPureWhite,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      ismicon = !ismicon!;
+                    });
+                  },
+                  icon: SvgPicture.asset(
+                    ImagePath.videomicOFF,
+                    width: 24 * SizeConfig.widthMultiplier!,
+                    height: 25.33 * SizeConfig.heightMultiplier!,
+                    color: kPureBlack,
+                  ),
+                ),
+              ),
               Spacer(),
               // speaker
               isspeakeron!
                   ? IconButton(
-                      icon: SvgPicture.asset(
-                        ImagePath.videospeakerON,
-                        width: 24 * SizeConfig.widthMultiplier!,
-                        height: 23.39 * SizeConfig.heightMultiplier!,
-                        fit: BoxFit.contain,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isspeakeron = !isspeakeron!;
-                        });
-                      },
-                    )
+                icon: SvgPicture.asset(
+                  ImagePath.videospeakerON,
+                  width: 24 * SizeConfig.widthMultiplier!,
+                  height: 23.39 * SizeConfig.heightMultiplier!,
+                  fit: BoxFit.contain,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isspeakeron = !isspeakeron!;
+                  });
+                },
+              )
                   : CircleAvatar(
-                      backgroundColor: kPureWhite,
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isspeakeron = !isspeakeron!;
-                          });
-                        },
-                        icon: SvgPicture.asset(
-                          ImagePath.videospeakerOFF,
-                          width: 24 * SizeConfig.widthMultiplier!,
-                          height: 24 * SizeConfig.heightMultiplier!,
-                          color: kPureBlack,
-                        ),
-                      ),
-                    ),
+                backgroundColor: kPureWhite,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isspeakeron = !isspeakeron!;
+                    });
+                  },
+                  icon: SvgPicture.asset(
+                    ImagePath.videospeakerOFF,
+                    width: 24 * SizeConfig.widthMultiplier!,
+                    height: 24 * SizeConfig.heightMultiplier!,
+                    color: kPureBlack,
+                  ),
+                ),
+              ),
               Spacer(),
               // camera
               iscameraon!
                   ? IconButton(
-                      icon: SvgPicture.asset(
-                        ImagePath.videocameraON,
-                        width: 24 * SizeConfig.widthMultiplier!,
-                        height: 16 * SizeConfig.heightMultiplier!,
-                        fit: BoxFit.contain,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          iscameraon = !iscameraon!;
-                        });
-                      },
-                    )
+                icon: SvgPicture.asset(
+                  ImagePath.videocameraON,
+                  width: 24 * SizeConfig.widthMultiplier!,
+                  height: 16 * SizeConfig.heightMultiplier!,
+                  fit: BoxFit.contain,
+                ),
+                onPressed: () {
+                  setState(() {
+                    iscameraon = !iscameraon!;
+                  });
+                },
+              )
                   : CircleAvatar(
-                      backgroundColor: kPureWhite,
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            iscameraon = !iscameraon!;
-                          });
-                        },
-                        icon: SvgPicture.asset(
-                          ImagePath.videocameraOFF,
-                          width: 25.33 * SizeConfig.widthMultiplier!,
-                          height: 25.33 * SizeConfig.heightMultiplier!,
-                          color: kPureBlack,
-                        ),
-                      ),
-                    ),
+                backgroundColor: kPureWhite,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      iscameraon = !iscameraon!;
+                    });
+                  },
+                  icon: SvgPicture.asset(
+                    ImagePath.videocameraOFF,
+                    width: 25.33 * SizeConfig.widthMultiplier!,
+                    height: 25.33 * SizeConfig.heightMultiplier!,
+                    color: kPureBlack,
+                  ),
+                ),
+              ),
               Spacer(),
               //Video end button
               Container(
@@ -573,18 +489,18 @@ class _PanelWidgetState extends State<PanelWidget> {
   }
 
   Widget buildDragHandle() => GestureDetector(
-        child: Center(
-          child: Container(
-            height: 4 * SizeConfig.heightMultiplier!,
-            width: 48 * SizeConfig.widthMultiplier!,
-            decoration: BoxDecoration(
-              color: kPureWhite,
-              borderRadius: BorderRadius.circular(3),
-            ),
-          ),
+    child: Center(
+      child: Container(
+        height: 4 * SizeConfig.heightMultiplier!,
+        width: 48 * SizeConfig.widthMultiplier!,
+        decoration: BoxDecoration(
+          color: kPureWhite,
+          borderRadius: BorderRadius.circular(3),
         ),
-        onTap: togglePanel,
-      );
+      ),
+    ),
+    onTap: togglePanel,
+  );
 
   Future<void> togglePanel() => widget.panelController.isPanelOpen
       ? widget.panelController.close()
