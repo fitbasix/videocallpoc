@@ -65,6 +65,7 @@ class LoginScreen extends StatelessWidget {
                       onChanged: (value) {
                         _loginController.mobile.value = value;
                       },
+                      maxLength: 10,
                       isTextFieldActive: true,
                       preFixWidget: Container(
                         width: 80,

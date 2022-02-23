@@ -9,7 +9,8 @@ class CutomizedTextField extends StatelessWidget {
   final Widget child;
   bool? wantWhiteBG;
 
-  CutomizedTextField({required this.color, required this.child, this.wantWhiteBG});
+  CutomizedTextField(
+      {required this.color, required this.child, this.wantWhiteBG});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -18,7 +19,7 @@ class CutomizedTextField extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
         border: Border.all(color: color),
-        color: wantWhiteBG!=null?Colors.white:lightGrey,
+        color: wantWhiteBG != null ? Colors.white : lightGrey,
         borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
       ),
       child: Center(child: child),
@@ -27,21 +28,21 @@ class CutomizedTextField extends StatelessWidget {
 }
 
 Widget TextFieldContainer(
-    {
-      required TextEditingController textEditingController,
+    {required TextEditingController textEditingController,
     required Function onChanged,
-      List<TextInputFormatter>? inputFormatters,
+    List<TextInputFormatter>? inputFormatters,
     required bool isNumber,
     bool? isObsecure,
     bool? readOnly,
     bool? isNotCapital,
     bool? isTextFieldActive,
     String? hint,
+    int? maxLength,
     Widget? preFixWidget,
     Widget? suffixWidget}) {
   return Container(
     child: TextField(
-      inputFormatters: inputFormatters!=null?inputFormatters:null,
+      inputFormatters: inputFormatters != null ? inputFormatters : null,
       controller: textEditingController,
       onChanged: (value) {
         onChanged(value);
@@ -51,9 +52,9 @@ Widget TextFieldContainer(
           isNumber ? TextInputType.number : TextInputType.streetAddress,
       style: AppTextStyle.hintText.copyWith(color: lightBlack),
       textAlignVertical: TextAlignVertical.bottom,
+      maxLength: maxLength == null ? 300 : maxLength,
       obscureText: isObsecure == null ? false : isObsecure,
       decoration: InputDecoration(
-
           isDense: true,
           counter: Container(
             height: 0,

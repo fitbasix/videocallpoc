@@ -36,7 +36,7 @@ class TrainerCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 242 * SizeConfig.heightMultiplier!,
+        // height: 242 * SizeConfig.heightMultiplier!,
         width: 164 * SizeConfig.widthMultiplier!,
         margin: EdgeInsets.only(
           right: 8 * SizeConfig.widthMultiplier!,
@@ -127,6 +127,9 @@ class TrainerCard extends StatelessWidget {
               '($raters)',
               style: AppTextStyle.NormalText.copyWith(
                   fontSize: 10 * SizeConfig.textMultiplier!, color: kGreyText),
+            ),
+            SizedBox(
+              height: 0 * SizeConfig.heightMultiplier!,
             ),
           ],
         ),
