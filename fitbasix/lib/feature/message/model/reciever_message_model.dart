@@ -95,18 +95,24 @@ class Attachment {
     this.type,
     this.contentType,
     this.url,
+    this.data,
+    this.name,
   });
 
   String? id;
   String? type;
   String? contentType;
   String? url;
+  String? data;
+  String? name;
 
   factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
     id: json["id"] == null ? null : json["id"],
     type: json["type"] == null ? null : json["type"],
     contentType: json["contentType"] == null ? null : json["contentType"],
     url: json["url"] == null ? null : json["url"],
+    name: json["name"] == null ? null : json["name"],
+    data: json["data"] == null ? null : json["data"]
   );
 
   Map<String, dynamic> toJson() => {

@@ -189,7 +189,7 @@ class CreatePostService {
     var chatConnect = await QB.chat.isConnected();
     if(chatConnect!){
       InitializeQuickBlox().initWebRTC();
-      InitializeQuickBlox().subscribeCall();
+      //InitializeQuickBlox().subscribeCall();
     }
     print("called connect user to chat");
     try {
@@ -197,7 +197,7 @@ class CreatePostService {
         var chatConnect = await QB.chat.isConnected();
         if(chatConnect!){
           InitializeQuickBlox().initWebRTC();
-          InitializeQuickBlox().subscribeCall();
+          //InitializeQuickBlox().subscribeCall();
         }
       });
 

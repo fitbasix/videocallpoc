@@ -65,7 +65,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                             1)
                         .toString();
                 TrainerServices.unFollowTrainer(
-                    trainerController.atrainerDetail.value.user!.id!);
+                    trainerController.atrainerDetail.value.user!.id!
+                );
               } else {
                 trainerController.atrainerDetail.value.isFollowing = true;
                 trainerController.atrainerDetail.value.followers =
@@ -81,7 +82,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             },
             onMessage: () async {
 
-              int UserQuickBloxId = 133613623;
+              int UserQuickBloxId = 133612606;
               //user id : 133612606
               //trainer id : 133612091
               debugPrint(_homeController.userQuickBloxId.value.toString()+"HomeControllervalue");
@@ -97,7 +98,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       dialogType: QBChatDialogTypes.CHAT, ).then((value)
                   {
                     print("dialog id is:"+value!.id!);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: value,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: value,opponentID: UserQuickBloxId,)));
                   });
                 } on PlatformException catch (e) {
                   print(e.toString());

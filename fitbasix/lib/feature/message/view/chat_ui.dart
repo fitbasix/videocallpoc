@@ -5,6 +5,7 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
@@ -15,11 +16,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quickblox_sdk/chat/constants.dart';
@@ -29,6 +30,8 @@ import 'package:quickblox_sdk/models/qb_file.dart';
 import 'package:quickblox_sdk/models/qb_filter.dart';
 import 'package:quickblox_sdk/models/qb_message.dart';
 import 'package:quickblox_sdk/models/qb_sort.dart';
+import 'package:quickblox_sdk/models/qb_subscription.dart';
+import 'package:quickblox_sdk/push/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
@@ -49,24 +52,36 @@ import 'package:quickblox_sdk/webrtc/constants.dart';
 
 import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
+import '../controller/chat_controller.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(new ChatScreen());
+}
+
 class ChatScreen extends StatefulWidget {
+  int? opponentID;
   QBDialog? userDialogForChat;
   String trainerTitle = 'Jonathan Swift'.tr;
 
-  ChatScreen({Key? key, this.userDialogForChat}) : super(key: key);
+  ChatScreen({Key? key, this.userDialogForChat,this.opponentID}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
+  ChatController _chatController = Get.put(ChatController());
   HomeController _homeController = Get.find();
   QBDialog? userDialogForChat;
-  final TextEditingController _massageController = TextEditingController();
+  var _massageController = TextEditingController().obs;
   StreamSubscription? _massageStreamSubscription;
   String event = QBChatEvents.RECEIVED_NEW_MESSAGE;
   List<QBMessage?>? messages;
   DateTime? messageDate = DateTime(2015, 5, 5);
+  var _typedMessage = "".obs;
   StreamSubscription? _connectionStreamSubscription;
 
   StreamSubscription? _callEndSubscription;
@@ -82,7 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
   StreamSubscription? _notAnswerSubscription;
 
   StreamSubscription? _peerConnectionSubscription;
-  ReceivePort _port = ReceivePort();
+
 
   @override
   void dispose() {
@@ -90,28 +105,12 @@ class _ChatScreenState extends State<ChatScreen> {
       _massageStreamSubscription!.cancel();
       _massageStreamSubscription = null;
     }
-
     super.dispose();
   }
 
 
   @override
   void initState() {
-    subscribeCall();
-    subscribeReject();
-    subscribeAccept();
-    subscribeHangUp();
-    subscribeVideoTrack();
-    subscribeNotAnswer();
-    subscribePeerConnection();
-    subscribeCallEnd();
-
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-    });
 
     userDialogForChat = widget.userDialogForChat;
     initMassage();
@@ -149,18 +148,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           physics: const BouncingScrollPhysics(),
                           itemCount: messages!.length,
                           itemBuilder: (context, index) {
-                            String? showDate;
-                            var date = new DateTime.fromMicrosecondsSinceEpoch(
-                                messages![index]!.dateSent! * 1000);
-                            if (messageDate!.day != date.day) {
-                              messageDate = date;
-                              print(date.toString() + "kashif");
-                              showDate =
-                                  DateFormat("yyyy MMMM dd").format(date);
-                            } else {
-                              showDate = "";
-                            }
-
                             if (messages![index]!.senderId ==
                                 _homeController.userQuickBloxId.value) {
                               return MessageBubbleSender(
@@ -195,9 +182,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: TextField(
-                            controller: _massageController,
+                            controller: _massageController.value,
                             onChanged: (value) {
-                              setState(() {});
+                              _typedMessage.value = value;
                             },
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.only(
@@ -244,34 +231,36 @@ class _ChatScreenState extends State<ChatScreen> {
                                 )),
                             // maxLines: 3,
                           )),
-                      Padding(
-                        padding: EdgeInsets.only(left: 8, bottom: 4),
-                        child: CircleAvatar(
-                          backgroundColor: greenChatColor,
-                          child: (_massageController.text.isNotEmpty)
-                              ? IconButton(
-                                  onPressed: () {
-                                    sendMsg(_massageController.text);
-                                    _massageController.clear();
-                                  },
-                                  icon: Icon(
-                                    Icons.send,
-                                    size: 16 * SizeConfig.heightMultiplier!,
-                                    color: Colors.white,
-                                  ))
-                              : IconButton(
-                                  onPressed: () async {
-                                    //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
-                                   callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-                                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: value!,)));
-                                   });
+                      Obx(()=>Padding(
+                          padding: EdgeInsets.only(left: 8, bottom: 4),
+                          child: CircleAvatar(
+                            backgroundColor: greenChatColor,
+                            child: (_typedMessage.value.isNotEmpty)
+                                ? IconButton(
+                                    onPressed: () {
+                                      sendMsg(_typedMessage.value);
+                                      _massageController.value.clear();
+                                      _typedMessage.value = "";
+                                    },
+                                    icon: Icon(
+                                      Icons.send,
+                                      size: 16 * SizeConfig.heightMultiplier!,
+                                      color: Colors.white,
+                                    ))
+                                : IconButton(
+                                    onPressed: () async {
+                                      //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
+                                     callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
+                                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: value!,)));
+                                     });
 
-                                  },
-                                  icon: SvgPicture.asset(
-                                    ImagePath.chatMicIcon,
-                                    width: 16 * SizeConfig.widthMultiplier!,
-                                    height: 16 * SizeConfig.heightMultiplier!,
-                                  )),
+                                    },
+                                    icon: SvgPicture.asset(
+                                      ImagePath.chatMicIcon,
+                                      width: 16 * SizeConfig.widthMultiplier!,
+                                      height: 16 * SizeConfig.heightMultiplier!,
+                                    )),
+                          ),
                         ),
                       )
                     ],
@@ -285,236 +274,35 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  RTCVideoViewController? _localVideoViewController;
-
-  RTCVideoViewController? _remoteVideoViewController;
 
 
 
-  void _onLocalVideoViewCreated(RTCVideoViewController controller) {
-    _localVideoViewController = controller;
-  }
-
-  void _onRemoteVideoViewCreated(RTCVideoViewController controller){
-    _remoteVideoViewController = controller;
-  }
-
-
-  ///related to video call
-  String? _sessionId;
-  StreamSubscription? _callSubscription;
 
 
 
-  Future<void> subscribeHangUp() async {
-    print("hangup lllllll");
-    if (_hangUpSubscription != null) {
-      return;
-    }
-    try {
-      _hangUpSubscription =
-      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.HANG_UP, (data) {
-        int userId = data["payload"]["userId"];
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
-
-  Future<void> subscribePeerConnection() async {
-    print("peerconnec lllllll");
-    if (_peerConnectionSubscription != null) {
-      return;
-    }
-    try {
-      _peerConnectionSubscription = await QB.webrtc.subscribeRTCEvent(
-          QBRTCEventTypes.PEER_CONNECTION_STATE_CHANGED, (data) {
-        int state = data["payload"]["state"];
-        String parsedState = parseState(state);
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
-
-  String parseState(int state) {
-    print("parsestate lllllll");
-    String parsedState = "";
-
-    switch (state) {
-      case QBRTCPeerConnectionStates.NEW:
-        parsedState = "NEW";
-
-        break;
-
-      case QBRTCPeerConnectionStates.FAILED:
-        parsedState = "FAILED";
-
-        break;
-
-      case QBRTCPeerConnectionStates.DISCONNECTED:
-        parsedState = "DISCONNECTED";
-
-        break;
-
-      case QBRTCPeerConnectionStates.CLOSED:
-        parsedState = "CLOSED";
-
-        break;
-
-      case QBRTCPeerConnectionStates.CONNECTED:
-        parsedState = "CONNECTED";
-
-        break;
-    }
-
-    return parsedState;
-  }
-
-  Future<void> subscribeAccept() async {
-    print("accept lllllll");
-    if (_acceptSubscription != null) {
-      return;
-    }
-
-    try {
-      _acceptSubscription =
-      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.ACCEPT, (data) {
-        int userId = data["payload"]["userId"];
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
-  Future<void> subscribeCallEnd() async {
-    print("end lllllll");
-    if (_callEndSubscription != null) {
-      return;
-    }
-
-    try {
-      _callEndSubscription =
-      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL_END, (data) {
-        Map<dynamic, dynamic> payloadMap =
-        Map<dynamic, dynamic>.from(data["payload"]);
-
-        Map<dynamic, dynamic> sessionMap =
-        Map<dynamic, dynamic>.from(payloadMap["session"]);
-
-        String sessionId = sessionMap["id"];
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
-  Future<void> subscribeReject() async {
-    print("reject lllllll");
-    if (_rejectSubscription != null) {
-      return;
-    }
-
-    try {
-      _rejectSubscription =
-      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.REJECT, (data) {
-        int userId = data["payload"]["userId"];
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
-  Future<void> startRenderingLocal() async {
-    print("rendering local lllllll");
-    try {
-      await _localVideoViewController!.play(_sessionId!, _homeController.userQuickBloxId.value);
-    } on PlatformException catch (e) {
+  void sendNotification(){
+    try{
+      FirebaseMessaging.instance.getToken().then((token) async{
+        List<QBSubscription?> subscriptions = await QB.subscriptions.create(token!, QBPushChannelNames.GCM);
+      });
+    }catch(e){
+      print("notification error"+e.toString());
     }
   }
-  Future<void> subscribeNotAnswer() async {
-    print("not answered lllllll");
-    if (_notAnswerSubscription != null) {
-      return;
-    }
+  
 
-    try {
-      _notAnswerSubscription =
-      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.NOT_ANSWER, (data) {
-        int userId = data["payload"]["userId"];
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
-  Future<void> subscribeVideoTrack() async {
-    print("subs video track lllllll");
-    if (_videoTrackSubscription != null) {
-      return;
-    }
 
-    try {
-      _videoTrackSubscription = await QB.webrtc
-          .subscribeRTCEvent(QBRTCEventTypes.RECEIVED_VIDEO_TRACK, (data) {
-        Map<dynamic, dynamic> payloadMap =
-        Map<dynamic, dynamic>.from(data["payload"]);
-
-        int opponentId = payloadMap["userId"];
-
-        if (opponentId == _homeController.userQuickBloxId.value) {
-          startRenderingLocal();
-        } else {
-          startRenderingRemote(opponentId);
-        }
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
-  Future<void> startRenderingRemote(int opponentId) async {
-    print("renderingRemote lllllll");
-
-    try {
-      await _remoteVideoViewController!.play(_sessionId!, opponentId);
-    } on PlatformException catch (e) {
-    }
-  }
-  Future<void> subscribeCall() async {
-    if (_callSubscription != null) {
-      print("call subscribed");
-      return;
-    }
-    try {
-      print("demo subs");
-      _callSubscription =
-      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL, (data) {
-        Map<dynamic, dynamic> payloadMap =
-        Map<dynamic, dynamic>.from(data["payload"]);
-        Map<dynamic, dynamic> sessionMap =
-        Map<dynamic, dynamic>.from(payloadMap["session"]);
-        String sessionId = sessionMap["id"];
-        int initiatorId = sessionMap["initiatorId"];
-        int callType = sessionMap["type"];
-        print("demo sub pay "+payloadMap.toString());
-        Get.defaultDialog(
-            title: "call incoming",
-            content: Row(
-              children: [
-                ElevatedButton(onPressed: (){
-                  Get.to(()=>VideoCallScreen(sessionIdForVideoCall: sessionId,));
-                }, child: Text("Accept")),
-                SizedBox(width: 10,),
-                ElevatedButton(onPressed: (){
-                  Navigator.of(Get.overlayContext!).pop();
-
-                }, child: Text("Decline"))
-              ],
-            )
-        );
-      }, onErrorMethod: (error) {});
-    } on PlatformException catch (e) {}
-  }
   Future<String?> callWebRTC(int sessionType) async {
     print("call webRTC lllllll");
     try {
-      QBRTCSession? session = await QB.webrtc.call([133613623,_homeController.userQuickBloxId.value], sessionType,userInfo: {"userName":"Kashif Ahmad"});
-      _sessionId = session!.id;
-      return _sessionId!;
+      QBRTCSession? session = await QB.webrtc.call([widget.opponentID!,_homeController.userQuickBloxId.value], sessionType,userInfo: {"userName":"Kashif Ahmad"});
+
+      return session!.id;
     } on PlatformException catch (e) {
       return null;
     }
 
   }
-
-
-
-
-
-
-
 
 
   void initMassage() async {
@@ -525,12 +313,14 @@ class _ChatScreenState extends State<ChatScreen> {
         Map<String, dynamic> payload =
             Map<String, dynamic>.from(map["payload"]);
         List<Attachment>? attachmentsFromJson;
+        print(payload.toString());
         if (payload["attachments"] != null) {
           attachmentsFromJson =
               (json.decode(json.encode(payload["attachments"])) as List)
                   .map((data) => Attachment.fromJson(data))
                   .toList();
         }
+
         String? messageId = payload["id"];
         QBMessage newMessage = QBMessage();
 
@@ -542,6 +332,8 @@ class _ChatScreenState extends State<ChatScreen> {
               attachment.id = element.id!;
               attachment.url = element.url;
               attachment.type = element.type;
+              attachment.name = element.name;
+              attachment.data = element.data;
               attachment.contentType = element.contentType;
               attachments.add(attachment);
             });
@@ -549,7 +341,6 @@ class _ChatScreenState extends State<ChatScreen> {
           }
           return null;
         }
-
         // print(payload["attachments"]);
         newMessage.id = payload["id"];
         newMessage.dialogId = payload["dialogId"];
@@ -648,6 +439,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
           //Required parameter
           attachment.type = "PHOTO";
+          attachment.data = pickedFile.path;
+          //Required parameter
+          //attachment.type = "PHOTO";
 
           List<QBAttachment>? attachmentsList = [];
           attachmentsList.add(attachment);
@@ -705,13 +499,13 @@ class _ChatScreenState extends State<ChatScreen> {
             print(contentType+" dddd");
             attachment.url = file.uid;
             attachment.name = file.name;
+            attachment.data = pickedFiles.files[i].path!;
             //Required parameter
             attachment.type = "PHOTO";
             attachmentsList.add(attachment);
             QBMessage message = QBMessage();
             message.attachments = attachmentsList;
             message.body = "test attachment";
-
             // Send a message logic
           }
         }
@@ -731,19 +525,33 @@ class _ChatScreenState extends State<ChatScreen> {
           .showSnackBar(SnackBar(content: Text("pick a some file to upload")));
     }
   }
+
+
+
+
 }
 
-//  Message Bubble
-class MessageBubbleSender extends StatelessWidget {
-  var isDownloaded = false.obs;
-  MessageBubbleSender({Key? key, this.message}) : super(key: key);
-  var filePath = "".obs;
 
+
+
+
+
+
+
+class MessageBubbleSender extends StatelessWidget{
+
+  MessageBubbleSender({Key? key, this.message}) : super(key: key);
   final QBMessage? message;
 
+  ChatController _chatController = Get.find();
+
+  var isDownloaded = false.obs;
+
+  var filePath = "".obs;
+  
+  
   @override
   Widget build(BuildContext context) {
-
     if (message!.attachments == null)  {
       return Padding(
         padding: EdgeInsets.only(
@@ -771,7 +579,7 @@ class MessageBubbleSender extends StatelessWidget {
         ),
       );
     } else {
-      checkFileExistense(message!.attachments![0]!.name);
+      checkFileExistence(message!.attachments![0]!.name);
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -796,40 +604,22 @@ class MessageBubbleSender extends StatelessWidget {
                   child:GestureDetector(
                       onTap: ()async {
                         isDownloaded.value = await _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.name!);
-
-                      },
+                        },
                       child: Text("download")),
-                ):Container(child: Text("${filePath.value}"),)
+                ):Container(child: GestureDetector(
+                    onTap: (){
+                      OpenFile.open(filePath.value);
+                    },
+                    child: Text("${filePath.value}")),)
                 ))
 
 
-                // FutureBuilder(
-                //   future: _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.url!),
-                //   builder: (context, AsyncSnapshot<String?> snapshot) {
-                //     if (snapshot.hasData) {
-                //       return ClipRRect(
-                //           borderRadius: BorderRadius.circular(
-                //               8 * SizeConfig.widthMultiplier!),
-                //           child: Image.network(snapshot.data!));
-                //     } else {
-                //       return Container(
-                //         height: 100 * SizeConfig.heightMultiplier!,
-                //         width: 100 * SizeConfig.widthMultiplier!,
-                //         child: Center(
-                //           child: CustomizedCircularProgress(),
-                //         ),
-                //       );
-                //     }
-                //   },
-                // ))
+
           ],
         ),
       );
     }
   }
-
-
-
 
   Future<bool> _getImageUrl(String id,String fileName) async {
     print(fileName+"this is the file name");
@@ -837,7 +627,7 @@ class MessageBubbleSender extends StatelessWidget {
       String? url = await QB.content.getPrivateURL(id);
       bool flag = false;
 
-      FlutterDownloader.registerCallback(downloadCallback);
+      //FlutterDownloader.registerCallback(downloadCallback);
       try{
         PermissionStatus status = await Permission.storage.request();
         if (status == PermissionStatus.granted) {
@@ -855,15 +645,17 @@ class MessageBubbleSender extends StatelessWidget {
             path =  _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
-          final taskId = await FlutterDownloader.enqueue(
-              url: url!,
-              savedDir: path,
-              fileName: fileName,
-              showNotification: false,
-              // show download progress in status bar (for Android)
-              openFileFromNotification: false,
-              // click on notification to open downloaded file (for Android)
-              saveInPublicStorage: false);
+          Dio dio =  Dio();
+          dio.download(url!, path+"/"+fileName,onReceiveProgress: (received, total){
+            print(((received/total )* 100).floor().toString() + "ssssss");
+            if(((received/total )* 100).floor() == 100){
+                checkFileExistence(fileName);
+            }
+          });
+
+
+
+
         }
       }catch(e){
         print(e.toString());
@@ -875,18 +667,16 @@ class MessageBubbleSender extends StatelessWidget {
       return false;
       // Some error occurred, look at the exception message for more details
     }
-
-
   }
 
-  void checkFileExistense(String? fileName) async {
+  void checkFileExistence(String? fileName) async {
     PermissionStatus status = await Permission.storage.request();
     if (status == PermissionStatus.granted) {
       String? path;
       final downloadsPath = Directory('/storage/emulated/0/Download');
-
       final Directory _appDocDir = await getApplicationDocumentsDirectory();
       final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+
       if (await _appDocDirFolder.exists()) {
         path = _appDocDirFolder.path;
       }
@@ -896,9 +686,12 @@ class MessageBubbleSender extends StatelessWidget {
         path =  _appDocDirNewFolder.path;
       }
 
+      //if(File(message!.attachments![0]!.data!).existsSync())
       if(File(path+"/"+fileName!).existsSync()){
+
         print("file exists in "+path+"/$fileName");
         filePath.value = path+"/$fileName";
+
       }
 
       if(File(downloadsPath.path +"/"+fileName).existsSync()){
@@ -907,13 +700,13 @@ class MessageBubbleSender extends StatelessWidget {
       }
     }
   }
-}
-
-void downloadCallback(String id, DownloadTaskStatus status, int progress) {
-  final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
-  send.send([id, status, progress]);
 
 }
+
+
+
+
+
 
 
 
@@ -925,6 +718,9 @@ class MessageBubbleOpponent extends StatelessWidget {
   }) : super(key: key);
 
   final QBMessage? message;
+  var isDownloaded = false.obs;
+
+  var filePath = "".obs;
 
   @override
   Widget build(BuildContext context) {
@@ -955,6 +751,7 @@ class MessageBubbleOpponent extends StatelessWidget {
         ),
       );
     } else {
+      checkFileExistence(message!.attachments![0]!.name);
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -973,42 +770,107 @@ class MessageBubbleOpponent extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: kPureWhite,
                   borderRadius:
-                      BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                  BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                 ),
-                child: FutureBuilder(
-                  future: _getImageUrl(message!.attachments![0]!.url!),
-                  builder: (context, AsyncSnapshot<String?> snapshot) {
-                    if (snapshot.hasData) {
-                      return ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              8 * SizeConfig.widthMultiplier!),
-                          child: Image.network(snapshot.data!));
-                    } else {
-                      return Container(
-                        height: 100 * SizeConfig.heightMultiplier!,
-                        width: 100 * SizeConfig.widthMultiplier!,
-                        color: Colors.white,
-                        child: Center(
-                          child: CustomizedCircularProgress(),
-                        ),
-                      );
-                    }
-                  },
-                ))
+                child:Obx(()=>filePath.value.isEmpty ?Container(
+                  child:GestureDetector(
+                      onTap: ()async {
+                        isDownloaded.value = await _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.name!);
+                      },
+                      child: Text("download")),
+                ):Container(child: GestureDetector(
+                    onTap: (){
+                      OpenFile.open(filePath.value);
+                    },
+                    child: Text("${filePath.value}")),)
+                )),
           ],
         ),
       );
     }
   }
 
-  Future<String?> _getImageUrl(String id) async {
+  Future<bool> _getImageUrl(String id,String fileName) async {
+    print(fileName+"this is the file name");
     try {
       String? url = await QB.content.getPrivateURL(id);
-      return url;
+      bool flag = false;
+
+      //FlutterDownloader.registerCallback(downloadCallback);
+      try{
+        PermissionStatus status = await Permission.storage.request();
+        if (status == PermissionStatus.granted) {
+          String? path;
+          final Directory _appDocDir = await getApplicationDocumentsDirectory();
+          //App Document Directory + folder name
+          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+          if (await _appDocDirFolder.exists()) {
+            //if folder already exists return path
+            path = _appDocDirFolder.path;
+          } else {
+            //if folder not exists create folder and then return its path
+            final Directory _appDocDirNewFolder =
+            await _appDocDirFolder.create(recursive: true);
+            path =  _appDocDirNewFolder.path;
+          }
+          print(path + "pp dir");
+          Dio dio =  Dio();
+          dio.download(url!, path+"/"+fileName,onReceiveProgress: (received, total){
+            print(((received/total )* 100).floor().toString() + "ssssss");
+            if(((received/total )* 100).floor() == 100){
+              checkFileExistence(fileName);
+            }
+          });
+
+
+
+
+        }
+      }catch(e){
+        print(e.toString());
+      }
+
+      return false;
     } on PlatformException catch (e) {
+      print(e);
+      return false;
       // Some error occurred, look at the exception message for more details
     }
   }
+
+  void checkFileExistence(String? fileName) async {
+    PermissionStatus status = await Permission.storage.request();
+    if (status == PermissionStatus.granted) {
+      String? path;
+      final downloadsPath = Directory('/storage/emulated/0/Download');
+      final Directory _appDocDir = await getApplicationDocumentsDirectory();
+      final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+
+      if (await _appDocDirFolder.exists()) {
+        path = _appDocDirFolder.path;
+      }
+      else{
+        //if folder not exists create folder and then return its path
+        final Directory _appDocDirNewFolder = await _appDocDirFolder.create(recursive: true);
+        path =  _appDocDirNewFolder.path;
+      }
+
+      //if(File(message!.attachments![0]!.data!).existsSync())
+      if(File(path+"/"+fileName!).existsSync()){
+
+        print("file exists in "+path+"/$fileName");
+        filePath.value = path+"/$fileName";
+
+      }
+
+      if(File(downloadsPath.path +"/"+fileName).existsSync()){
+        print("file exists in "+downloadsPath.path+"/$fileName");
+        filePath.value = downloadsPath.path +"/"+fileName;
+      }
+    }
+  }
+
+
 }
 
 // Appbar
