@@ -81,8 +81,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               setState(() {});
             },
             onMessage: () async {
-
-              int UserQuickBloxId = 133612606;
+              int UserQuickBloxId = 133612091;
               //user id : 133612606
               //trainer id : 133612091
               debugPrint(_homeController.userQuickBloxId.value.toString()+"HomeControllervalue");

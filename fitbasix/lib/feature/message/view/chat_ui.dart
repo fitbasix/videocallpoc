@@ -26,11 +26,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:quickblox_sdk/chat/constants.dart';
 import 'package:quickblox_sdk/models/qb_attachment.dart';
 import 'package:quickblox_sdk/models/qb_dialog.dart';
+import 'package:quickblox_sdk/models/qb_event.dart';
 import 'package:quickblox_sdk/models/qb_file.dart';
 import 'package:quickblox_sdk/models/qb_filter.dart';
 import 'package:quickblox_sdk/models/qb_message.dart';
 import 'package:quickblox_sdk/models/qb_sort.dart';
 import 'package:quickblox_sdk/models/qb_subscription.dart';
+import 'package:quickblox_sdk/notifications/constants.dart';
 import 'package:quickblox_sdk/push/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 import '../../../core/constants/app_text_style.dart';
@@ -278,18 +280,36 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
 
-
-
-  void sendNotification(){
+  void sendNotification(String massage) async {
     try{
-      FirebaseMessaging.instance.getToken().then((token) async{
+      FirebaseMessaging.instance.getToken().then((token)async{
         List<QBSubscription?> subscriptions = await QB.subscriptions.create(token!, QBPushChannelNames.GCM);
       });
     }catch(e){
       print("notification error"+e.toString());
     }
+    String eventType = QBNotificationEventTypes.ONE_SHOT;
+    String notificationEventType = QBNotificationTypes.PUSH;
+    int pushType = QBNotificationPushTypes.GCM;
+    int senderId = _homeController.userQuickBloxId.value;
+
+    Map<String, Object> payload = new Map();
+    payload["message"] = massage;
+
+    try {
+      List<QBEvent?> events = await QB.events.create(eventType, notificationEventType, senderId, payload, pushType: pushType,recipientsIds: [widget.opponentID!.toString()]);
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+
   }
-  
+
+
+
+
+
+
+
 
 
   Future<String?> callWebRTC(int sessionType) async {
@@ -394,6 +414,7 @@ class _ChatScreenState extends State<ChatScreen> {
     } on PlatformException catch (e) {
       print(e);
     }
+    sendNotification(messageBody);
   }
 
   getMassageFromHistory() async {
