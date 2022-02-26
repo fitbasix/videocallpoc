@@ -50,18 +50,18 @@ class CreatePostService {
     };
     Map getPostData = {"postId": postId};
     var response = await dio!.post(ApiUrl.createPost,
-        data: caption != null
-            ? updateCaption
-            : files != null
-                ? updateFiles
-                : placeId != null
-                    ? updateLocation
-                    : taggedPeople != null
-                        ? updatePeople
-                        : category != null
-                            ? updateCategory
-                            : isPublish != null
-                                ? publishPost
+        data: isPublish != null && caption != null
+            ? publishPost
+            : caption != null
+                ? updateCaption
+                : files != null
+                    ? updateFiles
+                    : placeId != null
+                        ? updateLocation
+                        : taggedPeople != null
+                            ? updatePeople
+                            : category != null
+                                ? updateCategory
                                 : getPostData);
     log(response.data.toString());
     return postDataFromJson(response.toString());
