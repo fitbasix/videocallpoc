@@ -1,7 +1,8 @@
 class ImagePath {
   static const String arrowRightIcon = "assets/Icons/arrow-right.svg";
   static const String commentIcon = "assets/Icons/comment_icon.svg";
-  static const String privacyPolicyIcon = "assets/Icons/privacy_policy_icon.svg";
+  static const String privacyPolicyIcon =
+      "assets/Icons/privacy_policy_icon.svg";
   static const String termOfUseIcon = "assets/Icons/term_of_use_icon.svg";
   static const String LiveIcon = "assets/Icons/live_icon.svg";
   static const String addPersonIcon = "assets/Icons/add_person_icon.svg";
@@ -50,9 +51,12 @@ class ImagePath {
   static const String logOut = "assets/menuSlider/logout.svg";
   static const String settings = "assets/menuSlider/settings.svg";
   static const String support = "assets/menuSlider/support.svg";
-  static const String feedbackdialogframe = "assets/menuSlider/feedbackdialogframe.svg";
-  static const String starrating_full = "assets/get_trained/starfullratingIcon.png";
-  static const String starrating_half = "assets/get_trained/starhalfratingIcon.png";
+  static const String feedbackdialogframe =
+      "assets/menuSlider/feedbackdialogframe.svg";
+  static const String starrating_full =
+      "assets/get_trained/starfullratingIcon.png";
+  static const String starrating_half =
+      "assets/get_trained/starhalfratingIcon.png";
   static const String starrating_no = "assets/get_trained/starnoratingIcon.png";
 
   ///home healthImage
@@ -75,27 +79,35 @@ class ImagePath {
 
   ///mytrainertile
   static const String trainerAvatar = "assets/message/trainerAvatar.png";
-  static const String penIcon= "assets/message/penicon.svg";
+  static const String penIcon = "assets/message/penicon.svg";
   static const String unmuteIcon = "assets/message/unmuteicon.svg";
   static const String enrolltrainerFrame = "assets/message/enrollFrame.svg";
-  static const String cancelEnrollmentIcon = "assets/message/cancelEnrollmentIcon.svg";
-  static const String sharefeedbackIcon = "assets/message/sharefeedbackIcon.svg";
+  static const String cancelEnrollmentIcon =
+      "assets/message/cancelEnrollmentIcon.svg";
+  static const String sharefeedbackIcon =
+      "assets/message/sharefeedbackIcon.svg";
 
   ///my trainer
-  static const String notrainerenrollframe = "assets/mytrainers/notrainerframe.svg";
+  static const String notrainerenrollframe =
+      "assets/mytrainers/notrainerframe.svg";
   static const String closedialogIcon = "assets/mytrainers/closedialogicon.svg";
 
   ///UI chat
   static const String chatdocumentIcon = "assets/message/documentIcon.svg";
   static const String chatpopupmenuIcon = "assets/message/popmenuitem.svg";
-  static const String attachdocumentIcon = "assets/message/attachdocumentIcon.svg";
+  static const String attachdocumentIcon =
+      "assets/message/attachdocumentIcon.svg";
   static const String openCameraIcon = "assets/message/opencameraIcon.svg";
   static const String chatMicIcon = "assets/message/chatMicIcon.svg";
 
   ///BMR chat
-  static const String circlequestionmarkIcon = "assets/message/circlequestionmark.svg";
+  static const String circlequestionmarkIcon =
+      "assets/message/circlequestionmark.svg";
   static const String plusIconbmr = "assets/bmrscreen/plusIconbmr.svg";
   static const String minuscircleIcon = "assets/bmrscreen/minuscirlceIcon.svg";
   static const String bmrinfoImage = "assets/bmrscreen/bmrimage.svg";
-}
 
+  ///LOGIN
+  static const String login_intro_image = "assets/log_in/login_image.png";
+  static const String black_rectangle = "assets/log_in/black_rectangle.png";
+}

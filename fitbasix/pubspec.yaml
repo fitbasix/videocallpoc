@@ -119,6 +119,7 @@ flutter:
     - assets/message/
     - assets/mytrainers/
     - assets/bmrscreen/
+    - assets/log_in/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
