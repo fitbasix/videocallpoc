@@ -223,11 +223,13 @@ class _PostTileState extends State<PostTile> {
                           SizedBox(
                             width: 14 * SizeConfig.widthMultiplier!,
                           ),
-                          Icon(
-                            Icons.place,
-                            size: 16,
-                            color: kGreyColor,
-                          ),
+                          widget.place == ''
+                              ? SizedBox()
+                              : Icon(
+                                  Icons.place,
+                                  size: 16,
+                                  color: kGreyColor,
+                                ),
                           SizedBox(
                             width: 6.5 * SizeConfig.widthMultiplier!,
                           ),
