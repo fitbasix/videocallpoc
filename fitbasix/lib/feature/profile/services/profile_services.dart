@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:fitbasix/core/routes/api_routes.dart';
 
 import '../../../core/api_service/dio_service.dart';
+import '../../Home/model/post_feed_model.dart';
 import '../../log_in/services/login_services.dart';
 
 class ProfileServices {
@@ -48,5 +49,18 @@ class ProfileServices {
                                     : null);
     log(response.statusCode.toString());
     log(response.toString());
+  }
+
+  static Future<PostsModel> getUserPosts({int? skip}) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var token = await LogInService.getAccessToken();
+    print(token);
+    var response = await dio!
+        .post(ApiUrl.getTrainerPosts, data: {"skip": skip == null ? 0 : skip});
+
+    log(response.toString());
+
+    return postsModelFromJson(response.toString());
   }
 }
