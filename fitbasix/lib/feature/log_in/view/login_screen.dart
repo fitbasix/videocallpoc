@@ -32,205 +32,206 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: kPureBlack,
       body: SafeArea(
         child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 44, right: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'welcomeTo'.tr,
-                    style: AppTextStyle.NormalText,
-                  ),
-                  SizedBox(
-                    height: 20 * SizeConfig.heightMultiplier!,
-                  ),
-                  SvgPicture.asset(
-                    ImagePath.fitBasixIconBlack,
-                  ),
-                  SizedBox(
-                    height: 58 * SizeConfig.heightMultiplier!,
-                  ),
-                  Text(
-                    'enter_mobile_text'.tr,
-                    style: AppTextStyle.NormalText,
-                  ),
-                  SizedBox(
-                    height: 8 * SizeConfig.heightMultiplier!,
-                  ),
-                  SizedBox(
-                    height: 32 * SizeConfig.heightMultiplier!,
-                  ),
-                  Obx(() => _loginController.isLoading.value
-                      ? Center(
-                          child: CustomizedCircularProgress(),
-                        )
-                      : ProceedButton(
-                          title: 'next'.tr,
-                          onPressed: () async {
-                            FocusScope.of(context).unfocus();
-                            if (_loginController.mobile.value.length == 10) {
-                              _loginController.isLoading.value = true;
-                              await _loginController.getOTP();
-                              _loginController.isLoading.value = false;
-                              Navigator.pushNamed(context, RouteName.otpScreen);
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          'Please enter valid mobile number')));
-                            }
-                          })),
-                  SizedBox(
-                    height: 32 * SizeConfig.heightMultiplier!,
-                  ),
-                  Center(
-                    child: Text(
-                      'or'.tr,
-                      style: AppTextStyle.NormalText,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16 * SizeConfig.heightMultiplier!,
-                  ),
-                  Center(
-                    child: Text(
-                      'withLogin'.tr,
-                      style: AppTextStyle.NormalText,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16 * SizeConfig.heightMultiplier!,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Platform.isIOS
-                          ? GestureDetector(
-                              onTap: () async {
-                                final credential =
-                                    await SignInWithApple.getAppleIDCredential(
-                                  scopes: [
-                                    AppleIDAuthorizationScopes.email,
-                                    AppleIDAuthorizationScopes.fullName,
-                                  ],
-                                );
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 16, top: 44, right: 16),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         'welcomeTo'.tr,
+            //         style: AppTextStyle.NormalText,
+            //       ),
+            //       SizedBox(
+            //         height: 20 * SizeConfig.heightMultiplier!,
+            //       ),
+            //       SvgPicture.asset(
+            //         ImagePath.fitBasixIconBlack,
+            //       ),
+            //       SizedBox(
+            //         height: 58 * SizeConfig.heightMultiplier!,
+            //       ),
+            //       Text(
+            //         'enter_mobile_text'.tr,
+            //         style: AppTextStyle.NormalText,
+            //       ),
+            //       SizedBox(
+            //         height: 8 * SizeConfig.heightMultiplier!,
+            //       ),
+            //       SizedBox(
+            //         height: 32 * SizeConfig.heightMultiplier!,
+            //       ),
+            //       Obx(() => _loginController.isLoading.value
+            //           ? Center(
+            //               child: CustomizedCircularProgress(),
+            //             )
+            //           : ProceedButton(
+            //               title: 'next'.tr,
+            //               onPressed: () async {
+            //                 FocusScope.of(context).unfocus();
+            //                 if (_loginController.mobile.value.length == 10) {
+            //                   _loginController.isLoading.value = true;
+            //                   await _loginController.getOTP();
+            //                   _loginController.isLoading.value = false;
+            //                   Navigator.pushNamed(context, RouteName.otpScreen);
+            //                 } else {
+            //                   ScaffoldMessenger.of(context).showSnackBar(
+            //                       SnackBar(
+            //                           content: Text(
+            //                               'Please enter valid mobile number')));
+            //                 }
+            //               })),
+            //       SizedBox(
+            //         height: 32 * SizeConfig.heightMultiplier!,
+            //       ),
+            //       Center(
+            //         child: Text(
+            //           'or'.tr,
+            //           style: AppTextStyle.NormalText,
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         height: 16 * SizeConfig.heightMultiplier!,
+            //       ),
+            //       Center(
+            //         child: Text(
+            //           'withLogin'.tr,
+            //           style: AppTextStyle.NormalText,
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         height: 16 * SizeConfig.heightMultiplier!,
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Platform.isIOS
+            //               ? GestureDetector(
+            //                   onTap: () async {
+            //                     final credential =
+            //                         await SignInWithApple.getAppleIDCredential(
+            //                       scopes: [
+            //                         AppleIDAuthorizationScopes.email,
+            //                         AppleIDAuthorizationScopes.fullName,
+            //                       ],
+            //                     );
 
-                                OAuthProvider oAuthProvider =
-                                    new OAuthProvider("apple.com");
-                                final AuthCredential authCredential =
-                                    oAuthProvider.credential(
-                                  idToken: credential.identityToken,
-                                  accessToken: credential.authorizationCode,
-                                );
-                                await FirebaseAuth.instance
-                                    .signInWithCredential(authCredential);
-                                _loginController.thirdPartyLogin.value =
-                                    await LogInService.thirdPartyAppleLogin(
-                                        "Apple",
-                                        credential.familyName == null
-                                            ? ""
-                                            : "${credential.givenName} " +
-                                                credential.familyName!,
-                                        credential.identityToken!);
-                                print(credential.identityToken!);
-                                if (_loginController.thirdPartyLogin.value
-                                        .response!.user!.token !=
-                                    null) {
-                                  final SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.setString(
-                                      'AccessToken',
-                                      _loginController.thirdPartyLogin.value
-                                          .response!.user!.token!);
+            //                     OAuthProvider oAuthProvider =
+            //                         new OAuthProvider("apple.com");
+            //                     final AuthCredential authCredential =
+            //                         oAuthProvider.credential(
+            //                       idToken: credential.identityToken,
+            //                       accessToken: credential.authorizationCode,
+            //                     );
+            //                     await FirebaseAuth.instance
+            //                         .signInWithCredential(authCredential);
+            //                     _loginController.thirdPartyLogin.value =
+            //                         await LogInService.thirdPartyAppleLogin(
+            //                             "Apple",
+            //                             credential.familyName == null
+            //                                 ? ""
+            //                                 : "${credential.givenName} " +
+            //                                     credential.familyName!,
+            //                             credential.identityToken!);
+            //                     print(credential.identityToken!);
+            //                     if (_loginController.thirdPartyLogin.value
+            //                             .response!.user!.token !=
+            //                         null) {
+            //                       final SharedPreferences prefs =
+            //                           await SharedPreferences.getInstance();
+            //                       prefs.setString(
+            //                           'AccessToken',
+            //                           _loginController.thirdPartyLogin.value
+            //                               .response!.user!.token!);
 
-                                  prefs.setString(
-                                      'RefreshToken',
-                                      _loginController.thirdPartyLogin.value
-                                          .response!.refreshToken!);
-                                }
-                                if (_loginController.thirdPartyLogin.value
-                                        .response!.screenId! ==
-                                    15) {
-                                  Navigator.pushNamed(
-                                      context, RouteName.enterMobileGoogle);
-                                } else {
-                                  Navigator.pushNamedAndRemoveUntil(context,
-                                      RouteName.homePage, (route) => false);
-                                  ;
-                                }
-                              },
-                              child: CircleAvatar(
-                                radius: 16,
-                                backgroundColor: kLightGrey,
-                                child: SvgPicture.asset(ImagePath.appleIcon),
-                              ),
-                            )
-                          : Container(),
-                      Platform.isIOS
-                          ? SizedBox(
-                              width: 12 * SizeConfig.heightMultiplier!,
-                            )
-                          : Container(),
-                      GestureDetector(
-                        onTap: () async {
-                          await _loginController.googleLogin();
-                          final user = FirebaseAuth.instance.currentUser;
-                          if (user != null) {
-                            user.getIdToken().then((value) {
-                              log(value.toString());
-                              _loginController.idToken.value = value;
-                            });
+            //                       prefs.setString(
+            //                           'RefreshToken',
+            //                           _loginController.thirdPartyLogin.value
+            //                               .response!.refreshToken!);
+            //                     }
+            //                     if (_loginController.thirdPartyLogin.value
+            //                             .response!.screenId! ==
+            //                         15) {
+            //                       Navigator.pushNamed(
+            //                           context, RouteName.enterMobileGoogle);
+            //                     } else {
+            //                       Navigator.pushNamedAndRemoveUntil(context,
+            //                           RouteName.homePage, (route) => false);
+            //                       ;
+            //                     }
+            //                   },
+            //                   child: CircleAvatar(
+            //                     radius: 16,
+            //                     backgroundColor: kLightGrey,
+            //                     child: SvgPicture.asset(ImagePath.appleIcon),
+            //                   ),
+            //                 )
+            //               : Container(),
+            //           Platform.isIOS
+            //               ? SizedBox(
+            //                   width: 12 * SizeConfig.heightMultiplier!,
+            //                 )
+            //               : Container(),
+            //           GestureDetector(
+            //             onTap: () async {
+            //               await _loginController.googleLogin();
+            //               final user = FirebaseAuth.instance.currentUser;
+            //               if (user != null) {
+            //                 user.getIdToken().then((value) {
+            //                   log(value.toString());
+            //                   _loginController.idToken.value = value;
+            //                 });
 
-                            _loginController.thirdPartyLogin.value =
-                                await LogInService.thirdPartyLogin(
-                                    'Google', _loginController.idToken.value);
+            //                 _loginController.thirdPartyLogin.value =
+            //                     await LogInService.thirdPartyLogin(
+            //                         'Google', _loginController.idToken.value);
 
-                            // log(_loginController.thirdPartyLogin.value.code
-                            //     .toString());
+            //                 // log(_loginController.thirdPartyLogin.value.code
+            //                 //     .toString());
 
-                            if (_loginController.thirdPartyLogin.value.response!
-                                    .user!.token !=
-                                null) {
-                              final SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setString(
-                                  'AccessToken',
-                                  _loginController.thirdPartyLogin.value
-                                      .response!.user!.token!);
-                              prefs.setString(
-                                  'RefreshToken',
-                                  _loginController.thirdPartyLogin.value
-                                      .response!.refreshToken!);
-                            }
+            //                 if (_loginController.thirdPartyLogin.value.response!
+            //                         .user!.token !=
+            //                     null) {
+            //                   final SharedPreferences prefs =
+            //                       await SharedPreferences.getInstance();
+            //                   prefs.setString(
+            //                       'AccessToken',
+            //                       _loginController.thirdPartyLogin.value
+            //                           .response!.user!.token!);
+            //                   prefs.setString(
+            //                       'RefreshToken',
+            //                       _loginController.thirdPartyLogin.value
+            //                           .response!.refreshToken!);
+            //                 }
 
-                            if (_loginController
-                                    .thirdPartyLogin.value.response!.screenId ==
-                                15) {
-                              Navigator.pushNamed(
-                                  context, RouteName.enterMobileGoogle);
-                            } else if (_loginController
-                                    .thirdPartyLogin.value.response!.screenId ==
-                                16) {
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  RouteName.homePage, (route) => false);
-                            }
-                          }
-                        },
-                        child: CircleAvatar(
-                          radius: 16,
-                          backgroundColor: kLightGrey,
-                          child: SvgPicture.asset(ImagePath.googleICon),
-                        ),
-                      )
-                    ],
-                  ),
-                  Spacer(),
-                ],
-              ),
-            ),
+            //                 if (_loginController
+            //                         .thirdPartyLogin.value.response!.screenId ==
+            //                     15) {
+            //                   Navigator.pushNamed(
+            //                       context, RouteName.enterMobileGoogle);
+            //                 } else if (_loginController
+            //                         .thirdPartyLogin.value.response!.screenId ==
+            //                     16) {
+            //                   Navigator.pushNamedAndRemoveUntil(context,
+            //                       RouteName.homePage, (route) => false);
+            //                 }
+            //               }
+            //             },
+            //             child: CircleAvatar(
+            //               radius: 16,
+            //               backgroundColor: kLightGrey,
+            //               child: SvgPicture.asset(ImagePath.googleICon),
+            //             ),
+            //           )
+            //         ],
+            //       ),
+            //       Spacer(),
+            //     ],
+            //   ),
+            // ),
             Image.asset(
               ImagePath.login_intro_image,
               height: 541 * SizeConfig.heightMultiplier!,
@@ -337,51 +338,152 @@ class LoginScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 156 * SizeConfig.widthMultiplier!,
-                        height: 48 * SizeConfig.heightMultiplier!,
-                        padding: EdgeInsets.only(
-                            left: 18, top: 14, bottom: 14, right: 54),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: greyBorder)),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(ImagePath.googleICon),
-                            SizedBox(
-                              width: 20 * SizeConfig.widthMultiplier!,
-                            ),
-                            Text(
-                              'Sign In',
-                              style: AppTextStyle.boldWhiteText.copyWith(
-                                  fontSize: 14 * SizeConfig.textMultiplier!),
-                            )
-                          ],
+                      GestureDetector(
+                        onTap: () async {
+                          await _loginController.googleLogin();
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user != null) {
+                            user.getIdToken().then((value) {
+                              log(value.toString());
+                              _loginController.idToken.value = value;
+                            });
+
+                            _loginController.thirdPartyLogin.value =
+                                await LogInService.thirdPartyLogin(
+                                    'Google', _loginController.idToken.value);
+
+                            // log(_loginController.thirdPartyLogin.value.code
+                            //     .toString());
+
+                            if (_loginController.thirdPartyLogin.value.response!
+                                    .user!.token !=
+                                null) {
+                              final SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setString(
+                                  'AccessToken',
+                                  _loginController.thirdPartyLogin.value
+                                      .response!.user!.token!);
+                              prefs.setString(
+                                  'RefreshToken',
+                                  _loginController.thirdPartyLogin.value
+                                      .response!.refreshToken!);
+                            }
+
+                            if (_loginController
+                                    .thirdPartyLogin.value.response!.screenId ==
+                                15) {
+                              Navigator.pushNamed(
+                                  context, RouteName.enterMobileGoogle);
+                            } else if (_loginController
+                                    .thirdPartyLogin.value.response!.screenId ==
+                                16) {
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  RouteName.homePage, (route) => false);
+                            }
+                          }
+                        },
+                        child: Container(
+                          width: 156 * SizeConfig.widthMultiplier!,
+                          height: 48 * SizeConfig.heightMultiplier!,
+                          padding: EdgeInsets.only(
+                              left: 18, top: 14, bottom: 14, right: 54),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: greyBorder)),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(ImagePath.googleICon),
+                              SizedBox(
+                                width: 20 * SizeConfig.widthMultiplier!,
+                              ),
+                              Text(
+                                'Sign In',
+                                style: AppTextStyle.boldWhiteText.copyWith(
+                                    fontSize: 14 * SizeConfig.textMultiplier!),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        width: 156 * SizeConfig.widthMultiplier!,
-                        height: 48 * SizeConfig.heightMultiplier!,
-                        padding: EdgeInsets.only(
-                            left: 18, top: 14, bottom: 14, right: 54),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: greyBorder)),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                              ImagePath.appleIcon,
-                              color: kPureWhite,
-                            ),
-                            SizedBox(
-                              width: 20 * SizeConfig.widthMultiplier!,
-                            ),
-                            Text(
-                              'Sign In',
-                              style: AppTextStyle.boldWhiteText.copyWith(
-                                  fontSize: 14 * SizeConfig.textMultiplier!),
-                            )
-                          ],
+                      GestureDetector(
+                        onTap: () async {
+                          final credential =
+                              await SignInWithApple.getAppleIDCredential(
+                            scopes: [
+                              AppleIDAuthorizationScopes.email,
+                              AppleIDAuthorizationScopes.fullName,
+                            ],
+                          );
+
+                          OAuthProvider oAuthProvider =
+                              new OAuthProvider("apple.com");
+                          final AuthCredential authCredential =
+                              oAuthProvider.credential(
+                            idToken: credential.identityToken,
+                            accessToken: credential.authorizationCode,
+                          );
+                          await FirebaseAuth.instance
+                              .signInWithCredential(authCredential);
+                          _loginController.thirdPartyLogin.value =
+                              await LogInService.thirdPartyAppleLogin(
+                                  "Apple",
+                                  credential.familyName == null
+                                      ? ""
+                                      : "${credential.givenName} " +
+                                          credential.familyName!,
+                                  credential.identityToken!);
+                          print(credential.identityToken!);
+                          if (_loginController.thirdPartyLogin.value.response!
+                                  .user!.token !=
+                              null) {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString(
+                                'AccessToken',
+                                _loginController.thirdPartyLogin.value.response!
+                                    .user!.token!);
+
+                            prefs.setString(
+                                'RefreshToken',
+                                _loginController.thirdPartyLogin.value.response!
+                                    .refreshToken!);
+                          }
+                          if (_loginController
+                                  .thirdPartyLogin.value.response!.screenId! ==
+                              15) {
+                            Navigator.pushNamed(
+                                context, RouteName.enterMobileGoogle);
+                          } else {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, RouteName.homePage, (route) => false);
+                            ;
+                          }
+                        },
+                        child: Container(
+                          width: 156 * SizeConfig.widthMultiplier!,
+                          height: 48 * SizeConfig.heightMultiplier!,
+                          padding: EdgeInsets.only(
+                              left: 18, top: 14, bottom: 14, right: 54),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: greyBorder)),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                ImagePath.appleIcon,
+                                color: kPureWhite,
+                              ),
+                              SizedBox(
+                                width: 20 * SizeConfig.widthMultiplier!,
+                              ),
+                              Text(
+                                'Sign In',
+                                style: AppTextStyle.boldWhiteText.copyWith(
+                                    fontSize: 14 * SizeConfig.textMultiplier!),
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],

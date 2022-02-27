@@ -78,10 +78,10 @@ dev_dependencies:
  
 
 flutter_native_splash:
-  background_image: "assets/images/welcome_image.png"
-  background_image_dark: "assets/images/welcome_image.png"
-  branding: assets/images/logo.png
-  branding_dark: assets/images/logo.png
+  background_image: "assets/log_in/welcome_image.png"
+  background_image_dark: "assets/log_in/welcome_image.png"
+  branding: assets/log_in/logo.png
+  branding_dark: assets/log_in/logo.png
   branding_mode: bottom
   android_gravity: center
   fullscreen: true
