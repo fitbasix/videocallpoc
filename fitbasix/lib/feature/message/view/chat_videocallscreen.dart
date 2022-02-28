@@ -37,10 +37,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   var _isCallPicked = false.obs;
   final panelController = PanelController();
 
-  String urlimage =
-      "https://cdna.artstation.com/p/assets/images/images/034/757/492/large/jorge-hardt-02112021-minimalist-japanese-mobile-hd.jpg?1613135473";
-  String avatarImage =
-      "http://tricky-photoshop.com/wp-content/uploads/2017/08/6.jpg";
+  String urlimage = "https://cdna.artstation.com/p/assets/images/images/034/757/492/large/jorge-hardt-02112021-minimalist-japanese-mobile-hd.jpg?1613135473";
+  String avatarImage = "http://tricky-photoshop.com/wp-content/uploads/2017/08/6.jpg";
 
   StreamSubscription? _callEndSubscription;
 
@@ -73,6 +71,98 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     // unsubscribeNotAnswer();
     // unsubscribePeerConnection();
     super.dispose();
+  }
+
+  void unsubscribeNotAnswer() {
+
+    if (_notAnswerSubscription != null) {
+
+      _notAnswerSubscription!.cancel();
+
+      _notAnswerSubscription = null;
+
+
+    }
+
+  }
+
+
+  void unsubscribePeerConnection() {
+
+    if (_peerConnectionSubscription != null) {
+
+      _peerConnectionSubscription!.cancel();
+
+      _peerConnectionSubscription = null;
+
+
+    }
+
+  }
+
+  void unsubscribeHangUp() {
+
+    if (_hangUpSubscription != null) {
+
+      _hangUpSubscription!.cancel();
+
+      _hangUpSubscription = null;
+
+
+    }
+
+  }
+
+  void unsubscribeVideoTrack() {
+
+    if (_videoTrackSubscription != null) {
+
+      _videoTrackSubscription!.cancel();
+
+      _videoTrackSubscription = null;
+
+
+    }
+
+  }
+
+  void unsubscribeReject() {
+
+    if (_rejectSubscription != null) {
+
+      _rejectSubscription!.cancel();
+
+      _rejectSubscription = null;
+
+
+    }
+
+  }
+
+  void unsubscribeAccept() {
+
+    if (_acceptSubscription != null) {
+
+      _acceptSubscription!.cancel();
+
+      _acceptSubscription = null;
+
+
+    }
+
+  }
+
+  void unsubscribeCallEnd() {
+
+    if (_callEndSubscription != null) {
+
+      _callEndSubscription!.cancel();
+
+      _callEndSubscription = null;
+
+
+    }
+
   }
 
   @override

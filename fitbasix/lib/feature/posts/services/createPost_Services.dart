@@ -15,6 +15,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quickblox_sdk/models/qb_session.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants/credentials.dart';
 import '../../Home/controller/Home_Controller.dart';
@@ -118,6 +119,7 @@ class CreatePostService {
         String userName = _userProfileModel.response!.data!.profile!.name!;
         int? userQuickBloxId = await createUserOnQuickBlox(
             name: userName, loginId: userId, password: password.hash);
+
         int response = await updateUserQuickBloxId(userQuickBloxId!);
         bool loggedIn = await LogInUserToQuickBlox(userId, password.hash, userQuickBloxId);
 
@@ -159,19 +161,16 @@ class CreatePostService {
 
   static Future<bool> LogInUserToQuickBlox(String logIn,String password,int userQuickBloxId) async {
     print("called login");
+
     var connected = await QB.chat.isConnected();
     if(connected!){
       print("called cat connected");
       InitializeQuickBlox().initWebRTC();
       //InitializeQuickBlox().subscribeCall();
     }
-    var result = await QB.auth.login(logIn,password).then((value){
-      print("user logged in");
-      if(_homeController.userQuickBloxId.value == 0){
-        print("userId stored");
-        _homeController.userQuickBloxId.value = value.qbUser!.id!;
-        print(_homeController.userQuickBloxId.value.toString()+" is stored in homecontroller");
-      }
+    var result = await QB.auth.login(logIn,password).then((value) async {
+      final sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setInt("userQuickBloxId",value.qbUser!.id!);
       connectUserToChat(password,userQuickBloxId);
       if(value.qbUser != null){
         return true;
@@ -213,10 +212,8 @@ class CreatePostService {
     String? password,
   }) async {
     var result = await QB.users.createUser(loginId!, password!, fullName: name,);
-    if(_homeController.userQuickBloxId.value == 0){
-      _homeController.userQuickBloxId.value = result!.id!;
-      print(_homeController.userQuickBloxId.value.toString()+" is stored in homecontroller");
-    }
+
+    print(_homeController.userQuickBloxId.value.toString()+" is stored in homecontroller");
     if(result != null){
       return result.id!;
     }
@@ -231,7 +228,6 @@ class CreatePostService {
     });
     log(response.toString());
     print(response.statusCode.toString() +"QBID");
-    print(response.data.toString() +"QBID");
 
     return response.statusCode!;
   }

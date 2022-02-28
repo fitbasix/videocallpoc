@@ -122,6 +122,8 @@ class MenuScreen extends StatelessWidget {
                 menuItemImage: ImagePath.logOut,
                 menuItemText: 'logOut'.tr,
                 onTap: () async {
+                  InitializeQuickBlox().logOutUserSession();
+                  InitializeQuickBlox().logOutFromVideoCall();
                   final LoginController _controller =
                       Get.put(LoginController());
                   final SharedPreferences prefs =
@@ -132,8 +134,6 @@ class MenuScreen extends StatelessWidget {
                       context, RouteName.loginScreen, (route) => false);
 
                   Get.deleteAll();
-                  InitializeQuickBlox().logOutUserSession();
-                  InitializeQuickBlox().logOutFromVideoCall();
                 })
           ],
         ));

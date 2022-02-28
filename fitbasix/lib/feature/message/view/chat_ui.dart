@@ -327,11 +327,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void initMassage() async {
     try {
-      _massageStreamSubscription =
-          await QB.chat.subscribeChatEvent(event, (data) {
+      _massageStreamSubscription = await QB.chat.subscribeChatEvent(event, (data) {
         Map<String, dynamic> map = Map<String, dynamic>.from(data);
-        Map<String, dynamic> payload =
-            Map<String, dynamic>.from(map["payload"]);
+        Map<String, dynamic> payload = Map<String, dynamic>.from(map["payload"]);
+        print("nnnnnn"+payload.toString());
         List<Attachment>? attachmentsFromJson;
         print(payload.toString());
         if (payload["attachments"] != null) {
@@ -340,10 +339,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   .map((data) => Attachment.fromJson(data))
                   .toList();
         }
-
         String? messageId = payload["id"];
         QBMessage newMessage = QBMessage();
-
         List<QBAttachment?>? getAttachments() {
           List<QBAttachment?>? attachments = [];
           if (attachmentsFromJson != null) {
@@ -373,8 +370,6 @@ class _ChatScreenState extends State<ChatScreen> {
         setState(() {
           messages!.insert(0, newMessage);
         });
-
-        //messages!.add(payload);
       });
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
@@ -401,6 +396,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void sendMsg(String messageBody) async {
+    print("nnnnnn created dialog id"+widget.userDialogForChat!.id.toString());
     String dialogId = widget.userDialogForChat!.id!;
     print("massage dialog id is: " + widget.userDialogForChat!.id!);
     bool saveToHistory = true;
@@ -418,6 +414,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   getMassageFromHistory() async {
+
     QBSort sort = QBSort();
     sort.field = QBChatMessageSorts.DATE_SENT;
     sort.ascending = false;

@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/message/view/accepted_video_call_screen.dart';
 import 'package:fitbasix/feature/message/view/chat_videocallscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quickblox_sdk/models/qb_rtc_session.dart';
+import 'package:quickblox_sdk/models/qb_session.dart';
 import 'package:quickblox_sdk/models/qb_settings.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'package:quickblox_sdk/webrtc/constants.dart';
@@ -21,6 +23,7 @@ const String CHAT_ENDPOINT = "";
 
 
 class InitializeQuickBlox{
+
   StreamSubscription? _callSubscription;
 
   Future<void> init() async {
@@ -58,14 +61,18 @@ class InitializeQuickBlox{
 
   }
   Future<void> enableAutoReconnect() async {
-    bool enable = true;
-    try {
-      await QB.settings.enableAutoReconnect(enable);}
-    on PlatformException catch (e) {}
+    // bool enable = true;
+    // try {
+    //   await QB.settings.enableAutoReconnect(enable);}
+    // on PlatformException catch (e) {}
   }
   Future<void> logOutUserSession() async{
+    HomeController _homeController = Get.find();
     try {
+      _homeController.userQuickBloxId.value = 0;
+      await QB.chat.disconnect();
       await QB.auth.logout();
+
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
     }
@@ -86,6 +93,7 @@ class InitializeQuickBlox{
       print("demo subs");
       _callSubscription =
       await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL, (data) {
+        print("call subs triggers an event of call kkkkkk");
         Map<dynamic, dynamic> payloadMap =
         Map<dynamic, dynamic>.from(data["payload"]);
         Map<dynamic, dynamic> sessionMap =

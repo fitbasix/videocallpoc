@@ -195,7 +195,7 @@ class Carbs {
   final double? carbsKiloCals;
 
   factory Carbs.fromJson(Map<String, dynamic> json) => Carbs(
-        carbsGrams: json["carbsGrams"],
+        carbsGrams: json["carbsGrams"].toDouble(),
         carbsKiloCals: json["carbsKiloCals"].toDouble(),
       );
 
@@ -235,7 +235,7 @@ class Protein {
   final double? proteinKiloCals;
 
   factory Protein.fromJson(Map<String, dynamic> json) => Protein(
-        proteinGrams: json["proteinGrams"],
+        proteinGrams: json["proteinGrams"].toDouble(),
         proteinKiloCals: json["proteinKiloCals"].toDouble(),
       );
 

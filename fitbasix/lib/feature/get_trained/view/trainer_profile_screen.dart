@@ -16,7 +16,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:quickblox_sdk/chat/constants.dart';
 import 'package:quickblox_sdk/models/qb_dialog.dart';
+import 'package:quickblox_sdk/models/qb_filter.dart';
+import 'package:quickblox_sdk/models/qb_sort.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -81,33 +84,56 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               setState(() {});
             },
             onMessage: () async {
-              int UserQuickBloxId = 133612091;
-              //user id : 133612606
-              //trainer id : 133612091
-              debugPrint(_homeController.userQuickBloxId.value.toString()+"HomeControllervalue");
-
-              print("$UserQuickBloxId idIs");
-                List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
-                String dialogName =  "someone chat" + DateTime.now().millisecond.toString();
-                int dialogType = QBChatDialogTypes.CHAT;
-
-                try {
-                  QBDialog? createdDialog = await QB.chat.createDialog(
-                      occupantsIds, dialogName,
-                      dialogType: QBChatDialogTypes.CHAT, ).then((value)
-                  {
-                    print("dialog id is:"+value!.id!);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: value,opponentID: UserQuickBloxId,)));
+              bool dialogCreatedPreviously = false;
+              int UserQuickBloxId = 133627356;
+              //133642567	Tarun Prajapat
+              //133627356 vartika
+              final sharedPreferences = await SharedPreferences.getInstance();
+              _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
+              print(UserQuickBloxId.toString() +"this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id" );
+              QBSort sort = QBSort();
+              sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+              sort.ascending = true;
+              try {
+                List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) async {
+                  value.forEach((element) {
+                    if(element!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&element.occupantsIds!.contains(UserQuickBloxId)){
+                      print(element.id.toString() + "maxxxx");
+                      dialogCreatedPreviously = true;
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: element,opponentID: UserQuickBloxId,)));
+                    }
                   });
-                } on PlatformException catch (e) {
-                  print(e.toString());
-                }//Navigator.pushNamed(context, RouteName.trainerchatscreen);
+                  if(!dialogCreatedPreviously){
+                    //user id : 133612606
+                    //trainer id : 133612091
+                    List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
+                    String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();
+                    int dialogType = QBChatDialogTypes.CHAT;
+                    print("got here too");
+                    try {
+                      QBDialog? createdDialog = await QB.chat.createDialog(
+                        occupantsIds, dialogName,
+                        dialogType: QBChatDialogTypes.CHAT, ).then((value) {
+
+                        print("dialog id is:"+value!.id!);
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: value,opponentID: UserQuickBloxId,)));
+                      });
+                    } on PlatformException catch (e) {
+                      print(e.toString());
+                    }
+                  }
+                  return value;
+                });
+
+              } on PlatformException catch (e) {
+                // some error occurred, look at the exception message for more details
+              }
+
             },
             onEnroll: () {
               showDialog(context: context,
                   builder: (BuildContext context) => EnrollTrainerDialog());
-
-            },
+              },
             onBack: () {
               Navigator.pop(context);
             },
