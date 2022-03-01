@@ -136,11 +136,11 @@ class _PostScreenState extends State<PostScreen> {
                       setState(() {});
                     },
                     postId: _homeController.post.value.id!,
-                    onTap: () {},
                     comment: null,
                     people: _homeController.post.value.people!,
                     commentsList: _homeController.commentsList,
                     onReply: () {},
+                    onTap: () {},
                     onViewPreviousComments: () async {
                       if (_homeController.post.value.comments! / 5 >
                           _homeController.skipCommentCount.value) {

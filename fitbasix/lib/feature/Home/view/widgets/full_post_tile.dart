@@ -74,7 +74,7 @@ class _FullPostTileState extends State<FullPostTile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return InkWell(
+    return GestureDetector(
       onTap: widget.onTap,
       child: Container(
         child: Column(
