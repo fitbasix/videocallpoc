@@ -74,8 +74,7 @@ class TagPeopleScreen extends StatelessWidget {
                                       postId: _postController.postId.value,
                                       taggedPeople: taggedPeople);
 
-                              Navigator.pushNamed(
-                                  context, RouteName.createPost);
+                              Navigator.pop(context);
                               _postController.isLoading.value = false;
                             }
                           },

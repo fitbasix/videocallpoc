@@ -91,10 +91,10 @@ class HomeService {
   static Future<void> updateWaterDetails(double waterLevel) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-
+    print(waterLevel.toString() + " water level");
     var response = await dio!
         .post(ApiUrl.updateWater, data: {"totalWaterConsumed": waterLevel});
-    print(response.data.toString());
+    print("update water " + response.data.toString());
   }
 
   static Future<void> updateWaterNotificationDetails(double waterGoal,
