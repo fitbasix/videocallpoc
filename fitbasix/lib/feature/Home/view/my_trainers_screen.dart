@@ -88,9 +88,14 @@ class NoTrainerScreen extends StatelessWidget {
                 width: double.infinity * SizeConfig.widthMultiplier!,
                 height: 48 * SizeConfig.heightMultiplier!,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                  //   Navigator.pushNamed(context, RouteName.trainerplanScreen);
+                   // Navigator.pushNamed(context, RouteName.planInformationScreen);
+                  // Navigator.pushNamed(context, RouteName.planTimingScreen);
+
+                  },
                   child:
-                      Text('enroll_now'.tr, style: AppTextStyle.hboldWhiteText),
+                      Text('explore_trainers'.tr, style: AppTextStyle.hboldWhiteText),
                 ),
               ),
             ],
@@ -157,7 +162,8 @@ class EnrollTrainerDialog extends StatelessWidget {
                         width: 156 * SizeConfig.widthMultiplier!,
                         height: 48 * SizeConfig.heightMultiplier!,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                          },
                           child: Text('enroll_now'.tr,
                               style: AppTextStyle.hboldWhiteText),
                         ),
