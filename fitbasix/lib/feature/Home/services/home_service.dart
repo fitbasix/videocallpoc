@@ -26,10 +26,13 @@ class HomeService {
     // );
     var dio = DioUtil().getInstance();
     dio!.options.headers["language"] = "1";
+    print("trending post");
     var token = await LogInService.getAccessToken();
+
     dio.options.headers['Authorization'] = token;
     var response = await dio
         .post(ApiUrl.getPosts, data: {"skip": skip == null ? 0 : skip * 5});
+    print("trending post");
     print(response.toString());
     return postsModelFromJson(response.toString());
   }

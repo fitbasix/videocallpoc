@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/log_in/model/third_party_login.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +15,7 @@ import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
 
 class LogInService {
-  static LoginController loginController = Get.find();
+  static LoginController loginController = Get.put(LoginController());
   static var dio = DioUtil().getInstance();
 
   static Future<String> getOTP(String mobile, String countryCode) async {
@@ -83,8 +85,8 @@ class LogInService {
     prefs.setString('RefreshToken', response.data['response']['refreshToken']);
   }
 
-  static Future<int?> loginAndSignup(
-      String mobile, String otp, String countryCode, String? email) async {
+  static Future<int?> loginAndSignup(String mobile, String otp,
+      String countryCode, String? email, BuildContext context) async {
     try {
       var putResponse = await http.put(
         Uri.parse(ApiUrl.loginAndSignup),
@@ -102,6 +104,10 @@ class LogInService {
 
       final responseData = jsonDecode(putResponse.body);
       log(responseData.toString());
+      if (putResponse.statusCode == 405) {
+        Get.deleteAll();
+        Navigator.pop(context);
+      }
       if (responseData['code'] == 0) {
         loginController.token.value = responseData['response']['user']['token'];
         final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -114,6 +120,7 @@ class LogInService {
         loginController.otpErrorMessage.value =
             responseData['response']['message'];
       }
+      print("login Response " + putResponse.body.toString());
       return responseData['response']['screenId'];
     } on Exception catch (e) {
       log(e.toString());
@@ -149,6 +156,7 @@ class LogInService {
             "email": email,
           }),
         );
+
         final responseData = jsonDecode(putResponse.body);
         log(responseData.toString());
         if (responseData['code'] == 0) {
@@ -159,5 +167,16 @@ class LogInService {
         // TODO
       }
     }
+  }
+
+  static Future<void> logOut() async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var RefreshToken = await getRefreshToken();
+    print(RefreshToken);
+    var response =
+        await dio!.post(ApiUrl.logOut, data: {"refreshToken": RefreshToken});
+    print(response.data.toString());
   }
 }
