@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const kPureWhite = Color(0xFFFFFFFF);
 const kPureBlack = Color(0xFF000000);
-const kGreenColor = Color.fromARGB(255, 79, 194, 76);
+const kGreenColor = Color.fromARGB(255, 73, 174, 80);
 const dustyWhite = Color.fromARGB(255, 213, 213, 213);
 const lightBlack = Color.fromARGB(255, 34, 34, 34);
 const kLightGrey = Color(0xFFF0F0F0);
@@ -34,12 +34,11 @@ const Blue = Color(0xFF3984FF);
 const LightGreen = Color.fromARGB(127, 235, 247, 235);
 const kBackgroundColor = Color(0x1A000000);
 const sliderColor = Color(0xFFF2F9F2);
-const grey183 =  Color.fromARGB(255, 183, 183, 183);
-const grey34 =  Color.fromARGB(1, 34, 34, 34);
-const greyB7 =  Color(0xFFB7B7B7);
-const greyF6 =  Color(0xFFF6F6F6);
+const grey183 = Color.fromARGB(255, 183, 183, 183);
+const grey34 = Color.fromARGB(1, 34, 34, 34);
+const greyB7 = Color(0xFFB7B7B7);
+const greyF6 = Color(0xFFF6F6F6);
 const kgreen49 = Color(0xFF49AE50);
 const kgreen4F = Color(0xFF4FC24C);
 const klightgreenEB = Color(0xFFEBF7EB);
-
-
+const greyBorder = Color(0xFF333333);

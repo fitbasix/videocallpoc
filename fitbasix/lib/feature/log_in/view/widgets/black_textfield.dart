@@ -1,15 +1,16 @@
-import 'package:fitbasix/core/constants/app_text_style.dart';
-import 'package:fitbasix/core/constants/color_palette.dart';
-import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CutomizedTextField extends StatelessWidget {
+import '../../../../core/constants/app_text_style.dart';
+import '../../../../core/constants/color_palette.dart';
+import '../../../../core/reponsive/SizeConfig.dart';
+
+class BlackCutomizedTextField extends StatelessWidget {
   final Color color;
   final Widget child;
   bool? wantWhiteBG;
 
-  CutomizedTextField(
+  BlackCutomizedTextField(
       {required this.color, required this.child, this.wantWhiteBG});
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class CutomizedTextField extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
         border: Border.all(color: color),
-        color: wantWhiteBG != null ? Colors.white : lightGrey,
+        color: lightBlack,
         borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
       ),
       child: Center(child: child),

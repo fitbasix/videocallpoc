@@ -7,6 +7,8 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
+import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,6 +23,8 @@ class MenuScreen extends StatelessWidget {
       {required this.imageUrl,
       required this.imageCoverPic,
       required this.name});
+
+  final ProfileController _profileController = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
     print(imageUrl);
@@ -30,9 +34,19 @@ class MenuScreen extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-              onTap: (){
-                Navigator.pushNamed(
-                    context, RouteName.userprofileinfo);
+              onTap: () async {
+                Navigator.pushNamed(context, RouteName.userprofileinfo);
+                _profileController.initialPostData.value =
+                    await ProfileServices.getUserPosts();
+
+                if (_profileController
+                        .initialPostData.value.response!.data!.length !=
+                    0) {
+                  _profileController.userPostList.value =
+                      _profileController.initialPostData.value.response!.data!;
+                } else {
+                  _profileController.userPostList.clear();
+                }
               },
               child: Container(
                 height: 160 * SizeConfig.heightMultiplier!,
@@ -98,7 +112,8 @@ class MenuScreen extends StatelessWidget {
                 menuItemImage: ImagePath.account,
                 menuItemText: 'account'.tr,
                 onTap: () {
-                  Navigator.pushNamed(context, RouteName.accountAndSubscription);
+                  Navigator.pushNamed(
+                      context, RouteName.accountAndSubscription);
                 }),
             MenuItem(
                 menuItemImage: ImagePath.settings,
@@ -118,7 +133,8 @@ class MenuScreen extends StatelessWidget {
                 onTap: () {
                   showDialog(
                       context: context,
-                      builder: (BuildContext context) => DialogboxForFeedback());
+                      builder: (BuildContext context) =>
+                          DialogboxForFeedback());
                 }),
             MenuItem(
                 menuItemImage: ImagePath.legal,
