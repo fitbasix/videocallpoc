@@ -106,6 +106,15 @@ class ImagePath {
   static const String plusIconbmr = "assets/bmrscreen/plusIconbmr.svg";
   static const String minuscircleIcon = "assets/bmrscreen/minuscirlceIcon.svg";
   static const String bmrinfoImage = "assets/bmrscreen/bmrimage.svg";
+  ///plan screen
+  static const String plantimerIcon = "assets/plans/plantimerIcon.svg";
+  static const String planpersonenrolledIcon = "assets/plans/planpersonenrolledIcon.svg";
+  static const String planlanguageIcon = "assets/plans/planLanguageIcon.png";
+  static const String plangreentickIcon = "assets/plans/plangreentickIcon.png";
+  static const String planredIcon = "assets/plans/planredcircleIcon.png";
+  static const String plantimerPNGIcon = "assets/plans/plantimerpngIcon.png";
+  static const String reverseBackIcon = "assets/plans/reversebackIcon.svg";
+}
 
   ///LOGIN
   static const String login_intro_image = "assets/log_in/login_image.png";

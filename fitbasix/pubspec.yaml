@@ -70,6 +70,7 @@ dependencies:
   video_player: ^2.2.18
   url_launcher: ^6.0.20
   flutter_native_splash: ^2.0.4
+  percent_indicator: ^4.0.0
 
 
 dev_dependencies:
@@ -119,6 +120,7 @@ flutter:
     - assets/message/
     - assets/mytrainers/
     - assets/bmrscreen/
+    - assets/plans/
     - assets/log_in/
   #   - images/a_dot_ham.jpeg
 

@@ -39,6 +39,9 @@ import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_height.dart';
 import 'package:fitbasix/feature/spg/view/set_weight.dart';
+import '../../feature/plans/view/plan_info.dart';
+import '../../feature/plans/view/trainers_plan.dart';
+import '../../feature/plans/view/plan_timing.dart';
 import '../../feature/spg/view/set_dob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +88,10 @@ abstract class RouteName {
   static const userprofileinfo = "/user_profile_info";
   static const edituserProfileScreen = "/edit_userprofile_info";
   static const bmrresultScreen = "/bmr_resultpage.dart";
-  static const trainerdocumentScreen = "chat_documentscreen.dart";
+  static const trainerdocumentScreen = "/chat_documentscreen.dart";
+  static const trainerplanScreen = "/trainers_plan.dart";
+  static const planInformationScreen = "/plan_info.dart";
+  static const planTimingScreen = "/plan_timing.dart";
   RouteName._();
 }
 
@@ -321,6 +327,21 @@ class GenerateRoute {
     if (route == RouteName.trainerdocumentScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) => TrainerDocumentScreen(),
+      );
+    }
+    if (route == RouteName.trainerplanScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => TrainerPlansScreen(),
+      );
+    }
+    if (route == RouteName.planInformationScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => PlanInformationUI(),
+      );
+    }
+    if (route == RouteName.planTimingScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => PlanTimingUI(),
       );
     }
     if (route == RouteName.editPersonalInfo) {
