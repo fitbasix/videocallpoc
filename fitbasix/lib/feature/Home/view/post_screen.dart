@@ -4,9 +4,15 @@ import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/widgets/full_post_tile.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:intl/intl.dart';
+
+import '../../../core/constants/app_text_style.dart';
+import '../../../core/constants/color_palette.dart';
+import '../../../core/constants/image_path.dart';
+import '../../../core/reponsive/SizeConfig.dart';
 
 class PostScreen extends StatefulWidget {
   PostScreen({Key? key}) : super(key: key);
@@ -27,9 +33,32 @@ class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            child: CustomAppBar(titleOfModule: 'post'.tr),
-            preferredSize: const Size(double.infinity, kToolbarHeight)),
+        appBar: AppBar(
+          backgroundColor: kPureWhite,
+          centerTitle: false,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _homeController.replyList.clear();
+              },
+              icon: SvgPicture.asset(
+                ImagePath.backIcon,
+                width: 7 * SizeConfig.widthMultiplier!,
+                height: 12 * SizeConfig.heightMultiplier!,
+              )),
+          title: Transform(
+            transform: Matrix4.translationValues(
+                -20 * SizeConfig.widthMultiplier!, 0, 0),
+            child: Text('post'.tr,
+                style: AppTextStyle.titleText
+                    .copyWith(fontSize: 16 * SizeConfig.textMultiplier!)),
+          ),
+        ),
+        // appBar: PreferredSize(
+        //     child: CustomAppBar(titleOfModule: 'post'.tr),
+        //     preferredSize: const Size(double.infinity, kToolbarHeight)),
         body: Obx(
           () => _homeController.postLoading.value
               ? Center(child: CustomizedCircularProgress())

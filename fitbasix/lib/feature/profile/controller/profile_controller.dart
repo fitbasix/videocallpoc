@@ -3,6 +3,7 @@ import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../Home/model/post_feed_model.dart';
 import '../../log_in/controller/login_controller.dart';
 
 class ProfileController extends GetxController {
@@ -19,7 +20,10 @@ class ProfileController extends GetxController {
   RxInt currentWeight = 65.obs;
   RxString weightType = "kg".obs;
   final rulerPickerController = RulerPickerController(value: 2);
-
+  RxList<Post> userPostList = RxList<Post>([]);
+  Rx<PostsModel> initialPostData = Rx(PostsModel());
+  RxInt currentPage = RxInt(1);
+  RxBool showLoading = RxBool(false);
   void editUserPersonalInfo() {
     //todo import API for user data updating
     //user email
