@@ -51,7 +51,7 @@ Widget TextFieldContainer(
       readOnly: readOnly == null ? false : true,
       keyboardType:
           isNumber ? TextInputType.number : TextInputType.streetAddress,
-      style: AppTextStyle.hintText.copyWith(color: lightBlack),
+      style: AppTextStyle.hintText.copyWith(color: kPureWhite),
       textAlignVertical: TextAlignVertical.bottom,
       maxLength: maxLength == null ? 300 : maxLength,
       obscureText: isObsecure == null ? false : isObsecure,

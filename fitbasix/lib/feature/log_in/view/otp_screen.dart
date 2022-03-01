@@ -20,130 +20,188 @@ class OtpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+    //  backgroundColor: kPureBlack,
       body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.only(
-            left: 16 * SizeConfig.widthMultiplier!,
-            right: 16 * SizeConfig.widthMultiplier!),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 16 * SizeConfig.heightMultiplier!,
-            ),
-            CustomBackButton(),
-            SizedBox(
-              height: 24 * SizeConfig.heightMultiplier!,
-            ),
-            Text(
-              'hello'.tr,
-              style: AppTextStyle.titleText,
-            ),
-            Text(
-              'enter_otp_text'
-                  .trParams({'number': _loginController.mobile.value}),
-              style: AppTextStyle.NormalText,
-            ),
-            Row(
-              children: [
-                Text(
-                  'to_modify_number'.tr,
-                  style: AppTextStyle.NormalText,
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'click_here'.tr,
-                    style: AppTextStyle.NormalText.copyWith(
-                        decoration: TextDecoration.underline),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 58 * SizeConfig.heightMultiplier!,
-            ),
-            PinCodeTextField(
-              appContext: context,
-              length: 6,
-              onChanged: (value) {
-                _loginController.otp.value = value;
-              },
-              enableActiveFill: true,
-              keyboardType: TextInputType.number,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(8),
-                fieldHeight: 48 * SizeConfig.widthMultiplier!,
-                fieldWidth: 48 * SizeConfig.widthMultiplier!,
-                selectedColor: Colors.transparent,
-                activeFillColor: kLightGrey,
-                inactiveColor: Colors.transparent,
-                activeColor: Colors.transparent,
-                inactiveFillColor: kLightGrey,
-                selectedFillColor: kLightGrey,
+          child: Stack(
+            children: [
+              Container(
+                height: double.infinity,
               ),
-            ),
-            SizedBox(
-              height: 16 * SizeConfig.heightMultiplier!,
-            ),
-            Row(
-              children: [
-                Text(
-                  'resend_otp_text'.tr,
-                  style: AppTextStyle.NormalText.copyWith(
-                      fontSize: 14 * SizeConfig.textMultiplier!),
+              Image.asset(
+                ImagePath.otp_intro_image,
+                height: 540 * SizeConfig.heightMultiplier!,
+                width: Get.width,
+                fit: BoxFit.cover,
+              ),
+              Positioned(
+                bottom: 0,
+                child: Image.asset(
+                  ImagePath.black_rectangle,
+                  height: 374 * SizeConfig.heightMultiplier!,
+                  width: Get.width,
+                  fit: BoxFit.cover,
                 ),
-                InkWell(
-                  onTap: () async {
-                    await _loginController.getOTP();
-                  },
-                  child: Text(
-                    'resend'.tr,
-                    style: AppTextStyle.NormalText.copyWith(
-                        decoration: TextDecoration.underline,
-                        fontSize: 14 * SizeConfig.textMultiplier!),
+              ),
+              Positioned(
+                  top: 16.12,
+                  left: 18.67,
+                  child: CustomBackButton(color: kPureWhite,)
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: kPureBlack,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(16*SizeConfig.widthMultiplier!),
+                      topLeft: Radius.circular(16*SizeConfig.widthMultiplier!),
+                    )
+                  ),
+                  padding: EdgeInsets.only(
+                      left: 16 * SizeConfig.widthMultiplier!,
+                      right: 16 * SizeConfig.widthMultiplier!),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 16 * SizeConfig.heightMultiplier!,
+                      ),
+                      Text(
+                        'Hi'.tr,
+                        style: AppTextStyle.titleText.copyWith(
+                            color: kPureWhite
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8 * SizeConfig.heightMultiplier!,
+                      ),
+                      Text(
+                        'enter_otp_text'
+                            .trParams({'number': _loginController.mobile.value}),
+                        style: AppTextStyle.NormalText.copyWith(
+                            color: kPureWhite,
+                          fontSize: (12) * SizeConfig.textMultiplier!,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'to_modify_number'.tr,
+                            style: AppTextStyle.NormalText.copyWith(
+                                color: kPureWhite,
+                              fontSize: (12) * SizeConfig.textMultiplier!,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'click_here'.tr,
+                              style: AppTextStyle.NormalText.copyWith(
+                                  color: kPureWhite,
+                                  fontSize: (12) * SizeConfig.textMultiplier!,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16 * SizeConfig.heightMultiplier!,
+                      ),
+                      PinCodeTextField(
+                        appContext: context,
+                        length: 6,
+                        onChanged: (value) {
+                          _loginController.otp.value = value;
+                        },
+                        enableActiveFill: false,
+                        keyboardType: TextInputType.number,
+                        textStyle: TextStyle(
+                          color: kPureWhite
+                        ),
+                        pinTheme: PinTheme(
+                          shape: PinCodeFieldShape.underline,
+                          fieldHeight: 48 * SizeConfig.widthMultiplier!,
+                          fieldWidth: 48 * SizeConfig.widthMultiplier!,
+                          selectedColor: greyBorder,
+                          // activeFillColor: kLightGrey,
+                          inactiveColor: greyBorder,
+                          activeColor: greyBorder,
+                          // inactiveFillColor: kLightGrey,
+                          // selectedFillColor: kLightGrey,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16 * SizeConfig.heightMultiplier!,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'resend_otp_text'.tr,
+                            style: AppTextStyle.NormalText.copyWith(
+                                color: kPureWhite,
+                                fontSize: 14 * SizeConfig.textMultiplier!),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              await _loginController.getOTP();
+                            },
+                            child: Text(
+                              'resend'.tr,
+                              style: AppTextStyle.NormalText.copyWith(
+                                  color: kPureWhite,
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 14 * SizeConfig.textMultiplier!),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Spacer(),
+                      SizedBox(
+                        height: 16 * SizeConfig.heightMultiplier!,
+                      ),
+                      Obx(() => _loginController.isLoading.value
+                          ? Center(child: CustomizedCircularProgress())
+                          : ProceedButton(
+                          title: 'verify'.tr,
+                          onPressed: () async {
+                            _loginController.isLoading.value = true;
+                            final redScreen = await LogInService.loginAndSignup(
+                                _loginController.mobile.value,
+                                _loginController.otp.value,
+                                _loginController.selectedCountry.value.code!,
+                                "");
+
+                            if (redScreen == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content:
+                                  Text(_loginController.otpErrorMessage.value)));
+                              _loginController.isLoading.value = false;
+                            }
+
+                            if (redScreen == 18) {
+                              _loginController.isLoading.value = false;
+                              Navigator.pushNamed(context, RouteName.enterDetails);
+                            } else if (redScreen == 16) {
+                              _loginController.isLoading.value = false;
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, RouteName.homePage, (route) => false);
+                            }
+                          })),
+                      SizedBox(
+                        height: 32 * SizeConfig.heightMultiplier!,
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            Spacer(),
-            Obx(() => _loginController.isLoading.value
-                ? Center(child: CustomizedCircularProgress())
-                : ProceedButton(
-                    title: 'verify'.tr,
-                    onPressed: () async {
-                      _loginController.isLoading.value = true;
-                      final redScreen = await LogInService.loginAndSignup(
-                          _loginController.mobile.value,
-                          _loginController.otp.value,
-                          _loginController.selectedCountry.value.code!,
-                          "");
-
-                      if (redScreen == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text(_loginController.otpErrorMessage.value)));
-                        _loginController.isLoading.value = false;
-                      }
-
-                      if (redScreen == 18) {
-                        _loginController.isLoading.value = false;
-                        Navigator.pushNamed(context, RouteName.enterDetails);
-                      } else if (redScreen == 16) {
-                        _loginController.isLoading.value = false;
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, RouteName.homePage, (route) => false);
-                      }
-                    })),
-            SizedBox(
-              height: 32 * SizeConfig.heightMultiplier!,
-            ),
-          ],
-        ),
-      )),
+              ),
+            ],
+          )
+      ),
     );
   }
 }
