@@ -1,4 +1,5 @@
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,7 @@ import '../../../core/reponsive/SizeConfig.dart';
 import '../../../core/routes/app_routes.dart';
 
 class MyTrainerTileScreen extends StatelessWidget {
-
+  MyTrainerTileScreen({Key? key,this.dialogId,}) : super(key: key);
   List<String> taggedPersonList = [
     "Sports Nutrition",
     "Hi",
@@ -17,11 +18,13 @@ class MyTrainerTileScreen extends StatelessWidget {
     "Hz",
   ];
 
-  var trainerName = 'Jonathan Swift';
-  var trainerStatus = 'Hey, please to meet you 👋 You can always text me if you have any questions.';
+  String? dialogId;
+  var trainerName = ''.obs;
+  var trainerStatus = "".obs;
   String trainerProfilePicUrl = 'http://www.pixelmator.com/community/download/file.php?avatar=17785_1569233053.png';
   @override
   Widget build(BuildContext context) {
+    fetchMessageData();
     return Scaffold(
       backgroundColor: offWhite,
       appBar: AppBar(
@@ -55,7 +58,7 @@ class MyTrainerTileScreen extends StatelessWidget {
                                   left: 16 * SizeConfig.widthMultiplier!,
                                   bottom: 30 * SizeConfig.heightMultiplier!),
                               child: Text(
-                                trainerName,
+                                trainerName.value.isNotEmpty?trainerName.value:"Loading..",
                                 style: AppTextStyle.hblackSemiBoldText,
                               ),
                             ),
@@ -138,7 +141,7 @@ class MyTrainerTileScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          trainerName,
+                          trainerName.value.isNotEmpty?trainerName.value:"Loading..",
                           style: AppTextStyle.hnormal600BlackText
                         ),
                         //_taggedBar Widget
@@ -163,7 +166,7 @@ class MyTrainerTileScreen extends StatelessWidget {
                         top: 16 * SizeConfig.heightMultiplier!,
                         bottom: 16 * SizeConfig.heightMultiplier!),
                     child: Text(
-                        trainerStatus,
+                        trainerStatus.value.isNotEmpty?trainerStatus.value:"loading...",
                         style: AppTextStyle.hmedium13Text),
                   ),
                 ),
@@ -240,6 +243,10 @@ class MyTrainerTileScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void fetchMessageData() {
+
   }
 }
 

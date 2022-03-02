@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../../core/constants/image_path.dart';
@@ -34,6 +35,8 @@ class AcceptedVideoCallScreen extends StatefulWidget {
 }
 
 class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
+  bool turnCameraOnOff = true;
+  bool turnMicOnOff = true;
   var _isCallPicked = false.obs;
   final panelController = PanelController();
 
@@ -75,8 +78,14 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
     super.dispose();
   }
 
+  setValueInHomeController() async{
+  final sharedPreferences = await SharedPreferences.getInstance();
+  _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
+  }
+
   @override
   void initState() {
+    setValueInHomeController();
     print("llll user id: " + _homeController.userQuickBloxId.value.toString());
     subscribeReject();
     subscribeAccept();
@@ -102,6 +111,17 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
           },
           panelController: panelController,
           controller: controller,
+          onCameraTap: (){
+            turnUserCameraOnOFF();
+            print("camera off pressed");
+          },
+          onMicTap: (){
+            turnUserMicOnOFF();
+            print("mic off pressed");
+          },
+          onSpeakerTap: (){
+
+          },
         ),
         //body
         body:Stack(
@@ -124,6 +144,25 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
 
       ),
     );
+  }
+
+  void turnUserMicOnOFF() async {
+    turnMicOnOff = !turnMicOnOff;
+    print("lllllll"+turnMicOnOff.toString());
+    try {
+      await QB.webrtc.enableAudio(widget.sessionIdForVideoCall!, enable: turnMicOnOff,);
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
+
+  void turnUserCameraOnOFF() async {
+    turnCameraOnOff = !turnCameraOnOff;
+    try {
+      await QB.webrtc.enableVideo(widget.sessionIdForVideoCall!, enable: turnCameraOnOff);
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
   }
 
   Future<void> hangUpWebRTC() async {
@@ -155,6 +194,7 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
     try {
       _hangUpSubscription =
       await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.HANG_UP, (data) {
+        Navigator.pop(context);
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
@@ -221,10 +261,10 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
     if (_callEndSubscription != null) {
       return;
     }
-
     try {
       _callEndSubscription =
       await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL_END, (data) {
+        Navigator.pop(context);
         print("video end triggeed");
         Map<dynamic, dynamic> payloadMap =
         Map<dynamic, dynamic>.from(data["payload"]);
@@ -309,16 +349,23 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
   }
 }
 
+
 class PanelWidget extends StatefulWidget {
   final ScrollController? controller;
   final PanelController panelController;
   ValueChanged<bool>? onHangUpTapped;
+  GestureTapCallback? onMicTap;
+  GestureTapCallback? onCameraTap;
+  GestureTapCallback? onSpeakerTap;
 
   PanelWidget(
       {Key? key,
         this.controller,
         required this.panelController,
-        this.onHangUpTapped})
+        this.onHangUpTapped,
+        this.onMicTap,
+        this.onCameraTap,
+        this.onSpeakerTap})
       : super(key: key);
 
   @override
@@ -330,6 +377,7 @@ class _PanelWidgetState extends State<PanelWidget> {
   bool? isspeakeron = true;
   bool? iscameraon = true;
   bool status = true;
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -349,30 +397,25 @@ class _PanelWidgetState extends State<PanelWidget> {
               right: 35 * SizeConfig.widthMultiplier!),
           child: Row(
             children: [
-              // mic
-              ismicon!
-                  ? IconButton(
-                icon: SvgPicture.asset(
+              GestureDetector(
+                onTap: () {
+                  widget.onMicTap!.call();
+                  setState(() {
+                    ismicon = !ismicon!;
+                    print("mic pressed");
+                  });
+                },
+                child: // mic
+                ismicon!
+                    ? SvgPicture.asset(
                   ImagePath.videomicON,
                   width: 18.67 * SizeConfig.widthMultiplier!,
                   height: 25.33 * SizeConfig.heightMultiplier!,
                   fit: BoxFit.contain,
-                ),
-                onPressed: () {
-                  setState(() {
-                    ismicon = !ismicon!;
-                  });
-                },
-              )
-                  : CircleAvatar(
-                backgroundColor: kPureWhite,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      ismicon = !ismicon!;
-                    });
-                  },
-                  icon: SvgPicture.asset(
+                )
+                    : CircleAvatar(
+                  backgroundColor: kPureWhite,
+                  child: SvgPicture.asset(
                     ImagePath.videomicOFF,
                     width: 24 * SizeConfig.widthMultiplier!,
                     height: 25.33 * SizeConfig.heightMultiplier!,
@@ -382,61 +425,49 @@ class _PanelWidgetState extends State<PanelWidget> {
               ),
               Spacer(),
               // speaker
-              isspeakeron!
-                  ? IconButton(
-                icon: SvgPicture.asset(
+              GestureDetector(
+                onTap: () {
+                  widget.onSpeakerTap!.call();
+                  setState(() {
+                    isspeakeron = !isspeakeron!;
+
+                  });
+                },
+                child: isspeakeron!
+                    ? SvgPicture.asset(
                   ImagePath.videospeakerON,
                   width: 24 * SizeConfig.widthMultiplier!,
                   height: 23.39 * SizeConfig.heightMultiplier!,
                   fit: BoxFit.contain,
-                ),
-                onPressed: () {
-                  setState(() {
-                    isspeakeron = !isspeakeron!;
-                  });
-                },
-              )
-                  : CircleAvatar(
-                backgroundColor: kPureWhite,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isspeakeron = !isspeakeron!;
-                    });
-                  },
-                  icon: SvgPicture.asset(
-                    ImagePath.videospeakerOFF,
-                    width: 24 * SizeConfig.widthMultiplier!,
-                    height: 24 * SizeConfig.heightMultiplier!,
-                    color: kPureBlack,
-                  ),
-                ),
+                )
+                    : CircleAvatar(
+                    backgroundColor: kPureWhite,
+                    child: SvgPicture.asset(
+                      ImagePath.videospeakerOFF,
+                      width: 24 * SizeConfig.widthMultiplier!,
+                      height: 24 * SizeConfig.heightMultiplier!,
+                      color: kPureBlack,
+                    )),
               ),
               Spacer(),
               // camera
-              iscameraon!
-                  ? IconButton(
-                icon: SvgPicture.asset(
-                  ImagePath.videocameraON,
-                  width: 24 * SizeConfig.widthMultiplier!,
-                  height: 16 * SizeConfig.heightMultiplier!,
-                  fit: BoxFit.contain,
-                ),
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
+                  widget.onCameraTap!.call();
                   setState(() {
                     iscameraon = !iscameraon!;
                   });
                 },
-              )
-                  : CircleAvatar(
-                backgroundColor: kPureWhite,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      iscameraon = !iscameraon!;
-                    });
-                  },
-                  icon: SvgPicture.asset(
+                child: iscameraon!
+                    ? SvgPicture.asset(
+                  ImagePath.videocameraON,
+                  width: 24 * SizeConfig.widthMultiplier!,
+                  height: 16 * SizeConfig.heightMultiplier!,
+                  fit: BoxFit.contain,
+                )
+                    : CircleAvatar(
+                  backgroundColor: kPureWhite,
+                  child: SvgPicture.asset(
                     ImagePath.videocameraOFF,
                     width: 25.33 * SizeConfig.widthMultiplier!,
                     height: 25.33 * SizeConfig.heightMultiplier!,

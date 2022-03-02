@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -113,11 +114,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-
     userDialogForChat = widget.userDialogForChat;
     initMassage();
     connectionEvent();
     getMassageFromHistory();
+
     super.initState();
   }
 
@@ -126,6 +127,12 @@ class _ChatScreenState extends State<ChatScreen> {
     if (messages != null) {}
     return Scaffold(
       appBar: AppbarforChat(
+        onHangUpTapped: (value){
+          //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
+          callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: value!,)));
+          });
+        },
         onDocumentsTap: () {
           Navigator.push(
               context,
@@ -251,10 +258,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ))
                                 : IconButton(
                                     onPressed: () async {
-                                      //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
-                                     callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-                                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: value!,)));
-                                     });
+
 
                                     },
                                     icon: SvgPicture.asset(
@@ -280,7 +284,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
 
-  void sendNotification(String massage) async {
+  void sendNotification(String messageBody) async {
     try{
       FirebaseMessaging.instance.getToken().then((token)async{
         List<QBSubscription?> subscriptions = await QB.subscriptions.create(token!, QBPushChannelNames.GCM);
@@ -294,10 +298,26 @@ class _ChatScreenState extends State<ChatScreen> {
     int senderId = _homeController.userQuickBloxId.value;
 
     Map<String, Object> payload = new Map();
-    payload["message"] = massage;
+    payload["message"] = {
+      "notification": {
+        "body": messageBody,
+        "title": "this is a title",
+        "imageUrl":"https://community.custom-cursor.com/uploads/default/adcc703632967e01dba11b8ed4ed893d57b8388c",
+        "name":_homeController.userQuickBloxId.value==133642567?"Tarun Prajapat":"Vartika",
+        "dialogId":widget.userDialogForChat!.id,
+        "opponentId":_homeController.userQuickBloxId.value.toString(),
+      },
+    "data": {
+    "sound": "default",
+    "status": "done",
+    "screen": "ChatScreen",
+    },
+    "to": "<FCM TOKEN>"
+  };
 
     try {
-      List<QBEvent?> events = await QB.events.create(eventType, notificationEventType, senderId, payload, pushType: pushType,recipientsIds: [widget.opponentID!.toString()]);
+      print(widget.opponentID.toString()+" kkkkk");
+      List<QBEvent?> events = await QB.events.create(eventType, notificationEventType, senderId, payload, pushType: pushType,recipientsIds: [widget.opponentID.toString()]);
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
     }
@@ -723,11 +743,6 @@ class MessageBubbleSender extends StatelessWidget{
 
 
 
-
-
-
-
-
 //  Message Bubble
 class MessageBubbleOpponent extends StatelessWidget {
   MessageBubbleOpponent({
@@ -899,13 +914,15 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   String? trainerstatus;
   BuildContext? parentContext;
   GestureTapCallback? onDocumentsTap;
+  ValueChanged<bool>? onHangUpTapped;
 
   AppbarforChat(
       {Key? key,
       this.trainertitle,
       this.parentContext,
       this.trainerstatus,
-      this.onDocumentsTap})
+      this.onDocumentsTap,
+      this.onHangUpTapped})
       : super(key: key);
 
   @override
@@ -952,14 +969,39 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
         ],
       ),
       actions: [
-        //document icon
-        IconButton(
-            onPressed: onDocumentsTap,
-            icon: SvgPicture.asset(
-              ImagePath.chatdocumentIcon,
-              width: 16 * SizeConfig.widthMultiplier!,
-              height: 20 * SizeConfig.heightMultiplier!,
-            )),
+        //call icon
+        Container(
+          child: FlutterSwitch(
+            onToggle: onHangUpTapped!,
+            value: false,
+            height: 24 * SizeConfig.heightMultiplier!,
+            width: 48 * SizeConfig.widthMultiplier!,
+            borderRadius: 30.0,
+            padding: 1.0,
+            activeToggleColor: kPureWhite,
+            inactiveToggleColor: Color(0xffB7B7B7),
+            // toggleSize: 28,
+            activeColor: Color(0xff49AE50),
+            inactiveColor: Colors.white,
+            activeIcon: Icon(
+              Icons.videocam,
+              color: Color(0xff49AE50),
+            ),
+            inactiveIcon: Icon(
+              Icons.videocam,
+              color: kPureWhite,
+            ),
+
+            inactiveSwitchBorder: Border.all(
+              color: Color(0xffB7B7B7),
+              width: 1.0,
+            ),
+            activeToggleBorder: Border.all(
+              color: Color(0xff49AE50),
+              width: 1.0,
+            ),
+          ),
+        ),
         // popupmenu icon
         IconButton(
             onPressed: () {},

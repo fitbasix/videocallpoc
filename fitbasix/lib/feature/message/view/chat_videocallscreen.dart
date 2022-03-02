@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
-import 'package:fitbasix/feature/message/view/chat_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,12 +32,15 @@ class VideoCallScreen extends StatefulWidget {
 }
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
-
+  bool turnCameraOnOff = true;
+  bool turnMicOnOff = true;
   var _isCallPicked = false.obs;
   final panelController = PanelController();
 
-  String urlimage = "https://cdna.artstation.com/p/assets/images/images/034/757/492/large/jorge-hardt-02112021-minimalist-japanese-mobile-hd.jpg?1613135473";
-  String avatarImage = "http://tricky-photoshop.com/wp-content/uploads/2017/08/6.jpg";
+  String urlimage =
+      "https://cdna.artstation.com/p/assets/images/images/034/757/492/large/jorge-hardt-02112021-minimalist-japanese-mobile-hd.jpg?1613135473";
+  String avatarImage =
+      "http://tricky-photoshop.com/wp-content/uploads/2017/08/6.jpg";
 
   StreamSubscription? _callEndSubscription;
 
@@ -62,107 +64,70 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   void dispose() {
-    // unsubscribeCall();
-    // unsubscribeCallEnd();
-    // unsubscribeReject();
-    // unsubscribeAccept();
-    // unsubscribeHangUp();
-    // unsubscribeVideoTrack();
-    // unsubscribeNotAnswer();
-    // unsubscribePeerConnection();
+    unsubscribeCallEnd();
+    unsubscribeReject();
+    unsubscribeAccept();
+    unsubscribeHangUp();
+    unsubscribeVideoTrack();
+    unsubscribeNotAnswer();
+    unsubscribePeerConnection();
     super.dispose();
   }
 
   void unsubscribeNotAnswer() {
-
     if (_notAnswerSubscription != null) {
-
       _notAnswerSubscription!.cancel();
 
       _notAnswerSubscription = null;
-
-
     }
-
   }
 
-
   void unsubscribePeerConnection() {
-
     if (_peerConnectionSubscription != null) {
-
       _peerConnectionSubscription!.cancel();
 
       _peerConnectionSubscription = null;
-
-
     }
-
   }
 
   void unsubscribeHangUp() {
-
     if (_hangUpSubscription != null) {
-
       _hangUpSubscription!.cancel();
 
       _hangUpSubscription = null;
-
-
     }
-
   }
 
   void unsubscribeVideoTrack() {
-
     if (_videoTrackSubscription != null) {
-
       _videoTrackSubscription!.cancel();
 
       _videoTrackSubscription = null;
-
-
     }
-
   }
 
   void unsubscribeReject() {
-
     if (_rejectSubscription != null) {
-
       _rejectSubscription!.cancel();
 
       _rejectSubscription = null;
-
-
     }
-
   }
 
   void unsubscribeAccept() {
-
     if (_acceptSubscription != null) {
-
       _acceptSubscription!.cancel();
 
       _acceptSubscription = null;
-
-
     }
-
   }
 
   void unsubscribeCallEnd() {
-
     if (_callEndSubscription != null) {
-
       _callEndSubscription!.cancel();
 
       _callEndSubscription = null;
-
-
     }
-
   }
 
   @override
@@ -190,24 +155,42 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             hangUpWebRTC();
             Navigator.pop(context);
           },
+          onCameraTap: () {
+            turnUserCameraOnOFF();
+            print("camera off pressed");
+          },
+          onMicTap: () {
+            turnUserMicOnOFF();
+            print("mic off pressed");
+          },
+          onSpeakerTap: () {},
           panelController: panelController,
           controller: controller,
         ),
         //body
-        body: Obx(()=> Stack(
+        body: Obx(
+          () => Stack(
             children: [
               SizedBox(
                 width: double.infinity,
                 height: double.infinity,
-                child: RTCVideoView(
-                    onVideoViewCreated:_onRemoteVideoViewCreated
-                ),
+                child:
+                    RTCVideoView(onVideoViewCreated: _onRemoteVideoViewCreated),
               ),
               Container(
-                margin: (_isCallPicked.value)?EdgeInsets.only(top: 38*SizeConfig.heightMultiplier!,left: 16*SizeConfig.widthMultiplier!):EdgeInsets.zero,
-                width: (_isCallPicked.value)?90*SizeConfig.widthMultiplier!:double.infinity,
-                height: (_isCallPicked.value)?160*SizeConfig.heightMultiplier!:double.infinity,
-                child: RTCVideoView(onVideoViewCreated: _onLocalVideoViewCreated),
+                margin: (_isCallPicked.value)
+                    ? EdgeInsets.only(
+                        top: 38 * SizeConfig.heightMultiplier!,
+                        left: 16 * SizeConfig.widthMultiplier!)
+                    : EdgeInsets.zero,
+                width: (_isCallPicked.value)
+                    ? 90 * SizeConfig.widthMultiplier!
+                    : double.infinity,
+                height: (_isCallPicked.value)
+                    ? 160 * SizeConfig.heightMultiplier!
+                    : double.infinity,
+                child:
+                    RTCVideoView(onVideoViewCreated: _onLocalVideoViewCreated),
               ),
               Visibility(
                 visible: !_isCallPicked.value,
@@ -244,43 +227,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                   ),
                 ),
               ),
-
-              // Visibility(
-              //   visible: true,
-              //   child: OrientationBuilder(builder: (context, orientation) {
-              //     return Container(
-              //       decoration: BoxDecoration(color: Colors.white),
-              //       child: Stack(
-              //         children: <Widget>[
-              //           Align(
-              //             alignment: orientation == Orientation.landscape
-              //                 ? const FractionalOffset(0.5, 0.1)
-              //                 : const FractionalOffset(0.0, 0.5),
-              //             child: Container(
-              //               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              //               width: 160.0,
-              //               height: 160.0,
-              //               child:
-              //               decoration: BoxDecoration(color: Colors.black54),
-              //             ),
-              //           ),
-              //           Align(
-              //             alignment: orientation == Orientation.landscape
-              //                 ? const FractionalOffset(0.5, 0.5)
-              //                 : const FractionalOffset(1.0, 0.5),
-              //             child: Container(
-              //               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              //               width: 160.0,
-              //               height: 160.0,
-              //               child:
-              //               decoration: BoxDecoration(color: Colors.black54),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     );
-              //   }),
-              // ),
             ],
           ),
         ),
@@ -288,10 +234,34 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
+  void turnUserMicOnOFF() async {
+    turnMicOnOff = !turnMicOnOff;;
+    print("lllllll"+turnMicOnOff.toString());
+    try {
+      await QB.webrtc.enableAudio(
+        widget.sessionIdForVideoCall!,
+        enable: turnMicOnOff,
+      );
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
+
+  void turnUserCameraOnOFF() async {
+    turnCameraOnOff = !turnCameraOnOff;
+    try {
+      await QB.webrtc
+          .enableVideo(widget.sessionIdForVideoCall!, enable: turnCameraOnOff);
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
+
   Future<void> hangUpWebRTC() async {
     try {
       print("hang up triggeed");
-      QBRTCSession? session = await QB.webrtc.hangUp(widget.sessionIdForVideoCall!);
+      QBRTCSession? session =
+          await QB.webrtc.hangUp(widget.sessionIdForVideoCall!);
 
       String? id = session!.id;
     } on PlatformException catch (e) {}
@@ -317,6 +287,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     try {
       _hangUpSubscription =
           await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.HANG_UP, (data) {
+            Navigator.pop(context);
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
@@ -376,12 +347,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     try {
       _acceptSubscription =
           await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.ACCEPT, (data) {
+
         _isCallPicked.value = true;
         int userId = data["payload"]["userId"];
         print(data["payload"] + "got this on accept triggeed");
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
+
   Future<void> subscribeCallEnd() async {
     if (_callEndSubscription != null) {
       return;
@@ -390,6 +363,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     try {
       _callEndSubscription =
           await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL_END, (data) {
+            Navigator.pop(context);
         print("video end triggeed");
         Map<dynamic, dynamic> payloadMap =
             Map<dynamic, dynamic>.from(data["payload"]);
@@ -401,6 +375,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
+
   Future<void> subscribeReject() async {
     if (_rejectSubscription != null) {
       return;
@@ -410,10 +385,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       print("video reject triggeed");
       _rejectSubscription =
           await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.REJECT, (data) {
+
         int userId = data["payload"]["userId"];
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
+
   Future<void> subscribeNotAnswer() async {
     if (_notAnswerSubscription != null) {
       return;
@@ -427,6 +404,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       }, onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
+
   Future<void> subscribeVideoTrack() async {
     print("video track started mmmm");
     if (_videoTrackSubscription != null) {
@@ -440,6 +418,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         Map<dynamic, dynamic> payloadMap =
             Map<dynamic, dynamic>.from(data["payload"]);
         int opponentId = payloadMap["userId"];
+        print(_homeController.userQuickBloxId.value.toString() + " mmmm");
         if (opponentId == _homeController.userQuickBloxId.value) {
           print("local rendring started");
           startRenderingLocal();
@@ -458,9 +437,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       try {
         await _localVideoViewController!.play(widget.sessionIdForVideoCall!,
             _homeController.userQuickBloxId.value);
-      } on PlatformException catch (e) {
-
-      }
+      } on PlatformException catch (e) {}
     });
   }
 
@@ -468,12 +445,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
       print("redering started mmmm");
       try {
-        await _remoteVideoViewController!.play(widget.sessionIdForVideoCall!, opponentId);
-      } on PlatformException catch (e) {
-
-      }
+        await _remoteVideoViewController!
+            .play(widget.sessionIdForVideoCall!, opponentId);
+      } on PlatformException catch (e) {}
     });
   }
+
   Future<void> callWebRTC(int sessionType) async {
     try {
       QBRTCSession? session = await QB.webrtc.call([133536465], sessionType,
@@ -487,12 +464,18 @@ class PanelWidget extends StatefulWidget {
   final ScrollController? controller;
   final PanelController panelController;
   ValueChanged<bool>? onHangUpTapped;
+  GestureTapCallback? onMicTap;
+  GestureTapCallback? onCameraTap;
+  GestureTapCallback? onSpeakerTap;
 
   PanelWidget(
       {Key? key,
       this.controller,
       required this.panelController,
-      this.onHangUpTapped})
+      this.onHangUpTapped,
+      this.onMicTap,
+      this.onCameraTap,
+      this.onSpeakerTap})
       : super(key: key);
 
   @override
@@ -504,6 +487,7 @@ class _PanelWidgetState extends State<PanelWidget> {
   bool? isspeakeron = true;
   bool? iscameraon = true;
   bool status = true;
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -523,101 +507,84 @@ class _PanelWidgetState extends State<PanelWidget> {
               right: 35 * SizeConfig.widthMultiplier!),
           child: Row(
             children: [
-              // mic
-              ismicon!
-                  ? IconButton(
-                      icon: SvgPicture.asset(
-                        ImagePath.videomicON,
-                        width: 18.67 * SizeConfig.widthMultiplier!,
-                        height: 25.33 * SizeConfig.heightMultiplier!,
-                        fit: BoxFit.contain,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          ismicon = !ismicon!;
-                        });
-                      },
-                    )
-                  : CircleAvatar(
-                      backgroundColor: kPureWhite,
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            ismicon = !ismicon!;
-                          });
-                        },
-                        icon: SvgPicture.asset(
-                          ImagePath.videomicOFF,
-                          width: 24 * SizeConfig.widthMultiplier!,
-                          height: 25.33 * SizeConfig.heightMultiplier!,
-                          color: kPureBlack,
-                        ),
-                      ),
-                    ),
+              GestureDetector(
+                onTap: () {
+                  widget.onMicTap!.call();
+                  setState(() {
+                    ismicon = !ismicon!;
+                    print("mic pressed");
+                  });
+                },
+                child: // mic
+                    ismicon!
+                        ? SvgPicture.asset(
+                            ImagePath.videomicON,
+                            width: 18.67 * SizeConfig.widthMultiplier!,
+                            height: 25.33 * SizeConfig.heightMultiplier!,
+                            fit: BoxFit.contain,
+                          )
+                        : CircleAvatar(
+                            backgroundColor: kPureWhite,
+                            child: SvgPicture.asset(
+                              ImagePath.videomicOFF,
+                              width: 24 * SizeConfig.widthMultiplier!,
+                              height: 25.33 * SizeConfig.heightMultiplier!,
+                              color: kPureBlack,
+                            ),
+                          ),
+              ),
               Spacer(),
               // speaker
-              isspeakeron!
-                  ? IconButton(
-                      icon: SvgPicture.asset(
+              GestureDetector(
+                onTap: () {
+                  widget.onSpeakerTap!.call();
+                  setState(() {
+                    isspeakeron = !isspeakeron!;
+
+                  });
+                },
+                child: isspeakeron!
+                    ? SvgPicture.asset(
                         ImagePath.videospeakerON,
                         width: 24 * SizeConfig.widthMultiplier!,
                         height: 23.39 * SizeConfig.heightMultiplier!,
                         fit: BoxFit.contain,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isspeakeron = !isspeakeron!;
-                        });
-                      },
-                    )
-                  : CircleAvatar(
-                      backgroundColor: kPureWhite,
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isspeakeron = !isspeakeron!;
-                          });
-                        },
-                        icon: SvgPicture.asset(
+                      )
+                    : CircleAvatar(
+                        backgroundColor: kPureWhite,
+                        child: SvgPicture.asset(
                           ImagePath.videospeakerOFF,
                           width: 24 * SizeConfig.widthMultiplier!,
                           height: 24 * SizeConfig.heightMultiplier!,
                           color: kPureBlack,
-                        ),
-                      ),
-                    ),
+                        )),
+              ),
               Spacer(),
               // camera
-              iscameraon!
-                  ? IconButton(
-                      icon: SvgPicture.asset(
-                        ImagePath.videocameraON,
-                        width: 24 * SizeConfig.widthMultiplier!,
-                        height: 16 * SizeConfig.heightMultiplier!,
-                        fit: BoxFit.contain,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          iscameraon = !iscameraon!;
-                        });
-                      },
-                    )
-                  : CircleAvatar(
-                      backgroundColor: kPureWhite,
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            iscameraon = !iscameraon!;
-                          });
-                        },
-                        icon: SvgPicture.asset(
+              GestureDetector(
+                onTap: () {
+                  widget.onCameraTap!.call();
+                  setState(() {
+                    iscameraon = !iscameraon!;
+                  });
+                },
+                child: iscameraon!
+                    ? SvgPicture.asset(
+    ImagePath.videocameraON,
+    width: 24 * SizeConfig.widthMultiplier!,
+    height: 16 * SizeConfig.heightMultiplier!,
+    fit: BoxFit.contain,
+    )
+                    : CircleAvatar(
+                        backgroundColor: kPureWhite,
+                        child: SvgPicture.asset(
                           ImagePath.videocameraOFF,
                           width: 25.33 * SizeConfig.widthMultiplier!,
                           height: 25.33 * SizeConfig.heightMultiplier!,
                           color: kPureBlack,
                         ),
                       ),
-                    ),
+              ),
               Spacer(),
               //Video end button
               Container(

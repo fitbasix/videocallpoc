@@ -84,12 +84,14 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               setState(() {});
             },
             onMessage: () async {
+
               bool dialogCreatedPreviously = false;
-              int UserQuickBloxId = 133627356;
               //133642567	Tarun Prajapat
               //133627356 vartika
+              //133612091 trainer
               final sharedPreferences = await SharedPreferences.getInstance();
               _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
+              int UserQuickBloxId = _homeController.userQuickBloxId.value==133642567?133627356:133642567;
               print(UserQuickBloxId.toString() +"this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id" );
               QBSort sort = QBSort();
               sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
@@ -104,8 +106,6 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                     }
                   });
                   if(!dialogCreatedPreviously){
-                    //user id : 133612606
-                    //trainer id : 133612091
                     List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
                     String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();
                     int dialogType = QBChatDialogTypes.CHAT;

@@ -43,12 +43,12 @@ class InitializeQuickBlox{
       print(e);
     }
 
-    //todo initialize web rtc after log in
 
   }
   Future<void> initWebRTC() async {
     print("called web RTC");
     ///init web RTC
+    //todo remove when testing on emulator is finished
     try {
       await QB.webrtc.init().then((value) {
         subscribeCall();

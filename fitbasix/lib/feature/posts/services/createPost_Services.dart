@@ -160,6 +160,16 @@ class CreatePostService {
 
 
   static Future<bool> LogInUserToQuickBlox(String logIn,String password,int userQuickBloxId) async {
+
+    if(await Permission.bluetooth.request().isGranted){
+
+    }
+    if(await Permission.camera.request().isGranted){
+
+    }
+    if(await Permission.microphone.request().isGranted){
+
+    }
     print("called login");
 
     var connected = await QB.chat.isConnected();
