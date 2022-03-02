@@ -26,6 +26,17 @@ class FitBasixApp extends StatelessWidget {
               SizeConfig().init(constraints, orientation);
               return GetMaterialApp(
                   title: 'Fitbasix',
+                  //  darkTheme: ThemeData.dark(),
+                  //   theme: ThemeData(
+                  //     scaffoldBackgroundColor: kPureBlack,
+                  //     primaryColor: kPureBlack,
+                  //    textTheme: TextTheme(bodyText1: TextStyle(
+                  //      color: Colors.yellowAccent
+                  //    ),
+                  //    bodyText2:TextStyle(
+                  //        color: Colors.yellowAccent
+                  //    ), )
+                  //   ),
                   theme: ThemeData(
                     primarySwatch: Colors.blue,
                   ),

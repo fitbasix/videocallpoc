@@ -70,6 +70,7 @@ class ImagePath {
   static const String appleHealth = "assets/home/appleHealth.png";
   static const String googleFit = "assets/home/googleFit.svg";
   static const String fitBit = "assets/home/fitbit.svg";
+  static const String setgoalfeedImage = "assets/home/set_goalImage.png";
 
   ///settings
   static const String notificationIcon = "assets/settings/notification.svg";

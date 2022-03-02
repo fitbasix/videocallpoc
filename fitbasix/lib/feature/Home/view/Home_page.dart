@@ -463,7 +463,9 @@ class _HomePageState extends State<HomePage> {
                                                   _homeController
                                                       .isConsumptionLoading
                                                       .value = false;
-                                                }))),
+                                                },
+                                                      //homecontroller
+                                                      _homeController))),
                                           SizedBox(
                                             width: 8.0 *
                                                 SizeConfig.widthMultiplier!,
@@ -483,7 +485,9 @@ class _HomePageState extends State<HomePage> {
                                                     context: context,
                                                     builder: (_) =>
                                                         HealthApp());
-                                              }),
+                                              },
+                                              //is connected
+                                              true),
                                             ),
                                           )
                                         ],
@@ -624,8 +628,8 @@ class _HomePageState extends State<HomePage> {
                                     ],
                                   )
                                 : Container(
-                                    padding:
-                                        EdgeInsets.only(left: 16, bottom: 16),
+                                    // padding:
+                                    //     EdgeInsets.only(left: 16, bottom: 16),
                                     decoration: BoxDecoration(
                                         color: kPureWhite,
                                         borderRadius: BorderRadius.circular(10),
@@ -639,123 +643,172 @@ class _HomePageState extends State<HomePage> {
                                         ]),
                                     child: Column(
                                       children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        // Row(
+                                        //   crossAxisAlignment:
+                                        //       CrossAxisAlignment.start,
+                                        //   children: [
+                                        //     Container(
+                                        //       padding: EdgeInsets.only(
+                                        //           top: 16 *
+                                        //               SizeConfig
+                                        //                   .heightMultiplier!),
+                                        //       width: 126 *
+                                        //           SizeConfig.widthMultiplier!,
+                                        //       child: Text(
+                                        //         'set_goal_heading'.tr,
+                                        //         style: AppTextStyle
+                                        //             .boldBlackText
+                                        //             .copyWith(
+                                        //                 fontSize: 14 *
+                                        //                     SizeConfig
+                                        //                         .textMultiplier!),
+                                        //         maxLines: 4,
+                                        //       ),
+                                        //     ),
+                                        //     CachedNetworkImage(
+                                        //         imageUrl:
+                                        //             "https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png",
+                                        //         fit: BoxFit.cover,
+                                        //         height: 120 *
+                                        //             SizeConfig.widthMultiplier!,
+                                        //         width: 186 *
+                                        //             SizeConfig
+                                        //                 .widthMultiplier!),
+                                        //   ],
+                                        // ),
+                                        Stack(
                                           children: [
-                                            Container(
-                                              padding: EdgeInsets.only(
-                                                  top: 16 *
-                                                      SizeConfig
-                                                          .heightMultiplier!),
-                                              width: 126 *
-                                                  SizeConfig.widthMultiplier!,
-                                              child: Text(
-                                                'set_goal_heading'.tr,
-                                                style: AppTextStyle
-                                                    .boldBlackText
-                                                    .copyWith(
-                                                        fontSize: 14 *
-                                                            SizeConfig
-                                                                .textMultiplier!),
-                                                maxLines: 4,
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                topRight: Radius.circular(8)
+                                              ),
+                                              child: Image.asset(
+                                                ImagePath.setgoalfeedImage,
+                                                height: 125 * SizeConfig.heightMultiplier!,
+                                                width: Get.width,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                            CachedNetworkImage(
-                                                imageUrl:
-                                                    "https://fitbasix-dev.s3.me-south-1.amazonaws.com/HealthGoalImage.png",
-                                                fit: BoxFit.cover,
-                                                height: 120 *
-                                                    SizeConfig.widthMultiplier!,
-                                                width: 186 *
-                                                    SizeConfig
-                                                        .widthMultiplier!),
+                                            Container(
+                                              height: 125 * SizeConfig.heightMultiplier!,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    topRight: Radius.circular(8)
+                                                ),
+                                                gradient: RadialGradient(
+                                                  colors: [
+                                                  Color(0xff000000).withOpacity(0),
+                                                  Color(0xff000000).withOpacity(0.22),
+                                                  Color(0xff000000).withOpacity(1.0),
+                                                ],
+                                                  focal: Alignment.center,
+                                                  radius: 8.0
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                                top: 63,
+                                                left: 16,
+                                                right: 178,
+                                                child: Text('set_goal_heading'.tr,
+                                                style: AppTextStyle.boldBlackText.copyWith(
+                                                  fontSize: 14*SizeConfig.textMultiplier!,
+                                                  color: kPureWhite
+                                                ),
+                                                maxLines: 3,))
                                           ],
                                         ),
                                         SizedBox(
-                                            height: 0 *
+                                            height: 13 *
                                                 SizeConfig.widthMultiplier!),
-                                        Row(
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Image.asset(
-                                                      ImagePath.dropIcon,
-                                                      width: 11 *
-                                                          SizeConfig
-                                                              .widthMultiplier!,
-                                                      height: 15 *
-                                                          SizeConfig
-                                                              .heightMultiplier!,
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10 *
-                                                          SizeConfig
-                                                              .widthMultiplier!,
-                                                    ),
-                                                    Text(
-                                                      'add_water_intake'.tr,
-                                                      style: AppTextStyle
-                                                          .smallBlackText
-                                                          .copyWith(
-                                                              fontSize: 14 *
-                                                                  SizeConfig
-                                                                      .textMultiplier!),
-                                                    )
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 8 *
-                                                      SizeConfig
-                                                          .heightMultiplier!,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Image.asset(
-                                                      ImagePath.fireIcon,
-                                                      width: 11 *
-                                                          SizeConfig
-                                                              .widthMultiplier!,
-                                                      height: 15 *
-                                                          SizeConfig
-                                                              .heightMultiplier!,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10 *
-                                                          SizeConfig
-                                                              .widthMultiplier!,
-                                                    ),
-                                                    Text(
-                                                      'track_calories'.tr,
-                                                      style: AppTextStyle
-                                                          .smallBlackText
-                                                          .copyWith(
-                                                              fontSize: 14 *
-                                                                  SizeConfig
-                                                                      .textMultiplier!),
-                                                    )
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                            Spacer(),
-                                            GreenCircleArrowButton(
-                                              onTap: () {
-                                                Navigator.pushNamed(context,
-                                                    RouteName.setGoalIntro);
-                                              },
-                                            )
-                                          ],
+                                        // above
+                                        Container(
+                                          padding:
+                                          EdgeInsets.only(left: 16, bottom: 16),
+                                          child: Row(
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Image.asset(
+                                                        ImagePath.dropIcon,
+                                                        width: 11 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                        height: 15 *
+                                                            SizeConfig
+                                                                .heightMultiplier!,
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                      ),
+                                                      Text(
+                                                        'add_water_intake'.tr,
+                                                        style: AppTextStyle
+                                                            .smallBlackText
+                                                            .copyWith(
+                                                                fontSize: 14 *
+                                                                    SizeConfig
+                                                                        .textMultiplier!),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Image.asset(
+                                                        ImagePath.fireIcon,
+                                                        width: 11 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                        height: 15 *
+                                                            SizeConfig
+                                                                .heightMultiplier!,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                      ),
+                                                      Text(
+                                                        'track_calories'.tr,
+                                                        style: AppTextStyle
+                                                            .smallBlackText
+                                                            .copyWith(
+                                                                fontSize: 14 *
+                                                                    SizeConfig
+                                                                        .textMultiplier!),
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                              Spacer(),
+                                              GreenCircleArrowButton(
+                                                onTap: () {
+                                                  Navigator.pushNamed(context,
+                                                      RouteName.setGoalIntro);
+                                                },
+                                              )
+                                            ],
+                                          ),
                                         )
                                       ],
                                     ),
