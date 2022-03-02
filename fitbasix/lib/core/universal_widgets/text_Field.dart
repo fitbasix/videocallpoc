@@ -19,7 +19,7 @@ class CutomizedTextField extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
         border: Border.all(color: color),
-        color: wantWhiteBG != null ? Colors.white : lightGrey,
+        color: wantWhiteBG != null ? kBlack : lightGrey,
         borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
       ),
       child: Center(child: child),
@@ -50,7 +50,7 @@ Widget TextFieldContainer(
       readOnly: readOnly == null ? false : true,
       keyboardType:
           isNumber ? TextInputType.number : TextInputType.streetAddress,
-      style: AppTextStyle.hintText.copyWith(color: lightBlack),
+      style: AppTextStyle.hintText.copyWith(color: kPureWhite),
       textAlignVertical: TextAlignVertical.bottom,
       maxLength: maxLength == null ? 300 : maxLength,
       obscureText: isObsecure == null ? false : isObsecure,
@@ -82,7 +82,9 @@ Widget TextFieldContainer(
             padding: EdgeInsets.only(right: 18.0 * SizeConfig.widthMultiplier!),
             child: suffixWidget,
           ),
-          hintStyle: AppTextStyle.hintText),
+          hintStyle: AppTextStyle.hintText.copyWith(
+            color: hintGrey
+          )),
     ),
   );
 }

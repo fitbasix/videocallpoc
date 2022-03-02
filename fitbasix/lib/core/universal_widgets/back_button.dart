@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomBackButton extends StatelessWidget {
-  const CustomBackButton({
+
+   CustomBackButton({
+     this.color,
     Key? key,
   }) : super(key: key);
-
+ Color? color;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -19,6 +21,7 @@ class CustomBackButton extends StatelessWidget {
           color: Colors.transparent,
           child: SvgPicture.asset(
             ImagePath.backIcon,
+            color: color,
           ),
         ));
   }

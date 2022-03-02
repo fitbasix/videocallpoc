@@ -120,4 +120,6 @@ class ImagePath {
   ///LOGIN
   static const String login_intro_image = "assets/log_in/login_image.png";
   static const String black_rectangle = "assets/log_in/black_rectangle.png";
+  static const String otp_intro_image = "assets/log_in/otp_screenImage.png";
+  static const String detail_intro_image = "assets/log_in/detail_screenImage.png";
 }
