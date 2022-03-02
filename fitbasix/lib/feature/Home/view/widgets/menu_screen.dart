@@ -7,13 +7,15 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
-import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../log_in/services/login_services.dart';
 
 class MenuScreen extends StatelessWidget {
   final String imageCoverPic;
@@ -148,6 +150,7 @@ class MenuScreen extends StatelessWidget {
                 onTap: () async {
                   final LoginController _controller =
                       Get.put(LoginController());
+                  await LogInService.logOut();
                   final SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   prefs.clear();

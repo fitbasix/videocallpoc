@@ -91,7 +91,8 @@ class EnterOTPGoogle extends StatelessWidget {
                           _loginController.otp.value,
                           _loginController.selectedCountry.value.code!,
                           _loginController
-                              .thirdPartyLogin.value.response!.user!.email);
+                              .thirdPartyLogin.value.response!.user!.email,
+                          context);
 
                       if (redScreen == null) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
