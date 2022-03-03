@@ -4,8 +4,15 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'dart:math';
+
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
+
+import '../../controller/Home_Controller.dart';
 
 class HealthScreen extends StatelessWidget {
   @override
@@ -16,8 +23,8 @@ class HealthScreen extends StatelessWidget {
   }
 }
 
-Widget WaterConsumed(
-        double consumedWater, double totalWater, VoidCallback onAddWater) =>
+Widget WaterConsumed(double consumedWater, double totalWater,
+        VoidCallback onAddWater, HomeController homeController) =>
     Container(
       child: Container(
         decoration: BoxDecoration(
@@ -49,38 +56,70 @@ Widget WaterConsumed(
                 ],
               ),
               SizedBox(
-                height: 10 * SizeConfig.heightMultiplier!,
+                height: 31.5 * SizeConfig.heightMultiplier!,
               ),
-              CustomPaint(
-                foregroundPainter: CirclePainter(
-                    (consumedWater / totalWater) * 100, Colors.blue),
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  color: Colors.white,
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          consumedWater.toStringAsFixed(1) + " ltr",
-                          style: AppTextStyle.boldBlackText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!),
-                        ),
-                        SizedBox(height: 2 * SizeConfig.heightMultiplier!),
-                        Text("of " + totalWater.toStringAsFixed(1) + " ltr",
-                            style: AppTextStyle.normalBlackText.copyWith(
-                                fontSize: 12 * SizeConfig.textMultiplier!,
-                                color: hintGrey)),
-                      ],
-                    ),
-                  ),
+              SizedBox(
+                width: 30.5 * SizeConfig.widthMultiplier!,
+                height: 61 * SizeConfig.heightMultiplier!,
+                //padding: const EdgeInsets.symmetric(vertical: 24.0),
+                child: LiquidLinearProgressIndicator(
+                  value: homeController.waterLevel.value, // Defaults to 0.5.
+                  valueColor: const AlwaysStoppedAnimation(Colors
+                      .lightBlue), // Defaults to the current Theme's accentColor.
+                  backgroundColor: Colors.grey
+                      .shade200, // Defaults to the current Theme's backgroundColor.
+                  borderColor: Colors.blueAccent.shade100,
+                  borderWidth: 0,
+                  borderRadius: 30.0,
+                  direction: Axis
+                      .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.horizontal.
                 ),
               ),
+              // CustomPaint(
+              //   foregroundPainter: CirclePainter(
+              //       (consumedWater / totalWater) * 100, Colors.blue),
+              //   child: Container(
+              //     width: 120,
+              //     height: 120,
+              //     color: Colors.white,
+              //     child: Center(
+              //       child: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Text(
+              //             consumedWater.toStringAsFixed(1) + " ltr",
+              //             style: AppTextStyle.boldBlackText.copyWith(
+              //                 fontSize: 14 * SizeConfig.textMultiplier!),
+              //           ),
+              //           SizedBox(height: 2 * SizeConfig.heightMultiplier!),
+              //           Text("of " + totalWater.toStringAsFixed(1) + " ltr",
+              //               style: AppTextStyle.normalBlackText.copyWith(
+              //                   fontSize: 12 * SizeConfig.textMultiplier!,
+              //                   color: hintGrey)),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              SizedBox(
+                height: 32.5 * SizeConfig.heightMultiplier!,
+              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Text(
+                    consumedWater.toStringAsFixed(1) + " ltr",
+                    style: AppTextStyle.boldBlackText
+                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                  ),
+                  SizedBox(width: 2 * SizeConfig.widthMultiplier!),
+                  Text("of " + totalWater.toStringAsFixed(1) + " ltr",
+                      style: AppTextStyle.normalBlackText.copyWith(
+                          fontSize: 12 * SizeConfig.textMultiplier!,
+                          color: hintGrey)),
+                  Spacer(),
                   GestureDetector(
                     onTap: onAddWater,
                     child: Container(
@@ -266,7 +305,7 @@ class CirclePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-Widget CaloriesBurnt(double burntCalories, VoidCallback onTap) => Container(
+Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected) => Container(
       child: Container(
         decoration: BoxDecoration(
             borderRadius:
@@ -297,32 +336,88 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap) => Container(
                 ],
               ),
               SizedBox(
-                height: 10 * SizeConfig.heightMultiplier!,
+                height: 12 * SizeConfig.heightMultiplier!,
               ),
-              CustomPaint(
-                foregroundPainter: CirclePainter(100.0, lightGrey),
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  color: Colors.white,
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          burntCalories.toString() + " kcal",
-                          style: AppTextStyle.boldBlackText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!),
-                        ),
+              Container(
+                height: 100* SizeConfig.heightMultiplier!,
+                width: 160* SizeConfig.widthMultiplier!,
+                child: SfRadialGauge(
+                  enableLoadingAnimation: true,
+                  //animationDuration: 1000,
+                  axes: [
+                    RadialAxis(
+                      startAngle: 180,
+                      endAngle: 0,
+                      interval: 10,
+                      canScaleToFit: true,
+                      showTicks: false,
+                      showLabels: false,
+                      axisLineStyle: AxisLineStyle(
+                          //  color: kPureWhite,
+                          thickness: 6.0 * SizeConfig.widthMultiplier!,
+                          thicknessUnit: GaugeSizeUnit.logicalPixel),
+                      // pointer marker & needle pointer
+                      pointers: [
+                        RangePointer(
+                            value: isConnected?burntCalories:100,
+                            color: isConnected?kgreen49:Color(0xffFF5A5A),
+                            width: 6 * SizeConfig.widthMultiplier!,
+                            sizeUnit: GaugeSizeUnit.logicalPixel),
+                        NeedlePointer(
+                            value: isConnected?burntCalories:0,
+                            needleLength: 48,
+                            lengthUnit: GaugeSizeUnit.logicalPixel,
+                            needleColor: kgreen49,
+                            needleStartWidth: 0.5 * SizeConfig.widthMultiplier!,
+                            needleEndWidth: 4 * SizeConfig.widthMultiplier!,
+                            knobStyle: KnobStyle(
+                                knobRadius: 3 * SizeConfig.widthMultiplier!,
+                                sizeUnit: GaugeSizeUnit.logicalPixel,
+                                borderColor: kgreen49,
+                                borderWidth: 2 * SizeConfig.widthMultiplier!,
+                                color: kPureWhite)
+                            )
                       ],
                     ),
-                  ),
+                  ],
                 ),
               ),
+              // CustomPaint(
+              //   foregroundPainter: CirclePainter(100.0, lightGrey),
+              //   child: Container(
+              //     width: 120,
+              //     height: 120,
+              //     color: Colors.white,
+              //     child: Center(
+              //       child: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Text(
+              //             burntCalories.toString() + " kcal",
+              //             style: AppTextStyle.boldBlackText.copyWith(
+              //                 fontSize: 14 * SizeConfig.textMultiplier!),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              SizedBox(
+                height: 13 * SizeConfig.heightMultiplier!,
+              ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  isConnected?Text(
+                    burntCalories.toString() + " kcal",
+                    style: AppTextStyle.boldBlackText
+                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                  )
+                      :Text('Not Connected',
+                  style: AppTextStyle.hmediumBlackText,),
+                  Spacer(),
                   GestureDetector(
                     onTap: onTap,
                     child: Container(

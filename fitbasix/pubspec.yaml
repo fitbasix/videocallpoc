@@ -71,6 +71,7 @@ dependencies:
   url_launcher: ^6.0.20
   flutter_native_splash: ^2.0.4
   percent_indicator: ^4.0.0
+  syncfusion_flutter_gauges: ^19.4.54
 
 
 dev_dependencies:
