@@ -12,6 +12,7 @@ import 'package:quickblox_sdk/models/qb_settings.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'package:quickblox_sdk/webrtc/constants.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 const String APP_ID = "95666";
@@ -107,10 +108,11 @@ class InitializeQuickBlox{
           content: Row(
             children: [
               ElevatedButton(onPressed: () async{
+                final sharedPreferences = await SharedPreferences.getInstance();
                 try {
                   QBRTCSession? session = await QB.webrtc.accept(sessionId).then((value){
                     Navigator.of(Get.overlayContext!).pop();
-                    Get.to(()=>AcceptedVideoCallScreen(sessionIdForVideoCall: sessionId,));
+                    Get.to(()=>AcceptedVideoCallScreen(sessionIdForVideoCall: sessionId,userQuickBloxId: sharedPreferences.getInt("userQuickBloxId")!,));
                   });
                 } on PlatformException catch (e) {
                   // Some error occurred, look at the exception message for more details

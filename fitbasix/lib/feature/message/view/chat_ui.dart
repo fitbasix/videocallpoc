@@ -171,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     )
                   : Expanded(
                       child: Center(
-                      child: Text("no massage yey"),
+                      child: Text("no massage yet"),
                     )),
               Align(
                 alignment: Alignment.bottomCenter,

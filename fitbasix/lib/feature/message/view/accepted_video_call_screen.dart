@@ -18,17 +18,15 @@ import '../../../core/constants/image_path.dart';
 import '../../Home/controller/Home_Controller.dart';
 import 'package:get/get.dart';
 import 'package:quickblox_sdk/models/qb_rtc_session.dart';
-
 import 'package:quickblox_sdk/quickblox_sdk.dart';
-
 import 'package:quickblox_sdk/webrtc/constants.dart';
-
 import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
 
 class AcceptedVideoCallScreen extends StatefulWidget {
   String? sessionIdForVideoCall;
-  AcceptedVideoCallScreen({Key? key,this.sessionIdForVideoCall}) : super(key: key);
+  int? userQuickBloxId;
+  AcceptedVideoCallScreen({Key? key,this.sessionIdForVideoCall,this.userQuickBloxId}) : super(key: key);
 
   @override
   _AcceptedVideoCallScreenState createState() => _AcceptedVideoCallScreenState();
@@ -61,12 +59,15 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
   StreamSubscription? _connectionStreamSubscription;
 
   HomeController _homeController = Get.find();
-  RTCVideoViewController? _localVideoViewController;
 
+  RTCVideoViewController? _localVideoViewController;
   RTCVideoViewController? _remoteVideoViewController;
+
 
   @override
   void dispose() {
+    _localVideoViewController!.release();
+    _remoteVideoViewController!.release();
     // unsubscribeCall();
     // unsubscribeCallEnd();
     // unsubscribeReject();
@@ -78,15 +79,11 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
     super.dispose();
   }
 
-  setValueInHomeController() async{
-  final sharedPreferences = await SharedPreferences.getInstance();
-  _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
-  }
 
   @override
   void initState() {
-    setValueInHomeController();
-    print("llll user id: " + _homeController.userQuickBloxId.value.toString());
+  
+    print("llll user id: " + widget.userQuickBloxId.toString());
     subscribeReject();
     subscribeAccept();
     subscribeHangUp();
@@ -315,7 +312,7 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
         Map<dynamic, dynamic> payloadMap =
         Map<dynamic, dynamic>.from(data["payload"]);
         int opponentId = payloadMap["userId"];
-        if (opponentId == _homeController.userQuickBloxId.value) {
+        if (opponentId == widget.userQuickBloxId) {
           startRenderingLocal();
         } else {
           startRenderingRemote(opponentId);
@@ -328,7 +325,7 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
       print("started rendering local");
       print(widget.sessionIdForVideoCall!.toString() + "session id check");
       try {
-        await _localVideoViewController!.play(widget.sessionIdForVideoCall!, _homeController.userQuickBloxId.value);
+        await _localVideoViewController!.play(widget.sessionIdForVideoCall!, widget.userQuickBloxId!);
       } on PlatformException catch (e) {}
     });
   }

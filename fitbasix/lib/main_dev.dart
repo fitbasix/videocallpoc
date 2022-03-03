@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fitbasix/feature/message/model/massage_notification_model.dart';
 
 
 import 'package:flutter/material.dart';
@@ -50,7 +49,6 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((message) async {
-      MessageNotificationModel? notificationModel;
       print(message.data["message"]);
       AndroidNotificationChannel channel =  AndroidNotificationChannel("channel_id","some_title",  description: "some_description", importance:Importance.high);
       AndroidNotificationDetails details = AndroidNotificationDetails(channel.id, channel.name, channelDescription:channel.description, icon: "launch_background");

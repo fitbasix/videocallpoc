@@ -98,13 +98,14 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               sort.ascending = true;
               try {
                 List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) async {
-                  value.forEach((element) {
-                    if(element!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&element.occupantsIds!.contains(UserQuickBloxId)){
-                      print(element.id.toString() + "maxxxx");
+                  for(int i =0; i<value.length;i++){
+                    if(value[i]!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&value[i]!.occupantsIds!.contains(UserQuickBloxId)){
+                      print(value[i]!.id.toString() + "maxxxx");
                       dialogCreatedPreviously = true;
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: element,opponentID: UserQuickBloxId,)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: value[i],opponentID: UserQuickBloxId,)));
+                      break;
                     }
-                  });
+                  }
                   if(!dialogCreatedPreviously){
                     List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
                     String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();

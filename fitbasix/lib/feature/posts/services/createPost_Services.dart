@@ -181,6 +181,7 @@ class CreatePostService {
     var result = await QB.auth.login(logIn,password).then((value) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setInt("userQuickBloxId",value.qbUser!.id!);
+
       connectUserToChat(password,userQuickBloxId);
       if(value.qbUser != null){
         return true;
