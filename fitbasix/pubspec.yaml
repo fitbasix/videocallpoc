@@ -72,6 +72,8 @@ dependencies:
   flutter_native_splash: ^2.0.4
   percent_indicator: ^4.0.0
   syncfusion_flutter_gauges: ^19.4.54
+  android_alarm_manager_plus: ^2.0.5
+  awesome_notifications: ^0.6.21
 
 
 dev_dependencies:

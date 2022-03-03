@@ -131,8 +131,7 @@ class HomeController extends GetxController {
 
   WaterReminder getWaterReminder(int Time) {
     try {
-      waterReminder.value = waterSource.value.response!.data!
-          .singleWhere((element) => element.serialId == Time);
+      waterReminder.value = waterSource.value.response!.data!.singleWhere((element) => element.serialId == Time);
       return waterReminder.value;
     } catch (e) {
       return waterReminder.value;
