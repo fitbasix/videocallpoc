@@ -47,6 +47,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             trainerCoverImage: trainerController
                 .atrainerDetail.value.user!.coverPhoto!
                 .toString(),
+            isEnrolled: true,
             onFollow: () {
               if (trainerController.atrainerDetail.value.isFollowing!) {
                 trainerController.atrainerDetail.value.isFollowing = false;
@@ -75,9 +76,10 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               Navigator.pushNamed(context, RouteName.trainerchatscreen);
             },
             onEnroll: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => EnrollTrainerDialog());
+              Navigator.pushNamed(context, RouteName.trainerplanScreen);
+              // showDialog(
+              //     context: context,
+              //     builder: (BuildContext context) => EnrollTrainerDialog());
             },
             onBack: () {
               Navigator.pop(context);
@@ -127,6 +129,7 @@ class TrainerPage extends StatefulWidget {
       required this.name,
       required this.allPlans,
       required this.isFollowing,
+      required this.isEnrolled,
       Key? key})
       : super(key: key);
   final String trainerImage;
@@ -146,6 +149,7 @@ class TrainerPage extends StatefulWidget {
   final String aboutTrainer;
   final List<Plan> allPlans;
   final bool isFollowing;
+  final bool isEnrolled;
 
   @override
   State<TrainerPage> createState() => _TrainerPageState();

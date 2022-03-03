@@ -12,6 +12,8 @@ import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:get/get.dart';
 
+import '../../plans/models/FullPlanDetailModel.dart';
+
 class TrainerServices {
   static var dio = DioUtil().getInstance();
   static TrainerController _trainerController = Get.find();
@@ -33,6 +35,15 @@ class TrainerServices {
         await dio!.post(ApiUrl.getTrainerById, data: {"trainerId": trainerId});
     print(response.toString());
     return trainerModelFromJson(response.toString());
+  }
+
+  static Future<PlanFullDetails> getPlanById(String PlanId) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response = await dio!.post(ApiUrl.planById, data: {"planId": PlanId});
+    print("plan details" + response.data.toString());
+    return planFullDetailsFromJson(response.toString());
   }
 
   static Future<AllTrainer> getAllTrainer(
