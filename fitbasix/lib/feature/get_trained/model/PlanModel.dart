@@ -66,7 +66,7 @@ class Plan {
   String? planIcon;
   String? planName;
   int? planDuration;
-  int? plansRating;
+  double? plansRating;
   int? likesCount;
 
   factory Plan.fromJson(Map<String, dynamic> json) => Plan(

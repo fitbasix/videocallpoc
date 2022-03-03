@@ -81,7 +81,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
         },
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: kPureWhite,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             elevation: 0,
             leading: IconButton(
                 onPressed: () {
@@ -89,6 +89,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                 },
                 icon: SvgPicture.asset(
                   ImagePath.backIcon,
+                  color: Theme.of(context).primaryColor,
                   width: 7 * SizeConfig.widthMultiplier!,
                   height: 12 * SizeConfig.heightMultiplier!,
                 )),
@@ -209,7 +210,10 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                     child: Text(
                       _trainerController.pageTitle.value,
                       style: AppTextStyle.titleText
-                          .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                          .copyWith(
+                          color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                          fontSize: 16 * SizeConfig.textMultiplier!
+                      ),
                     ),
                   )),
             actions: [
@@ -221,7 +225,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                       },
                       icon: Icon(
                         Icons.search,
-                        color: kPureBlack,
+                        color: Theme.of(context).primaryColor,
                         size: 25 * SizeConfig.heightMultiplier!,
                       )))
             ],
@@ -245,7 +249,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                         'interests'.tr,
                         style: AppTextStyle.titleText.copyWith(
                             fontSize: 14 * SizeConfig.textMultiplier!,
-                            color: kBlack),
+                            color: Theme.of(context).textTheme.bodyText1?.color,
+                            ),
                       ),
                     ),
                     SizedBox(
@@ -619,7 +624,8 @@ class TrainerTile extends StatelessWidget {
             bottom: 16 * SizeConfig.heightMultiplier!),
         padding: EdgeInsets.only(top: 16 * SizeConfig.heightMultiplier!),
         decoration: BoxDecoration(
-            color: kPureWhite, borderRadius: BorderRadius.circular(10)),
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
             Padding(
@@ -632,7 +638,8 @@ class TrainerTile extends StatelessWidget {
                     height: 80 * SizeConfig.heightMultiplier!,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: kPureBlack),
+                       // color: kPureBlack
+                    ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.network(
@@ -654,6 +661,7 @@ class TrainerTile extends StatelessWidget {
                         Text(
                           name,
                           style: AppTextStyle.titleText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 16 * SizeConfig.textMultiplier!),
                         ),
                         SizedBox(
@@ -688,7 +696,9 @@ class TrainerTile extends StatelessWidget {
               child: Text(
                 description,
                 style: AppTextStyle.NormalText.copyWith(
-                    fontSize: 12 * SizeConfig.textMultiplier!),
+                    fontSize: 14 * SizeConfig.textMultiplier!,
+                  color: Theme.of(context).textTheme.bodyText1?.color
+                ),
                 maxLines: 2,
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.ellipsis,
@@ -716,7 +726,8 @@ class TrainerTile extends StatelessWidget {
                               certificateDescription:
                                   certifcateTitle![index].certificateName!,
                               certificateIcon: certifcateTitle![index].url!,
-                              color: index % 2 == 0 ? oceanBlue : lightOrange,
+                              color: index % 2 == 0 ?
+                              Theme.of(context).highlightColor : Theme.of(context).indicatorColor,
                             ),
                           );
                         }),
@@ -743,7 +754,9 @@ class TrainerTile extends StatelessWidget {
                           Text(
                             'trainee'.tr,
                             style: AppTextStyle.titleText.copyWith(
-                                fontSize: 12 * SizeConfig.textMultiplier!),
+                                fontSize: 14 * SizeConfig.textMultiplier!,
+                                color: Theme.of(context).textTheme.bodyText1?.color
+                            ),
                           ),
                           SizedBox(
                             width: 8 * SizeConfig.widthMultiplier!,
@@ -752,7 +765,9 @@ class TrainerTile extends StatelessWidget {
                             NumberFormatter.textFormatter(
                                 traineeCount.toString()),
                             style: AppTextStyle.NormalText.copyWith(
-                                fontSize: 12 * SizeConfig.textMultiplier!),
+                                fontSize: 14 * SizeConfig.textMultiplier!,
+                                color: Theme.of(context).textTheme.bodyText1?.color
+                            ),
                           )
                         ],
                       ),
@@ -764,7 +779,9 @@ class TrainerTile extends StatelessWidget {
                         children: [
                           Text('ratings'.tr,
                               style: AppTextStyle.titleText.copyWith(
-                                  fontSize: 12 * SizeConfig.textMultiplier!)),
+                                  fontSize: 14 * SizeConfig.textMultiplier!,
+                                  color: Theme.of(context).textTheme.bodyText1?.color
+                              )),
                           SizedBox(
                             width: 8 * SizeConfig.widthMultiplier!,
                           ),
@@ -782,7 +799,8 @@ class TrainerTile extends StatelessWidget {
                                 }) +
                                 ')',
                             style: AppTextStyle.normalBlackText.copyWith(
-                                fontSize: 12 * SizeConfig.textMultiplier!),
+                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                fontSize: 14 * SizeConfig.textMultiplier!),
                           )
                         ],
                       )
@@ -797,7 +815,7 @@ class TrainerTile extends StatelessWidget {
                             fontSize: 36,
                             color: slotLeft >=
                                     _trainerController.slotsLeftLimit.value
-                                ? kGreenColor
+                                ? kgreen4F
                                 : kRed),
                       ),
                       Row(
@@ -806,6 +824,7 @@ class TrainerTile extends StatelessWidget {
                           Text(
                             'slotLeft'.tr,
                             style: AppTextStyle.titleText.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
                                 fontSize: 12 * SizeConfig.textMultiplier!),
                           ),
                         ],
@@ -838,7 +857,7 @@ class StrengthTile extends StatelessWidget {
     return Container(
       height: 28 * SizeConfig.heightMultiplier!,
       decoration: BoxDecoration(
-          color: offWhite,
+          color: Theme.of(context).textTheme.headline4?.color,
           borderRadius:
               BorderRadius.circular(14 * SizeConfig.heightMultiplier!)),
       child: Padding(
@@ -847,7 +866,9 @@ class StrengthTile extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: AppTextStyle.lightMediumBlackText,
+            style: AppTextStyle.lightMediumBlackText.copyWith(
+              color: Theme.of(context).textTheme.bodyText1?.color,
+            ),
           ),
         ),
       ),
@@ -875,7 +896,8 @@ class ItemCategory extends StatelessWidget {
         child: Container(
           height: 28 * SizeConfig.heightMultiplier!,
           decoration: BoxDecoration(
-              color: isSelected ? kBlack : offWhite,
+              color: isSelected ?
+              Theme.of(context).primaryColor : Theme.of(context).secondaryHeaderColor,
               borderRadius:
                   BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
               border: Border.all(
@@ -888,7 +910,8 @@ class ItemCategory extends StatelessWidget {
               child: Text(
                 interest,
                 style: AppTextStyle.lightMediumBlackText
-                    .copyWith(color: isSelected ? offWhite : kBlack),
+                    .copyWith(color: isSelected ?
+                Theme.of(context).primaryColorDark : Theme.of(context).primaryColorLight),
               ),
             ),
           ),

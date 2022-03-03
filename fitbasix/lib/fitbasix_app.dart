@@ -1,3 +1,4 @@
+import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/get_started_page/view/get_started_page.dart';
 import 'package:flutter/material.dart';
@@ -27,19 +28,45 @@ class FitBasixApp extends StatelessWidget {
               return GetMaterialApp(
                   title: 'Fitbasix',
                   //  darkTheme: ThemeData.dark(),
-                  //   theme: ThemeData(
-                  //     scaffoldBackgroundColor: kPureBlack,
-                  //     primaryColor: kPureBlack,
-                  //    textTheme: TextTheme(bodyText1: TextStyle(
-                  //      color: Colors.yellowAccent
-                  //    ),
-                  //    bodyText2:TextStyle(
-                  //        color: Colors.yellowAccent
-                  //    ), )
-                  //   ),
                   theme: ThemeData(
-                    primarySwatch: Colors.blue,
+                    //scaffold color of app
+                    scaffoldBackgroundColor: kPureWhite,
+                    //used in my trainer screen & icon back button color
+                    primaryColor: kPureWhite,
+                    //used in all trainer screen in Item category
+                    secondaryHeaderColor: kPureBlack,
+                    primaryColorLight: kPureWhite,
+                    primaryColorDark: kBlack,
+                    // used in achiements certificate
+                    highlightColor: Color(0xff28362B),
+                    indicatorColor: Color(0xff37342F),
+                    // icon
+                    primaryIconTheme: IconThemeData(color: kPureWhite),
+                    appBarTheme: AppBarTheme(
+                        color: kPureWhite,
+                        titleTextStyle: TextStyle(color: kPureWhite),
+                        iconTheme: IconThemeData(color: kPureWhite),
+                        actionsIconTheme: IconThemeData(color: kPureWhite)),
+                    // primary text theme
+                    textTheme: TextTheme(
+                        //primary text color used in gettrainerscreen & trainer profile Screen
+                        bodyText1: TextStyle(color: kPureWhite),
+                        bodyText2: TextStyle(color: Colors.yellowAccent),
+                        // See All text & about & divider used in get trained screen
+                        headline1: TextStyle(color: hintGrey),
+                        // used in trainer profile screen
+                        headline2: TextStyle(color: greyC4),
+                        headline3: TextStyle(color: grey92),
+                        // used in strength listview of trainer screen
+                        headline4: TextStyle(color: greyBorder),
+                        // used in plantile in trainer profile screen
+                        headline5: TextStyle(color: grey2B)),
+                    //Trainer card in get trainer screen & all trainer Screen
+                    cardColor: kBlack,
                   ),
+                  // theme: ThemeData(
+                  //   primarySwatch: Colors.blue,
+                  // ),
                   translations: translations,
                   locale: const Locale('en', 'US'),
                   fallbackLocale: const Locale('es', 'ES'),

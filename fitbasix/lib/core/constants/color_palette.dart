@@ -42,3 +42,6 @@ const kgreen49 = Color(0xFF49AE50);
 const kgreen4F = Color(0xFF4FC24C);
 const klightgreenEB = Color(0xFFEBF7EB);
 const greyBorder = Color(0xFF333333);
+const greyC4 = Color(0xffC4C4C4);
+const grey92 = Color(0xff929292);
+const grey2B = Color(0xff2B2B2B);
