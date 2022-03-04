@@ -10,9 +10,16 @@ import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:quickblox_sdk/chat/constants.dart';
+import 'package:quickblox_sdk/models/qb_dialog.dart';
+import 'package:quickblox_sdk/models/qb_filter.dart';
+import 'package:quickblox_sdk/models/qb_sort.dart';
+import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -26,6 +33,7 @@ import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
 import '../../Home/view/my_trainers_screen.dart';
+import '../../message/view/chat_ui.dart';
 
 class TrainerProfileScreen extends StatefulWidget {
   const TrainerProfileScreen({Key? key}) : super(key: key);
@@ -35,8 +43,11 @@ class TrainerProfileScreen extends StatefulWidget {
 }
 
 class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
+  HomeController _homeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
+
     final TrainerController trainerController = Get.put(TrainerController());
     return Scaffold(
       body: SafeArea(
@@ -57,7 +68,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                             1)
                         .toString();
                 TrainerServices.unFollowTrainer(
-                    trainerController.atrainerDetail.value.user!.id!);
+                    trainerController.atrainerDetail.value.user!.id!
+                );
               } else {
                 trainerController.atrainerDetail.value.isFollowing = true;
                 trainerController.atrainerDetail.value.followers =
@@ -71,11 +83,74 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
               setState(() {});
             },
-            onMessage: () {
-              print('message pressed');
-              Navigator.pushNamed(context, RouteName.trainerchatscreen);
+            onMessage: () async {
+
+              bool dialogCreatedPreviously = false;
+              int openPage = 0;
+              //133642567	Tarun Prajapat
+              //133627356 vartika
+              //133612091 trainer
+              final sharedPreferences = await SharedPreferences.getInstance();
+              _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
+              int UserQuickBloxId = _homeController.userQuickBloxId.value==133642567?133627356:133642567;
+              print(UserQuickBloxId.toString() +"this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id" );
+              QBSort sort = QBSort();
+              sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+              sort.ascending = true;
+              try {
+                List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) async {
+                  for(int i =0; i<value.length;i++){
+                    if(value[i]!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&value[i]!.occupantsIds!.contains(UserQuickBloxId)){
+                      dialogCreatedPreviously = true;
+                      print(value[i]!.id.toString() + "maxxxx");
+                      if(openPage<1){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                      userDialogForChat: value[i],
+                                      opponentID: UserQuickBloxId,
+                                    )));
+                        ++openPage;
+                      }
+                      break;
+                    }
+                  }
+                  if(!dialogCreatedPreviously){
+                    List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
+                    String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();
+                    int dialogType = QBChatDialogTypes.CHAT;
+                    print("got here too");
+                    try {
+                      QBDialog? createdDialog = await QB.chat.createDialog(
+                        occupantsIds, dialogName,
+                        dialogType: QBChatDialogTypes.CHAT, ).then((value) {
+                          print("dialog id is:"+value!.id!);
+                          if(openPage<1){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                        userDialogForChat: value,
+                                        opponentID: UserQuickBloxId,
+                                      )));
+                          ++openPage;
+                        }
+                      });
+                    } on PlatformException catch (e) {
+                      print(e.toString());
+                    }
+                  }
+                  return value;
+                });
+
+              } on PlatformException catch (e) {
+                // some error occurred, look at the exception message for more details
+              }
+
             },
             onEnroll: () {
+
               Navigator.pushNamed(context, RouteName.trainerplanScreen);
               // showDialog(
               //     context: context,

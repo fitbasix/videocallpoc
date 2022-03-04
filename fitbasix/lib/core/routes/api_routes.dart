@@ -8,12 +8,15 @@ class ApiUrl {
   static String getPrivacyPolicyContents =
       liveBaseURL + '/api/auth/privacyPolicy';
 
+  static String updateUserQuickBloxId = liveBaseURL +"/api/chat/add";
+
   ///auth
   static String logOut = liveBaseURL + '/api/auth/logout';
 
   static String getHelpAndSupportContents =
       liveBaseURL + '/api/auth/helpAndSupport';
   static String bmrcalculation = liveBaseURL + '/api/nutritions/getbmr';
+
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
   static String loginAndSignup = liveBaseURL + '/api/auth/login';
   static String registerUser = liveBaseURL + '/api/auth/create';

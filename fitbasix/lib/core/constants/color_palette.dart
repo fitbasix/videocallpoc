@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const kPureWhite = Color(0xFFFFFFFF);
 const kPureBlack = Color(0xFF000000);
+const greenChatColor = Color(0xff49AE50);
 const kGreenColor = Color.fromARGB(255, 73, 174, 80);
 const dustyWhite = Color.fromARGB(255, 213, 213, 213);
 const lightBlack = Color.fromARGB(255, 34, 34, 34);
@@ -18,6 +19,7 @@ const offWhite = Color.fromARGB(255, 246, 246, 246);
 const oceanBlue = Color.fromARGB(255, 239, 252, 242);
 const lightOrange = Color.fromARGB(255, 255, 239, 215);
 const kOrange = Color.fromARGB(255, 255, 181, 72);
+
 const kBlack = Color(0xFF222222);
 const hintGrey = Color(0xFF747474);
 const kRed = Color(0xFFDC675F);
