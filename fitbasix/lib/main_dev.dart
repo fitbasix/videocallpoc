@@ -19,6 +19,7 @@ import 'package:get/get.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'feature/settings/view/settings.dart';
 
 initializeNotification(){
   AwesomeNotifications().initialize(
@@ -44,7 +45,7 @@ initializeNotification(){
 }
 
 
-import 'feature/settings/view/settings.dart';
+
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   AndroidNotificationChannel channel =  AndroidNotificationChannel("channel_id","some_title",  description: "some_description", importance:Importance.high);

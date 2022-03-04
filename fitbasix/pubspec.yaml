@@ -81,8 +81,6 @@ dependencies:
   firebase_messaging: ^11.2.8
   flutter_local_notifications: ^9.3.2
   connectycube_flutter_call_kit: ^2.0.2
-  url_launcher: ^6.0.20
-  flutter_native_splash: ^2.0.4
   percent_indicator: ^4.0.0
   syncfusion_flutter_gauges: ^19.4.54
   android_alarm_manager_plus: ^2.0.5

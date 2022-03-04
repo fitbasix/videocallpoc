@@ -475,7 +475,6 @@ class _ChatScreenState extends State<ChatScreen> {
           attachment.contentType = contentType;
           attachment.url = file.uid;
           attachment.name = file.name;
-
           //Required parameter
           attachment.type = "PHOTO";
           attachment.data = pickedFile.path;

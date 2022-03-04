@@ -314,7 +314,7 @@ class GenerateRoute {
     }
     if (route == RouteName.videocallScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) => VideoCallScreen(),
+        builder: (BuildContext context) => VideoCallScreen());
         }
     if (route == RouteName.userprofileinfo) {
       return MaterialPageRoute(
