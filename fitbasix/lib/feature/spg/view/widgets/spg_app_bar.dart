@@ -22,7 +22,7 @@ class SPGAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
             onPressed: onBack,
@@ -32,12 +32,13 @@ class SPGAppBar extends StatelessWidget {
                 ImagePath.backIcon,
                 width: 7 * SizeConfig.widthMultiplier!,
                 height: 12 * SizeConfig.heightMultiplier!,
+                color: Theme.of(context).primaryColor,
               ),
             )),
         title: Text(
           title,
           style: AppTextStyle.NormalText.copyWith(
-              color: lightBlack, fontSize: 14 * SizeConfig.textMultiplier!),
+              color: Theme.of(context).appBarTheme.titleTextStyle!.color, fontSize: 14 * SizeConfig.textMultiplier!),
         ),
         centerTitle: true,
         actions: [
