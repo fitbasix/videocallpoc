@@ -34,7 +34,7 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: kPureWhite,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           centerTitle: false,
           elevation: 0,
           automaticallyImplyLeading: false,
@@ -47,13 +47,16 @@ class _PostScreenState extends State<PostScreen> {
                 ImagePath.backIcon,
                 width: 7 * SizeConfig.widthMultiplier!,
                 height: 12 * SizeConfig.heightMultiplier!,
+                color: Theme.of(context).primaryColor,
               )),
           title: Transform(
             transform: Matrix4.translationValues(
                 -20 * SizeConfig.widthMultiplier!, 0, 0),
             child: Text('post'.tr,
                 style: AppTextStyle.titleText
-                    .copyWith(fontSize: 16 * SizeConfig.textMultiplier!)),
+                    .copyWith(
+                    color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    fontSize: 16 * SizeConfig.textMultiplier!)),
           ),
         ),
         // appBar: PreferredSize(

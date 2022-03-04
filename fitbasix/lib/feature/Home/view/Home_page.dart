@@ -846,7 +846,7 @@ class _HomePageState extends State<HomePage> {
                               height: 72 * SizeConfig.heightMultiplier!,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  color: kBlack,
+                                  color: Theme.of(context).cardColor,
                                   // gradient: LinearGradient(
                                   //   begin: Alignment.centerLeft,
                                   //     end: Alignment.centerRight,
@@ -862,7 +862,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   SvgPicture.asset(
                                       ImagePath.searchFavoriteIcon,
-                                  color: kPureWhite,),
+                                  ),
                                   SizedBox(
                                     width: 16 * SizeConfig.widthMultiplier!,
                                   ),
@@ -907,7 +907,7 @@ class _HomePageState extends State<HomePage> {
                             height: 24 * SizeConfig.heightMultiplier!,
                           ),
                           Container(
-                            color: kPureWhite,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -918,6 +918,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     'trending_posts'.tr,
                                     style: AppTextStyle.boldBlackText.copyWith(
+                                      color: Theme.of(context).textTheme.bodyText1?.color,
                                         fontSize:
                                             16 * SizeConfig.textMultiplier!),
                                   ),
@@ -1180,7 +1181,7 @@ class _HomePageState extends State<HomePage> {
                                                       height: 16 *
                                                           SizeConfig
                                                               .heightMultiplier!,
-                                                      color: kBackgroundColor,
+                                                      color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.1),
                                                     )
                                                   ],
                                                 ));

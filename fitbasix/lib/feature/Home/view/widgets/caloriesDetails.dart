@@ -40,7 +40,7 @@ Widget WaterConsumed(double consumedWater, double totalWater,
           child: Column(
             children: [
               SizedBox(
-                height: 3 * SizeConfig.heightMultiplier!,
+                height: 5 * SizeConfig.heightMultiplier!,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,13 +134,16 @@ Widget WaterConsumed(double consumedWater, double totalWater,
                       color: Colors.transparent,
                       child: SvgPicture.asset(
                         ImagePath.add,
-                        height: 16 * SizeConfig.widthMultiplier!,
-                        width: 16 * SizeConfig.widthMultiplier!,
+                        height: 14 * SizeConfig.widthMultiplier!,
+                        width: 14 * SizeConfig.widthMultiplier!,
                         color: Theme.of(context).textTheme.bodyText2?.color,
                       ),
                     ),
                   )
                 ],
+              ),
+              SizedBox(
+                height: 4*SizeConfig.heightMultiplier!,
               )
             ],
           ),
@@ -186,7 +189,7 @@ Widget CaloryConsumption(
                     color: Theme.of(context).textTheme.bodyText1?.color,
                     fontSize: 16 * SizeConfig.textMultiplier!)),
             SizedBox(
-              height: 2 * SizeConfig.heightMultiplier!,
+              height: 12 * SizeConfig.heightMultiplier!,
             ),
             Padding(
               padding: EdgeInsets.symmetric(
@@ -341,7 +344,7 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
           child: Column(
             children: [
               SizedBox(
-                height: 3 * SizeConfig.heightMultiplier!,
+                height: 5 * SizeConfig.heightMultiplier!,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -355,8 +358,8 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
                   ),
                   Image.asset(
                     ImagePath.fireIcon,
-                    height: 20 * SizeConfig.heightMultiplier!,
-                    width: 16 * SizeConfig.widthMultiplier!,
+                    height: 22.5 * SizeConfig.heightMultiplier!,
+                    width: 17.64 * SizeConfig.widthMultiplier!,
                   )
                 ],
               ),
@@ -453,13 +456,16 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
                       color: Colors.transparent,
                       child: SvgPicture.asset(
                         ImagePath.power,
-                        height: 16 * SizeConfig.widthMultiplier!,
-                        width: 16 * SizeConfig.widthMultiplier!,
+                        height: 18 * SizeConfig.widthMultiplier!,
+                        width: 18 * SizeConfig.widthMultiplier!,
                         color: Theme.of(context).primaryColor,
                       ),
                     ),
                   )
                 ],
+              ),
+              SizedBox(
+                height: 4*SizeConfig.heightMultiplier!,
               )
             ],
           ),
