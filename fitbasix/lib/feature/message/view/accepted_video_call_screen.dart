@@ -38,6 +38,7 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
   var _isCallPicked = false.obs;
   final panelController = PanelController();
 
+
   String urlimage =
       "https://cdna.artstation.com/p/assets/images/images/034/757/492/large/jorge-hardt-02112021-minimalist-japanese-mobile-hd.jpg?1613135473";
   String avatarImage =
@@ -68,21 +69,78 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
   void dispose() {
     _localVideoViewController!.release();
     _remoteVideoViewController!.release();
-    // unsubscribeCall();
-    // unsubscribeCallEnd();
-    // unsubscribeReject();
-    // unsubscribeAccept();
-    // unsubscribeHangUp();
-    // unsubscribeVideoTrack();
-    // unsubscribeNotAnswer();
-    // unsubscribePeerConnection();
+    unsubscribeCallEnd();
+    unsubscribeReject();
+    unsubscribeAccept();
+    unsubscribeHangUp();
+    unsubscribeVideoTrack();
+    unsubscribeNotAnswer();
+    unsubscribePeerConnection();
     super.dispose();
   }
 
 
+  void unsubscribeNotAnswer() {
+    if (_notAnswerSubscription != null) {
+      _notAnswerSubscription!.cancel();
+
+      _notAnswerSubscription = null;
+    }
+  }
+
+  void unsubscribePeerConnection() {
+    if (_peerConnectionSubscription != null) {
+      _peerConnectionSubscription!.cancel();
+
+      _peerConnectionSubscription = null;
+    }
+  }
+
+  void unsubscribeHangUp() {
+    if (_hangUpSubscription != null) {
+      _hangUpSubscription!.cancel();
+
+      _hangUpSubscription = null;
+    }
+  }
+
+  void unsubscribeVideoTrack() {
+    if (_videoTrackSubscription != null) {
+      _videoTrackSubscription!.cancel();
+
+      _videoTrackSubscription = null;
+    }
+  }
+
+  void unsubscribeReject() {
+    if (_rejectSubscription != null) {
+      _rejectSubscription!.cancel();
+
+      _rejectSubscription = null;
+    }
+  }
+
+  void unsubscribeAccept() {
+    if (_acceptSubscription != null) {
+      _acceptSubscription!.cancel();
+
+      _acceptSubscription = null;
+    }
+  }
+
+  void unsubscribeCallEnd() {
+    if (_callEndSubscription != null) {
+      _callEndSubscription!.cancel();
+
+      _callEndSubscription = null;
+    }
+  }
+
+
+
+
   @override
   void initState() {
-  
     print("llll user id: " + widget.userQuickBloxId.toString());
     subscribeReject();
     subscribeAccept();
@@ -104,7 +162,6 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
         panelBuilder: (controller) => PanelWidget(
           onHangUpTapped: (value) {
             hangUpWebRTC();
-            Navigator.pop(context);
           },
           panelController: panelController,
           controller: controller,
@@ -117,7 +174,7 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
             print("mic off pressed");
           },
           onSpeakerTap: (){
-
+            switchCameraInCall();
           },
         ),
         //body
@@ -143,6 +200,11 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
     );
   }
 
+
+  void switchCameraInCall() {
+    var result = QB.webrtc.switchCamera(widget.sessionIdForVideoCall!);
+  }
+
   void turnUserMicOnOFF() async {
     turnMicOnOff = !turnMicOnOff;
     print("lllllll"+turnMicOnOff.toString());
@@ -165,7 +227,11 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
   Future<void> hangUpWebRTC() async {
     try {
       print("hang up triggeed");
-      QBRTCSession? session = await QB.webrtc.hangUp(widget.sessionIdForVideoCall!);
+      QBRTCSession? session = await QB.webrtc.hangUp(widget.sessionIdForVideoCall!).then((value){
+        Navigator.pop(context);
+        return value;
+      });
+
 
       String? id = session!.id;
     } on PlatformException catch (e) {}
@@ -312,7 +378,7 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
         Map<dynamic, dynamic> payloadMap =
         Map<dynamic, dynamic>.from(data["payload"]);
         int opponentId = payloadMap["userId"];
-        if (opponentId == widget.userQuickBloxId) {
+        if (opponentId == widget.userQuickBloxId!) {
           startRenderingLocal();
         } else {
           startRenderingRemote(opponentId);
@@ -344,6 +410,8 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
       _sessionId = session!.id;
     } on PlatformException catch (e) {}
   }
+
+  
 }
 
 

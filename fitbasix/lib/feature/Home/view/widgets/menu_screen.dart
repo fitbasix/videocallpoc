@@ -123,7 +123,7 @@ class MenuScreen extends StatelessWidget {
                 menuItemText: 'logOut'.tr,
                 onTap: () async {
                   InitializeQuickBlox().logOutUserSession();
-                  InitializeQuickBlox().logOutFromVideoCall();
+
                   final LoginController _controller =
                       Get.put(LoginController());
                   final SharedPreferences prefs =

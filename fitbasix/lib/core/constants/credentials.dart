@@ -73,7 +73,7 @@ class InitializeQuickBlox{
       _homeController.userQuickBloxId.value = 0;
       await QB.chat.disconnect();
       await QB.auth.logout();
-
+      logOutFromVideoCall();
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
     }
@@ -108,15 +108,19 @@ class InitializeQuickBlox{
           content: Row(
             children: [
               ElevatedButton(onPressed: () async{
-                final sharedPreferences = await SharedPreferences.getInstance();
-                try {
-                  QBRTCSession? session = await QB.webrtc.accept(sessionId).then((value){
-                    Navigator.of(Get.overlayContext!).pop();
-                    Get.to(()=>AcceptedVideoCallScreen(sessionIdForVideoCall: sessionId,userQuickBloxId: sharedPreferences.getInt("userQuickBloxId")!,));
-                  });
-                } on PlatformException catch (e) {
-                  // Some error occurred, look at the exception message for more details
-                }
+                final sharedPreferences = await SharedPreferences.getInstance().then((sharedPreference) async {
+                  try {
+                    QBRTCSession? session = await QB.webrtc.accept(sessionId).then((value){
+                      Navigator.of(Get.overlayContext!).pop();
+                      print(sharedPreference.getInt("userQuickBloxId")!.toString()+" got this sestion id");
+                      Get.to(()=>AcceptedVideoCallScreen(sessionIdForVideoCall: sessionId,userQuickBloxId: sharedPreference.getInt("userQuickBloxId")!,));
+
+                    });
+                  } on PlatformException catch (e) {
+                    // Some error occurred, look at the exception message for more details
+                  }
+                });
+
 
               }, child: Text("Accept")),
               SizedBox(width: 10,),

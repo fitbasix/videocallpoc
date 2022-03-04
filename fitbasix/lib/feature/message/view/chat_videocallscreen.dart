@@ -32,6 +32,7 @@ class VideoCallScreen extends StatefulWidget {
 }
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
+
   bool turnCameraOnOff = true;
   bool turnMicOnOff = true;
   var _isCallPicked = false.obs;
@@ -62,8 +63,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   RTCVideoViewController? _remoteVideoViewController;
 
+
+
   @override
   void dispose() {
+    _localVideoViewController!.release();
+    _remoteVideoViewController!.release();
     unsubscribeCallEnd();
     unsubscribeReject();
     unsubscribeAccept();
@@ -153,7 +158,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         panelBuilder: (controller) => PanelWidget(
           onHangUpTapped: (value) {
             hangUpWebRTC();
-            Navigator.pop(context);
           },
           onCameraTap: () {
             turnUserCameraOnOFF();
@@ -163,7 +167,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             turnUserMicOnOFF();
             print("mic off pressed");
           },
-          onSpeakerTap: () {},
+          onSpeakerTap: () {
+            switchCameraInCall();
+          },
           panelController: panelController,
           controller: controller,
         ),
@@ -234,6 +240,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
+  void switchCameraInCall()  {
+    var result = QB.webrtc.switchCamera(widget.sessionIdForVideoCall!);
+
+  }
+
   void turnUserMicOnOFF() async {
     turnMicOnOff = !turnMicOnOff;;
     print("lllllll"+turnMicOnOff.toString());
@@ -261,8 +272,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     try {
       print("hang up triggeed");
       QBRTCSession? session =
-          await QB.webrtc.hangUp(widget.sessionIdForVideoCall!);
-
+          await QB.webrtc.hangUp(widget.sessionIdForVideoCall!).then((value) {
+            Navigator.pop(context);
+          });
       String? id = session!.id;
     } on PlatformException catch (e) {}
   }

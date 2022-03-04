@@ -86,6 +86,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             onMessage: () async {
 
               bool dialogCreatedPreviously = false;
+              int openPage = 0;
               //133642567	Tarun Prajapat
               //133627356 vartika
               //133612091 trainer
@@ -100,9 +101,18 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) async {
                   for(int i =0; i<value.length;i++){
                     if(value[i]!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&value[i]!.occupantsIds!.contains(UserQuickBloxId)){
-                      print(value[i]!.id.toString() + "maxxxx");
                       dialogCreatedPreviously = true;
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: value[i],opponentID: UserQuickBloxId,)));
+                      print(value[i]!.id.toString() + "maxxxx");
+                      if(openPage<1){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                      userDialogForChat: value[i],
+                                      opponentID: UserQuickBloxId,
+                                    )));
+                        ++openPage;
+                      }
                       break;
                     }
                   }
@@ -115,9 +125,17 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       QBDialog? createdDialog = await QB.chat.createDialog(
                         occupantsIds, dialogName,
                         dialogType: QBChatDialogTypes.CHAT, ).then((value) {
-
-                        print("dialog id is:"+value!.id!);
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen(userDialogForChat: value,opponentID: UserQuickBloxId,)));
+                          print("dialog id is:"+value!.id!);
+                          if(openPage<1){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                        userDialogForChat: value,
+                                        opponentID: UserQuickBloxId,
+                                      )));
+                          ++openPage;
+                        }
                       });
                     } on PlatformException catch (e) {
                       print(e.toString());
