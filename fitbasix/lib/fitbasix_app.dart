@@ -31,7 +31,7 @@ class FitBasixApp extends StatelessWidget {
                   theme: ThemeData(
                     //scaffold color of app
                     scaffoldBackgroundColor: kPureBlack,
-                    //used in my trainer screen & icon back button color
+                    //used in my trainer screen & icon back button color & post screen
                     primaryColor: kPureWhite,
                     //used in all trainer screen in Item category
                     secondaryHeaderColor: kPureBlack,
@@ -62,9 +62,13 @@ class FitBasixApp extends StatelessWidget {
                         headline4: TextStyle(color: greyBorder),
                         // used in plantile in trainer profile screen
                         headline5: TextStyle(color: grey2B),
-
-                       headline6: TextStyle(color: kBlack)
+                      // used in comment tile
+                      headline6: TextStyle(
+                        color: greyB7
+                    )
                     ),
+
+
 
                     //Trainer card in get trainer screen & all trainer Screen & home sceen
                     cardColor: kBlack,

@@ -22,7 +22,7 @@ class GreenCircleArrowButton extends StatelessWidget {
         height: 40 * SizeConfig.heightMultiplier!,
         width: 40 * SizeConfig.heightMultiplier!,
         margin: EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
-        decoration: BoxDecoration(shape: BoxShape.circle, color: kGreenColor),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: kgreen49),
         child: Transform.rotate(
           angle: -pi,
           child: SvgPicture.asset(
