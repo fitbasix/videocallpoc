@@ -175,8 +175,8 @@ class LogInService {
 
     var RefreshToken = await getRefreshToken();
     print(RefreshToken);
-    var response =
-        await dio!.post(ApiUrl.logOut, data: {"refreshToken": RefreshToken});
-    print(response.data.toString());
+    // var response =
+    //     await dio!.post(ApiUrl.logOut, data: {"refreshToken": RefreshToken});
+    //print(response.data.toString());
   }
 }

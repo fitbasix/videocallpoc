@@ -47,7 +47,7 @@ class SPGAppBar extends StatelessWidget {
           //     child: Text(
           //       'skip'.tr,
           //       style: AppTextStyle.normalBlackText.copyWith(
-          //           color: hintGrey, fontSize: 14 * SizeConfig.textMultiplier!),
+          //           color: Theme.of(context).textTheme.headline1!.color, fontSize: 14 * SizeConfig.textMultiplier!),
           //     ))
         ],
       ),
