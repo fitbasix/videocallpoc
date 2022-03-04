@@ -105,6 +105,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       if(value[i]!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&value[i]!.occupantsIds!.contains(UserQuickBloxId)){
                         dialogCreatedPreviously = true;
                         print(value[i]!.id.toString() + "maxxxx");
+                        isMessageLoading.value = false;
                         if(openPage<1){
                           Navigator.push(
                               context,
@@ -113,13 +114,13 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                                     userDialogForChat: value[i],
                                     opponentID: UserQuickBloxId,
                                   )));
-                          isMessageLoading.value = false;
                           ++openPage;
                         }
                         break;
                       }
                     }
                     if(!dialogCreatedPreviously){
+
                       List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
                       String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();
                       int dialogType = QBChatDialogTypes.CHAT;
@@ -129,6 +130,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                           occupantsIds, dialogName,
                           dialogType: QBChatDialogTypes.CHAT, ).then((value) {
                           print("dialog id is:"+value!.id!);
+                          isMessageLoading.value = false;
                           if(openPage<1){
                             Navigator.push(
                                 context,
@@ -137,7 +139,6 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                                       userDialogForChat: value,
                                       opponentID: UserQuickBloxId,
                                     )));
-                            isMessageLoading.value = false;
                             ++openPage;
                           }
                         });
