@@ -69,6 +69,7 @@ class FitBasixApp extends StatelessWidget {
                     ),
 
 
+
                     //Trainer card in get trainer screen & all trainer Screen & home sceen
                     cardColor: kBlack,
                   ),

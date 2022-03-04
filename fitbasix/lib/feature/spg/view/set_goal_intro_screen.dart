@@ -21,9 +21,9 @@ class SetGoalIntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
             onPressed: () {
@@ -31,26 +31,28 @@ class SetGoalIntroScreen extends StatelessWidget {
             },
             icon: SvgPicture.asset(
               ImagePath.backIcon,
+              color: Theme.of(context).primaryColor,
               width: 7 * SizeConfig.widthMultiplier!,
               height: 12 * SizeConfig.heightMultiplier!,
             )),
       ),
       body: SafeArea(
           child: Container(
-        margin: EdgeInsets.symmetric(
-            horizontal: 25 * SizeConfig.widthMultiplier!,
-            vertical: 16 * SizeConfig.heightMultiplier!),
+        margin:
+            EdgeInsets.symmetric(vertical: 16 * SizeConfig.heightMultiplier!),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Spacer(),
+            SizedBox(
+              height: 90 * SizeConfig.heightMultiplier!,
+            ),
             Obx(() => _spgController.isLoading.value
                 ? Shimmer.fromColors(
                     child: Container(
                       color: kGreyColor,
                       width: double.infinity,
-                      height: 146 * SizeConfig.heightMultiplier!,
+                      height: 280 * SizeConfig.heightMultiplier!,
                     ),
                     baseColor: const Color.fromRGBO(230, 230, 230, 1),
                     highlightColor: const Color.fromRGBO(242, 245, 245, 1),
@@ -58,29 +60,33 @@ class SetGoalIntroScreen extends StatelessWidget {
                 : CachedNetworkImage(
                     imageUrl: _spgController
                         .spgData.value.response!.data!.setGoalIntroImage!,
-                    height: 146 * SizeConfig.heightMultiplier!,
-                    fit: BoxFit.cover,
+                    height: 280 * SizeConfig.heightMultiplier!,
+                    fit: BoxFit.fitWidth,
                   )),
             SizedBox(
               height: 26 * SizeConfig.heightMultiplier!,
             ),
             Padding(
-              padding: EdgeInsets.only(
-                  left: 7 * SizeConfig.widthMultiplier!,
-                  right: 7 * SizeConfig.widthMultiplier!),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 32 * SizeConfig.widthMultiplier!),
               child: Text(
                 'set_goal_intro_text'.tr,
                 textAlign: TextAlign.center,
-                style: AppTextStyle.normalBlackText.copyWith(color: hintGrey),
+                style: AppTextStyle.normalBlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color),
               ),
             ),
             Spacer(),
-            ProceedButton(
-                title: 'proceed'.tr,
-                onPressed: () async {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => SetGoalScreen()));
-                })
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 25 * SizeConfig.widthMultiplier!),
+              child: ProceedButton(
+                  title: 'proceed'.tr,
+                  onPressed: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => SetGoalScreen()));
+                  }),
+            )
           ],
         ),
       )),

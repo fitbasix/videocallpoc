@@ -16,7 +16,7 @@ class SetWeight extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
@@ -29,11 +29,18 @@ class SetWeight extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Stack(
+              children: [
+                Container(
+                  color: Theme.of(context).primaryColor,
+                  height: 2 * SizeConfig.heightMultiplier!,
+                  width: Get.width,
+                ),
           Container(
             color: kGreenColor,
             height: 2 * SizeConfig.heightMultiplier!,
             width: Get.width * 0.625,
-          ),
+          ),]),
           SizedBox(
             height: 30 * SizeConfig.heightMultiplier!,
           ),
@@ -55,7 +62,7 @@ class SetWeight extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: _spgController.weightType == "kg"
                             ? kGreenColor
-                            : Colors.transparent,
+                            : Theme.of(context).primaryColor,
                         border: Border.all(
                             color: _spgController.weightType == "kg"
                                 ? Colors.transparent
@@ -69,7 +76,7 @@ class SetWeight extends StatelessWidget {
                       style: _spgController.weightType == "kg"
                           ? AppTextStyle.white400Text
                           : AppTextStyle.white400Text
-                              .copyWith(color: lightBlack),
+                              .copyWith(color: Theme.of(context).textTheme.headline6!.color),
                     )),
                   ),
                 ),
@@ -87,7 +94,7 @@ class SetWeight extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: _spgController.weightType != "kg"
                             ? kGreenColor
-                            : Colors.transparent,
+                            : Theme.of(context).primaryColor,
                         border: Border.all(
                             color: _spgController.weightType != "kg"
                                 ? Colors.transparent
@@ -114,7 +121,7 @@ class SetWeight extends StatelessWidget {
           Center(
             child: Text(
               'ask_weight'.tr,
-              style: AppTextStyle.boldBlackText,
+              style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
               textAlign: TextAlign.center,
             ),
           ),
@@ -129,6 +136,7 @@ class SetWeight extends StatelessWidget {
                 Text(
                   _spgController.currentWeight.value.toString(),
                   style: AppTextStyle.normalBlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 48 * SizeConfig.textMultiplier!, height: 0),
                   textAlign: TextAlign.center,
                 ),
@@ -137,7 +145,7 @@ class SetWeight extends StatelessWidget {
                     _spgController.weightType.value == "kg" ? 'kg'.tr : 'lb'.tr,
                     textAlign: TextAlign.start,
                     style: AppTextStyle.normalBlackText
-                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!))
+                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!,color: Theme.of(context).textTheme.bodyText1!.color))
               ],
             ),
           ),
@@ -161,6 +169,12 @@ class SetWeight extends StatelessWidget {
                         ScaleLineStyle(
                             color: kGreenColor, width: 1, height: 15, scale: -1)
                       ],
+                marker: Container(
+                    width: 1.5 * SizeConfig.widthMultiplier!,
+                    height: 50 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5))),
                       onBuildRulerScalueText: (index, scaleValue) {
                         return (scaleValue * 2).toInt().toString() + "lbs";
                       },
@@ -179,6 +193,12 @@ class SetWeight extends StatelessWidget {
                       beginValue: 30,
                       endValue: 200,
                       initValue: _spgController.currentWeight.value,
+                marker: Container(
+                    width: 1.5 * SizeConfig.widthMultiplier!,
+                    height: 50 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5))),
                       scaleLineStyleList: const [
                         ScaleLineStyle(
                             color: kGreenColor,
@@ -209,7 +229,7 @@ class SetWeight extends StatelessWidget {
           Center(
             child: Text(
               'ask_target_weight'.tr,
-              style: AppTextStyle.boldBlackText,
+              style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
               textAlign: TextAlign.center,
             ),
           ),
@@ -224,6 +244,7 @@ class SetWeight extends StatelessWidget {
                 Text(
                   _spgController.targetWeight.value.toString(),
                   style: AppTextStyle.normalBlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 48 * SizeConfig.textMultiplier!, height: 0),
                 ),
                 SizedBox(width: 3 * SizeConfig.widthMultiplier!),
@@ -231,7 +252,7 @@ class SetWeight extends StatelessWidget {
                     _spgController.weightType.value == "kg" ? 'kg'.tr : 'lb'.tr,
                     textAlign: TextAlign.start,
                     style: AppTextStyle.normalBlackText
-                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!))
+                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!,color: Theme.of(context).textTheme.bodyText1!.color))
               ],
             ),
           ),
@@ -261,6 +282,12 @@ class SetWeight extends StatelessWidget {
                       onValueChange: (value) {
                         _spgController.targetWeight.value = value * 2;
                       },
+                    marker: Container(
+                    width: 1.5 * SizeConfig.widthMultiplier!,
+                    height: 50 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5))),
                       width: MediaQuery.of(context).size.width -
                           48 * SizeConfig.widthMultiplier!,
                       height: 100 * SizeConfig.heightMultiplier!,
@@ -276,6 +303,12 @@ class SetWeight extends StatelessWidget {
                       onBuildRulerScalueText: (index, scaleValue) {
                         return (scaleValue).toInt().toString() + "kg";
                       },
+                    marker: Container(
+                    width: 1.5 * SizeConfig.widthMultiplier!,
+                    height: 50 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5))),
                       scaleLineStyleList: const [
                         ScaleLineStyle(
                             color: kGreenColor,

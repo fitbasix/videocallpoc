@@ -5,6 +5,7 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/widgets/spg_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,22 +50,29 @@ class SetFoodType extends StatelessWidget {
               children: [
                 Text(
                   'set_food_type'.tr,
-                  style: AppTextStyle.boldBlackText,
+                  style: AppTextStyle.boldBlackText.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color),
                 ),
                 SizedBox(
                   height: 40 * SizeConfig.heightMultiplier!,
                 ),
-                ListView.builder(
+                GridView.builder(
                     itemCount: _spgController
                         .spgData.value.response!.data!.foodType!.length,
                     shrinkWrap: true,
-                    itemBuilder: (_, index) {
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16 * SizeConfig.widthMultiplier!,
+                      mainAxisSpacing: 16 * SizeConfig.widthMultiplier!,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
                       if (_spgController.selectedFoodIndex.value.serialId ==
                           null) {
                         _spgController.selectedFoodIndex.value = _spgController
                             .spgData.value.response!.data!.foodType![0];
                       }
-                      return Obx(() => FoodTile(
+                      return Obx(() => GoalCard(
                             title: _spgController.spgData.value.response!.data!
                                 .foodType![index].name!,
                             imageUrl: _spgController.spgData.value.response!
@@ -80,7 +88,7 @@ class SetFoodType extends StatelessWidget {
                                 ? true
                                 : false,
                           ));
-                    }),
+                    })
               ],
             ),
           ),

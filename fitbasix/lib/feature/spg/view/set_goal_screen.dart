@@ -69,12 +69,16 @@ class SetGoalScreen extends StatelessWidget {
                     _spgController
                             .spgData.value.response==null?
                             Container()
-                            :ListView.builder(
+                            :GridView.builder(
                         itemCount: _spgController
                             .spgData.value.response!.data!.goalType!.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (_, index) {
+                        gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
+                          crossAxisSpacing: 16*SizeConfig.widthMultiplier!,
+                          mainAxisSpacing: 16*SizeConfig.widthMultiplier!,
+                        ),
+                        itemBuilder: (BuildContext context, int index){
                           if (_spgController.selectedGoalIndex.value.serialId ==
                               null) {
                             _spgController.selectedGoalIndex.value =
@@ -145,12 +149,12 @@ class GoalCard extends StatelessWidget {
       child: Container(
           // margin: EdgeInsets.only(top: 8 * SizeConfig.heightMultiplier!),
           // padding: EdgeInsets.only(left: 24 * SizeConfig.widthMultiplier!),
-          height: 156 * SizeConfig.widthMultiplier!,
+          height: 156 *SizeConfig.widthMultiplier!,
           width: 156*SizeConfig.widthMultiplier!,
           decoration: BoxDecoration(
               color: isSelected ? kSelectedGreen : kPureWhite,
-              border: Border.all(color: isSelected ? kGreenColor : kLightGrey),
-              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: isSelected ? kGreenColor : Colors.black),
+              borderRadius: BorderRadius.circular(10*SizeConfig.imageSizeMultiplier!),
               boxShadow: [
                 BoxShadow(
                     color: Colors.black.withOpacity(0.05),
@@ -167,15 +171,22 @@ class GoalCard extends StatelessWidget {
                       imageUrl: imageUrl,
                       // height: 60 * SizeConfig.heightMultiplier!,
                       // width: 60 * SizeConfig.heightMultiplier!,
-                      fit: BoxFit.contain)),
+                      fit: BoxFit.cover)),
               Container(
-                margin: EdgeInsets.only(left: 12*SizeConfig.widthMultiplier!,top: 12*SizeConfig.heightMultiplier!),
+                margin: EdgeInsets.only(left: 12*SizeConfig.widthMultiplier!,top: 12*SizeConfig.heightMultiplier!,right: 15*SizeConfig.widthMultiplier!),
                 child: Text(
                   title,
                   style: AppTextStyle.boldBlackText
-                      .copyWith(fontSize: 14 * SizeConfig.textMultiplier!,color: Theme.of(context).textTheme.bodyText1!.color),
+                      .copyWith(fontSize: 14 * SizeConfig.textMultiplier!,color: Theme.of(context).textTheme.bodyText1!.color,),
                 ),
               ),
+              (isSelected)?Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  margin: EdgeInsets.only(right: 11*SizeConfig.widthMultiplier!,top: 8*SizeConfig.heightMultiplier!),
+                  child: Icon(Icons.check,color: Theme.of(context).primaryColor,size: 24*SizeConfig.widthMultiplier!,),
+                ),
+              ):Container()
 
             ],
           )),
