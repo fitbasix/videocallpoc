@@ -204,7 +204,8 @@ class CreatePostService {
   static connectUserToChat(String password,int userQuickBloxId) async {
     var chatConnect = await QB.chat.isConnected();
     if(chatConnect!){
-      InitializeQuickBlox().initWebRTC();
+      //todo remove comment for initWebRTC to enable video call
+      //InitializeQuickBlox().initWebRTC();
       //InitializeQuickBlox().subscribeCall();
     }
     print("called connect user to chat");
@@ -212,7 +213,8 @@ class CreatePostService {
       var result = await QB.chat.connect(userQuickBloxId, password).then((value) async {
         var chatConnect = await QB.chat.isConnected();
         if(chatConnect!){
-          InitializeQuickBlox().initWebRTC();
+          //todo remove comment for initWebRTC to enable video call
+          //InitializeQuickBlox().initWebRTC();
           //InitializeQuickBlox().subscribeCall();
         }
       });
