@@ -44,6 +44,7 @@ class TrainerProfileScreen extends StatefulWidget {
 
 class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   HomeController _homeController = Get.find();
+  var isMessageLoading = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -84,70 +85,76 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               setState(() {});
             },
             onMessage: () async {
-
-              bool dialogCreatedPreviously = false;
-              int openPage = 0;
-              //133642567	Tarun Prajapat
-              //133627356 vartika
-              //133612091 trainer
-              final sharedPreferences = await SharedPreferences.getInstance();
-              _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
-              int UserQuickBloxId = _homeController.userQuickBloxId.value==133642567?133627356:133642567;
-              print(UserQuickBloxId.toString() +"this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id" );
-              QBSort sort = QBSort();
-              sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
-              sort.ascending = true;
-              try {
-                List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) async {
-                  for(int i =0; i<value.length;i++){
-                    if(value[i]!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&value[i]!.occupantsIds!.contains(UserQuickBloxId)){
-                      dialogCreatedPreviously = true;
-                      print(value[i]!.id.toString() + "maxxxx");
-                      if(openPage<1){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChatScreen(
-                                      userDialogForChat: value[i],
-                                      opponentID: UserQuickBloxId,
-                                    )));
-                        ++openPage;
-                      }
-                      break;
-                    }
-                  }
-                  if(!dialogCreatedPreviously){
-                    List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
-                    String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();
-                    int dialogType = QBChatDialogTypes.CHAT;
-                    print("got here too");
-                    try {
-                      QBDialog? createdDialog = await QB.chat.createDialog(
-                        occupantsIds, dialogName,
-                        dialogType: QBChatDialogTypes.CHAT, ).then((value) {
-                          print("dialog id is:"+value!.id!);
-                          if(openPage<1){
+              if(!isMessageLoading.value){
+                isMessageLoading.value = true;
+                bool dialogCreatedPreviously = false;
+                int openPage = 0;
+                //133642567	Tarun Prajapat
+                //133627356 vartika
+                //133612091 trainer
+                final sharedPreferences = await SharedPreferences.getInstance();
+                _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
+                int UserQuickBloxId = _homeController.userQuickBloxId.value==133642567?133627356:133642567;
+                print(UserQuickBloxId.toString() +"this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id" );
+                QBSort sort = QBSort();
+                sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+                sort.ascending = true;
+                try {
+                  List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) async {
+                    for(int i =0; i<value.length;i++){
+                      if(value[i]!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&value[i]!.occupantsIds!.contains(UserQuickBloxId)){
+                        dialogCreatedPreviously = true;
+                        print(value[i]!.id.toString() + "maxxxx");
+                        if(openPage<1){
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ChatScreen(
-                                        userDialogForChat: value,
-                                        opponentID: UserQuickBloxId,
-                                      )));
+                                    userDialogForChat: value[i],
+                                    opponentID: UserQuickBloxId,
+                                  )));
+                          isMessageLoading.value = false;
                           ++openPage;
                         }
-                      });
-                    } on PlatformException catch (e) {
-                      print(e.toString());
+                        break;
+                      }
                     }
-                  }
-                  return value;
-                });
+                    if(!dialogCreatedPreviously){
+                      List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
+                      String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();
+                      int dialogType = QBChatDialogTypes.CHAT;
+                      print("got here too");
+                      try {
+                        QBDialog? createdDialog = await QB.chat.createDialog(
+                          occupantsIds, dialogName,
+                          dialogType: QBChatDialogTypes.CHAT, ).then((value) {
+                          print("dialog id is:"+value!.id!);
+                          if(openPage<1){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                      userDialogForChat: value,
+                                      opponentID: UserQuickBloxId,
+                                    )));
+                            isMessageLoading.value = false;
+                            ++openPage;
+                          }
+                        });
+                      } on PlatformException catch (e) {
+                        print(e.toString());
+                      }
+                    }
+                    return value;
+                  });
 
-              } on PlatformException catch (e) {
-                // some error occurred, look at the exception message for more details
+                } on PlatformException catch (e) {
+                  // some error occurred, look at the exception message for more details
+                }
               }
-
+              else{
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Message is loading")));
+              }
             },
             onEnroll: () {
 
