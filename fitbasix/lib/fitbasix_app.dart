@@ -30,7 +30,7 @@ class FitBasixApp extends StatelessWidget {
                   //  darkTheme: ThemeData.dark(),
                   theme: ThemeData(
                     //scaffold color of app
-                    scaffoldBackgroundColor: kPureWhite,
+                    scaffoldBackgroundColor: kPureBlack,
                     //used in my trainer screen & icon back button color
                     primaryColor: kPureWhite,
                     //used in all trainer screen in Item category
@@ -40,7 +40,7 @@ class FitBasixApp extends StatelessWidget {
                     // used in achiements certificate
                     highlightColor: Color(0xff28362B),
                     indicatorColor: Color(0xff37342F),
-                    // icon
+                    // icon used in homescreen & used in needle color
                     primaryIconTheme: IconThemeData(color: kPureWhite),
                     appBarTheme: AppBarTheme(
                         color: kPureWhite,
@@ -49,9 +49,10 @@ class FitBasixApp extends StatelessWidget {
                         actionsIconTheme: IconThemeData(color: kPureWhite)),
                     // primary text theme
                     textTheme: TextTheme(
-                        //primary text color used in gettrainerscreen & trainer profile Screen
+                        //primary text color used in gettrainerscreen & trainer profile Screen & home Screen
                         bodyText1: TextStyle(color: kPureWhite),
-                        bodyText2: TextStyle(color: Colors.yellowAccent),
+                        // used in home screen today text
+                        bodyText2: TextStyle(color: kLightGrey),
                         // See All text & about & divider used in get trained screen
                         headline1: TextStyle(color: hintGrey),
                         // used in trainer profile screen
@@ -61,7 +62,7 @@ class FitBasixApp extends StatelessWidget {
                         headline4: TextStyle(color: greyBorder),
                         // used in plantile in trainer profile screen
                         headline5: TextStyle(color: grey2B)),
-                    //Trainer card in get trainer screen & all trainer Screen
+                    //Trainer card in get trainer screen & all trainer Screen & home sceen
                     cardColor: kBlack,
                   ),
                   // theme: ThemeData(
