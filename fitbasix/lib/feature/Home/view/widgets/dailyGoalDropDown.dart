@@ -19,52 +19,54 @@ Widget DailyGoalDropDown(
           isExpanded: true,
           elevation: 0,
           icon: Padding(
-            padding:  EdgeInsets.only(right:16 * SizeConfig.widthMultiplier!),
-            child: Icon(
-              Icons.arrow_drop_down
-            ),
+            padding: EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
+            child: Icon(Icons.arrow_drop_down),
           ),
-          hint:Padding(
-            padding: EdgeInsets.only(
-                                        left:
-                                            10 * SizeConfig.widthMultiplier!),
-            child: hint == null
-              ? Row(
-                children: [
-                  Text("3",
-                  style: AppTextStyle.normalBlackText),
-                  SizedBox(width: 4,),
-                   Text('ltr'.tr,style: AppTextStyle.normalBlackText.copyWith(
-                     color: grey183
-                   ),),
-                ],
-              )
-              : Row(
-                children: [
-                  Text(hint.toString(),style: AppTextStyle.normalBlackText),
-              SizedBox(width: 4,),
-                   Text('ltr'.tr,style: AppTextStyle.normalBlackText.copyWith(
-                     color: grey183
-                   )),
-                ],
-              )),
+          hint: Padding(
+              padding: EdgeInsets.only(left: 9 * SizeConfig.widthMultiplier!),
+              child: hint == null
+                  ? Row(
+                      children: [
+                        Text("3", style: AppTextStyle.normalBlackText),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          'ltr'.tr,
+                          style: AppTextStyle.normalBlackText
+                              .copyWith(color: grey183),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Text(hint.toString(),
+                            style: AppTextStyle.normalBlackText),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text('ltr'.tr,
+                            style: AppTextStyle.normalBlackText
+                                .copyWith(color: grey183)),
+                      ],
+                    )),
           underline: Container(),
           items: listofItems.map((double value) {
             return DropdownMenuItem<double>(
                 value: value,
                 child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8)
-                  ),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(8)),
                   child: Padding(
-                    padding:  EdgeInsets.symmetric(horizontal:16.0*SizeConfig.widthMultiplier!),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 16.0 * SizeConfig.widthMultiplier!),
                     child: Padding(
-                      padding:  EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),
+                      padding: EdgeInsets.only(
+                          right: 10 * SizeConfig.widthMultiplier!),
                       child: Text(
-                        value.toString()+"ltr",
+                        value.toString() + "ltr",
                         style: AppTextStyle.boldBlackText.copyWith(
-                          fontSize: 14*SizeConfig.textMultiplier!
-                        ),
+                            fontSize: 14 * SizeConfig.textMultiplier!),
                       ),
                     ),
                   ),

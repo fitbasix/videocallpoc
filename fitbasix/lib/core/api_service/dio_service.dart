@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../feature/log_in/controller/login_controller.dart';
+import '../../feature/log_in/view/login_screen.dart';
 
 class DioUtil {
   Dio? _instance;
@@ -14,6 +18,7 @@ class DioUtil {
 
   Dio createDioInstance() {
     var dio = Dio();
+
     // adding interceptor
     dio.interceptors.clear();
     dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
@@ -21,7 +26,6 @@ class DioUtil {
     }, onResponse: (response, handler) {
       // ignore: unnecessary_null_comparison
       if (response != null) {
-        //on success it is getting called here
         return handler.next(response);
       } else {
         return null;
@@ -29,14 +33,12 @@ class DioUtil {
     }, onError: (DioError e, handler) async {
       if (e.response != null) {
         if (e.response!.statusCode == 403) {
-          //catch the 401 here
           dio.interceptors.requestLock.lock();
           dio.interceptors.responseLock.lock();
           RequestOptions requestOptions = e.requestOptions;
           await LogInService.updateToken();
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           var accessToken = prefs.getString('AccessToken').toString();
-          print("updated Access token" + accessToken.toString());
           final opts = new Options(method: requestOptions.method);
           dio.options.headers["language"] = "1";
           dio.options.headers["Accept"] = "*/*";
@@ -56,6 +58,20 @@ class DioUtil {
             return null;
           }
         } else {
+          if (e.response!.statusCode == 444) {
+            final LoginController _controller = Get.put(LoginController());
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.clear();
+            await _controller.googleSignout();
+            navigator!.pushAndRemoveUntil<void>(
+              MaterialPageRoute<void>(
+                  builder: (BuildContext context) => LoginScreen()),
+              ModalRoute.withName('/'),
+            );
+            Get.deleteAll();
+          } else {
+            RequestOptions requestOptions = e.requestOptions;
+          }
           handler.next(e);
         }
       }

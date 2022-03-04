@@ -16,13 +16,24 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ExploreFeed extends StatelessWidget {
+import '../../../core/routes/app_routes.dart';
+
+class ExploreFeed extends StatefulWidget {
+  @override
+  State<ExploreFeed> createState() => _ExploreFeedState();
+}
+
+class _ExploreFeedState extends State<ExploreFeed> {
   final HomeController homeController = Get.find();
+
   final PostController postController = Get.find();
+
   final ScrollController _scrollController = ScrollController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    homeController.explorePageCount.value = 1;
     _scrollController.addListener(() async {
       if (_scrollController.position.maxScrollExtent ==
           _scrollController.position.pixels) {
@@ -33,7 +44,7 @@ class ExploreFeed extends StatelessWidget {
 
         if (postQuery.response!.data!.length < 5) {
           homeController.explorePostList.addAll(postQuery.response!.data!);
-          homeController.explorePageCount.value++;
+          // homeController.explorePageCount.value++;
           homeController.nextDataLoad.value = false;
           return;
         } else {
@@ -42,14 +53,27 @@ class ExploreFeed extends StatelessWidget {
           //   _homeController.showLoader.value = false;
           //   return;
           // }
-          homeController.explorePageCount.value++;
+
+          if (homeController.explorePostList.last.id ==
+              postQuery.response!.data!.last.id) {
+            // homeController.explorePageCount.value++;
+            homeController.nextDataLoad.value = false;
+            return;
+          }
+
+          // homeController.explorePageCount.value++;
           homeController.explorePostList.addAll(postQuery.response!.data!);
           homeController.nextDataLoad.value = false;
         }
-
+        homeController.explorePageCount.value++;
         homeController.nextDataLoad.value = false;
+        setState(() {});
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: kPureWhite,
@@ -371,31 +395,26 @@ class ExploreFeed extends StatelessWidget {
                                                     .explorePostList[index]
                                                     .likes! -
                                                 1);
-                                            // HomeService.unlikePost(
-                                            //     postId: _homeController
-                                            //         .trendingPostList[
-                                            //     index]
-                                            //         .id!);
+                                            HomeService.unlikePost(
+                                                postId: homeController
+                                                    .explorePostList[index]
+                                                    .id!);
                                           } else {
-                                            // _homeController
-                                            //     .trendingPostList[
-                                            // index]
-                                            //     .isLiked = true;
-                                            // _homeController
-                                            //     .trendingPostList[
-                                            // index]
-                                            //     .likes = (_homeController
-                                            //     .trendingPostList[
-                                            // index]
-                                            //     .likes! +
-                                            //     1);
-                                            // HomeService.likePost(
-                                            //     postId: _homeController
-                                            //         .trendingPostList[
-                                            //     index]
-                                            //         .id!);
+                                            homeController
+                                                .explorePostList[index]
+                                                .isLiked = true;
+                                            homeController
+                                                .explorePostList[index]
+                                                .likes = (homeController
+                                                    .explorePostList[index]
+                                                    .likes! +
+                                                1);
+                                            HomeService.likePost(
+                                                postId: homeController
+                                                    .explorePostList[index]
+                                                    .id!);
                                           }
-                                          // setState(() {});
+                                          setState(() {});
                                         },
                                         addComment: () {
                                           // HomeService.addComment(
@@ -416,12 +435,40 @@ class ExploreFeed extends StatelessWidget {
                                             .explorePostList[index].id!,
                                         isLiked: homeController
                                             .explorePostList[index].isLiked!,
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      PostScreen()));
+                                        onTap: () async {
+                                          homeController.commentsList.clear();
+                                          Navigator.pushNamed(
+                                              context, RouteName.postScreen);
+                                          homeController.postLoading.value =
+                                              true;
+                                          var postData =
+                                              await HomeService.getPostById(
+                                                  homeController
+                                                      .explorePostList[index]
+                                                      .id!);
+
+                                          homeController.post.value =
+                                              postData.response!.data!;
+
+                                          homeController.postLoading.value =
+                                              false;
+                                          homeController.commentsLoading.value =
+                                              true;
+                                          homeController.postComments.value =
+                                              await HomeService.fetchComment(
+                                                  postId: homeController
+                                                      .explorePostList[index]
+                                                      .id!);
+
+                                          if (homeController.postComments.value
+                                                  .response!.data!.length !=
+                                              0) {
+                                            homeController.commentsList.value =
+                                                homeController.postComments
+                                                    .value.response!.data!;
+                                          }
+                                          homeController.commentsLoading.value =
+                                              false;
                                         },
                                         people: homeController
                                             .explorePostList[index].people!,

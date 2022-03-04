@@ -35,7 +35,6 @@ import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import '../../Home/view/my_trainers_screen.dart';
 import '../../message/view/chat_ui.dart';
 
-
 class TrainerProfileScreen extends StatefulWidget {
   const TrainerProfileScreen({Key? key}) : super(key: key);
 
@@ -59,6 +58,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             trainerCoverImage: trainerController
                 .atrainerDetail.value.user!.coverPhoto!
                 .toString(),
+            isEnrolled: true,
             onFollow: () {
               if (trainerController.atrainerDetail.value.isFollowing!) {
                 trainerController.atrainerDetail.value.isFollowing = false;
@@ -150,9 +150,12 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
             },
             onEnroll: () {
-              showDialog(context: context,
-                  builder: (BuildContext context) => EnrollTrainerDialog());
-              },
+
+              Navigator.pushNamed(context, RouteName.trainerplanScreen);
+              // showDialog(
+              //     context: context,
+              //     builder: (BuildContext context) => EnrollTrainerDialog());
+            },
             onBack: () {
               Navigator.pop(context);
             },
@@ -201,6 +204,7 @@ class TrainerPage extends StatefulWidget {
       required this.name,
       required this.allPlans,
       required this.isFollowing,
+      required this.isEnrolled,
       Key? key})
       : super(key: key);
   final String trainerImage;
@@ -220,6 +224,7 @@ class TrainerPage extends StatefulWidget {
   final String aboutTrainer;
   final List<Plan> allPlans;
   final bool isFollowing;
+  final bool isEnrolled;
 
   @override
   State<TrainerPage> createState() => _TrainerPageState();
@@ -308,7 +313,6 @@ class _TrainerPageState extends State<TrainerPage> {
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,
                                   ),
-
                                   Row(
                                     children: [
                                       Obx(
@@ -357,11 +361,15 @@ class _TrainerPageState extends State<TrainerPage> {
                                       Column(
                                         children: [
                                           Text(widget.followersCount,
-                                              style:
-                                                  AppTextStyle.boldBlackText),
+                                              style: AppTextStyle.boldBlackText
+                                                  .copyWith(color: kBlack)),
                                           Text('follower'.tr,
-                                              style:
-                                                  AppTextStyle.smallBlackText)
+                                              style: AppTextStyle.smallBlackText
+                                                  .copyWith(
+                                                      color: kBlack,
+                                                      fontSize: 12 *
+                                                          SizeConfig
+                                                              .textMultiplier!))
                                         ],
                                       ),
                                       SizedBox(
@@ -370,11 +378,15 @@ class _TrainerPageState extends State<TrainerPage> {
                                       Column(
                                         children: [
                                           Text(widget.followingCount,
-                                              style:
-                                                  AppTextStyle.boldBlackText),
+                                              style: AppTextStyle.boldBlackText
+                                                  .copyWith(color: kBlack)),
                                           Text('following'.tr,
-                                              style:
-                                                  AppTextStyle.smallBlackText)
+                                              style: AppTextStyle.smallBlackText
+                                                  .copyWith(
+                                                      color: kBlack,
+                                                      fontSize: 12 *
+                                                          SizeConfig
+                                                              .textMultiplier!))
                                         ],
                                       ),
                                     ],
@@ -410,21 +422,30 @@ class _TrainerPageState extends State<TrainerPage> {
                                                 .toString(),
                                             style: AppTextStyle
                                                 .greenSemiBoldText
-                                                .copyWith(color: lightBlack),
+                                                .copyWith(color: kPureBlack),
                                           ),
                                           SizedBox(
                                               width: 8 *
                                                   SizeConfig.widthMultiplier!),
                                           Text(
                                             'people_trained'.tr,
-                                            style: AppTextStyle.smallBlackText,
+                                            style: AppTextStyle.smallBlackText
+                                                .copyWith(
+                                                    fontSize: (12) *
+                                                        SizeConfig
+                                                            .textMultiplier!,
+                                                    color: kPureBlack),
                                           )
                                         ],
                                       ),
                                       Text(
+                                        //extra text
                                         'view_and_review'.tr,
-                                        style: AppTextStyle.smallBlackText
+                                        style: AppTextStyle
+                                            .smallBlackText
                                             .copyWith(
+                                                fontSize: (12) *
+                                                    SizeConfig.textMultiplier!,
                                                 color: greyColor,
                                                 decoration:
                                                     TextDecoration.underline),
@@ -434,18 +455,22 @@ class _TrainerPageState extends State<TrainerPage> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 24 * SizeConfig.heightMultiplier!),
+                            SizedBox(height: 28 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left: 24.0 * SizeConfig.widthMultiplier!,
                                   bottom: 24 * SizeConfig.heightMultiplier!),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'strength'.tr,
-                                    style: AppTextStyle.greenSemiBoldText
-                                        .copyWith(color: lightBlack),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            24.0 * SizeConfig.widthMultiplier!),
+                                    child: Text(
+                                      'strength'.tr,
+                                      style: AppTextStyle.greenSemiBoldText
+                                          .copyWith(color: kBlack),
+                                    ),
                                   ),
                                   SizedBox(
                                       height:
@@ -460,7 +485,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                             (BuildContext context, int index) {
                                           return Padding(
                                             padding: index == 0
-                                                ? EdgeInsets.all(0)
+                                                ? EdgeInsets.only(
+                                                    left: 24.0 *
+                                                        SizeConfig
+                                                            .widthMultiplier!)
                                                 : EdgeInsets.only(
                                                     left: 8.0 *
                                                         SizeConfig
@@ -496,6 +524,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                       ? Container()
                                       : Padding(
                                           padding: EdgeInsets.only(
+                                              left: 24.0 *
+                                                  SizeConfig.widthMultiplier!,
                                               top: 24 *
                                                   SizeConfig.heightMultiplier!,
                                               bottom: 12 *
@@ -504,14 +534,14 @@ class _TrainerPageState extends State<TrainerPage> {
                                             'achivement'.tr,
                                             style: AppTextStyle
                                                 .greenSemiBoldText
-                                                .copyWith(color: lightBlack),
+                                                .copyWith(color: kBlack),
                                           ),
                                         ),
                                   widget.certifcateTitle.length == 0
                                       ? Container()
                                       : Container(
                                           height:
-                                              79 * SizeConfig.heightMultiplier!,
+                                              81 * SizeConfig.heightMultiplier!,
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
                                               itemCount:
@@ -521,40 +551,56 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   (BuildContext context,
                                                       int index) {
                                                 return Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 8.0 *
-                                                          SizeConfig
-                                                              .widthMultiplier!),
-                                                  child:
-                                                      AchivementCertificateTile(
-                                                    certificateDescription:
-                                                        widget
-                                                            .certifcateTitle[
-                                                                index]
-                                                            .certificateName!,
-                                                    certificateIcon: widget
-                                                        .certifcateTitle[index]
-                                                        .url!,
-                                                    color: index % 2 == 0
-                                                        ? oceanBlue
-                                                        : lightOrange,
+                                                  padding: index == 0
+                                                      ? EdgeInsets.only(
+                                                          left: 24.0 *
+                                                              SizeConfig
+                                                                  .widthMultiplier!)
+                                                      : EdgeInsets.only(),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 12.0 *
+                                                            SizeConfig
+                                                                .widthMultiplier!),
+                                                    child:
+                                                        AchivementCertificateTile(
+                                                      certificateDescription:
+                                                          widget
+                                                              .certifcateTitle[
+                                                                  index]
+                                                              .certificateName!,
+                                                      certificateIcon: widget
+                                                          .certifcateTitle[
+                                                              index]
+                                                          .url!,
+                                                      color: index % 2 == 0
+                                                          ? oceanBlue
+                                                          : lightOrange,
+                                                    ),
                                                   ),
                                                 );
                                               }),
                                         ),
                                   SizedBox(
                                       height:
-                                          24 * SizeConfig.heightMultiplier!),
-                                  Text(
-                                    'about'.tr,
-                                    style: AppTextStyle.greenSemiBoldText
-                                        .copyWith(color: lightBlack),
+                                          23 * SizeConfig.heightMultiplier!),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            24.0 * SizeConfig.widthMultiplier!),
+                                    child: Text(
+                                      'about'.tr,
+                                      style: AppTextStyle.greenSemiBoldText
+                                          .copyWith(color: kBlack),
+                                    ),
                                   ),
                                   SizedBox(
                                       height:
                                           12 * SizeConfig.heightMultiplier!),
                                   Padding(
                                     padding: EdgeInsets.only(
+                                        left:
+                                            24.0 * SizeConfig.widthMultiplier!,
                                         right:
                                             24.0 * SizeConfig.widthMultiplier!),
                                     child: Text(
@@ -562,23 +608,31 @@ class _TrainerPageState extends State<TrainerPage> {
                                       style: AppTextStyle.lightMediumBlackText
                                           .copyWith(
                                               fontSize: (14) *
-                                                  SizeConfig.textMultiplier!),
+                                                  SizeConfig.textMultiplier!,
+                                              color: kBlack),
                                     ),
                                   ),
                                   SizedBox(
                                       height:
                                           24 * SizeConfig.heightMultiplier!),
-                                  Obx(() => trainerController
-                                          .isProfileLoading.value
-                                      ? Text('plan'.tr,
-                                          style: AppTextStyle.greenSemiBoldText
-                                              .copyWith(color: lightBlack))
-                                      : widget.allPlans.length != 0
-                                          ? Text('plan'.tr,
-                                              style: AppTextStyle
-                                                  .greenSemiBoldText
-                                                  .copyWith(color: lightBlack))
-                                          : SizedBox()),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      left: 24.0 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    child: Obx(() => trainerController
+                                            .isProfileLoading.value
+                                        ? Text('plan'.tr,
+                                            style: AppTextStyle
+                                                .greenSemiBoldText
+                                                .copyWith(color: lightBlack))
+                                        : widget.allPlans.length != 0
+                                            ? Text('plan'.tr,
+                                                style: AppTextStyle
+                                                    .greenSemiBoldText
+                                                    .copyWith(
+                                                        color: lightBlack))
+                                            : SizedBox()),
+                                  ),
                                   SizedBox(
                                       height:
                                           12 * SizeConfig.heightMultiplier!),
@@ -602,10 +656,15 @@ class _TrainerPageState extends State<TrainerPage> {
                                                       const Color.fromRGBO(
                                                           242, 245, 245, 1),
                                                   child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 8.0 *
-                                                            SizeConfig
-                                                                .widthMultiplier!),
+                                                    padding: index == 0
+                                                        ? EdgeInsets.only(
+                                                            left: 24.0 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!)
+                                                        : EdgeInsets.only(
+                                                            right: 8.0 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!),
                                                     child: PlanTile(
                                                       rating: double.parse("2"),
                                                       planTitle: "",
@@ -633,10 +692,18 @@ class _TrainerPageState extends State<TrainerPage> {
                                                       (BuildContext context,
                                                           int index) {
                                                     return Padding(
-                                                      padding: EdgeInsets.only(
-                                                          right: 8.0 *
-                                                              SizeConfig
-                                                                  .widthMultiplier!),
+                                                      padding: index == 0
+                                                          ? EdgeInsets.only(
+                                                              left: 24.0 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!,
+                                                              right: 8.0 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!)
+                                                          : EdgeInsets.only(
+                                                              right: 8.0 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!),
                                                       child: PlanTile(
                                                         rating: double.parse(
                                                             widget
@@ -826,12 +893,57 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   isLiked: _trainerController
                                                       .trainerPostList[index]
                                                       .isLiked!,
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (_) =>
-                                                                PostScreen()));
+                                                  onTap: () async {
+                                                    _homeController.commentsList
+                                                        .clear();
+                                                    Navigator.pushNamed(context,
+                                                        RouteName.postScreen);
+
+                                                    _homeController.postLoading
+                                                        .value = true;
+                                                    var postData = await HomeService
+                                                        .getPostById(
+                                                            _trainerController
+                                                                .trainerPostList[
+                                                                    index]
+                                                                .id!);
+
+                                                    _homeController.post.value =
+                                                        postData
+                                                            .response!.data!;
+
+                                                    _homeController.postLoading
+                                                        .value = false;
+                                                    _homeController
+                                                        .commentsLoading
+                                                        .value = true;
+                                                    _homeController.postComments
+                                                            .value =
+                                                        await HomeService.fetchComment(
+                                                            postId: _trainerController
+                                                                .trainerPostList[
+                                                                    index]
+                                                                .id!);
+
+                                                    if (_homeController
+                                                            .postComments
+                                                            .value
+                                                            .response!
+                                                            .data!
+                                                            .length !=
+                                                        0) {
+                                                      _homeController
+                                                              .commentsList
+                                                              .value =
+                                                          _homeController
+                                                              .postComments
+                                                              .value
+                                                              .response!
+                                                              .data!;
+                                                    }
+                                                    _homeController
+                                                        .commentsLoading
+                                                        .value = false;
                                                   },
                                                   people: _trainerController
                                                       .trainerPostList[index]
@@ -996,8 +1108,10 @@ class AchivementCertificateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 79 * SizeConfig.heightMultiplier!,
-      width: 222 * SizeConfig.widthMultiplier!,
+      //79
+      height: 81 * SizeConfig.heightMultiplier!,
+      //214
+      width: 214 * SizeConfig.widthMultiplier!,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0), color: color),
       child: Row(

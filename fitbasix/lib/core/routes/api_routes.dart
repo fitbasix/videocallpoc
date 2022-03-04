@@ -1,13 +1,22 @@
 class ApiUrl {
   static String liveBaseURL = 'http://3.131.171.176';
-  // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';
+  // static String liveBaseURL = 'https://8b4c-103-15-254-242.ngrok.io';
+  // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getTermOfUseContents = liveBaseURL + '/api/auth/termsOfService';
-  static String getPrivacyPolicyContents = liveBaseURL + '/api/auth/privacyPolicy';
+  static String getPrivacyPolicyContents =
+      liveBaseURL + '/api/auth/privacyPolicy';
 
-  static String getHelpAndSupportContents = liveBaseURL+'/api/auth/helpAndSupport';
   static String updateUserQuickBloxId = liveBaseURL +"/api/chat/add";
+
+  ///auth
+  static String logOut = liveBaseURL + '/api/auth/logout';
+
+  static String getHelpAndSupportContents =
+      liveBaseURL + '/api/auth/helpAndSupport';
+  static String bmrcalculation = liveBaseURL + '/api/nutritions/getbmr';
+
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
   static String loginAndSignup = liveBaseURL + '/api/auth/login';
   static String registerUser = liveBaseURL + '/api/auth/create';
@@ -42,7 +51,13 @@ class ApiUrl {
   static String getComment = liveBaseURL + '/api/comment/getCommentByPost';
   static String unlike = liveBaseURL + '/api/like/disLike';
   static String explorePost = liveBaseURL + '/api/posts/explorePage';
+  static String getPostById = liveBaseURL + '/api/posts/getPostById';
+  static String replyComment = liveBaseURL + '/api/comment/reply';
 
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';
+  static String editProfile = liveBaseURL + '/api/auth/edit';
+
+  ///plan demo
+  static String planById = liveBaseURL + '/api/plan/getPlanById';
 }

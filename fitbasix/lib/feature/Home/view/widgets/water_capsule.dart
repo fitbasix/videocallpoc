@@ -33,18 +33,26 @@ class AnimatedLiquidCustomProgressIndicatorState
       children: [
         GestureDetector(
           onTap: () async {
-            homeController.waterLevel.value = homeController.waterLevel.value -
-                (1 /
-                    (homeController.waterDetails.value.response!.data![0]
-                            .totalWaterRequired! *
-                        4));
+            homeController.waterLevel.value = (homeController.waterLevel.value -
+                        (1 /
+                            (homeController.waterDetails.value.response!
+                                    .data![0].totalWaterRequired! *
+                                4)) <=
+                    0.0)
+                ? 0.0
+                : homeController.waterLevel.value -
+                    (1 /
+                        (homeController.waterDetails.value.response!.data![0]
+                                .totalWaterRequired! *
+                            4));
             homeController.waterConsumedDataLoading.value = true;
             await HomeService.updateWaterDetails(
                 homeController.waterLevel.value *
                     homeController.waterDetails.value.response!.data![0]
                         .totalWaterRequired!);
-                        homeController.userProfileData.value = await CreatePostService.getUserProfile();
-                        homeController.waterConsumedDataLoading.value=false;
+            homeController.userProfileData.value =
+                await CreatePostService.getUserProfile();
+            homeController.waterConsumedDataLoading.value = false;
           },
           child: Container(
             width: 27 * SizeConfig.heightMultiplier!,
@@ -58,7 +66,7 @@ class AnimatedLiquidCustomProgressIndicatorState
                   EdgeInsets.only(bottom: 15 * SizeConfig.heightMultiplier!),
               child: Icon(
                 Icons.minimize_sharp,
-                size: 20 * SizeConfig.heightMultiplier!,
+                size: 18 * SizeConfig.heightMultiplier!,
                 color: Colors.white,
               ),
             ),
@@ -71,32 +79,34 @@ class AnimatedLiquidCustomProgressIndicatorState
               child: Row(
                 children: [
                   SizedBox(
-                      height: 112 * SizeConfig.heightMultiplier!,
+                    height: 112 * SizeConfig.heightMultiplier!,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                      Text(homeController.waterDetails.value.response!.data![0]
-                            .totalWaterRequired!.toString()+ " "+'ltr'.tr,
+                        Text(
+                          homeController.waterDetails.value.response!.data![0]
+                                  .totalWaterRequired!
+                                  .toString() +
+                              " " +
+                              'ltr'.tr,
+                          style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 12 * SizeConfig.textMultiplier!),
+                        ),
+                        Text("0 " + 'ltr'.tr,
                             style: AppTextStyle.NormalText.copyWith(
-                              fontSize: 12*SizeConfig.textMultiplier!
-                            ),
-                            
-                            ),
-                            Text("0 "+'ltr'.tr,
-                            style: AppTextStyle.NormalText.copyWith(
-                              fontSize: 12*SizeConfig.textMultiplier!,
-                             color: grey183
-                            ))
-                            
-                    ],),
+                                fontSize: 12 * SizeConfig.textMultiplier!,
+                                color: grey183))
+                      ],
+                    ),
                   ),
-                  SizedBox(width: 12*SizeConfig.widthMultiplier!),
+                  SizedBox(width: 12 * SizeConfig.widthMultiplier!),
                   SizedBox(
                       width: 56 * SizeConfig.widthMultiplier!,
                       height: 112 * SizeConfig.heightMultiplier!,
                       //padding: const EdgeInsets.symmetric(vertical: 24.0),
                       child: LiquidLinearProgressIndicator(
-                        value: homeController.waterLevel.value, // Defaults to 0.5.
+                        value:
+                            homeController.waterLevel.value, // Defaults to 0.5.
                         valueColor: const AlwaysStoppedAnimation(Colors
                             .lightBlue), // Defaults to the current Theme's accentColor.
                         backgroundColor: Colors.grey
@@ -114,18 +124,20 @@ class AnimatedLiquidCustomProgressIndicatorState
           width: 20 * SizeConfig.widthMultiplier!,
         ),
         GestureDetector(
-          onTap: () async{
+          onTap: () async {
             homeController.waterLevel.value = homeController.waterLevel.value +
                 (1 /
                     (homeController.waterDetails.value.response!.data![0]
                             .totalWaterRequired! *
                         4));
-                        homeController.waterConsumedDataLoading.value = true;
-            await HomeService.updateWaterDetails(homeController.waterLevel.value *
-                homeController
-                    .waterDetails.value.response!.data![0].totalWaterRequired!);
-                    homeController.userProfileData.value = await CreatePostService.getUserProfile();
-                    homeController.waterConsumedDataLoading.value = false;
+            homeController.waterConsumedDataLoading.value = true;
+            await HomeService.updateWaterDetails(
+                homeController.waterLevel.value *
+                    homeController.waterDetails.value.response!.data![0]
+                        .totalWaterRequired!);
+            homeController.userProfileData.value =
+                await CreatePostService.getUserProfile();
+            homeController.waterConsumedDataLoading.value = false;
           },
           child: Container(
             width: 27 * SizeConfig.heightMultiplier!,

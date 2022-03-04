@@ -10,7 +10,6 @@ import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 // import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
-import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/comments_tile.dart';
 import 'package:fitbasix/feature/Home/view/widgets/video_player.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
@@ -38,7 +37,10 @@ class FullPostTile extends StatefulWidget {
       required this.onTap,
       required this.comment,
       required this.people,
-      required this.commentsList})
+      required this.commentsList,
+      required this.onReply,
+      required this.onViewPreviousComments,
+      required this.addReply})
       : super(key: key);
   final String name;
   final String profilePhoto;
@@ -57,6 +59,9 @@ class FullPostTile extends StatefulWidget {
   final Comment? comment;
   final List<Person> people;
   final List<Comments> commentsList;
+  final VoidCallback onReply;
+  final VoidCallback onViewPreviousComments;
+  final VoidCallback addReply;
 
   @override
   State<FullPostTile> createState() => _FullPostTileState();
@@ -69,7 +74,7 @@ class _FullPostTileState extends State<FullPostTile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return InkWell(
+    return GestureDetector(
       onTap: widget.onTap,
       child: Container(
         child: Column(
@@ -402,6 +407,24 @@ class _FullPostTileState extends State<FullPostTile> {
                 ],
               ),
             ),
+            int.tryParse(widget.comments)! > 5
+                ? Obx(() => (_homeController.post.value.comments! / 5 >
+                        _homeController.skipCommentCount.value)
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            left: 16 * SizeConfig.widthMultiplier!,
+                            bottom: 16 * SizeConfig.heightMultiplier!,
+                            right: 16 * SizeConfig.widthMultiplier!,
+                            top: 4 * SizeConfig.heightMultiplier!),
+                        child: InkWell(
+                            onTap: widget.onViewPreviousComments,
+                            child: Text('view_previous_comments'.tr,
+                                style: AppTextStyle.boldBlackText.copyWith(
+                                    fontSize:
+                                        14 * SizeConfig.textMultiplier!))),
+                      )
+                    : Container())
+                : Container(),
             Obx(() => _homeController.commentsLoading.value
                 ? Center(
                     child: CustomizedCircularProgress(),
@@ -411,50 +434,406 @@ class _FullPostTileState extends State<FullPostTile> {
                         itemCount: widget.commentsList.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
+                        reverse: true,
                         itemBuilder: (_, index) {
+                          for (var item in widget.commentsList) {
+                            _homeController.viewReplies!.add(false);
+                            _homeController.skipReplyList.add(0);
+                          }
                           return Obx(() => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CommentsTile(
-                                      name: widget
-                                              .commentsList[index].user!.name ??
-                                          '',
-                                      comment:
-                                          widget.commentsList[index].comment!,
-                                      time: _homeController.timeAgoSinceDate(
-                                          DateFormat.yMd().add_Hms().format(
+                                    name:
+                                        widget.commentsList[index].user!.name ??
+                                            '',
+                                    comment:
+                                        widget.commentsList[index].comment!,
+                                    time: _homeController.timeAgoSinceDate(
+                                        DateFormat.yMd().add_Hms().format(
                                               widget.commentsList[index]
-                                                  .createdAt!)),
-                                      likes: widget.commentsList[index].likes!,
-                                      profilePhoto: widget.commentsList[index]
-                                          .user!.profilePhoto!,
-                                      onReply: () {},
-                                      onLikeComment: () {
-                                        if (widget
-                                            .commentsList[index].isLiked!) {
-                                          widget.commentsList[index].isLiked =
-                                              false;
-                                          widget.commentsList[index].likes =
-                                              widget.commentsList[index]
-                                                      .likes! -
-                                                  1;
+                                                  .createdAt!
+                                                  .toLocal(),
+                                            )),
+                                    likes: widget.commentsList[index].likes!,
+                                    profilePhoto: widget.commentsList[index]
+                                        .user!.profilePhoto!,
+                                    onReply: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          builder: (context) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(
+                                                  bottom: MediaQuery.of(context)
+                                                      .viewInsets
+                                                      .bottom),
+                                              child: Row(
+                                                // mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Expanded(
+                                                    child: Container(
+                                                      // height: 40,
+                                                      // width: 260 * SizeConfig.widthMultiplier!,
+                                                      margin: EdgeInsets.only(
+                                                          left: 16,
+                                                          right: 16,
+                                                          top: 16,
+                                                          bottom: 16),
+                                                      decoration: BoxDecoration(
+                                                        color: lightGrey,
+                                                        borderRadius: BorderRadius
+                                                            .circular(8 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!),
+                                                      ),
+                                                      child: TextField(
+                                                        controller:
+                                                            _homeController
+                                                                .replyController,
+                                                        onChanged: (value) {
+                                                          _homeController.reply
+                                                              .value = value;
+                                                        },
+                                                        autofocus: true,
+                                                        maxLines: null,
+                                                        decoration: InputDecoration(
+                                                            enabled: true,
+                                                            border: InputBorder
+                                                                .none,
+                                                            hintText:
+                                                                'add_comment'
+                                                                    .tr,
+                                                            hintStyle: AppTextStyle
+                                                                .smallGreyText
+                                                                .copyWith(
+                                                                    fontSize: 14 *
+                                                                        SizeConfig
+                                                                            .textMultiplier!,
+                                                                    color:
+                                                                        hintGrey),
+                                                            contentPadding:
+                                                                EdgeInsets.only(
+                                                                    bottom: 12,
+                                                                    top: 12,
+                                                                    left: 16 *
+                                                                        SizeConfig
+                                                                            .widthMultiplier!)),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  IconButton(
+                                                      onPressed: () async {
+                                                        Navigator.pop(context);
+                                                        FocusScope.of(context)
+                                                            .unfocus();
+                                                        await HomeService
+                                                            .replyComment(
+                                                                commentId: widget
+                                                                    .commentsList[
+                                                                        index]
+                                                                    .id!,
+                                                                comment:
+                                                                    _homeController
+                                                                        .reply
+                                                                        .value);
 
-                                          HomeService.unlikePost(
-                                              commentId: widget
-                                                  .commentsList[index].id);
-                                        } else {
-                                          widget.commentsList[index].isLiked =
-                                              true;
-                                          widget.commentsList[index].likes =
-                                              widget.commentsList[index]
-                                                      .likes! +
-                                                  1;
+                                                        _homeController
+                                                                .postComments
+                                                                .value =
+                                                            await HomeService
+                                                                .fetchComment(
+                                                                    postId: _homeController
+                                                                        .post
+                                                                        .value
+                                                                        .id!);
 
-                                          HomeService.likePost(
-                                              commentId: widget
-                                                  .commentsList[index].id);
-                                        }
-                                        setState(() {});
-                                      }),
+                                                        if (_homeController
+                                                                .postComments
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .length !=
+                                                            0) {
+                                                          _homeController
+                                                                  .commentsList
+                                                                  .value =
+                                                              _homeController
+                                                                  .postComments
+                                                                  .value
+                                                                  .response!
+                                                                  .data!;
+                                                        }
+                                                        _homeController
+                                                            .replyList
+                                                            .clear();
+
+                                                        setState(() {
+                                                          _homeController
+                                                                  .future =
+                                                              _homeController.fetchReplyComment(
+                                                                  commentId: widget
+                                                                      .commentsList[
+                                                                          index]
+                                                                      .id!,
+                                                                  skip: 0,
+                                                                  limit: 1);
+                                                        });
+                                                      },
+                                                      icon: Icon(Icons.send))
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                    },
+                                    onLikeComment: () {
+                                      if (widget.commentsList[index].isLiked!) {
+                                        widget.commentsList[index].isLiked =
+                                            false;
+                                        widget.commentsList[index].likes =
+                                            widget.commentsList[index].likes! -
+                                                1;
+
+                                        HomeService.unlikePost(
+                                            commentId:
+                                                widget.commentsList[index].id);
+                                      } else {
+                                        widget.commentsList[index].isLiked =
+                                            true;
+                                        widget.commentsList[index].likes =
+                                            widget.commentsList[index].likes! +
+                                                1;
+
+                                        HomeService.likePost(
+                                            commentId:
+                                                widget.commentsList[index].id);
+                                      }
+                                      setState(() {});
+                                    },
+                                    replyCount:
+                                        widget.commentsList[index].reply,
+                                    minWidth: Get.width -
+                                        80 * SizeConfig.widthMultiplier!,
+                                    taggedPersonName: '',
+                                    maxWidth: Get.width,
+                                  ),
+                                  Obx(() => _homeController
+                                                  .commentsList[index].reply! >
+                                              0 &&
+                                          _homeController.viewReplies![index] ==
+                                              false
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 64 *
+                                                  SizeConfig.widthMultiplier!,
+                                              top: 4 *
+                                                  SizeConfig.heightMultiplier!,
+                                              bottom: 12 *
+                                                  SizeConfig.heightMultiplier!),
+                                          child: InkWell(
+                                              onTap: () {
+                                                _homeController.viewReplies!
+                                                    .replaceRange(
+                                                        0,
+                                                        _homeController
+                                                            .viewReplies!
+                                                            .length,
+                                                        List.generate(
+                                                            _homeController
+                                                                .viewReplies!
+                                                                .length,
+                                                            (index) => false));
+                                                _homeController
+                                                    .viewReplies![index] = true;
+                                                _homeController.replyList
+                                                    .clear();
+                                                _homeController
+                                                    .skipReplyList[index] = 0;
+                                                setState(() {
+                                                  _homeController.future =
+                                                      _homeController.fetchReplyComment(
+                                                          commentId:
+                                                              _homeController
+                                                                  .commentsList[
+                                                                      index]
+                                                                  .id!,
+                                                          skip: _homeController
+                                                                  .skipReplyList[
+                                                              index]);
+                                                });
+                                              },
+                                              child: Text('view_replies'.tr,
+                                                  style: AppTextStyle
+                                                      .boldBlackText
+                                                      .copyWith(
+                                                          fontSize: 14 *
+                                                              SizeConfig
+                                                                  .textMultiplier!))),
+                                        )
+                                      : Container()),
+                                  Obx(
+                                      () =>
+                                          _homeController.viewReplies![index] ==
+                                                  true
+                                              ? Container(
+                                                  child:
+                                                      FutureBuilder<
+                                                              List<Comments>>(
+                                                          initialData: [],
+                                                          future:
+                                                              _homeController
+                                                                  .future,
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (snapshot
+                                                                .hasData)
+                                                              return ListView
+                                                                  .builder(
+                                                                      itemCount: snapshot
+                                                                          .data!
+                                                                          .length,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      physics:
+                                                                          NeverScrollableScrollPhysics(),
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index2) {
+                                                                        return Padding(
+                                                                          padding:
+                                                                              EdgeInsets.only(left: 48 * SizeConfig.widthMultiplier!),
+                                                                          child:
+                                                                              Column(
+                                                                            children: [
+                                                                              CommentsTile(
+                                                                                name: snapshot.data![index2].user!.name!,
+                                                                                comment: snapshot.data![index2].comment!,
+                                                                                taggedPersonName: snapshot.data![index2].taggedPerson == null ? '' : snapshot.data![index2].taggedPerson!.name!,
+                                                                                time: _homeController.timeAgoSinceDate(DateFormat.yMd().add_Hms().format(snapshot.data![index2].createdAt!.toLocal())),
+                                                                                likes: snapshot.data![index2].likes!,
+                                                                                profilePhoto: snapshot.data![index2].user!.profilePhoto!,
+                                                                                onReply: () {
+                                                                                  showModalBottomSheet(
+                                                                                      context: context,
+                                                                                      isScrollControlled: true,
+                                                                                      builder: (context) {
+                                                                                        return Padding(
+                                                                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                                                          child: Row(
+                                                                                            // mainAxisSize: MainAxisSize.min,
+                                                                                            children: [
+                                                                                              Expanded(
+                                                                                                child: Container(
+                                                                                                  // height: 40,
+                                                                                                  // width: 260 * SizeConfig.widthMultiplier!,
+                                                                                                  margin: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                                                                                                  decoration: BoxDecoration(
+                                                                                                    color: lightGrey,
+                                                                                                    borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                                                                                                  ),
+                                                                                                  child: TextField(
+                                                                                                    controller: _homeController.replyController,
+                                                                                                    onChanged: (value) {
+                                                                                                      _homeController.reply.value = value;
+                                                                                                    },
+                                                                                                    autofocus: true,
+                                                                                                    maxLines: null,
+                                                                                                    decoration: InputDecoration(enabled: true, border: InputBorder.none, hintText: 'add_comment'.tr, hintStyle: AppTextStyle.smallGreyText.copyWith(fontSize: 14 * SizeConfig.textMultiplier!, color: hintGrey), contentPadding: EdgeInsets.only(bottom: 12, top: 12, left: 16 * SizeConfig.widthMultiplier!)),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                              IconButton(
+                                                                                                  onPressed: () async {
+                                                                                                    Navigator.pop(context);
+                                                                                                    FocusScope.of(context).unfocus();
+                                                                                                    await HomeService.replyComment(commentId: widget.commentsList[index].id!, taggedPerson: snapshot.data![index2].user!.id, comment: _homeController.reply.value);
+
+                                                                                                    _homeController.postComments.value = await HomeService.fetchComment(postId: _homeController.post.value.id!);
+
+                                                                                                    if (_homeController.postComments.value.response!.data!.length != 0) {
+                                                                                                      _homeController.commentsList.value = _homeController.postComments.value.response!.data!;
+                                                                                                    }
+                                                                                                    _homeController.replyList.clear();
+
+                                                                                                    setState(() {
+                                                                                                      _homeController.future = _homeController.fetchReplyComment(commentId: widget.commentsList[index].id!, skip: 0, limit: 1);
+                                                                                                    });
+                                                                                                  },
+                                                                                                  icon: Icon(Icons.send))
+                                                                                            ],
+                                                                                          ),
+                                                                                        );
+                                                                                      });
+                                                                                },
+                                                                                onLikeComment: () {
+                                                                                  if (snapshot.data![index2].isLiked!) {
+                                                                                    snapshot.data![index2].isLiked = false;
+                                                                                    snapshot.data![index2].likes = snapshot.data![index2].likes! - 1;
+
+                                                                                    HomeService.unlikePost(commentId: snapshot.data![index2].id);
+                                                                                  } else {
+                                                                                    snapshot.data![index2].isLiked = true;
+                                                                                    snapshot.data![index2].likes = snapshot.data![index2].likes! + 1;
+
+                                                                                    HomeService.likePost(commentId: snapshot.data![index2].id);
+                                                                                  }
+                                                                                  setState(() {});
+                                                                                },
+                                                                                minWidth: Get.width - 128 * SizeConfig.widthMultiplier!,
+                                                                                maxWidth: 236 * SizeConfig.widthMultiplier!,
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        );
+                                                                      });
+                                                            return Container();
+                                                          }),
+                                                )
+                                              : Container()),
+                                  Obx(() => _homeController
+                                                  .commentsList[index].reply! >
+                                              _homeController
+                                                      .skipReplyList[index] *
+                                                  3 &&
+                                          _homeController.viewReplies![index] ==
+                                              true
+                                      ? TextButton(
+                                          onPressed: () {
+                                            _homeController
+                                                    .skipReplyList[index] =
+                                                _homeController
+                                                        .skipReplyList[index] +
+                                                    1;
+                                            setState(() {
+                                              _homeController.future =
+                                                  _homeController
+                                                      .fetchReplyComment(
+                                                          commentId:
+                                                              _homeController
+                                                                  .commentsList[
+                                                                      index]
+                                                                  .id!,
+                                                          skip: _homeController
+                                                                  .skipReplyList[
+                                                              index]);
+                                            });
+
+                                            // setState(() {});
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 56 *
+                                                    SizeConfig
+                                                        .widthMultiplier!),
+                                            child: Text('view_more_replies'.tr,
+                                                style: AppTextStyle
+                                                    .boldBlackText
+                                                    .copyWith(
+                                                        fontSize: 14 *
+                                                            SizeConfig
+                                                                .textMultiplier!)),
+                                          ))
+                                      : Container())
                                 ],
                               ));
                         }),
@@ -469,7 +848,7 @@ class _FullPostTileState extends State<FullPostTile> {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 40,
+                      // height: 40,
                       // width: 260 * SizeConfig.widthMultiplier!,
                       margin: EdgeInsets.only(left: 16, right: 16),
                       decoration: BoxDecoration(
@@ -482,6 +861,7 @@ class _FullPostTileState extends State<FullPostTile> {
                         onChanged: (value) {
                           _homeController.comment.value = value;
                         },
+                        maxLines: null,
                         decoration: InputDecoration(
                             enabled: true,
                             border: InputBorder.none,
@@ -490,7 +870,8 @@ class _FullPostTileState extends State<FullPostTile> {
                                 fontSize: 14 * SizeConfig.textMultiplier!,
                                 color: hintGrey),
                             contentPadding: EdgeInsets.only(
-                                bottom: 10,
+                                bottom: 12,
+                                top: 12,
                                 left: 16 * SizeConfig.widthMultiplier!)),
                       ),
                     ),

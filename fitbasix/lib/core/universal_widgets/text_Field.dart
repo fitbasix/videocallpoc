@@ -9,7 +9,8 @@ class CutomizedTextField extends StatelessWidget {
   final Widget child;
   bool? wantWhiteBG;
 
-  CutomizedTextField({required this.color, required this.child, this.wantWhiteBG});
+  CutomizedTextField(
+      {required this.color, required this.child, this.wantWhiteBG});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -18,7 +19,7 @@ class CutomizedTextField extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
         border: Border.all(color: color),
-        color: wantWhiteBG!=null?Colors.white:lightGrey,
+        color: wantWhiteBG != null ? kBlack : lightGrey,
         borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
       ),
       child: Center(child: child),
@@ -27,21 +28,21 @@ class CutomizedTextField extends StatelessWidget {
 }
 
 Widget TextFieldContainer(
-    {
-      required TextEditingController textEditingController,
+    {required TextEditingController textEditingController,
     required Function onChanged,
-      List<TextInputFormatter>? inputFormatters,
+    List<TextInputFormatter>? inputFormatters,
     required bool isNumber,
     bool? isObsecure,
     bool? readOnly,
     bool? isNotCapital,
     bool? isTextFieldActive,
     String? hint,
+    int? maxLength,
     Widget? preFixWidget,
     Widget? suffixWidget}) {
   return Container(
     child: TextField(
-      inputFormatters: inputFormatters!=null?inputFormatters:null,
+      inputFormatters: inputFormatters != null ? inputFormatters : null,
       controller: textEditingController,
       onChanged: (value) {
         onChanged(value);
@@ -49,11 +50,11 @@ Widget TextFieldContainer(
       readOnly: readOnly == null ? false : true,
       keyboardType:
           isNumber ? TextInputType.number : TextInputType.streetAddress,
-      style: AppTextStyle.hintText.copyWith(color: lightBlack),
+      style: AppTextStyle.hintText.copyWith(color: kPureWhite),
       textAlignVertical: TextAlignVertical.bottom,
+      maxLength: maxLength == null ? 300 : maxLength,
       obscureText: isObsecure == null ? false : isObsecure,
       decoration: InputDecoration(
-
           isDense: true,
           counter: Container(
             height: 0,
@@ -81,7 +82,9 @@ Widget TextFieldContainer(
             padding: EdgeInsets.only(right: 18.0 * SizeConfig.widthMultiplier!),
             child: suffixWidget,
           ),
-          hintStyle: AppTextStyle.hintText),
+          hintStyle: AppTextStyle.hintText.copyWith(
+            color: hintGrey
+          )),
     ),
   );
 }

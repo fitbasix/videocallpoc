@@ -1,3 +1,5 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'widgets/water_capsule.dart';
@@ -29,10 +32,16 @@ class ConsumptionScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: SvgPicture.asset(
-              ImagePath.backIcon,
-              width: 7 * SizeConfig.widthMultiplier!,
-              height: 12 * SizeConfig.heightMultiplier!,
+            icon: Container(
+              color: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: SvgPicture.asset(
+                  ImagePath.backIcon,
+                  width: 7 * SizeConfig.widthMultiplier!,
+                  height: 12 * SizeConfig.heightMultiplier!,
+                ),
+              ),
             )),
         title: Text(
           'today_consumption'.tr,
@@ -233,7 +242,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                 _homeController.formatedTime(_homeController
+                                                _homeController.formatedTime(
+                                                    _homeController
                                                         .waterTimingFrom.value),
                                                 style: AppTextStyle.NormalText,
                                               ),
@@ -281,7 +291,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                _homeController.formatedTime(_homeController
+                                                _homeController.formatedTime(
+                                                    _homeController
                                                         .waterTimingTo.value),
                                                 style: AppTextStyle.NormalText,
                                               ),
@@ -346,19 +357,27 @@ class ConsumptionScreen extends StatelessWidget {
                                   height: 12 * SizeConfig.heightMultiplier!,
                                 ),
                                 GestureDetector(
-                                  onTap: () async{
+                                  onTap: () async {
                                     String s = "12:24";
                                     _homeController
-                                        .iswaterNotificationDataUpdating.value = true;
-                                    await HomeService.updateWaterNotificationDetails(
-                                        _homeController.goalWater.value,
-                                       _homeController.waterTimingFrom.value.hour.toString()+":"+_homeController.waterTimingFrom.value.minute.toString(),
-                                        _homeController.waterTimingTo.value.hour.toString()+":"+_homeController.waterTimingTo.value.minute.toString(),
-                                        _homeController
-                                            .waterReminder.value.serialId!);
-                                            _homeController.userProfileData.value = await CreatePostService.getUserProfile();
+                                        .iswaterNotificationDataUpdating
+                                        .value = true;
+                                    await HomeService
+                                        .updateWaterNotificationDetails(
+                                            _homeController.goalWater.value,
+                                            _homeController.waterTimingFrom.value.hour.toString() +
+                                                ":" +
+                                                _homeController.waterTimingFrom.value.minute.toString(),
+                                            _homeController.waterTimingTo.value.hour.toString() +
+                                                ":" + _homeController.waterTimingTo.value.minute.toString(),
+                                            _homeController.waterReminder.value.serialId!);
+                                    _homeController.userProfileData.value =
+                                        await CreatePostService
+                                            .getUserProfile();
                                     _homeController
-                                        .iswaterNotificationDataUpdating.value = false;
+                                        .iswaterNotificationDataUpdating
+                                        .value = false;
+                                    setNotificationDetailsForConsumption(_homeController.waterTimingFrom.value.hour, _homeController.waterTimingFrom.value.minute,_homeController.waterTimingTo.value.hour,_homeController.waterTimingTo.value.minute,_homeController.waterReminder.value.serialId!);
                                   },
                                   child: Container(
                                       width: Get.width -
@@ -367,12 +386,18 @@ class ConsumptionScreen extends StatelessWidget {
                                       color: kGreenColor,
                                       child: Center(
                                         child: _homeController
-                                        .iswaterNotificationDataUpdating.value?
-                                        Center(child: CircularProgressIndicator(color: Colors.white),)
-                                        :Text(
-                                          "Save Changes",
-                                          style: AppTextStyle.white400Text,
-                                        ),
+                                                .iswaterNotificationDataUpdating
+                                                .value
+                                            ? Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                        color: Colors.white),
+                                              )
+                                            : Text(
+                                                "Save Changes",
+                                                style:
+                                                    AppTextStyle.white400Text,
+                                              ),
                                       )),
                                 ),
                                 SizedBox(
@@ -508,6 +533,25 @@ class ConsumptionScreen extends StatelessWidget {
       ),
     );
   }
+
+  // void setNotificationDetailsForConsumption(int fromHour,int fromMinute,int toHour,int toMinute, int reminderSerialNo) async{
+  //   bool canceled = await AndroidAlarmManager.cancel(0).then((value){
+  //     AndroidAlarmManager.periodic(Duration(seconds: 30), 0, showWaterConsumptionNotification,allowWhileIdle: true,exact: true,startAt: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute));
+  //     return value;
+  //   });
+  // }
+
+  void setNotificationDetailsForConsumption(int fromHour,int fromMinute,int toHour,int toMinute, int reminderSerialNo) async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool canceled = await AndroidAlarmManager.cancel(0).then((value){
+      AndroidAlarmManager.periodic(Duration(minutes: reminderSerialNo), 0, showWaterConsumptionNotification,allowWhileIdle: true,exact: true,startAt: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute),rescheduleOnReboot: true);
+      sharedPreferences.setInt("endMinute", 7);
+      sharedPreferences.setInt("endHour", 18);
+      //sharedPreferences.setInt("endMinute", toMinute);
+      //sharedPreferences.setInt("endHour", toHour);
+      return value;
+    });
+  }
 }
 
 class ChartApp extends StatefulWidget {
@@ -602,4 +646,27 @@ class __ChartAppState extends State<ChartApp> {
               dataLabelSettings: const DataLabelSettings(isVisible: false)),
         ]);
   }
+}
+
+
+void showWaterConsumptionNotification(int id) async {
+  print("calledddd1123");
+  print(DateTime.now());
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance().then((value) {
+    DateTime endTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,value.getInt("endHour")!,value.getInt("endMinute")!);
+    if(DateTime.now().isBefore(endTime)){
+      print("calledddd");
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 10,
+            channelKey: 'basic_channel',
+            title: 'Water',
+            body: 'Drink water',
+          )
+      );}
+      return value;
+  });
+
+
+
 }

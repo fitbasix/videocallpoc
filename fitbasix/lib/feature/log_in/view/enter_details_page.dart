@@ -18,116 +18,171 @@ class EnterDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: 16 * SizeConfig.widthMultiplier!),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 16 * SizeConfig.heightMultiplier!,
-              ),
-              CustomBackButton(),
-              SizedBox(
-                height: 24 * SizeConfig.heightMultiplier!,
-              ),
-              Text(
-                'fillDetailsHeader'.tr,
-                style: AppTextStyle.normalBlackText,
-              ),
-              SizedBox(
-                height: 28 * SizeConfig.heightMultiplier!,
-              ),
-              CutomizedTextField(
-                color: Colors.transparent,
-                child: TextFieldContainer(
-                    onChanged: (value) {
-                      _loginController.name.value = value;
-                    },
-                    textEditingController: _loginController.nameController,
-                    isNumber: false,
-                    preFixWidget: SvgPicture.asset(ImagePath.profileIcon),
-                    hint: 'enterNameHint'.tr),
-              ),
-              SizedBox(
-                height: 16 * SizeConfig.heightMultiplier!,
-              ),
-              CutomizedTextField(
-                color: Colors.transparent,
-                child: TextFieldContainer(
-                    onChanged: (value) {
-                      _loginController.email.value = value;
-                    },
-                    textEditingController: _loginController.emailController,
-                    isNumber: false,
-                    preFixWidget: SvgPicture.asset(ImagePath.mailIcon),
-                    hint: 'enterEmailHint'.tr),
-              ),
-              SizedBox(
-                height: 16 * SizeConfig.heightMultiplier!,
-              ),
-              Spacer(),
-              Obx(
-                () => _loginController.isLoading.value
-                    ? Center(
-                        child: CustomizedCircularProgress(),
-                      )
-                    : ProceedButtonWithArrow(
-                        title: 'proceed'.tr,
-                        onPressed: () async {
-                          if (_loginController.name.value != '' &&
-                              _loginController.email.value != '') {
-                            _loginController.isLoading.value = true;
-                            var screenId = await LogInService.registerUser(
-                                _loginController.name.value,
-                                _loginController.email.value);
-
-                            if (!_loginController.email.value.contains('@')) {
-                              _loginController.isLoading.value = false;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text('Please enter an valid email')));
-                            } else if (screenId == 1) {
-                              _loginController.isLoading.value = false;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Email already exists')));
-                            } else if (screenId == 16) {
-                              _loginController.isLoading.value = false;
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  RouteName.homePage, (route) => false);
-                            } else
-                              return;
-                          } else {
-                            if (_loginController.name.value == '' &&
-                                _loginController.email.value == '') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          'Please enter a name and an email')));
-                            } else if (_loginController.name.value == '') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Please enter a name')));
-                            } else if (_loginController.email.value == '') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Please enter an email')));
-                            }
-                          }
-                        },
-                      ),
-              ),
-              SizedBox(
-                height: 32 * SizeConfig.heightMultiplier!,
-              ),
-            ],
+          child: Stack(
+        children: [
+          Container(
+            height: double.infinity,
           ),
-        ),
-      ),
+          Image.asset(
+            ImagePath.detail_intro_image,
+            height: 540 * SizeConfig.heightMultiplier!,
+            width: Get.width,
+            fit: BoxFit.cover,
+          ),
+          Positioned(
+            bottom: 0,
+            child: Image.asset(
+              ImagePath.black_rectangle,
+              height: 374 * SizeConfig.heightMultiplier!,
+              width: Get.width,
+              fit: BoxFit.cover,
+            ),
+          ),
+          //backbutton
+          Positioned(
+              top: 16.12,
+              left: 18.67,
+              child: CustomBackButton(
+                color: kPureWhite,
+              )),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: kPureBlack,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(16 * SizeConfig.widthMultiplier!),
+                    topLeft: Radius.circular(16 * SizeConfig.widthMultiplier!),
+                  )),
+              padding: EdgeInsets.only(
+                  left: 16 * SizeConfig.widthMultiplier!,
+                  right: 16 * SizeConfig.widthMultiplier!),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 16 * SizeConfig.heightMultiplier!,
+                  ),
+                  Text(
+                    'Hi'.tr,
+                    style: AppTextStyle.titleText.copyWith(
+                        color: kPureWhite
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8 * SizeConfig.heightMultiplier!,
+                  ),
+                  Text(
+                    'fillDetailsHeader'.tr,
+                    style: AppTextStyle.normalBlackText
+                        .copyWith(color: kPureWhite,
+                      fontSize: (12) * SizeConfig.textMultiplier!,),
+                  ),
+                  SizedBox(
+                    height: 16 * SizeConfig.heightMultiplier!,
+                  ),
+                  CutomizedTextField(
+                    wantWhiteBG: true,
+                    color: Colors.transparent,
+                    child: TextFieldContainer(
+                        onChanged: (value) {
+                          _loginController.name.value = value;
+                        },
+                        textEditingController: _loginController.nameController,
+                        isNumber: false,
+                        preFixWidget: SvgPicture.asset(ImagePath.profileIcon,
+                        color: kPureWhite,),
+                        hint: 'enterNameHint'.tr,),
+                  ),
+                  SizedBox(
+                    height: 16 * SizeConfig.heightMultiplier!,
+                  ),
+                  CutomizedTextField(
+                    wantWhiteBG: true,
+                    color: Colors.transparent,
+                    child: TextFieldContainer(
+                        onChanged: (value) {
+                          _loginController.email.value = value;
+                        },
+                        textEditingController: _loginController.emailController,
+                        isNumber: false,
+                        preFixWidget: SvgPicture.asset(ImagePath.mailIcon,
+                        color: kPureWhite,
+                        ),
+                        hint: 'enterEmailHint'.tr),
+                  ),
+                  SizedBox(
+                    height: 16 * SizeConfig.heightMultiplier!,
+                  ),
+                  Obx(
+                    () => _loginController.isLoading.value
+                        ? Center(
+                            child: CustomizedCircularProgress(),
+                          )
+                        : ProceedButtonWithArrow(
+                            title: 'proceed'.tr,
+                            onPressed: () async {
+                              if (_loginController.name.value != '' &&
+                                  _loginController.email.value != '') {
+                                _loginController.isLoading.value = true;
+                                var screenId = await LogInService.registerUser(
+                                    _loginController.name.value,
+                                    _loginController.email.value);
+
+                                if (!_loginController.email.value
+                                    .contains('@')) {
+                                  _loginController.isLoading.value = false;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Please enter an valid email')));
+                                } else if (screenId == 1) {
+                                  _loginController.isLoading.value = false;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('Email already exists')));
+                                } else if (screenId == 16) {
+                                  _loginController.isLoading.value = false;
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      RouteName.homePage, (route) => false);
+                                } else
+                                  return;
+                              } else {
+                                if (_loginController.name.value == '' &&
+                                    _loginController.email.value == '') {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Please enter a name and an email')));
+                                } else if (_loginController.name.value == '') {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('Please enter a name')));
+                                } else if (_loginController.email.value == '') {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('Please enter an email')));
+                                }
+                              }
+                            },
+                          ),
+                  ),
+                  SizedBox(
+                    height: 32 * SizeConfig.heightMultiplier!,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      )),
     );
   }
 }

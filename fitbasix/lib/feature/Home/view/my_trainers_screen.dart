@@ -11,6 +11,7 @@ import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
 import '../../../core/routes/app_routes.dart';
+import '../controller/Home_Controller.dart';
 
 class MyTrainersScreen extends StatelessWidget {
   MyTrainersScreen({Key? key}) : super(key: key);
@@ -30,6 +31,7 @@ class MyTrainersScreen extends StatelessWidget {
                 })
                 : NoTrainerScreen()),
       ),
+
     );
   }
 
@@ -56,6 +58,7 @@ class NoTrainerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeController _homeController = Get.find();
     return Scaffold(
       backgroundColor: kPureWhite,
       appBar: AppBar(
@@ -63,6 +66,7 @@ class NoTrainerScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
             onPressed: () {
+              _homeController.selectedIndex.value = 0;
               //    Navigator.pop(context);
             },
             icon: SvgPicture.asset(
@@ -118,9 +122,16 @@ class NoTrainerScreen extends StatelessWidget {
                 width: double.infinity * SizeConfig.widthMultiplier!,
                 height: 48 * SizeConfig.heightMultiplier!,
                 child: TextButton(
-                  onPressed: () {},
+
+                  onPressed: () {
+                  //   Navigator.pushNamed(context, RouteName.trainerplanScreen);
+                   // Navigator.pushNamed(context, RouteName.planInformationScreen);
+                  // Navigator.pushNamed(context, RouteName.planTimingScreen);
+
+                  },
                   child:
-                      Text('enroll_now'.tr, style: AppTextStyle.hboldWhiteText),
+                      Text('explore_trainers'.tr, style: AppTextStyle.hboldWhiteText),
+
                 ),
               ),
             ],
@@ -188,7 +199,7 @@ class EnrollTrainerDialog extends StatelessWidget {
                         height: 48 * SizeConfig.heightMultiplier!,
                         child: TextButton(
                           onPressed: () {},
-                          child: Text('enroll_now'.tr,
+           child: Text('enroll_now'.tr,
                               style: AppTextStyle.hboldWhiteText),
                         ),
                       ),

@@ -57,21 +57,25 @@ class CreatePostService {
     };
     Map updatePeople = {"postId": postId, "people": taggedPeople};
     Map updateCategory = {"postId": postId, "category": category};
-    Map publishPost = {"postId": postId, "isPublished": isPublish};
+    Map publishPost = {
+      "postId": postId,
+      "isPublished": isPublish,
+      "caption": caption
+    };
     Map getPostData = {"postId": postId};
     var response = await dio!.post(ApiUrl.createPost,
-        data: caption != null
-            ? updateCaption
-            : files != null
-                ? updateFiles
-                : placeId != null
-                    ? updateLocation
-                    : taggedPeople != null
-                        ? updatePeople
-                        : category != null
-                            ? updateCategory
-                            : isPublish != null
-                                ? publishPost
+        data: isPublish != null && caption != null
+            ? publishPost
+            : caption != null
+                ? updateCaption
+                : files != null
+                    ? updateFiles
+                    : placeId != null
+                        ? updateLocation
+                        : taggedPeople != null
+                            ? updatePeople
+                            : category != null
+                                ? updateCategory
                                 : getPostData);
     log(response.data.toString());
     return postDataFromJson(response.toString());
@@ -96,10 +100,12 @@ class CreatePostService {
   }
 
   static Future<UserProfileModel> getUserProfile() async {
+    var dio = DioUtil().getInstance();
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     print(dio!.options.headers["Authorization"].toString()+"tokenDemo");
     var response = await dio!.get(ApiUrl.getUserProfile);
+
     log(response.data.toString());
     UserProfileModel _userProfileModel = userProfileModelFromJson(response.toString());
     if(_userProfileModel.response!.data!.profile!.quickBloxId != null) {

@@ -223,11 +223,13 @@ class _PostTileState extends State<PostTile> {
                           SizedBox(
                             width: 14 * SizeConfig.widthMultiplier!,
                           ),
-                          Icon(
-                            Icons.place,
-                            size: 16,
-                            color: kGreyColor,
-                          ),
+                          widget.place == ''
+                              ? SizedBox()
+                              : Icon(
+                                  Icons.place,
+                                  size: 16,
+                                  color: kGreyColor,
+                                ),
                           SizedBox(
                             width: 6.5 * SizeConfig.widthMultiplier!,
                           ),
@@ -406,7 +408,7 @@ class _PostTileState extends State<PostTile> {
                     comment: widget.comment!.comment.toString(),
                     time: _homeController.timeAgoSinceDate(DateFormat.yMd()
                         .add_Hms()
-                        .format(widget.comment!.createdAt!)),
+                        .format(widget.comment!.createdAt!.toLocal())),
                     likes: widget.comment!.likes!,
                     onReply: () {},
                     onLikeComment: () {
@@ -422,6 +424,9 @@ class _PostTileState extends State<PostTile> {
 
                       setState(() {});
                     },
+                    minWidth: Get.width - 80 * SizeConfig.widthMultiplier!,
+                    taggedPersonName: '',
+                    maxWidth: Get.width,
                   ),
             // StreamBuilder<CommentModel>(
             //     stream: HomeService.fetchComment(widget.postId),
@@ -472,46 +477,39 @@ class _PostTileState extends State<PostTile> {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => PostScreen()));
-              },
-              child: Row(
-                // mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 40,
-                      // width: 260 * SizeConfig.widthMultiplier!,
-                      margin: EdgeInsets.only(left: 16, right: 16),
-                      decoration: BoxDecoration(
-                        color: lightGrey,
-                        borderRadius: BorderRadius.circular(
-                            8 * SizeConfig.widthMultiplier!),
-                      ),
-                      child: TextField(
-                        controller: _homeController.commentController,
-                        onChanged: (value) {
-                          _homeController.comment.value = value;
-                        },
-                        decoration: InputDecoration(
-                            enabled: false,
-                            border: InputBorder.none,
-                            hintText: 'add_comment'.tr,
-                            hintStyle: AppTextStyle.smallGreyText.copyWith(
-                                fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: hintGrey),
-                            contentPadding: EdgeInsets.only(
-                                bottom: 10,
-                                left: 16 * SizeConfig.widthMultiplier!)),
-                      ),
+            Row(
+              // mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 40,
+                    // width: 260 * SizeConfig.widthMultiplier!,
+                    margin: EdgeInsets.only(left: 16, right: 16),
+                    decoration: BoxDecoration(
+                      color: lightGrey,
+                      borderRadius: BorderRadius.circular(
+                          8 * SizeConfig.widthMultiplier!),
+                    ),
+                    child: TextField(
+                      controller: _homeController.commentController,
+                      onChanged: (value) {
+                        _homeController.comment.value = value;
+                      },
+                      decoration: InputDecoration(
+                          enabled: false,
+                          border: InputBorder.none,
+                          hintText: 'add_comment'.tr,
+                          hintStyle: AppTextStyle.smallGreyText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: hintGrey),
+                          contentPadding: EdgeInsets.only(
+                              bottom: 10,
+                              left: 16 * SizeConfig.widthMultiplier!)),
                     ),
                   ),
-                  IconButton(
-                      onPressed: widget.addComment, icon: Icon(Icons.send))
-                ],
-              ),
+                ),
+                IconButton(onPressed: widget.onTap, icon: Icon(Icons.send))
+              ],
             ),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,

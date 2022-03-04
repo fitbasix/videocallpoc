@@ -57,7 +57,16 @@ class HomeController extends GetxController {
   Rx<PostsModel> explorePostModel = Rx(PostsModel());
   RxList<Post> explorePostList = RxList<Post>([]);
   RxBool nextDataLoad = false.obs;
-  RxInt explorePageCount = 0.obs;
+  RxInt explorePageCount = 1.obs;
+  RxBool postLoading = RxBool(false);
+  RxInt skipCommentCount = RxInt(1);
+  final TextEditingController replyController = TextEditingController();
+  RxString reply = RxString('');
+  RxList<Comments> replyList = RxList<Comments>([]);
+  RxList<bool>? viewReplies = RxList<bool>([]);
+  RxList<int> skipReplyList = RxList<int>([]);
+  Future<List<Comments>>? future;
+  RxList<String> likedPost = RxList<String>([]);
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,
@@ -123,8 +132,7 @@ class HomeController extends GetxController {
 
   WaterReminder getWaterReminder(int Time) {
     try {
-      waterReminder.value = waterSource.value.response!.data!
-          .singleWhere((element) => element.serialId == Time);
+      waterReminder.value = waterSource.value.response!.data!.singleWhere((element) => element.serialId == Time);
       return waterReminder.value;
     } catch (e) {
       return waterReminder.value;
@@ -230,6 +238,20 @@ class HomeController extends GetxController {
     } else {
       return 'Just now';
     }
+  }
+
+  Future<List<Comments>> fetchReplyComment(
+      {required String commentId, int? skip, int? limit}) async {
+    var replyData = await HomeService.fetchComment(
+        commentId: commentId, skip: skip, limit: limit);
+
+    if (replyData.response!.data!.length != 0) {
+      for (var item in replyData.response!.data!) {
+        replyList.add(item);
+      }
+      // replyList.addAll(replyData.response!.data!);
+    }
+    return replyList;
   }
 
   @override

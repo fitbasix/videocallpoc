@@ -7,6 +7,8 @@ import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../plans/models/FullPlanDetailModel.dart';
+
 class TrainerController extends GetxController {
   RxBool isSelected = RxBool(false);
   RxBool isLoading = RxBool(false);
@@ -36,6 +38,9 @@ class TrainerController extends GetxController {
   RxList<Post> trainerPostList = RxList<Post>([]);
   Rx<PostsModel> initialPostData = Rx(PostsModel());
   RxBool loadingIndicator = RxBool(false);
+  Rx<PlanFullDetails> fullPlanDetails = PlanFullDetails().obs;
+  RxBool fullPlanInfoLoading = true.obs;
+  RxString selectedPlanId = "".obs;
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;

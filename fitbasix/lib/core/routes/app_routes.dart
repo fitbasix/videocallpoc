@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Bmr_calculator/view/bmr_resultpage.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
@@ -19,12 +20,15 @@ import 'package:fitbasix/feature/log_in/view/forgot_password.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:fitbasix/feature/log_in/view/reset_password.dart';
+import 'package:fitbasix/feature/message/view/chat_documentscreen.dart';
 import 'package:fitbasix/feature/message/view/chat_ui.dart';
 import 'package:fitbasix/feature/message/view/my_trainer_tile.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
+import 'package:fitbasix/feature/profile/view/edit_userprofile_info.dart';
+import 'package:fitbasix/feature/profile/view/user_profile_info.dart';
 import 'package:fitbasix/feature/settings/view/settings.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
 import 'package:fitbasix/feature/profile/view/edit_personal_info_screen.dart';
@@ -36,6 +40,10 @@ import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_height.dart';
 import 'package:fitbasix/feature/spg/view/set_weight.dart';
 import '../../feature/message/view/chat_videocallscreen.dart';
+import '../../feature/plans/view/plan_info.dart';
+import '../../feature/plans/view/trainers_plan.dart';
+import '../../feature/plans/view/plan_timing.dart';
+
 import '../../feature/spg/view/set_dob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,8 +90,11 @@ abstract class RouteName {
   static const userprofileinfo = "/user_profile_info";
   static const edituserProfileScreen = "/edit_userprofile_info";
   static const bmrresultScreen = "/bmr_resultpage.dart";
-  static const trainerdocumentScreen = "chat_documentscreen.dart";
   static const videocallScreen = "chat_videocallscreen.dart";
+  static const trainerdocumentScreen = "/chat_documentscreen.dart";
+  static const trainerplanScreen = "/trainers_plan.dart";
+  static const planInformationScreen = "/plan_info.dart";
+  static const planTimingScreen = "/plan_timing.dart";
   RouteName._();
 }
 
@@ -304,6 +315,41 @@ class GenerateRoute {
     if (route == RouteName.videocallScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) => VideoCallScreen(),
+        }
+    if (route == RouteName.userprofileinfo) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => UserProfileScreen(),
+      );
+    }
+    if (route == RouteName.edituserProfileScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => EditProfileScreen(),
+      );
+    }
+    if (route == RouteName.bmrresultScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => BMRResultScreen(),
+      );
+    }
+    if (route == RouteName.trainerdocumentScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => TrainerDocumentScreen(),
+      );
+    }
+    if (route == RouteName.trainerplanScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => TrainerPlansScreen(),
+      );
+    }
+    if (route == RouteName.planInformationScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => PlanInformationUI(),
+      );
+    }
+    if (route == RouteName.planTimingScreen) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => PlanTimingUI(),
+
       );
     }
     if (route == RouteName.editPersonalInfo) {
@@ -317,6 +363,5 @@ class GenerateRoute {
                   Animation<double> secondaryAnimation) =>
               LoginScreen());
     }
-
   }
 }

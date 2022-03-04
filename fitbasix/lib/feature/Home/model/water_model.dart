@@ -84,20 +84,19 @@ class ConsumedWater {
   int? waterReminder;
 
   factory ConsumedWater.fromJson(Map<String, dynamic> json) => ConsumedWater(
-        status: json["status"] == null ? null : json["status"],
-        id: json["_id"],
-        date: json["date"],
-        userId: json["userId"],
-        v: json["__v"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        expireAt: DateTime.parse(json["expireAt"]),
-        sleepTime: json["sleepTime"],
-        totalWaterConsumed: json["totalWaterConsumed"].toDouble(),
-        totalWaterRequired: json["totalWaterRequired"].toDouble(),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        wakeupTime: json["wakeupTime"],
-        waterReminder: json["waterReminder"]
-      );
+      status: json["status"] == null ? null : json["status"],
+      id: json["_id"],
+      date: json["date"],
+      userId: json["userId"],
+      v: json["__v"],
+      createdAt: DateTime.parse(json["createdAt"]),
+      // expireAt: DateTime.parse(json["expireAt"]),
+      sleepTime: json["sleepTime"],
+      totalWaterConsumed: json["totalWaterConsumed"].toDouble(),
+      totalWaterRequired: json["totalWaterRequired"].toDouble(),
+      // updatedAt: DateTime.parse(json["updatedAt"]),
+      wakeupTime: json["wakeupTime"],
+      waterReminder: json["waterReminder"]);
 
   Map<String, dynamic> toJson() => {
         "status": status == null ? null : status,
@@ -115,4 +114,3 @@ class ConsumedWater {
         "waterReminder": waterReminder
       };
 }
-

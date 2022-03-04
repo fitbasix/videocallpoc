@@ -68,177 +68,200 @@ class GetTrainedScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 19 * SizeConfig.heightMultiplier!,
+                  //19
+                  height: 21 * SizeConfig.heightMultiplier!,
                 ),
-                Container(
-                  height: 252 * SizeConfig.heightMultiplier!,
-                  child: ListView.builder(
+                Obx(
+                  () => Container(
+                    // height: 242 * SizeConfig.heightMultiplier!,
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      itemCount: _trainerController.getTrainedIsLoading.value
-                          ? 5
-                          : _trainerController
-                              .trainers.value.response!.data!.trainers!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Obx(() => _trainerController
-                                .getTrainedIsLoading.value
-                            ? Shimmer.fromColors(
-                                child: Padding(
-                                  padding: index == 0
-                                      ? EdgeInsets.only(
-                                          left:
-                                              12 * SizeConfig.widthMultiplier!)
-                                      : EdgeInsets.all(0),
-                                  child: TrainerCard(
-                                      name: '',
-                                      certificateCount: 0,
-                                      profilePhoto:
-                                          'https://randomuser.me/api/portraits/men/1.jpg',
-                                      strength: '',
-                                      strengthLength: 0,
-                                      about: '',
-                                      raters: '',
-                                      rating: 0,
-                                      onTap: () {}),
-                                ),
-                                baseColor:
-                                    const Color.fromRGBO(230, 230, 230, 1),
-                                highlightColor:
-                                    const Color.fromRGBO(242, 245, 245, 1),
-                              )
-                            : Padding(
-                                padding: index == 0
-                                    ? EdgeInsets.only(
-                                        left: 12 * SizeConfig.widthMultiplier!)
-                                    : EdgeInsets.all(0),
-                                child: TrainerCard(
-                                  name: _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .trainers![index]
-                                              .user !=
-                                          null
-                                      ? _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .trainers![index]
-                                              .user!
-                                              .name ??
-                                          ''
-                                      : '',
-                                  certificateCount: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .trainers![index]
-                                      .certificates!
-                                      .length,
-                                  rating: double.tryParse(_trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .trainers![index]
-                                      .rating!)!,
-                                  profilePhoto: _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .trainers![index]
-                                              .user !=
-                                          null
-                                      ? _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .trainers![index]
-                                              .user!
-                                              .profilePhoto ??
-                                          ''
-                                      : '',
-                                  about: _trainerController.trainers.value
-                                      .response!.data!.trainers![index].about!,
-                                  raters: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .trainers![index]
-                                      .totalRating!,
-                                  strength: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .trainers![index]
-                                      .strength![0]
-                                      .name
-                                      .toString(),
-                                  strengthLength: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .trainers![index]
-                                      .strength!
-                                      .length,
-                                  onTap: () async {
-                                    Navigator.pushNamed(context,
-                                        RouteName.trainerProfileScreen);
-                                    _trainerController.isProfileLoading.value =
-                                        true;
-                                    _trainerController.atrainerDetail.value =
-                                        _trainerController.trainers.value
-                                            .response!.data!.trainers![index];
-                                    _trainerController.planModel.value =
-                                        await TrainerServices
-                                            .getPlanByTrainerId(
-                                                _trainerController
-                                                    .trainers
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .trainers![index]
-                                                    .user!
-                                                    .id!);
-                                    _trainerController.loadingIndicator.value =
-                                        false;
-                                    _trainerController.initialPostData.value =
-                                        await TrainerServices.getTrainerPosts(
+                      child: Row(
+                        children: [
+                          for (int index = 0;
+                              index <
+                                  (_trainerController.getTrainedIsLoading.value
+                                      ? 5
+                                      : _trainerController.trainers.value
+                                          .response!.data!.trainers!.length);
+                              index++)
+                            _trainerController.getTrainedIsLoading.value
+                                ? Shimmer.fromColors(
+                                    child: Padding(
+                                      padding: index == 0
+                                          ? EdgeInsets.only(
+                                              left: 12 *
+                                                  SizeConfig.widthMultiplier!)
+                                          : EdgeInsets.all(0),
+                                      child: TrainerCard(
+                                          name: '',
+                                          certificateCount: 0,
+                                          profilePhoto:
+                                              'https://randomuser.me/api/portraits/men/1.jpg',
+                                          strength: '',
+                                          strengthLength: 0,
+                                          about: '',
+                                          raters: '',
+                                          rating: 0,
+                                          onTap: () {}),
+                                    ),
+                                    baseColor:
+                                        const Color.fromRGBO(230, 230, 230, 1),
+                                    highlightColor:
+                                        const Color.fromRGBO(242, 245, 245, 1),
+                                  )
+                                : Padding(
+                                    padding: index == 0
+                                        ? EdgeInsets.only(
+                                            left: 12 *
+                                                SizeConfig.widthMultiplier!)
+                                        : EdgeInsets.all(0),
+                                    child: TrainerCard(
+                                      name: _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .trainers![index]
+                                                  .user !=
+                                              null
+                                          ? _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .trainers![index]
+                                                  .user!
+                                                  .name ??
+                                              ''
+                                          : '',
+                                      certificateCount: _trainerController
+                                          .trainers
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .certificates!
+                                          .length,
+                                      rating: double.tryParse(_trainerController
+                                          .trainers
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .rating!)!,
+                                      profilePhoto: _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .trainers![index]
+                                                  .user !=
+                                              null
+                                          ? _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .trainers![index]
+                                                  .user!
+                                                  .profilePhoto ??
+                                              ''
+                                          : '',
+                                      about: _trainerController
+                                          .trainers
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .about!,
+                                      raters: _trainerController
+                                          .trainers
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .totalRating!,
+                                      strength: _trainerController
+                                          .trainers
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .strength![0]
+                                          .name
+                                          .toString(),
+                                      strengthLength: _trainerController
+                                          .trainers
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .strength!
+                                          .length,
+                                      onTap: () async {
+                                        Navigator.pushNamed(context,
+                                            RouteName.trainerProfileScreen);
+                                        _trainerController
+                                            .isProfileLoading.value = true;
+                                        _trainerController
+                                                .atrainerDetail.value =
                                             _trainerController
                                                 .trainers
                                                 .value
                                                 .response!
                                                 .data!
-                                                .trainers![index]
-                                                .user!
-                                                .id!,
-                                            0);
-                                    if (_trainerController.initialPostData.value
-                                            .response!.data!.length !=
-                                        0) {
-                                      _trainerController.trainerPostList.value =
-                                          _trainerController.initialPostData
-                                              .value.response!.data!;
-                                    } else {
-                                      _trainerController.trainerPostList
-                                          .clear();
-                                    }
-                                    _trainerController.isProfileLoading.value =
-                                        false;
-                                  },
-                                ),
-                              ));
-                      }),
+                                                .trainers![index];
+                                        _trainerController.planModel.value =
+                                            await TrainerServices
+                                                .getPlanByTrainerId(
+                                                    _trainerController
+                                                        .trainers
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .trainers![index]
+                                                        .user!
+                                                        .id!);
+                                        _trainerController
+                                            .loadingIndicator.value = false;
+                                        _trainerController
+                                                .initialPostData.value =
+                                            await TrainerServices
+                                                .getTrainerPosts(
+                                                    _trainerController
+                                                        .trainers
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .trainers![index]
+                                                        .user!
+                                                        .id!,
+                                                    0);
+                                        if (_trainerController.initialPostData
+                                                .value.response!.data!.length !=
+                                            0) {
+                                          _trainerController
+                                                  .trainerPostList.value =
+                                              _trainerController.initialPostData
+                                                  .value.response!.data!;
+                                        } else {
+                                          _trainerController.trainerPostList
+                                              .clear();
+                                        }
+                                        _trainerController
+                                            .isProfileLoading.value = false;
+                                      },
+                                    ),
+                                  )
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
-                  height: 39 * SizeConfig.heightMultiplier!,
+                  //39
+                  height: 37 * SizeConfig.heightMultiplier!,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -274,183 +297,190 @@ class GetTrainedScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 19 * SizeConfig.heightMultiplier!,
+                  //19
+                  height: 18 * SizeConfig.heightMultiplier!,
                 ),
-                Container(
-                  height: 252 * SizeConfig.heightMultiplier!,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Obx(() => _trainerController
-                                .getTrainedIsLoading.value
-                            ? Shimmer.fromColors(
-                                child: Padding(
+                Obx(
+                  () => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                        //252
+                        child: Row(
+                      children: [
+                        for (int index = 0; index < 5; index++)
+                          _trainerController.getTrainedIsLoading.value
+                              ? Shimmer.fromColors(
+                                  child: Padding(
+                                    padding: index == 0
+                                        ? EdgeInsets.only(
+                                            left: 12 *
+                                                SizeConfig.widthMultiplier!)
+                                        : EdgeInsets.all(0),
+                                    child: TrainerCard(
+                                        name: '',
+                                        certificateCount: 0,
+                                        profilePhoto:
+                                            'https://randomuser.me/api/portraits/men/1.jpg',
+                                        strength: '',
+                                        strengthLength: 0,
+                                        about: '',
+                                        raters: '',
+                                        rating: 0,
+                                        onTap: () {}),
+                                  ),
+                                  baseColor:
+                                      const Color.fromRGBO(230, 230, 230, 1),
+                                  highlightColor:
+                                      const Color.fromRGBO(242, 245, 245, 1),
+                                )
+                              : Padding(
                                   padding: index == 0
                                       ? EdgeInsets.only(
                                           left:
                                               12 * SizeConfig.widthMultiplier!)
                                       : EdgeInsets.all(0),
                                   child: TrainerCard(
-                                      name: '',
-                                      certificateCount: 0,
-                                      profilePhoto:
-                                          'https://randomuser.me/api/portraits/men/1.jpg',
-                                      strength: '',
-                                      strengthLength: 0,
-                                      about: '',
-                                      raters: '',
-                                      rating: 0,
-                                      onTap: () {}),
-                                ),
-                                baseColor:
-                                    const Color.fromRGBO(230, 230, 230, 1),
-                                highlightColor:
-                                    const Color.fromRGBO(242, 245, 245, 1),
-                              )
-                            : Padding(
-                                padding: index == 0
-                                    ? EdgeInsets.only(
-                                        left: 12 * SizeConfig.widthMultiplier!)
-                                    : EdgeInsets.all(0),
-                                child: TrainerCard(
-                                  name: _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .fitnessConsultant![index]
-                                              .user !=
-                                          null
-                                      ? _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .fitnessConsultant![index]
-                                              .user!
-                                              .name ??
-                                          ''
-                                      : '',
-                                  certificateCount: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .fitnessConsultant![index]
-                                      .certificates!
-                                      .length,
-                                  rating: double.tryParse(_trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .fitnessConsultant![index]
-                                      .rating!)!,
-                                  profilePhoto: _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .fitnessConsultant![index]
-                                              .user !=
-                                          null
-                                      ? _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .fitnessConsultant![index]
-                                              .user!
-                                              .profilePhoto ??
-                                          ''
-                                      : '',
-                                  about: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .fitnessConsultant![index]
-                                      .about!,
-                                  raters: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .fitnessConsultant![index]
-                                      .totalRating!,
-                                  strength: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .fitnessConsultant![index]
-                                      .strength![0]
-                                      .name
-                                      .toString(),
-                                  strengthLength: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .fitnessConsultant![index]
-                                      .strength!
-                                      .length,
-                                  onTap: () async {
-                                    Navigator.pushNamed(context,
-                                        RouteName.trainerProfileScreen);
-                                    _trainerController.isProfileLoading.value =
-                                        true;
-                                    _trainerController.atrainerDetail.value =
-                                        _trainerController
-                                            .trainers
-                                            .value
-                                            .response!
-                                            .data!
-                                            .fitnessConsultant![index];
-                                    _trainerController.planModel.value =
-                                        await TrainerServices
-                                            .getPlanByTrainerId(
-                                                _trainerController
-                                                    .trainers
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .fitnessConsultant![index]
-                                                    .user!
-                                                    .id!);
-                                    _trainerController.loadingIndicator.value =
-                                        false;
-                                    _trainerController.initialPostData.value =
-                                        await TrainerServices.getTrainerPosts(
-                                            _trainerController
+                                    name: _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .fitnessConsultant![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
                                                 .trainers
                                                 .value
                                                 .response!
                                                 .data!
                                                 .fitnessConsultant![index]
                                                 .user!
-                                                .id!,
-                                            0);
-                                    if (_trainerController.initialPostData.value
-                                            .response!.data!.length !=
-                                        0) {
-                                      _trainerController.trainerPostList.value =
-                                          _trainerController.initialPostData
-                                              .value.response!.data!;
-                                    } else {
-                                      _trainerController.trainerPostList
-                                          .clear();
-                                    }
-                                    _trainerController.isProfileLoading.value =
-                                        false;
-                                  },
-                                ),
-                              ));
-                      }),
+                                                .name ??
+                                            ''
+                                        : '',
+                                    certificateCount: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .fitnessConsultant![index]
+                                        .certificates!
+                                        .length,
+                                    rating: double.tryParse(_trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .fitnessConsultant![index]
+                                        .rating!)!,
+                                    profilePhoto: _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .fitnessConsultant![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .fitnessConsultant![index]
+                                                .user!
+                                                .profilePhoto ??
+                                            ''
+                                        : '',
+                                    about: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .fitnessConsultant![index]
+                                        .about!,
+                                    raters: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .fitnessConsultant![index]
+                                        .totalRating!,
+                                    strength: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .fitnessConsultant![index]
+                                        .strength![0]
+                                        .name
+                                        .toString(),
+                                    strengthLength: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .fitnessConsultant![index]
+                                        .strength!
+                                        .length,
+                                    onTap: () async {
+                                      Navigator.pushNamed(context,
+                                          RouteName.trainerProfileScreen);
+                                      _trainerController
+                                          .isProfileLoading.value = true;
+                                      _trainerController.atrainerDetail.value =
+                                          _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .fitnessConsultant![index];
+                                      _trainerController.planModel.value =
+                                          await TrainerServices
+                                              .getPlanByTrainerId(
+                                                  _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .fitnessConsultant![index]
+                                                      .user!
+                                                      .id!);
+                                      _trainerController
+                                          .loadingIndicator.value = false;
+                                      _trainerController.initialPostData.value =
+                                          await TrainerServices.getTrainerPosts(
+                                              _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .fitnessConsultant![index]
+                                                  .user!
+                                                  .id!,
+                                              0);
+                                      if (_trainerController.initialPostData
+                                              .value.response!.data!.length !=
+                                          0) {
+                                        _trainerController
+                                                .trainerPostList.value =
+                                            _trainerController.initialPostData
+                                                .value.response!.data!;
+                                      } else {
+                                        _trainerController.trainerPostList
+                                            .clear();
+                                      }
+                                      _trainerController
+                                          .isProfileLoading.value = false;
+                                    },
+                                  ),
+                                )
+                      ],
+                    )),
+                  ),
                 ),
                 SizedBox(
-                  height: 39 * SizeConfig.heightMultiplier!,
+                  //39
+                  height: 37 * SizeConfig.heightMultiplier!,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -485,180 +515,187 @@ class GetTrainedScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 19 * SizeConfig.heightMultiplier!,
+                  //19
+                  height: 18 * SizeConfig.heightMultiplier!,
                 ),
-                Container(
-                  height: 252 * SizeConfig.heightMultiplier!,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Obx(() => _trainerController
-                                .getTrainedIsLoading.value
-                            ? Shimmer.fromColors(
-                                child: Padding(
+                Obx(
+                  () => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                        //252
+                        child: Row(
+                      children: [
+                        for (int index = 0; index < 5; index++)
+                          _trainerController.getTrainedIsLoading.value
+                              ? Shimmer.fromColors(
+                                  child: Padding(
+                                    padding: index == 0
+                                        ? EdgeInsets.only(
+                                            left: 12 *
+                                                SizeConfig.widthMultiplier!)
+                                        : EdgeInsets.all(0),
+                                    child: TrainerCard(
+                                        name: '',
+                                        certificateCount: 0,
+                                        profilePhoto:
+                                            'https://randomuser.me/api/portraits/men/1.jpg',
+                                        strength: '',
+                                        strengthLength: 0,
+                                        about: '',
+                                        raters: '',
+                                        rating: 0,
+                                        onTap: () {}),
+                                  ),
+                                  baseColor:
+                                      const Color.fromRGBO(230, 230, 230, 1),
+                                  highlightColor:
+                                      const Color.fromRGBO(242, 245, 245, 1),
+                                )
+                              : Padding(
                                   padding: index == 0
                                       ? EdgeInsets.only(
                                           left:
                                               12 * SizeConfig.widthMultiplier!)
                                       : EdgeInsets.all(0),
                                   child: TrainerCard(
-                                      name: '',
-                                      certificateCount: 0,
-                                      profilePhoto:
-                                          'https://randomuser.me/api/portraits/men/1.jpg',
-                                      strength: '',
-                                      strengthLength: 0,
-                                      about: '',
-                                      raters: '',
-                                      rating: 0,
-                                      onTap: () {}),
-                                ),
-                                baseColor:
-                                    const Color.fromRGBO(230, 230, 230, 1),
-                                highlightColor:
-                                    const Color.fromRGBO(242, 245, 245, 1),
-                              )
-                            : Padding(
-                                padding: index == 0
-                                    ? EdgeInsets.only(
-                                        left: 12 * SizeConfig.widthMultiplier!)
-                                    : EdgeInsets.all(0),
-                                child: TrainerCard(
-                                  name: _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .nutritionConsultant![index]
-                                              .user !=
-                                          null
-                                      ? _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .nutritionConsultant![index]
-                                              .user!
-                                              .name ??
-                                          ''
-                                      : '',
-                                  certificateCount: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .nutritionConsultant![index]
-                                      .certificates!
-                                      .length,
-                                  rating: double.tryParse(_trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .nutritionConsultant![index]
-                                      .rating!)!,
-                                  profilePhoto: _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .nutritionConsultant![index]
-                                              .user !=
-                                          null
-                                      ? _trainerController
-                                              .trainers
-                                              .value
-                                              .response!
-                                              .data!
-                                              .nutritionConsultant![index]
-                                              .user!
-                                              .profilePhoto ??
-                                          ''
-                                      : '',
-                                  about: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .nutritionConsultant![index]
-                                      .about!,
-                                  raters: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .nutritionConsultant![index]
-                                      .totalRating!,
-                                  strength: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .nutritionConsultant![index]
-                                      .strength![0]
-                                      .name
-                                      .toString(),
-                                  strengthLength: _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .nutritionConsultant![index]
-                                      .strength!
-                                      .length,
-                                  onTap: () async {
-                                    Navigator.pushNamed(context,
-                                        RouteName.trainerProfileScreen);
-                                    _trainerController.isProfileLoading.value =
-                                        true;
-                                    _trainerController.atrainerDetail.value =
-                                        _trainerController
-                                            .trainers
-                                            .value
-                                            .response!
-                                            .data!
-                                            .nutritionConsultant![index];
-                                    _trainerController.planModel.value =
-                                        await TrainerServices
-                                            .getPlanByTrainerId(
-                                                _trainerController
-                                                    .trainers
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .nutritionConsultant![index]
-                                                    .user!
-                                                    .id!);
-                                    _trainerController.loadingIndicator.value =
-                                        false;
-                                    _trainerController.initialPostData.value =
-                                        await TrainerServices.getTrainerPosts(
-                                            _trainerController
+                                    name: _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .nutritionConsultant![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
                                                 .trainers
                                                 .value
                                                 .response!
                                                 .data!
                                                 .nutritionConsultant![index]
                                                 .user!
-                                                .id!,
-                                            0);
-                                    if (_trainerController.initialPostData.value
-                                            .response!.data!.length !=
-                                        0) {
-                                      _trainerController.trainerPostList.value =
-                                          _trainerController.initialPostData
-                                              .value.response!.data!;
-                                    } else {
-                                      _trainerController.trainerPostList
-                                          .clear();
-                                    }
-                                    _trainerController.isProfileLoading.value =
-                                        false;
-                                  },
-                                ),
-                              ));
-                      }),
+                                                .name ??
+                                            ''
+                                        : '',
+                                    certificateCount: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .nutritionConsultant![index]
+                                        .certificates!
+                                        .length,
+                                    rating: double.tryParse(_trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .nutritionConsultant![index]
+                                        .rating!)!,
+                                    profilePhoto: _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .nutritionConsultant![index]
+                                                .user !=
+                                            null
+                                        ? _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .nutritionConsultant![index]
+                                                .user!
+                                                .profilePhoto ??
+                                            ''
+                                        : '',
+                                    about: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .nutritionConsultant![index]
+                                        .about!,
+                                    raters: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .nutritionConsultant![index]
+                                        .totalRating!,
+                                    strength: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .nutritionConsultant![index]
+                                        .strength![0]
+                                        .name
+                                        .toString(),
+                                    strengthLength: _trainerController
+                                        .trainers
+                                        .value
+                                        .response!
+                                        .data!
+                                        .nutritionConsultant![index]
+                                        .strength!
+                                        .length,
+                                    onTap: () async {
+                                      Navigator.pushNamed(context,
+                                          RouteName.trainerProfileScreen);
+                                      _trainerController
+                                          .isProfileLoading.value = true;
+                                      _trainerController.atrainerDetail.value =
+                                          _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .nutritionConsultant![index];
+                                      _trainerController.planModel.value =
+                                          await TrainerServices
+                                              .getPlanByTrainerId(
+                                                  _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .nutritionConsultant![
+                                                          index]
+                                                      .user!
+                                                      .id!);
+                                      _trainerController
+                                          .loadingIndicator.value = false;
+                                      _trainerController.initialPostData.value =
+                                          await TrainerServices.getTrainerPosts(
+                                              _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .nutritionConsultant![index]
+                                                  .user!
+                                                  .id!,
+                                              0);
+                                      if (_trainerController.initialPostData
+                                              .value.response!.data!.length !=
+                                          0) {
+                                        _trainerController
+                                                .trainerPostList.value =
+                                            _trainerController.initialPostData
+                                                .value.response!.data!;
+                                      } else {
+                                        _trainerController.trainerPostList
+                                            .clear();
+                                      }
+                                      _trainerController
+                                          .isProfileLoading.value = false;
+                                    },
+                                  ),
+                                )
+                      ],
+                    )),
+                  ),
                 ),
               ],
             ),

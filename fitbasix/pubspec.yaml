@@ -81,18 +81,29 @@ dependencies:
   firebase_messaging: ^11.2.8
   flutter_local_notifications: ^9.3.2
   connectycube_flutter_call_kit: ^2.0.2
+  url_launcher: ^6.0.20
+  flutter_native_splash: ^2.0.4
+  percent_indicator: ^4.0.0
+  syncfusion_flutter_gauges: ^19.4.54
+  android_alarm_manager_plus: ^2.0.5
+  awesome_notifications: ^0.6.21
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 flutter_native_splash:
-  background_image: "assets/images/splash.png"
+  background_image: "assets/log_in/welcome_image.png"
+  background_image_dark: "assets/log_in/welcome_image.png"
+  branding: assets/log_in/logo.png
+  branding_dark: assets/log_in/logo.png
+  branding_mode: bottom
+  android_gravity: center
+  fullscreen: true
   android: true
   ios: true
-  fullscreen: true
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -123,6 +134,9 @@ flutter:
     - assets/settings/
     - assets/message/
     - assets/mytrainers/
+    - assets/bmrscreen/
+    - assets/plans/
+    - assets/log_in/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

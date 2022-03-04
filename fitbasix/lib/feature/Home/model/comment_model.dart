@@ -66,7 +66,8 @@ class Comments {
       this.reply,
       this.likes,
       this.datumId,
-      this.isLiked});
+      this.isLiked,
+      this.taggedPerson});
 
   final String? id;
   final String? postId;
@@ -79,6 +80,7 @@ class Comments {
   int? likes;
   final String? datumId;
   bool? isLiked;
+  final TaggedPerson? taggedPerson;
 
   factory Comments.fromJson(Map<String, dynamic> json) => Comments(
       id: json["_id"],
@@ -93,7 +95,10 @@ class Comments {
       reply: json["reply"],
       likes: json["likes"],
       datumId: json["id"],
-      isLiked: json["isLiked"]);
+      isLiked: json["isLiked"],
+      taggedPerson: json['taggedPerson'] == null
+          ? null
+          : TaggedPerson.fromJson(json['taggedPerson']));
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -107,6 +112,20 @@ class Comments {
         "likes": likes,
         "id": datumId,
       };
+}
+
+class TaggedPerson {
+  final String? id;
+  final String? name;
+  final String? userId;
+
+  TaggedPerson({this.id, this.name, this.userId});
+
+  factory TaggedPerson.fromJson(Map<String, dynamic> json) => TaggedPerson(
+        id: json["_id"],
+        name: json["name"],
+        userId: json["id"],
+      );
 }
 
 class User {

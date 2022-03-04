@@ -1,19 +1,22 @@
 import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
-import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
+import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/credentials.dart';
+import '../../../log_in/services/login_services.dart';
 
 class MenuScreen extends StatelessWidget {
   final String imageCoverPic;
@@ -23,6 +26,8 @@ class MenuScreen extends StatelessWidget {
       {required this.imageUrl,
       required this.imageCoverPic,
       required this.name});
+
+  final ProfileController _profileController = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
     print(imageUrl);
@@ -31,70 +36,87 @@ class MenuScreen extends StatelessWidget {
         width: 300 * SizeConfig.widthMultiplier!,
         child: Column(
           children: [
-            Container(
-              height: 160 * SizeConfig.heightMultiplier!,
-              width: 300 * SizeConfig.widthMultiplier!,
-              child: Stack(
-                children: [
-                  Image.network(
-                    imageCoverPic,
-                    height: 160 * SizeConfig.heightMultiplier!,
-                    width: 300 * SizeConfig.widthMultiplier!,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
+            GestureDetector(
+              onTap: () async {
+                Navigator.pushNamed(context, RouteName.userprofileinfo);
+                _profileController.initialPostData.value =
+                    await ProfileServices.getUserPosts();
+
+                if (_profileController
+                        .initialPostData.value.response!.data!.length !=
+                    0) {
+                  _profileController.userPostList.value =
+                      _profileController.initialPostData.value.response!.data!;
+                } else {
+                  _profileController.userPostList.clear();
+                }
+              },
+              child: Container(
+                height: 160 * SizeConfig.heightMultiplier!,
+                width: 300 * SizeConfig.widthMultiplier!,
+                child: Stack(
+                  children: [
+                    Image.network(
+                      imageCoverPic,
                       height: 160 * SizeConfig.heightMultiplier!,
                       width: 300 * SizeConfig.widthMultiplier!,
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
-                        child: Container(
-                          height: 160 * SizeConfig.heightMultiplier!,
-                          width: 300 * SizeConfig.widthMultiplier!,
-                          color: Colors.black.withOpacity(0.5),
+                      fit: BoxFit.cover,
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        height: 160 * SizeConfig.heightMultiplier!,
+                        width: 300 * SizeConfig.widthMultiplier!,
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+                          child: Container(
+                            height: 160 * SizeConfig.heightMultiplier!,
+                            width: 300 * SizeConfig.widthMultiplier!,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    left: 18 * SizeConfig.widthMultiplier!,
-                    bottom: 16 * SizeConfig.heightMultiplier!,
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              30 * SizeConfig.widthMultiplier!),
-                          child: CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              fit: BoxFit.cover,
-                              height: 64 * SizeConfig.widthMultiplier!,
-                              width: 64 * SizeConfig.widthMultiplier!),
-                        ),
-                        SizedBox(height: 8 * SizeConfig.widthMultiplier!),
-                        Text(
-                          name.toString(),
-                          style: AppTextStyle.normalWhiteText.copyWith(
-                              color: kPureWhite,
-                              fontSize: 18 * SizeConfig.textMultiplier!),
-                        )
-                      ],
-                    ),
-                  )
-                  // Container(
-                  //   height: 160 * SizeConfig.heightMultiplier!,
-                  //   width: 300 * SizeConfig.widthMultiplier!,
-                  //   color: Colors.black.withOpacity(0.55),
-                  // )
-                ],
+                    Positioned(
+                      left: 18 * SizeConfig.widthMultiplier!,
+                      bottom: 16 * SizeConfig.heightMultiplier!,
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                30 * SizeConfig.widthMultiplier!),
+                            child: CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.cover,
+                                height: 64 * SizeConfig.widthMultiplier!,
+                                width: 64 * SizeConfig.widthMultiplier!),
+                          ),
+                          SizedBox(height: 8 * SizeConfig.widthMultiplier!),
+                          Text(
+                            name.toString(),
+                            style: AppTextStyle.normalWhiteText.copyWith(
+                                color: kPureWhite,
+                                fontSize: 18 * SizeConfig.textMultiplier!),
+                          )
+                        ],
+                      ),
+                    )
+                    // Container(
+                    //   height: 160 * SizeConfig.heightMultiplier!,
+                    //   width: 300 * SizeConfig.widthMultiplier!,
+                    //   color: Colors.black.withOpacity(0.55),
+                    // )
+                  ],
+                ),
               ),
             ),
             MenuItem(
                 menuItemImage: ImagePath.account,
                 menuItemText: 'account'.tr,
                 onTap: () {
-                  Navigator.pushNamed(context, RouteName.accountAndSubscription);
+                  Navigator.pushNamed(
+                      context, RouteName.accountAndSubscription);
                 }),
             MenuItem(
                 menuItemImage: ImagePath.settings,
@@ -111,7 +133,12 @@ class MenuScreen extends StatelessWidget {
             MenuItem(
                 menuItemImage: ImagePath.feedback,
                 menuItemText: 'feedback'.tr,
-                onTap: () {}),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          DialogboxForFeedback());
+                }),
             MenuItem(
                 menuItemImage: ImagePath.legal,
                 menuItemText: 'legal'.tr,
@@ -126,6 +153,7 @@ class MenuScreen extends StatelessWidget {
 
                   final LoginController _controller =
                       Get.put(LoginController());
+                  await LogInService.logOut();
                   final SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   prefs.clear();
