@@ -20,9 +20,10 @@ Widget dobPicker() => Container(
         //locale: DatePicker.localeFromString('he'),
         onChange: (DateTime newDate, _) {
           DateTime _selectedDate = newDate;
-          _profileController.selectedDate.value = _selectedDate.toString();
+          _profileController.selectedDate.value =
+              DateFormat("dd/LL/yyyy").format(newDate);
           _profileController.DOBController.text =
-              _profileController.selectedDate.value;
+              DateFormat("dd/LL/yyyy").format(newDate);
           // (DateFormat('LL-dd-yyyy').format(_selectedDate));
           // ignore: avoid_print
         },

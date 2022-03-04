@@ -11,22 +11,18 @@ import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
 import '../../../core/universal_widgets/text_Field.dart';
-import '../../log_in/controller/login_controller.dart';
+import '../../Home/controller/Home_Controller.dart';
 import '../../log_in/view/widgets/country_dropdown.dart';
-import '../../spg/controller/spg_controller.dart';
 
 class EditPersonalInfoScreen extends StatelessWidget {
-  final LoginController _mobileNoController = Get.put(LoginController());
   final ProfileController _profileController = Get.put(ProfileController());
-  final SPGController _spgController = Get.put(SPGController());
-
+  final HomeController homeController = Get.find();
   EditPersonalInfoScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    _profileController.mobileNoController = _mobileNoController;
+    print(_profileController.DOBController.text);
     return Scaffold(
       backgroundColor: kPureWhite,
       appBar: AppBarForAccount(
@@ -52,9 +48,9 @@ class EditPersonalInfoScreen extends StatelessWidget {
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field for user email
             TextFormField(
+              controller: _profileController.emailController,
               onChanged: (value) {
                 //storing user input in email controller
-                _profileController.emailController.text = value;
               },
               style: AppTextStyle.normalBlackText,
               decoration: InputDecoration(
@@ -105,7 +101,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                       LengthLimitingTextInputFormatter(10),
                     ],
                     onChanged: (value) {
-                      _mobileNoController.mobile.value = value;
+                      _profileController.loginController!.mobile.value = value;
                     },
                     isTextFieldActive: true,
                     preFixWidget: Container(
@@ -113,12 +109,15 @@ class EditPersonalInfoScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           CountryDropDown(
-                            hint: _mobileNoController.selectedCountry.value,
-                            listofItems: _mobileNoController.countryList,
+                            hint: _profileController
+                                .loginController!.selectedCountry.value,
+                            listofItems:
+                                _profileController.loginController!.countryList,
                             onChanged: (value) {
-                              _mobileNoController.selectedCountry.value = value;
-                              print(_mobileNoController
-                                  .selectedCountry.value.code);
+                              _profileController.loginController!
+                                  .selectedCountry.value = value;
+                              print(_profileController
+                                  .loginController!.selectedCountry.value.code);
                             },
                           ),
                           const Text(
@@ -128,7 +127,8 @@ class EditPersonalInfoScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    textEditingController: _mobileNoController.mobileController,
+                    textEditingController:
+                        _profileController.loginController!.mobileController,
                     isNumber: true,
                     hint: 'enter_number_hint'.tr),
               ),
@@ -216,43 +216,81 @@ class EditPersonalInfoScreen extends StatelessWidget {
                                 8 * SizeConfig.widthMultiplier!)))),
                     onPressed: () {
                       //change user personal data on cloud
+                      String? updatedEmailId =
+                          _profileController.emailController.text ==
+                                  homeController.userProfileData.value.response!
+                                      .data!.profile!.email
+                              ? null
+                              : _profileController.emailController.text;
+                      String? updatedPhnNumber = _profileController
+                                  .loginController!.mobile.value ==
+                              homeController.userProfileData.value.response!
+                                  .data!.profile!.mobileNumber
+                          ? null
+                          : _profileController.loginController!.mobile.value;
+                      String updatedCountryCode = _profileController
+                          .loginController!.selectedCountry.value.code!;
 
-                      _profileController.emailController.text.length != 0 &&
-                              _mobileNoController.mobile.value.length != 0 &&
-                              _profileController.DOBController.text.length != 0
-                          ? ProfileServices.editProfile(
-                              email: _profileController.emailController.text,
-                              countryCode: _mobileNoController
-                                  .selectedCountry.value.code,
-                              phone: _mobileNoController.mobile.value,
-                              dob: _profileController.DOBController.text)
-                          : _profileController.emailController.text.length ==
-                                      0 &&
-                                  _mobileNoController.mobile.value.length !=
-                                      0 &&
-                                  _profileController
-                                          .DOBController.text.length !=
-                                      0
-                              ? ProfileServices.editProfile(
-                                  email: null,
-                                  countryCode: _mobileNoController
-                                      .selectedCountry.value.code,
-                                  phone: _mobileNoController.mobile.value,
-                                  dob: _profileController.DOBController.text)
-                              : null;
+                      String? updatedDob =
+                          _profileController.DOBController.text ==
+                                  homeController.userProfileData.value.response!
+                                      .data!.profile!.dob
+                              ? null
+                              : _profileController.DOBController.text;
+                      print(updatedEmailId);
+                      print(updatedPhnNumber);
+                      print(updatedCountryCode);
+                      print(updatedDob);
+                      ProfileServices.editProfile(
+                          email: updatedEmailId,
+                          countryCode: updatedCountryCode,
+                          phone: updatedPhnNumber,
+                          dob: updatedDob == "" ? null : updatedDob);
 
+                      // _profileController.emailController.text.length != 0 &&
+                      //         _profileController
+                      //                 .loginController!.mobile.value.length !=
+                      //             0 &&
+                      //         _profileController.DOBController.text.length != 0
+                      //     ? ProfileServices.editProfile(
+                      //         email: _profileController.emailController.text,
+                      //         countryCode: _profileController
+                      //             .loginController!.selectedCountry.value.code,
+                      //         phone: _profileController
+                      //             .loginController!.mobile.value,
+                      //         dob: _profileController.DOBController.text)
+                      //     : _profileController.emailController.text.length == 0 &&
+                      //             _profileController.loginController!.mobile
+                      //                     .value.length !=
+                      //                 0 &&
+                      //             _profileController.DOBController.text.length !=
+                      //                 0
+                      //         ? ProfileServices.editProfile(
+                      //             email: null,
+                      //             countryCode: _profileController
+                      //                 .loginController!
+                      //                 .selectedCountry
+                      //                 .value
+                      //                 .code,
+                      //             phone: _profileController
+                      //                 .loginController!.mobile.value,
+                      //             dob: _profileController.DOBController.text)
+                      //         : null;
+                      //
                       // _profileController.emailController.text.length == 0
                       //     ? ProfileServices.editProfile(
                       //         email: null,
-                      //         countryCode: _mobileNoController
-                      //             .selectedCountry.value.code,
-                      //         phone: _mobileNoController.mobile.value,
+                      //         countryCode: _profileController
+                      //             .loginController!.selectedCountry.value.code,
+                      //         phone: _profileController
+                      //             .loginController!.mobile.value,
                       //         dob: _profileController.DOBController.text)
                       //     : ProfileServices.editProfile(
                       //         email: _profileController.emailController.text,
-                      //         countryCode: _mobileNoController
-                      //             .selectedCountry.value.code,
-                      //         phone: _mobileNoController.mobile.value,
+                      //         countryCode: _profileController
+                      //             .loginController!.selectedCountry.value.code,
+                      //         phone: _profileController
+                      //             .loginController!.mobile.value,
                       //         dob: _profileController.DOBController.text);
                     },
                     child: Text(

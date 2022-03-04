@@ -90,8 +90,9 @@ class CreatePostService {
     dio!.options.headers["language"] = "1";
     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
     print("user profile");
+
     var response = await dio.get(ApiUrl.getUserProfile);
-    log(response.data.toString());
+    log("user profile " + response.data.toString());
     return userProfileModelFromJson(response.toString());
   }
 
