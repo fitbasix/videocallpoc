@@ -44,7 +44,7 @@ class TrainerProfileScreen extends StatefulWidget {
 
 class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   HomeController _homeController = Get.find();
-  var isMessageLoading = false.obs;
+  bool isMessageLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +85,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
               setState(() {});
             },
             onMessage: () async {
-              if(!isMessageLoading.value){
-                isMessageLoading.value = true;
+              print("the button value is:" +isMessageLoading.toString());
+              if(!isMessageLoading){
+                isMessageLoading = true;
                 bool dialogCreatedPreviously = false;
                 int openPage = 0;
                 //133642567	Tarun Prajapat
@@ -105,7 +106,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       if(value[i]!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&value[i]!.occupantsIds!.contains(UserQuickBloxId)){
                         dialogCreatedPreviously = true;
                         print(value[i]!.id.toString() + "maxxxx");
-                        isMessageLoading.value = false;
+                        isMessageLoading = false;
                         if(openPage<1){
                           Navigator.push(
                               context,
@@ -116,11 +117,11 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                                   )));
                           ++openPage;
                         }
+                        isMessageLoading = false;
                         break;
                       }
                     }
                     if(!dialogCreatedPreviously){
-
                       List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
                       String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();
                       int dialogType = QBChatDialogTypes.CHAT;
@@ -130,8 +131,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                           occupantsIds, dialogName,
                           dialogType: QBChatDialogTypes.CHAT, ).then((value) {
                           print("dialog id is:"+value!.id!);
-                          isMessageLoading.value = false;
+                          isMessageLoading = false;
                           if(openPage<1){
+                            isMessageLoading = false;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -143,6 +145,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                           }
                         });
                       } on PlatformException catch (e) {
+                        isMessageLoading = false;
                         print(e.toString());
                       }
                     }
@@ -150,6 +153,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   });
 
                 } on PlatformException catch (e) {
+                  isMessageLoading = false;
                   // some error occurred, look at the exception message for more details
                 }
               }

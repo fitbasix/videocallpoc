@@ -181,7 +181,8 @@ class CreatePostService {
     var connected = await QB.chat.isConnected();
     if(connected!){
       print("called cat connected");
-      InitializeQuickBlox().initWebRTC();
+      //todo remove the comment for webrtc
+      //InitializeQuickBlox().initWebRTC();
       //InitializeQuickBlox().subscribeCall();
     }
     var result = await QB.auth.login(logIn,password).then((value) async {
