@@ -138,13 +138,14 @@ class _ChatScreenState extends State<ChatScreen> {
         },
         onMenuTap: () {
           if(messages!=null){
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DocumentsViewerScreen(
-                      messages: messages,
-                      opponentName: widget.trainerTitle,
-                    )));
+            
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => DocumentsViewerScreen(
+            //           messages: messages,
+            //           opponentName: widget.trainerTitle,
+            //         )));
           }
         },
         parentContext: context,
@@ -182,95 +183,90 @@ class _ChatScreenState extends State<ChatScreen> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
-                  height: 76 * SizeConfig.heightMultiplier!,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                          height: 44 * SizeConfig.heightMultiplier!,
-                          width: 280 * SizeConfig.widthMultiplier!,
-                          decoration: BoxDecoration(
-                            color: kPureWhite,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: TextField(
-                            controller: _massageController.value,
-                            onChanged: (value) {
-                              _typedMessage.value = value;
-                            },
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(
-                                    left: 16 * SizeConfig.widthMultiplier!,
-                                    top: 12 * SizeConfig.heightMultiplier!),
-                                hintText: "message".tr,
-                                hintStyle: AppTextStyle.hsmallhintText,
-                                border: InputBorder.none,
-                                suffixIcon: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SizedBox(
-                                      width: 30 * SizeConfig.widthMultiplier!,
-                                      child: IconButton(
-                                          onPressed: () {
-                                            sendAttachmentsFromDevice();
-                                          },
-                                          icon: SvgPicture.asset(
-                                            ImagePath.attachdocumentIcon,
-                                            width: 9.17 *
-                                                SizeConfig.widthMultiplier!,
-                                            height: 18.34 *
-                                                SizeConfig.heightMultiplier!,
-                                          )),
-                                    ),
-                                    SizedBox(
-                                      width: 30 * SizeConfig.widthMultiplier!,
-                                      child: IconButton(
-                                          onPressed: () {
-                                            sendImageFromCamera();
-                                          },
-                                          icon: SvgPicture.asset(
-                                            ImagePath.openCameraIcon,
-                                            width: 15 *
-                                                SizeConfig.widthMultiplier!,
-                                            height: 13.57 *
-                                                SizeConfig.heightMultiplier!,
-                                          )),
-                                    ),
-                                    SizedBox(
-                                      width: 5 * SizeConfig.widthMultiplier!,
-                                    ),
-                                  ],
-                                )),
-                            // maxLines: 3,
-                          )),
+                      Expanded(
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: kBlack,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: TextField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              cursorColor: kPureWhite,
+                              style: AppTextStyle.black400Text.copyWith(color: kPureWhite,height: 1.3),
+                              controller: _massageController.value,
+                              onChanged: (value) {
+                                _typedMessage.value = value;
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(
+                                      left: 16 * SizeConfig.widthMultiplier!,
+                                      top: 12 * SizeConfig.heightMultiplier!,bottom: 12 * SizeConfig.heightMultiplier!),
+                                  hintText: "message".tr,
+                                  hintStyle: AppTextStyle.hsmallhintText,
+                                  border: InputBorder.none,
+                                  suffixIcon: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        width: 30 * SizeConfig.widthMultiplier!,
+                                        child: IconButton(
+                                            onPressed: () {
+                                              sendAttachmentsFromDevice();
+                                            },
+                                            icon: SvgPicture.asset(
+                                              ImagePath.attachdocumentIcon,
+                                              width: 9.17 *
+                                                  SizeConfig.widthMultiplier!,
+                                              height: 18.34 *
+                                                  SizeConfig.heightMultiplier!,
+                                            )),
+                                      ),
+                                      SizedBox(
+                                        width: 30 * SizeConfig.widthMultiplier!,
+                                        child: IconButton(
+                                            onPressed: () {
+                                              sendImageFromCamera();
+                                            },
+                                            icon: SvgPicture.asset(
+                                              ImagePath.openCameraIcon,
+                                              width: 15 *
+                                                  SizeConfig.widthMultiplier!,
+                                              height: 13.57 *
+                                                  SizeConfig.heightMultiplier!,
+                                            )),
+                                      ),
+                                      SizedBox(
+                                        width: 5 * SizeConfig.widthMultiplier!,
+                                      ),
+                                    ],
+                                  )),
+                              // maxLines: 3,
+                            )),
+                      ),
                       Obx(
-                        () => Padding(
-                          padding: EdgeInsets.only(left: 8, bottom: 4),
-                          child: CircleAvatar(
-                            backgroundColor: greenChatColor,
-                            child: (_typedMessage.value.isNotEmpty)
-                                ? IconButton(
-                                    onPressed: () {
-                                      sendMsg(_typedMessage.value);
-                                      _massageController.value.clear();
-                                      _typedMessage.value = "";
-                                    },
-                                    icon: Icon(
-                                      Icons.send,
-                                      size: 16 * SizeConfig.heightMultiplier!,
-                                      color: Colors.white,
-                                    ))
-                                : IconButton(
-                                    onPressed: () async {},
-                                    icon: SvgPicture.asset(
-                                      ImagePath.chatMicIcon,
-                                      width: 16 * SizeConfig.widthMultiplier!,
-                                      height: 16 * SizeConfig.heightMultiplier!,
-                                    )),
-                          ),
-                        ),
+                        () => (_typedMessage.value.isNotEmpty) ?
+                        Padding(
+                          padding: EdgeInsets.only(left: 23*SizeConfig.widthMultiplier!),
+                          child: GestureDetector(
+                                onTap: () {
+                                  sendMsg(_typedMessage.value);
+                                  _massageController.value.clear();
+                                  _typedMessage.value = "";
+                                },
+                                child: Icon(
+                                  Icons.send,
+                                  size: 21 * SizeConfig.heightMultiplier!,
+                                  color: greenChatColor,
+                                )),
+                        )
+                              : Container(),
                       )
                     ],
                   ),
