@@ -123,8 +123,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (messages != null) {}
+
     return Scaffold(
+      backgroundColor: kPureBlack,
       appBar: AppbarforChat(
         onHangUpTapped: (value) {
           //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
@@ -135,13 +136,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     )));
           });
         },
-        onDocumentsTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DocumentsViewerScreen(
-                        messages: messages,
-                      )));
+        onMenuTap: () {
+          if(messages!=null){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DocumentsViewerScreen(
+                      messages: messages,
+                      opponentName: widget.trainerTitle,
+                    )));
+          }
         },
         parentContext: context,
         trainertitle: widget.trainerTitle,
@@ -149,7 +153,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: SafeArea(
         child: Container(
-          color: Color(0xffE5E5E5).withOpacity(0.5),
           child: Column(
             children: [
               (messages != null)
@@ -351,9 +354,7 @@ class _ChatScreenState extends State<ChatScreen> {
         print(payload.toString());
         if (payload["attachments"] != null) {
           attachmentsFromJson =
-              (json.decode(json.encode(payload["attachments"])) as List)
-                  .map((data) => Attachment.fromJson(data))
-                  .toList();
+              (json.decode(json.encode(payload["attachments"])) as List).map((data) => Attachment.fromJson(data)).toList();
         }
         String? messageId = payload["id"];
         QBMessage newMessage = QBMessage();
@@ -852,16 +853,17 @@ class MessageBubbleOpponent extends StatelessWidget {
                 horizontal: 10.0 * SizeConfig.widthMultiplier!,
               ),
               decoration: BoxDecoration(
-                color: kPureWhite,
+                color: kBlack,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(message!.body.toString(),
-                  style: AppTextStyle.black400Text),
+                  style: AppTextStyle.black400Text.copyWith(color: kPureWhite)),
             )
           ],
         ),
       );
     } else {
+      ///if chat has documents
       fileExtension = message!.attachments![0]!.name!.split(".").last.toUpperCase();
       getFileSize();
       checkFileExistence(message!.attachments![0]!.name);
@@ -900,7 +902,6 @@ class MessageBubbleOpponent extends StatelessWidget {
                                   color: kPureWhite.withOpacity(0.15),
                                   borderRadius:
                                   BorderRadius.circular(8 * SizeConfig.imageSizeMultiplier!),
-
                                 ),
                                 child: Row(
                                   children: [
@@ -925,7 +926,6 @@ class MessageBubbleOpponent extends StatelessWidget {
                               SizedBox(height: 8*SizeConfig.heightMultiplier!,),
                               Text("${fileSize.value.isNotEmpty?fileSize.value:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: hintGrey,height: 1),)
 
-
                             ],
                           ),
                         ),
@@ -939,7 +939,7 @@ class MessageBubbleOpponent extends StatelessWidget {
                               width: 220*SizeConfig.widthMultiplier!,
                               child: Row(
                                 children: [
-                                  Image.asset((fileExtension == "JPEG"||fileExtension == "JPG"||fileExtension == "PNG"||fileExtension == "SVG")?ImagePath.jpgFileIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,),
+                                  Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,),
                                   SizedBox(width: 7*SizeConfig.widthMultiplier!,),
                                   Expanded(
                                     child: Column(
@@ -1071,7 +1071,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   String? trainertitle;
   String? trainerstatus;
   BuildContext? parentContext;
-  GestureTapCallback? onDocumentsTap;
+  GestureTapCallback? onMenuTap;
   ValueChanged<bool>? onHangUpTapped;
 
   AppbarforChat(
@@ -1079,7 +1079,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
       this.trainertitle,
       this.parentContext,
       this.trainerstatus,
-      this.onDocumentsTap,
+      this.onMenuTap,
       this.onHangUpTapped})
       : super(key: key);
 
@@ -1162,7 +1162,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
         ),
         // popupmenu icon
         IconButton(
-            onPressed: () {},
+            onPressed:onMenuTap,
             icon: SvgPicture.asset(
               ImagePath.chatpopupmenuIcon,
               width: 4 * SizeConfig.widthMultiplier!,

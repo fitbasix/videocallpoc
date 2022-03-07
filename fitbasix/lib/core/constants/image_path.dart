@@ -4,6 +4,10 @@ class ImagePath {
   static const String downloadDocIcon = "assets/Icons/download_icon.png";
   static const String docFileIcon = "assets/Icons/doc_file_icon.png";
   static const String pdfFileIcon = "assets/Icons/pdf_file_icon.png";
+  static const String pngIcon = "assets/Icons/png_icon.png";
+  static const String pptIcon = "assets/Icons/ppt_icon.png";
+  static const String mp4Icon = "assets/Icons/video_file_icon.png";
+  static const String xlxIcon = "assets/Icons/xlx_icon.png";
   static const String jpgFileIcon = "assets/Icons/jpg_file_icon.png";
   static const String privacyPolicyIcon = "assets/Icons/privacy_policy_icon.svg";
   static const String termOfUseIcon = "assets/Icons/term_of_use_icon.svg";
