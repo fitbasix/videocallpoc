@@ -10,10 +10,22 @@ class ProfileServices {
   static var dio = DioUtil().getInstance();
 
   static Future<void> editProfile(
-      {String? email, String? countryCode, String? phone, String? dob}) async {
+      {String? email,
+      String? countryCode,
+      String? phone,
+      String? dob,
+      String? otp}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-
+    String? verifiedNumber;
+    print(email);
+    print(countryCode);
+    print(phone);
+    print(dob);
+    if (phone != null) {
+      print("otp verify");
+      // await LogInService.getOTP(phone, "000000");
+    }
     Map editEmail = {"email": email};
     Map editPhone = {"countryCode": countryCode, "phone": phone};
     Map editDob = {"DOB": dob};
@@ -30,7 +42,26 @@ class ProfileServices {
       "phone": phone,
       "DOB": dob
     };
-
+    print("otp done");
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    print("profile update" +
+        (email != null && phone != null && dob != null
+                ? editAll
+                : email != null && phone != null && dob == null
+                    ? editEmailPhone
+                    : email != null && phone == null && dob != null
+                        ? editEmailDob
+                        : email != null && phone == null && dob == null
+                            ? editEmail
+                            : phone != null && dob != null
+                                ? editPhoneDob
+                                : phone != null && dob == null
+                                    ? editPhone
+                                    : dob != null
+                                        ? editDob
+                                        : null)
+            .toString());
     final response = await dio!.put(ApiUrl.editProfile,
         data: email != null && phone != null && dob != null
             ? editAll
@@ -47,7 +78,7 @@ class ProfileServices {
                                 : dob != null
                                     ? editDob
                                     : null);
-    log(response.statusCode.toString());
+    log("response   " + response.data.toString());
     log(response.toString());
   }
 

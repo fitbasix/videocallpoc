@@ -101,6 +101,7 @@ class CreatePostService {
     var dio = DioUtil().getInstance();
     dio!.options.headers["language"] = "1";
     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+
     print(dio.options.headers["Authorization"].toString() + "tokenDemo");
     var response = await dio.get(ApiUrl.getUserProfile);
 

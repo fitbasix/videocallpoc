@@ -77,6 +77,10 @@ class Profile {
     this.name,
     this.profilePhoto,
     this.coverPhoto,
+    this.email,
+    this.dob,
+    this.countryCode,
+    this.mobileNumber,
     this.nutrition,
     this.following,
     this.followers,
@@ -87,6 +91,10 @@ class Profile {
   final String? name;
   final String? profilePhoto;
   final String? coverPhoto;
+  final String? mobileNumber;
+  final String? email;
+  final DateTime? dob;
+  final String? countryCode;
   final Nutrition? nutrition;
   final int? following;
   final int? followers;
@@ -97,6 +105,10 @@ class Profile {
         name: json["name"],
         profilePhoto: json["profilePhoto"],
         coverPhoto: json["coverPhoto"],
+        mobileNumber: json["phone"],
+        email: json["email"],
+        countryCode: json["countryCode"],
+        dob: DateTime.parse(json["DOB"]),
         nutrition: json["nutrition"] == null
             ? Nutrition()
             : Nutrition.fromJson(json["nutrition"]),
