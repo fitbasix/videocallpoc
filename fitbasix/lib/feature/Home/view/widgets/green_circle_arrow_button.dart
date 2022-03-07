@@ -28,8 +28,8 @@ class GreenCircleArrowButton extends StatelessWidget {
           child: SvgPicture.asset(
             ImagePath.backIcon,
             color: kPureWhite,
-            height: 15,
-            width: 7,
+            height: 12*SizeConfig.heightMultiplier!,
+            width: 7.41*SizeConfig.widthMultiplier!,
             fit: BoxFit.scaleDown,
           ),
         ),
