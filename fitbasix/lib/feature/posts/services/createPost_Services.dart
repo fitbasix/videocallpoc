@@ -182,7 +182,7 @@ class CreatePostService {
     if(connected!){
       print("called cat connected");
       //todo remove the comment for webrtc
-      //InitializeQuickBlox().initWebRTC();
+      InitializeQuickBlox().initWebRTC();
       //InitializeQuickBlox().subscribeCall();
     }
     var result = await QB.auth.login(logIn,password).then((value) async {
@@ -206,7 +206,7 @@ class CreatePostService {
     var chatConnect = await QB.chat.isConnected();
     if(chatConnect!){
       //todo remove comment for initWebRTC to enable video call
-      //InitializeQuickBlox().initWebRTC();
+      InitializeQuickBlox().initWebRTC();
       //InitializeQuickBlox().subscribeCall();
     }
     print("called connect user to chat");
@@ -215,7 +215,7 @@ class CreatePostService {
         var chatConnect = await QB.chat.isConnected();
         if(chatConnect!){
           //todo remove comment for initWebRTC to enable video call
-          //InitializeQuickBlox().initWebRTC();
+          InitializeQuickBlox().initWebRTC();
           //InitializeQuickBlox().subscribeCall();
         }
       });
