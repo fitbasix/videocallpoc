@@ -10,7 +10,11 @@ import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:fitbasix/feature/plans/models/AvailableSlot.dart';
 import 'package:get/get.dart';
+
+import '../../plans/models/FullPlanDetailModel.dart';
+import '../../plans/models/allTimeSlot.dart';
 
 class TrainerServices {
   static var dio = DioUtil().getInstance();
@@ -33,6 +37,24 @@ class TrainerServices {
         await dio!.post(ApiUrl.getTrainerById, data: {"trainerId": trainerId});
     print(response.toString());
     return trainerModelFromJson(response.toString());
+  }
+
+  static Future<PlanFullDetails> getPlanById(String PlanId) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response = await dio!.post(ApiUrl.planById, data: {"planId": PlanId});
+    print("plan details" + response.data.toString());
+    return planFullDetailsFromJson(response.toString());
+  }
+
+  static Future<AllTimeSlots> getAllTimeSlot() async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response = await dio!.get(ApiUrl.getAllPlans);
+    print("plan details" + response.data.toString());
+    return allTimeSlotsFromJson(response.toString());
   }
 
   static Future<AllTrainer> getAllTrainer(
@@ -72,6 +94,30 @@ class TrainerServices {
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getTrainers, data: {});
     return getTrainerModelFromJson(response.toString());
+  }
+
+  static Future<AvailableSlot> getEnrolledPlanDetails(String trainerId) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response =
+        await dio!.post(ApiUrl.getSchedules, data: {"trainerId": trainerId});
+    return availableSlotFromJson(response.toString());
+  }
+
+  static Future<AvailableSlot> getAllWeekDays(
+      String trainerId, int time) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.post(ApiUrl.getSchedules,
+        data: {"trainerId": trainerId, "time": time});
+    return availableSlotFromJson(response.toString());
+  }
+
+  static Future<void> bookSlot(List<String> slots) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.post(ApiUrl.bookDemo, data: {"days": slots});
+    print(response.toString());
   }
 
   static Future<AllTrainer> getFitnessConsultant() async {

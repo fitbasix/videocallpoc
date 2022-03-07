@@ -1,4 +1,6 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/plans/view/widget/custom_buttonforplan.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,9 @@ import 'package:get/get.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
+import '../../../core/universal_widgets/number_format.dart';
+import '../../get_trained/controller/trainer_controller.dart';
+import '../../get_trained/services/trainer_services.dart';
 import '../../get_trained/view/widgets/star_rating.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -18,57 +23,155 @@ class PlanInformationUI extends StatefulWidget {
   _PlanInformationUIState createState() => _PlanInformationUIState();
 }
 
-var imageurl =
-    "https://s3-alpha-sig.figma.com/img/a2f9/9007/54ca7015b64810f8e3185115236ee597?Expires=1646611200&Signature=GnAVttQd8W9Gbw72FGeDEuRqcIwRIv7TzsltIw9CpqBZKHnqC5WcG4dQ6j168SFz0sl6lHk2qlzE1TrFdZIIcmc~ue0wIEy2lvghS86Kr7xQpTRqbF0fakP-El-nUTxcg~X2kQm8kKtgPgFW3qmlWlPAMKlgHQO62TzPY8sngV5GEP4fFjjHfLHC~f-3kUUX-jPPU62t79Zb7svcWbBUKjh0zP-bzpv1j1tjbHayvqzH~PJRDBlJwdclSzkAoguX~bMeyFelgsApFhl~saCTFb~~YY1gKzIPFaG94ft3fTYcKtLLeCiYq-JpyFFX-UrLfrz3lMjIbgGrfSdMQMGuWg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA";
-var trainernetworkimage =
-    "https://s3-alpha-sig.figma.com/img/3602/51de/062e5d1fd0d2c7f3ae10cd8973b3a786?Expires=1646611200&Signature=Tizz9xU3c44ik2xIGwP3UiQsxNRb6AQG1iM8idByENnF2PrH9K1V90zMc3fY8jgYWObS-e767vFy0CjKZPenEbBpx3fOSa2O4jaaOMdWVptfrQJyG024A1lvudJ5INSCyJgu6kKemRVwX27MtbNAv9~7OMIhul7wY~apbwwiJc0cWZ8s9abvx3qhSaIKsaTrnaj61VzJfMdLH4dpMvwyrrJSX01GKZp0pnZaJhq20V5etaPsu1bL4c~DfvOT6UZDmIgmFLBi7dlVfJ0Je5FPn2-blSJdjPgsPjs-S36hpq7zMO~bxrgRQAYSQO7xVsFS7Hjnb0TuOzCGrTCyHT-xnA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA";
+// var imageurl =
+//     "https://s3-alpha-sig.figma.com/img/a2f9/9007/54ca7015b64810f8e3185115236ee597?Expires=1646611200&Signature=GnAVttQd8W9Gbw72FGeDEuRqcIwRIv7TzsltIw9CpqBZKHnqC5WcG4dQ6j168SFz0sl6lHk2qlzE1TrFdZIIcmc~ue0wIEy2lvghS86Kr7xQpTRqbF0fakP-El-nUTxcg~X2kQm8kKtgPgFW3qmlWlPAMKlgHQO62TzPY8sngV5GEP4fFjjHfLHC~f-3kUUX-jPPU62t79Zb7svcWbBUKjh0zP-bzpv1j1tjbHayvqzH~PJRDBlJwdclSzkAoguX~bMeyFelgsApFhl~saCTFb~~YY1gKzIPFaG94ft3fTYcKtLLeCiYq-JpyFFX-UrLfrz3lMjIbgGrfSdMQMGuWg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA";
+// var trainernetworkimage =
+//     "https://s3-alpha-sig.figma.com/img/3602/51de/062e5d1fd0d2c7f3ae10cd8973b3a786?Expires=1646611200&Signature=Tizz9xU3c44ik2xIGwP3UiQsxNRb6AQG1iM8idByENnF2PrH9K1V90zMc3fY8jgYWObS-e767vFy0CjKZPenEbBpx3fOSa2O4jaaOMdWVptfrQJyG024A1lvudJ5INSCyJgu6kKemRVwX27MtbNAv9~7OMIhul7wY~apbwwiJc0cWZ8s9abvx3qhSaIKsaTrnaj61VzJfMdLH4dpMvwyrrJSX01GKZp0pnZaJhq20V5etaPsu1bL4c~DfvOT6UZDmIgmFLBi7dlVfJ0Je5FPn2-blSJdjPgsPjs-S36hpq7zMO~bxrgRQAYSQO7xVsFS7Hjnb0TuOzCGrTCyHT-xnA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA";
 
 class _PlanInformationUIState extends State<PlanInformationUI> {
+  final TrainerController trainerController = Get.find();
+  void getPlan() async {
+    trainerController.fullPlanInfoLoading.value = true;
+    trainerController.fullPlanDetails.value = await TrainerServices.getPlanById(
+        trainerController.selectedPlanId.value);
+    trainerController.fullPlanInfoLoading.value = false;
+  }
+
+  @override
+  void initState() {
+    getPlan();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: kPureWhite,
-        body: TrainerPlanScreen(
-          backgroundUrl: trainernetworkimage,
-          onGetdemo: (){},
-          onEnrollnow: (){},
-          onfollowtrainer: (){},
-          onmessagetrainer: (){},
-          trainerName: 'Jonathan Swift',
-          planLanguage: 'english',
-          planduration: '8 weeks',
-          plandescription: 'Venenatis, feugiat quis nibh faucibus pellentesque.'
-              ' Dignissim sed feugiat turpis tortor. Viverra sed '
-              'dictumst scelerisque nunc, at eu ullamcorper. Enim,'
-              ' sagittis consectetur vitae elementum diam interdum. '
-              'Aliquet tellus nisl, eu dolor, cras habitasse. '
-              'Et amet feugiat quis a odio facilisi.',
-          plankeypoints: 'Set yourself a habit and make exercise a routine',
-          planequipment: 'Yoga mat',
-          planprizing: '\$240',
-          traineravatarUrl: trainernetworkimage,
-          followerscount: '16.2K',
-          followingcount: '1.5K',
-          rating: 3.0,
-          ratingCount: '3',
-          totalPeopleTrained: '13.3K',
-          reviewdiscription: 'Venenatis, feugiat quis nibh faucibus pellentesque. '
-              'Dignissim sed feugiat turpis tortor. Viverra sed '
-              'dictumst scelerisque nunc, at eu ullamcorper.'
-              ' Enim, sagittis consectetur vitae elementum diam interdum. ',
-          reviewdate: '3 days ago',
-          reviewStarcount: '5',
-          reviewPersonName: 'Rajesh Sharma',
-          reviewPersonDetail: '18 plans/member since 2022',
-          reviewPersonCircleavatar: trainernetworkimage,
-          totalreviewrating: '4.7',
-        )
-    );
+        body: Obx(
+          () => trainerController.fullPlanInfoLoading.value
+              ? Center(
+                  child: CustomizedCircularProgress(),
+                )
+              : TrainerPlanScreen(
+                  backgroundUrl: trainerController
+                      .fullPlanDetails.value.response!.data!.planIcon
+                      .toString(),
+                  onGetdemo: () async {
+                    trainerController.weekAvailableSlots.value = [];
+                    Navigator.pushNamed(context, RouteName.planTimingScreen);
+                    // trainerController.fullPlanDetails.value.response!.data!
+                    //             .isEnrolled ==
+                    //         false
+                    //     ? Navigator.pushNamed(
+                    //         context, RouteName.planTimingScreen)
+                    //     : "";
+                    trainerController.isAvailableSlotDataLoading.value = true;
+                    var output = await TrainerServices.getAllTimeSlot();
+                    trainerController.getAllSlots.value =
+                        output.response!.data!;
+
+                    trainerController.availableSlots.value =
+                        await TrainerServices.getEnrolledPlanDetails(
+                            trainerController.fullPlanDetails.value.response!
+                                .data!.trainer!.trainerId!);
+                    trainerController.isAvailableSlotDataLoading.value = false;
+                  },
+                  onEnrollnow: () async {
+                    trainerController.weekAvailableSlots.value = [];
+                    Navigator.pushNamed(context, RouteName.planTimingScreen);
+                    // trainerController.fullPlanDetails.value.response!.data!
+                    //             .isEnrolled ==
+                    //         false
+                    //     ? Navigator.pushNamed(
+                    //         context, RouteName.planTimingScreen)
+                    //     : "";
+                    trainerController.isAvailableSlotDataLoading.value = true;
+                    var output = await TrainerServices.getAllTimeSlot();
+                    trainerController.getAllSlots.value =
+                        output.response!.data!;
+
+                    trainerController.availableSlots.value =
+                        await TrainerServices.getEnrolledPlanDetails(
+                            trainerController.fullPlanDetails.value.response!
+                                .data!.trainer!.trainerId!);
+                    trainerController.isAvailableSlotDataLoading.value = false;
+                  },
+                  onfollowtrainer: () {
+                    trainerController.fullPlanDetails.value.response!.data!
+                        .trainer!.isFollowing = true;
+                    trainerController.fullPlanDetails.value.response!.data!
+                        .trainer!.followers = (int.tryParse(trainerController
+                            .fullPlanDetails
+                            .value
+                            .response!
+                            .data!
+                            .trainer!
+                            .followers!
+                            .toString())! +
+                        1);
+                    TrainerServices.followTrainer(
+                        trainerController.atrainerDetail.value.user!.id!);
+                    setState(() {});
+                  },
+                  isFollowing: trainerController.fullPlanDetails.value.response!
+                      .data!.trainer!.isFollowing,
+                  onmessagetrainer: () {},
+                  trainerName: trainerController
+                      .fullPlanDetails.value.response!.data!.trainer!.name
+                      .toString(),
+                  planLanguage: trainerController
+                      .fullPlanDetails.value.response!.data!.language
+                      .toString(),
+                  planduration: trainerController
+                          .fullPlanDetails.value.response!.data!.planDuration
+                          .toString() +
+                      ' weeks',
+                  plandescription: trainerController
+                      .fullPlanDetails.value.response!.data!.description
+                      .toString(),
+                  plankeypoints: trainerController
+                      .fullPlanDetails.value.response!.data!.keyPoints!,
+                  planequipment: trainerController
+                      .fullPlanDetails.value.response!.data!.equipments!,
+                  planprizing: 'AED ' +
+                      trainerController
+                          .fullPlanDetails.value.response!.data!.prize
+                          .toString(),
+                  traineravatarUrl: trainerController.fullPlanDetails.value
+                      .response!.data!.trainer!.profilePhoto,
+                  followerscount: NumberFormatter.textFormatter(
+                      trainerController.fullPlanDetails.value.response!.data!
+                          .trainer!.followers!
+                          .toString()),
+                  followingcount: NumberFormatter.textFormatter(
+                      trainerController.fullPlanDetails.value.response!.data!
+                          .trainer!.followings!
+                          .toString()),
+                  rating: trainerController
+                      .fullPlanDetails.value.response!.data!.plansRating!,
+                  ratingCount: NumberFormatter.textFormatter(trainerController
+                      .fullPlanDetails.value.response!.data!.raters
+                      .toString()),
+                  totalPeopleTrained: NumberFormatter.textFormatter(
+                      trainerController
+                          .fullPlanDetails.value.response!.data!.trainees
+                          .toString()),
+                  // reviewdiscription:
+                  //     'Venenatis, feugiat quis nibh faucibus pellentesque. '
+                  //     'Dignissim sed feugiat turpis tortor. Viverra sed '
+                  //     'dictumst scelerisque nunc, at eu ullamcorper.'
+                  //     ' Enim, sagittis consectetur vitae elementum diam interdum. ',
+                  // reviewdate: '3 days ago',
+                  // reviewStarcount: '5',
+                  // reviewPersonName: 'Rajesh Sharma',
+                  // reviewPersonDetail: '18 plans/member since 2022',
+                  // totalreviewrating: '4.7',
+                ),
+        ));
   }
 }
 
 class TrainerPlanScreen extends StatefulWidget {
-
   final String? backgroundUrl;
   final String? traineravatarUrl;
   final VoidCallback? onGetdemo;
@@ -78,8 +181,8 @@ class TrainerPlanScreen extends StatefulWidget {
   final String? planLanguage;
   final String? planduration;
   final String? plandescription;
-  final String? plankeypoints;
-  final String? planequipment;
+  final List<String> plankeypoints;
+  final List<String> planequipment;
   final String? planprizing;
   final String? trainerName;
   final String? followerscount;
@@ -94,36 +197,38 @@ class TrainerPlanScreen extends StatefulWidget {
   final String? reviewPersonDetail;
   final String? reviewPersonCircleavatar;
   final String? totalreviewrating;
-  double? value =1.0;
+  final bool? isFollowing;
+  double? value = 1.0;
 
-   TrainerPlanScreen(
-       {
-         this.backgroundUrl,
-         this.onGetdemo,
-         this.onEnrollnow,
-         this.followingcount,
-         this.followerscount,
-         this.trainerName,
-         this.plandescription,
-         this.planduration,
-         this.planequipment,
-         this.plankeypoints,
-         this.planLanguage,
-         this.planprizing,
-         this.rating,
-         this.ratingCount,
-         this.totalPeopleTrained,
-         this.traineravatarUrl,
-         this.onfollowtrainer,
-         this.onmessagetrainer,
-         this.reviewdate,
-         this.reviewdiscription,
-         this.reviewStarcount,
-         this.reviewPersonName,
-         this.reviewPersonDetail,
-         this.reviewPersonCircleavatar,
-         this.totalreviewrating,
-         Key? key}) : super(key: key);
+  TrainerPlanScreen(
+      {this.backgroundUrl,
+      this.onGetdemo,
+      this.onEnrollnow,
+      this.followingcount,
+      this.followerscount,
+      this.trainerName,
+      this.plandescription,
+      this.planduration,
+      required this.planequipment,
+      required this.plankeypoints,
+      this.planLanguage,
+      this.planprizing,
+      this.rating,
+      this.ratingCount,
+      this.totalPeopleTrained,
+      this.traineravatarUrl,
+      this.onfollowtrainer,
+      this.onmessagetrainer,
+      this.reviewdate,
+      this.reviewdiscription,
+      this.reviewStarcount,
+      this.reviewPersonName,
+      this.reviewPersonDetail,
+      this.reviewPersonCircleavatar,
+      this.totalreviewrating,
+      this.isFollowing,
+      Key? key})
+      : super(key: key);
   @override
   _TrainerPlanScreenState createState() => _TrainerPlanScreenState();
 }
@@ -158,23 +263,17 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                     height: 1 * SizeConfig.heightMultiplier!,
                   ),
                   // Review of the plan
-                  _BuildReviewofPlan(),
+                  // _BuildReviewofPlan(),
 
                   // get a demo & enroll button
                   Container(
-                    decoration: BoxDecoration(
-                        color: kPureWhite,
-                      boxShadow:[
-                        BoxShadow(
-                            color: Color(0xFF000000).withOpacity(0.1),
-                            blurRadius: 4.0, // soften the shadow
-                            spreadRadius: 4.0,
-                          offset: Offset(
-                            0,-2.0
-                          )
-                        )
-                      ]
-                    ),
+                    decoration: BoxDecoration(color: kPureWhite, boxShadow: [
+                      BoxShadow(
+                          color: Color(0xFF000000).withOpacity(0.1),
+                          blurRadius: 4.0, // soften the shadow
+                          spreadRadius: 4.0,
+                          offset: Offset(0, -2.0))
+                    ]),
                     padding: EdgeInsets.only(
                         top: 8 * SizeConfig.heightMultiplier!,
                         bottom: 16 * SizeConfig.heightMultiplier!,
@@ -294,7 +393,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
               height: 8 * SizeConfig.heightMultiplier!,
             ),
             //instructor
-            Text('instructed_by '.tr+ widget.trainerName!.tr,
+            Text('instructed_by'.tr + " " + widget.trainerName!.tr,
                 style: AppTextStyle.hblackSemiBoldText),
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
@@ -340,13 +439,20 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
-            _BuildIcon(
-                widget.plankeypoints!.tr,
-                ImageIcon(
-                  AssetImage(ImagePath.plangreentickIcon),
-                  size: 15 * SizeConfig.imageSizeMultiplier!,
-                  color: kgreen4F,
-                )),
+            ListView.builder(
+                itemCount: widget.plankeypoints.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return _BuildIcon(
+                      widget.plankeypoints[index],
+                      ImageIcon(
+                        AssetImage(ImagePath.plangreentickIcon),
+                        size: 15 * SizeConfig.imageSizeMultiplier!,
+                        color: kgreen4F,
+                      ));
+                }),
+
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
@@ -357,13 +463,19 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
-            _BuildIcon(
-                widget.planequipment!.tr,
-                ImageIcon(
-                  AssetImage(ImagePath.planredIcon),
-                  size: 8 * SizeConfig.imageSizeMultiplier!,
-                  color: Color(0xFFD05252),
-                )),
+            ListView.builder(
+                itemCount: widget.planequipment.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return _BuildIcon(
+                      widget.planequipment[index],
+                      ImageIcon(
+                        AssetImage(ImagePath.planredIcon),
+                        size: 8 * SizeConfig.imageSizeMultiplier!,
+                        color: Color(0xFFD05252),
+                      ));
+                }),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
@@ -395,9 +507,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
               children: [
                 CircleAvatar(
                   radius: 30 * SizeConfig.heightMultiplier!,
-                  backgroundImage: NetworkImage(
-                      widget.traineravatarUrl!
-                  ),
+                  backgroundImage: NetworkImage(widget.traineravatarUrl!),
                 ),
                 SizedBox(
                   width: 16 * SizeConfig.widthMultiplier!,
@@ -416,18 +526,31 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                     ),
                     Row(
                       children: [
-                        CustomButtonPlanScreen(
-                          colour: kgreen4F,
-                          width: 102 * SizeConfig.widthMultiplier!,
-                          height: 28 * SizeConfig.heightMultiplier!,
-                          onpressed: widget.onfollowtrainer!,
-                          Text: Text(
-                            'follow'.tr,
-                            style: AppTextStyle.hboldWhiteText.copyWith(
-                              fontSize: (12) * SizeConfig.textMultiplier!,
-                            ),
-                          ),
-                        ),
+                        widget.isFollowing == true
+                            ? CustomButtonPlanScreen(
+                                colour: kgreen4F,
+                                width: 102 * SizeConfig.widthMultiplier!,
+                                height: 28 * SizeConfig.heightMultiplier!,
+                                onpressed: () {},
+                                Text: Text(
+                                  'following'.tr,
+                                  style: AppTextStyle.hboldWhiteText.copyWith(
+                                    fontSize: (12) * SizeConfig.textMultiplier!,
+                                  ),
+                                ),
+                              )
+                            : CustomButtonPlanScreen(
+                                colour: kgreen4F,
+                                width: 102 * SizeConfig.widthMultiplier!,
+                                height: 28 * SizeConfig.heightMultiplier!,
+                                onpressed: widget.onfollowtrainer!,
+                                Text: Text(
+                                  'follow'.tr,
+                                  style: AppTextStyle.hboldWhiteText.copyWith(
+                                    fontSize: (12) * SizeConfig.textMultiplier!,
+                                  ),
+                                ),
+                              ),
                         SizedBox(
                           width: 12 * SizeConfig.widthMultiplier!,
                         ),
@@ -546,8 +669,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
         padding: EdgeInsets.only(
             left: 16 * SizeConfig.widthMultiplier!,
             right: 16 * SizeConfig.widthMultiplier!,
-            top: 16 * SizeConfig.heightMultiplier!
-        ),
+            top: 16 * SizeConfig.heightMultiplier!),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -557,7 +679,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                   .copyWith(color: kBlack, letterSpacing: -0.08),
             ),
             SizedBox(
-              height: 16*SizeConfig.heightMultiplier!,
+              height: 16 * SizeConfig.heightMultiplier!,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -580,14 +702,13 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
               ],
             ),
             Padding(
-              padding:  EdgeInsets.only(
-                top: 12*SizeConfig.heightMultiplier!,
-                bottom: 12*SizeConfig.heightMultiplier!
-              ),
+              padding: EdgeInsets.only(
+                  top: 12 * SizeConfig.heightMultiplier!,
+                  bottom: 12 * SizeConfig.heightMultiplier!),
               child: Row(
                 children: [
                   Expanded(
-                    child:LinearPercentIndicator(
+                    child: LinearPercentIndicator(
                       lineHeight: 8.0,
                       percent: widget.value!,
                       backgroundColor: kLightGrey,
@@ -596,19 +717,19 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 16*SizeConfig.widthMultiplier!,
+                    width: 16 * SizeConfig.widthMultiplier!,
                   ),
                   StarRating(
-                    rating: (widget.value!)*5,
+                    rating: (widget.value!) * 5,
                   ),
                   SizedBox(
-                    width: 8*SizeConfig.widthMultiplier!,
+                    width: 8 * SizeConfig.widthMultiplier!,
                   ),
                   //print value in percent
-                  Text((widget.value!*100).floor().toString()+'%',
-                  style: AppTextStyle.hblack400Text.copyWith(
-                    color: hintGrey
-                  ),)
+                  Text(
+                    (widget.value! * 100).floor().toString() + '%',
+                    style: AppTextStyle.hblack400Text.copyWith(color: hintGrey),
+                  )
                 ],
               ),
             ),
@@ -619,9 +740,8 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
               children: [
                 CircleAvatar(
                   radius: 16 * SizeConfig.heightMultiplier!,
-                  backgroundImage: NetworkImage(
-                    widget.reviewPersonCircleavatar!
-                  ),
+                  backgroundImage:
+                      NetworkImage(widget.reviewPersonCircleavatar!),
                 ),
                 SizedBox(
                   width: 14 * SizeConfig.widthMultiplier!,

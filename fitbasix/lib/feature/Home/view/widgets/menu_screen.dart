@@ -15,6 +15,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/constants/credentials.dart';
 import '../../../log_in/services/login_services.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -148,6 +149,7 @@ class MenuScreen extends StatelessWidget {
                 menuItemImage: ImagePath.logOut,
                 menuItemText: 'logOut'.tr,
                 onTap: () async {
+                  InitializeQuickBlox().logOutUserSession();
                   final LoginController _controller =
                       Get.put(LoginController());
                   await LogInService.logOut();

@@ -27,6 +27,8 @@ class LogInService {
     return response.data['response']['message'];
   }
 
+
+
   static Future<Countries> getCountries() async {
     dio!.options.headers["language"] = "1";
     var response = await dio!.get(ApiUrl.getCountries);
@@ -177,6 +179,6 @@ class LogInService {
     print(RefreshToken);
     // var response =
     //     await dio!.post(ApiUrl.logOut, data: {"refreshToken": RefreshToken});
-    //print(response.data.toString());
+
   }
 }

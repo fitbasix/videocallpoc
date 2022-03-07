@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
   RxInt selectedIndex = 0.obs;
+  RxInt userQuickBloxId = 0.obs;
   RxBool isLoading = RxBool(false);
   RxBool spgStatus = RxBool(false);
   Rx<UserProfileModel> userProfileData = Rx(UserProfileModel());
@@ -131,8 +132,7 @@ class HomeController extends GetxController {
 
   WaterReminder getWaterReminder(int Time) {
     try {
-      waterReminder.value = waterSource.value.response!.data!
-          .singleWhere((element) => element.serialId == Time);
+      waterReminder.value = waterSource.value.response!.data!.singleWhere((element) => element.serialId == Time);
       return waterReminder.value;
     } catch (e) {
       return waterReminder.value;

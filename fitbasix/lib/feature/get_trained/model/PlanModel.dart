@@ -49,16 +49,17 @@ class Response {
 }
 
 class Plan {
-  Plan({
-    this.raters,
-    this.id,
-    this.createdBy,
-    this.planIcon,
-    this.planName,
-    this.planDuration,
-    this.plansRating,
-    this.likesCount,
-  });
+  Plan(
+      {this.raters,
+      this.id,
+      this.createdBy,
+      this.planIcon,
+      this.planName,
+      this.planDuration,
+      this.plansRating,
+      this.likesCount,
+      this.prize,
+      this.trainees});
 
   int? raters;
   String? id;
@@ -68,17 +69,20 @@ class Plan {
   int? planDuration;
   double? plansRating;
   int? likesCount;
+  int? prize;
+  int? trainees;
 
   factory Plan.fromJson(Map<String, dynamic> json) => Plan(
-        raters: json["raters"],
-        id: json["_id"],
-        createdBy: json["trainer"],
-        planIcon: json["planIcon"],
-        planName: json["planName"],
-        planDuration: json["planDuration"],
-        plansRating: json["plansRating"],
-        likesCount: json["likesCount"],
-      );
+      raters: json["raters"],
+      id: json["_id"],
+      createdBy: json["trainer"],
+      planIcon: json["planIcon"],
+      planName: json["planName"],
+      planDuration: json["planDuration"],
+      plansRating: json["plansRating"].toDouble(),
+      likesCount: json["likesCount"],
+      trainees: json["trainees"],
+      prize: json["prize"]);
 
   Map<String, dynamic> toJson() => {
         "raters": raters,
