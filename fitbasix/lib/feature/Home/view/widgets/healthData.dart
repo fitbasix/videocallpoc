@@ -214,7 +214,7 @@ class _HealthAppState extends State<HealthApp> {
   Widget build(BuildContext context) {
     return Dialog(
         insetPadding: EdgeInsets.all(50 * SizeConfig.widthMultiplier!),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         insetAnimationDuration: const Duration(milliseconds: 100),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Padding(
@@ -228,7 +228,9 @@ class _HealthAppState extends State<HealthApp> {
               Text(
                 'track_calories_heading'.tr,
                 style: AppTextStyle.boldBlackText
-                    .copyWith(fontSize: 18 * SizeConfig.textMultiplier!),
+                    .copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    fontSize: 18 * SizeConfig.textMultiplier!),
               ),
               SizedBox(
                 height: 12 * SizeConfig.heightMultiplier!,
@@ -236,7 +238,8 @@ class _HealthAppState extends State<HealthApp> {
               Text(
                 'calories_track_reson'.tr,
                 style: AppTextStyle.normalBlackText.copyWith(
-                    fontSize: 14 * SizeConfig.textMultiplier!, color: hintGrey),
+                    fontSize: 14 * SizeConfig.textMultiplier!,
+                    color: hintGrey),
               ),
               SizedBox(
                 height: 48 * SizeConfig.heightMultiplier!,
@@ -322,7 +325,9 @@ class HealthTrackOptionTile extends StatelessWidget {
         ),
         Text(applicationName,
             style: AppTextStyle.boldBlackText
-                .copyWith(fontSize: 18 * SizeConfig.textMultiplier!))
+                .copyWith(
+              color: Theme.of(context).textTheme.bodyText1?.color,
+                fontSize: 18 * SizeConfig.textMultiplier!))
       ],
     );
   }

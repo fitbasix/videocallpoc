@@ -16,11 +16,17 @@ class BMRDialog extends StatelessWidget {
         left: 32 * SizeConfig.widthMultiplier!,
         right: 32 * SizeConfig.widthMultiplier!,
       ),
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
+
           borderRadius: BorderRadius.all(Radius.circular(8.0))),
       child: Container(
         height: 374 * SizeConfig.heightMultiplier!,
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: greyBorder
+          ),
+        ),
         child: Stack(
           children: [
             Column(
@@ -36,7 +42,9 @@ class BMRDialog extends StatelessWidget {
                 ),
                 Center(
                   child: Text('what_bmr'.tr,
-                  style: AppTextStyle.hblack600Text,),
+                  style: AppTextStyle.hblack600Text.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color
+                  ),),
                 ),
                 SizedBox(
                   height: 16*SizeConfig.heightMultiplier!,
@@ -48,6 +56,7 @@ class BMRDialog extends StatelessWidget {
                   ),
                   child: Text('answer_bmr'.tr,
                   style: AppTextStyle.hnormal600BlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
                     fontWeight: FontWeight.w400,
                   ),
                       textAlign: TextAlign.center
@@ -63,7 +72,7 @@ class BMRDialog extends StatelessWidget {
                 },
                 icon: SvgPicture.asset(
                   ImagePath.closedialogIcon,
-                  color: kPureBlack,
+                  color: Theme.of(context).primaryColor,
                   width: 15.55 * SizeConfig.widthMultiplier!,
                   height: 15.55 * SizeConfig.heightMultiplier!,
                 ),

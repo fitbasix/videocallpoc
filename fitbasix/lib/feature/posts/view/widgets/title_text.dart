@@ -14,7 +14,9 @@ class TitleText extends StatelessWidget {
     return Text(
       title,
       style: AppTextStyle.boldBlackText
-          .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+          .copyWith(
+          color: Theme.of(context).textTheme.bodyText1?.color,
+          fontSize: 14 * SizeConfig.textMultiplier!),
     );
   }
 }

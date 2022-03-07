@@ -9,6 +9,7 @@ import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 Widget customDropDownBtn({
+  required BuildContext context,
   String? label,
   VoidCallback? onPressed,
   //TODO change this logic to a cleaner way in future
@@ -20,7 +21,7 @@ Widget customDropDownBtn({
 }) {
   return isExpanded
       ? SizedBox(
-          width: 180 * SizeConfig.widthMultiplier!,
+         // width: 180 * SizeConfig.widthMultiplier!,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
@@ -30,7 +31,9 @@ Widget customDropDownBtn({
                     height: 35 * SizeConfig.heightMultiplier!,
                   ),
                   Container(
-                    decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        boxShadow: [
                       BoxShadow(
                           color: Colors.grey.withOpacity(0.10),
                           blurRadius: 7,
@@ -76,11 +79,12 @@ Widget customDropDownBtn({
                                   children: [
                                     Expanded(
                                       child: Padding(
-                                        padding: EdgeInsets.only(left: 16),
+                                        padding: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!),
                                         child: Text(options[i].name,
                                             style: AppTextStyle.titleText
                                                 .copyWith(
-                                                    fontSize: 16 *
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                                    fontSize: 14 *
                                                         SizeConfig
                                                             .textMultiplier!)),
                                       ),
@@ -147,8 +151,9 @@ class _DropDownTopHeader extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 180 * SizeConfig.widthMultiplier!,
-        height: 40 * SizeConfig.heightMultiplier!,
+        padding: EdgeInsets.only(left: 4*SizeConfig.widthMultiplier!),
+        // width: 180 * SizeConfig.widthMultiplier!,
+        // height: 40 * SizeConfig.heightMultiplier!,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -157,24 +162,26 @@ class _DropDownTopHeader extends StatelessWidget {
                 label!,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyle.titleText
-                    .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                    .copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color,
+                    fontSize: 16 * SizeConfig.textMultiplier!),
               ),
             ),
             SizedBox(
-              width: 12,
+              width: 12*SizeConfig.widthMultiplier!,
             ),
-            // if (isExpanded)
-            //   Icon(
-            //     Icons.keyboard_arrow_up_rounded,
-            //     color: Colors.black,
-            //     size: 36,
-            //   )
-            // else
-            //   Icon(
-            //     Icons.keyboard_arrow_down_rounded,
-            //     color: Colors.black,
-            //     size: 36,
-            //   ),
+            if (isExpanded)
+              Icon(
+                Icons.keyboard_arrow_up_rounded,
+                color: Theme.of(context).primaryColor,
+                size: 25*SizeConfig.widthMultiplier!,
+              )
+            else
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: Theme.of(context).primaryColor,
+                size: 25*SizeConfig.widthMultiplier!,
+              ),
           ],
         ),
       ),

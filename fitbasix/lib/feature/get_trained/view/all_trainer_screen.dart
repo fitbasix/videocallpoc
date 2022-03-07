@@ -894,7 +894,7 @@ class ItemCategory extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          height: 28 * SizeConfig.heightMultiplier!,
+          height: 30 * SizeConfig.heightMultiplier!,
           decoration: BoxDecoration(
               color: isSelected ?
               Theme.of(context).primaryColor : Theme.of(context).secondaryHeaderColor,

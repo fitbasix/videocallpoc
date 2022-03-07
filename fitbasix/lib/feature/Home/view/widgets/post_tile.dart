@@ -222,7 +222,7 @@ class _PostTileState extends State<PostTile> {
                           ),
                           Icon(
                             Icons.access_time,
-                            size: 16,
+                            size: 16*SizeConfig.widthMultiplier!,
                               color: Theme.of(context).textTheme.headline3?.color
                           ),
                           SizedBox(
@@ -240,7 +240,7 @@ class _PostTileState extends State<PostTile> {
                               ? SizedBox()
                               : Icon(
                                   Icons.place,
-                                  size: 16,
+                                  size: 16*SizeConfig.widthMultiplier!,
                                   color: Theme.of(context).textTheme.headline3?.color
                                 ),
                           SizedBox(
@@ -415,7 +415,7 @@ class _PostTileState extends State<PostTile> {
                     color: kPureWhite,
                   ),
                   SizedBox(
-                    width: 6.5 * SizeConfig.widthMultiplier!,
+                    width: 7 * SizeConfig.widthMultiplier!,
                   ),
                   Text(
                     'comments'.trParams({'no_comments': widget.comments}),
