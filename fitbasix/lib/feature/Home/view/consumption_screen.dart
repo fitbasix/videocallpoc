@@ -23,7 +23,7 @@ class ConsumptionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
         elevation: 0.0,
         leading: IconButton(
             onPressed: () {
@@ -37,16 +37,18 @@ class ConsumptionScreen extends StatelessWidget {
                   ImagePath.backIcon,
                   width: 7 * SizeConfig.widthMultiplier!,
                   height: 12 * SizeConfig.heightMultiplier!,
+                  color: Theme.of(context).textTheme.bodyText1?.color,
                 ),
               ),
             )),
         title: Text(
           'today_consumption'.tr,
           style: AppTextStyle.boldBlackText.copyWith(
-              color: lightBlack, fontSize: 16 * SizeConfig.textMultiplier!),
+              color: Theme.of(context).textTheme.bodyText1?.color,
+              fontSize: 16 * SizeConfig.textMultiplier!),
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: SingleChildScrollView(
         child: Obx(
           () => _homeController.isConsumptionLoading.value
@@ -54,11 +56,11 @@ class ConsumptionScreen extends StatelessWidget {
                   child: CustomizedCircularProgress(),
                 )
               : Container(
-                  color: kBackgroundColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   child: Column(
                     children: [
                       Container(
-                        color: Colors.white,
+                        color: Theme.of(context).secondaryHeaderColor,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 16 * SizeConfig.widthMultiplier!),
@@ -87,7 +89,9 @@ class ConsumptionScreen extends StatelessWidget {
                                                 .copyWith(
                                                     fontSize: 14 *
                                                         SizeConfig
-                                                            .textMultiplier!),
+                                                            .textMultiplier!,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
                                           ),
                                           SizedBox(
                                             height: 12 *
@@ -105,6 +109,7 @@ class ConsumptionScreen extends StatelessWidget {
                                             height: 48 *
                                                 SizeConfig.heightMultiplier!,
                                             child: DailyGoalDropDown(
+                                                context: context,
                                                 listofItems:
                                                     _homeController.Watergoal,
                                                 onChanged: (Value) {
@@ -133,7 +138,9 @@ class ConsumptionScreen extends StatelessWidget {
                                                 .copyWith(
                                                     fontSize: 14 *
                                                         SizeConfig
-                                                            .textMultiplier!),
+                                                            .textMultiplier!,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
                                           ),
                                           SizedBox(
                                             height: 26 *
@@ -152,7 +159,12 @@ class ConsumptionScreen extends StatelessWidget {
                                                             .totalWaterRequired!)
                                                     .toStringAsFixed(2),
                                                 style: AppTextStyle
-                                                    .normalBlackText,
+                                                    .normalWhiteText
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color),
                                               ),
                                               SizedBox(
                                                 width: 3 *
@@ -184,7 +196,9 @@ class ConsumptionScreen extends StatelessWidget {
                                                 .copyWith(
                                                     fontSize: 14 *
                                                         SizeConfig
-                                                            .textMultiplier!),
+                                                            .textMultiplier!,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
                                           ),
                                           SizedBox(
                                             height: 26 *
@@ -206,8 +220,8 @@ class ConsumptionScreen extends StatelessWidget {
                                 Text(
                                   'Timings'.tr,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      fontSize:
-                                          14 * SizeConfig.textMultiplier!),
+                                      fontSize: 14 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context).primaryColor),
                                 ),
                                 SizedBox(
                                   height: 12 * SizeConfig.heightMultiplier!,
@@ -242,7 +256,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 _homeController.formatedTime(
                                                     _homeController
                                                         .waterTimingFrom.value),
-                                                style: AppTextStyle.NormalText,
+                                                style: AppTextStyle
+                                                    .normalWhiteText,
                                               ),
                                             ],
                                           ),
@@ -291,7 +306,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 _homeController.formatedTime(
                                                     _homeController
                                                         .waterTimingTo.value),
-                                                style: AppTextStyle.NormalText,
+                                                style: AppTextStyle
+                                                    .normalWhiteText,
                                               ),
                                             ],
                                           ),
@@ -306,8 +322,8 @@ class ConsumptionScreen extends StatelessWidget {
                                 Text(
                                   'reminder'.tr,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      fontSize:
-                                          14 * SizeConfig.textMultiplier!),
+                                      fontSize: 14 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context).primaryColor),
                                 ),
                                 SizedBox(
                                   height: 12 * SizeConfig.heightMultiplier!,
@@ -328,6 +344,7 @@ class ConsumptionScreen extends StatelessWidget {
                                               .value
                                               .response!
                                               .data!,
+                                          context: context,
                                           hint: _homeController
                                               .waterReminder.value,
                                           onChanged: (Value) {
@@ -419,7 +436,7 @@ class ConsumptionScreen extends StatelessWidget {
                       ),
                       Container(
                         height: 182 * SizeConfig.heightMultiplier!,
-                        color: kPureWhite,
+                        color: Theme.of(context).secondaryHeaderColor,
                         child: Center(
                           child: AnimatedLiquidCustomProgressIndicator(),
                         ),
@@ -429,7 +446,7 @@ class ConsumptionScreen extends StatelessWidget {
                       ),
                       Container(
                         height: 244 * SizeConfig.heightMultiplier!,
-                        color: kPureWhite,
+                        color: Theme.of(context).secondaryHeaderColor,
                         child: Column(
                           children: [
                             SizedBox(
@@ -443,7 +460,7 @@ class ConsumptionScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('water_intake'.tr,
-                                      style: AppTextStyle.boldBlackText
+                                      style: AppTextStyle.boldWhiteText
                                           .copyWith(
                                               fontSize: 14 *
                                                   SizeConfig.textMultiplier!)),
@@ -475,7 +492,7 @@ class ConsumptionScreen extends StatelessWidget {
                                             Text(
                                               'goal'.tr,
                                               style: AppTextStyle
-                                                  .normalBlackText
+                                                  .normalWhiteText
                                                   .copyWith(
                                                       fontSize: 10 *
                                                           SizeConfig
@@ -505,7 +522,7 @@ class ConsumptionScreen extends StatelessWidget {
                                             Text(
                                               'intake'.tr,
                                               style: AppTextStyle
-                                                  .normalBlackText
+                                                  .normalWhiteText
                                                   .copyWith(
                                                       fontSize: 10 *
                                                           SizeConfig
@@ -561,7 +578,7 @@ class __ChartAppState extends State<ChartApp> {
           majorTickLines:
               MajorTickLines(size: 0, width: 0, color: Colors.transparent),
           //axisLine: AxisLine(color: Colors.transparent),
-          labelStyle: AppTextStyle.normalBlackText
+          labelStyle: AppTextStyle.normalWhiteText
               .copyWith(fontSize: 10 * SizeConfig.textMultiplier!),
           // majorGridLines: MajorGridLines(width: 0),
         ),
@@ -580,7 +597,7 @@ class __ChartAppState extends State<ChartApp> {
               opacity: 0.5,
               // gradient color
               gradient: const LinearGradient(colors: [
-                GreyColor,
+                grey2B,
                 Colors.white,
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               xValueMapper: (ConsumedWater sales, _) =>
@@ -609,7 +626,7 @@ class __ChartAppState extends State<ChartApp> {
               // gradient color
               gradient: const LinearGradient(colors: [
                 kGreenColor,
-                Colors.white,
+                Colors.black,
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               //  color: Colors.green.shade200,
               xValueMapper: (ConsumedWater sales, _) =>
