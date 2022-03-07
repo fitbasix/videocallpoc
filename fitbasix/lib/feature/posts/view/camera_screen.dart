@@ -32,9 +32,10 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
           elevation: 0,
-          backgroundColor: kPureWhite,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           leading: IconButton(
               onPressed: () {
                  _postController.isLoading.value = false;
@@ -42,6 +43,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
               },
               icon: SvgPicture.asset(
                 ImagePath.backIcon,
+                color: Theme.of(context).primaryColor,
                 width: 7 * SizeConfig.widthMultiplier!,
                 height: 12 * SizeConfig.heightMultiplier!,
               )),
@@ -50,7 +52,12 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
             child: Text(
               'camera'.tr,
               style: AppTextStyle.titleText
-                  .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                  .copyWith(
+                  color: Theme.of(context)
+                      .appBarTheme
+                      .titleTextStyle
+                      ?.color,
+                  fontSize: 16 * SizeConfig.textMultiplier!),
             ),
           )),
       body: Column(
@@ -97,7 +104,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         ),
         child: BottomAppBar(
           elevation: 15,
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 24 * SizeConfig.widthMultiplier!),

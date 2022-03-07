@@ -17,7 +17,7 @@ class SetHeight extends StatelessWidget {
   Widget build(BuildContext context) {
     final SPGController _spgController = Get.find();
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
@@ -30,11 +30,18 @@ class SetHeight extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Stack(
+              children: [
+                Container(
+                  color: Theme.of(context).primaryColor,
+                  height: 2 * SizeConfig.heightMultiplier!,
+                  width: Get.width,
+                ),
           Container(
             color: kGreenColor,
             height: 2 * SizeConfig.heightMultiplier!,
             width: Get.width * 0.50,
-          ),
+          ),]),
           SizedBox(
             height: 30 * SizeConfig.heightMultiplier!,
           ),
@@ -52,7 +59,7 @@ class SetHeight extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: _spgController.heightType == "inch"
                             ? kGreenColor
-                            : Colors.transparent,
+                            : Theme.of(context).primaryColor,
                         border: Border.all(
                             color: _spgController.heightType == "inch"
                                 ? Colors.transparent
@@ -66,7 +73,7 @@ class SetHeight extends StatelessWidget {
                       style: _spgController.heightType == "inch"
                           ? AppTextStyle.white400Text
                           : AppTextStyle.white400Text
-                              .copyWith(color: lightBlack),
+                              .copyWith(color: Theme.of(context).textTheme.headline6!.color),
                     )),
                   ),
                 ),
@@ -80,7 +87,7 @@ class SetHeight extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: _spgController.heightType != "inch"
                             ? kGreenColor
-                            : Colors.transparent,
+                            : Theme.of(context).primaryColor,
                         border: Border.all(
                             color: _spgController.heightType != "inch"
                                 ? Colors.transparent
@@ -94,7 +101,7 @@ class SetHeight extends StatelessWidget {
                       style: _spgController.heightType != "inch"
                           ? AppTextStyle.white400Text
                           : AppTextStyle.white400Text
-                              .copyWith(color: lightBlack),
+                              .copyWith(color: Theme.of(context).textTheme.headline6!.color),
                     )),
                   ),
                 )
@@ -107,7 +114,7 @@ class SetHeight extends StatelessWidget {
           Center(
             child: Text(
               'ask_height'.tr,
-              style: AppTextStyle.boldBlackText,
+              style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
               textAlign: TextAlign.center,
             ),
           ),
@@ -123,6 +130,7 @@ class SetHeight extends StatelessWidget {
                         Text(
                           _spgController.currentHeight.value.toString(),
                           style: AppTextStyle.normalBlackText.copyWith(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 48 * SizeConfig.textMultiplier!,
                               height: 0),
                         ),
@@ -130,6 +138,7 @@ class SetHeight extends StatelessWidget {
                         Text("cm",
                             textAlign: TextAlign.start,
                             style: AppTextStyle.normalBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1!.color,
                                 fontSize: 14 * SizeConfig.textMultiplier!,
                                 height: 0))
                       ],
@@ -144,6 +153,7 @@ class SetHeight extends StatelessWidget {
                               .toString()
                               .split(".")[0],
                           style: AppTextStyle.normalBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 48 * SizeConfig.textMultiplier!,
                               height: 0),
                         ),
@@ -151,6 +161,7 @@ class SetHeight extends StatelessWidget {
                         Text("ft",
                             textAlign: TextAlign.start,
                             style: AppTextStyle.normalBlackText.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1!.color,
                                 fontSize: 14 * SizeConfig.textMultiplier!,
                                 height: 0)),
                         SizedBox(width: 7 * SizeConfig.widthMultiplier!),
@@ -164,6 +175,7 @@ class SetHeight extends StatelessWidget {
                               .substring(0, 2)
                               .replaceAll(".", ""),
                           style: AppTextStyle.normalBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1!.color,
                               fontSize: 48 * SizeConfig.textMultiplier!,
                               height: 0),
                         ),
@@ -171,6 +183,7 @@ class SetHeight extends StatelessWidget {
                         Text("in",
                             textAlign: TextAlign.start,
                             style: AppTextStyle.normalBlackText.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1!.color,
                                 fontSize: 14 * SizeConfig.textMultiplier!,
                                 height: 0))
                       ],
@@ -203,7 +216,7 @@ class SetHeight extends StatelessWidget {
                           width: 1.5 * SizeConfig.widthMultiplier!,
                           height: 50 * SizeConfig.heightMultiplier!,
                           decoration: BoxDecoration(
-                              color: Colors.black,
+                              color: Theme.of(context).primaryColor,
                               borderRadius: BorderRadius.circular(5))),
                       onValueChange: (value) {
                         _spgController.currentHeight.value = value;
@@ -250,7 +263,7 @@ class SetHeight extends StatelessWidget {
                           width: 1.5 * SizeConfig.widthMultiplier!,
                           height: 50 * SizeConfig.heightMultiplier!,
                           decoration: BoxDecoration(
-                              color: Colors.black,
+                              color: Theme.of(context).primaryColor,
                               borderRadius: BorderRadius.circular(5))),
                       onValueChange: (value) {
                         _spgController.currentHeight.value = value;

@@ -27,9 +27,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => BottomNavigationBar(
-          backgroundColor: kPureWhite,
+          backgroundColor: Theme.of(context).cardColor,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: kGreenColor,
+          selectedItemColor: kgreen49,
           unselectedItemColor: hintGrey,
           currentIndex: _homeController.selectedIndex.value,
           items: [
@@ -45,7 +45,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 label: 'my_trainers'.tr),
             BottomNavigationBarItem(
                 icon: new Icon(
-                  Icons.add_circle,
+                  Icons.add,
+                  color: kPureWhite,
                 ),
                 label: 'post'.tr),
             BottomNavigationBarItem(

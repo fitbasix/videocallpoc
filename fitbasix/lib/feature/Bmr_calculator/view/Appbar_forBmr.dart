@@ -18,12 +18,13 @@ class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       leading: IconButton(
         onPressed: onRoute,
         icon: SvgPicture.asset(
           ImagePath.backIcon,
+          color: Theme.of(context).primaryColor,
           width: 7.41 * SizeConfig.widthMultiplier!,
           height: 12 * SizeConfig.heightMultiplier!,
           fit: BoxFit.contain,
@@ -31,7 +32,9 @@ class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
       ),
       title: Text(
         title!,
-        style: AppTextStyle.NormalBlackTitleText,
+        style: AppTextStyle.NormalBlackTitleText.copyWith(
+          color: Theme.of(context).textTheme.bodyText1?.color
+        ),
       ),
       actions: [
         IconButton(
@@ -42,6 +45,7 @@ class AppbarforBMRScreen extends StatelessWidget with PreferredSizeWidget {
             },
             icon: SvgPicture.asset(
               ImagePath.circlequestionmarkIcon,
+              color: Theme.of(context).primaryColor,
               width: 20 * SizeConfig.widthMultiplier!,
               height: 20 * SizeConfig.heightMultiplier!,
             )),

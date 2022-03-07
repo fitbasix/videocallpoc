@@ -51,6 +51,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
     final TrainerController trainerController = Get.put(TrainerController());
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Obx(
           () => TrainerPage(
@@ -291,7 +292,7 @@ class _TrainerPageState extends State<TrainerPage> {
   Widget build(BuildContext context) {
     final TrainerController trainerController = Get.put(TrainerController());
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Stack(
           children: [
@@ -319,8 +320,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                   Text(
                                     widget.name,
                                     style: AppTextStyle.titleText.copyWith(
-                                        fontSize:
-                                            18 * SizeConfig.textMultiplier!),
+                                        fontSize: 18 * SizeConfig.textMultiplier!,
+                                        color: Theme.of(context).textTheme.bodyText1?.color
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,
@@ -333,14 +335,14 @@ class _TrainerPageState extends State<TrainerPage> {
                                             ? CustomButton(
                                                 title: 'following'.tr,
                                                 onPress: widget.onFollow,
-                                                color: kPureWhite,
-                                                textColor: kGreenColor,
+                                                color: Theme.of(context).scaffoldBackgroundColor,
+                                                textColor: kgreen49,
                                               )
                                             : CustomButton(
                                                 title: 'follow'.tr,
                                                 onPress: widget.onFollow,
                                                 color: kGreenColor,
-                                                textColor: kPureWhite,
+                                                textColor: Theme.of(context).primaryColor
                                               ),
                                       ),
                                       SizedBox(
@@ -349,8 +351,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                       CustomButton(
                                         title: 'message'.tr,
                                         onPress: widget.onMessage,
-                                        color: kPureWhite,
-                                        textColor: kGreenColor,
+                                        color: Theme.of(context).scaffoldBackgroundColor,
+                                        textColor: kgreen49,
                                       ),
                                     ],
                                   ),
@@ -374,11 +376,13 @@ class _TrainerPageState extends State<TrainerPage> {
                                         children: [
                                           Text(widget.followersCount,
                                               style: AppTextStyle.boldBlackText
-                                                  .copyWith(color: kBlack)),
+                                                  .copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1?.color
+                                              )),
                                           Text('follower'.tr,
                                               style: AppTextStyle.smallBlackText
                                                   .copyWith(
-                                                      color: kBlack,
+                                                  color: Theme.of(context).textTheme.bodyText1?.color,
                                                       fontSize: 12 *
                                                           SizeConfig
                                                               .textMultiplier!))
@@ -391,11 +395,13 @@ class _TrainerPageState extends State<TrainerPage> {
                                         children: [
                                           Text(widget.followingCount,
                                               style: AppTextStyle.boldBlackText
-                                                  .copyWith(color: kBlack)),
+                                                  .copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1?.color
+                                              )),
                                           Text('following'.tr,
                                               style: AppTextStyle.smallBlackText
                                                   .copyWith(
-                                                      color: kBlack,
+                                                  color: Theme.of(context).textTheme.bodyText1?.color,
                                                       fontSize: 12 *
                                                           SizeConfig
                                                               .textMultiplier!))
@@ -406,7 +412,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                   Container(
                                     width: 1,
                                     height: 56 * SizeConfig.widthMultiplier!,
-                                    color: kDarkGrey,
+                                    color: Theme.of(context).textTheme.headline2?.color,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -434,7 +440,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                                 .toString(),
                                             style: AppTextStyle
                                                 .greenSemiBoldText
-                                                .copyWith(color: kPureBlack),
+                                                .copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                            ),
                                           ),
                                           SizedBox(
                                               width: 8 *
@@ -446,7 +454,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                                     fontSize: (12) *
                                                         SizeConfig
                                                             .textMultiplier!,
-                                                    color: kPureBlack),
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                            ),
                                           )
                                         ],
                                       ),
@@ -458,7 +467,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                             .copyWith(
                                                 fontSize: (12) *
                                                     SizeConfig.textMultiplier!,
-                                                color: greyColor,
+                                                color: Theme.of(context).textTheme.headline3?.color,
                                                 decoration:
                                                     TextDecoration.underline),
                                       )
@@ -481,7 +490,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                     child: Text(
                                       'strength'.tr,
                                       style: AppTextStyle.greenSemiBoldText
-                                          .copyWith(color: kBlack),
+                                          .copyWith(
+                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -509,7 +520,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                               height: 28 *
                                                   SizeConfig.heightMultiplier!,
                                               decoration: BoxDecoration(
-                                                  color: offWhite,
+                                                  color: Theme.of(context).textTheme.headline4?.color,
                                                   borderRadius:
                                                       BorderRadius.circular(28 *
                                                           SizeConfig
@@ -524,7 +535,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                                     widget.strengths[index].name
                                                         .toString(),
                                                     style: AppTextStyle
-                                                        .lightMediumBlackText,
+                                                        .lightMediumBlackText.copyWith(
+                                                      color: Theme.of(context).textTheme.bodyText1?.color,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -546,7 +559,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                             'achivement'.tr,
                                             style: AppTextStyle
                                                 .greenSemiBoldText
-                                                .copyWith(color: kBlack),
+                                                .copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                            ),
                                           ),
                                         ),
                                   widget.certifcateTitle.length == 0
@@ -586,8 +601,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                                               index]
                                                           .url!,
                                                       color: index % 2 == 0
-                                                          ? oceanBlue
-                                                          : lightOrange,
+                                                          ? Theme.of(context).highlightColor
+                                                          : Theme.of(context).indicatorColor,
                                                     ),
                                                   ),
                                                 );
@@ -603,7 +618,9 @@ class _TrainerPageState extends State<TrainerPage> {
                                     child: Text(
                                       'about'.tr,
                                       style: AppTextStyle.greenSemiBoldText
-                                          .copyWith(color: kBlack),
+                                          .copyWith(
+                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -621,7 +638,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                           .copyWith(
                                               fontSize: (14) *
                                                   SizeConfig.textMultiplier!,
-                                              color: kBlack),
+                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -636,13 +654,16 @@ class _TrainerPageState extends State<TrainerPage> {
                                         ? Text('plan'.tr,
                                             style: AppTextStyle
                                                 .greenSemiBoldText
-                                                .copyWith(color: lightBlack))
+                                                .copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                            ))
                                         : widget.allPlans.length != 0
                                             ? Text('plan'.tr,
                                                 style: AppTextStyle
                                                     .greenSemiBoldText
                                                     .copyWith(
-                                                        color: lightBlack))
+                                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                                ))
                                             : SizedBox()),
                                   ),
                                   SizedBox(
@@ -651,7 +672,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                   Obx(() => trainerController
                                           .isProfileLoading.value
                                       ? Container(
-                                          height: 238 *
+                                          height: 250 *
                                               SizeConfig.heightMultiplier!,
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
@@ -692,7 +713,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                         )
                                       : (widget.allPlans.length != 0
                                           ? Container(
-                                              height: 238 *
+                                              height: 250 *
                                                   SizeConfig.heightMultiplier!,
                                               child: ListView.builder(
                                                   scrollDirection:
@@ -1006,10 +1027,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                 width: 40 * SizeConfig.heightMultiplier!,
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.white),
+                                    color: Theme.of(context).scaffoldBackgroundColor),
                                 child: SvgPicture.asset(
                                   ImagePath.backIcon,
-                                  color: kPureBlack,
+                                  color: Theme.of(context).primaryColor,
                                   height: 15,
                                   width: 7,
                                   fit: BoxFit.scaleDown,
@@ -1034,7 +1055,7 @@ class _TrainerPageState extends State<TrainerPage> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                color: kPureWhite,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 width: double.infinity,
                 padding: EdgeInsets.only(
                     top: 8 * SizeConfig.heightMultiplier!,
@@ -1045,7 +1066,7 @@ class _TrainerPageState extends State<TrainerPage> {
                   onTap: widget.onEnroll,
                   child: Container(
                     decoration: BoxDecoration(
-                        color: kGreenColor,
+                        color: kgreen4F,
                         borderRadius: BorderRadius.circular(8.0)),
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -1095,7 +1116,7 @@ class CustomButton extends StatelessWidget {
               horizontal: 12 * SizeConfig.widthMultiplier!),
           decoration: BoxDecoration(
               color: color,
-              border: Border.all(color: kGreenColor),
+              border: Border.all(color: kgreen49),
               borderRadius: BorderRadius.circular(8.0)),
           child: Center(
             child: Text(
@@ -1149,14 +1170,20 @@ class AchivementCertificateTile extends StatelessWidget {
                 width: 134 * SizeConfig.heightMultiplier!,
                 child: Text(certificateDescription,
                     style: AppTextStyle.lightMediumBlackText
-                        .copyWith(fontWeight: FontWeight.w600)),
+                        .copyWith(
+                        fontWeight: FontWeight.w600,
+                      color: Theme.of(context).textTheme.bodyText1?.color
+                    )),
               ),
               SizedBox(
                 height: 4 * SizeConfig.heightMultiplier!,
               ),
               Text('certified'.tr,
                   style: AppTextStyle.lightMediumBlackText
-                      .copyWith(fontSize: 12 * SizeConfig.textMultiplier!))
+                      .copyWith(
+                      fontSize: 12 * SizeConfig.textMultiplier!,
+                    color: Theme.of(context).textTheme.bodyText1?.color
+                  ))
             ],
           )
         ],
@@ -1184,9 +1211,10 @@ class PlanTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 238 * SizeConfig.heightMultiplier!,
+     // height: 250 * SizeConfig.heightMultiplier!,
       width: 160 * SizeConfig.widthMultiplier!,
       child: Card(
+        color: Theme.of(context).textTheme.headline5?.color,
         semanticContainer: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -1229,14 +1257,20 @@ class PlanTile extends StatelessWidget {
                         SizedBox(width: 4 * SizeConfig.widthMultiplier!),
                         Text('(' + ratingCount + ')',
                             style: AppTextStyle.smallBlackText
-                                .copyWith(color: greyColor))
+                                .copyWith(
+                                fontSize: (12) * SizeConfig.textMultiplier!,
+                                color: Theme.of(context).textTheme.headline3?.color,
+                            ))
                       ],
                     ),
                     SizedBox(height: 4 * SizeConfig.heightMultiplier!),
                     Text(
                       planTitle,
                       style: AppTextStyle.lightMediumBlackText
-                          .copyWith(fontWeight: FontWeight.w600),
+                          .copyWith(
+                          fontWeight: FontWeight.w600,
+                        color: Theme.of(context).textTheme.bodyText1?.color,
+                      ),
                     ),
                     SizedBox(height: 5.5 * SizeConfig.heightMultiplier!),
                     Row(
@@ -1246,13 +1280,15 @@ class PlanTile extends StatelessWidget {
                           height: 10 * SizeConfig.widthMultiplier!,
                           width: 10 * SizeConfig.widthMultiplier!,
                           fit: BoxFit.contain,
+                          color: Theme.of(context).secondaryHeaderColor,
                         ),
                         SizedBox(
                           width: 5.5 * SizeConfig.widthMultiplier!,
                         ),
                         Text(palnTime,
                             style: AppTextStyle.lightMediumBlackText.copyWith(
-                                fontSize: 10 * SizeConfig.textMultiplier!))
+                               color: Theme.of(context).textTheme.bodyText1?.color,
+                                fontSize: 12 * SizeConfig.textMultiplier!))
                       ],
                     ),
                     SizedBox(
@@ -1266,7 +1302,9 @@ class PlanTile extends StatelessWidget {
                         children: [
                           Text(likesCount,
                               style: AppTextStyle.greenSemiBoldText
-                                  .copyWith(color: lightBlack)),
+                                  .copyWith(
+                                  color: Theme.of(context).textTheme.bodyText1?.color
+                              )),
                           SizedBox(
                             width: 5.5 * SizeConfig.widthMultiplier!,
                           ),
@@ -1275,9 +1313,13 @@ class PlanTile extends StatelessWidget {
                             height: 12 * SizeConfig.heightMultiplier!,
                             width: 13.4 * SizeConfig.widthMultiplier!,
                             fit: BoxFit.contain,
+                            color: Theme.of(context).textTheme.bodyText1?.color,
                           )
                         ],
                       ),
+                    ),
+                    SizedBox(
+                      height: 9*SizeConfig.heightMultiplier!,
                     )
                   ]),
             )

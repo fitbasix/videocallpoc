@@ -18,7 +18,7 @@ class SetGoalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
@@ -36,10 +36,19 @@ class SetGoalScreen extends StatelessWidget {
           : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                color: kGreenColor,
-                height: 2 * SizeConfig.heightMultiplier!,
-                width: Get.width * (1 / 8),
+              Stack(
+                children: [
+                  Container(
+                    color: Theme.of(context).primaryColor,
+                    height: 2 * SizeConfig.heightMultiplier!,
+                    width: Get.width,
+                  ),
+                  Container(
+                    color: kGreenColor,
+                    height: 2 * SizeConfig.heightMultiplier!,
+                    width: Get.width * (1 / 8),
+                  ),
+                ],
               ),
               Padding(
                 padding: EdgeInsets.only(
@@ -52,7 +61,7 @@ class SetGoalScreen extends StatelessWidget {
                   children: [
                     Text(
                       'what_is_your_goal'.tr,
-                      style: AppTextStyle.boldBlackText,
+                      style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
                     ),
                     SizedBox(
                       height: 40 * SizeConfig.heightMultiplier!,
@@ -60,12 +69,16 @@ class SetGoalScreen extends StatelessWidget {
                     _spgController
                             .spgData.value.response==null?
                             Container()
-                            :ListView.builder(
+                            :GridView.builder(
                         itemCount: _spgController
                             .spgData.value.response!.data!.goalType!.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (_, index) {
+                        gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
+                          crossAxisSpacing: 16*SizeConfig.widthMultiplier!,
+                          mainAxisSpacing: 16*SizeConfig.widthMultiplier!,
+                        ),
+                        itemBuilder: (BuildContext context, int index){
                           if (_spgController.selectedGoalIndex.value.serialId ==
                               null) {
                             _spgController.selectedGoalIndex.value =
@@ -134,13 +147,14 @@ class GoalCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-          margin: EdgeInsets.only(top: 8 * SizeConfig.heightMultiplier!),
-          padding: EdgeInsets.only(left: 24 * SizeConfig.widthMultiplier!),
-          height: 70 * SizeConfig.heightMultiplier!,
+          // margin: EdgeInsets.only(top: 8 * SizeConfig.heightMultiplier!),
+          // padding: EdgeInsets.only(left: 24 * SizeConfig.widthMultiplier!),
+          height: 156 *SizeConfig.widthMultiplier!,
+          width: 156*SizeConfig.widthMultiplier!,
           decoration: BoxDecoration(
               color: isSelected ? kSelectedGreen : kPureWhite,
-              border: Border.all(color: isSelected ? kGreenColor : kLightGrey),
-              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: isSelected ? kGreenColor : Colors.black),
+              borderRadius: BorderRadius.circular(10*SizeConfig.imageSizeMultiplier!),
               boxShadow: [
                 BoxShadow(
                     color: Colors.black.withOpacity(0.05),
@@ -148,24 +162,32 @@ class GoalCard extends StatelessWidget {
                     spreadRadius: -2,
                     offset: Offset(0, 4))
               ]),
-          child: Row(
+          child: Stack(
             children: [
               Container(
-                  height: 60 * SizeConfig.heightMultiplier!,
-                  width: 60 * SizeConfig.heightMultiplier!,
+                  // height: 60 * SizeConfig.heightMultiplier!,
+                  // width: 60 * SizeConfig.heightMultiplier!,
                   child: CachedNetworkImage(
                       imageUrl: imageUrl,
-                      height: 60 * SizeConfig.heightMultiplier!,
-                      width: 60 * SizeConfig.heightMultiplier!,
-                      fit: BoxFit.contain)),
-              SizedBox(
-                width: 15 * SizeConfig.widthMultiplier!,
+                      // height: 60 * SizeConfig.heightMultiplier!,
+                      // width: 60 * SizeConfig.heightMultiplier!,
+                      fit: BoxFit.cover)),
+              Container(
+                margin: EdgeInsets.only(left: 12*SizeConfig.widthMultiplier!,top: 12*SizeConfig.heightMultiplier!,right: 15*SizeConfig.widthMultiplier!),
+                child: Text(
+                  title,
+                  style: AppTextStyle.boldBlackText
+                      .copyWith(fontSize: 14 * SizeConfig.textMultiplier!,color: Theme.of(context).textTheme.bodyText1!.color,),
+                ),
               ),
-              Text(
-                title,
-                style: AppTextStyle.boldBlackText
-                    .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
-              ),
+              (isSelected)?Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  margin: EdgeInsets.only(right: 11*SizeConfig.widthMultiplier!,top: 8*SizeConfig.heightMultiplier!),
+                  child: Icon(Icons.check,color: Theme.of(context).primaryColor,size: 24*SizeConfig.widthMultiplier!,),
+                ),
+              ):Container()
+
             ],
           )),
     );

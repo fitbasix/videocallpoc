@@ -90,14 +90,11 @@ class ImagePath {
   static const String penIcon = "assets/message/penicon.svg";
   static const String unmuteIcon = "assets/message/unmuteicon.svg";
   static const String enrolltrainerFrame = "assets/message/enrollFrame.svg";
-  static const String cancelEnrollmentIcon =
-      "assets/message/cancelEnrollmentIcon.svg";
-  static const String sharefeedbackIcon =
-      "assets/message/sharefeedbackIcon.svg";
+  static const String cancelEnrollmentIcon = "assets/message/cancelEnrollmentIcon.svg";
+  static const String sharefeedbackIcon = "assets/message/sharefeedbackIcon.svg";
 
   ///my trainer
-  static const String notrainerenrollframe =
-      "assets/mytrainers/notrainerframe.svg";
+  static const String notrainerenrollframe = "assets/mytrainers/notrainerframe.svg";
   static const String closedialogIcon = "assets/mytrainers/closedialogicon.svg";
 
   ///UI chat

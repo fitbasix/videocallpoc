@@ -31,7 +31,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: greyF6,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppbarforBMRScreen(
         onRoute: () {
           _homeController.selectedIndex.value = 0;
@@ -56,8 +56,16 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                               EdgeInsets.all(8 * SizeConfig.widthMultiplier!),
                           height: 180 * SizeConfig.heightMultiplier!,
                           decoration: BoxDecoration(
-                            border: Border.all(color: lightGrey),
-                            color: kPureWhite,
+                            boxShadow: [
+                              BoxShadow(
+                                offset: Offset(0,2),
+                                blurRadius: 10,
+                                spreadRadius: -2,
+                                color: greyBorder
+                              )
+                            ],
+                            border: Border.all(color: greyBorder),
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           // width: 156 * SizeConfig.widthMultiplier!,
@@ -75,7 +83,8 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                     child: Text(
                                       'age'.tr,
                                       style: AppTextStyle.hblack400Text
-                                          .copyWith(color: kBlack),
+                                          .copyWith(
+                                          color: Theme.of(context).textTheme.bodyText1?.color),
                                     ),
                                   ),
                                 ),
@@ -92,16 +101,18 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                             }
                                           });
                                         },
-                                        color: kPureWhite,
+                                       // color: kPureWhite,
                                         child: Icon(
                                           Icons.remove_circle,
-                                          color: kLightGrey,
-                                        )),
+                                          color: hintGrey,
+                                        )
+                                    ),
                                     Spacer(),
                                     Text(
                                       '$age',
                                       style: AppTextStyle.hblackSemiBoldText
                                           .copyWith(
+                                        color: Theme.of(context).textTheme.bodyText1?.color,
                                               fontSize: 32 *
                                                   SizeConfig.textMultiplier!),
                                     ),
@@ -112,11 +123,12 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                             age++;
                                           });
                                         },
-                                        color: Colors.black,
-                                        child: SvgPicture.asset(
-                                          ImagePath.add,
-                                          color: kPureWhite,
-                                        ))
+                                       // color: Theme.of(context).primaryColor,
+                                        child: Icon(
+                                          Icons.add_circle,
+                                          color: Theme.of(context).primaryColor,
+                                        )
+                                    )
                                   ],
                                 ),
                                 SizedBox(
@@ -126,7 +138,9 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                   child: Text(
                                     'year'.tr,
                                     style: AppTextStyle.hsmallGreenText
-                                        .copyWith(color: kBlack),
+                                        .copyWith(
+                                      color: Theme.of(context).textTheme.bodyText1?.color,
+                                    ),
                                   ),
                                 )
                               ]),
@@ -137,9 +151,18 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                         child: Container(
                           margin:
                               EdgeInsets.all(8 * SizeConfig.widthMultiplier!),
+
                           decoration: BoxDecoration(
-                            border: Border.all(color: lightGrey),
-                            color: kPureWhite,
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0,2),
+                                  blurRadius: 10,
+                                  spreadRadius: -2,
+                                  color: greyBorder
+                              )
+                            ],
+                            border: Border.all(color: greyBorder),
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           height: 180 * SizeConfig.heightMultiplier!,
@@ -158,7 +181,9 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                     child: Text(
                                       'body_weight'.tr,
                                       style: AppTextStyle.hblack400Text
-                                          .copyWith(color: kBlack),
+                                          .copyWith(
+                                          color: Theme.of(context).textTheme.bodyText1?.color
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -175,16 +200,18 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                             }
                                           });
                                         },
-                                        color: kPureWhite,
+                                     //   color: kPureWhite,
                                         child: Icon(
                                           Icons.remove_circle,
-                                          color: kLightGrey,
-                                        )),
+                                          color: hintGrey,
+                                        )
+                                    ),
                                     Spacer(),
                                     Text(
                                       bodyweight.toString(),
                                       style: AppTextStyle.hblackSemiBoldText
                                           .copyWith(
+                                          color: Theme.of(context).textTheme.bodyText1?.color,
                                               fontSize: 32 *
                                                   SizeConfig.textMultiplier!),
                                     ),
@@ -195,11 +222,12 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                             bodyweight++;
                                           });
                                         },
-                                        color: Colors.black,
-                                        child: SvgPicture.asset(
-                                          ImagePath.add,
-                                          color: kPureWhite,
-                                        ))
+                                        //color: Colors.black,
+                                        child: Icon(
+                                          Icons.add_circle,
+                                          color: Theme.of(context).primaryColor,
+                                        )
+                                    )
                                   ],
                                 ),
                                 SizedBox(
@@ -209,7 +237,9 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                   child: Text(
                                     'kg'.tr,
                                     style: AppTextStyle.hsmallGreenText
-                                        .copyWith(color: kBlack),
+                                        .copyWith(
+                                   color: Theme.of(context).textTheme.bodyText1?.color,
+                                        ),
                                   ),
                                 )
                               ]),
@@ -221,9 +251,17 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                   Container(
                     margin: EdgeInsets.all(8 * SizeConfig.widthMultiplier!),
                     decoration: BoxDecoration(
-                      border: Border.all(color: lightGrey),
-                      color: kPureWhite,
+                      border: Border.all(color: greyBorder),
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0,2),
+                            blurRadius: 10,
+                            spreadRadius: -2,
+                            color: greyBorder
+                        )
+                      ],
                     ),
                     // height: 195 * SizeConfig.heightMultiplier!,
                     child: Padding(
@@ -235,13 +273,15 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                               Text(
                                 'height'.tr,
                                 style: AppTextStyle.hblack400Text
-                                    .copyWith(color: kBlack),
+                                    .copyWith(
+                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                ),
                               ),
                               Spacer(),
                               Text(
                                 'feet_inches'.tr,
                                 style: AppTextStyle.hblack400Text
-                                    .copyWith(color: kBlack),
+                                    .copyWith( color: Theme.of(context).textTheme.bodyText1?.color,),
                               ),
                             ],
                           ),
@@ -259,6 +299,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                     .substring(0, 2)
                                     .replaceAll(".", ""),
                             style: AppTextStyle.hblackSemiBoldText.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
                                 fontSize: 32 * SizeConfig.textMultiplier!),
                           ),
                           SizedBox(
@@ -300,13 +341,21 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                             border: Border.all(
                                 color: selectedgender == Gender.male
                                     ? kgreen4F
-                                    : lightGrey),
+                                    : greyBorder),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0,2),
+                                  blurRadius: 10,
+                                  spreadRadius: -2,
+                                  color: greyBorder
+                              )
+                            ],
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(8),
                                 bottomLeft: Radius.circular(8)),
                             color: selectedgender == Gender.male
                                 ? kgreen4F
-                                : kPureWhite,
+                                : kBlack,
                           ),
                           child: Center(
                             child: Text(
@@ -315,7 +364,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                   ? AppTextStyle.normalBlackText
                                       .copyWith(color: kPureWhite)
                                   : AppTextStyle.normalBlackText.copyWith(
-                                      color: kPureBlack,
+                                  color: Theme.of(context).textTheme.bodyText1?.color,
                                     ),
                             ),
                           ),
@@ -334,13 +383,13 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                 border: Border.all(
                                     color: selectedgender == Gender.female
                                         ? kgreen4F
-                                        : lightGrey),
+                                        : greyBorder),
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(8),
                                     bottomRight: Radius.circular(8)),
                                 color: selectedgender == Gender.female
                                     ? kgreen4F
-                                    : kPureWhite),
+                                    : kBlack),
                             child: Center(
                               child: Text(
                                 'female'.tr,
@@ -348,7 +397,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                     ? AppTextStyle.normalBlackText
                                         .copyWith(color: kPureWhite)
                                     : AppTextStyle.normalBlackText.copyWith(
-                                        color: kPureBlack,
+                                        color: Theme.of(context).textTheme.bodyText1?.color,
                                       ),
                               ),
                             ),
@@ -369,7 +418,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                     16 * SizeConfig.heightMultiplier!),
                 height: 72 * SizeConfig.heightMultiplier!,
                 decoration: BoxDecoration(
-                  color: kPureWhite,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
                 child: Container(
                   height: 48 * SizeConfig.heightMultiplier!,

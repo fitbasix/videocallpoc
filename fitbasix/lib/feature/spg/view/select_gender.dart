@@ -19,7 +19,7 @@ class SelectGenderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
@@ -33,11 +33,18 @@ class SelectGenderScreen extends StatelessWidget {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            color: kGreenColor,
-            height: 2 * SizeConfig.heightMultiplier!,
-            width: Get.width / 8 * 2,
-          ),
+          Stack(children: [
+            Container(
+              color: Theme.of(context).primaryColor,
+              height: 2 * SizeConfig.heightMultiplier!,
+              width: Get.width,
+            ),
+            Container(
+              color: kGreenColor,
+              height: 2 * SizeConfig.heightMultiplier!,
+              width: Get.width / 8 * 2,
+            ),
+          ]),
           Padding(
             padding: EdgeInsets.only(
                 left: 16 * SizeConfig.widthMultiplier!,
@@ -49,7 +56,8 @@ class SelectGenderScreen extends StatelessWidget {
               children: [
                 Text(
                   'gender_select_heading'.tr,
-                  style: AppTextStyle.boldBlackText,
+                  style: AppTextStyle.boldBlackText.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
@@ -144,46 +152,59 @@ class GenderCard extends StatelessWidget {
           Container(
             height: 202 * SizeConfig.heightMultiplier!,
             width: (Get.width - 54 * SizeConfig.widthMultiplier!) / 2,
-            padding: EdgeInsets.only(top: 20 * SizeConfig.heightMultiplier!),
             decoration: BoxDecoration(
                 color: isSelected ? kSelectedBlue : kPureWhite,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: kLightGrey)),
-            child: Column(
+                borderRadius:
+                    BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                border:
+                    Border.all(color: isSelected ? kGreenColor : Colors.black)),
+            child: Stack(
               children: [
-                SizedBox(
-                    height: 129 * SizeConfig.heightMultiplier!,
-                    child: CachedNetworkImage(imageUrl: imageUrl)),
-                SizedBox(
-                  height: 14 * SizeConfig.heightMultiplier!,
+                ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(7 * SizeConfig.widthMultiplier!),
+                  child: CachedNetworkImage(
+                    height: 204 * SizeConfig.heightMultiplier!,
+                    width: (Get.width - 54 * SizeConfig.widthMultiplier!) / 2,
+                    imageUrl: imageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                Text(
-                  title,
-                  style:
-                      AppTextStyle.normalBlackText.copyWith(color: kBlueColor),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        bottom: 16 * SizeConfig.heightMultiplier!),
+                    child: Text(
+                      title,
+                      style: AppTextStyle.normalBlackText.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                  ),
                 ),
-                SizedBox(
-                  height: 14 * SizeConfig.heightMultiplier!,
-                ),
+                isSelected
+                    ? Container(
+                        height: 202 * SizeConfig.heightMultiplier!,
+                        width:
+                            (Get.width - 54 * SizeConfig.widthMultiplier!) / 2,
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: 10 * SizeConfig.heightMultiplier!,
+                                right: 10 * SizeConfig.widthMultiplier!),
+                            child: Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).primaryColor,
+                              size: 24 * SizeConfig.imageSizeMultiplier!,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
               ],
             ),
           ),
-          isSelected
-              ? Container(
-                  height: 202 * SizeConfig.heightMultiplier!,
-                  width: (Get.width - 54 * SizeConfig.widthMultiplier!) / 2,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: 15.6 * SizeConfig.heightMultiplier!,
-                          right: 12 * SizeConfig.widthMultiplier!),
-                      child: SvgPicture.asset(ImagePath.rightTickIcon,
-                          color: Blue),
-                    ),
-                  ),
-                )
-              : Container(),
         ],
       ),
     );

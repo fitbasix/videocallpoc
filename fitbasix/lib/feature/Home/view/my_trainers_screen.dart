@@ -148,7 +148,7 @@ class EnrollTrainerDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         insetAnimationDuration: const Duration(milliseconds: 100),
@@ -177,22 +177,27 @@ class EnrollTrainerDialog extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 24, bottom: 16),
                       child: Text(
                         'uh_oh'.tr,
-                        style: AppTextStyle.hblack600Text,
+                        style: AppTextStyle.hblack600Text.copyWith(
+                           color: Theme.of(context).textTheme.bodyText1?.color
+                        ),
                       ),
                     ),
                     //enroll summary
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
                       child: Text('enroll_summary'.tr,
-                          style: AppTextStyle.hblack400Text,
-                          textAlign: TextAlign.center),
+                          style: AppTextStyle.hblack400Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color
+                          ),
+                          textAlign: TextAlign.center,
+                      ),
                     ),
                     //enroll now text button
                     Padding(
                       padding: const EdgeInsets.fromLTRB(39, 0, 39, 0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: kGreenColor,
+                          color: kgreen49,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         width: 156 * SizeConfig.widthMultiplier!,
@@ -215,6 +220,7 @@ class EnrollTrainerDialog extends StatelessWidget {
                     },
                     icon: SvgPicture.asset(
                       ImagePath.closedialogIcon,
+                      color: Theme.of(context).primaryColor,
                       width: 16 * SizeConfig.widthMultiplier!,
                       height: 16 * SizeConfig.heightMultiplier!,
                     ),

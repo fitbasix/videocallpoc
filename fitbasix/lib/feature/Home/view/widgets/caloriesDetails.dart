@@ -24,13 +24,15 @@ class HealthScreen extends StatelessWidget {
 }
 
 Widget WaterConsumed(double consumedWater, double totalWater,
-        VoidCallback onAddWater, HomeController homeController) =>
+        VoidCallback onAddWater, HomeController homeController,
+    BuildContext context) =>
     Container(
       child: Container(
         decoration: BoxDecoration(
             borderRadius:
                 BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-            color: kPureWhite),
+            color: Theme.of(context).cardColor
+        ),
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: 12.0 * SizeConfig.widthMultiplier!,
@@ -38,7 +40,7 @@ Widget WaterConsumed(double consumedWater, double totalWater,
           child: Column(
             children: [
               SizedBox(
-                height: 3 * SizeConfig.heightMultiplier!,
+                height: 5 * SizeConfig.heightMultiplier!,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +48,9 @@ Widget WaterConsumed(double consumedWater, double totalWater,
                   Text(
                     'waterConsumed'.tr,
                     style: AppTextStyle.boldBlackText
-                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                        .copyWith(
+                        color: Theme.of(context).textTheme.bodyText2?.color,
+                        fontSize: 14 * SizeConfig.textMultiplier!),
                   ),
                   Image.asset(
                     ImagePath.dropIcon,
@@ -64,11 +68,11 @@ Widget WaterConsumed(double consumedWater, double totalWater,
                 //padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: LiquidLinearProgressIndicator(
                   value: homeController.waterLevel.value, // Defaults to 0.5.
-                  valueColor: const AlwaysStoppedAnimation(Colors
-                      .lightBlue), // Defaults to the current Theme's accentColor.
-                  backgroundColor: Colors.grey
-                      .shade200, // Defaults to the current Theme's backgroundColor.
-                  borderColor: Colors.blueAccent.shade100,
+                  valueColor:  AlwaysStoppedAnimation(
+                      Color(0xFF47BCFE)
+                  ), // Defaults to the current Theme's accentColor.
+                  backgroundColor: kLightGrey, // Defaults to the current Theme's backgroundColor.
+                  borderColor: Color(0xFF47BCFE),
                   borderWidth: 0,
                   borderRadius: 30.0,
                   direction: Axis
@@ -112,13 +116,17 @@ Widget WaterConsumed(double consumedWater, double totalWater,
                   Text(
                     consumedWater.toStringAsFixed(1) + " ltr",
                     style: AppTextStyle.boldBlackText
-                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                        .copyWith(
+                        color: Theme.of(context).textTheme.bodyText2?.color,
+                        fontSize: 14 * SizeConfig.textMultiplier!),
                   ),
                   SizedBox(width: 2 * SizeConfig.widthMultiplier!),
                   Text("of " + totalWater.toStringAsFixed(1) + " ltr",
                       style: AppTextStyle.normalBlackText.copyWith(
+                          color: Theme.of(context).textTheme.bodyText2?.color,
                           fontSize: 12 * SizeConfig.textMultiplier!,
-                          color: hintGrey)),
+                        //  color: hintGrey
+                      )),
                   Spacer(),
                   GestureDetector(
                     onTap: onAddWater,
@@ -126,12 +134,16 @@ Widget WaterConsumed(double consumedWater, double totalWater,
                       color: Colors.transparent,
                       child: SvgPicture.asset(
                         ImagePath.add,
-                        height: 16 * SizeConfig.widthMultiplier!,
-                        width: 16 * SizeConfig.widthMultiplier!,
+                        height: 14 * SizeConfig.widthMultiplier!,
+                        width: 14 * SizeConfig.widthMultiplier!,
+                        color: Theme.of(context).textTheme.bodyText2?.color,
                       ),
                     ),
                   )
                 ],
+              ),
+              SizedBox(
+                height: 4*SizeConfig.heightMultiplier!,
               )
             ],
           ),
@@ -146,13 +158,16 @@ Widget CaloryConsumption(
         String? proteinInGram,
         String? proteinCal,
         String? fatInGram,
-        String? fatInCal) =>
+        String? fatInCal,
+    BuildContext context
+    ) =>
     Container(
       child: Container(
         decoration: BoxDecoration(
             borderRadius:
                 BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-            color: kPureWhite),
+            color: Theme.of(context).cardColor
+        ),
         child: Column(
           children: [
             SizedBox(
@@ -161,16 +176,20 @@ Widget CaloryConsumption(
             Text(
               'caloryConsumption'.tr,
               style: AppTextStyle.normalBlackText
-                  .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                  .copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color,
+                  fontSize: 14 * SizeConfig.textMultiplier!),
             ),
             SizedBox(
               height: 2 * SizeConfig.heightMultiplier!,
             ),
             Text(totalCalory.toString(),
                 style: AppTextStyle.boldBlackText
-                    .copyWith(fontSize: 16 * SizeConfig.textMultiplier!)),
+                    .copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    fontSize: 16 * SizeConfig.textMultiplier!)),
             SizedBox(
-              height: 2 * SizeConfig.heightMultiplier!,
+              height: 12 * SizeConfig.heightMultiplier!,
             ),
             Padding(
               padding: EdgeInsets.symmetric(
@@ -191,19 +210,21 @@ Widget CaloryConsumption(
                       ),
                       Text('carbs'.tr,
                           style: AppTextStyle.normalBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!)),
                       SizedBox(
                         height: 2,
                       ),
                       Text(carbsInGram.toString(),
                           style: AppTextStyle.boldBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!)),
                       SizedBox(
                         height: 2,
                       ),
                       Text(carbsInCal.toString(),
                           style: AppTextStyle.normalBlackText.copyWith(
-                              color: hintGrey,
+                              color: Theme.of(context).textTheme.headline1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!))
                     ],
                   ),
@@ -220,19 +241,21 @@ Widget CaloryConsumption(
                       ),
                       Text('protein'.tr,
                           style: AppTextStyle.normalBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!)),
                       SizedBox(
                         height: 2,
                       ),
                       Text(proteinInGram.toString(),
                           style: AppTextStyle.boldBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!)),
                       SizedBox(
                         height: 2,
                       ),
                       Text(proteinCal.toString(),
                           style: AppTextStyle.normalBlackText.copyWith(
-                              color: hintGrey,
+                              color: Theme.of(context).textTheme.headline1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!))
                     ],
                   ),
@@ -249,19 +272,21 @@ Widget CaloryConsumption(
                       ),
                       Text('fat'.tr,
                           style: AppTextStyle.normalBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!)),
                       SizedBox(
                         height: 2,
                       ),
                       Text(fatInGram.toString(),
                           style: AppTextStyle.boldBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!)),
                       SizedBox(
                         height: 2,
                       ),
                       Text(fatInCal.toString(),
                           style: AppTextStyle.normalBlackText.copyWith(
-                              color: hintGrey,
+                              color: Theme.of(context).textTheme.headline1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!))
                     ],
                   )
@@ -305,12 +330,13 @@ class CirclePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected) => Container(
+Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,BuildContext context) => Container(
       child: Container(
         decoration: BoxDecoration(
             borderRadius:
                 BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-            color: kPureWhite),
+            color: Theme.of(context).cardColor
+        ),
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: 12.0 * SizeConfig.widthMultiplier!,
@@ -318,7 +344,7 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected) 
           child: Column(
             children: [
               SizedBox(
-                height: 3 * SizeConfig.heightMultiplier!,
+                height: 5 * SizeConfig.heightMultiplier!,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -326,12 +352,14 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected) 
                   Text(
                     'caloriesBurnt'.tr,
                     style: AppTextStyle.boldBlackText
-                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                        .copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color,
+                        fontSize: 14 * SizeConfig.textMultiplier!),
                   ),
                   Image.asset(
                     ImagePath.fireIcon,
-                    height: 20 * SizeConfig.heightMultiplier!,
-                    width: 16 * SizeConfig.widthMultiplier!,
+                    height: 22.5 * SizeConfig.heightMultiplier!,
+                    width: 17.64 * SizeConfig.widthMultiplier!,
                   )
                 ],
               ),
@@ -340,7 +368,7 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected) 
               ),
               Container(
                 height: 100* SizeConfig.heightMultiplier!,
-                width: 160* SizeConfig.widthMultiplier!,
+                width: 148* SizeConfig.widthMultiplier!,
                 child: SfRadialGauge(
                   enableLoadingAnimation: true,
                   //animationDuration: 1000,
@@ -353,29 +381,29 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected) 
                       showTicks: false,
                       showLabels: false,
                       axisLineStyle: AxisLineStyle(
-                          //  color: kPureWhite,
+                           color: kPureWhite,
                           thickness: 6.0 * SizeConfig.widthMultiplier!,
                           thicknessUnit: GaugeSizeUnit.logicalPixel),
                       // pointer marker & needle pointer
                       pointers: [
                         RangePointer(
                             value: isConnected?burntCalories:100,
-                            color: isConnected?kgreen49:Color(0xffFF5A5A),
+                            color: isConnected?kgreen49:Color(0xFFFF5A5A),
                             width: 6 * SizeConfig.widthMultiplier!,
                             sizeUnit: GaugeSizeUnit.logicalPixel),
                         NeedlePointer(
                             value: isConnected?burntCalories:0,
-                            needleLength: 48,
+                            needleLength: 45*SizeConfig.heightMultiplier!,
                             lengthUnit: GaugeSizeUnit.logicalPixel,
-                            needleColor: kgreen49,
+                            needleColor: Theme.of(context).primaryIconTheme.color,
                             needleStartWidth: 0.5 * SizeConfig.widthMultiplier!,
                             needleEndWidth: 4 * SizeConfig.widthMultiplier!,
                             knobStyle: KnobStyle(
                                 knobRadius: 3 * SizeConfig.widthMultiplier!,
                                 sizeUnit: GaugeSizeUnit.logicalPixel,
-                                borderColor: kgreen49,
+                                borderColor: Theme.of(context).primaryIconTheme.color,
                                 borderWidth: 2 * SizeConfig.widthMultiplier!,
-                                color: kPureWhite)
+                                color: kgreen49)
                             )
                       ],
                     ),
@@ -413,10 +441,14 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected) 
                   isConnected?Text(
                     burntCalories.toString() + " kcal",
                     style: AppTextStyle.boldBlackText
-                        .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                        .copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color,
+                        fontSize: 14 * SizeConfig.textMultiplier!),
                   )
                       :Text('Not Connected',
-                  style: AppTextStyle.hmediumBlackText,),
+                  style: AppTextStyle.hmediumBlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                  ),),
                   Spacer(),
                   GestureDetector(
                     onTap: onTap,
@@ -424,12 +456,16 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected) 
                       color: Colors.transparent,
                       child: SvgPicture.asset(
                         ImagePath.power,
-                        height: 16 * SizeConfig.widthMultiplier!,
-                        width: 16 * SizeConfig.widthMultiplier!,
+                        height: 18 * SizeConfig.widthMultiplier!,
+                        width: 18 * SizeConfig.widthMultiplier!,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   )
                 ],
+              ),
+              SizedBox(
+                height: 4*SizeConfig.heightMultiplier!,
               )
             ],
           ),

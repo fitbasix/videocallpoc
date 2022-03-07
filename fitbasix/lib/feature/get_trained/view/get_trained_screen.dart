@@ -69,7 +69,7 @@ class GetTrainedScreen extends StatelessWidget {
                 ),
                 SizedBox(
                   //19
-                  height: 21 * SizeConfig.heightMultiplier!,
+                  height: 18 * SizeConfig.heightMultiplier!,
                 ),
                 Obx(
                   () => Container(
@@ -716,7 +716,9 @@ class GetTrainedTitle extends StatelessWidget {
     return Text(
       title,
       style: AppTextStyle.titleText
-          .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+          .copyWith(
+        color: Theme.of(context).textTheme.bodyText1?.color,
+          fontSize: 16 * SizeConfig.textMultiplier!),
     );
   }
 }
@@ -737,7 +739,8 @@ class SeeAllButton extends StatelessWidget {
           style: AppTextStyle.NormalText.copyWith(
               fontSize: 14 * SizeConfig.textMultiplier!,
               decoration: TextDecoration.underline,
-              color: kGreyText),
+              color: Theme.of(context).textTheme.headline1?.color
+          ),
         ));
   }
 }
