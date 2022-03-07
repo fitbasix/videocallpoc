@@ -1,4 +1,5 @@
 import 'package:fitbasix/core/constants/app_text_style.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/plans/view/widget/custom_buttonforplan.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,9 +56,65 @@ class _PlanInformationUIState extends State<PlanInformationUI> {
                   backgroundUrl: trainerController
                       .fullPlanDetails.value.response!.data!.planIcon
                       .toString(),
-                  onGetdemo: () {},
-                  onEnrollnow: () {},
-                  onfollowtrainer: () {},
+                  onGetdemo: () async {
+                    trainerController.weekAvailableSlots.value = [];
+                    Navigator.pushNamed(context, RouteName.planTimingScreen);
+                    // trainerController.fullPlanDetails.value.response!.data!
+                    //             .isEnrolled ==
+                    //         false
+                    //     ? Navigator.pushNamed(
+                    //         context, RouteName.planTimingScreen)
+                    //     : "";
+                    trainerController.isAvailableSlotDataLoading.value = true;
+                    var output = await TrainerServices.getAllTimeSlot();
+                    trainerController.getAllSlots.value =
+                        output.response!.data!;
+
+                    trainerController.availableSlots.value =
+                        await TrainerServices.getEnrolledPlanDetails(
+                            trainerController.fullPlanDetails.value.response!
+                                .data!.trainer!.trainerId!);
+                    trainerController.isAvailableSlotDataLoading.value = false;
+                  },
+                  onEnrollnow: () async {
+                    trainerController.weekAvailableSlots.value = [];
+                    Navigator.pushNamed(context, RouteName.planTimingScreen);
+                    // trainerController.fullPlanDetails.value.response!.data!
+                    //             .isEnrolled ==
+                    //         false
+                    //     ? Navigator.pushNamed(
+                    //         context, RouteName.planTimingScreen)
+                    //     : "";
+                    trainerController.isAvailableSlotDataLoading.value = true;
+                    var output = await TrainerServices.getAllTimeSlot();
+                    trainerController.getAllSlots.value =
+                        output.response!.data!;
+
+                    trainerController.availableSlots.value =
+                        await TrainerServices.getEnrolledPlanDetails(
+                            trainerController.fullPlanDetails.value.response!
+                                .data!.trainer!.trainerId!);
+                    trainerController.isAvailableSlotDataLoading.value = false;
+                  },
+                  onfollowtrainer: () {
+                    trainerController.fullPlanDetails.value.response!.data!
+                        .trainer!.isFollowing = true;
+                    trainerController.fullPlanDetails.value.response!.data!
+                        .trainer!.followers = (int.tryParse(trainerController
+                            .fullPlanDetails
+                            .value
+                            .response!
+                            .data!
+                            .trainer!
+                            .followers!
+                            .toString())! +
+                        1);
+                    TrainerServices.followTrainer(
+                        trainerController.atrainerDetail.value.user!.id!);
+                    setState(() {});
+                  },
+                  isFollowing: trainerController.fullPlanDetails.value.response!
+                      .data!.trainer!.isFollowing,
                   onmessagetrainer: () {},
                   trainerName: trainerController
                       .fullPlanDetails.value.response!.data!.trainer!.name
@@ -76,7 +133,10 @@ class _PlanInformationUIState extends State<PlanInformationUI> {
                       .fullPlanDetails.value.response!.data!.keyPoints!,
                   planequipment: trainerController
                       .fullPlanDetails.value.response!.data!.equipments!,
-                  planprizing: '\$240',
+                  planprizing: 'AED ' +
+                      trainerController
+                          .fullPlanDetails.value.response!.data!.prize
+                          .toString(),
                   traineravatarUrl: trainerController.fullPlanDetails.value
                       .response!.data!.trainer!.profilePhoto,
                   followerscount: NumberFormatter.textFormatter(
@@ -137,6 +197,7 @@ class TrainerPlanScreen extends StatefulWidget {
   final String? reviewPersonDetail;
   final String? reviewPersonCircleavatar;
   final String? totalreviewrating;
+  final bool? isFollowing;
   double? value = 1.0;
 
   TrainerPlanScreen(
@@ -165,6 +226,7 @@ class TrainerPlanScreen extends StatefulWidget {
       this.reviewPersonDetail,
       this.reviewPersonCircleavatar,
       this.totalreviewrating,
+      this.isFollowing,
       Key? key})
       : super(key: key);
   @override
@@ -464,18 +526,31 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                     ),
                     Row(
                       children: [
-                        CustomButtonPlanScreen(
-                          colour: kgreen4F,
-                          width: 102 * SizeConfig.widthMultiplier!,
-                          height: 28 * SizeConfig.heightMultiplier!,
-                          onpressed: widget.onfollowtrainer!,
-                          Text: Text(
-                            'follow'.tr,
-                            style: AppTextStyle.hboldWhiteText.copyWith(
-                              fontSize: (12) * SizeConfig.textMultiplier!,
-                            ),
-                          ),
-                        ),
+                        widget.isFollowing == true
+                            ? CustomButtonPlanScreen(
+                                colour: kgreen4F,
+                                width: 102 * SizeConfig.widthMultiplier!,
+                                height: 28 * SizeConfig.heightMultiplier!,
+                                onpressed: () {},
+                                Text: Text(
+                                  'following'.tr,
+                                  style: AppTextStyle.hboldWhiteText.copyWith(
+                                    fontSize: (12) * SizeConfig.textMultiplier!,
+                                  ),
+                                ),
+                              )
+                            : CustomButtonPlanScreen(
+                                colour: kgreen4F,
+                                width: 102 * SizeConfig.widthMultiplier!,
+                                height: 28 * SizeConfig.heightMultiplier!,
+                                onpressed: widget.onfollowtrainer!,
+                                Text: Text(
+                                  'follow'.tr,
+                                  style: AppTextStyle.hboldWhiteText.copyWith(
+                                    fontSize: (12) * SizeConfig.textMultiplier!,
+                                  ),
+                                ),
+                              ),
                         SizedBox(
                           width: 12 * SizeConfig.widthMultiplier!,
                         ),

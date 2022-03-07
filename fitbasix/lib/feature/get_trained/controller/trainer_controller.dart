@@ -7,7 +7,9 @@ import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../plans/models/AvailableSlot.dart';
 import '../../plans/models/FullPlanDetailModel.dart';
+import '../../plans/models/allTimeSlot.dart';
 
 class TrainerController extends GetxController {
   RxBool isSelected = RxBool(false);
@@ -41,6 +43,12 @@ class TrainerController extends GetxController {
   Rx<PlanFullDetails> fullPlanDetails = PlanFullDetails().obs;
   RxBool fullPlanInfoLoading = true.obs;
   RxString selectedPlanId = "".obs;
+  Rx<AvailableSlot> availableSlots = AvailableSlot().obs;
+  RxList<TimeSlot> getAllSlots = <TimeSlot>[].obs;
+  RxBool isAvailableSlotDataLoading = false.obs;
+  RxInt TimeSlotSelected = RxInt(-1);
+  RxList<Slot> weekAvailableSlots = <Slot>[].obs;
+  RxList<String> selectedDays = <String>[].obs;
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;
