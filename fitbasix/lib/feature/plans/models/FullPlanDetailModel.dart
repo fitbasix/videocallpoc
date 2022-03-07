@@ -135,27 +135,32 @@ class FullPlan {
 
 class TrainerDetail {
   TrainerDetail({
+    this.trainerId,
     this.trainees,
     this.rating,
     this.followers,
     this.followings,
+    this.isFollowing,
     this.name,
     this.profilePhoto,
   });
-
+  String? trainerId;
   String? trainees;
   String? rating;
   int? followers;
   int? followings;
   String? name;
+  bool? isFollowing;
   String? profilePhoto;
 
   factory TrainerDetail.fromJson(Map<String, dynamic> json) => TrainerDetail(
+        trainerId: json["user"],
         trainees: json["trainees"],
         rating: json["rating"],
         followers: json["followers"],
         followings: json["followings"],
         name: json["name"],
+        isFollowing: json["isFollowing"],
         profilePhoto: json["profilePhoto"],
       );
 

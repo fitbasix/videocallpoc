@@ -38,7 +38,7 @@ class TrendingPostUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: kPureWhite,
+      color: Theme.of(context).secondaryHeaderColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -53,7 +53,8 @@ class TrendingPostUI extends StatelessWidget {
                 backgroundImage: NetworkImage(profileImageURL)),
             title: Text(
               titleOfLive,
-              style: AppTextStyle.black600Text,
+              style: AppTextStyle.black600Text.copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color),
             ),
             subtitle: Text(
               userName,
@@ -65,7 +66,8 @@ class TrendingPostUI extends StatelessWidget {
                   horizontal: 16 * SizeConfig.widthMultiplier!),
               child: Text(
                 liveDescription,
-                style: AppTextStyle.black400Text,
+                style: AppTextStyle.black400Text.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color),
               )),
           SizedBox(
             height: 12 * SizeConfig.widthMultiplier!,
@@ -248,8 +250,11 @@ class TrendingPostUI extends StatelessWidget {
               SizedBox(
                 width: 6 * SizeConfig.widthMultiplier!,
               ),
-              Text("${likeCount.toString()} " + "Likes".tr,
-                  style: AppTextStyle.black600Text),
+              Text(
+                "${likeCount.toString()} " + "Likes".tr,
+                style: AppTextStyle.black600Text.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color),
+              ),
 
               Spacer(),
 
@@ -269,7 +274,9 @@ class TrendingPostUI extends StatelessWidget {
                     SvgPicture.asset(
                       ImagePath.commentIcon,
                       height: 20 * SizeConfig.imageSizeMultiplier!,
-                      color: (isAccountLive!) ? kPureBlack : hintGrey,
+                      color: (isAccountLive!)
+                          ? Theme.of(context).primaryColor
+                          : hintGrey,
                     ),
                     SizedBox(
                       width: 6 * SizeConfig.widthMultiplier!,
@@ -280,6 +287,11 @@ class TrendingPostUI extends StatelessWidget {
                             : "live_chat".tr,
                         style: (isAccountLive!)
                             ? AppTextStyle.normalPureBlackTextWithWeight600
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color)
                             : AppTextStyle.greyTextWithWeight600),
                     SizedBox(
                       width: 16 * SizeConfig.widthMultiplier!,
@@ -293,7 +305,7 @@ class TrendingPostUI extends StatelessWidget {
             margin: EdgeInsets.only(top: 12 * SizeConfig.heightMultiplier!),
             width: double.infinity,
             height: 12 * SizeConfig.heightMultiplier!,
-            color: kLightGrey,
+            color: Theme.of(context).secondaryHeaderColor,
           ),
         ],
       ),

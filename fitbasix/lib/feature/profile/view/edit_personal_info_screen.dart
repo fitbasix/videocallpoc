@@ -20,9 +20,11 @@ class EditPersonalInfoScreen extends StatelessWidget {
   final HomeController homeController = Get.find();
   EditPersonalInfoScreen({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     print(_profileController.DOBController.text);
+
     return Scaffold(
       backgroundColor: kPureWhite,
       appBar: AppBarForAccount(

@@ -45,7 +45,7 @@ class TrainerCard extends StatelessWidget {
             vertical: 24 * SizeConfig.heightMultiplier!,
             horizontal: 12 * SizeConfig.widthMultiplier!),
         decoration: BoxDecoration(
-            color: kPureWhite,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
@@ -70,7 +70,9 @@ class TrainerCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyle.titleText
-                  .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                  .copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color,
+                  fontSize: 14 * SizeConfig.textMultiplier!),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -81,6 +83,7 @@ class TrainerCard extends StatelessWidget {
                       ? '$strength'
                       : '$strength + ${strengthLength - 1}',
                   style: AppTextStyle.NormalText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
                       fontSize: 10 * SizeConfig.textMultiplier!),
                 ),
                 SizedBox(
@@ -88,7 +91,9 @@ class TrainerCard extends StatelessWidget {
                 ),
                 Text(
                   '|',
-                  style: TextStyle(color: kLightGrey),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.headline1?.color
+                  ),
                 ),
                 SizedBox(
                   width: 8 * SizeConfig.widthMultiplier!,
@@ -100,7 +105,9 @@ class TrainerCard extends StatelessWidget {
                 Text(
                   '$certificateCount',
                   style: AppTextStyle.titleText
-                      .copyWith(fontSize: 10 * SizeConfig.textMultiplier!),
+                      .copyWith(
+                      color: Theme.of(context).textTheme.bodyText1?.color,
+                      fontSize: 10 * SizeConfig.textMultiplier!),
                 ),
               ],
             ),
@@ -112,7 +119,9 @@ class TrainerCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyle.NormalText.copyWith(
-                  fontSize: 10 * SizeConfig.textMultiplier!, color: kGreyText),
+                  fontSize: 10 * SizeConfig.textMultiplier!,
+                  color: Theme.of(context).textTheme.headline1?.color
+              ),
             ),
             SizedBox(
               height: 8 * SizeConfig.heightMultiplier!,
@@ -126,7 +135,9 @@ class TrainerCard extends StatelessWidget {
             Text(
               '($raters)',
               style: AppTextStyle.NormalText.copyWith(
-                  fontSize: 10 * SizeConfig.textMultiplier!, color: kGreyText),
+                  fontSize: 10 * SizeConfig.textMultiplier!,
+                  color: Theme.of(context).textTheme.headline1?.color
+              ),
             ),
             SizedBox(
               height: 0 * SizeConfig.heightMultiplier!,

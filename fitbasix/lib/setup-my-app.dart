@@ -1,3 +1,4 @@
+import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
 import 'package:fitbasix/feature/get_started_page/view/get_started_page.dart';
@@ -15,13 +16,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fitbasix/core/localization/translations.dart';
 import 'package:fitbasix/fitbasix_app.dart';
-
 import 'feature/Home/view/consumption_screen.dart';
 
 Future<void> setupApp() async {
+
   Get.put(AppTranslations());
   await RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  InitializeQuickBlox().init();
   var accessToken = prefs.getString('AccessToken');
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(

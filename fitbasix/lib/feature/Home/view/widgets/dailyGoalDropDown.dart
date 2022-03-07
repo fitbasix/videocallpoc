@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 Widget DailyGoalDropDown(
     {required List<double> listofItems,
+    required BuildContext context,
     required Function onChanged,
     double? hint}) {
   return Align(
@@ -17,6 +18,7 @@ Widget DailyGoalDropDown(
       child: DropdownButton(
           isDense: true,
           isExpanded: true,
+          dropdownColor: Theme.of(context).primaryColorDark,
           elevation: 0,
           icon: Padding(
             padding: EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
@@ -27,7 +29,10 @@ Widget DailyGoalDropDown(
               child: hint == null
                   ? Row(
                       children: [
-                        Text("3", style: AppTextStyle.normalBlackText),
+                        Text(
+                          "3",
+                          style: AppTextStyle.normalWhiteText,
+                        ),
                         SizedBox(
                           width: 4,
                         ),
@@ -41,7 +46,7 @@ Widget DailyGoalDropDown(
                   : Row(
                       children: [
                         Text(hint.toString(),
-                            style: AppTextStyle.normalBlackText),
+                            style: AppTextStyle.normalWhiteText),
                         SizedBox(
                           width: 4,
                         ),
@@ -55,8 +60,9 @@ Widget DailyGoalDropDown(
             return DropdownMenuItem<double>(
                 value: value,
                 child: Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: 16.0 * SizeConfig.widthMultiplier!),
@@ -65,7 +71,7 @@ Widget DailyGoalDropDown(
                           right: 10 * SizeConfig.widthMultiplier!),
                       child: Text(
                         value.toString() + "ltr",
-                        style: AppTextStyle.boldBlackText.copyWith(
+                        style: AppTextStyle.boldWhiteText.copyWith(
                             fontSize: 14 * SizeConfig.textMultiplier!),
                       ),
                     ),

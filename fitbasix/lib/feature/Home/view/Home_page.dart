@@ -41,6 +41,7 @@ class HomeAndTrainerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       key: homeController.drawerKey,
       body: Obx(() => screens[homeController.selectedIndex.value]),
       // bottomNavigationBar: CustomizedBottomAppBar(),
@@ -142,7 +143,7 @@ class _HomePageState extends State<HomePage> {
       //         onPressed: () {}, icon: SvgPicture.asset(ImagePath.bellIcon))
       //   ],
       // ),
-      backgroundColor: kBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
           child: Obx(() => _homeController.isLoading.value
               ? Padding(
@@ -155,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Container(
                         height: 178 * SizeConfig.heightMultiplier!,
-                        color: kPureWhite,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                             60 * SizeConfig.widthMultiplier!)),
                                   ),
                                   SizedBox(
-                                    width: 15,
+                                    width: 15*SizeConfig.widthMultiplier!,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -215,7 +216,9 @@ class _HomePageState extends State<HomePage> {
                                                         .name!
                                                   }),
                                                   style: AppTextStyle
-                                                      .boldBlackText,
+                                                      .boldBlackText.copyWith(
+                                                    color: Theme.of(context).textTheme.bodyText1?.color
+                                                  ),
                                                 ),
                                           // SizedBox(
                                           //   width: 31 *
@@ -227,13 +230,16 @@ class _HomePageState extends State<HomePage> {
                                         'home_page_subtitle'.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
+                                            color: Theme.of(context).textTheme.bodyText1?.color,
                                                 fontSize: 12 *
                                                     SizeConfig.textMultiplier!),
                                       )
                                     ],
                                   ),
                                   Spacer(),
-                                  SvgPicture.asset(ImagePath.bellIcon),
+                                  SvgPicture.asset(ImagePath.bellIcon,
+                                    color: Theme.of(context).primaryIconTheme.color,
+                                  ),
                                 ],
                               ),
                             ),
@@ -289,13 +295,17 @@ class _HomePageState extends State<HomePage> {
                                   'today'.tr,
                                   style: AppTextStyle.boldBlackText.copyWith(
                                       fontSize:
-                                          16 * SizeConfig.textMultiplier!),
+                                          16 * SizeConfig.textMultiplier!,
+                                    color: Theme.of(context).textTheme.bodyText2?.color
+                                  ),
                                 ),
                                 Text(
                                   formatter,
                                   style: AppTextStyle.boldBlackText.copyWith(
                                       fontSize:
-                                          14 * SizeConfig.textMultiplier!),
+                                          14 * SizeConfig.textMultiplier!,
+                                  color: Theme.of(context).textTheme.bodyText2?.color
+                                  ),
                                 )
                               ],
                             ),
@@ -465,7 +475,9 @@ class _HomePageState extends State<HomePage> {
                                                       .value = false;
                                                 },
                                                       //homecontroller
-                                                      _homeController))),
+                                                      _homeController,
+                                                      //Passing context for theme
+                                                  context))),
                                           SizedBox(
                                             width: 8.0 *
                                                 SizeConfig.widthMultiplier!,
@@ -487,7 +499,9 @@ class _HomePageState extends State<HomePage> {
                                                         HealthApp());
                                               },
                                               //is connected
-                                              true),
+                                              true,
+                                                  //Passing context for theme
+                                              context),
                                             ),
                                           )
                                         ],
@@ -578,7 +592,10 @@ class _HomePageState extends State<HomePage> {
                                                   .fatsKiloCals!
                                                   .toInt()
                                                   .toString() +
-                                              " kcal"),
+                                              " kcal",
+                                      //passing context for theme
+                                      context
+                                      ),
                                       SizedBox(
                                           height: 20 *
                                               SizeConfig.heightMultiplier!),
@@ -595,6 +612,7 @@ class _HomePageState extends State<HomePage> {
                                                     style: AppTextStyle
                                                         .normalBlackText
                                                         .copyWith(
+                                                      color: Theme.of(context).textTheme.bodyText1?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!)),
@@ -604,7 +622,7 @@ class _HomePageState extends State<HomePage> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8),
-                                                      color: kGreenColor),
+                                                      color: kgreen4F),
                                                   child: Padding(
                                                     padding: EdgeInsets.symmetric(
                                                         vertical: 8.0 *
@@ -619,7 +637,7 @@ class _HomePageState extends State<HomePage> {
                                                             .copyWith(
                                                                 fontSize: 14 *
                                                                     SizeConfig
-                                                                        .textMultiplier!)),
+                                                                        .textMultiplier!),),
                                                   ),
                                                 )
                                               ],
@@ -631,7 +649,7 @@ class _HomePageState extends State<HomePage> {
                                     // padding:
                                     //     EdgeInsets.only(left: 16, bottom: 16),
                                     decoration: BoxDecoration(
-                                        color: kPureWhite,
+                                        color: Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(10),
                                         boxShadow: [
                                           BoxShadow(
@@ -757,6 +775,7 @@ class _HomePageState extends State<HomePage> {
                                                         style: AppTextStyle
                                                             .smallBlackText
                                                             .copyWith(
+                                                          color: Theme.of(context).textTheme.bodyText1?.color,
                                                                 fontSize: 14 *
                                                                     SizeConfig
                                                                         .textMultiplier!),
@@ -792,6 +811,7 @@ class _HomePageState extends State<HomePage> {
                                                         style: AppTextStyle
                                                             .smallBlackText
                                                             .copyWith(
+                                                            color: Theme.of(context).textTheme.bodyText1?.color,
                                                                 fontSize: 14 *
                                                                     SizeConfig
                                                                         .textMultiplier!),
@@ -829,11 +849,14 @@ class _HomePageState extends State<HomePage> {
                               height: 72 * SizeConfig.heightMultiplier!,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  gradient: LinearGradient(
-                                      colors: [kLightBlue, kPureWhite]),
+                                  color: Theme.of(context).cardColor,
+                                  // gradient: LinearGradient(
+                                  //   begin: Alignment.centerLeft,
+                                  //     end: Alignment.centerRight,
+                                  //     colors: [kBlack.withOpacity(1), Color(0xFF948F8F).withOpacity(0)]),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.black.withOpacity(0.10),
+                                        color: kBlack.withOpacity(0.10),
                                         blurRadius: 10,
                                         spreadRadius: 0,
                                         offset: Offset(0, 5))
@@ -841,7 +864,8 @@ class _HomePageState extends State<HomePage> {
                               child: Row(
                                 children: [
                                   SvgPicture.asset(
-                                      ImagePath.searchFavoriteIcon),
+                                      ImagePath.searchFavoriteIcon,
+                                  ),
                                   SizedBox(
                                     width: 16 * SizeConfig.widthMultiplier!,
                                   ),
@@ -851,6 +875,7 @@ class _HomePageState extends State<HomePage> {
                                       'explore_fitbasix'.tr,
                                       style:
                                           AppTextStyle.boldBlackText.copyWith(
+                                            color: Theme.of(context).textTheme.bodyText1?.color,
                                         fontSize:
                                             14 * SizeConfig.textMultiplier!,
                                       ),
@@ -885,7 +910,7 @@ class _HomePageState extends State<HomePage> {
                             height: 24 * SizeConfig.heightMultiplier!,
                           ),
                           Container(
-                            color: kPureWhite,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -896,6 +921,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     'trending_posts'.tr,
                                     style: AppTextStyle.boldBlackText.copyWith(
+                                      color: Theme.of(context).textTheme.bodyText1?.color,
                                         fontSize:
                                             16 * SizeConfig.textMultiplier!),
                                   ),
@@ -1158,7 +1184,7 @@ class _HomePageState extends State<HomePage> {
                                                       height: 16 *
                                                           SizeConfig
                                                               .heightMultiplier!,
-                                                      color: kBackgroundColor,
+                                                      color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.1),
                                                     )
                                                   ],
                                                 ));

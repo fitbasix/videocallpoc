@@ -77,9 +77,9 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
             onPressed: () {
@@ -88,6 +88,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
             },
             icon: SvgPicture.asset(
               ImagePath.backIcon,
+              color: Theme.of(context).primaryColor,
               width: 7 * SizeConfig.widthMultiplier!,
               height: 12 * SizeConfig.heightMultiplier!,
             )),
@@ -96,7 +97,12 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
           child: Text(
             'create_post'.tr,
             style: AppTextStyle.titleText
-                .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                .copyWith(
+                color: Theme.of(context)
+                    .appBarTheme
+                    .titleTextStyle
+                    ?.color,
+                fontSize: 16 * SizeConfig.textMultiplier!),
           ),
         ),
         actions: [
@@ -163,7 +169,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         },
                         icon: Icon(
                           Icons.camera_alt,
-                          color: kPureBlack,
+                          color: Theme.of(context).primaryColor,
                         )),
                     GestureDetector(
                       onTap: () async {
@@ -187,6 +193,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                       },
                       child: SvgPicture.asset(
                         ImagePath.videoIcon,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                     SizedBox(
@@ -212,7 +219,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         () => _postController.assets.length == 0
                             ? Container()
                             : Padding(
-                                padding: EdgeInsets.only(top: 58.0),
+                                padding: EdgeInsets.only(top: 58.0*SizeConfig.heightMultiplier!),
                                 child: GridView.builder(
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -261,11 +268,12 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                       customDropDownBtn(
                         options: _postController.foldersAvailable,
                         controller: _postController,
+                        context: context,
                         isExpanded: _postController.isDropDownExpanded.value,
                         label: 'gallery'.tr,
-                        /* onPressed: () {
+                        onPressed: () {
                             _postController.toggleDropDownExpansion();
-                          }*/
+                          }
                       ),
                     ],
                   ),
@@ -311,7 +319,7 @@ class AssetThumbnail extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(
-                color: isSelected ? kGreenColor : kPureWhite, width: 2)),
+                color: isSelected ? kGreenColor : Colors.transparent, width: 2)),
         child: FutureBuilder<Uint8List?>(
           future: asset.thumbData,
           builder: (_, snapshot) {

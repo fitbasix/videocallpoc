@@ -1,3 +1,5 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'widgets/water_capsule.dart';
@@ -23,7 +26,7 @@ class ConsumptionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
         elevation: 0.0,
         leading: IconButton(
             onPressed: () {
@@ -37,16 +40,18 @@ class ConsumptionScreen extends StatelessWidget {
                   ImagePath.backIcon,
                   width: 7 * SizeConfig.widthMultiplier!,
                   height: 12 * SizeConfig.heightMultiplier!,
+                  color: Theme.of(context).textTheme.bodyText1?.color,
                 ),
               ),
             )),
         title: Text(
           'today_consumption'.tr,
           style: AppTextStyle.boldBlackText.copyWith(
-              color: lightBlack, fontSize: 16 * SizeConfig.textMultiplier!),
+              color: Theme.of(context).textTheme.bodyText1?.color,
+              fontSize: 16 * SizeConfig.textMultiplier!),
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: SingleChildScrollView(
         child: Obx(
           () => _homeController.isConsumptionLoading.value
@@ -54,11 +59,11 @@ class ConsumptionScreen extends StatelessWidget {
                   child: CustomizedCircularProgress(),
                 )
               : Container(
-                  color: kBackgroundColor,
+                  color: Theme.of(context).secondaryHeaderColor,
                   child: Column(
                     children: [
                       Container(
-                        color: Colors.white,
+                        color: Theme.of(context).secondaryHeaderColor,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 16 * SizeConfig.widthMultiplier!),
@@ -87,7 +92,9 @@ class ConsumptionScreen extends StatelessWidget {
                                                 .copyWith(
                                                     fontSize: 14 *
                                                         SizeConfig
-                                                            .textMultiplier!),
+                                                            .textMultiplier!,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
                                           ),
                                           SizedBox(
                                             height: 12 *
@@ -105,6 +112,7 @@ class ConsumptionScreen extends StatelessWidget {
                                             height: 48 *
                                                 SizeConfig.heightMultiplier!,
                                             child: DailyGoalDropDown(
+                                                context: context,
                                                 listofItems:
                                                     _homeController.Watergoal,
                                                 onChanged: (Value) {
@@ -133,7 +141,9 @@ class ConsumptionScreen extends StatelessWidget {
                                                 .copyWith(
                                                     fontSize: 14 *
                                                         SizeConfig
-                                                            .textMultiplier!),
+                                                            .textMultiplier!,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
                                           ),
                                           SizedBox(
                                             height: 26 *
@@ -152,7 +162,12 @@ class ConsumptionScreen extends StatelessWidget {
                                                             .totalWaterRequired!)
                                                     .toStringAsFixed(2),
                                                 style: AppTextStyle
-                                                    .normalBlackText,
+                                                    .normalWhiteText
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color),
                                               ),
                                               SizedBox(
                                                 width: 3 *
@@ -184,7 +199,9 @@ class ConsumptionScreen extends StatelessWidget {
                                                 .copyWith(
                                                     fontSize: 14 *
                                                         SizeConfig
-                                                            .textMultiplier!),
+                                                            .textMultiplier!,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
                                           ),
                                           SizedBox(
                                             height: 26 *
@@ -206,8 +223,8 @@ class ConsumptionScreen extends StatelessWidget {
                                 Text(
                                   'Timings'.tr,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      fontSize:
-                                          14 * SizeConfig.textMultiplier!),
+                                      fontSize: 14 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context).primaryColor),
                                 ),
                                 SizedBox(
                                   height: 12 * SizeConfig.heightMultiplier!,
@@ -242,7 +259,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 _homeController.formatedTime(
                                                     _homeController
                                                         .waterTimingFrom.value),
-                                                style: AppTextStyle.NormalText,
+                                                style: AppTextStyle
+                                                    .normalWhiteText,
                                               ),
                                             ],
                                           ),
@@ -291,7 +309,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 _homeController.formatedTime(
                                                     _homeController
                                                         .waterTimingTo.value),
-                                                style: AppTextStyle.NormalText,
+                                                style: AppTextStyle
+                                                    .normalWhiteText,
                                               ),
                                             ],
                                           ),
@@ -306,8 +325,8 @@ class ConsumptionScreen extends StatelessWidget {
                                 Text(
                                   'reminder'.tr,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      fontSize:
-                                          14 * SizeConfig.textMultiplier!),
+                                      fontSize: 14 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context).primaryColor),
                                 ),
                                 SizedBox(
                                   height: 12 * SizeConfig.heightMultiplier!,
@@ -328,6 +347,7 @@ class ConsumptionScreen extends StatelessWidget {
                                               .value
                                               .response!
                                               .data!,
+                                          context: context,
                                           hint: _homeController
                                               .waterReminder.value,
                                           onChanged: (Value) {
@@ -362,28 +382,19 @@ class ConsumptionScreen extends StatelessWidget {
                                     await HomeService
                                         .updateWaterNotificationDetails(
                                             _homeController.goalWater.value,
-                                            _homeController
-                                                    .waterTimingFrom.value.hour
-                                                    .toString() +
+                                            _homeController.waterTimingFrom.value.hour.toString() +
                                                 ":" +
-                                                _homeController.waterTimingFrom
-                                                    .value.minute
-                                                    .toString(),
-                                            _homeController
-                                                    .waterTimingTo.value.hour
-                                                    .toString() +
-                                                ":" +
-                                                _homeController
-                                                    .waterTimingTo.value.minute
-                                                    .toString(),
-                                            _homeController
-                                                .waterReminder.value.serialId!);
+                                                _homeController.waterTimingFrom.value.minute.toString(),
+                                            _homeController.waterTimingTo.value.hour.toString() +
+                                                ":" + _homeController.waterTimingTo.value.minute.toString(),
+                                            _homeController.waterReminder.value.serialId!);
                                     _homeController.userProfileData.value =
                                         await CreatePostService
                                             .getUserProfile();
                                     _homeController
                                         .iswaterNotificationDataUpdating
                                         .value = false;
+                                    setNotificationDetailsForConsumption(_homeController.waterTimingFrom.value.hour, _homeController.waterTimingFrom.value.minute,_homeController.waterTimingTo.value.hour,_homeController.waterTimingTo.value.minute,_homeController.waterReminder.value.serialId!);
                                   },
                                   child: Container(
                                       width: Get.width -
@@ -419,7 +430,7 @@ class ConsumptionScreen extends StatelessWidget {
                       ),
                       Container(
                         height: 182 * SizeConfig.heightMultiplier!,
-                        color: kPureWhite,
+                        color: Theme.of(context).secondaryHeaderColor,
                         child: Center(
                           child: AnimatedLiquidCustomProgressIndicator(),
                         ),
@@ -429,7 +440,7 @@ class ConsumptionScreen extends StatelessWidget {
                       ),
                       Container(
                         height: 244 * SizeConfig.heightMultiplier!,
-                        color: kPureWhite,
+                        color: Theme.of(context).secondaryHeaderColor,
                         child: Column(
                           children: [
                             SizedBox(
@@ -443,7 +454,7 @@ class ConsumptionScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('water_intake'.tr,
-                                      style: AppTextStyle.boldBlackText
+                                      style: AppTextStyle.boldWhiteText
                                           .copyWith(
                                               fontSize: 14 *
                                                   SizeConfig.textMultiplier!)),
@@ -475,7 +486,7 @@ class ConsumptionScreen extends StatelessWidget {
                                             Text(
                                               'goal'.tr,
                                               style: AppTextStyle
-                                                  .normalBlackText
+                                                  .normalWhiteText
                                                   .copyWith(
                                                       fontSize: 10 *
                                                           SizeConfig
@@ -505,7 +516,7 @@ class ConsumptionScreen extends StatelessWidget {
                                             Text(
                                               'intake'.tr,
                                               style: AppTextStyle
-                                                  .normalBlackText
+                                                  .normalWhiteText
                                                   .copyWith(
                                                       fontSize: 10 *
                                                           SizeConfig
@@ -539,6 +550,25 @@ class ConsumptionScreen extends StatelessWidget {
       ),
     );
   }
+
+  // void setNotificationDetailsForConsumption(int fromHour,int fromMinute,int toHour,int toMinute, int reminderSerialNo) async{
+  //   bool canceled = await AndroidAlarmManager.cancel(0).then((value){
+  //     AndroidAlarmManager.periodic(Duration(seconds: 30), 0, showWaterConsumptionNotification,allowWhileIdle: true,exact: true,startAt: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute));
+  //     return value;
+  //   });
+  // }
+
+  void setNotificationDetailsForConsumption(int fromHour,int fromMinute,int toHour,int toMinute, int reminderSerialNo) async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool canceled = await AndroidAlarmManager.cancel(0).then((value){
+      AndroidAlarmManager.periodic(Duration(minutes: reminderSerialNo), 0, showWaterConsumptionNotification,allowWhileIdle: true,exact: true,startAt: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute),rescheduleOnReboot: true);
+      sharedPreferences.setInt("endMinute", 7);
+      sharedPreferences.setInt("endHour", 18);
+      //sharedPreferences.setInt("endMinute", toMinute);
+      //sharedPreferences.setInt("endHour", toHour);
+      return value;
+    });
+  }
 }
 
 class ChartApp extends StatefulWidget {
@@ -561,7 +591,7 @@ class __ChartAppState extends State<ChartApp> {
           majorTickLines:
               MajorTickLines(size: 0, width: 0, color: Colors.transparent),
           //axisLine: AxisLine(color: Colors.transparent),
-          labelStyle: AppTextStyle.normalBlackText
+          labelStyle: AppTextStyle.normalWhiteText
               .copyWith(fontSize: 10 * SizeConfig.textMultiplier!),
           // majorGridLines: MajorGridLines(width: 0),
         ),
@@ -580,7 +610,7 @@ class __ChartAppState extends State<ChartApp> {
               opacity: 0.5,
               // gradient color
               gradient: const LinearGradient(colors: [
-                GreyColor,
+                grey2B,
                 Colors.white,
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               xValueMapper: (ConsumedWater sales, _) =>
@@ -609,7 +639,7 @@ class __ChartAppState extends State<ChartApp> {
               // gradient color
               gradient: const LinearGradient(colors: [
                 kGreenColor,
-                Colors.white,
+                Colors.black,
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               //  color: Colors.green.shade200,
               xValueMapper: (ConsumedWater sales, _) =>
@@ -633,4 +663,27 @@ class __ChartAppState extends State<ChartApp> {
               dataLabelSettings: const DataLabelSettings(isVisible: false)),
         ]);
   }
+}
+
+
+void showWaterConsumptionNotification(int id) async {
+  print("calledddd1123");
+  print(DateTime.now());
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance().then((value) {
+    DateTime endTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,value.getInt("endHour")!,value.getInt("endMinute")!);
+    if(DateTime.now().isBefore(endTime)){
+      print("calledddd");
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 10,
+            channelKey: 'basic_channel',
+            title: 'Water',
+            body: 'Drink water',
+          )
+      );}
+      return value;
+  });
+
+
+
 }

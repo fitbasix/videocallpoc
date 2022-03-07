@@ -13,9 +13,11 @@ class RightTick extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(top: 8, bottom: 8, right: 16),
+        margin: EdgeInsets.only(
+            top: 8*SizeConfig.heightMultiplier!, bottom: 8*SizeConfig.heightMultiplier!,
+            right: 16*SizeConfig.widthMultiplier!),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0), color: kGreenColor),
+            borderRadius: BorderRadius.circular(8.0), color: kgreen4F),
         child: Center(
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -23,7 +25,7 @@ class RightTick extends StatelessWidget {
                 vertical: 11 * SizeConfig.heightMultiplier!),
             child: SvgPicture.asset(
               ImagePath.rightTickIcon,
-              color: Colors.white,
+              color: kPureWhite,
               fit: BoxFit.contain,
               height: 13.4 * SizeConfig.heightMultiplier!,
               width: 17.6 * SizeConfig.widthMultiplier!,

@@ -17,7 +17,7 @@ class SetDob extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
@@ -30,25 +30,32 @@ class SetDob extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Stack(
+              children: [
+                Container(
+                  color: Theme.of(context).primaryColor,
+                  height: 2 * SizeConfig.heightMultiplier!,
+                  width: Get.width,
+                ),
           Container(
             color: kGreenColor,
             height: 2 * SizeConfig.heightMultiplier!,
             width: Get.width * 0.375,
-          ),
+          ),]),
           SizedBox(
             height: 40 * SizeConfig.heightMultiplier!,
           ),
           Center(
             child: Text(
               'ask_dob'.tr,
-              style: AppTextStyle.boldBlackText,
+              style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
               textAlign: TextAlign.center,
             ),
           ),
           SizedBox(
             height: 50,
           ),
-          datePicker(),
+          datePicker(context),
           Spacer(),
           Padding(
             padding: EdgeInsets.symmetric(
@@ -71,7 +78,7 @@ class SetDob extends StatelessWidget {
 
 final SPGController _spgController = Get.find();
 
-Widget datePicker() => Container(
+Widget datePicker(BuildContext context) => Container(
       child: DatePickerWidget(
         looping: true,
         initialDate: DateTime.parse(_spgController.selectedDate.value),
@@ -91,7 +98,7 @@ Widget datePicker() => Container(
           itemHeight: 75,
           pickerHeight: 270 * SizeConfig.heightMultiplier!,
           itemTextStyle: TextStyle(
-              color: lightBlack, fontSize: 28 * SizeConfig.heightMultiplier!),
+              color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 28 * SizeConfig.heightMultiplier!),
           dividerColor: Colors.transparent,
         ),
       ),

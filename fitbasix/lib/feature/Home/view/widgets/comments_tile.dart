@@ -75,7 +75,7 @@ class _CommentsTileState extends State<CommentsTile> {
                     right: 12 * SizeConfig.widthMultiplier!,
                     bottom: 16 * SizeConfig.heightMultiplier!),
                 decoration: BoxDecoration(
-                    color: kLightGrey,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(8),
                         bottomLeft: Radius.circular(8),
@@ -86,12 +86,13 @@ class _CommentsTileState extends State<CommentsTile> {
                     Text(
                       widget.name,
                       style: AppTextStyle.boldBlackText
-                          .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
+                          .copyWith(
+                          color: Theme.of(context).textTheme.bodyText1?.color,
+                          fontSize: 12 * SizeConfig.textMultiplier!),
                     ),
                     SizedBox(
                       height: 8 * SizeConfig.heightMultiplier!,
                     ),
-
                     RichText(
                         text: TextSpan(children: [
                       TextSpan(
@@ -105,6 +106,7 @@ class _CommentsTileState extends State<CommentsTile> {
                               ? widget.comment.substring(0, length) + '...'
                               : widget.comment,
                           style: AppTextStyle.normalBlackText.copyWith(
+                            color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 14 * SizeConfig.textMultiplier!)),
                       widget.comment.length > length
                           ? WidgetSpan(
@@ -152,7 +154,8 @@ class _CommentsTileState extends State<CommentsTile> {
                     Text(widget.time,
                         style: AppTextStyle.normalBlackText.copyWith(
                             fontSize: 12 * SizeConfig.textMultiplier!,
-                            color: kGreyColor)),
+                            color: Theme.of(context).textTheme.headline6?.color
+                        )),
                     SizedBox(
                       width: 13 * SizeConfig.widthMultiplier!,
                     ),
@@ -160,8 +163,8 @@ class _CommentsTileState extends State<CommentsTile> {
                       onTap: widget.onLikeComment,
                       child: Icon(
                         Icons.favorite,
-                        color: kGreyColor,
-                        size: 14,
+                        color: Theme.of(context).textTheme.headline6?.color,
+                        size: 14*SizeConfig.heightMultiplier!,
                       ),
                     ),
                     SizedBox(
@@ -171,14 +174,15 @@ class _CommentsTileState extends State<CommentsTile> {
                         'likes'.trParams({'no_likes': widget.likes.toString()}),
                         style: AppTextStyle.normalBlackText.copyWith(
                             fontSize: 12 * SizeConfig.textMultiplier!,
-                            color: kGreyColor)),
+                            color: Theme.of(context).textTheme.headline6?.color
+                        )),
                     SizedBox(
                       width: 13 * SizeConfig.widthMultiplier!,
                     ),
                     Icon(
                       Icons.reply,
-                      color: kGreyColor,
-                      size: 18,
+                      color: Theme.of(context).textTheme.headline6?.color,
+                      size: 18*SizeConfig.heightMultiplier!,
                     ),
                     SizedBox(
                       width: 4 * SizeConfig.widthMultiplier!,
@@ -188,7 +192,8 @@ class _CommentsTileState extends State<CommentsTile> {
                       child: Text('reply'.tr,
                           style: AppTextStyle.normalBlackText.copyWith(
                               fontSize: 12 * SizeConfig.textMultiplier!,
-                              color: kGreyColor)),
+                              color: Theme.of(context).textTheme.headline6?.color
+                          )),
                     ),
                   ],
                 ),

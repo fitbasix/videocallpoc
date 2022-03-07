@@ -102,6 +102,10 @@ class _FullPostTileState extends State<FullPostTile> {
                           ? Text(
                               widget.name,
                               style: AppTextStyle.boldBlackText.copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color,
                                   fontSize: 14 * SizeConfig.textMultiplier!),
                             )
                           : widget.people.length == 1
@@ -115,6 +119,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                         widget.name,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -124,12 +132,24 @@ class _FullPostTileState extends State<FullPostTile> {
                                       Container(
                                         height: 1,
                                         width: 15,
-                                        color: kPureBlack,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
-                                      Text('with'.tr),
+                                      Text(
+                                        'with'.tr,
+                                        style: AppTextStyle.normalGreenText
+                                            .copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.color,
+                                        ),
+                                      ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
@@ -137,6 +157,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                         widget.people[0].name!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       )
@@ -153,6 +177,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                         widget.name,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -162,7 +190,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                       Container(
                                         height: 1,
                                         width: 15,
-                                        color: kPureBlack,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
@@ -171,6 +202,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                         'with'.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -181,6 +216,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                         widget.people[0].name!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -191,6 +230,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                         'and'.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -202,6 +245,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                         }),
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       )
@@ -213,37 +260,44 @@ class _FullPostTileState extends State<FullPostTile> {
                           Text(widget.category,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: kGreyColor)),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color)),
                           SizedBox(
                             width: 13 * SizeConfig.widthMultiplier!,
                           ),
-                          Icon(
-                            Icons.access_time,
-                            size: 16,
-                            color: kGreyColor,
-                          ),
+                          Icon(Icons.access_time,
+                              size: 16,
+                              color:
+                                  Theme.of(context).textTheme.headline3?.color),
                           SizedBox(
                             width: 5 * SizeConfig.widthMultiplier!,
                           ),
                           Text(widget.date,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: kGreyColor)),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color)),
                           SizedBox(
                             width: 14 * SizeConfig.widthMultiplier!,
                           ),
-                          Icon(
-                            Icons.place,
-                            size: 16,
-                            color: kGreyColor,
-                          ),
+                          Icon(Icons.place,
+                              size: 16,
+                              color:
+                                  Theme.of(context).textTheme.headline3?.color),
                           SizedBox(
                             width: 6.5 * SizeConfig.widthMultiplier!,
                           ),
                           Text(widget.place,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: kGreyColor))
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color))
                         ],
                       )
                     ],
@@ -264,6 +318,7 @@ class _FullPostTileState extends State<FullPostTile> {
                 trimExpandedText: 'see_less'.tr,
                 colorClickableText: hintGrey,
                 style: AppTextStyle.NormalText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
                     fontSize: 14 * SizeConfig.textMultiplier!),
               ),
             ),
@@ -381,7 +436,7 @@ class _FullPostTileState extends State<FullPostTile> {
                     child: widget.isLiked
                         ? Icon(
                             Icons.favorite,
-                            color: kRedColor,
+                            color: Color(0xFFF66868),
                           )
                         : Icon(
                             Icons.favorite_outline,
@@ -393,16 +448,26 @@ class _FullPostTileState extends State<FullPostTile> {
                   ),
                   Text(
                     'likes'.trParams({'no_likes': widget.likes}),
-                    style: AppTextStyle.boldBlackText
-                        .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
+                    style: AppTextStyle.boldBlackText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color,
+                        fontSize: 12 * SizeConfig.textMultiplier!),
                   ),
                   SizedBox(
                     width: 18 * SizeConfig.widthMultiplier!,
                   ),
+                  Icon(
+                    Icons.mode_comment_outlined,
+                    size: 16*SizeConfig.widthMultiplier!,
+                    color: kPureWhite,
+                  ),
+                  SizedBox(
+                    width: 6.5 * SizeConfig.widthMultiplier!,
+                  ),
                   Text(
                     'comments'.trParams({'no_comments': widget.comments}),
-                    style: AppTextStyle.boldBlackText
-                        .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
+                    style: AppTextStyle.boldBlackText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color,
+                        fontSize: 12 * SizeConfig.textMultiplier!),
                   )
                 ],
               ),
@@ -420,6 +485,10 @@ class _FullPostTileState extends State<FullPostTile> {
                             onTap: widget.onViewPreviousComments,
                             child: Text('view_previous_comments'.tr,
                                 style: AppTextStyle.boldBlackText.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        ?.color,
                                     fontSize:
                                         14 * SizeConfig.textMultiplier!))),
                       )
@@ -468,36 +537,63 @@ class _FullPostTileState extends State<FullPostTile> {
                                                   bottom: MediaQuery.of(context)
                                                       .viewInsets
                                                       .bottom),
-                                              child: Row(
-                                                // mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Expanded(
-                                                    child: Container(
-                                                      // height: 40,
-                                                      // width: 260 * SizeConfig.widthMultiplier!,
-                                                      margin: EdgeInsets.only(
-                                                          left: 16,
-                                                          right: 16,
-                                                          top: 16,
-                                                          bottom: 16),
-                                                      decoration: BoxDecoration(
-                                                        color: lightGrey,
-                                                        borderRadius: BorderRadius
-                                                            .circular(8 *
+                                              child: Container(
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor,
+                                                child: Row(
+                                                  // mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(
+                                                        // height: 40,
+                                                        // width: 260 * SizeConfig.widthMultiplier!,
+                                                        margin: EdgeInsets.only(
+                                                            left: 16 *
                                                                 SizeConfig
-                                                                    .widthMultiplier!),
-                                                      ),
-                                                      child: TextField(
-                                                        controller:
+                                                                    .widthMultiplier!,
+                                                            right: 16 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!,
+                                                            top: 16 *
+                                                                SizeConfig
+                                                                    .heightMultiplier!,
+                                                            bottom: 16 *
+                                                                SizeConfig
+                                                                    .heightMultiplier!),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .cardColor,
+                                                          borderRadius: BorderRadius
+                                                              .circular(8 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!),
+                                                        ),
+                                                        child: TextField(
+                                                          controller:
+                                                              _homeController
+                                                                  .replyController,
+                                                          onChanged: (value) {
                                                             _homeController
-                                                                .replyController,
-                                                        onChanged: (value) {
-                                                          _homeController.reply
-                                                              .value = value;
-                                                        },
-                                                        autofocus: true,
-                                                        maxLines: null,
-                                                        decoration: InputDecoration(
+                                                                .reply
+                                                                .value = value;
+                                                          },
+                                                          style: AppTextStyle
+                                                              .lightMediumBlackText
+                                                              .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText1
+                                                                      ?.color),
+                                                          autofocus: true,
+                                                          maxLines: null,
+                                                          decoration:
+                                                              InputDecoration(
                                                             enabled: true,
                                                             border: InputBorder
                                                                 .none,
@@ -507,81 +603,99 @@ class _FullPostTileState extends State<FullPostTile> {
                                                             hintStyle: AppTextStyle
                                                                 .smallGreyText
                                                                 .copyWith(
-                                                                    fontSize: 14 *
+                                                                    fontSize: 12 *
                                                                         SizeConfig
                                                                             .textMultiplier!,
-                                                                    color:
-                                                                        hintGrey),
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .headline1
+                                                                        ?.color),
                                                             contentPadding:
                                                                 EdgeInsets.only(
-                                                                    bottom: 12,
-                                                                    top: 12,
-                                                                    left: 16 *
-                                                                        SizeConfig
-                                                                            .widthMultiplier!)),
+                                                              bottom: 12 *
+                                                                  SizeConfig
+                                                                      .heightMultiplier!,
+                                                              top: 12 *
+                                                                  SizeConfig
+                                                                      .heightMultiplier!,
+                                                              left: 16 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!,
+                                                              right: 16 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  IconButton(
-                                                      onPressed: () async {
-                                                        Navigator.pop(context);
-                                                        FocusScope.of(context)
-                                                            .unfocus();
-                                                        await HomeService
-                                                            .replyComment(
-                                                                commentId: widget
-                                                                    .commentsList[
-                                                                        index]
-                                                                    .id!,
-                                                                comment:
-                                                                    _homeController
-                                                                        .reply
-                                                                        .value);
+                                                    IconButton(
+                                                        onPressed: () async {
+                                                          Navigator.pop(
+                                                              context);
+                                                          FocusScope.of(context)
+                                                              .unfocus();
+                                                          await HomeService.replyComment(
+                                                              commentId: widget
+                                                                  .commentsList[
+                                                                      index]
+                                                                  .id!,
+                                                              comment:
+                                                                  _homeController
+                                                                      .reply
+                                                                      .value);
 
-                                                        _homeController
-                                                                .postComments
-                                                                .value =
-                                                            await HomeService
-                                                                .fetchComment(
-                                                                    postId: _homeController
-                                                                        .post
-                                                                        .value
-                                                                        .id!);
-
-                                                        if (_homeController
-                                                                .postComments
-                                                                .value
-                                                                .response!
-                                                                .data!
-                                                                .length !=
-                                                            0) {
                                                           _homeController
-                                                                  .commentsList
+                                                                  .postComments
                                                                   .value =
-                                                              _homeController
+                                                              await HomeService
+                                                                  .fetchComment(
+                                                                      postId: _homeController
+                                                                          .post
+                                                                          .value
+                                                                          .id!);
+
+                                                          if (_homeController
                                                                   .postComments
                                                                   .value
                                                                   .response!
-                                                                  .data!;
-                                                        }
-                                                        _homeController
-                                                            .replyList
-                                                            .clear();
-
-                                                        setState(() {
+                                                                  .data!
+                                                                  .length !=
+                                                              0) {
+                                                            _homeController
+                                                                    .commentsList
+                                                                    .value =
+                                                                _homeController
+                                                                    .postComments
+                                                                    .value
+                                                                    .response!
+                                                                    .data!;
+                                                          }
                                                           _homeController
-                                                                  .future =
-                                                              _homeController.fetchReplyComment(
-                                                                  commentId: widget
-                                                                      .commentsList[
-                                                                          index]
-                                                                      .id!,
-                                                                  skip: 0,
-                                                                  limit: 1);
-                                                        });
-                                                      },
-                                                      icon: Icon(Icons.send))
-                                                ],
+                                                              .replyList
+                                                              .clear();
+
+                                                          setState(() {
+                                                            _homeController
+                                                                    .future =
+                                                                _homeController.fetchReplyComment(
+                                                                    commentId: widget
+                                                                        .commentsList[
+                                                                            index]
+                                                                        .id!,
+                                                                    skip: 0,
+                                                                    limit: 1);
+                                                          });
+                                                        },
+                                                        icon: Icon(
+                                                          Icons.send,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                        ))
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           });
@@ -615,7 +729,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                     minWidth: Get.width -
                                         80 * SizeConfig.widthMultiplier!,
                                     taggedPersonName: '',
-                                    maxWidth: Get.width,
+                                    maxWidth: Get.width*SizeConfig.widthMultiplier!,
                                   ),
                                   Obx(() => _homeController
                                                   .commentsList[index].reply! >
@@ -624,12 +738,9 @@ class _FullPostTileState extends State<FullPostTile> {
                                               false
                                       ? Padding(
                                           padding: EdgeInsets.only(
-                                              left: 64 *
-                                                  SizeConfig.widthMultiplier!,
-                                              top: 4 *
-                                                  SizeConfig.heightMultiplier!,
-                                              bottom: 12 *
-                                                  SizeConfig.heightMultiplier!),
+                                              left: 64 * SizeConfig.widthMultiplier!,
+                                              top: 4 * SizeConfig.heightMultiplier!,
+                                              bottom: 12 * SizeConfig.heightMultiplier!),
                                           child: InkWell(
                                               onTap: () {
                                                 _homeController.viewReplies!
@@ -666,6 +777,11 @@ class _FullPostTileState extends State<FullPostTile> {
                                                   style: AppTextStyle
                                                       .boldBlackText
                                                       .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .headline6
+                                                                  ?.color,
                                                           fontSize: 14 *
                                                               SizeConfig
                                                                   .textMultiplier!))),
@@ -719,48 +835,76 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                                       builder: (context) {
                                                                                         return Padding(
                                                                                           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                                                          child: Row(
-                                                                                            // mainAxisSize: MainAxisSize.min,
-                                                                                            children: [
-                                                                                              Expanded(
-                                                                                                child: Container(
-                                                                                                  // height: 40,
-                                                                                                  // width: 260 * SizeConfig.widthMultiplier!,
-                                                                                                  margin: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: lightGrey,
-                                                                                                    borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                                                                                                  ),
-                                                                                                  child: TextField(
-                                                                                                    controller: _homeController.replyController,
-                                                                                                    onChanged: (value) {
-                                                                                                      _homeController.reply.value = value;
-                                                                                                    },
-                                                                                                    autofocus: true,
-                                                                                                    maxLines: null,
-                                                                                                    decoration: InputDecoration(enabled: true, border: InputBorder.none, hintText: 'add_comment'.tr, hintStyle: AppTextStyle.smallGreyText.copyWith(fontSize: 14 * SizeConfig.textMultiplier!, color: hintGrey), contentPadding: EdgeInsets.only(bottom: 12, top: 12, left: 16 * SizeConfig.widthMultiplier!)),
+                                                                                          child: Container(
+                                                                                            color: Theme.of(context).scaffoldBackgroundColor,
+                                                                                            child: Row(
+                                                                                              // mainAxisSize: MainAxisSize.min,
+                                                                                              children: [
+                                                                                                Expanded(
+                                                                                                  child: Container(
+                                                                                                    // height: 40,
+                                                                                                    // width: 260 * SizeConfig.widthMultiplier!,
+                                                                                                    margin: EdgeInsets.only(
+                                                                                                        left: 16*SizeConfig.widthMultiplier!,
+                                                                                                        right: 16*SizeConfig.widthMultiplier!,
+                                                                                                        top: 16*SizeConfig.heightMultiplier!,
+                                                                                                        bottom: 16*SizeConfig.heightMultiplier!
+                                                                                                    ),
+                                                                                                    decoration: BoxDecoration(
+                                                                                                      color: Theme.of(context).cardColor,
+                                                                                                      borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                                                                                                    ),
+                                                                                                    child: TextField(
+                                                                                                      controller: _homeController.replyController,
+                                                                                                      onChanged: (value) {
+                                                                                                        _homeController.reply.value = value;
+                                                                                                      },
+                                                                                                      autofocus: true,
+                                                                                                      maxLines: null,
+                                                                                                      style: AppTextStyle.lightMediumBlackText.copyWith(
+                                                                                                          fontWeight: FontWeight.w600,
+                                                                                                          color: Theme.of(context).textTheme.bodyText1?.color),
+                                                                                                      decoration: InputDecoration(
+                                                                                                          enabled: true,
+                                                                                                          border: InputBorder.none,
+                                                                                                          hintText: 'add_comment'.tr,
+                                                                                                          hintStyle: AppTextStyle.smallGreyText.copyWith(
+                                                                                                              fontSize: 12 * SizeConfig.textMultiplier!,
+                                                                                                              color: Theme.of(context).textTheme.headline1?.color
+                                                                                                          ),
+                                                                                                          contentPadding: EdgeInsets.only(
+                                                                                                            bottom: 12 * SizeConfig.heightMultiplier!,
+                                                                                                            top: 12 * SizeConfig.heightMultiplier!,
+                                                                                                            left: 16 * SizeConfig.widthMultiplier!,
+                                                                                                            right: 16 * SizeConfig.widthMultiplier!,
+                                                                                                          )
+                                                                                                      ),
+                                                                                                    ),
                                                                                                   ),
                                                                                                 ),
-                                                                                              ),
-                                                                                              IconButton(
-                                                                                                  onPressed: () async {
-                                                                                                    Navigator.pop(context);
-                                                                                                    FocusScope.of(context).unfocus();
-                                                                                                    await HomeService.replyComment(commentId: widget.commentsList[index].id!, taggedPerson: snapshot.data![index2].user!.id, comment: _homeController.reply.value);
+                                                                                                IconButton(
+                                                                                                    onPressed: () async {
+                                                                                                      Navigator.pop(context);
+                                                                                                      FocusScope.of(context).unfocus();
+                                                                                                      await HomeService.replyComment(commentId: widget.commentsList[index].id!, taggedPerson: snapshot.data![index2].user!.id, comment: _homeController.reply.value);
 
-                                                                                                    _homeController.postComments.value = await HomeService.fetchComment(postId: _homeController.post.value.id!);
+                                                                                                      _homeController.postComments.value = await HomeService.fetchComment(postId: _homeController.post.value.id!);
 
-                                                                                                    if (_homeController.postComments.value.response!.data!.length != 0) {
-                                                                                                      _homeController.commentsList.value = _homeController.postComments.value.response!.data!;
-                                                                                                    }
-                                                                                                    _homeController.replyList.clear();
+                                                                                                      if (_homeController.postComments.value.response!.data!.length != 0) {
+                                                                                                        _homeController.commentsList.value = _homeController.postComments.value.response!.data!;
+                                                                                                      }
+                                                                                                      _homeController.replyList.clear();
 
-                                                                                                    setState(() {
-                                                                                                      _homeController.future = _homeController.fetchReplyComment(commentId: widget.commentsList[index].id!, skip: 0, limit: 1);
-                                                                                                    });
-                                                                                                  },
-                                                                                                  icon: Icon(Icons.send))
-                                                                                            ],
+                                                                                                      setState(() {
+                                                                                                        _homeController.future = _homeController.fetchReplyComment(commentId: widget.commentsList[index].id!, skip: 0, limit: 1);
+                                                                                                      });
+                                                                                                    },
+                                                                                                    icon: Icon(
+                                                                                                      Icons.send,
+                                                                                                      color: Theme.of(context).primaryColor,
+                                                                                                    ))
+                                                                                              ],
+                                                                                            ),
                                                                                           ),
                                                                                         );
                                                                                       });
@@ -829,6 +973,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                 style: AppTextStyle
                                                     .boldBlackText
                                                     .copyWith(
+                                                  color: Theme.of(context).textTheme.headline6?.color,
                                                         fontSize: 14 *
                                                             SizeConfig
                                                                 .textMultiplier!)),
@@ -850,9 +995,11 @@ class _FullPostTileState extends State<FullPostTile> {
                     child: Container(
                       // height: 40,
                       // width: 260 * SizeConfig.widthMultiplier!,
-                      margin: EdgeInsets.only(left: 16, right: 16),
+                      margin: EdgeInsets.only(
+                          left: 16*SizeConfig.widthMultiplier!,
+                          right: 16*SizeConfig.widthMultiplier!),
                       decoration: BoxDecoration(
-                        color: lightGrey,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
                       ),
@@ -862,22 +1009,32 @@ class _FullPostTileState extends State<FullPostTile> {
                           _homeController.comment.value = value;
                         },
                         maxLines: null,
+                        style: AppTextStyle.lightMediumBlackText.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).textTheme.bodyText1?.color),
                         decoration: InputDecoration(
                             enabled: true,
                             border: InputBorder.none,
                             hintText: 'add_comment'.tr,
                             hintStyle: AppTextStyle.smallGreyText.copyWith(
-                                fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: hintGrey),
+                                fontSize: 12 * SizeConfig.textMultiplier!,
+                                color: Theme.of(context).textTheme.headline1?.color
+                            ),
                             contentPadding: EdgeInsets.only(
-                                bottom: 12,
-                                top: 12,
-                                left: 16 * SizeConfig.widthMultiplier!)),
+                              bottom: 12 * SizeConfig.heightMultiplier!,
+                              top: 12 * SizeConfig.heightMultiplier!,
+                              left: 16 * SizeConfig.widthMultiplier!,
+                              right: 16 * SizeConfig.widthMultiplier!,
+                            )),
                       ),
                     ),
                   ),
                   IconButton(
-                      onPressed: widget.addComment, icon: Icon(Icons.send))
+                      onPressed: widget.addComment,
+                      icon: Icon(
+                      Icons.send,
+                    color: Theme.of(context).primaryColor,
+                  ))
                 ],
               ),
             ),

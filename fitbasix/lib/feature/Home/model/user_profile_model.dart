@@ -42,11 +42,11 @@ class Response {
   });
 
   final String? message;
-  final Data? data;
+  final ProfileResponseData? data;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: ProfileResponseData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -55,14 +55,14 @@ class Response {
       };
 }
 
-class Data {
-  Data({
+class ProfileResponseData {
+  ProfileResponseData({
     this.profile,
   });
 
   final Profile? profile;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory ProfileResponseData.fromJson(Map<String, dynamic> json) => ProfileResponseData(
         profile: Profile.fromJson(json["profile"]),
       );
 
@@ -84,6 +84,7 @@ class Profile {
     this.nutrition,
     this.following,
     this.followers,
+    this.quickBloxId
   });
 
   final String? id;
@@ -97,6 +98,7 @@ class Profile {
   final Nutrition? nutrition;
   final int? following;
   final int? followers;
+  final int? quickBloxId;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
         id: json["_id"],
@@ -112,6 +114,7 @@ class Profile {
             : Nutrition.fromJson(json["nutrition"]),
         following: json["following"],
         followers: json["followers"],
+        quickBloxId: json["quickBlox"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -122,6 +125,7 @@ class Profile {
         "nutrition": nutrition!.toJson(),
         "following": following,
         "followers": followers,
+        "quickBlox": quickBloxId
       };
 }
 
@@ -203,7 +207,7 @@ class Carbs {
   final double? carbsKiloCals;
 
   factory Carbs.fromJson(Map<String, dynamic> json) => Carbs(
-        carbsGrams: json["carbsGrams"],
+        carbsGrams: json["carbsGrams"].toDouble(),
         carbsKiloCals: json["carbsKiloCals"].toDouble(),
       );
 
@@ -243,7 +247,7 @@ class Protein {
   final double? proteinKiloCals;
 
   factory Protein.fromJson(Map<String, dynamic> json) => Protein(
-        proteinGrams: json["proteinGrams"],
+        proteinGrams: json["proteinGrams"].toDouble(),
         proteinKiloCals: json["proteinKiloCals"].toDouble(),
       );
 
