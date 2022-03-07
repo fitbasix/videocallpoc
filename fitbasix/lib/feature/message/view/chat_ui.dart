@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
+import 'package:http/http.dart' as http;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -573,8 +574,11 @@ class MessageBubbleSender extends StatelessWidget {
   ChatController _chatController = Get.find();
 
   var isDownloaded = false.obs;
-
+  var isDownloadingStarted = false.obs;
   var filePath = "".obs;
+  var downloadProgress = 0.0.obs;
+  var fileSize = "".obs;
+  String? fileExtension;
 
   @override
   Widget build(BuildContext context) {
@@ -605,6 +609,9 @@ class MessageBubbleSender extends StatelessWidget {
         ),
       );
     } else {
+      fileExtension = message!.attachments![0]!.name!.split(".").last.toUpperCase();
+      getFileSize();
+
       checkFileExistence(message!.attachments![0]!.name);
       return Padding(
         padding: EdgeInsets.only(
@@ -615,33 +622,96 @@ class MessageBubbleSender extends StatelessWidget {
           children: [
             Container(
                 constraints: BoxConstraints(
-                    maxWidth: 200 * SizeConfig.widthMultiplier!,
+                    maxWidth: 300 * SizeConfig.widthMultiplier!,
                     maxHeight: 250 * SizeConfig.heightMultiplier!),
                 padding: EdgeInsets.symmetric(
-                  vertical: 3.0 * SizeConfig.heightMultiplier!,
-                  horizontal: 3.0 * SizeConfig.widthMultiplier!,
+                  vertical: 14.0 * SizeConfig.heightMultiplier!,
+                  horizontal: 8.0 * SizeConfig.widthMultiplier!,
                 ),
                 decoration: BoxDecoration(
                   color: greenChatColor,
                   borderRadius:
-                      BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                      BorderRadius.circular(8 * SizeConfig.imageSizeMultiplier!),
                 ),
                 child: Obx(() => filePath.value.isEmpty
                     ? Container(
                         child: GestureDetector(
                             onTap: () async {
-                              isDownloaded.value = await _getImageUrl(
-                                  message!.attachments![0]!.url!,
-                                  message!.attachments![0]!.name!);
+
                             },
-                            child: Text("download")),
+                            child: Container(
+                              width: 220*SizeConfig.widthMultiplier!,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(left: 8*SizeConfig.widthMultiplier!),
+                                    height: 50*SizeConfig.heightMultiplier!,
+                                    decoration: BoxDecoration(
+                                      color: kPureWhite.withOpacity(0.15),
+                                      borderRadius:
+                                      BorderRadius.circular(8 * SizeConfig.imageSizeMultiplier!),
+
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Text(message!.attachments![0]!.name!,overflow: TextOverflow.ellipsis,style: AppTextStyle.whiteTextWithWeight600,)),
+                                        SizedBox(width: 10*SizeConfig.widthMultiplier!,),
+                                        (!isDownloadingStarted.value)?GestureDetector(
+                                            onTap: () async {
+                                              isDownloadingStarted.value = true;
+                                              isDownloaded.value = await _getImageUrl(
+                                                  message!.attachments![0]!.url!,
+                                                  message!.attachments![0]!.name!);
+                                            },
+                                            child: Image.asset(ImagePath.downloadDocIcon,width: 16.79*SizeConfig.widthMultiplier!,height: 22.4*SizeConfig.heightMultiplier!,)):SizedBox(
+                                            height: 22*SizeConfig.heightMultiplier!,
+                                            width: 22*SizeConfig.heightMultiplier!,
+
+                                            child: CircularProgressIndicator(color: kPureWhite,value: downloadProgress.value,backgroundColor: Colors.grey.withOpacity(0.2),strokeWidth: 2.5*SizeConfig.imageSizeMultiplier!,)),
+                                        SizedBox(width: 12*SizeConfig.widthMultiplier!,),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                                  Text("${fileSize.value.isNotEmpty ?fileSize.value:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: kPureWhite,height: 1),)
+
+                                ],
+                              ),
+                            )),
                       )
                     : Container(
                         child: GestureDetector(
                             onTap: () {
                               OpenFile.open(filePath.value);
                             },
-                            child: Text("${filePath.value}")),
+                            child: Container(
+                                width: 220*SizeConfig.widthMultiplier!,
+                                child: Row(
+                                  children: [
+                                    Image.asset((fileExtension == "JPEG"||fileExtension == "JPG"||fileExtension == "PNG"||fileExtension == "SVG")?ImagePath.jpgFileIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,),
+                                    SizedBox(width: 7*SizeConfig.widthMultiplier!,),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container( padding: new EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),child: Text(message!.attachments![0]!.name!,overflow: TextOverflow.ellipsis,style: AppTextStyle.whiteTextWithWeight600,)),
+                                          SizedBox(height: 5*SizeConfig.imageSizeMultiplier!,),
+                                          FutureBuilder(
+                                              future: getFileSizeFromLocal(),
+                                              builder: (context,AsyncSnapshot<String> snapshot){
+
+                                                return Text("${snapshot.hasData?snapshot.data:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: kPureWhite,height: 1),);
+                                              })
+                                        ],),
+                                    )
+
+
+                                  ],
+                                )
+                            )),
                       )))
           ],
         ),
@@ -681,7 +751,8 @@ class MessageBubbleSender extends StatelessWidget {
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-            print(((received / total) * 100).floor().toString() + "ssssss");
+            downloadProgress.value = ((received / total));
+            print(downloadProgress.value);
             if (((received / total) * 100).floor() == 100) {
               checkFileExistence(fileName);
             }
@@ -701,12 +772,12 @@ class MessageBubbleSender extends StatelessWidget {
 
   void checkFileExistence(String? fileName) async {
     PermissionStatus status = await Permission.storage.request();
+    PermissionStatus status1 = await Permission.manageExternalStorage.request();
     if (status == PermissionStatus.granted) {
       String? path;
       final downloadsPath = Directory('/storage/emulated/0/Download');
       final Directory _appDocDir = await getApplicationDocumentsDirectory();
-      final Directory _appDocDirFolder =
-          Directory('storage/emulated/0/fitBasix/media');
+      final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
 
       if (await _appDocDirFolder.exists()) {
         path = _appDocDirFolder.path;
@@ -729,6 +800,21 @@ class MessageBubbleSender extends StatelessWidget {
       }
     }
   }
+
+  void getFileSize() async{
+    String? url = await QB.content.getPrivateURL(message!.attachments![0]!.url!);
+    print(message!.attachments![0]!.url!);
+    http.Response size = await http.get(Uri.parse(url!));
+    double sizeInBytes = double.parse(size.headers["content-length"]!);
+    fileSize.value = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
+  }
+  Future<String> getFileSizeFromLocal() async {
+    File file = File(filePath.value);
+    int sizeInBytes = (await file.length());
+    var size = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
+    return size;
+
+  }
 }
 
 //  Message Bubble
@@ -740,8 +826,12 @@ class MessageBubbleOpponent extends StatelessWidget {
 
   final QBMessage? message;
   var isDownloaded = false.obs;
-
+  var isDownloadingStarted = false.obs;
+  var downloadProgress = 0.0.obs;
   var filePath = "".obs;
+  var fileSize = "".obs;
+  String? fileExtension;
+
 
   @override
   Widget build(BuildContext context) {
@@ -772,6 +862,8 @@ class MessageBubbleOpponent extends StatelessWidget {
         ),
       );
     } else {
+      fileExtension = message!.attachments![0]!.name!.split(".").last.toUpperCase();
+      getFileSize();
       checkFileExistence(message!.attachments![0]!.name);
       return Padding(
         padding: EdgeInsets.only(
@@ -782,33 +874,93 @@ class MessageBubbleOpponent extends StatelessWidget {
           children: [
             Container(
                 constraints: BoxConstraints(
-                    maxWidth: 200 * SizeConfig.widthMultiplier!,
+                    maxWidth: 300 * SizeConfig.widthMultiplier!,
                     maxHeight: 250 * SizeConfig.heightMultiplier!),
                 padding: EdgeInsets.symmetric(
-                  vertical: 3.0 * SizeConfig.heightMultiplier!,
-                  horizontal: 3.0 * SizeConfig.widthMultiplier!,
+                  vertical: 14.0 * SizeConfig.heightMultiplier!,
+                  horizontal: 8.0 * SizeConfig.widthMultiplier!,
                 ),
                 decoration: BoxDecoration(
-                  color: kPureWhite,
+                  color: kBlack,
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                 ),
                 child: Obx(() => filePath.value.isEmpty
                     ? Container(
-                        child: GestureDetector(
-                            onTap: () async {
-                              isDownloaded.value = await _getImageUrl(
-                                  message!.attachments![0]!.url!,
-                                  message!.attachments![0]!.name!);
-                            },
-                            child: Text("download")),
+                        child: Container(
+                          width: 220*SizeConfig.widthMultiplier!,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 8*SizeConfig.widthMultiplier!),
+                                height: 50*SizeConfig.heightMultiplier!,
+                                decoration: BoxDecoration(
+                                  color: kPureWhite.withOpacity(0.15),
+                                  borderRadius:
+                                  BorderRadius.circular(8 * SizeConfig.imageSizeMultiplier!),
+
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(child: Text(message!.attachments![0]!.name!,overflow: TextOverflow.ellipsis,style: AppTextStyle.whiteTextWithWeight600,)),
+                                    SizedBox(width: 10*SizeConfig.widthMultiplier!,),
+                                    (!isDownloadingStarted.value)?GestureDetector(
+                                        onTap: () async {
+                                          isDownloadingStarted.value = true;
+                                          isDownloaded.value = await _getImageUrl(
+                                              message!.attachments![0]!.url!,
+                                              message!.attachments![0]!.name!);
+                                        },
+                                        child: Image.asset(ImagePath.downloadDocIcon,width: 16.79*SizeConfig.widthMultiplier!,height: 22.4*SizeConfig.heightMultiplier!,)):SizedBox(
+                                        height: 22*SizeConfig.heightMultiplier!,
+                                        width: 22*SizeConfig.heightMultiplier!,
+
+                                        child: CircularProgressIndicator(color: kPureWhite,value: downloadProgress.value,backgroundColor: Colors.grey.withOpacity(0.2),strokeWidth: 2.5*SizeConfig.imageSizeMultiplier!,)),
+                                    SizedBox(width: 12*SizeConfig.widthMultiplier!,),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                              Text("${fileSize.value.isNotEmpty?fileSize.value:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: hintGrey,height: 1),)
+
+
+                            ],
+                          ),
+                        ),
                       )
                     : Container(
                         child: GestureDetector(
                             onTap: () {
                               OpenFile.open(filePath.value);
                             },
-                            child: Text("${filePath.value}")),
+                            child: Container(
+                              width: 220*SizeConfig.widthMultiplier!,
+                              child: Row(
+                                children: [
+                                  Image.asset((fileExtension == "JPEG"||fileExtension == "JPG"||fileExtension == "PNG"||fileExtension == "SVG")?ImagePath.jpgFileIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,),
+                                  SizedBox(width: 7*SizeConfig.widthMultiplier!,),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container( padding: new EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),child: Text(message!.attachments![0]!.name!,overflow: TextOverflow.ellipsis,style: AppTextStyle.whiteTextWithWeight600,)),
+                                        SizedBox(height: 5*SizeConfig.imageSizeMultiplier!,),
+                                        FutureBuilder(
+                                            future: getFileSizeFromLocal(),
+                                            builder: (context,AsyncSnapshot<String> snapshot){
+
+                                          return Text("${snapshot.hasData?snapshot.data:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: kPureWhite,height: 1),);
+                                        })
+                                    ],),
+                                  )
+
+
+                                ],
+                              )
+                            )),
                       ))),
           ],
         ),
@@ -844,7 +996,8 @@ class MessageBubbleOpponent extends StatelessWidget {
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-            print(((received / total) * 100).floor().toString() + "ssssss");
+                downloadProgress.value = ((received / total));
+                print(downloadProgress.value);
             if (((received / total) * 100).floor() == 100) {
               checkFileExistence(fileName);
             }
@@ -891,6 +1044,23 @@ class MessageBubbleOpponent extends StatelessWidget {
         filePath.value = downloadsPath.path + "/" + fileName;
       }
     }
+  }
+
+  void getFileSize() async{
+    String? url = await QB.content.getPrivateURL(message!.attachments![0]!.url!);
+    print(message!.attachments![0]!.url!);
+    http.Response size = await http.get(Uri.parse(url!));
+    double sizeInBytes = double.parse(size.headers["content-length"]!);
+    fileSize.value = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
+  }
+
+  Future<String> getFileSizeFromLocal() async {
+
+    File file = File(filePath.value);
+    int sizeInBytes = (await file.length());
+    var size = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
+    return size;
+
   }
 }
 
