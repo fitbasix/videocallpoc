@@ -45,7 +45,6 @@ import 'package:mime_type/mime_type.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-
 import 'package:flutter/services.dart';
 
 import 'package:quickblox_sdk/models/qb_rtc_session.dart';
@@ -69,14 +68,14 @@ class ChatScreen extends StatefulWidget {
   QBDialog? userDialogForChat;
   String trainerTitle = 'Jonathan Swift'.tr;
 
-  ChatScreen({Key? key, this.userDialogForChat,this.opponentID}) : super(key: key);
+  ChatScreen({Key? key, this.userDialogForChat, this.opponentID})
+      : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
   ChatController _chatController = Get.put(ChatController());
   HomeController _homeController = Get.find();
   QBDialog? userDialogForChat;
@@ -102,7 +101,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   StreamSubscription? _peerConnectionSubscription;
 
-
   @override
   void dispose() {
     if (_massageStreamSubscription != null) {
@@ -111,7 +109,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     super.dispose();
   }
-
 
   @override
   void initState() {
@@ -128,10 +125,13 @@ class _ChatScreenState extends State<ChatScreen> {
     if (messages != null) {}
     return Scaffold(
       appBar: AppbarforChat(
-        onHangUpTapped: (value){
+        onHangUpTapped: (value) {
           //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
           callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: value!,)));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => VideoCallScreen(
+                      sessionIdForVideoCall: value!,
+                    )));
           });
         },
         onDocumentsTap: () {
@@ -241,7 +241,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 )),
                             // maxLines: 3,
                           )),
-                      Obx(()=>Padding(
+                      Obx(
+                        () => Padding(
                           padding: EdgeInsets.only(left: 8, bottom: 4),
                           child: CircleAvatar(
                             backgroundColor: greenChatColor,
@@ -258,10 +259,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       color: Colors.white,
                                     ))
                                 : IconButton(
-                                    onPressed: () async {
-
-
-                                    },
+                                    onPressed: () async {},
                                     icon: SvgPicture.asset(
                                       ImagePath.chatMicIcon,
                                       width: 16 * SizeConfig.widthMultiplier!,
@@ -281,17 +279,14 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-
-
-
-
   void sendNotification(String messageBody) async {
-    try{
-      FirebaseMessaging.instance.getToken().then((token)async{
-        List<QBSubscription?> subscriptions = await QB.subscriptions.create(token!, QBPushChannelNames.GCM);
+    try {
+      FirebaseMessaging.instance.getToken().then((token) async {
+        List<QBSubscription?> subscriptions =
+            await QB.subscriptions.create(token!, QBPushChannelNames.GCM);
       });
-    }catch(e){
-      print("notification error"+e.toString());
+    } catch (e) {
+      print("notification error" + e.toString());
     }
     String eventType = QBNotificationEventTypes.ONE_SHOT;
     String notificationEventType = QBNotificationTypes.PUSH;
@@ -303,55 +298,54 @@ class _ChatScreenState extends State<ChatScreen> {
       "notification": {
         "body": messageBody,
         "title": "this is a title",
-        "imageUrl":"https://community.custom-cursor.com/uploads/default/adcc703632967e01dba11b8ed4ed893d57b8388c",
-        "name":_homeController.userQuickBloxId.value==133642567?"Tarun Prajapat":"Vartika",
-        "dialogId":widget.userDialogForChat!.id,
-        "opponentId":_homeController.userQuickBloxId.value.toString(),
+        "imageUrl":
+            "https://community.custom-cursor.com/uploads/default/adcc703632967e01dba11b8ed4ed893d57b8388c",
+        "name": _homeController.userQuickBloxId.value == 133642567
+            ? "Tarun Prajapat"
+            : "Vartika",
+        "dialogId": widget.userDialogForChat!.id,
+        "opponentId": _homeController.userQuickBloxId.value.toString(),
       },
-    "data": {
-    "sound": "default",
-    "status": "done",
-    "screen": "ChatScreen",
-    },
-    "to": "<FCM TOKEN>"
-  };
+      "data": {
+        "sound": "default",
+        "status": "done",
+        "screen": "ChatScreen",
+      },
+      "to": "<FCM TOKEN>"
+    };
 
     try {
-      print(widget.opponentID.toString()+" kkkkk");
-      List<QBEvent?> events = await QB.events.create(eventType, notificationEventType, senderId, payload, pushType: pushType,recipientsIds: [widget.opponentID.toString()]);
+      print(widget.opponentID.toString() + " kkkkk");
+      List<QBEvent?> events = await QB.events.create(
+          eventType, notificationEventType, senderId, payload,
+          pushType: pushType, recipientsIds: [widget.opponentID.toString()]);
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
     }
-
   }
-
-
-
-
-
-
-
-
 
   Future<String?> callWebRTC(int sessionType) async {
     print("call webRTC lllllll");
     try {
-      QBRTCSession? session = await QB.webrtc.call([widget.opponentID!,_homeController.userQuickBloxId.value], sessionType,userInfo: {"userName":"Kashif Ahmad"});
+      QBRTCSession? session = await QB.webrtc.call(
+          [widget.opponentID!, _homeController.userQuickBloxId.value],
+          sessionType,
+          userInfo: {"userName": "Kashif Ahmad"});
 
       return session!.id;
     } on PlatformException catch (e) {
       return null;
     }
-
   }
-
 
   void initMassage() async {
     try {
-      _massageStreamSubscription = await QB.chat.subscribeChatEvent(event, (data) {
+      _massageStreamSubscription =
+          await QB.chat.subscribeChatEvent(event, (data) {
         Map<String, dynamic> map = Map<String, dynamic>.from(data);
-        Map<String, dynamic> payload = Map<String, dynamic>.from(map["payload"]);
-        print("nnnnnn"+payload.toString());
+        Map<String, dynamic> payload =
+            Map<String, dynamic>.from(map["payload"]);
+        print("nnnnnn" + payload.toString());
         List<Attachment>? attachmentsFromJson;
         print(payload.toString());
         if (payload["attachments"] != null) {
@@ -379,6 +373,7 @@ class _ChatScreenState extends State<ChatScreen> {
           }
           return null;
         }
+
         // print(payload["attachments"]);
         newMessage.id = payload["id"];
         newMessage.dialogId = payload["dialogId"];
@@ -410,14 +405,12 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       _connectionStreamSubscription = await QB.chat.subscribeChatEvent(
           QBChatEvents.CONNECTED, (data) {},
-          onErrorMethod: (error) {
-
-          });
+          onErrorMethod: (error) {});
     } on PlatformException catch (e) {}
   }
 
   void sendMsg(String messageBody) async {
-    print("nnnnnn created dialog id"+widget.userDialogForChat!.id.toString());
+    print("nnnnnn created dialog id" + widget.userDialogForChat!.id.toString());
     String dialogId = widget.userDialogForChat!.id!;
     print("massage dialog id is: " + widget.userDialogForChat!.id!);
     bool saveToHistory = true;
@@ -435,7 +428,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   getMassageFromHistory() async {
-
     QBSort sort = QBSort();
     sort.field = QBChatMessageSorts.DATE_SENT;
     sort.ascending = false;
@@ -506,12 +498,20 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-
   Future<FilePickerResult?> pickAttachments() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc','png','jpeg','mp3','mp4','mkv'],
+      allowedExtensions: [
+        'jpg',
+        'pdf',
+        'doc',
+        'png',
+        'jpeg',
+        'mp3',
+        'mp4',
+        'mkv'
+      ],
     );
 
     if (result != null) {
@@ -526,15 +526,16 @@ class _ChatScreenState extends State<ChatScreen> {
     if (pickedFiles != null) {
       try {
         List<QBAttachment>? attachmentsList = [];
-        for(int i =0;i<pickedFiles.files.length;i++){
-          QBFile? file = await QB.content.upload(pickedFiles.files[i].path!, public: false);
+        for (int i = 0; i < pickedFiles.files.length; i++) {
+          QBFile? file = await QB.content
+              .upload(pickedFiles.files[i].path!, public: false);
           if (file != null) {
             int? id = file.id;
             String? contentType = pickedFiles.files[i].path!.split('.').last;
             QBAttachment attachment = QBAttachment();
             attachment.id = id.toString();
             attachment.contentType = contentType;
-            print(contentType+" dddd");
+            print(contentType + " dddd");
             attachment.url = file.uid;
             attachment.name = file.name;
             attachment.data = pickedFiles.files[i].path!;
@@ -549,9 +550,9 @@ class _ChatScreenState extends State<ChatScreen> {
         }
         QB.chat
             .sendMessage(widget.userDialogForChat!.id!,
-            attachments: attachmentsList,
-            body: "imageTest",
-            saveToHistory: true)
+                attachments: attachmentsList,
+                body: "imageTest",
+                saveToHistory: true)
             .then((value) {
           print("demo msg send");
         });
@@ -563,21 +564,9 @@ class _ChatScreenState extends State<ChatScreen> {
           .showSnackBar(SnackBar(content: Text("pick a some file to upload")));
     }
   }
-
-
-
-
 }
 
-
-
-
-
-
-
-
-class MessageBubbleSender extends StatelessWidget{
-
+class MessageBubbleSender extends StatelessWidget {
   MessageBubbleSender({Key? key, this.message}) : super(key: key);
   final QBMessage? message;
 
@@ -586,11 +575,10 @@ class MessageBubbleSender extends StatelessWidget{
   var isDownloaded = false.obs;
 
   var filePath = "".obs;
-  
-  
+
   @override
   Widget build(BuildContext context) {
-    if (message!.attachments == null)  {
+    if (message!.attachments == null) {
       return Padding(
         padding: EdgeInsets.only(
             bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -638,68 +626,72 @@ class MessageBubbleSender extends StatelessWidget{
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                 ),
-                child:Obx(()=>filePath.value.isEmpty ?Container(
-                  child:GestureDetector(
-                      onTap: ()async {
-                        isDownloaded.value = await _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.name!);
-                        },
-                      child: Text("download")),
-                ):Container(child: GestureDetector(
-                    onTap: (){
-                      OpenFile.open(filePath.value);
-                    },
-                    child: Text("${filePath.value}")),)
-                ))
-
-
-
+                child: Obx(() => filePath.value.isEmpty
+                    ? Container(
+                        child: GestureDetector(
+                            onTap: () async {
+                              isDownloaded.value = await _getImageUrl(
+                                  message!.attachments![0]!.url!,
+                                  message!.attachments![0]!.name!);
+                            },
+                            child: Text("download")),
+                      )
+                    : Container(
+                        child: GestureDetector(
+                            onTap: () {
+                              OpenFile.open(filePath.value);
+                            },
+                            child: Text("${filePath.value}")),
+                      )))
           ],
         ),
       );
     }
   }
 
-  Future<bool> _getImageUrl(String id,String fileName) async {
-    print(fileName+"this is the file name");
+  Future<bool> _getImageUrl(String id, String fileName) async {
+    print(fileName + "this is the file name");
     try {
       String? url = await QB.content.getPrivateURL(id);
       bool flag = false;
 
       //FlutterDownloader.registerCallback(downloadCallback);
-      try{
+      try {
         PermissionStatus status = await Permission.storage.request();
+        PermissionStatus status1 =
+            await Permission.manageExternalStorage.request();
+        print(status1.toString() + "hhhhh");
         if (status == PermissionStatus.granted) {
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
-          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+          final Directory _appDocDirFolder =
+              Directory('storage/emulated/0/fitBasix/media');
+          //Environment.getExternalStoragePublicDirectory(...);
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
           } else {
             //if folder not exists create folder and then return its path
             final Directory _appDocDirNewFolder =
-            await _appDocDirFolder.create(recursive: true);
-            path =  _appDocDirNewFolder.path;
+                await _appDocDirFolder.create(recursive: true);
+            path = _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
-          Dio dio =  Dio();
-          dio.download(url!, path+"/"+fileName,onReceiveProgress: (received, total){
-            print(((received/total )* 100).floor().toString() + "ssssss");
-            if(((received/total )* 100).floor() == 100){
-                checkFileExistence(fileName);
+          Dio dio = Dio();
+          dio.download(url!, path + "/" + fileName,
+              onReceiveProgress: (received, total) {
+            print(((received / total) * 100).floor().toString() + "ssssss");
+            if (((received / total) * 100).floor() == 100) {
+              checkFileExistence(fileName);
             }
           });
-
-
-
-
         }
-      }catch(e){
+      } catch (e) {
         print(e.toString());
       }
 
-     return false;
+      return false;
     } on PlatformException catch (e) {
       print(e);
       return false;
@@ -713,35 +705,31 @@ class MessageBubbleSender extends StatelessWidget{
       String? path;
       final downloadsPath = Directory('/storage/emulated/0/Download');
       final Directory _appDocDir = await getApplicationDocumentsDirectory();
-      final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+      final Directory _appDocDirFolder =
+          Directory('storage/emulated/0/fitBasix/media');
 
       if (await _appDocDirFolder.exists()) {
         path = _appDocDirFolder.path;
-      }
-      else{
+      } else {
         //if folder not exists create folder and then return its path
-        final Directory _appDocDirNewFolder = await _appDocDirFolder.create(recursive: true);
-        path =  _appDocDirNewFolder.path;
+        final Directory _appDocDirNewFolder =
+            await _appDocDirFolder.create(recursive: true);
+        path = _appDocDirNewFolder.path;
       }
 
       //if(File(message!.attachments![0]!.data!).existsSync())
-      if(File(path+"/"+fileName!).existsSync()){
-
-        print("file exists in "+path+"/$fileName");
-        filePath.value = path+"/$fileName";
-
+      if (File(path + "/" + fileName!).existsSync()) {
+        print("file exists in " + path + "/$fileName");
+        filePath.value = path + "/$fileName";
       }
 
-      if(File(downloadsPath.path +"/"+fileName).existsSync()){
-        print("file exists in "+downloadsPath.path+"/$fileName");
-        filePath.value = downloadsPath.path +"/"+fileName;
+      if (File(downloadsPath.path + "/" + fileName).existsSync()) {
+        print("file exists in " + downloadsPath.path + "/$fileName");
+        filePath.value = downloadsPath.path + "/" + fileName;
       }
     }
   }
-
 }
-
-
 
 //  Message Bubble
 class MessageBubbleOpponent extends StatelessWidget {
@@ -803,63 +791,66 @@ class MessageBubbleOpponent extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: kPureWhite,
                   borderRadius:
-                  BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                      BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                 ),
-                child:Obx(()=>filePath.value.isEmpty ?Container(
-                  child:GestureDetector(
-                      onTap: ()async {
-                        isDownloaded.value = await _getImageUrl(message!.attachments![0]!.url!,message!.attachments![0]!.name!);
-                      },
-                      child: Text("download")),
-                ):Container(child: GestureDetector(
-                    onTap: (){
-                      OpenFile.open(filePath.value);
-                    },
-                    child: Text("${filePath.value}")),)
-                )),
+                child: Obx(() => filePath.value.isEmpty
+                    ? Container(
+                        child: GestureDetector(
+                            onTap: () async {
+                              isDownloaded.value = await _getImageUrl(
+                                  message!.attachments![0]!.url!,
+                                  message!.attachments![0]!.name!);
+                            },
+                            child: Text("download")),
+                      )
+                    : Container(
+                        child: GestureDetector(
+                            onTap: () {
+                              OpenFile.open(filePath.value);
+                            },
+                            child: Text("${filePath.value}")),
+                      ))),
           ],
         ),
       );
     }
   }
 
-  Future<bool> _getImageUrl(String id,String fileName) async {
-    print(fileName+"this is the file name");
+  Future<bool> _getImageUrl(String id, String fileName) async {
+    print(fileName + "this is the file name");
     try {
       String? url = await QB.content.getPrivateURL(id);
       bool flag = false;
 
       //FlutterDownloader.registerCallback(downloadCallback);
-      try{
+      try {
         PermissionStatus status = await Permission.storage.request();
         if (status == PermissionStatus.granted) {
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
-          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+          final Directory _appDocDirFolder =
+              Directory('storage/emulated/0/fitBasix/media');
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
           } else {
             //if folder not exists create folder and then return its path
             final Directory _appDocDirNewFolder =
-            await _appDocDirFolder.create(recursive: true);
-            path =  _appDocDirNewFolder.path;
+                await _appDocDirFolder.create(recursive: true);
+            path = _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
-          Dio dio =  Dio();
-          dio.download(url!, path+"/"+fileName,onReceiveProgress: (received, total){
-            print(((received/total )* 100).floor().toString() + "ssssss");
-            if(((received/total )* 100).floor() == 100){
+          Dio dio = Dio();
+          dio.download(url!, path + "/" + fileName,
+              onReceiveProgress: (received, total) {
+            print(((received / total) * 100).floor().toString() + "ssssss");
+            if (((received / total) * 100).floor() == 100) {
               checkFileExistence(fileName);
             }
           });
-
-
-
-
         }
-      }catch(e){
+      } catch (e) {
         print(e.toString());
       }
 
@@ -877,33 +868,30 @@ class MessageBubbleOpponent extends StatelessWidget {
       String? path;
       final downloadsPath = Directory('/storage/emulated/0/Download');
       final Directory _appDocDir = await getApplicationDocumentsDirectory();
-      final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+      final Directory _appDocDirFolder =
+          Directory('storage/emulated/0/fitBasix/media');
 
       if (await _appDocDirFolder.exists()) {
         path = _appDocDirFolder.path;
-      }
-      else{
+      } else {
         //if folder not exists create folder and then return its path
-        final Directory _appDocDirNewFolder = await _appDocDirFolder.create(recursive: true);
-        path =  _appDocDirNewFolder.path;
+        final Directory _appDocDirNewFolder =
+            await _appDocDirFolder.create(recursive: true);
+        path = _appDocDirNewFolder.path;
       }
 
       //if(File(message!.attachments![0]!.data!).existsSync())
-      if(File(path+"/"+fileName!).existsSync()){
-
-        print("file exists in "+path+"/$fileName");
-        filePath.value = path+"/$fileName";
-
+      if (File(path + "/" + fileName!).existsSync()) {
+        print("file exists in " + path + "/$fileName");
+        filePath.value = path + "/$fileName";
       }
 
-      if(File(downloadsPath.path +"/"+fileName).existsSync()){
-        print("file exists in "+downloadsPath.path+"/$fileName");
-        filePath.value = downloadsPath.path +"/"+fileName;
+      if (File(downloadsPath.path + "/" + fileName).existsSync()) {
+        print("file exists in " + downloadsPath.path + "/$fileName");
+        filePath.value = downloadsPath.path + "/" + fileName;
       }
     }
   }
-
-
 }
 
 // Appbar
@@ -1006,7 +994,6 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
         IconButton(
             onPressed: () {},
             icon: SvgPicture.asset(
-
               ImagePath.chatpopupmenuIcon,
               width: 4 * SizeConfig.widthMultiplier!,
               height: 20 * SizeConfig.heightMultiplier!,
@@ -1018,5 +1005,3 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
-
-

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,6 +60,7 @@ class DioUtil {
           }
         } else {
           if (e.response!.statusCode == 444) {
+            InitializeQuickBlox().logOutUserSession();
             final LoginController _controller = Get.put(LoginController());
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.clear();
