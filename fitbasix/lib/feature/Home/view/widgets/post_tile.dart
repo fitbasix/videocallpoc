@@ -409,6 +409,14 @@ class _PostTileState extends State<PostTile> {
                   SizedBox(
                     width: 18 * SizeConfig.widthMultiplier!,
                   ),
+                  Icon(
+                    Icons.mode_comment_outlined,
+                    size: 16*SizeConfig.widthMultiplier!,
+                    color: kPureWhite,
+                  ),
+                  SizedBox(
+                    width: 6.5 * SizeConfig.widthMultiplier!,
+                  ),
                   Text(
                     'comments'.trParams({'no_comments': widget.comments}),
                     style: AppTextStyle.boldBlackText

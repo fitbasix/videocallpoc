@@ -169,7 +169,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             prefixIcon: Padding(
                               padding: EdgeInsets.only(
                                   left: 10.5 * SizeConfig.widthMultiplier!,
-                                  right: 5),
+                                  right: 5*SizeConfig.widthMultiplier!),
                               child: Icon(
                                 Icons.search,
                                 color: hintGrey,

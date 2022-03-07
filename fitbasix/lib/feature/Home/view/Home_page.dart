@@ -41,6 +41,7 @@ class HomeAndTrainerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       key: homeController.drawerKey,
       body: Obx(() => screens[homeController.selectedIndex.value]),
       // bottomNavigationBar: CustomizedBottomAppBar(),
@@ -142,7 +143,7 @@ class _HomePageState extends State<HomePage> {
       //         onPressed: () {}, icon: SvgPicture.asset(ImagePath.bellIcon))
       //   ],
       // ),
-      backgroundColor: kBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
           child: Obx(() => _homeController.isLoading.value
               ? Padding(
@@ -648,7 +649,7 @@ class _HomePageState extends State<HomePage> {
                                     // padding:
                                     //     EdgeInsets.only(left: 16, bottom: 16),
                                     decoration: BoxDecoration(
-                                        color: kPureWhite,
+                                        color: Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(10),
                                         boxShadow: [
                                           BoxShadow(
@@ -774,6 +775,7 @@ class _HomePageState extends State<HomePage> {
                                                         style: AppTextStyle
                                                             .smallBlackText
                                                             .copyWith(
+                                                          color: Theme.of(context).textTheme.bodyText1?.color,
                                                                 fontSize: 14 *
                                                                     SizeConfig
                                                                         .textMultiplier!),
@@ -809,6 +811,7 @@ class _HomePageState extends State<HomePage> {
                                                         style: AppTextStyle
                                                             .smallBlackText
                                                             .copyWith(
+                                                            color: Theme.of(context).textTheme.bodyText1?.color,
                                                                 fontSize: 14 *
                                                                     SizeConfig
                                                                         .textMultiplier!),
