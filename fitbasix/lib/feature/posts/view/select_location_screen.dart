@@ -21,9 +21,9 @@ class SelectLocationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
             onPressed: () {
@@ -32,6 +32,7 @@ class SelectLocationScreen extends StatelessWidget {
             },
             icon: SvgPicture.asset(
               ImagePath.backIcon,
+              color: Theme.of(context).primaryColor,
               width: 7 * SizeConfig.widthMultiplier!,
               height: 12 * SizeConfig.heightMultiplier!,
             )),
@@ -40,7 +41,12 @@ class SelectLocationScreen extends StatelessWidget {
           child: Text(
             'select_location'.tr,
             style: AppTextStyle.titleText
-                .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                .copyWith(
+                color: Theme.of(context)
+                    .appBarTheme
+                    .titleTextStyle
+                    ?.color,
+                fontSize: 16 * SizeConfig.textMultiplier!),
           ),
         ),
         actions: [
@@ -81,12 +87,15 @@ class SelectLocationScreen extends StatelessWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: lightGrey,
+                        color: Theme.of(context).textTheme.headline4?.color,
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
                       ),
                       child: TextField(
                         controller: _postController.locationSearchController,
+                        style: AppTextStyle.normalGreenText.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1?.color
+                        ),
                         onChanged: (value) async {
                           if (value.length > 0) {
                             _postController.searchLoading.value = true;
@@ -148,6 +157,7 @@ class SelectLocationScreen extends StatelessWidget {
                                 Text(
                                   _postController.selectedLocation.value,
                                   style: AppTextStyle.boldBlackText.copyWith(
+                                    color: Theme.of(context).textTheme.bodyText1?.color,
                                       fontSize:
                                           14 * SizeConfig.textMultiplier!),
                                 ),
@@ -161,7 +171,7 @@ class SelectLocationScreen extends StatelessWidget {
                                       _postController.selectedLocationData.value
                                           .placeId = '';
                                     },
-                                    icon: Icon(Icons.clear))
+                                    icon: Icon(Icons.clear,color: Theme.of(context).primaryColor,))
                               ],
                             ),
                           )),
@@ -279,12 +289,15 @@ class LocationTile extends StatelessWidget {
             Text(
               mainText,
               style: AppTextStyle.boldBlackText
-                  .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                  .copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color,
+                  fontSize: 14 * SizeConfig.textMultiplier!),
             ),
             Text(
               secondaryText,
               style: AppTextStyle.NormalText.copyWith(
-                  fontSize: 12 * SizeConfig.textMultiplier!, color: lightBlack),
+                  color: Theme.of(context).textTheme.bodyText1?.color,
+                  fontSize: 12 * SizeConfig.textMultiplier!, ),
             ),
           ],
         ),

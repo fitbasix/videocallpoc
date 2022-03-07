@@ -54,9 +54,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         () => _postController.iscreateingPost.value
             ? Center(child: CustomizedCircularProgress())
             : Scaffold(
-                backgroundColor: kPureWhite,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 appBar: AppBar(
-                  backgroundColor: kPureWhite,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   elevation: 0,
                   leading: IconButton(
                       onPressed: () {
@@ -66,6 +66,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       },
                       icon: SvgPicture.asset(
                         ImagePath.backIcon,
+                        color: Theme.of(context).primaryColor,
                         width: 7 * SizeConfig.widthMultiplier!,
                         height: 12 * SizeConfig.heightMultiplier!,
                       )),
@@ -73,8 +74,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     transform: Matrix4.translationValues(-20, 0, 0),
                     child: Text(
                       'create_post'.tr,
-                      style: AppTextStyle.titleText
-                          .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                      style: AppTextStyle.titleText.copyWith(
+                          color: Theme.of(context)
+                              .appBarTheme
+                              .titleTextStyle
+                              ?.color,
+                          fontSize: 16 * SizeConfig.textMultiplier!),
                     ),
                   ),
                   actions: [
@@ -93,10 +98,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 null
                         ? _postController.isLoading.value == false
                             ? Container(
-                                height: 32,
-                                width: 78,
+                                height: 32 * SizeConfig.heightMultiplier!,
+                                width: 78 * SizeConfig.widthMultiplier!,
                                 margin: EdgeInsets.only(
-                                    top: 8, bottom: 8, right: 16),
+                                    top: 8 * SizeConfig.heightMultiplier!,
+                                    bottom: 8 * SizeConfig.heightMultiplier!,
+                                    right: 16 * SizeConfig.widthMultiplier!),
                                 child: ElevatedButton(
                                   onPressed: () async {
                                     _postController.isLoading.value = true;
@@ -104,7 +111,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                         await CreatePostService.createPost(
                                             postId:
                                                 _postController.postId.value,
-                                            isPublish: true,caption:_postController.postText.value);
+                                            isPublish: true,
+                                            caption:
+                                                _postController.postText.value);
                                     _postController.isLoading.value = false;
                                     if (_postController.postData.value.code ==
                                         0) {
@@ -144,7 +153,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       elevation: 0,
-                                      primary: kGreenColor),
+                                      primary: kgreen49),
                                 ))
                             : Padding(
                                 padding: EdgeInsets.only(
@@ -152,24 +161,32 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 child: CustomizedCircularProgress(),
                               )
                         : Container(
-                            height: 32,
-                            width: 78,
-                            margin:
-                                EdgeInsets.only(top: 8, bottom: 8, right: 16),
+                            height: 32 * SizeConfig.heightMultiplier!,
+                            width: 78 * SizeConfig.widthMultiplier!,
+                            margin: EdgeInsets.only(
+                                top: 8 * SizeConfig.heightMultiplier!,
+                                bottom: 8 * SizeConfig.heightMultiplier!,
+                                right: 16 * SizeConfig.widthMultiplier!),
                             child: ElevatedButton(
                               onPressed: null,
                               child: Text(
                                 'post'.tr,
                                 style: AppTextStyle.boldBlackText.copyWith(
                                     fontSize: 14 * SizeConfig.textMultiplier!,
-                                    color: kGreyColor),
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline1
+                                        ?.color),
                               ),
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   elevation: 0,
-                                  primary: lightGrey),
+                                  primary: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      ?.color),
                             )))
                   ],
                 ),
@@ -221,6 +238,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                               .response!.data!.profile!.name!,
                                           style: AppTextStyle.boldBlackText
                                               .copyWith(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      ?.color,
                                                   fontSize: 14 *
                                                       SizeConfig
                                                           .textMultiplier!),
@@ -246,6 +267,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!),
@@ -256,16 +282,31 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                             .widthMultiplier!,
                                                   ),
                                                   Container(
-                                                    height: 1,
-                                                    width: 15,
-                                                    color: kPureBlack,
+                                                    height: 1 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    width: 15 *
+                                                        SizeConfig
+                                                            .widthMultiplier!,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        ?.color,
                                                   ),
                                                   SizedBox(
                                                     width: 4 *
                                                         SizeConfig
                                                             .widthMultiplier!,
                                                   ),
-                                                  Text('with'.tr),
+                                                  Text('with'.tr,
+                                                      style: AppTextStyle
+                                                          .normalGreenText
+                                                          .copyWith(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyText1
+                                                                  ?.color)),
                                                   SizedBox(
                                                     width: 4 *
                                                         SizeConfig
@@ -282,6 +323,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!),
@@ -307,6 +353,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!),
@@ -317,9 +368,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                             .widthMultiplier!,
                                                   ),
                                                   Container(
-                                                    height: 1,
-                                                    width: 15,
-                                                    color: kPureBlack,
+                                                    height: 1 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    width: 15 *
+                                                        SizeConfig
+                                                            .widthMultiplier!,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        ?.color,
                                                   ),
                                                   SizedBox(
                                                     width: 4 *
@@ -331,6 +389,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                     style: AppTextStyle
                                                         .normalBlackText
                                                         .copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!),
@@ -351,6 +414,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!),
@@ -365,6 +433,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                     style: AppTextStyle
                                                         .normalBlackText
                                                         .copyWith(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!),
@@ -385,6 +458,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
+                                                        color: Theme.of(context).textTheme.bodyText1?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!),
@@ -400,6 +474,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               Obx(() => CategoryDropDown(
                                   hint: _postController.selectedCategory.value,
                                   listofItems: _postController.categories,
+                                  context: context,
                                   onChanged: (value) async {
                                     print(_postController.postData.value
                                         .response!.data!.category);
@@ -414,7 +489,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                 .selectedCategory
                                                 .value
                                                 .serialId);
-                                  })),
+                                  }
+                                  )),
                               SizedBox(
                                 height: 10 * SizeConfig.heightMultiplier!,
                               ),
@@ -436,7 +512,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                 onSubmitted: (value) {},
                                                 onEditingComplete: () {},
                                                 style: AppTextStyle
-                                                    .normalPureBlackText,
+                                                    .normalGreenText.copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1?.color
+                                                ),
                                                 // keyboardType: TextInputType.multiline,
                                                 maxLines: null,
                                                 decoration: InputDecoration(
@@ -490,7 +568,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                           onEditingComplete:
                                                               () {},
                                                           style: AppTextStyle
-                                                              .normalPureBlackText,
+                                                              .normalGreenText.copyWith(
+                                                            color: Theme.of(context).textTheme.bodyText1?.color),
                                                           // keyboardType: TextInputType.multiline,
                                                           maxLines: null,
                                                           decoration: InputDecoration(
@@ -544,8 +623,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                                               ),
                                                                             )),
                                                                 Positioned(
-                                                                    top: 10,
-                                                                    right: 10,
+                                                                    top: 10*SizeConfig.heightMultiplier!,
+                                                                    right: 10*SizeConfig.widthMultiplier!,
                                                                     child:
                                                                         GestureDetector(
                                                                       onTap:
@@ -623,10 +702,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                                             .fitWidth,
                                                                       ),
                                                                       Positioned(
-                                                                          top:
-                                                                              10,
-                                                                          right:
-                                                                              10,
+                                                                          top: 10*SizeConfig.heightMultiplier!,
+                                                                          right: 10*SizeConfig.widthMultiplier!,
                                                                           child:
                                                                               GestureDetector(
                                                                             onTap:
@@ -708,7 +785,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                           onEditingComplete:
                                                               () {},
                                                           style: AppTextStyle
-                                                              .normalPureBlackText,
+                                                              .normalGreenText.copyWith(
+                                                              color: Theme.of(context).textTheme.bodyText1?.color),
                                                           // keyboardType: TextInputType.multiline,
                                                           maxLines: null,
                                                           decoration: InputDecoration(
@@ -728,7 +806,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         ),
                                                       ),
                                                       Container(
-                                                        height: 120,
+                                                        height: 120*SizeConfig.heightMultiplier!,
                                                         child: ListView.builder(
                                                             itemCount:
                                                                 _postController
@@ -903,6 +981,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                           children: [
                                             SvgPicture.asset(
                                                 ImagePath.locationIcon,
+                                                color: Theme.of(context).primaryColor,
                                                 width: 17 *
                                                     SizeConfig
                                                         .widthMultiplier!),
@@ -914,6 +993,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                               'location'.tr,
                                               style: AppTextStyle.titleText
                                                   .copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1?.color,
                                                       fontSize: 14 *
                                                           SizeConfig
                                                               .textMultiplier!),
@@ -953,6 +1033,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                   .placeName![1],
                                               style: AppTextStyle.titleText
                                                   .copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1?.color,
                                                       fontSize: 14 *
                                                           SizeConfig
                                                               .textMultiplier!),
@@ -988,15 +1069,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      SvgPicture.asset(ImagePath.galleryIcon,
-                                          width:
-                                              17 * SizeConfig.widthMultiplier!),
+                                      SvgPicture.asset(
+                                          ImagePath.galleryIcon,
+                                          color: Theme.of(context).primaryColor,
+                                          width: 17 * SizeConfig.widthMultiplier!),
                                       SizedBox(
                                         width: 16 * SizeConfig.widthMultiplier!,
                                       ),
                                       Text(
                                         'photo_video'.tr,
                                         style: AppTextStyle.titleText.copyWith(
+                                            color: Theme.of(context).textTheme.bodyText1?.color,
                                             fontSize: 14 *
                                                 SizeConfig.textMultiplier!),
                                       )
@@ -1032,6 +1115,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     children: [
                                       SvgPicture.asset(
                                         ImagePath.tagPeopleIcon,
+                                        color: Theme.of(context).primaryColor,
                                         width: 17 * SizeConfig.widthMultiplier!,
                                       ),
                                       SizedBox(
@@ -1040,6 +1124,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       Text(
                                         'tag_people'.tr,
                                         style: AppTextStyle.titleText.copyWith(
+                                            color: Theme.of(context).textTheme.bodyText1?.color,
                                             fontSize: 14 *
                                                 SizeConfig.textMultiplier!),
                                       )

@@ -381,7 +381,7 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
                       showTicks: false,
                       showLabels: false,
                       axisLineStyle: AxisLineStyle(
-                          //  color: kPureWhite,
+                           color: kPureWhite,
                           thickness: 6.0 * SizeConfig.widthMultiplier!,
                           thicknessUnit: GaugeSizeUnit.logicalPixel),
                       // pointer marker & needle pointer

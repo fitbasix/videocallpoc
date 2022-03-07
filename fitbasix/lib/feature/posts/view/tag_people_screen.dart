@@ -34,9 +34,9 @@ class TagPeopleScreen extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-            backgroundColor: kPureWhite,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             elevation: 0,
             leading: IconButton(
                 onPressed: () async {
@@ -45,6 +45,7 @@ class TagPeopleScreen extends StatelessWidget {
                 },
                 icon: SvgPicture.asset(
                   ImagePath.backIcon,
+                  color: Theme.of(context).primaryColor,
                   width: 7 * SizeConfig.widthMultiplier!,
                   height: 12 * SizeConfig.heightMultiplier!,
                 )),
@@ -52,8 +53,9 @@ class TagPeopleScreen extends StatelessWidget {
               transform: Matrix4.translationValues(-20, 0, 0),
               child: Text(
                 'tag_people'.tr,
-                style: AppTextStyle.titleText
-                    .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                style: AppTextStyle.titleText.copyWith(
+                    color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                    fontSize: 16 * SizeConfig.textMultiplier!),
               ),
             ),
             actions: [
@@ -100,7 +102,7 @@ class TagPeopleScreen extends StatelessWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: lightGrey,
+                        color: Theme.of(context).textTheme.headline4?.color,
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
                       ),
@@ -112,6 +114,9 @@ class TagPeopleScreen extends StatelessWidget {
                             _postController.users.value = users.response!.data!;
                             print(_postController.users.value);
                           },
+                          style: AppTextStyle.normalGreenText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color
+                          ),
                           onSubmitted: (value) {
                             print(value);
                           },
@@ -188,6 +193,7 @@ class TagPeopleScreen extends StatelessWidget {
                                                 style: AppTextStyle
                                                     .boldBlackText
                                                     .copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1?.color,
                                                         fontSize: 14 *
                                                             SizeConfig
                                                                 .textMultiplier!),
@@ -345,7 +351,9 @@ class PeopleTile extends StatelessWidget {
               Text(
                 name,
                 style: AppTextStyle.boldBlackText
-                    .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                    .copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    fontSize: 14 * SizeConfig.textMultiplier!),
               ),
               SizedBox(
                 height: 4 * SizeConfig.heightMultiplier!,
@@ -353,17 +361,23 @@ class PeopleTile extends StatelessWidget {
               Text(
                 subtitle,
                 style: AppTextStyle.normalBlackText
-                    .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
+                    .copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    fontSize: 12 * SizeConfig.textMultiplier!),
               )
             ],
           ),
           Spacer(),
           Checkbox(
             value: value,
+           checkColor: kPureBlack,
+            side: BorderSide(
+              color: hintGrey,
+            ),
             onChanged: (value) {
               onTap(value);
             },
-            activeColor: kGreenColor,
+            activeColor: kgreen49,
           ),
           SizedBox(
             width: 7 * SizeConfig.widthMultiplier!,

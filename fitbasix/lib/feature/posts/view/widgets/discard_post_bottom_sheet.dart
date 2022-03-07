@@ -24,7 +24,7 @@ class DiscardPostBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 235 * SizeConfig.heightMultiplier!,
-      color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       padding: EdgeInsets.only(
           top: 32 * SizeConfig.heightMultiplier!,
           left: 16 * SizeConfig.widthMultiplier!,
@@ -36,7 +36,9 @@ class DiscardPostBottomSheet extends StatelessWidget {
           Text(
             'discard_post_title'.tr,
             style: AppTextStyle.boldBlackText
-                .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                .copyWith(
+                color: Theme.of(context).textTheme.bodyText1?.color,
+                fontSize: 14 * SizeConfig.textMultiplier!),
           ),
           SizedBox(
             height: 8 * SizeConfig.heightMultiplier!,
@@ -44,7 +46,9 @@ class DiscardPostBottomSheet extends StatelessWidget {
           Text(
             'discard_post_subtitle'.tr,
             style: AppTextStyle.normalBlackText
-                .copyWith(fontSize: 12 * SizeConfig.textMultiplier!),
+                .copyWith(
+                color: Theme.of(context).textTheme.bodyText1?.color,
+                fontSize: 12 * SizeConfig.textMultiplier!),
           ),
           SizedBox(
             height: 31 * SizeConfig.heightMultiplier!,
@@ -53,11 +57,13 @@ class DiscardPostBottomSheet extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.create),
+            icon: Icon(Icons.create,color: Theme.of(context).primaryColor),
             label: Text(
               'continue_editing'.tr,
               style: AppTextStyle.boldBlackText
-                  .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                  .copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color,
+                  fontSize: 14 * SizeConfig.textMultiplier!),
             ),
             style: TextButton.styleFrom(
                 primary: lightBlack,

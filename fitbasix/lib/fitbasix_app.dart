@@ -57,6 +57,7 @@ class FitBasixApp extends StatelessWidget {
                         headline1: TextStyle(color: hintGrey),
                         // used in trainer profile screen
                         headline2: TextStyle(color: greyC4),
+                        // used in post tile & explore feed for category duration & location
                         headline3: TextStyle(color: grey92),
                         // used in strength listview of trainer screen
                         headline4: TextStyle(color: greyBorder),
@@ -67,9 +68,6 @@ class FitBasixApp extends StatelessWidget {
                         color: greyB7
                     )
                     ),
-
-
-
                     //Trainer card in get trainer screen & all trainer Screen & home sceen
                     cardColor: kBlack,
                   ),

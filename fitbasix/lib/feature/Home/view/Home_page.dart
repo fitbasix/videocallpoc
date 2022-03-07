@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                             60 * SizeConfig.widthMultiplier!)),
                                   ),
                                   SizedBox(
-                                    width: 15,
+                                    width: 15*SizeConfig.widthMultiplier!,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -499,7 +499,7 @@ class _HomePageState extends State<HomePage> {
                                                         HealthApp());
                                               },
                                               //is connected
-                                              false,
+                                              true,
                                                   //Passing context for theme
                                               context),
                                             ),

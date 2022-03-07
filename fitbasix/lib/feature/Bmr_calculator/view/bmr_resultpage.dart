@@ -25,7 +25,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: greyF6,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppbarforBMRScreen(
         title: 'bmr_calc'.tr,
         parentContext: context,
@@ -38,8 +38,8 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
         // height: !isReadmore
         //  ? 191 * SizeConfig.heightMultiplier!
         //  : 515 * SizeConfig.heightMultiplier!,
-        duration: Duration(milliseconds: 0),
-        child: ListView(
+          duration: Duration(milliseconds: 0),
+          child: ListView(
           children: [
             Container(
               margin: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
@@ -47,8 +47,19 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
               //  padding: EdgeInsets.all(16*SizeConfig.widthMultiplier!),
               //  height: 300 * SizeConfig.heightMultiplier!,
               decoration: BoxDecoration(
-                color: kPureWhite,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: greyBorder
+                ),
+                boxShadow: [
+                  BoxShadow(
+                      offset: Offset(0,2),
+                      blurRadius: 10,
+                      spreadRadius: -2,
+                      color: greyBorder
+                  )
+                ],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -66,7 +77,9 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                           children: [
                             Text(
                               'your_bmr'.tr,
-                              style: AppTextStyle.hblackSemiBoldText,
+                              style: AppTextStyle.hblackSemiBoldText.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color
+                              ),
                             ),
                             SizedBox(
                               height: 16 * SizeConfig.heightMultiplier!,
@@ -78,6 +91,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                                       .bmrresult.value.response!.data!.bmr
                                       .toString())),
                               style: AppTextStyle.hblackSemiBoldText.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
                                 fontSize: 32 * SizeConfig.textMultiplier!,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -87,7 +101,9 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                             ),
                             Text(
                               'calories_day'.tr,
-                              style: AppTextStyle.hblack400Text,
+                              style: AppTextStyle.hblack400Text.copyWith(
+                                  color: Theme.of(context).textTheme.bodyText1?.color
+                              ),
                             )
                           ],
                         ),
@@ -107,7 +123,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                     ),
                     child: Container(
                       height: 1 * SizeConfig.heightMultiplier!,
-                      color: greyF6,
+                      color: greyBorder,
                     ),
                   ),
                   isReadmore
@@ -125,14 +141,16 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                         style: ButtonStyle(
                             elevation: MaterialStateProperty.all(0),
                             backgroundColor:
-                                MaterialStateProperty.all(kPureWhite),
+                                MaterialStateProperty.all(Theme.of(context).scaffoldBackgroundColor),
                             shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         0 * SizeConfig.widthMultiplier!)))),
                         child: Text(
                           (isReadmore ? 'view_less'.tr : 'view_more'.tr),
-                          style: AppTextStyle.hmediumBlackText,
+                          style: AppTextStyle.hmediumBlackText.copyWith(
+                            color: hintGrey
+                          ),
                         )),
                   )
                 ],
@@ -160,7 +178,9 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
             alignment: Alignment.centerLeft,
             child: Text(
               'bmr_moresummary'.tr,
-              style: AppTextStyle.hnormal600BlackText,
+              style: AppTextStyle.hnormal600BlackText.copyWith(
+                color: Theme.of(context).textTheme.bodyText1?.color
+              ),
               // maxLines: lines,
             ),
           ),
@@ -180,12 +200,16 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
                         width: 168 * SizeConfig.widthMultiplier!,
                         child: Text(
                           calories[index].name.toString(),
-                          style: AppTextStyle.black400Text,
+                          style: AppTextStyle.black400Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color
+                          ),
                         ),
                       ),
                       Text(
                         calories[index].value!.toInt().toString(),
-                        style: AppTextStyle.hnormal600BlackText,
+                        style: AppTextStyle.hnormal600BlackText.copyWith(
+                            color: Theme.of(context).textTheme.bodyText1?.color
+                        ),
                       )
                     ],
                   ),
@@ -201,7 +225,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
               ),
               child: Container(
                 height: 1 * SizeConfig.heightMultiplier!,
-                color: greyF6,
+                color: greyBorder,
               )),
         ],
       ),

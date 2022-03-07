@@ -9,15 +9,17 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 Widget CategoryDropDown(
     {required List<Category> listofItems,
     required Function onChanged,
+     required BuildContext context,
     Category? hint}) {
   return Align(
     alignment: Alignment.centerLeft,
     child: Container(
       // width: 140 * SizeConfig.widthMultiplier!,
       decoration: BoxDecoration(
+        color: Theme.of(context).secondaryHeaderColor,
           border: Border.all(
-            width: 1,
-            color: hint!.name == null ? hintGrey : lightBlack,
+            width: 1*SizeConfig.widthMultiplier!,
+            color: hint!.name == null ? hintGrey : Theme.of(context).primaryColorLight,
           ),
           borderRadius:
               BorderRadius.circular(8 * SizeConfig.heightMultiplier!)),
@@ -41,15 +43,15 @@ Widget CategoryDropDown(
                   )
                 : Container(),
             Container(
-              width: 100 * SizeConfig.widthMultiplier!,
+              width: 90 * SizeConfig.widthMultiplier!,
               child: DropdownButton2(
-                  dropdownWidth: 140 * SizeConfig.widthMultiplier!,
+                  dropdownWidth: 200 * SizeConfig.widthMultiplier!,
                   iconSize: 0.0,
                   isDense: true,
                   isExpanded: true,
                   // dropdownPadding: EdgeInsets.only(top: 10),
                   dropdownDecoration: BoxDecoration(
-                      color: kPureWhite,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(8)),
                   offset:
                       hint.name == null ? Offset(-42, -12) : Offset(-16, -12),
@@ -59,13 +61,17 @@ Widget CategoryDropDown(
                       ? Text(
                           'add_category'.tr,
                           style: AppTextStyle.smallGreyText
-                              .copyWith(color: hintGrey),
+                              .copyWith(
+                              color: hintGrey
+                          ),
                         )
                       : Center(
                           child: Text(
                             hint.name.toString(),
                             style: AppTextStyle.smallGreyText
-                                .copyWith(color: lightBlack),
+                                .copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color
+                            ),
                           ),
                         ),
                   underline: Container(),
@@ -73,9 +79,11 @@ Widget CategoryDropDown(
                     return DropdownMenuItem<Category>(
                         value: value,
                         child: Container(
-                          // width: 30,
-                          // height: 20,
-                          child: Text(value.name!),
+                          child: Text(value.name!,
+                          style: AppTextStyle.smallGreyText.copyWith(
+                              fontSize: (14) * SizeConfig.textMultiplier!,
+                              color: Theme.of(context).textTheme.bodyText1?.color
+                          ),),
                         ));
                   }).toList(),
                   onChanged: (value) {

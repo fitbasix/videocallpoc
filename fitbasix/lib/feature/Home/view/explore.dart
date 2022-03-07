@@ -76,7 +76,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: kPureWhite,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           leading: IconButton(
               onPressed: () {
@@ -84,6 +84,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
               },
               icon: SvgPicture.asset(
                 ImagePath.backIcon,
+                color: Theme.of(context).primaryColor,
                 width: 7 * SizeConfig.widthMultiplier!,
                 height: 12 * SizeConfig.heightMultiplier!,
               )),
@@ -174,7 +175,9 @@ class _ExploreFeedState extends State<ExploreFeed> {
                   child: Text(
                     'explore'.tr,
                     style: AppTextStyle.titleText
-                        .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+                        .copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color,
+                        fontSize: 16 * SizeConfig.textMultiplier!),
                   ),
                 )),
           actions: [
@@ -186,7 +189,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                     },
                     icon: Icon(
                       Icons.search,
-                      color: kPureBlack,
+                      color: Theme.of(context).primaryColor,
                       size: 25 * SizeConfig.heightMultiplier!,
                     )))
           ],
@@ -203,13 +206,13 @@ class _ExploreFeedState extends State<ExploreFeed> {
                   ),
                   Obx(
                     () => Container(
-                      height: 28 * SizeConfig.heightMultiplier!,
+                      height: 30 * SizeConfig.heightMultiplier!,
                       child: Row(
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!),
-                            child: ItemCategory(
+                            child: ExploreItemCategory(
                               onTap: () async {
                                 homeController.explorePageCount.value = 0;
                                 homeController.selectedPostCategoryIndex.value =
@@ -249,7 +252,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                 return Obx(
                                     () => postController.categories.length == 0
                                         ? Shimmer.fromColors(
-                                            child: ItemCategory(
+                                            child: ExploreItemCategory(
                                                 interest: "Category",
                                                 onTap: () {},
                                                 isSelected: false),
@@ -266,7 +269,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                                         SizeConfig
                                                             .widthMultiplier!)
                                                 : EdgeInsets.all(0),
-                                            child: ItemCategory(
+                                            child: ExploreItemCategory(
                                               onTap: () async {
                                                 homeController
                                                     .explorePageCount.value = 0;
@@ -496,5 +499,52 @@ class _ExploreFeedState extends State<ExploreFeed> {
             ],
           ),
         ));
+  }
+}
+
+
+
+class ExploreItemCategory extends StatelessWidget {
+  const ExploreItemCategory({
+    Key? key,
+    required this.interest,
+    required this.onTap,
+    required this.isSelected,
+  }) : super(key: key);
+  final String interest;
+  final VoidCallback onTap;
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0 * SizeConfig.widthMultiplier!),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 30 * SizeConfig.heightMultiplier!,
+          decoration: BoxDecoration(
+              color: isSelected ?
+              kgreen49 : Theme.of(context).textTheme.headline4?.color,
+              borderRadius:
+              BorderRadius.circular(14 * SizeConfig.heightMultiplier!),
+              // border: Border.all(
+              //   color: kBlack,
+              // )
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 12 * SizeConfig.widthMultiplier!),
+            child: Center(
+              child: Text(
+                interest,
+                style: AppTextStyle.lightMediumBlackText
+                    .copyWith(color: Theme.of(context).textTheme.bodyText1?.color),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
