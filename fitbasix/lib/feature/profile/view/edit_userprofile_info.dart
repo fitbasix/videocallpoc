@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:fitbasix/feature/profile/view/appbar_for_account.dart';
@@ -6,13 +8,16 @@ import 'package:fitbasix/feature/profile/view/set_userweight_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:images_picker/images_picker.dart';
 
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
+import '../../../core/routes/app_routes.dart';
 import '../../get_trained/model/interest_model.dart';
 import '../../posts/services/createPost_Services.dart';
+import '../../posts/services/post_service.dart';
 import '../controller/profile_controller.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -102,7 +107,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 top: 80 * SizeConfig.heightMultiplier!,
                                 left: 80 * SizeConfig.widthMultiplier!,
                                 child: GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
+                                    print("pppp");
+                                    Navigator.pushNamed(
+                                        context, RouteName.selectProfilePhoto);
+                                    // final pickedFile = await ImagesPicker.pick(
+                                    //     count: 1, pickType: PickType.image);
+                                    // if (pickedFile != null) {
+                                    //   await PostService.uploadMedia(
+                                    //       [File(pickedFile[0].path)]);
+                                    //   }
+
                                     // open user profilepic for change
                                   },
                                   child: Container(

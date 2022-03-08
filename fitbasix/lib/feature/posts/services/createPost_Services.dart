@@ -108,13 +108,17 @@ class CreatePostService {
     log(response.data.toString());
     UserProfileModel _userProfileModel =
         userProfileModelFromJson(response.toString());
+
     if (_userProfileModel.response!.data!.profile!.quickBloxId != null) {
-      String userId = _userProfileModel.response!.data!.profile!.id!;
-      final password = Crypt.sha256(
-          _userProfileModel.response!.data!.profile!.id!,
-          salt: '10');
-      bool loggedIn = await LogInUserToQuickBlox(userId, password.hash,
-          _userProfileModel.response!.data!.profile!.quickBloxId!);
+      try {
+        String userId = _userProfileModel.response!.data!.profile!.id!;
+        final password = Crypt.sha256(
+            _userProfileModel.response!.data!.profile!.id!,
+            salt: '10');
+        bool loggedIn = await LogInUserToQuickBlox(userId, password.hash,
+            _userProfileModel.response!.data!.profile!.quickBloxId!);
+      } catch (e) {}
+
       //await InitializeQuickBlox().initWebRTC();
       // InitializeQuickBlox().subscribeCall();
 
