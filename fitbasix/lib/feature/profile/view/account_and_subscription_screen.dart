@@ -17,7 +17,8 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController _homeController = Get.find();
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
+        _homeController.selectedIndex.value = 0;
         Navigator.pop(context);
         Navigator.pop(context);
         return false;

@@ -1,3 +1,6 @@
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
+import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
+import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -7,8 +10,11 @@ import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
+import '../../Home/controller/Home_Controller.dart';
 
 class NumberChangeOtpVerify extends StatelessWidget {
+  final ProfileController profileController = Get.find();
+  final HomeController homeController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +63,7 @@ class NumberChangeOtpVerify extends StatelessWidget {
                 appContext: context,
                 length: 6,
                 onChanged: (value) {
+                  profileController.otp.value = value;
                   // _loginController.otp.value = value;
                 },
                 enableActiveFill: true,
@@ -67,13 +74,65 @@ class NumberChangeOtpVerify extends StatelessWidget {
                   fieldHeight: 48 * SizeConfig.widthMultiplier!,
                   fieldWidth: 48 * SizeConfig.widthMultiplier!,
                   selectedColor: Colors.transparent,
-                  activeFillColor: kLightGrey,
+                  activeFillColor: kDarkGreyish,
                   inactiveColor: Colors.transparent,
                   activeColor: Colors.transparent,
-                  inactiveFillColor: kLightGrey,
-                  selectedFillColor: kLightGrey,
+                  inactiveFillColor: kDarkGreyish,
+                  selectedFillColor: kDarkGreyish,
                 ),
               ),
+              Container(
+                  margin:
+                      EdgeInsets.only(top: 32 * SizeConfig.heightMultiplier!),
+                  width: double.infinity,
+                  height: 48 * SizeConfig.heightMultiplier!,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(0),
+                          backgroundColor:
+                              MaterialStateProperty.all(kGreenColor),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8 * SizeConfig.widthMultiplier!)))),
+                      onPressed: () async {
+                        if (profileController.otp.value.length == 6) {
+                          String? updatedEmailId =
+                              profileController.emailController.text ==
+                                      homeController.userProfileData.value
+                                          .response!.data!.profile!.email
+                                  ? null
+                                  : profileController.emailController.text;
+                          String? updatedPhnNumber = profileController
+                                      .loginController!.mobile.value ==
+                                  homeController.userProfileData.value.response!
+                                      .data!.profile!.mobileNumber
+                              ? null
+                              : profileController.loginController!.mobile.value;
+                          String updatedCountryCode = profileController
+                              .loginController!.selectedCountry.value.code!;
+
+                          String? updatedDob =
+                              profileController.DOBController.text ==
+                                      homeController.userProfileData.value
+                                          .response!.data!.profile!.dob
+                                  ? null
+                                  : profileController.DOBController.text;
+                          await ProfileServices.editProfile(
+                              email: updatedEmailId,
+                              countryCode: updatedCountryCode,
+                              phone: updatedPhnNumber,
+                              dob: updatedDob == "" ? null : updatedDob,
+                              otp: profileController.otp.value);
+                          Navigator.pop(context);
+                          homeController.userProfileData.value =
+                              await CreatePostService.getUserProfile();
+                        }
+                      },
+                      child: Text(
+                        "confirm".tr,
+                        style: AppTextStyle.boldWhiteText,
+                      )))
             ],
           ),
         ),
