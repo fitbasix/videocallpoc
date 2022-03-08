@@ -26,7 +26,8 @@ class DialogboxForFeedback extends StatelessWidget {
           left: 32 * SizeConfig.widthMultiplier!,
           right: 32 * SizeConfig.widthMultiplier!,
         ),
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor
+        ,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         child: Container(
@@ -46,7 +47,9 @@ class DialogboxForFeedback extends StatelessWidget {
                   Center(
                     child: Text(
                       'Your opinion matters to us!'.tr,
-                      style: AppTextStyle.hblack600Text,
+                      style: AppTextStyle.hblack600Text.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -61,6 +64,7 @@ class DialogboxForFeedback extends StatelessWidget {
                         'Rate us on the App Store and send us your feedback ⭐'.tr,
                         style: AppTextStyle.hnormal600BlackText.copyWith(
                           fontWeight: FontWeight.w400,
+                            color: Theme.of(context).textTheme.bodyText1?.color
                         ),
                         textAlign: TextAlign.center),
                   ),

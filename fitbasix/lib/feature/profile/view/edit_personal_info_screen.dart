@@ -26,7 +26,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
     print(_profileController.DOBController.text);
 
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBarForAccount(
         title: "Personal Information",
         onback: () {
@@ -45,7 +45,9 @@ class EditPersonalInfoScreen extends StatelessWidget {
             ),
             Text(
               "email".tr,
-              style: AppTextStyle.normalPureBlackTextWithWeight600,
+              style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
+                color: Theme.of(context).textTheme.bodyText1?.color
+              ),
             ),
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field for user email
@@ -54,7 +56,9 @@ class EditPersonalInfoScreen extends StatelessWidget {
               onChanged: (value) {
                 //storing user input in email controller
               },
-              style: AppTextStyle.normalBlackText,
+              style: AppTextStyle.normalBlackText.copyWith(
+                color: Theme.of(context).textTheme.bodyText1?.color
+              ),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(
                     12 * SizeConfig.widthMultiplier!,
@@ -64,12 +68,12 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                  borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                  borderSide: BorderSide(color: greyBorder, width: 1.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                  borderSide: BorderSide(color: kLightGrey, width: 1.5),
+                  borderSide: BorderSide(color: greyBorder, width: 1.5),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius:
@@ -80,7 +84,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 enabledBorder: OutlineInputBorder(
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                  borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                  borderSide: BorderSide(color: greyBorder, width: 1.0),
                 ),
               ),
             ),
@@ -90,14 +94,16 @@ class EditPersonalInfoScreen extends StatelessWidget {
             //user phone no field
             Text(
               "mobile_no".tr,
-              style: AppTextStyle.normalPureBlackTextWithWeight600,
+              style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color
+              ),
             ),
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field Phone no
             Obx(
               () => CutomizedTextField(
-                wantWhiteBG: true,
-                color: kLightGrey,
+               // wantWhiteBG: true,
+                color: greyBorder,
                 child: TextFieldContainer(
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(10),
@@ -124,7 +130,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                           ),
                           const Text(
                             '|',
-                            style: TextStyle(fontSize: 24, color: kGreyColor),
+                            style: TextStyle(fontSize: 24, color: greyBorder),
                           ),
                         ],
                       ),
@@ -141,7 +147,9 @@ class EditPersonalInfoScreen extends StatelessWidget {
             ),
             Text(
               "date_of_birth".tr,
-              style: AppTextStyle.normalPureBlackTextWithWeight600,
+              style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color
+              ),
             ),
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field for user email
@@ -152,7 +160,9 @@ class EditPersonalInfoScreen extends StatelessWidget {
                   child: TextFormField(
                     controller: _profileController.DOBController,
                     enabled: false,
-                    style: AppTextStyle.normalBlackText,
+                    style: AppTextStyle.normalBlackText.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1?.color
+                    ),
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(
                           12 * SizeConfig.widthMultiplier!,
@@ -167,12 +177,12 @@ class EditPersonalInfoScreen extends StatelessWidget {
                       disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
-                        borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                        borderSide: BorderSide(color: greyBorder, width: 1.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
-                        borderSide: BorderSide(color: kLightGrey, width: 1.5),
+                        borderSide: BorderSide(color: greyBorder, width: 1.5),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
@@ -183,7 +193,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
-                        borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                        borderSide: BorderSide(color: greyBorder, width: 1.0),
                       ),
                     ),
                   ),
@@ -198,7 +208,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                   },
                   child: SvgPicture.asset(
                     ImagePath.calanderIcon,
-                    color: kPureBlack,
+                    color: Theme.of(context).primaryColor,
                     height: 22 * SizeConfig.imageSizeMultiplier!,
                   ),
                 )
@@ -212,7 +222,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 child: ElevatedButton(
                     style: ButtonStyle(
                         elevation: MaterialStateProperty.all(0),
-                        backgroundColor: MaterialStateProperty.all(kGreenColor),
+                        backgroundColor: MaterialStateProperty.all(kgreen4F),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!)))),

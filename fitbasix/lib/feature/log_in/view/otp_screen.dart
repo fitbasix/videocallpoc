@@ -15,13 +15,13 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatelessWidget {
   OtpScreen({Key? key}) : super(key: key);
-  final LoginController _loginController = Get.find();
-
+//  final LoginController _loginController = Get.find();
+ final LoginController _loginController= Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-    //  backgroundColor: kPureBlack,
+     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
           child: Stack(
             children: [
@@ -46,14 +46,14 @@ class OtpScreen extends StatelessWidget {
               Positioned(
                   top: 16.12,
                   left: 18.67,
-                  child: CustomBackButton(color: kPureWhite,)
+                  child: CustomBackButton(color: Theme.of(context).primaryColor)
               ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: kPureBlack,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(16*SizeConfig.widthMultiplier!),
                       topLeft: Radius.circular(16*SizeConfig.widthMultiplier!),
@@ -72,7 +72,7 @@ class OtpScreen extends StatelessWidget {
                       Text(
                         'Hi'.tr,
                         style: AppTextStyle.titleText.copyWith(
-                            color: kPureWhite
+                            color: Theme.of(context).textTheme.bodyText1?.color
                         ),
                       ),
                       SizedBox(
@@ -82,7 +82,7 @@ class OtpScreen extends StatelessWidget {
                         'enter_otp_text'
                             .trParams({'number': _loginController.mobile.value}),
                         style: AppTextStyle.NormalText.copyWith(
-                            color: kPureWhite,
+                            color: Theme.of(context).textTheme.bodyText1?.color,
                           fontSize: (12) * SizeConfig.textMultiplier!,
                         ),
                       ),
@@ -91,7 +91,7 @@ class OtpScreen extends StatelessWidget {
                           Text(
                             'to_modify_number'.tr,
                             style: AppTextStyle.NormalText.copyWith(
-                                color: kPureWhite,
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: (12) * SizeConfig.textMultiplier!,
                             ),
                           ),
@@ -102,7 +102,7 @@ class OtpScreen extends StatelessWidget {
                             child: Text(
                               'click_here'.tr,
                               style: AppTextStyle.NormalText.copyWith(
-                                  color: kPureWhite,
+                                  color: Theme.of(context).textTheme.bodyText1?.color,
                                   fontSize: (12) * SizeConfig.textMultiplier!,
                                   decoration: TextDecoration.underline),
                             ),
@@ -121,7 +121,7 @@ class OtpScreen extends StatelessWidget {
                         enableActiveFill: false,
                         keyboardType: TextInputType.number,
                         textStyle: TextStyle(
-                          color: kPureWhite
+                          color: Theme.of(context).textTheme.bodyText1?.color,
                         ),
                         pinTheme: PinTheme(
                           shape: PinCodeFieldShape.underline,
@@ -143,7 +143,7 @@ class OtpScreen extends StatelessWidget {
                           Text(
                             'resend_otp_text'.tr,
                             style: AppTextStyle.NormalText.copyWith(
-                                color: kPureWhite,
+                                color: Theme.of(context).textTheme.bodyText1?.color,
                                 fontSize: 14 * SizeConfig.textMultiplier!),
                           ),
                           InkWell(
@@ -153,7 +153,7 @@ class OtpScreen extends StatelessWidget {
                             child: Text(
                               'resend'.tr,
                               style: AppTextStyle.NormalText.copyWith(
-                                  color: kPureWhite,
+                                  color: Theme.of(context).textTheme.bodyText1?.color,
                                   decoration: TextDecoration.underline,
                                   fontSize: 14 * SizeConfig.textMultiplier!),
                             ),

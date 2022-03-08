@@ -36,7 +36,7 @@ class HelpAndSupportScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-          backgroundColor: kPureWhite,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBarForAccount(
             title: "help_support".tr,
             onback: () {
@@ -62,7 +62,9 @@ class HelpAndSupportScreen extends StatelessWidget {
                             Text(
                               _helpAndSupportController.helpAndSupportDataModel!
                                   .response!.data!.description!,
-                              style: AppTextStyle.black400Text,
+                              style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color
+                              ),
                             ),
                             SizedBox(
                               height: 16 * SizeConfig.heightMultiplier!,
@@ -81,7 +83,7 @@ class HelpAndSupportScreen extends StatelessWidget {
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               8 * SizeConfig.widthMultiplier!),
-                                          color: kGreenColor),
+                                          color: kgreen49),
                                       child: Center(
                                         child: SvgPicture.asset(
                                           ImagePath.whatsAppIcon,
@@ -108,7 +110,7 @@ class HelpAndSupportScreen extends StatelessWidget {
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               8 * SizeConfig.widthMultiplier!),
-                                          color: kGreenColor),
+                                          color: kgreen49),
                                       child: Center(
                                         child: SvgPicture.asset(
                                           ImagePath.phoneCallIcon,
@@ -129,7 +131,7 @@ class HelpAndSupportScreen extends StatelessWidget {
                       Container(
                         width: double.infinity,
                         height: 16 * SizeConfig.heightMultiplier!,
-                        color: kLightGrey,
+                        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.1),
                       ),
                       SizedBox(
                         height: 24 * SizeConfig.heightMultiplier!,
@@ -140,7 +142,9 @@ class HelpAndSupportScreen extends StatelessWidget {
                               bottom: 16 * SizeConfig.heightMultiplier!),
                           child: Text(
                             "FAQs".tr,
-                            style: AppTextStyle.boldBlackText,
+                            style: AppTextStyle.boldBlackText.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color
+                            ),
                           )),
                       Column(
                           mainAxisSize: MainAxisSize.min,

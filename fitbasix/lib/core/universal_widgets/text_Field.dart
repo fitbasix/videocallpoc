@@ -19,7 +19,7 @@ class CutomizedTextField extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
         border: Border.all(color: color),
-        color: wantWhiteBG != null ? kBlack : lightGrey,
+        color: wantWhiteBG != null ? kBlack : kPureBlack,
         borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
       ),
       child: Center(child: child),

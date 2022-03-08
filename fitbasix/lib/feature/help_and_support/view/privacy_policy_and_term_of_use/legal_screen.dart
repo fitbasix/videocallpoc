@@ -23,7 +23,7 @@ class LegalScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBarForAccount(
           title: "legal".tr,
           onback: () {
@@ -51,6 +51,7 @@ class LegalScreen extends StatelessWidget {
                       ImagePath.privacyPolicyIcon,
                       width: 16 * SizeConfig.widthMultiplier!,
                       height: 20 * SizeConfig.heightMultiplier!,
+                      color: Theme.of(context).primaryColor,
                       fit: BoxFit.contain,
                     )),
                     SizedBox(
@@ -58,7 +59,9 @@ class LegalScreen extends StatelessWidget {
                     ),
                     Text(
                       "privacy_policy".tr,
-                      style: AppTextStyle.NormalBlackTitleText,
+                      style: AppTextStyle.NormalBlackTitleText.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1?.color
+                      ),
                     ),
                   ],
                 ),
@@ -81,6 +84,7 @@ class LegalScreen extends StatelessWidget {
                       ImagePath.termOfUseIcon,
                       width: 20 * SizeConfig.imageSizeMultiplier!,
                       height: 20 * SizeConfig.imageSizeMultiplier!,
+                          color: Theme.of(context).primaryColor,
                       fit: BoxFit.contain,
                     )),
                     SizedBox(
@@ -88,7 +92,9 @@ class LegalScreen extends StatelessWidget {
                     ),
                     Text(
                       "term_of_use".tr,
-                      style: AppTextStyle.NormalBlackTitleText,
+                      style: AppTextStyle.NormalBlackTitleText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color
+                      ),
                     ),
                   ],
                 ),
