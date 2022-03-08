@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                                                         .response!
                                                         .data!
                                                         .profile!
-                                                        .name!
+                                                        .name.toString()
                                                   }),
                                                   style: AppTextStyle
                                                       .boldBlackText.copyWith(

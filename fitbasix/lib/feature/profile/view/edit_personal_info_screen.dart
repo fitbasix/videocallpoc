@@ -11,6 +11,7 @@ import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import '../../../core/routes/app_routes.dart';
 import '../../../core/universal_widgets/text_Field.dart';
 import '../../Home/controller/Home_Controller.dart';
 import '../../log_in/view/widgets/country_dropdown.dart';
@@ -19,7 +20,6 @@ class EditPersonalInfoScreen extends StatelessWidget {
   final ProfileController _profileController = Get.put(ProfileController());
   final HomeController homeController = Get.find();
   EditPersonalInfoScreen({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -243,11 +243,15 @@ class EditPersonalInfoScreen extends StatelessWidget {
                       print(updatedPhnNumber);
                       print(updatedCountryCode);
                       print(updatedDob);
-                      ProfileServices.editProfile(
-                          email: updatedEmailId,
-                          countryCode: updatedCountryCode,
-                          phone: updatedPhnNumber,
-                          dob: updatedDob == "" ? null : updatedDob);
+                      if (updatedPhnNumber == null) {
+                        // ProfileServices.editProfile(
+                        //     email: updatedEmailId,
+                        //     countryCode: updatedCountryCode,
+                        //     phone: updatedPhnNumber,
+                        //     dob: updatedDob == "" ? null : updatedDob);
+                      } else {
+                        Navigator.pushNamed(context, RouteName.otpReScreen);
+                      }
 
                       // _profileController.emailController.text.length != 0 &&
                       //         _profileController

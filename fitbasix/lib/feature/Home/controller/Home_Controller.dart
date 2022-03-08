@@ -16,6 +16,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/routes/app_routes.dart';
+
 class HomeController extends GetxController {
   RxInt selectedIndex = 0.obs;
   RxInt userQuickBloxId = 0.obs;
@@ -132,7 +134,8 @@ class HomeController extends GetxController {
 
   WaterReminder getWaterReminder(int Time) {
     try {
-      waterReminder.value = waterSource.value.response!.data!.singleWhere((element) => element.serialId == Time);
+      waterReminder.value = waterSource.value.response!.data!
+          .singleWhere((element) => element.serialId == Time);
       return waterReminder.value;
     } catch (e) {
       return waterReminder.value;
@@ -190,6 +193,13 @@ class HomeController extends GetxController {
   Future<void> setup() async {
     isLoading.value = true;
     userProfileData.value = await CreatePostService.getUserProfile();
+
+    ///todo after
+    // if (userProfileData.value.response!.data!.profile!.name == null) {
+    //   print("jdfjdsjkg");
+    //   Get.deleteAll();
+    //   Get.toNamed(RouteName.enterDetails);
+    // }
     print(userProfileData.value.response!.data!.profile!.nutrition.toString());
     if (userProfileData
             .value.response!.data!.profile!.nutrition!.totalRequiredCalories !=

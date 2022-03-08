@@ -44,6 +44,7 @@ import '../../feature/plans/view/plan_info.dart';
 import '../../feature/plans/view/trainers_plan.dart';
 import '../../feature/plans/view/plan_timing.dart';
 
+import '../../feature/profile/view/number_Change_otp_verify.dart';
 import '../../feature/spg/view/set_dob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,8 @@ abstract class RouteName {
   static const privacyAndPolicy = "/privacy_policy_screen";
   static const termOfUse = "/term_of_use_screen";
   static const liveStream = "/live_stream_screen";
-  static const scheduledLiveStreamInformation = "/scheduled_live_information_screen";
+  static const scheduledLiveStreamInformation =
+      "/scheduled_live_information_screen";
   static const trainerchatscreen = "/chat_ui";
   static const userprofileinfo = "/user_profile_info";
   static const edituserProfileScreen = "/edit_userprofile_info";
@@ -95,6 +97,7 @@ abstract class RouteName {
   static const trainerplanScreen = "/trainers_plan.dart";
   static const planInformationScreen = "/plan_info.dart";
   static const planTimingScreen = "/plan_timing.dart";
+  static const otpReScreen = "/otp_screen";
   RouteName._();
 }
 
@@ -110,39 +113,59 @@ class GenerateRoute {
             LoginScreen(),
       );
     }
+    if (route == RouteName.otpReScreen) {
+      return MaterialPageRoute(
+        builder: (
+          BuildContext context,
+        ) =>
+            NumberChangeOtpVerify(),
+      );
+    }
     if (route == RouteName.legal) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             LegalScreen(),
       );
     }
     if (route == RouteName.scheduledLiveStreamInformation) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             ScheduledLiveInformationScreen(),
       );
     }
     if (route == RouteName.liveStream) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             LiveStreamScreen(),
       );
     }
     if (route == RouteName.termOfUse) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             TermOfUseScreen(),
       );
     }
     if (route == RouteName.privacyAndPolicy) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             PrivacyPolicyScreen(),
       );
     }
     if (route == RouteName.helpAndSupport) {
       return MaterialPageRoute(
-        builder: (BuildContext context,) =>
+        builder: (
+          BuildContext context,
+        ) =>
             HelpAndSupportScreen(),
       );
     }
@@ -280,21 +303,18 @@ class GenerateRoute {
     if (route == RouteName.postScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) => PostScreen(),
-
       );
     }
 
     if (route == RouteName.userSetting) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            SettingScreen(),
+        builder: (BuildContext context) => SettingScreen(),
       );
     }
 
     if (route == RouteName.myTrainer) {
       return MaterialPageRoute(
-        builder: (BuildContext context) =>
-            MyTrainerTileScreen(),
+        builder: (BuildContext context) => MyTrainerTileScreen(),
       );
     }
     if (route == RouteName.getTrainedScreen) {
@@ -314,8 +334,8 @@ class GenerateRoute {
     }
     if (route == RouteName.videocallScreen) {
       return MaterialPageRoute(
-        builder: (BuildContext context) => VideoCallScreen());
-        }
+          builder: (BuildContext context) => VideoCallScreen());
+    }
     if (route == RouteName.userprofileinfo) {
       return MaterialPageRoute(
         builder: (BuildContext context) => UserProfileScreen(),
@@ -349,15 +369,13 @@ class GenerateRoute {
     if (route == RouteName.planTimingScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) => PlanTimingUI(),
-
       );
     }
     if (route == RouteName.editPersonalInfo) {
       return MaterialPageRoute(
         builder: (BuildContext context) => EditPersonalInfoScreen(),
       );
-    }
-    else {
+    } else {
       return PageRouteBuilder(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secondaryAnimation) =>
