@@ -4,11 +4,11 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
+import 'package:crypt/crypt.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
-import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/message/model/reciever_message_model.dart';
 import 'package:fitbasix/feature/message/view/chat_videocallscreen.dart';
@@ -56,6 +56,7 @@ import 'package:quickblox_sdk/webrtc/constants.dart';
 
 import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
+import '../../posts/services/createPost_Services.dart';
 import '../controller/chat_controller.dart';
 
 void main() async {
@@ -108,22 +109,22 @@ class _ChatScreenState extends State<ChatScreen> {
       _massageStreamSubscription!.cancel();
       _massageStreamSubscription = null;
     }
+    unSubscribeInitStreamManagement();
     super.dispose();
   }
 
   @override
   void initState() {
     userDialogForChat = widget.userDialogForChat;
+    initStreamManagement();
     initMassage();
     connectionEvent();
     getMassageFromHistory();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: kPureBlack,
       appBar: AppbarforChat(
@@ -146,6 +147,8 @@ class _ChatScreenState extends State<ChatScreen> {
             //           messages: messages,
             //           opponentName: widget.trainerTitle,
             //         )));
+            //QB.chat.disconnect();
+            // print("chat disconnected");
           }
         },
         parentContext: context,
@@ -177,7 +180,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     )
                   : Expanded(
                       child: Center(
-                      child: Text("no massage yet"),
+                      child: Text("no message yet"),
                     )),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -279,6 +282,22 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  void initStreamManagement() async {
+    try {
+      await QB.settings.initStreamManagement(3, autoReconnect: true);
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
+
+  void unSubscribeInitStreamManagement() async {
+    try {
+      await QB.settings.initStreamManagement(0, autoReconnect: false);
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
+  }
+
   void sendNotification(String messageBody) async {
     try {
       FirebaseMessaging.instance.getToken().then((token) async {
@@ -349,8 +368,8 @@ class _ChatScreenState extends State<ChatScreen> {
         List<Attachment>? attachmentsFromJson;
         print(payload.toString());
         if (payload["attachments"] != null) {
-          attachmentsFromJson =
-              (json.decode(json.encode(payload["attachments"])) as List).map((data) => Attachment.fromJson(data)).toList();
+          attachmentsFromJson = (json.decode(json.encode(payload["attachments"])) as List)
+                  .map((data) => Attachment.fromJson(data)).toList();
         }
         String? messageId = payload["id"];
         QBMessage newMessage = QBMessage();
@@ -408,6 +427,29 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void sendMsg(String messageBody) async {
+    var chatStatus = await QB.chat.isConnected();
+    if(chatStatus!){
+      sendMessageAfterVarification(messageBody);
+    }
+    else{
+      print("user chat is disconnected");
+      String logIn = _homeController.userProfileData.value.response!.data!.profile!.id!;
+      final password = Crypt.sha256(logIn, salt: '10');
+      CreatePostService.LogInUserToQuickBlox(logIn, password.hash, _homeController.userQuickBloxId.value).then((value) async {
+        var check =  await QB.chat.isConnected();
+         if(!check!){
+           CreatePostService.connectUserToChat(password.hash, _homeController.userQuickBloxId.value);
+           sendMsg(messageBody);
+         }
+         else{
+           sendMsg(messageBody);
+         }
+        return value;
+      });
+    }
+  }
+
+  void sendMessageAfterVarification(String messageBody) async {
     print("nnnnnn created dialog id" + widget.userDialogForChat!.id.toString());
     String dialogId = widget.userDialogForChat!.id!;
     print("massage dialog id is: " + widget.userDialogForChat!.id!);
@@ -415,7 +457,7 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       await QB.chat
           .sendMessage(dialogId,
-              body: messageBody, saveToHistory: saveToHistory)
+          body: messageBody, saveToHistory: saveToHistory)
           .then((value) {
         print("msg send");
       });
@@ -972,13 +1014,13 @@ class MessageBubbleOpponent extends StatelessWidget {
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        PermissionStatus status = await Permission.storage.request();
+        PermissionStatus status  = await Permission.storage.request();
+        PermissionStatus status1 = await Permission.manageExternalStorage.request();
         if (status == PermissionStatus.granted) {
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
-          final Directory _appDocDirFolder =
-              Directory('storage/emulated/0/fitBasix/media');
+          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
@@ -1083,7 +1125,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       title: Row(
         children: [
@@ -1099,6 +1141,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
                 width: 7.41 * SizeConfig.widthMultiplier!,
                 height: 12 * SizeConfig.heightMultiplier!,
                 fit: BoxFit.contain,
+                color: Theme.of(context).primaryColor,
               )),
           SizedBox(
             width: 16.59 * SizeConfig.widthMultiplier!,
@@ -1116,7 +1159,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(trainertitle ?? "", style: AppTextStyle.hnormal600BlackText),
+              Text(trainertitle ?? "", style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color)),
               Text(trainerstatus ?? "", style: AppTextStyle.hsmallGreenText),
             ],
           ),
@@ -1136,7 +1179,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
             inactiveToggleColor: Color(0xffB7B7B7),
             // toggleSize: 28,
             activeColor: Color(0xff49AE50),
-            inactiveColor: Colors.white,
+            inactiveColor: Colors.transparent,
             activeIcon: Icon(
               Icons.videocam,
               color: Color(0xff49AE50),
@@ -1163,6 +1206,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
               ImagePath.chatpopupmenuIcon,
               width: 4 * SizeConfig.widthMultiplier!,
               height: 20 * SizeConfig.heightMultiplier!,
+              color: Theme.of(context).primaryColor,
             )),
       ],
     );
