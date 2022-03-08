@@ -62,7 +62,8 @@ class ProfileResponseData {
 
   final Profile? profile;
 
-  factory ProfileResponseData.fromJson(Map<String, dynamic> json) => ProfileResponseData(
+  factory ProfileResponseData.fromJson(Map<String, dynamic> json) =>
+      ProfileResponseData(
         profile: Profile.fromJson(json["profile"]),
       );
 
@@ -72,20 +73,24 @@ class ProfileResponseData {
 }
 
 class Profile {
-  Profile({
-    this.id,
-    this.name,
-    this.profilePhoto,
-    this.coverPhoto,
-    this.email,
-    this.dob,
-    this.countryCode,
-    this.mobileNumber,
-    this.nutrition,
-    this.following,
-    this.followers,
-    this.quickBloxId
-  });
+  Profile(
+      {this.id,
+      this.name,
+      this.profilePhoto,
+      this.coverPhoto,
+      this.email,
+      this.dob,
+      this.bio,
+      this.countryCode,
+      this.mobileNumber,
+      this.height,
+      this.weight,
+      this.gender,
+      this.nutrition,
+      this.following,
+      this.selectedInterest,
+      this.followers,
+      this.quickBloxId});
 
   final String? id;
   final String? name;
@@ -94,28 +99,37 @@ class Profile {
   final String? mobileNumber;
   final String? email;
   final DateTime? dob;
+  final int? gender;
+  final String? bio;
+  final double? height;
+  final double? weight;
   final String? countryCode;
+  final List<int>? selectedInterest;
   final Nutrition? nutrition;
   final int? following;
   final int? followers;
   final int? quickBloxId;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json["_id"],
-        name: json["name"],
-        profilePhoto: json["profilePhoto"],
-        coverPhoto: json["coverPhoto"],
-        mobileNumber: json["phone"],
-        email: json["email"],
-        countryCode: json["countryCode"],
-        dob: DateTime.parse(json["DOB"]),
-        nutrition: json["nutrition"] == null
-            ? Nutrition()
-            : Nutrition.fromJson(json["nutrition"]),
-        following: json["following"],
-        followers: json["followers"],
-        quickBloxId: json["quickBlox"]
-      );
+      id: json["_id"],
+      name: json["name"],
+      profilePhoto: json["profilePhoto"],
+      coverPhoto: json["coverPhoto"],
+      mobileNumber: json["phone"],
+      email: json["email"],
+      countryCode: json["countryCode"],
+      bio: json["bio"],
+      gender: json["gender"],
+      height: json["height"] == null ? null : json["height"].toDouble(),
+      weight: json["weight"] == null ? null : json["weight"].toDouble(),
+      dob: json["DOB"] == null ? null : DateTime.parse(json["DOB"]),
+      nutrition: json["nutrition"] == null
+          ? Nutrition()
+          : Nutrition.fromJson(json["nutrition"]),
+      following: json["following"],
+      selectedInterest: json["interests"] == null ? [] : json["interests"],
+      followers: json["followers"],
+      quickBloxId: json["quickBlox"]);
 
   Map<String, dynamic> toJson() => {
         "_id": id,

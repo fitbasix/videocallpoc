@@ -30,25 +30,26 @@ class SetDob extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-              children: [
-                Container(
-                  color: Theme.of(context).primaryColor,
-                  height: 2 * SizeConfig.heightMultiplier!,
-                  width: Get.width,
-                ),
-          Container(
-            color: kGreenColor,
-            height: 2 * SizeConfig.heightMultiplier!,
-            width: Get.width * 0.375,
-          ),]),
+          Stack(children: [
+            Container(
+              color: Theme.of(context).primaryColor,
+              height: 2 * SizeConfig.heightMultiplier!,
+              width: Get.width,
+            ),
+            Container(
+              color: kGreenColor,
+              height: 2 * SizeConfig.heightMultiplier!,
+              width: Get.width * 0.375,
+            ),
+          ]),
           SizedBox(
             height: 40 * SizeConfig.heightMultiplier!,
           ),
           Center(
             child: Text(
               'ask_dob'.tr,
-              style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
+              style: AppTextStyle.boldBlackText.copyWith(
+                  color: Theme.of(context).textTheme.bodyText1!.color),
               textAlign: TextAlign.center,
             ),
           ),
@@ -82,7 +83,7 @@ Widget datePicker(BuildContext context) => Container(
       child: DatePickerWidget(
         looping: true,
         initialDate: DateTime.parse(_spgController.selectedDate.value),
-        firstDate: DateTime(1994), //DateTime(1960),
+        firstDate: DateTime(1900), //DateTime(1960),
         lastDate: DateTime.now(),
         dateFormat: "dd-MMMM-yyyy",
         //   "dd-MMMM-yyyy",
@@ -98,7 +99,8 @@ Widget datePicker(BuildContext context) => Container(
           itemHeight: 75,
           pickerHeight: 270 * SizeConfig.heightMultiplier!,
           itemTextStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color, fontSize: 28 * SizeConfig.heightMultiplier!),
+              color: Theme.of(context).textTheme.bodyText1!.color,
+              fontSize: 28 * SizeConfig.heightMultiplier!),
           dividerColor: Colors.transparent,
         ),
       ),

@@ -82,6 +82,28 @@ class ProfileServices {
     log(response.toString());
   }
 
+  static Future<void> UpdateProfileData(
+      {String? name,
+      String? bio,
+      int? height,
+      int? weight,
+      int? gender,
+      List<int>? interests,
+      String? profilePhoto}) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    final response = await dio!.put(ApiUrl.editProfile, data: {
+      "name": name,
+      "bio": bio,
+      "height": height,
+      "weight": weight,
+      "gender": gender,
+      "interests": interests,
+      "profilePhoto": profilePhoto
+    });
+    print(response.toString());
+  }
+
   static Future<PostsModel> getUserPosts({int? skip}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();

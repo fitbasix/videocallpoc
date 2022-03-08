@@ -27,8 +27,6 @@ class LogInService {
     return response.data['response']['message'];
   }
 
-
-
   static Future<Countries> getCountries() async {
     dio!.options.headers["language"] = "1";
     var response = await dio!.get(ApiUrl.getCountries);
@@ -113,6 +111,7 @@ class LogInService {
       if (responseData['code'] == 0) {
         loginController.token.value = responseData['response']['user']['token'];
         final SharedPreferences prefs = await SharedPreferences.getInstance();
+
         prefs.setString(
             'AccessToken', responseData['response']['user']['token']);
         prefs.setString(
@@ -131,6 +130,8 @@ class LogInService {
   }
 
   static Future<int?> registerUser(String name, String email) async {
+    loginController.token.value = await getAccessToken();
+    print("token   " + loginController.token.value);
     if (loginController.token.value == '') {
       var putResponse = await http.put(
         Uri.parse(ApiUrl.registerUser),
@@ -179,6 +180,5 @@ class LogInService {
     print(RefreshToken);
     // var response =
     //     await dio!.post(ApiUrl.logOut, data: {"refreshToken": RefreshToken});
-
   }
 }

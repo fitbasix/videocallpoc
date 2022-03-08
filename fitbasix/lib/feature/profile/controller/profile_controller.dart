@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../Home/model/post_feed_model.dart';
+import '../../get_trained/model/interest_model.dart';
+import '../../get_trained/services/trainer_services.dart';
 import '../../log_in/controller/login_controller.dart';
 
 class ProfileController extends GetxController {
@@ -12,7 +14,9 @@ class ProfileController extends GetxController {
   LoginController? loginController;
   final HomeController homeController = Get.find();
   TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController DOBController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
   RxString selectedDate = DateTime.now().toString().obs;
 // height controller for dialog box
   RxString heightType = "inch".obs;
@@ -25,7 +29,12 @@ class ProfileController extends GetxController {
   RxList<Post> userPostList = RxList<Post>([]);
   Rx<PostsModel> initialPostData = Rx(PostsModel());
   RxInt currentPage = RxInt(1);
+  RxInt gender = RxInt(0);
+  RxBool isLoading = false.obs;
   RxBool showLoading = RxBool(false);
+  Rx<InterestModel> interests = InterestModel().obs;
+  RxList<int> interestList = <int>[].obs;
+  RxString profilePhoto = "".obs;
   void editUserPersonalInfo() {
     //todo import API for user data updating
     //user email
@@ -42,9 +51,39 @@ class ProfileController extends GetxController {
     loginController!.mobileController.text = homeController
         .userProfileData.value.response!.data!.profile!.mobileNumber
         .toString();
+    interestList.value = homeController
+        .userProfileData.value.response!.data!.profile!.selectedInterest!;
     loginController!.mobile.value = homeController
         .userProfileData.value.response!.data!.profile!.mobileNumber
         .toString();
+    nameController.text = homeController
+        .userProfileData.value.response!.data!.profile!.name
+        .toString();
+    bioController.text =
+        homeController.userProfileData.value.response!.data!.profile!.bio ==
+                null
+            ? ""
+            : homeController.userProfileData.value.response!.data!.profile!.bio
+                .toString();
+    currentWeight.value = homeController
+                .userProfileData.value.response!.data!.profile!.weight ==
+            null
+        ? 65
+        : homeController.userProfileData.value.response!.data!.profile!.weight!
+            .toInt();
+    currentHeight.value = homeController
+                .userProfileData.value.response!.data!.profile!.height ==
+            null
+        ? 120
+        : homeController.userProfileData.value.response!.data!.profile!.height!
+            .toInt();
+    profilePhoto.value = homeController
+        .userProfileData.value.response!.data!.profile!.profilePhoto!;
+    gender.value = homeController
+                .userProfileData.value.response!.data!.profile!.gender ==
+            null
+        ? 0
+        : homeController.userProfileData.value.response!.data!.profile!.gender!;
     print(loginController!.mobile.value);
     emailController.text = homeController
         .userProfileData.value.response!.data!.profile!.email
@@ -71,8 +110,11 @@ class ProfileController extends GetxController {
 
   @override
   Future<void> onInit() async {
+    isLoading.value = true;
     loginController = Get.put(LoginController());
     setEditProfileData();
+    interests.value = await TrainerServices.getAllInterest();
+    isLoading.value = false;
     super.onInit();
   }
 }

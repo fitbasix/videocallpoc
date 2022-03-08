@@ -40,12 +40,8 @@ class SelectLocationScreen extends StatelessWidget {
           transform: Matrix4.translationValues(-20, 0, 0),
           child: Text(
             'select_location'.tr,
-            style: AppTextStyle.titleText
-                .copyWith(
-                color: Theme.of(context)
-                    .appBarTheme
-                    .titleTextStyle
-                    ?.color,
+            style: AppTextStyle.titleText.copyWith(
+                color: Theme.of(context).appBarTheme.titleTextStyle?.color,
                 fontSize: 16 * SizeConfig.textMultiplier!),
           ),
         ),
@@ -94,8 +90,8 @@ class SelectLocationScreen extends StatelessWidget {
                       child: TextField(
                         controller: _postController.locationSearchController,
                         style: AppTextStyle.normalGreenText.copyWith(
-                          color: Theme.of(context).textTheme.bodyText1?.color
-                        ),
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                         onChanged: (value) async {
                           if (value.length > 0) {
                             _postController.searchLoading.value = true;
@@ -157,7 +153,10 @@ class SelectLocationScreen extends StatelessWidget {
                                 Text(
                                   _postController.selectedLocation.value,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                    color: Theme.of(context).textTheme.bodyText1?.color,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
                                       fontSize:
                                           14 * SizeConfig.textMultiplier!),
                                 ),
@@ -171,7 +170,10 @@ class SelectLocationScreen extends StatelessWidget {
                                       _postController.selectedLocationData.value
                                           .placeId = '';
                                     },
-                                    icon: Icon(Icons.clear,color: Theme.of(context).primaryColor,))
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: Theme.of(context).primaryColor,
+                                    ))
                               ],
                             ),
                           )),
@@ -207,7 +209,8 @@ class SelectLocationScreen extends StatelessWidget {
                                             .value
                                             .predictions![index]
                                             .structuredFormatting!
-                                            .secondaryText!,
+                                            .secondaryText
+                                            .toString(),
                                         onTap: () {
                                           print(_postController
                                               .searchSuggestion
@@ -221,7 +224,8 @@ class SelectLocationScreen extends StatelessWidget {
                                                   .value
                                                   .predictions![index]
                                                   .structuredFormatting!
-                                                  .mainText!;
+                                                  .mainText
+                                                  .toString();
 
                                           _postController.selectedLocationData
                                                   .value.placeId =
@@ -279,27 +283,31 @@ class LocationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: 4 * SizeConfig.widthMultiplier!,
-            bottom: 32 * SizeConfig.heightMultiplier!),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              mainText,
-              style: AppTextStyle.boldBlackText
-                  .copyWith(
+      child: Container(
+        color: Colors.transparent,
+        width: Get.width,
+        child: Padding(
+          padding: EdgeInsets.only(
+              left: 4 * SizeConfig.widthMultiplier!,
+              bottom: 32 * SizeConfig.heightMultiplier!),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                mainText,
+                style: AppTextStyle.boldBlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    fontSize: 14 * SizeConfig.textMultiplier!),
+              ),
+              Text(
+                secondaryText,
+                style: AppTextStyle.NormalText.copyWith(
                   color: Theme.of(context).textTheme.bodyText1?.color,
-                  fontSize: 14 * SizeConfig.textMultiplier!),
-            ),
-            Text(
-              secondaryText,
-              style: AppTextStyle.NormalText.copyWith(
-                  color: Theme.of(context).textTheme.bodyText1?.color,
-                  fontSize: 12 * SizeConfig.textMultiplier!, ),
-            ),
-          ],
+                  fontSize: 12 * SizeConfig.textMultiplier!,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
