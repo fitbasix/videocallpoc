@@ -27,19 +27,26 @@ class ProfileServices {
       // await LogInService.getOTP(phone, "000000");
     }
     Map editEmail = {"email": email};
-    Map editPhone = {"countryCode": countryCode, "phone": phone};
+    Map editPhone = {"countryCode": countryCode, "phone": phone, "otp": otp};
     Map editDob = {"DOB": dob};
     Map editEmailPhone = {
       "email": email,
       "countryCode": countryCode,
+      "otp": otp,
       "phone": phone
     };
     Map editEmailDob = {"email": email, "DOB": dob};
-    Map editPhoneDob = {"countryCode": countryCode, "phone": phone};
+    Map editPhoneDob = {
+      "countryCode": countryCode,
+      "phone": phone,
+      "otp": otp,
+      "DOB": dob
+    };
     Map editAll = {
       "email": email,
       "countryCode": countryCode,
       "phone": phone,
+      "otp": otp,
       "DOB": dob
     };
     print("otp done");

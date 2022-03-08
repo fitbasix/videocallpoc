@@ -19,7 +19,7 @@ const offWhite = Color.fromARGB(255, 246, 246, 246);
 const oceanBlue = Color.fromARGB(255, 239, 252, 242);
 const lightOrange = Color.fromARGB(255, 255, 239, 215);
 const kOrange = Color.fromARGB(255, 255, 181, 72);
-
+const kDarkGreyish = Color.fromARGB(255, 52, 52, 52);
 const kBlack = Color(0xFF222222);
 const hintGrey = Color(0xFF747474);
 const kRed = Color(0xFFDC675F);
