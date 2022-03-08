@@ -59,7 +59,7 @@ class AnimatedLiquidCustomProgressIndicatorState
             height: 27 * SizeConfig.heightMultiplier!,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: lightGrey,
+              color: darkGreyColor,
             ),
             child: Padding(
               padding:
@@ -67,7 +67,7 @@ class AnimatedLiquidCustomProgressIndicatorState
               child: Icon(
                 Icons.minimize_sharp,
                 size: 18 * SizeConfig.heightMultiplier!,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ),
@@ -89,13 +89,13 @@ class AnimatedLiquidCustomProgressIndicatorState
                                   .toString() +
                               " " +
                               'ltr'.tr,
-                          style: AppTextStyle.NormalText.copyWith(
+                          style: AppTextStyle.normalWhiteText.copyWith(
                               fontSize: 12 * SizeConfig.textMultiplier!),
                         ),
                         Text("0 " + 'ltr'.tr,
                             style: AppTextStyle.NormalText.copyWith(
                                 fontSize: 12 * SizeConfig.textMultiplier!,
-                                color: grey183))
+                                color: kPureWhite))
                       ],
                     ),
                   ),
@@ -107,11 +107,11 @@ class AnimatedLiquidCustomProgressIndicatorState
                       child: LiquidLinearProgressIndicator(
                         value:
                             homeController.waterLevel.value, // Defaults to 0.5.
-                        valueColor: const AlwaysStoppedAnimation(Colors
-                            .lightBlue), // Defaults to the current Theme's accentColor.
-                        backgroundColor: Colors.grey
-                            .shade200, // Defaults to the current Theme's backgroundColor.
-                        borderColor: Colors.blueAccent.shade100,
+                        valueColor: const AlwaysStoppedAnimation(Color(
+                            0xFF47BCFE)), // Defaults to the current Theme's accentColor.
+                        backgroundColor: Colors
+                            .white, // Defaults to the current Theme's backgroundColor.
+                        borderColor: Colors.lightBlue.shade100,
                         borderWidth: 0,
                         borderRadius: 30.0,
                         direction: Axis
@@ -144,12 +144,12 @@ class AnimatedLiquidCustomProgressIndicatorState
             height: 27 * SizeConfig.heightMultiplier!,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: kPureBlack,
+              color: kPureWhite,
             ),
             child: Icon(
               Icons.add,
               size: 20 * SizeConfig.heightMultiplier!,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
         ),
