@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:photo_manager/photo_manager.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../Home/model/post_feed_model.dart';
 import '../../get_trained/model/interest_model.dart';
@@ -18,6 +23,8 @@ class ProfileController extends GetxController {
   TextEditingController DOBController = TextEditingController();
   TextEditingController bioController = TextEditingController();
   RxString selectedDate = DateTime.now().toString().obs;
+  RxString otp = "".obs;
+  RxInt lastPage = RxInt(0);
 // height controller for dialog box
   RxString heightType = "inch".obs;
   RxInt currentHeight = 170.obs;
@@ -28,13 +35,17 @@ class ProfileController extends GetxController {
   final rulerPickerController = RulerPickerController(value: 2);
   RxList<Post> userPostList = RxList<Post>([]);
   Rx<PostsModel> initialPostData = Rx(PostsModel());
-  RxInt currentPage = RxInt(1);
+  RxInt currentPage = RxInt(0);
   RxInt gender = RxInt(0);
   RxBool isLoading = false.obs;
+  File? imageFile;
   RxBool showLoading = RxBool(false);
   Rx<InterestModel> interests = InterestModel().obs;
   RxList<int> interestList = <int>[].obs;
   RxString profilePhoto = "".obs;
+  RxList<AssetEntity> assets = RxList();
+  RxList<AssetEntity> selectedMediaAsset = RxList<AssetEntity>([]);
+  RxList<AssetPathEntity> foldersAvailable = RxList<AssetPathEntity>([]);
   void editUserPersonalInfo() {
     //todo import API for user data updating
     //user email
@@ -45,6 +56,55 @@ class ProfileController extends GetxController {
     loginController?.mobile.value;
     //country code
     loginController?.selectedCountry.value;
+  }
+
+  Future<File> genThumbnailFile(String path) async {
+    final fileName = await VideoThumbnail.thumbnailFile(
+      video: path,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.JPEG,
+      maxHeight:
+          100, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+      quality: 100,
+    );
+    File file = File(fileName!);
+    return file;
+  }
+
+  // Future<File> getFile(AssetEntity assetEntities) async {
+  //   selectedMediaFiles.value = [];
+  //   for (int i = 0; i < assetEntities.length; i++) {
+  //     File? fileName = await assetEntities.file;
+  //     selectedMediaFiles.add(fileName!);
+  //   }
+  //   return selectedMediaFiles;
+  // }
+
+  Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
+    lastPage.value = currentPage.value;
+    foldersAvailable.value = await PhotoManager.getAssetPathList(
+        onlyAll: true, type: RequestType.image);
+    print("kkk" + foldersAvailable.toString());
+//     try{
+// selectedFolder.value = foldersAvailable.indexOf(
+//         foldersAvailable.singleWhere(
+//             (element) => element.name.toLowerCase().contains("recent")));
+//     }
+//     catch(e){
+//       selectedFolder.value = foldersAvailable.indexOf(
+//         foldersAvailable.singleWhere(
+//             (element) => element.name.toLowerCase().contains("all photos")));
+//     }
+    var assetList = <AssetEntity>[];
+
+    assetList = await foldersAvailable[0].getAssetListPaged(
+      currentPage.value,
+      100,
+    );
+    print("AssetList " + assetList.toString());
+    currentPage++;
+    print("AssetList " + assetList.toString());
+    return assetList;
   }
 
   void setEditProfileData() async {
@@ -94,6 +154,7 @@ class ProfileController extends GetxController {
         ? DateTime.now().toString()
         : DateFormat("dd/LL/yyyy").format(
             homeController.userProfileData.value.response!.data!.profile!.dob!);
+    print(selectedDate.value + " kkk");
     DOBController.text = homeController
                 .userProfileData.value.response!.data!.profile!.dob ==
             null
@@ -106,11 +167,14 @@ class ProfileController extends GetxController {
             element.code ==
             homeController
                 .userProfileData.value.response!.data!.profile!.countryCode);
+    assets.value = await fetchAssets(presentPage: currentPage.value);
   }
 
   @override
   Future<void> onInit() async {
     isLoading.value = true;
+
+    print("asset list " + assets.toString());
     loginController = Get.put(LoginController());
     setEditProfileData();
     interests.value = await TrainerServices.getAllInterest();

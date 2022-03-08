@@ -45,6 +45,7 @@ import '../../feature/plans/view/trainers_plan.dart';
 import '../../feature/plans/view/plan_timing.dart';
 
 import '../../feature/profile/view/number_Change_otp_verify.dart';
+import '../../feature/profile/view/select_profileImage.dart';
 import '../../feature/spg/view/set_dob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -98,13 +99,21 @@ abstract class RouteName {
   static const planInformationScreen = "/plan_info.dart";
   static const planTimingScreen = "/plan_timing.dart";
   static const otpReScreen = "/otp_screen";
+  static const selectProfilePhoto = "/select_profile_photo";
   RouteName._();
 }
 
 class GenerateRoute {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final route = settings.name;
-
+    if (route == RouteName.selectProfilePhoto) {
+      return MaterialPageRoute(
+        builder: (
+          BuildContext context,
+        ) =>
+            SelectProfilePicScreen(),
+      );
+    }
     if (route == RouteName.loginScreen) {
       return MaterialPageRoute(
         builder: (

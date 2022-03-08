@@ -48,22 +48,26 @@ class GetTrainedScreen extends StatelessWidget {
                         title: 'getTrainer'.tr,
                       ),
                       Spacer(),
-                      SeeAllButton(
-                        onTap: () async {
-                          Navigator.pushNamed(
-                              context, RouteName.allTrainerScreen);
+                      Obx(() => _trainerController.getTrainedIsLoading.value
+                          ? Container()
+                          : SeeAllButton(
+                              onTap: () async {
+                                Navigator.pushNamed(
+                                    context, RouteName.allTrainerScreen);
 
-                          _trainerController.isLoading.value = true;
-                          _trainerController.pageTitle.value = 'trainers'.tr;
-                          _trainerController.SelectedInterestIndex.value = 0;
-                          _trainerController.trainerType.value = 0;
-                          _trainerController.searchedName.value = "";
-                          _trainerController.searchController.text = "";
-                          _trainerController.allTrainer.value =
-                              await TrainerServices.getAllTrainer();
-                          _trainerController.isLoading.value = false;
-                        },
-                      )
+                                _trainerController.isLoading.value = true;
+                                _trainerController.pageTitle.value =
+                                    'trainers'.tr;
+                                _trainerController.SelectedInterestIndex.value =
+                                    0;
+                                _trainerController.trainerType.value = 0;
+                                _trainerController.searchedName.value = "";
+                                _trainerController.searchController.text = "";
+                                _trainerController.allTrainer.value =
+                                    await TrainerServices.getAllTrainer();
+                                _trainerController.isLoading.value = false;
+                              },
+                            ))
                     ],
                   ),
                 ),
@@ -276,23 +280,26 @@ class GetTrainedScreen extends StatelessWidget {
                         title: 'getFitnessConsult'.tr,
                       ),
                       Spacer(),
-                      SeeAllButton(
-                        onTap: () async {
-                          Navigator.pushNamed(
-                              context, RouteName.allTrainerScreen);
-                          _trainerController.isLoading.value = true;
-                          _trainerController.pageTitle.value =
-                              'fitnessConsult'.tr;
-                          _trainerController.SelectedInterestIndex.value = 0;
-                          _trainerController.searchedName.value = "";
-                          _trainerController.trainerType.value = 1;
-                          _trainerController.searchController.text = "";
-                          _trainerController.allTrainer.value =
-                              await TrainerServices.getAllTrainer();
+                      Obx(() => _trainerController.getTrainedIsLoading.value
+                          ? Container()
+                          : SeeAllButton(
+                              onTap: () async {
+                                Navigator.pushNamed(
+                                    context, RouteName.allTrainerScreen);
+                                _trainerController.isLoading.value = true;
+                                _trainerController.pageTitle.value =
+                                    'fitnessConsult'.tr;
+                                _trainerController.SelectedInterestIndex.value =
+                                    0;
+                                _trainerController.searchedName.value = "";
+                                _trainerController.trainerType.value = 1;
+                                _trainerController.searchController.text = "";
+                                _trainerController.allTrainer.value =
+                                    await TrainerServices.getAllTrainer();
 
-                          _trainerController.isLoading.value = false;
-                        },
-                      )
+                                _trainerController.isLoading.value = false;
+                              },
+                            ))
                     ],
                   ),
                 ),
@@ -495,22 +502,25 @@ class GetTrainedScreen extends StatelessWidget {
                         title: 'getNutritionConsult'.tr,
                       ),
                       Spacer(),
-                      SeeAllButton(
-                        onTap: () async {
-                          _trainerController.SelectedInterestIndex.value = 0;
-                          _trainerController.searchedName.value = "";
-                          _trainerController.trainerType.value = 2;
-                          _trainerController.searchController.text = "";
-                          Navigator.pushNamed(
-                              context, RouteName.allTrainerScreen);
-                          _trainerController.isLoading.value = true;
-                          _trainerController.pageTitle.value =
-                              'nutritionConsult'.tr;
-                          _trainerController.allTrainer.value =
-                              await TrainerServices.getAllTrainer();
-                          _trainerController.isLoading.value = false;
-                        },
-                      )
+                      Obx(() => _trainerController.getTrainedIsLoading.value
+                          ? Container()
+                          : SeeAllButton(
+                              onTap: () async {
+                                _trainerController.SelectedInterestIndex.value =
+                                    0;
+                                _trainerController.searchedName.value = "";
+                                _trainerController.trainerType.value = 2;
+                                _trainerController.searchController.text = "";
+                                Navigator.pushNamed(
+                                    context, RouteName.allTrainerScreen);
+                                _trainerController.isLoading.value = true;
+                                _trainerController.pageTitle.value =
+                                    'nutritionConsult'.tr;
+                                _trainerController.allTrainer.value =
+                                    await TrainerServices.getAllTrainer();
+                                _trainerController.isLoading.value = false;
+                              },
+                            ))
                     ],
                   ),
                 ),
@@ -715,9 +725,8 @@ class GetTrainedTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: AppTextStyle.titleText
-          .copyWith(
-        color: Theme.of(context).textTheme.bodyText1?.color,
+      style: AppTextStyle.titleText.copyWith(
+          color: Theme.of(context).textTheme.bodyText1?.color,
           fontSize: 16 * SizeConfig.textMultiplier!),
     );
   }
@@ -739,8 +748,7 @@ class SeeAllButton extends StatelessWidget {
           style: AppTextStyle.NormalText.copyWith(
               fontSize: 14 * SizeConfig.textMultiplier!,
               decoration: TextDecoration.underline,
-              color: Theme.of(context).textTheme.headline1?.color
-          ),
+              color: Theme.of(context).textTheme.headline1?.color),
         ));
   }
 }

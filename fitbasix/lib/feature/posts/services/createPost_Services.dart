@@ -108,14 +108,18 @@ class CreatePostService {
     log(response.data.toString());
     UserProfileModel _userProfileModel =
         userProfileModelFromJson(response.toString());
+
     if (_userProfileModel.response!.data!.profile!.quickBloxId != null) {
 
-      String userId = _userProfileModel.response!.data!.profile!.id!;
-      final password = Crypt.sha256(
-          _userProfileModel.response!.data!.profile!.id!,
-          salt: '10');
-      bool loggedIn = await LogInUserToQuickBlox(userId, password.hash,
-          _userProfileModel.response!.data!.profile!.quickBloxId!);
+      try {
+        String userId = _userProfileModel.response!.data!.profile!.id!;
+        final password = Crypt.sha256(
+            _userProfileModel.response!.data!.profile!.id!,
+            salt: '10');
+        bool loggedIn = await LogInUserToQuickBlox(userId, password.hash,
+            _userProfileModel.response!.data!.profile!.quickBloxId!);
+      } catch (e) {}
+
       //await InitializeQuickBlox().initWebRTC();
       // InitializeQuickBlox().subscribeCall();
 
@@ -175,6 +179,7 @@ class CreatePostService {
       print("called cat connected");
       //todo remove the comment for webrtc
       //InitializeQuickBlox().initWebRTC();
+
       //InitializeQuickBlox().subscribeCall();
     }
     var result = await QB.auth.login(logIn, password).then((value) async {
@@ -197,7 +202,8 @@ class CreatePostService {
     var chatConnect = await QB.chat.isConnected();
     if (chatConnect!) {
       //todo remove comment for initWebRTC to enable video call
-      //InitializeQuickBlox().initWebRTC();
+      // InitializeQuickBlox().initWebRTC();
+
       //InitializeQuickBlox().subscribeCall();
     }
     print("called connect user to chat");
@@ -207,7 +213,8 @@ class CreatePostService {
         var chatConnect = await QB.chat.isConnected();
         if (chatConnect!) {
           //todo remove comment for initWebRTC to enable video call
-          //InitializeQuickBlox().initWebRTC();
+          // InitializeQuickBlox().initWebRTC();
+
           //InitializeQuickBlox().subscribeCall();
         }
       });

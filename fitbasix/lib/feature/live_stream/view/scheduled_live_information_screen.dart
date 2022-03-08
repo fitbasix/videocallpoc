@@ -59,11 +59,13 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
           ),
           _getDetailsUI(
               userName: "Steven Wang",
+              context: context,
               liveTitle: "Endurance workout techniques",
               liveTime: DateTime.now(),
               aboutContent:
                   "Hi, This is Steven. I am certified by Institute Viverra cras facilisis massa amet, hendrerit nunc. Tristique tellus, massa scelerisque tincidunt neque dui metus, id pellentesque.\nLet’s start your fitness journey!!!"),
           _getPreviousSessionsUI(
+              context: context,
               userName: "Steven Wang",
               liveTitle: "Endurance workout techniques",
               liveTime: DateTime.now(),
@@ -77,18 +79,20 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
   Widget _getDetailsUI(
       {String? userName,
       String? liveTitle,
+      BuildContext? context,
       DateTime? liveTime,
       String? aboutContent}) {
     return Container(
       padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
-      color: kPureWhite,
+      color: Theme.of(context!).secondaryHeaderColor,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             userName!,
-            style: AppTextStyle.boldBlackText,
+            style: AppTextStyle.boldBlackText
+                .copyWith(color: Theme.of(context).textTheme.bodyText1?.color),
           ),
           SizedBox(
             height: 25 * SizeConfig.heightMultiplier!,
@@ -103,7 +107,10 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
                   children: [
                     Text(
                       "$liveTitle",
-                      style: AppTextStyle.normalPureBlackTextWithWeight600,
+                      style: AppTextStyle.normalPureBlackTextWithWeight600
+                          .copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
                     ),
                     SizedBox(
                       height: 4 * SizeConfig.heightMultiplier!,
@@ -113,7 +120,8 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
                           " | " +
                           DateFormat("E, dd MMM yyyy, hh:mm a")
                               .format(liveTime!),
-                      style: AppTextStyle.lightBlack400Text,
+                      style: AppTextStyle.lightBlack400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1?.color),
                     )
                   ],
                 ),
@@ -140,7 +148,8 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
                     SizedBox(width: 5 * SizeConfig.widthMultiplier!),
                     Text(
                       "live".tr,
-                      style: AppTextStyle.whiteTextWithWeight600,
+                      style: AppTextStyle.whiteTextWithWeight600.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1?.color),
                     ),
                   ],
                 ),
@@ -156,7 +165,8 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
             children: [
               Text(
                 "about".tr,
-                style: AppTextStyle.normalPureBlackTextWithWeight600,
+                style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color),
               ),
               SizedBox(
                 height: 4 * SizeConfig.heightMultiplier!,
@@ -165,7 +175,8 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
                   width: double.infinity,
                   child: Text(
                     aboutContent!,
-                    style: AppTextStyle.lightBlack400Text,
+                    style: AppTextStyle.lightBlack400Text.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color),
                   ))
             ],
           ),
@@ -177,20 +188,22 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
 
   Widget _getPreviousSessionsUI(
       {String? userName,
+      BuildContext? context,
       String? liveTitle,
       DateTime? liveTime,
       String? aboutContent}) {
     return Container(
       margin: EdgeInsets.only(top: 16 * SizeConfig.heightMultiplier!),
       padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
-      color: kPureWhite,
+      color: Theme.of(context!).secondaryHeaderColor,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "previous_sessions".tr,
-            style: AppTextStyle.NormalBlackTitleText,
+            style: AppTextStyle.NormalBlackTitleText.copyWith(
+                color: Theme.of(context).textTheme.bodyText1?.color),
           ),
           SizedBox(
             height: 25 * SizeConfig.heightMultiplier!,
@@ -198,20 +211,35 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
 
           ///add list of lives here
           _getLiveTitleAndTimeUI(
-              liveTitle: liveTitle, liveTime: liveTime, isExpired: false),
+              liveTitle: liveTitle,
+              liveTime: liveTime,
+              isExpired: false,
+              context: context),
           _getLiveTitleAndTimeUI(
-              liveTitle: liveTitle, liveTime: liveTime, isExpired: false),
+              liveTitle: liveTitle,
+              liveTime: liveTime,
+              isExpired: false,
+              context: context),
           _getLiveTitleAndTimeUI(
-              liveTitle: liveTitle, liveTime: liveTime, isExpired: true),
+              liveTitle: liveTitle,
+              liveTime: liveTime,
+              isExpired: true,
+              context: context),
           _getLiveTitleAndTimeUI(
-              liveTitle: liveTitle, liveTime: liveTime, isExpired: true),
+              liveTitle: liveTitle,
+              liveTime: liveTime,
+              isExpired: true,
+              context: context),
         ],
       ),
     );
   }
 
   Widget _getLiveTitleAndTimeUI(
-      {String? liveTitle, DateTime? liveTime, bool? isExpired}) {
+      {String? liveTitle,
+      DateTime? liveTime,
+      bool? isExpired,
+      BuildContext? context}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -225,7 +253,10 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
                 children: [
                   Text(
                     "$liveTitle",
-                    style: AppTextStyle.normalPureBlackTextWithWeight600,
+                    style: AppTextStyle.normalPureBlackTextWithWeight600
+                        .copyWith(
+                            color:
+                                Theme.of(context!).textTheme.bodyText1?.color),
                   ),
                   SizedBox(
                     height: 4 * SizeConfig.heightMultiplier!,
@@ -234,7 +265,8 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
                     "live".tr +
                         " | " +
                         DateFormat("E, dd MMM yyyy, hh:mm a").format(liveTime!),
-                    style: AppTextStyle.lightBlack400Text,
+                    style: AppTextStyle.lightBlack400Text.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color),
                   )
                 ],
               ),
@@ -245,7 +277,7 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
             Container(
                 height: 32 * SizeConfig.heightMultiplier!,
                 decoration: BoxDecoration(
-                    color: lightGrey,
+                    color: Theme.of(context).textTheme.headline4?.color,
                     borderRadius:
                         BorderRadius.circular(8 * SizeConfig.widthMultiplier!)),
                 child: (!isExpired!)
@@ -266,8 +298,13 @@ class ScheduledLiveInformationScreen extends StatelessWidget {
                             SizedBox(width: 5 * SizeConfig.widthMultiplier!),
                             Text(
                               "Watch".tr,
-                              style:
-                                  AppTextStyle.normalPureBlackTextWithWeight600,
+                              style: AppTextStyle
+                                  .normalPureBlackTextWithWeight600
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color),
                             ),
                             SizedBox(width: 8 * SizeConfig.widthMultiplier!),
                           ],
