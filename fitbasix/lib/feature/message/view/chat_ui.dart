@@ -139,7 +139,6 @@ class _ChatScreenState extends State<ChatScreen> {
         },
         onMenuTap: () {
           if(messages!=null){
-            
             // Navigator.push(
             //     context,
             //     MaterialPageRoute(
@@ -149,6 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
             //         )));
             //QB.chat.disconnect();
             // print("chat disconnected");
+
           }
         },
         parentContext: context,
@@ -429,15 +429,17 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendMsg(String messageBody) async {
     var chatStatus = await QB.chat.isConnected();
     if(chatStatus!){
+      print("connected to chat mmmmmm");
       sendMessageAfterVarification(messageBody);
     }
     else{
-      print("user chat is disconnected");
+      print("user chat is disconnected mmmmmm");
       String logIn = _homeController.userProfileData.value.response!.data!.profile!.id!;
       final password = Crypt.sha256(logIn, salt: '10');
       CreatePostService.LogInUserToQuickBlox(logIn, password.hash, _homeController.userQuickBloxId.value).then((value) async {
         var check =  await QB.chat.isConnected();
          if(!check!){
+           print("not connected to chat mmmmmm");
            CreatePostService.connectUserToChat(password.hash, _homeController.userQuickBloxId.value);
            sendMsg(messageBody);
          }
