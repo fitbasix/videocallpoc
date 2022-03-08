@@ -109,6 +109,7 @@ class CreatePostService {
     UserProfileModel _userProfileModel =
         userProfileModelFromJson(response.toString());
     if (_userProfileModel.response!.data!.profile!.quickBloxId != null) {
+
       String userId = _userProfileModel.response!.data!.profile!.id!;
       final password = Crypt.sha256(
           _userProfileModel.response!.data!.profile!.id!,
@@ -129,8 +130,7 @@ class CreatePostService {
             name: userName, loginId: userId, password: password.hash);
 
         int response = await updateUserQuickBloxId(userQuickBloxId!);
-        bool loggedIn =
-            await LogInUserToQuickBlox(userId, password.hash, userQuickBloxId);
+        bool loggedIn = await LogInUserToQuickBlox(userId, password.hash, userQuickBloxId);
 
         //await InitializeQuickBlox().initWebRTC();
         // await InitializeQuickBlox().subscribeCall();
@@ -174,13 +174,12 @@ class CreatePostService {
     if (connected!) {
       print("called cat connected");
       //todo remove the comment for webrtc
-      InitializeQuickBlox().initWebRTC();
+      //InitializeQuickBlox().initWebRTC();
       //InitializeQuickBlox().subscribeCall();
     }
     var result = await QB.auth.login(logIn, password).then((value) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setInt("userQuickBloxId", value.qbUser!.id!);
-
       connectUserToChat(password, userQuickBloxId);
       if (value.qbUser != null) {
         return true;
@@ -198,7 +197,7 @@ class CreatePostService {
     var chatConnect = await QB.chat.isConnected();
     if (chatConnect!) {
       //todo remove comment for initWebRTC to enable video call
-      InitializeQuickBlox().initWebRTC();
+      //InitializeQuickBlox().initWebRTC();
       //InitializeQuickBlox().subscribeCall();
     }
     print("called connect user to chat");
@@ -208,7 +207,7 @@ class CreatePostService {
         var chatConnect = await QB.chat.isConnected();
         if (chatConnect!) {
           //todo remove comment for initWebRTC to enable video call
-          InitializeQuickBlox().initWebRTC();
+          //InitializeQuickBlox().initWebRTC();
           //InitializeQuickBlox().subscribeCall();
         }
       });
