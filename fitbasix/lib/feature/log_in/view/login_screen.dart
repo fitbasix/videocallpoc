@@ -140,6 +140,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: 32 * SizeConfig.heightMultiplier!,
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

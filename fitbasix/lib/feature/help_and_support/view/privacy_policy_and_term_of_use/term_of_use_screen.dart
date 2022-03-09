@@ -22,7 +22,7 @@ class TermOfUseScreen extends StatelessWidget {
       _termOfUseController.getTermOfUseContent();
     }
     return Scaffold(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBarForAccount(
             title: "term_of_use".tr,
             onback: () {
@@ -44,7 +44,9 @@ class TermOfUseScreen extends StatelessWidget {
                         "last_updated".tr +
                             DateFormat(" dd MMM yy").format(_termOfUseController
                                 .termOfUseModel!.response!.data!.updatedAt!),
-                        style: AppTextStyle.grey400Text,
+                        style: AppTextStyle.grey400Text.copyWith(
+                            color: Theme.of(context).textTheme.headline6?.color
+                        ),
                       )),
 
                   SizedBox(

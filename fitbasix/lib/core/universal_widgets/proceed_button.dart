@@ -18,7 +18,7 @@ class ProceedButton extends StatelessWidget {
         height: 45 * SizeConfig.heightMultiplier!,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-          color: kGreenColor,
+          color: kgreen49,
         ),
         child: Center(
           child: Text(

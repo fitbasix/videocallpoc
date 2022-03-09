@@ -31,7 +31,7 @@ class _SettingScreenState extends State<SettingScreen> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBarForAccount(
           title: 'setting'.tr,
           onback: () {
@@ -117,6 +117,7 @@ class _SettingScreenState extends State<SettingScreen> {
             width: 16 * SizeConfig.widthMultiplier!,
             height: 19.5 * SizeConfig.heightMultiplier!,
             fit: BoxFit.contain,
+            color: textcolor!=null?textcolor:Theme.of(context).primaryColor,
           ),
           SizedBox(
             width: 16.59 * SizeConfig.widthMultiplier!,
@@ -128,7 +129,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   style: GoogleFonts.openSans(
                     fontSize: 16 * SizeConfig.textMultiplier!,
                     fontWeight: FontWeight.w600,
-                    color: textcolor != null ? textcolor : kBlack,
+                    color: textcolor != null ? textcolor : Theme.of(context).textTheme.bodyText1?.color,
                   )),
               SizedBox(
                 height: 12 * SizeConfig.heightMultiplier!,
@@ -139,7 +140,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     ? 230 * SizeConfig.widthMultiplier!
                     : 285 * SizeConfig.widthMultiplier!,
                 //  height: 32 * SizeConfig.heightMultiplier!,
-                child: Text(description!, style: AppTextStyle.hmediumBlackText),
+                child: Text(description!, style: AppTextStyle.hmediumBlackText.copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color
+                )),
               )
             ],
           ),

@@ -25,7 +25,7 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBarForAccount(
           title: "Account & Subscription",
           onback: () {
@@ -53,6 +53,7 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                       ImagePath.addPersonIcon,
                       width: 16 * SizeConfig.widthMultiplier!,
                       height: 16 * SizeConfig.heightMultiplier!,
+                      color: Theme.of(context).primaryColor,
                       fit: BoxFit.contain,
                     )),
                     SizedBox(
@@ -60,7 +61,9 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                     ),
                     Text(
                       "Edit_personal_info".tr,
-                      style: AppTextStyle.NormalBlackTitleText,
+                      style: AppTextStyle.NormalBlackTitleText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color
+                      ),
                     ),
                   ],
                 ),
@@ -110,13 +113,16 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                     width: 24 * SizeConfig.imageSizeMultiplier!,
                     height: 24 * SizeConfig.imageSizeMultiplier!,
                     fit: BoxFit.contain,
+                        color: Theme.of(context).primaryColor,
                   )),
                   SizedBox(
                     width: 12 * SizeConfig.widthMultiplier!,
                   ),
                   Text(
                     "subscription_details".tr,
-                    style: AppTextStyle.NormalBlackTitleText,
+                    style: AppTextStyle.NormalBlackTitleText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color
+                    ),
                   ),
                 ],
               ),

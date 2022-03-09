@@ -33,6 +33,7 @@ class MenuScreen extends StatelessWidget {
     print(imageUrl);
     print(imageCoverPic);
     return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
         width: 300 * SizeConfig.widthMultiplier!,
         child: Column(
           children: [
@@ -190,12 +191,15 @@ class MenuItem extends StatelessWidget {
               children: [
                 SvgPicture.asset(menuItemImage,
                     width: 22 * SizeConfig.heightMultiplier!,
+                    color: Theme.of(context).textTheme.headline1?.color,
                     fit: BoxFit.contain),
                 SizedBox(width: 15 * SizeConfig.widthMultiplier!),
                 Text(
                   menuItemText,
                   style: AppTextStyle.boldBlackText
-                      .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                      .copyWith(
+                      color: Theme.of(context).textTheme.bodyText1?.color,
+                      fontSize: 14 * SizeConfig.textMultiplier!),
                 )
               ],
             ),
