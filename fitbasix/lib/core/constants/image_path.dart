@@ -1,5 +1,7 @@
 class ImagePath {
   static const String arrowRightIcon = "assets/Icons/arrow-right.svg";
+  static const String fileIcon = "assets/Icons/file_icon.svg";
+  static const String muteBell = "assets/Icons/mute_bell.svg";
   static const String commentIcon = "assets/Icons/comment_icon.svg";
   static const String downloadDocIcon = "assets/Icons/download_icon.png";
   static const String docFileIcon = "assets/Icons/doc_file_icon.png";

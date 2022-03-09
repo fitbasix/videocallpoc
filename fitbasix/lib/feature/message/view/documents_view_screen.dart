@@ -29,6 +29,8 @@ class DocumentsViewerScreen extends StatefulWidget {
 class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
   DateTime dateToShow = DateTime.now();
   List<QBMessage?>? messageWithAttachment;
+  String ShowDay = "demo";
+
   @override
   Widget build(BuildContext context) {
     getAllMessageWithAttachments();
@@ -55,7 +57,7 @@ class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _getGroupByDate(messageWithAttachment![index]!.dateSent!),
+                _getGroupByDate(messageWithAttachment![index]!.body!),
                 Container(
                   margin: EdgeInsets.only(bottom: 16*SizeConfig.heightMultiplier!,left: 29*SizeConfig.widthMultiplier!),
                   child: DocumentTiles(documentName: messageWithAttachment![index]!.attachments![0]!.name!,date: messageWithAttachment![index]!.dateSent!,),
@@ -73,52 +75,48 @@ class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
   void getAllMessageWithAttachments() {
     messageWithAttachment= List.from(widget.messages!.where((element) => element!.attachments != null));
     messageWithAttachment!.forEach((element) {
-
+      element!.body = _getGroupByDateString(element.dateSent!);
     });
   }
 
-  Widget _getGroupByDate(int dateSent) {
+  Widget _getGroupByDate(String sentDateString) {
     final now = DateTime.now();
     final lastMonth = DateTime(now.year, now.month-1, now.day);
+    final Year = DateTime(now.year -1, now.month, now.day);
+    // DateTime dateOfFile = DateTime.fromMicrosecondsSinceEpoch(dateSent * 1000);
+    // final checkDate = DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
+    if( ShowDay != sentDateString){
+      ShowDay = sentDateString;
+      return Container(
+          margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
+          child: Text(sentDateString,style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.headline1!.color),));
+    }
+    else{
+      return Container();
+    }
+  }
+
+  String? _getGroupByDateString(int dateSent) {
+    final now = DateTime.now();
+    final lastMonth = DateTime(now.year, now.month-1, now.day);
+    final previousMonth = DateTime(now.year, now.month-2, now.day);
     final Year = DateTime(now.year -1, now.month, now.day);
     DateTime dateOfFile = DateTime.fromMicrosecondsSinceEpoch(dateSent * 1000);
     final checkDate = DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
     if(checkDate.isAfter(lastMonth)){
-      if(dateToShow != checkDate){
-        dateToShow = checkDate;
-        return Container(
-            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
-            child: Text("Last Month",style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.headline1!.color),));
-      }
-      else{
-        return Container();
-      }
+      return "This Month";
+    }
+    else if(checkDate.month == lastMonth.month &&checkDate.isAfter(previousMonth)){
+      return "Last Month";
     }
     else if(checkDate.isAfter(Year)){
-      if(dateToShow != checkDate){
-        dateToShow = checkDate;
-        return Container(
-            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
-            child: Text(DateFormat("MMMM").format(checkDate),style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.headline1!.color),));
-      }
-      else{
-        return Container();
-      }
-
+      return DateFormat("MMMM").format(checkDate);
     }
     else{
-      if(dateToShow != checkDate){
-        dateToShow = checkDate;
-        return Container(
-            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
-            child: Text(DateFormat("yyyy").format(checkDate),style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.headline1!.color),));
-      }
-      else{
-        return Container();
-      }
+      return DateFormat("yyyy").format(checkDate);
     }
-  }
 
+  }
 
 }
 

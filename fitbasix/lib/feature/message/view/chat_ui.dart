@@ -59,18 +59,14 @@ import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 import '../../posts/services/createPost_Services.dart';
 import '../controller/chat_controller.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(new ChatScreen());
-}
 
 class ChatScreen extends StatefulWidget {
   int? opponentID;
   QBDialog? userDialogForChat;
-  String trainerTitle = 'Jonathan Swift'.tr;
+  String? trainerTitle;
 
-  ChatScreen({Key? key, this.userDialogForChat, this.opponentID})
+  ChatScreen({Key? key, this.userDialogForChat, this.opponentID,this.trainerTitle})
       : super(key: key);
 
   @override
@@ -78,6 +74,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
   ChatController _chatController = Get.put(ChatController());
   HomeController _homeController = Get.find();
   QBDialog? userDialogForChat;
@@ -121,6 +118,16 @@ class _ChatScreenState extends State<ChatScreen> {
     connectionEvent();
     getMassageFromHistory();
     super.initState();
+
+  }
+  checkUserOnlineStatus() async {
+    try {
+      print("called");
+      var status = await QB.chat.getOnlineUsers(widget.userDialogForChat!.id!);
+      print(status.toString());
+    } on PlatformException catch (e) {
+      // Some error occurred, look at the exception message for more details
+    }
   }
 
   @override
@@ -139,16 +146,11 @@ class _ChatScreenState extends State<ChatScreen> {
         },
         onMenuTap: () {
           if(messages!=null){
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => DocumentsViewerScreen(
-            //           messages: messages,
-            //           opponentName: widget.trainerTitle,
-            //         )));
+            //checkUserOnlineStatus();
+
             //QB.chat.disconnect();
             // print("chat disconnected");
-
+            createMenuDialog(context);
           }
         },
         parentContext: context,
@@ -362,8 +364,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _massageStreamSubscription =
           await QB.chat.subscribeChatEvent(event, (data) {
         Map<String, dynamic> map = Map<String, dynamic>.from(data);
-        Map<String, dynamic> payload =
-            Map<String, dynamic>.from(map["payload"]);
+        Map<String, dynamic> payload = Map<String, dynamic>.from(map["payload"]);
         print("nnnnnn" + payload.toString());
         List<Attachment>? attachmentsFromJson;
         print(payload.toString());
@@ -557,7 +558,13 @@ class _ChatScreenState extends State<ChatScreen> {
     );
 
     if (result != null) {
-      return result;
+      if((result.files[0].size/(1024*1024))<25){
+        return result;
+      }
+      else{
+        createFileSizeIsLargeDialog(context);
+      }
+
     } else {
       return null;
     }
@@ -605,6 +612,104 @@ class _ChatScreenState extends State<ChatScreen> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("pick a some file to upload")));
     }
+  }
+
+  void createFileSizeIsLargeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("File is too large",style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
+                    Text("Cannot upload files larger\n than 25MB.",style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 12*SizeConfig.textMultiplier!,fontWeight: FontWeight.w400),textAlign: TextAlign.center,),
+
+                  ],
+                ),
+              )
+          ),
+        );
+
+
+
+      },
+    );
+  }
+
+  void createMenuDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(widget.trainerTitle!,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                    SizedBox(height: 26*SizeConfig.heightMultiplier!,),
+                    GestureDetector(
+                      onTap: (){
+
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(ImagePath.penIcon,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
+                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
+                          Text('Open profile',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 22*SizeConfig.heightMultiplier!,),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DocumentsViewerScreen(
+                                  messages: messages,
+                                  opponentName: widget.trainerTitle,
+                                )));
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(ImagePath.fileIcon,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
+                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
+                          Text('View documents',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                        ],
+                      ),
+                    ),
+
+                  ],
+                ),
+              )
+          ),
+        );
+
+
+
+      },
+    );
   }
 }
 

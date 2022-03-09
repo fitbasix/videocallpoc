@@ -15,7 +15,7 @@ import '../controller/Home_Controller.dart';
 
 class MyTrainersScreen extends StatelessWidget {
   MyTrainersScreen({Key? key}) : super(key: key);
-  RxList<QBDialog?> userChatsHistory = [QBDialog()].obs;
+  var userChatsHistory = [QBDialog()].obs;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +23,8 @@ class MyTrainersScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(()=>
          Center(
-            child: userChatsHistory[0]!.id!=null
-                ? ListView.builder(
-                itemCount: userChatsHistory.length,
-                itemBuilder: (context,index){
-                  return MyTrainerTileScreen(dialogId: userChatsHistory[index]!.id!,);
-                })
+            child: userChatsHistory[0].id!=null
+                ? MyTrainerTileScreen(chatHistoryList: userChatsHistory,)
                 : NoTrainerScreen()),
       ),
 
@@ -41,10 +37,14 @@ class MyTrainersScreen extends StatelessWidget {
     sort.ascending = true;
     try {
       List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) {
-            print(value[0]!.id.toString() +" fdfdsf");
-        value.forEach((element) {
-          userChatsHistory.add(element);
-        });
+        if(value.isNotEmpty){
+          userChatsHistory.value = List.from(value);
+          //todo remove below lines after done testing
+          userChatsHistory.add(userChatsHistory[0]);
+          userChatsHistory.add(userChatsHistory[0]);
+          userChatsHistory.add(userChatsHistory[0]);
+          userChatsHistory.add(userChatsHistory[0]);
+        }
         return value;
       });
     } catch (e) {
@@ -60,30 +60,23 @@ class NoTrainerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController _homeController = Get.find();
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        leading: IconButton(
-            onPressed: () {
-              _homeController.selectedIndex.value = 0;
-              //    Navigator.pop(context);
-            },
-            icon: SvgPicture.asset(
-              ImagePath.backIcon,
-              width: 7.41 * SizeConfig.widthMultiplier!,
-              height: 12 * SizeConfig.heightMultiplier!,
-            )),
-        title: Text('my_trainer'.tr, style: AppTextStyle.hblack600Text),
+        title: Padding(
+            padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
+            child: Text('my_trainer'.tr, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color))),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.search,
-              color: kPureBlack,
-              size: 25 * SizeConfig.heightMultiplier!,
-            ),
-          ),
+              onPressed: () {
+              },
+              icon: Icon(
+                Icons.search,
+                color: Theme.of(context).primaryColor,
+                size: 25 * SizeConfig.heightMultiplier!,
+              )),
         ],
       ),
       body: SafeArea(

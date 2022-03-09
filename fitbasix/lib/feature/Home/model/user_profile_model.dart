@@ -127,7 +127,7 @@ class Profile {
           ? Nutrition()
           : Nutrition.fromJson(json["nutrition"]),
       following: json["following"],
-      selectedInterest: json["interests"] == null ? [] : json["interests"],
+      selectedInterest: json["interests"] == null ? [] :json["interests"],
       followers: json["followers"],
       quickBloxId: json["quickBlox"]);
 
