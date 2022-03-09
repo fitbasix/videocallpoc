@@ -28,6 +28,7 @@ import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:fitbasix/feature/profile/view/edit_userprofile_info.dart';
+import 'package:fitbasix/feature/profile/view/reset_password.dart';
 import 'package:fitbasix/feature/profile/view/user_profile_info.dart';
 import 'package:fitbasix/feature/settings/view/settings.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
@@ -45,6 +46,7 @@ import '../../feature/plans/view/trainers_plan.dart';
 import '../../feature/plans/view/plan_timing.dart';
 
 import '../../feature/profile/view/number_Change_otp_verify.dart';
+import '../../feature/profile/view/select_profileImage.dart';
 import '../../feature/spg/view/set_dob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -98,13 +100,21 @@ abstract class RouteName {
   static const planInformationScreen = "/plan_info.dart";
   static const planTimingScreen = "/plan_timing.dart";
   static const otpReScreen = "/otp_screen";
+  static const selectProfilePhoto = "/select_profile_photo";
   RouteName._();
 }
 
 class GenerateRoute {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final route = settings.name;
-
+    if (route == RouteName.selectProfilePhoto) {
+      return MaterialPageRoute(
+        builder: (
+          BuildContext context,
+        ) =>
+            SelectProfilePicScreen(),
+      );
+    }
     if (route == RouteName.loginScreen) {
       return MaterialPageRoute(
         builder: (
@@ -173,6 +183,10 @@ class GenerateRoute {
       return MaterialPageRoute(
         builder: (BuildContext context) => OtpScreen(),
       );
+    }
+    if (route == RouteName.resetPassword) {
+      return MaterialPageRoute(
+          builder: (BuildContext context) => ResetPasswordScreen());
     }
     if (route == RouteName.enterDetails) {
       return MaterialPageRoute(

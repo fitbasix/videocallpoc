@@ -14,7 +14,9 @@ import 'package:get/get.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/universal_widgets/text_Field.dart';
 import '../../Home/controller/Home_Controller.dart';
+import '../../Home/view/Home_page.dart';
 import '../../log_in/view/widgets/country_dropdown.dart';
+import '../../posts/services/createPost_Services.dart';
 
 class EditPersonalInfoScreen extends StatelessWidget {
   final ProfileController _profileController = Get.put(ProfileController());
@@ -226,7 +228,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!)))),
-                    onPressed: () {
+                    onPressed: () async {
                       //change user personal data on cloud
                       String? updatedEmailId =
                           _profileController.emailController.text ==
@@ -254,11 +256,15 @@ class EditPersonalInfoScreen extends StatelessWidget {
                       print(updatedCountryCode);
                       print(updatedDob);
                       if (updatedPhnNumber == null) {
-                        // ProfileServices.editProfile(
-                        //     email: updatedEmailId,
-                        //     countryCode: updatedCountryCode,
-                        //     phone: updatedPhnNumber,
-                        //     dob: updatedDob == "" ? null : updatedDob);
+                        await ProfileServices.editProfile(
+                            email: updatedEmailId,
+                            countryCode: updatedCountryCode,
+                            phone: updatedPhnNumber,
+                            dob: updatedDob == "" ? null : updatedDob);
+
+                        Navigator.pop(context);
+                        homeController.userProfileData.value =
+                            await CreatePostService.getUserProfile();
                       } else {
                         Navigator.pushNamed(context, RouteName.otpReScreen);
                       }

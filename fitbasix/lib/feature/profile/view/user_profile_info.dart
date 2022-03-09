@@ -137,7 +137,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: SafeArea(
         child: SingleChildScrollView(
           controller: _scrollController,
@@ -165,6 +165,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                   Text(
                                     widget.username!,
                                     style: AppTextStyle.titleText.copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                         fontSize:
                                             18 * SizeConfig.textMultiplier!),
                                   ),
@@ -215,6 +219,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                       Text(widget.userfollowerscount!,
                                           style: AppTextStyle.hmedium13Text
                                               .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: (18) *
                                                 SizeConfig.textMultiplier!,
                                           )),
@@ -225,6 +233,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                       Text('follower'.tr,
                                           style: AppTextStyle.hmediumBlackText
                                               .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: (12) *
                                                 SizeConfig.textMultiplier!,
                                           )),
@@ -239,6 +251,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                       Text(widget.userfollowingscount!,
                                           style: AppTextStyle.hmedium13Text
                                               .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: (18) *
                                                 SizeConfig.textMultiplier!,
                                           )),
@@ -249,6 +265,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                       Text('following'.tr,
                                           style: AppTextStyle.hmediumBlackText
                                               .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: (12) *
                                                 SizeConfig.textMultiplier!,
                                           )),
@@ -268,7 +288,13 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                 children: [
                                   Text(
                                     'about'.tr,
-                                    style: AppTextStyle.hblackSemiBoldText,
+                                    style: AppTextStyle.hblackSemiBoldText
+                                        .copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,
@@ -277,6 +303,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     widget.aboutuser!,
                                     style: AppTextStyle.hblackSemiBoldText
                                         .copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -285,7 +315,12 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                   ),
                                   Text(
                                     'interested_in'.tr,
-                                    style: AppTextStyle.hblackSemiBoldText,
+                                    style: AppTextStyle.hblackSemiBoldText
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color),
                                   ),
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,

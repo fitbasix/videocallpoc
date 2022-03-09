@@ -91,12 +91,12 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 isMessageLoading = true;
                 bool dialogCreatedPreviously = false;
                 int openPage = 0;
-                //133642567	Tarun Prajapat
-                //133627356 vartika
+                //133817477	user1
+                //133815819 trainer1
                 //133612091 trainer
                 final sharedPreferences = await SharedPreferences.getInstance();
                 _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
-                int UserQuickBloxId = _homeController.userQuickBloxId.value==133642567?133627356:133642567;
+                int UserQuickBloxId = _homeController.userQuickBloxId.value==133817477?133815819:133817477;
                 print(UserQuickBloxId.toString() +"this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id" );
                 QBSort sort = QBSort();
                 sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;

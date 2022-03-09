@@ -27,6 +27,7 @@ class DocumentsViewerScreen extends StatefulWidget {
 }
 
 class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
+  DateTime dateToShow = DateTime.now();
   List<QBMessage?>? messageWithAttachment;
   @override
   Widget build(BuildContext context) {
@@ -50,9 +51,16 @@ class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
               shrinkWrap: true,
               itemCount: messageWithAttachment!.length,
               itemBuilder: (context, index){
-            return Container(
-              margin: EdgeInsets.only(bottom: 16*SizeConfig.heightMultiplier!,left: 29*SizeConfig.widthMultiplier!),
-              child: DocumentTiles(documentName: messageWithAttachment![index]!.attachments![0]!.name!,date: messageWithAttachment![index]!.dateSent!,),
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _getGroupByDate(messageWithAttachment![index]!.dateSent!),
+                Container(
+                  margin: EdgeInsets.only(bottom: 16*SizeConfig.heightMultiplier!,left: 29*SizeConfig.widthMultiplier!),
+                  child: DocumentTiles(documentName: messageWithAttachment![index]!.attachments![0]!.name!,date: messageWithAttachment![index]!.dateSent!,),
+                ),
+              ],
             );
           }),
 
@@ -65,8 +73,53 @@ class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
   void getAllMessageWithAttachments() {
     messageWithAttachment= List.from(widget.messages!.where((element) => element!.attachments != null));
     messageWithAttachment!.forEach((element) {
+
     });
   }
+
+  Widget _getGroupByDate(int dateSent) {
+    final now = DateTime.now();
+    final lastMonth = DateTime(now.year, now.month-1, now.day);
+    final Year = DateTime(now.year -1, now.month, now.day);
+    DateTime dateOfFile = DateTime.fromMicrosecondsSinceEpoch(dateSent * 1000);
+    final checkDate = DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
+    if(checkDate.isAfter(lastMonth)){
+      if(dateToShow != checkDate){
+        dateToShow = checkDate;
+        return Container(
+            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
+            child: Text("Last Month",style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.headline1!.color),));
+      }
+      else{
+        return Container();
+      }
+    }
+    else if(checkDate.isAfter(Year)){
+      if(dateToShow != checkDate){
+        dateToShow = checkDate;
+        return Container(
+            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
+            child: Text(DateFormat("MMMM").format(checkDate),style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.headline1!.color),));
+      }
+      else{
+        return Container();
+      }
+
+    }
+    else{
+      if(dateToShow != checkDate){
+        dateToShow = checkDate;
+        return Container(
+            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
+            child: Text(DateFormat("yyyy").format(checkDate),style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.headline1!.color),));
+      }
+      else{
+        return Container();
+      }
+    }
+  }
+
+
 }
 
 class DocumentTiles extends StatelessWidget {
@@ -186,4 +239,6 @@ class DocumentTiles extends StatelessWidget {
     }
   }
 }
+
+
 
