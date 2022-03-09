@@ -17,6 +17,9 @@ class ProfileController extends GetxController {
   TextEditingController nameController = TextEditingController();
   TextEditingController DOBController = TextEditingController();
   TextEditingController bioController = TextEditingController();
+  TextEditingController currentPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   RxString selectedDate = DateTime.now().toString().obs;
 // height controller for dialog box
   RxString heightType = "inch".obs;

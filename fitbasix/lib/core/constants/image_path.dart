@@ -9,7 +9,8 @@ class ImagePath {
   static const String mp4Icon = "assets/Icons/video_file_icon.png";
   static const String xlxIcon = "assets/Icons/xlx_icon.png";
   static const String jpgFileIcon = "assets/Icons/jpg_file_icon.png";
-  static const String privacyPolicyIcon = "assets/Icons/privacy_policy_icon.svg";
+  static const String privacyPolicyIcon =
+      "assets/Icons/privacy_policy_icon.svg";
   static const String termOfUseIcon = "assets/Icons/term_of_use_icon.svg";
   static const String LiveIcon = "assets/Icons/live_icon.svg";
   static const String addPersonIcon = "assets/Icons/add_person_icon.svg";
@@ -90,11 +91,14 @@ class ImagePath {
   static const String penIcon = "assets/message/penicon.svg";
   static const String unmuteIcon = "assets/message/unmuteicon.svg";
   static const String enrolltrainerFrame = "assets/message/enrollFrame.svg";
-  static const String cancelEnrollmentIcon = "assets/message/cancelEnrollmentIcon.svg";
-  static const String sharefeedbackIcon = "assets/message/sharefeedbackIcon.svg";
+  static const String cancelEnrollmentIcon =
+      "assets/message/cancelEnrollmentIcon.svg";
+  static const String sharefeedbackIcon =
+      "assets/message/sharefeedbackIcon.svg";
 
   ///my trainer
-  static const String notrainerenrollframe = "assets/mytrainers/notrainerframe.svg";
+  static const String notrainerenrollframe =
+      "assets/mytrainers/notrainerframe.svg";
   static const String closedialogIcon = "assets/mytrainers/closedialogicon.svg";
 
   ///UI chat
@@ -107,10 +111,9 @@ class ImagePath {
   static const String videomicON = "assets/message/videomicON.svg";
   static const String videocameraON = "assets/message/videocameraON.svg";
   static const String videospeakerON = "assets/message/videospeakerON.svg";
-  static const String videomicOFF= "assets/message/videomicOFF.svg";
-  static const String videospeakerOFF= "assets/message/videospeakerOFF.svg";
-  static const String videocameraOFF= "assets/message/videocameraOFF.svg";
-
+  static const String videomicOFF = "assets/message/videomicOFF.svg";
+  static const String videospeakerOFF = "assets/message/videospeakerOFF.svg";
+  static const String videocameraOFF = "assets/message/videocameraOFF.svg";
 
   ///BMR chat
   static const String circlequestionmarkIcon =
@@ -133,5 +136,8 @@ class ImagePath {
   static const String login_intro_image = "assets/log_in/login_image.png";
   static const String black_rectangle = "assets/log_in/black_rectangle.png";
   static const String otp_intro_image = "assets/log_in/otp_screenImage.png";
-  static const String detail_intro_image = "assets/log_in/detail_screenImage.png";
+  static const String detail_intro_image =
+      "assets/log_in/detail_screenImage.png";
+
+  //PASSWORD
 }
