@@ -30,6 +30,7 @@ String about_user =
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final HomeController _homeController = Get.find();
+  final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +51,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         oneditprofile: () {
           Navigator.pushNamed(context, RouteName.edituserProfileScreen);
         },
-        oneditcoverimage: () {},
+        oneditcoverimage: () {
+          profileController.isCoverPhoto.value = true;
+          Navigator.pushNamed(context, RouteName.selectProfilePhoto);
+        },
       ),
     );
   }

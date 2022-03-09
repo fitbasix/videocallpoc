@@ -930,7 +930,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 16 * SizeConfig.heightMultiplier!,
                                 ),
                                 Obx(
-                                  () => _homeController.isLoading.value
+                                  () => _homeController.isPostUpdate.value
                                       ? CustomizedCircularProgress()
                                       : ListView.builder(
                                           itemCount: _homeController

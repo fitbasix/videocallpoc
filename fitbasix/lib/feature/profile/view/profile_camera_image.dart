@@ -18,6 +18,8 @@ import 'package:get/get.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../posts/model/media_response_model.dart';
+
 class CameraProfileViewScreen extends StatefulWidget {
   CameraProfileViewScreen({this.imageFile, this.isVideo});
   File? imageFile;
@@ -159,6 +161,13 @@ class _CameraProfileViewScreenState extends State<CameraProfileViewScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+                        profileController.isLoading.value = true;
+                        MediaUrl mediaUrl = await PostService.uploadMedia(
+                            [File(profileController.imageFile!.path)]);
+                        profileController.profilePhoto.value =
+                            mediaUrl.response!.data![0];
+                        Navigator.pop(context);
+                        profileController.isLoading.value = false;
                         // _postController.isLoading.value = true;
                         //
                         // // final List<File> selectedImage = [];
