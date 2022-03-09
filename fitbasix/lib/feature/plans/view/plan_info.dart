@@ -46,7 +46,7 @@ class _PlanInformationUIState extends State<PlanInformationUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Obx(
           () => trainerController.fullPlanInfoLoading.value
               ? Center(
@@ -239,6 +239,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
           width: double.infinity,
           child: Stack(
             children: [
@@ -250,7 +251,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                   //trainerplanInfoWidget
                   _BuildTrainerPlanInfo(),
                   Divider(
-                    color: Color(0xFFF0F0F0),
+                    color: greyBorder,
                     thickness: 1 * SizeConfig.heightMultiplier!,
                     height: 1 * SizeConfig.heightMultiplier!,
                   ),
@@ -258,16 +259,18 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                   //trainerinfoWidget
                   _BuildTrainerinfo(),
                   Divider(
-                    color: Color(0xFFF0F0F0),
+                    color: greyBorder,
                     thickness: 1 * SizeConfig.heightMultiplier!,
                     height: 1 * SizeConfig.heightMultiplier!,
                   ),
                   // Review of the plan
-                  // _BuildReviewofPlan(),
+                  //_BuildReviewofPlan(),
 
                   // get a demo & enroll button
                   Container(
-                    decoration: BoxDecoration(color: kPureWhite, boxShadow: [
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        boxShadow: [
                       BoxShadow(
                           color: Color(0xFF000000).withOpacity(0.1),
                           blurRadius: 4.0, // soften the shadow
@@ -293,7 +296,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                         ),
                         Spacer(),
                         CustomButtonPlanScreen(
-                          colour: kgreen4F,
+                          colour: greyBorder,
                           width: 156 * SizeConfig.widthMultiplier!,
                           height: 48 * SizeConfig.heightMultiplier!,
                           onpressed: widget.onEnrollnow!,
@@ -325,12 +328,12 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                       height: 40 * SizeConfig.heightMultiplier!,
                       width: 40 * SizeConfig.heightMultiplier!,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.white),
+                          shape: BoxShape.circle, color: Theme.of(context).secondaryHeaderColor),
                       child: SvgPicture.asset(
                         ImagePath.backIcon,
-                        color: kPureBlack,
-                        height: 12,
-                        width: 7.41,
+                        color: Theme.of(context).primaryColor,
+                        height: 11*SizeConfig.heightMultiplier!,
+                        width: 7.41*SizeConfig.widthMultiplier!,
                         fit: BoxFit.scaleDown,
                       ),
                     ),
@@ -363,7 +366,8 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             Expanded(
               child: Text(
                 title!,
-                style: AppTextStyle.hblack400Text.copyWith(color: kBlack),
+                style: AppTextStyle.hblack400Text.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color),
               ),
             ),
           ],
@@ -383,7 +387,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             Text(
               'loose_fat_buildmuscle'.tr,
               style: AppTextStyle.boldBlackText
-                  .copyWith(color: kPureBlack, letterSpacing: -0.08),
+                  .copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color,
+                  letterSpacing: -0.08),
             ),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
@@ -394,7 +400,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             ),
             //instructor
             Text('instructed_by'.tr + " " + widget.trainerName!.tr,
-                style: AppTextStyle.hblackSemiBoldText),
+                style: AppTextStyle.hblackSemiBoldText.copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color
+                )),
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
@@ -422,12 +430,15 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             //Description
             Text('description'.tr,
                 style: AppTextStyle.hblackSemiBoldText
-                    .copyWith(letterSpacing: -0.08)),
+                    .copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    letterSpacing: -0.08)),
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
             Text(widget.plandescription!.tr,
                 style: AppTextStyle.hblackSemiBoldText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
                     fontWeight: FontWeight.w400, fontStyle: FontStyle.normal)),
             SizedBox(
               height: 24 * SizeConfig.heightMultiplier!,
@@ -435,7 +446,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             //Key points
             Text('key_points'.tr,
                 style: AppTextStyle.hblackSemiBoldText
-                    .copyWith(letterSpacing: -0.08)),
+                    .copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    letterSpacing: -0.08)),
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
@@ -459,7 +472,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             //Equipment
             Text('equipment'.tr,
                 style: AppTextStyle.hblackSemiBoldText
-                    .copyWith(letterSpacing: -0.08)),
+                    .copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    letterSpacing: -0.08)),
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
@@ -482,13 +497,16 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             //Plan Prizing
             Text('plan_pricing'.tr,
                 style: AppTextStyle.hblackSemiBoldText
-                    .copyWith(letterSpacing: -0.08)),
+                    .copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    letterSpacing: -0.08)),
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
             Text(
               widget.planprizing!.tr,
               style: AppTextStyle.hblackSemiBoldText.copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color,
                   fontSize: (24) * SizeConfig.textMultiplier!,
                   letterSpacing: 1),
             ),
@@ -519,7 +537,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                     Text(
                       widget.trainerName!.tr,
                       style: AppTextStyle.boldBlackText
-                          .copyWith(color: kBlack, letterSpacing: -0.08),
+                          .copyWith(
+                          color: Theme.of(context).textTheme.bodyText1?.color,
+                          letterSpacing: -0.08),
                     ),
                     SizedBox(
                       height: 8 * SizeConfig.heightMultiplier!,
@@ -586,10 +606,14 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                       children: [
                         Text(widget.followerscount!.tr,
                             style: AppTextStyle.boldBlackText
-                                .copyWith(color: kBlack, letterSpacing: -0.08)),
+                                .copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                letterSpacing: -0.08)),
                         Text('follower'.tr,
                             style: AppTextStyle.smallBlackText
-                                .copyWith(color: kBlack, letterSpacing: -0.08))
+                                .copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                letterSpacing: -0.08))
                       ],
                     ),
                     SizedBox(width: 25 * SizeConfig.widthMultiplier!),
@@ -599,10 +623,12 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                       children: [
                         Text(widget.followingcount!.tr,
                             style: AppTextStyle.boldBlackText
-                                .copyWith(color: kBlack, letterSpacing: -0.08)),
+                                .copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                letterSpacing: -0.08)),
                         Text('following'.tr,
                             style: AppTextStyle.smallBlackText.copyWith(
-                              color: kBlack,
+                              color: Theme.of(context).textTheme.bodyText1?.color,
                               letterSpacing: -0.08,
                             ))
                       ],
@@ -612,7 +638,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                 Container(
                   width: 1 * SizeConfig.widthMultiplier!,
                   height: 56 * SizeConfig.heightMultiplier!,
-                  color: kDarkGrey,
+                  color: greyC4,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -637,7 +663,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                         Text(
                           widget.totalPeopleTrained!,
                           style: AppTextStyle.greenSemiBoldText.copyWith(
-                            color: kPureBlack,
+                            color: Theme.of(context).textTheme.bodyText1?.color,
                             letterSpacing: -0.08,
                           ),
                         ),
@@ -645,7 +671,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                         Text(
                           'people_trained'.tr,
                           style: AppTextStyle.smallBlackText.copyWith(
-                              letterSpacing: -0.08, color: kPureBlack),
+                              letterSpacing: -0.08,
+                            color: Theme.of(context).textTheme.bodyText1?.color,
+                          ),
                         )
                       ],
                     ),
@@ -653,7 +681,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                       //extra text
                       'view_and_review'.tr,
                       style: AppTextStyle.smallBlackText.copyWith(
-                          color: greyColor,
+                          color: grey92,
                           decoration: TextDecoration.underline),
                     ),
                   ],
@@ -676,7 +704,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             Text(
               'review_for_plan'.tr,
               style: AppTextStyle.hblack600Text
-                  .copyWith(color: kBlack, letterSpacing: -0.08),
+                  .copyWith(
+                  color: Theme.of(context).textTheme.bodyText1?.color,
+                  letterSpacing: -0.08),
             ),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
@@ -688,7 +718,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                   widget.totalreviewrating!.tr,
                   style: AppTextStyle.hblack600Text.copyWith(
                       fontSize: (36) * SizeConfig.textMultiplier!,
-                      color: kBlack,
+                      color: Theme.of(context).textTheme.bodyText1?.color,
                       letterSpacing: -0.08),
                 ),
                 SizedBox(
@@ -697,7 +727,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                 Text(
                   'plan_rating'.tr,
                   style: AppTextStyle.hblack400Text
-                      .copyWith(color: kBlack, letterSpacing: -0.08),
+                      .copyWith(
+                      color: Theme.of(context).textTheme.bodyText1?.color,
+                      letterSpacing: -0.08),
                 ),
               ],
             ),
@@ -752,7 +784,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                     Text(
                       widget.reviewPersonName!.tr,
                       style: AppTextStyle.hnormal600BlackText
-                          .copyWith(color: kBlack),
+                          .copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color,
+                      ),
                     ),
                     Text(
                       widget.reviewPersonDetail!.tr,
@@ -788,7 +822,9 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             //review description
             Text(
               widget.reviewdiscription!.tr,
-              style: AppTextStyle.hblack400Text.copyWith(color: kBlack),
+              style: AppTextStyle.hblack400Text.copyWith(
+                color: Theme.of(context).textTheme.bodyText1?.color,
+              ),
             ),
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
