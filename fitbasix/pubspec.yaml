@@ -85,6 +85,7 @@ dependencies:
   syncfusion_flutter_gauges: ^19.4.54
   android_alarm_manager_plus: ^2.0.5
   awesome_notifications: ^0.6.21
+  images_picker: ^1.2.10
 
 
 dev_dependencies:
