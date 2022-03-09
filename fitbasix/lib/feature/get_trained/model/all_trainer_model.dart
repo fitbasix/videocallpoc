@@ -99,7 +99,7 @@ class Trainer {
   String? followers;
   final String? following;
   final String? trainees;
-  final String? slotsFeft;
+  final int? slotsFeft;
   final String? totalRating;
   final String? rating;
   final String? id;

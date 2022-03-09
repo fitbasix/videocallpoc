@@ -71,6 +71,7 @@ class HomeController extends GetxController {
   RxBool isPostUpdate = false.obs;
   RxString coverPhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
+
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,
