@@ -46,6 +46,9 @@ class ProfileController extends GetxController {
   RxList<AssetEntity> assets = RxList();
   RxList<AssetEntity> selectedMediaAsset = RxList<AssetEntity>([]);
   RxList<AssetPathEntity> foldersAvailable = RxList<AssetPathEntity>([]);
+  RxBool isCoverPhoto = false.obs;
+  RxString coverPhoto = "".obs;
+
   void editUserPersonalInfo() {
     //todo import API for user data updating
     //user email

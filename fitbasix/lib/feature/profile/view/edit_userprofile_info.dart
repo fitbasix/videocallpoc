@@ -109,6 +109,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 child: GestureDetector(
                                   onTap: () async {
                                     print("pppp");
+                                    profileController.isCoverPhoto.value =
+                                        false;
                                     Navigator.pushNamed(
                                         context, RouteName.selectProfilePhoto);
                                     // final pickedFile = await ImagesPicker.pick(

@@ -196,11 +196,11 @@ class HomeController extends GetxController {
     userProfileData.value = await CreatePostService.getUserProfile();
 
     ///todo after
-    // if (userProfileData.value.response!.data!.profile!.name == null) {
-    //   print("jdfjdsjkg");
-    //   Get.deleteAll();
-    //   Get.toNamed(RouteName.enterDetails);
-    // }
+    if (userProfileData.value.response!.data!.profile!.name == null) {
+      print("jdfjdsjkg");
+      Get.deleteAll();
+      Get.toNamed(RouteName.enterDetails);
+    }
     print(userProfileData.value.response!.data!.profile!.nutrition.toString());
     if (userProfileData
             .value.response!.data!.profile!.nutrition!.totalRequiredCalories !=
