@@ -7,6 +7,7 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
@@ -19,6 +20,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../posts/model/media_response_model.dart';
+import '../services/profile_services.dart';
 
 class CameraProfileViewScreen extends StatefulWidget {
   CameraProfileViewScreen({this.imageFile, this.isVideo});
@@ -32,197 +34,227 @@ class CameraProfileViewScreen extends StatefulWidget {
 
 class _CameraProfileViewScreenState extends State<CameraProfileViewScreen> {
   final ProfileController profileController = Get.find();
+  final HomeController homeController = Get.find();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-          elevation: 0,
+        child: Stack(
+      children: [
+        Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          leading: IconButton(
-              onPressed: () {
-                profileController.isLoading.value = false;
-                Navigator.pop(context);
-              },
-              icon: SvgPicture.asset(
-                ImagePath.backIcon,
-                color: Theme.of(context).primaryColor,
-                width: 7 * SizeConfig.widthMultiplier!,
-                height: 12 * SizeConfig.heightMultiplier!,
+          appBar: AppBar(
+              elevation: 0,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              leading: IconButton(
+                  onPressed: () {
+                    profileController.isLoading.value = false;
+                    Navigator.pop(context);
+                  },
+                  icon: SvgPicture.asset(
+                    ImagePath.backIcon,
+                    color: Theme.of(context).primaryColor,
+                    width: 7 * SizeConfig.widthMultiplier!,
+                    height: 12 * SizeConfig.heightMultiplier!,
+                  )),
+              title: Transform(
+                transform: Matrix4.translationValues(-20, 0, 0),
+                child: Text(
+                  'camera'.tr,
+                  style: AppTextStyle.titleText.copyWith(
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color,
+                      fontSize: 16 * SizeConfig.textMultiplier!),
+                ),
               )),
-          title: Transform(
-            transform: Matrix4.translationValues(-20, 0, 0),
-            child: Text(
-              'camera'.tr,
-              style: AppTextStyle.titleText.copyWith(
-                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,
-                  fontSize: 16 * SizeConfig.textMultiplier!),
-            ),
-          )),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 16 * SizeConfig.heightMultiplier!,
-          ),
-          Stack(
+          body: Column(
             children: [
-              Image.file(
-                widget.imageFile!,
-                height: 400 * SizeConfig.heightMultiplier!,
-                width: Get.width,
-                fit: BoxFit.cover,
+              SizedBox(
+                height: 16 * SizeConfig.heightMultiplier!,
               ),
-              widget.isVideo == true
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                          top: 170 * SizeConfig.heightMultiplier!),
-                      child: Center(
-                        child: Icon(
-                          Icons.play_arrow,
-                          color: kPureWhite,
-                          size: 56 * SizeConfig.heightMultiplier!,
-                        ),
-                      ),
-                    )
-                  : Container(),
-              Obx(() => profileController.isLoading.value
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                          top: 170 * SizeConfig.heightMultiplier!),
-                      child: Center(child: CustomizedCircularProgress()),
-                    )
-                  : Container())
+              Stack(
+                children: [
+                  Image.file(
+                    widget.imageFile!,
+                    height: 400 * SizeConfig.heightMultiplier!,
+                    width: Get.width,
+                    fit: BoxFit.cover,
+                  ),
+                  widget.isVideo == true
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              top: 170 * SizeConfig.heightMultiplier!),
+                          child: Center(
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: kPureWhite,
+                              size: 56 * SizeConfig.heightMultiplier!,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  Obx(() => profileController.isLoading.value
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              top: 170 * SizeConfig.heightMultiplier!),
+                          child: Center(child: CustomizedCircularProgress()),
+                        )
+                      : Container())
+                ],
+              ),
             ],
           ),
-        ],
-      ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-        ),
-        child: BottomAppBar(
-          elevation: 15,
-          color: Theme.of(context).scaffoldBackgroundColor,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 24 * SizeConfig.widthMultiplier!),
-            child: Container(
-              height: 65 * SizeConfig.heightMultiplier!,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        final ImagePicker picker = ImagePicker();
-                        if (widget.isVideo == true) {
-                          XFile? file = await picker.pickVideo(
-                              source: ImageSource.camera);
-                          if (file != null) {
-                            profileController.imageFile = File(file.path);
-                            final fileName = await profileController
-                                .genThumbnailFile(file.path);
-                            setState(() {
-                              widget.imageFile = fileName;
-                            });
-                          }
-                        } else {
-                          XFile? file = await picker.pickImage(
-                              source: ImageSource.camera);
-                          if (file != null) {
-                            profileController.imageFile = File(file.path);
-                            setState(() {
-                              widget.imageFile = File(file.path);
-                            });
-                          }
-                        }
-                      },
-                      child: Container(
-                        height: 48 * SizeConfig.heightMultiplier!,
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(
-                                color: kGreenColor,
-                                width: 2 * SizeConfig.heightMultiplier!),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: Center(
-                          child: Text(
-                            'ratake'.tr,
-                            style: AppTextStyle.greenSemiBoldText.copyWith(
-                                fontSize: 18 * SizeConfig.textMultiplier!),
+          bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+            ),
+            child: BottomAppBar(
+              elevation: 15,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 24 * SizeConfig.widthMultiplier!),
+                child: Container(
+                  height: 65 * SizeConfig.heightMultiplier!,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            final ImagePicker picker = ImagePicker();
+                            if (widget.isVideo == true) {
+                              XFile? file = await picker.pickVideo(
+                                  source: ImageSource.camera);
+                              if (file != null) {
+                                profileController.imageFile = File(file.path);
+                                final fileName = await profileController
+                                    .genThumbnailFile(file.path);
+                                setState(() {
+                                  widget.imageFile = fileName;
+                                });
+                              }
+                            } else {
+                              XFile? file = await picker.pickImage(
+                                  source: ImageSource.camera, imageQuality: 20);
+                              if (file != null) {
+                                profileController.imageFile = File(file.path);
+                                setState(() {
+                                  widget.imageFile = File(file.path);
+                                });
+                              }
+                            }
+                          },
+                          child: Container(
+                            height: 48 * SizeConfig.heightMultiplier!,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(
+                                    color: kGreenColor,
+                                    width: 2 * SizeConfig.heightMultiplier!),
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: Center(
+                              child: Text(
+                                'ratake'.tr,
+                                style: AppTextStyle.greenSemiBoldText.copyWith(
+                                    fontSize: 18 * SizeConfig.textMultiplier!),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(width: 30 * SizeConfig.widthMultiplier!),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        profileController.isLoading.value = true;
-                        MediaUrl mediaUrl = await PostService.uploadMedia(
-                            [File(profileController.imageFile!.path)]);
-                        profileController.profilePhoto.value =
-                            mediaUrl.response!.data![0];
-                        Navigator.pop(context);
-                        profileController.isLoading.value = false;
-                        // _postController.isLoading.value = true;
-                        //
-                        // // final List<File> selectedImage = [];
-                        // if (_postController.imageFile != null) {
-                        //   print('inside');
-                        //   _postController.selectedFiles
-                        //       .add(_postController.imageFile!);
-                        // }
-                        // // if (_postController.selectedMediaFiles.length != 0)
-                        // //   for (var item in _postController.selectedMediaFiles) {
-                        // //     _postController.selectedFiles.add(item);
-                        // //   }
-                        //
-                        // print(_postController.selectedFiles.length);
-                        // // selectedImage.addAllIf(
-                        // //     _postController.selectedMediaFiles.length != 0,
-                        // //     _postController.selectedMediaFiles);
-                        // _postController.imageFile = null;
-                        // _postController.uploadedFiles.value =
-                        // await PostService.uploadMedia(
-                        //   _postController.selectedFiles,
-                        // );
-                        //
-                        // _postController.isLoading.value = false;
-                        //
-                        // if (_postController.uploadedFiles.value.code == 0) {
-                        //   _postController.postData.value =
-                        //   await CreatePostService.createPost(
-                        //       postId: _postController.postId.value,
-                        //       files: _postController
-                        //           .uploadedFiles.value.response!.data);
-                        //   Navigator.pushNamed(context, RouteName.createPost);
-                        // }
-                        // _postController.isLoading.value = false;
-                      },
-                      child: Container(
-                        height: 48 * SizeConfig.heightMultiplier!,
-                        decoration: BoxDecoration(
-                            color: kGreenColor,
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: Center(
-                          child: Text('next'.tr,
-                              style: AppTextStyle.greenSemiBoldText.copyWith(
-                                  fontSize: 18 * SizeConfig.textMultiplier!,
-                                  color: kPureWhite)),
+                      SizedBox(width: 30 * SizeConfig.widthMultiplier!),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            profileController.isLoading.value = true;
+                            if (profileController.isCoverPhoto.value == false) {
+                              MediaUrl mediaUrl = await PostService.uploadMedia(
+                                  [File(profileController.imageFile!.path)]);
+                              profileController.profilePhoto.value =
+                                  mediaUrl.response!.data![0];
+                            } else {
+                              MediaUrl mediaUrl = await PostService.uploadMedia(
+                                  [File(profileController.imageFile!.path)]);
+                              profileController.coverPhoto.value =
+                                  mediaUrl.response!.data![0];
+                              await ProfileServices.UpdateCoverPhoto(
+                                  coverPhoto:
+                                      profileController.coverPhoto.value);
+                              homeController.coverPhoto.value =
+                                  mediaUrl.response!.data![0];
+                            }
+
+                            profileController.isLoading.value = false;
+                            Navigator.pop(context);
+                            // _postController.isLoading.value = true;
+                            //
+                            // // final List<File> selectedImage = [];
+                            // if (_postController.imageFile != null) {
+                            //   print('inside');
+                            //   _postController.selectedFiles
+                            //       .add(_postController.imageFile!);
+                            // }
+                            // // if (_postController.selectedMediaFiles.length != 0)
+                            // //   for (var item in _postController.selectedMediaFiles) {
+                            // //     _postController.selectedFiles.add(item);
+                            // //   }
+                            //
+                            // print(_postController.selectedFiles.length);
+                            // // selectedImage.addAllIf(
+                            // //     _postController.selectedMediaFiles.length != 0,
+                            // //     _postController.selectedMediaFiles);
+                            // _postController.imageFile = null;
+                            // _postController.uploadedFiles.value =
+                            // await PostService.uploadMedia(
+                            //   _postController.selectedFiles,
+                            // );
+                            //
+                            // _postController.isLoading.value = false;
+                            //
+                            // if (_postController.uploadedFiles.value.code == 0) {
+                            //   _postController.postData.value =
+                            //   await CreatePostService.createPost(
+                            //       postId: _postController.postId.value,
+                            //       files: _postController
+                            //           .uploadedFiles.value.response!.data);
+                            //   Navigator.pushNamed(context, RouteName.createPost);
+                            // }
+                            // _postController.isLoading.value = false;
+                          },
+                          child: Container(
+                            height: 48 * SizeConfig.heightMultiplier!,
+                            decoration: BoxDecoration(
+                                color: kGreenColor,
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: Center(
+                              child: Text('next'.tr,
+                                  style: AppTextStyle.greenSemiBoldText
+                                      .copyWith(
+                                          fontSize:
+                                              18 * SizeConfig.textMultiplier!,
+                                          color: kPureWhite)),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  )
-                ],
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
         ),
-      ),
+        Obx(
+          () => profileController.isLoading.value
+              ? Container(
+                  height: Get.height,
+                  width: Get.width,
+                  color: Colors.black.withOpacity(0.015),
+                )
+              : Container(),
+        )
+      ],
     ));
   }
 }

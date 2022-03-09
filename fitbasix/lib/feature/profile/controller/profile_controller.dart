@@ -107,7 +107,8 @@ class ProfileController extends GetxController {
       currentPage.value,
       100,
     );
-    print("AssetList " + assetList.toString());
+
+    print("AssetList " + currentPage.value.toString());
     currentPage++;
     print("AssetList " + assetList.toString());
     return assetList;
@@ -124,6 +125,9 @@ class ProfileController extends GetxController {
         .toString();
     nameController.text = homeController
         .userProfileData.value.response!.data!.profile!.name
+        .toString();
+    coverPhoto.value = homeController
+        .userProfileData.value.response!.data!.profile!.coverPhoto
         .toString();
     bioController.text =
         homeController.userProfileData.value.response!.data!.profile!.bio ==

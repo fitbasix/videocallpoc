@@ -69,6 +69,7 @@ class HomeController extends GetxController {
   RxList<int> skipReplyList = RxList<int>([]);
   Future<List<Comments>>? future;
   RxBool isPostUpdate = false.obs;
+  RxString coverPhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -201,6 +202,8 @@ class HomeController extends GetxController {
       Get.deleteAll();
       Get.toNamed(RouteName.enterDetails);
     }
+    coverPhoto.value =
+        userProfileData.value.response!.data!.profile!.coverPhoto.toString();
     print(userProfileData.value.response!.data!.profile!.nutrition.toString());
     if (userProfileData
             .value.response!.data!.profile!.nutrition!.totalRequiredCalories !=
