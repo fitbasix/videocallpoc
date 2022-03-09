@@ -18,6 +18,7 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
     final HomeController _homeController = Get.find();
     return WillPopScope(
       onWillPop: () async {
+
         _homeController.selectedIndex.value = 0;
         Navigator.pop(context);
         Navigator.pop(context);
@@ -59,6 +60,36 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                     ),
                     Text(
                       "Edit_personal_info".tr,
+                      style: AppTextStyle.NormalBlackTitleText,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30 * SizeConfig.heightMultiplier!,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 18 * SizeConfig.widthMultiplier!),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.resetPassword);
+                },
+                child: Row(
+                  children: [
+                    GestureDetector(
+                        child: SvgPicture.asset(
+                      ImagePath.addPersonIcon,
+                      width: 16 * SizeConfig.widthMultiplier!,
+                      height: 16 * SizeConfig.heightMultiplier!,
+                      fit: BoxFit.contain,
+                    )),
+                    SizedBox(
+                      width: 16.59 * SizeConfig.widthMultiplier!,
+                    ),
+                    Text(
+                      "reset_password".tr,
                       style: AppTextStyle.NormalBlackTitleText,
                     ),
                   ],

@@ -22,6 +22,9 @@ class ProfileController extends GetxController {
   TextEditingController nameController = TextEditingController();
   TextEditingController DOBController = TextEditingController();
   TextEditingController bioController = TextEditingController();
+  TextEditingController currentPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   RxString selectedDate = DateTime.now().toString().obs;
   RxString otp = "".obs;
   RxInt lastPage = RxInt(0);

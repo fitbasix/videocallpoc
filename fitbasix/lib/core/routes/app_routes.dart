@@ -28,6 +28,7 @@ import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
 import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:fitbasix/feature/profile/view/edit_userprofile_info.dart';
+import 'package:fitbasix/feature/profile/view/reset_password.dart';
 import 'package:fitbasix/feature/profile/view/user_profile_info.dart';
 import 'package:fitbasix/feature/settings/view/settings.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
@@ -182,6 +183,10 @@ class GenerateRoute {
       return MaterialPageRoute(
         builder: (BuildContext context) => OtpScreen(),
       );
+    }
+    if (route == RouteName.resetPassword) {
+      return MaterialPageRoute(
+          builder: (BuildContext context) => ResetPasswordScreen());
     }
     if (route == RouteName.enterDetails) {
       return MaterialPageRoute(
