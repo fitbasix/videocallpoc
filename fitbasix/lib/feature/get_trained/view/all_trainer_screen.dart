@@ -169,7 +169,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             prefixIcon: Padding(
                               padding: EdgeInsets.only(
                                   left: 10.5 * SizeConfig.widthMultiplier!,
-                                  right: 5*SizeConfig.widthMultiplier!),
+                                  right: 5 * SizeConfig.widthMultiplier!),
                               child: Icon(
                                 Icons.search,
                                 color: hintGrey,
@@ -209,11 +209,12 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                     transform: Matrix4.translationValues(-20, 0, 0),
                     child: Text(
                       _trainerController.pageTitle.value,
-                      style: AppTextStyle.titleText
-                          .copyWith(
-                          color: Theme.of(context).appBarTheme.titleTextStyle?.color,
-                          fontSize: 16 * SizeConfig.textMultiplier!
-                      ),
+                      style: AppTextStyle.titleText.copyWith(
+                          color: Theme.of(context)
+                              .appBarTheme
+                              .titleTextStyle
+                              ?.color,
+                          fontSize: 16 * SizeConfig.textMultiplier!),
                     ),
                   )),
             actions: [
@@ -248,9 +249,9 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                       child: Text(
                         'interests'.tr,
                         style: AppTextStyle.titleText.copyWith(
-                            fontSize: 14 * SizeConfig.textMultiplier!,
-                            color: Theme.of(context).textTheme.bodyText1?.color,
-                            ),
+                          fontSize: 14 * SizeConfig.textMultiplier!,
+                          color: Theme.of(context).textTheme.bodyText1?.color,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -497,13 +498,13 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                 .profilePhoto ??
                                             ''
                                         : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-                                    slotLeft: int.tryParse(_trainerController
+                                    slotLeft: _trainerController
                                         .allTrainer
                                         .value
                                         .response!
                                         .data!
                                         .trainers![index]
-                                        .slotsFeft!)!,
+                                        .slotsFeft!,
                                     onTap: () async {
                                       _trainerController.atrainerDetail.value =
                                           _trainerController.allTrainer.value
@@ -637,8 +638,8 @@ class TrainerTile extends StatelessWidget {
                     width: 80 * SizeConfig.heightMultiplier!,
                     height: 80 * SizeConfig.heightMultiplier!,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                       // color: kPureBlack
+                      borderRadius: BorderRadius.circular(10),
+                      // color: kPureBlack
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
@@ -661,7 +662,8 @@ class TrainerTile extends StatelessWidget {
                         Text(
                           name,
                           style: AppTextStyle.titleText.copyWith(
-                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 16 * SizeConfig.textMultiplier!),
                         ),
                         SizedBox(
@@ -697,8 +699,7 @@ class TrainerTile extends StatelessWidget {
                 description,
                 style: AppTextStyle.NormalText.copyWith(
                     fontSize: 14 * SizeConfig.textMultiplier!,
-                  color: Theme.of(context).textTheme.bodyText1?.color
-                ),
+                    color: Theme.of(context).textTheme.bodyText1?.color),
                 maxLines: 2,
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.ellipsis,
@@ -726,8 +727,9 @@ class TrainerTile extends StatelessWidget {
                               certificateDescription:
                                   certifcateTitle![index].certificateName!,
                               certificateIcon: certifcateTitle![index].url!,
-                              color: index % 2 == 0 ?
-                              Theme.of(context).highlightColor : Theme.of(context).indicatorColor,
+                              color: index % 2 == 0
+                                  ? Theme.of(context).highlightColor
+                                  : Theme.of(context).indicatorColor,
                             ),
                           );
                         }),
@@ -755,8 +757,10 @@ class TrainerTile extends StatelessWidget {
                             'trainee'.tr,
                             style: AppTextStyle.titleText.copyWith(
                                 fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: Theme.of(context).textTheme.bodyText1?.color
-                            ),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color),
                           ),
                           SizedBox(
                             width: 8 * SizeConfig.widthMultiplier!,
@@ -766,8 +770,10 @@ class TrainerTile extends StatelessWidget {
                                 traineeCount.toString()),
                             style: AppTextStyle.NormalText.copyWith(
                                 fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: Theme.of(context).textTheme.bodyText1?.color
-                            ),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color),
                           )
                         ],
                       ),
@@ -780,8 +786,10 @@ class TrainerTile extends StatelessWidget {
                           Text('ratings'.tr,
                               style: AppTextStyle.titleText.copyWith(
                                   fontSize: 14 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context).textTheme.bodyText1?.color
-                              )),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color)),
                           SizedBox(
                             width: 8 * SizeConfig.widthMultiplier!,
                           ),
@@ -799,7 +807,10 @@ class TrainerTile extends StatelessWidget {
                                 }) +
                                 ')',
                             style: AppTextStyle.normalBlackText.copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color,
                                 fontSize: 14 * SizeConfig.textMultiplier!),
                           )
                         ],
@@ -824,7 +835,10 @@ class TrainerTile extends StatelessWidget {
                           Text(
                             'slotLeft'.tr,
                             style: AppTextStyle.titleText.copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color,
                                 fontSize: 12 * SizeConfig.textMultiplier!),
                           ),
                         ],
@@ -896,8 +910,9 @@ class ItemCategory extends StatelessWidget {
         child: Container(
           height: 30 * SizeConfig.heightMultiplier!,
           decoration: BoxDecoration(
-              color: isSelected ?
-              Theme.of(context).primaryColor : Theme.of(context).secondaryHeaderColor,
+              color: isSelected
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).secondaryHeaderColor,
               borderRadius:
                   BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
               border: Border.all(
@@ -909,9 +924,10 @@ class ItemCategory extends StatelessWidget {
             child: Center(
               child: Text(
                 interest,
-                style: AppTextStyle.lightMediumBlackText
-                    .copyWith(color: isSelected ?
-                Theme.of(context).primaryColorDark : Theme.of(context).primaryColorLight),
+                style: AppTextStyle.lightMediumBlackText.copyWith(
+                    color: isSelected
+                        ? Theme.of(context).primaryColorDark
+                        : Theme.of(context).primaryColorLight),
               ),
             ),
           ),

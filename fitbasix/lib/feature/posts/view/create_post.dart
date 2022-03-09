@@ -41,7 +41,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(_postController.selectedCategory.value.name);
+    print(_postController.postId.value.toString() + "  postId");
     return GestureDetector(
       onTap: () async {
         FocusScope.of(context).unfocus();
@@ -122,7 +122,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                         message: 'post_successfull'.tr,
                                         duration: Duration(seconds: 3),
                                       ));
-
+                                      await _homeController.getTrendingPost();
+                                      // Navigator.pop(context);
+                                      _postController.postId.value == "";
                                       _postController.postTextController
                                           .clear();
                                       _postController.postText.value = '';
@@ -140,14 +142,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       _postController.selectedFiles.clear();
                                       _homeController.selectedIndex.value = 0;
                                       _homeController.currentPage.value = 1;
-                                      await _homeController.getTrendingPost();
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  HomeAndTrainerPage()),
-                                          (route) => false);
-                                      _postController.postId.value = '';
                                     }
                                   },
                                   child: Text(
