@@ -68,6 +68,7 @@ class HomeController extends GetxController {
   RxList<bool>? viewReplies = RxList<bool>([]);
   RxList<int> skipReplyList = RxList<int>([]);
   Future<List<Comments>>? future;
+  RxBool isPostUpdate = false.obs;
   RxList<String> likedPost = RxList<String>([]);
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -206,11 +207,13 @@ class HomeController extends GetxController {
         null) {
       spgStatus.value = true;
     }
-    await getTrendingPost();
+
     isLoading.value = false;
+    await getTrendingPost();
   }
 
   Future<void> getTrendingPost({int? skip}) async {
+    isPostUpdate.value = true;
     initialPostData.value = await HomeService.getPosts(skip: skip);
 
     if (initialPostData.value.response!.data!.length != 0) {
@@ -220,6 +223,7 @@ class HomeController extends GetxController {
     if (trendingPostList.value.length < 5) {
       isNeedToLoadData.value = false;
     }
+    isPostUpdate.value = false;
   }
 
   String timeAgoSinceDate(String dateString, {bool numericDates = true}) {

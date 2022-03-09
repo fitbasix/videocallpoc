@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
@@ -138,6 +139,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       _postController.imageFile = null;
                                       _postController.selectedFiles.clear();
                                       _homeController.selectedIndex.value = 0;
+                                      _homeController.currentPage.value = 1;
+                                      await _homeController.getTrendingPost();
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  HomeAndTrainerPage()),
+                                          (route) => false);
                                       _postController.postId.value = '';
                                     }
                                   },
@@ -458,7 +467,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
-                                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!),
@@ -489,8 +502,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                 .selectedCategory
                                                 .value
                                                 .serialId);
-                                  }
-                                  )),
+                                  })),
                               SizedBox(
                                 height: 10 * SizeConfig.heightMultiplier!,
                               ),
@@ -512,9 +524,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                 onSubmitted: (value) {},
                                                 onEditingComplete: () {},
                                                 style: AppTextStyle
-                                                    .normalGreenText.copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color
-                                                ),
+                                                    .normalGreenText
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color),
                                                 // keyboardType: TextInputType.multiline,
                                                 maxLines: null,
                                                 decoration: InputDecoration(
@@ -568,8 +583,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                           onEditingComplete:
                                                               () {},
                                                           style: AppTextStyle
-                                                              .normalGreenText.copyWith(
-                                                            color: Theme.of(context).textTheme.bodyText1?.color),
+                                                              .normalGreenText
+                                                              .copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText1
+                                                                      ?.color),
                                                           // keyboardType: TextInputType.multiline,
                                                           maxLines: null,
                                                           decoration: InputDecoration(
@@ -623,8 +643,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                                               ),
                                                                             )),
                                                                 Positioned(
-                                                                    top: 10*SizeConfig.heightMultiplier!,
-                                                                    right: 10*SizeConfig.widthMultiplier!,
+                                                                    top: 10 *
+                                                                        SizeConfig
+                                                                            .heightMultiplier!,
+                                                                    right: 10 *
+                                                                        SizeConfig
+                                                                            .widthMultiplier!,
                                                                     child:
                                                                         GestureDetector(
                                                                       onTap:
@@ -702,8 +726,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                                             .fitWidth,
                                                                       ),
                                                                       Positioned(
-                                                                          top: 10*SizeConfig.heightMultiplier!,
-                                                                          right: 10*SizeConfig.widthMultiplier!,
+                                                                          top: 10 *
+                                                                              SizeConfig
+                                                                                  .heightMultiplier!,
+                                                                          right: 10 *
+                                                                              SizeConfig
+                                                                                  .widthMultiplier!,
                                                                           child:
                                                                               GestureDetector(
                                                                             onTap:
@@ -785,8 +813,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                           onEditingComplete:
                                                               () {},
                                                           style: AppTextStyle
-                                                              .normalGreenText.copyWith(
-                                                              color: Theme.of(context).textTheme.bodyText1?.color),
+                                                              .normalGreenText
+                                                              .copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText1
+                                                                      ?.color),
                                                           // keyboardType: TextInputType.multiline,
                                                           maxLines: null,
                                                           decoration: InputDecoration(
@@ -806,7 +839,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         ),
                                                       ),
                                                       Container(
-                                                        height: 120*SizeConfig.heightMultiplier!,
+                                                        height: 120 *
+                                                            SizeConfig
+                                                                .heightMultiplier!,
                                                         child: ListView.builder(
                                                             itemCount:
                                                                 _postController
@@ -981,7 +1016,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                           children: [
                                             SvgPicture.asset(
                                                 ImagePath.locationIcon,
-                                                color: Theme.of(context).primaryColor,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
                                                 width: 17 *
                                                     SizeConfig
                                                         .widthMultiplier!),
@@ -993,7 +1029,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                               'location'.tr,
                                               style: AppTextStyle.titleText
                                                   .copyWith(
-                                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color,
                                                       fontSize: 14 *
                                                           SizeConfig
                                                               .textMultiplier!),
@@ -1033,7 +1072,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                   .placeName![1],
                                               style: AppTextStyle.titleText
                                                   .copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color,
                                                       fontSize: 14 *
                                                           SizeConfig
                                                               .textMultiplier!),
@@ -1069,17 +1111,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      SvgPicture.asset(
-                                          ImagePath.galleryIcon,
+                                      SvgPicture.asset(ImagePath.galleryIcon,
                                           color: Theme.of(context).primaryColor,
-                                          width: 17 * SizeConfig.widthMultiplier!),
+                                          width:
+                                              17 * SizeConfig.widthMultiplier!),
                                       SizedBox(
                                         width: 16 * SizeConfig.widthMultiplier!,
                                       ),
                                       Text(
                                         'photo_video'.tr,
                                         style: AppTextStyle.titleText.copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: 14 *
                                                 SizeConfig.textMultiplier!),
                                       )
@@ -1124,7 +1169,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       Text(
                                         'tag_people'.tr,
                                         style: AppTextStyle.titleText.copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: 14 *
                                                 SizeConfig.textMultiplier!),
                                       )

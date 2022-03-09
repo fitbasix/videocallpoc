@@ -68,6 +68,7 @@ class _PostTileState extends State<PostTile> {
     return InkWell(
       onTap: widget.onTap,
       child: Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -93,7 +94,10 @@ class _PostTileState extends State<PostTile> {
                           ? Text(
                               widget.name,
                               style: AppTextStyle.boldBlackText.copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color,
                                   fontSize: 14 * SizeConfig.textMultiplier!),
                             )
                           : widget.people.length == 1
@@ -107,7 +111,10 @@ class _PostTileState extends State<PostTile> {
                                         widget.name,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -117,14 +124,23 @@ class _PostTileState extends State<PostTile> {
                                       Container(
                                         height: 1,
                                         width: 15,
-                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
-                                      Text('with'.tr,style: AppTextStyle.normalGreenText.copyWith(
-                                        color: Theme.of(context).textTheme.bodyText1?.color,
-                                      ),
+                                      Text(
+                                        'with'.tr,
+                                        style: AppTextStyle.normalGreenText
+                                            .copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.color,
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
@@ -133,7 +149,10 @@ class _PostTileState extends State<PostTile> {
                                         widget.people[0].name!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       )
@@ -150,7 +169,10 @@ class _PostTileState extends State<PostTile> {
                                         widget.name,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -160,7 +182,10 @@ class _PostTileState extends State<PostTile> {
                                       Container(
                                         height: 1,
                                         width: 15,
-                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
@@ -169,7 +194,10 @@ class _PostTileState extends State<PostTile> {
                                         'with'.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -180,7 +208,10 @@ class _PostTileState extends State<PostTile> {
                                         widget.people[0].name!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -191,7 +222,10 @@ class _PostTileState extends State<PostTile> {
                                         'and'.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -203,7 +237,10 @@ class _PostTileState extends State<PostTile> {
                                         }),
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       )
@@ -215,42 +252,48 @@ class _PostTileState extends State<PostTile> {
                           Text(widget.category,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context).textTheme.headline3?.color
-                              )),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color)),
                           SizedBox(
                             width: 13 * SizeConfig.widthMultiplier!,
                           ),
-                          Icon(
-                            Icons.access_time,
-                            size: 16*SizeConfig.widthMultiplier!,
-                              color: Theme.of(context).textTheme.headline3?.color
-                          ),
+                          Icon(Icons.access_time,
+                              size: 16 * SizeConfig.widthMultiplier!,
+                              color:
+                                  Theme.of(context).textTheme.headline3?.color),
                           SizedBox(
                             width: 5 * SizeConfig.widthMultiplier!,
                           ),
                           Text(widget.date,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context).textTheme.headline3?.color
-                              )),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color)),
                           SizedBox(
                             width: 14 * SizeConfig.widthMultiplier!,
                           ),
                           widget.place == ''
                               ? SizedBox()
-                              : Icon(
-                                  Icons.place,
-                                  size: 16*SizeConfig.widthMultiplier!,
-                                  color: Theme.of(context).textTheme.headline3?.color
-                                ),
+                              : Icon(Icons.place,
+                                  size: 16 * SizeConfig.widthMultiplier!,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color),
                           SizedBox(
                             width: 6.5 * SizeConfig.widthMultiplier!,
                           ),
                           Text(widget.place,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context).textTheme.headline3?.color
-                              ))
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color))
                         ],
                       )
                     ],
@@ -271,7 +314,7 @@ class _PostTileState extends State<PostTile> {
                 trimExpandedText: 'see_less'.tr,
                 colorClickableText: hintGrey,
                 style: AppTextStyle.NormalText.copyWith(
-                  color: Theme.of(context).textTheme.bodyText1?.color,
+                    color: Theme.of(context).textTheme.bodyText1?.color,
                     fontSize: 14 * SizeConfig.textMultiplier!),
               ),
             ),
@@ -401,8 +444,7 @@ class _PostTileState extends State<PostTile> {
                   ),
                   Text(
                     'likes'.trParams({'no_likes': widget.likes}),
-                    style: AppTextStyle.boldBlackText
-                        .copyWith(
+                    style: AppTextStyle.boldBlackText.copyWith(
                         color: Theme.of(context).textTheme.bodyText1?.color,
                         fontSize: 12 * SizeConfig.textMultiplier!),
                   ),
@@ -411,7 +453,7 @@ class _PostTileState extends State<PostTile> {
                   ),
                   Icon(
                     Icons.mode_comment_outlined,
-                    size: 16*SizeConfig.widthMultiplier!,
+                    size: 16 * SizeConfig.widthMultiplier!,
                     color: kPureWhite,
                   ),
                   SizedBox(
@@ -419,8 +461,7 @@ class _PostTileState extends State<PostTile> {
                   ),
                   Text(
                     'comments'.trParams({'no_comments': widget.comments}),
-                    style: AppTextStyle.boldBlackText
-                        .copyWith(
+                    style: AppTextStyle.boldBlackText.copyWith(
                         color: Theme.of(context).textTheme.bodyText1?.color,
                         fontSize: 12 * SizeConfig.textMultiplier!),
                   )
@@ -509,7 +550,7 @@ class _PostTileState extends State<PostTile> {
               children: [
                 Expanded(
                   child: Container(
-                    height: 40*SizeConfig.heightMultiplier!,
+                    height: 40 * SizeConfig.heightMultiplier!,
                     // width: 260 * SizeConfig.widthMultiplier!,
                     margin: EdgeInsets.only(left: 16, right: 16),
                     decoration: BoxDecoration(
@@ -527,18 +568,20 @@ class _PostTileState extends State<PostTile> {
                           border: InputBorder.none,
                           hintText: 'add_comment'.tr,
                           hintStyle: AppTextStyle.smallGreyText.copyWith(
-                              color: Theme.of(context).textTheme.headline1?.color
-                          ),
+                              color:
+                                  Theme.of(context).textTheme.headline1?.color),
                           contentPadding: EdgeInsets.only(
-                              bottom: 10*SizeConfig.heightMultiplier!,
+                              bottom: 10 * SizeConfig.heightMultiplier!,
                               left: 16 * SizeConfig.widthMultiplier!)),
                     ),
                   ),
                 ),
-                IconButton(onPressed: widget.onTap, icon: Icon(
-                    Icons.send,
-                  color: Theme.of(context).primaryColor,
-                ))
+                IconButton(
+                    onPressed: widget.onTap,
+                    icon: Icon(
+                      Icons.send,
+                      color: Theme.of(context).primaryColor,
+                    ))
               ],
             ),
             SizedBox(

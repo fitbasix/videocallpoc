@@ -99,6 +99,7 @@ class ProfileServices {
       String? profilePhoto}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    print(interests);
     final response = await dio!.put(ApiUrl.editProfile, data: {
       "name": name,
       "bio": bio,

@@ -33,6 +33,7 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
   // final PostController _postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
   final ProfileController profileController = Get.find();
+
   File? selectedMediaFile;
   AssetEntity? selectedAssestEntity;
   List<DropdownMenuItem<AssetPathEntity>> buildDropdownMenuItems(
@@ -203,11 +204,18 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
                                       tag: profileController
                                           .assets[index].modifiedDateSecond!,
                                       onTap: () async {
-                                        selectedAssestEntity =
-                                            profileController.assets[index];
-                                        selectedMediaFile =
-                                            await profileController
-                                                .assets[index].file;
+                                        if (selectedAssestEntity ==
+                                            profileController.assets[index]) {
+                                          selectedAssestEntity = null;
+                                          selectedMediaFile = null;
+                                        } else {
+                                          selectedAssestEntity =
+                                              profileController.assets[index];
+                                          selectedMediaFile =
+                                              await profileController
+                                                  .assets[index].file;
+                                        }
+
                                         setState(() {});
                                         print(selectedMediaFile);
                                       },
