@@ -34,27 +34,27 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: UserPageInfo(
-        username:
-            _homeController.userProfileData.value.response!.data!.profile!.name,
-        userfollowerscount: _homeController
-            .userProfileData.value.response!.data!.profile!.followers
-            .toString(),
-        userfollowingscount: _homeController
-            .userProfileData.value.response!.data!.profile!.following
-            .toString(),
-        aboutuser: about_user.tr,
-        userImage: _homeController
-            .userProfileData.value.response!.data!.profile!.profilePhoto,
-        userCoverImage: _homeController
-            .userProfileData.value.response!.data!.profile!.coverPhoto,
-        oneditprofile: () {
-          Navigator.pushNamed(context, RouteName.edituserProfileScreen);
-        },
-        oneditcoverimage: () {
-          profileController.isCoverPhoto.value = true;
-          Navigator.pushNamed(context, RouteName.selectProfilePhoto);
-        },
+      body: Obx(
+        () => UserPageInfo(
+          username: _homeController
+              .userProfileData.value.response!.data!.profile!.name,
+          userfollowerscount: _homeController
+              .userProfileData.value.response!.data!.profile!.followers
+              .toString(),
+          userfollowingscount: _homeController
+              .userProfileData.value.response!.data!.profile!.following
+              .toString(),
+          aboutuser: about_user.tr,
+          userImage: profileController.profilePhoto.value,
+          userCoverImage: profileController.coverPhoto.toString(),
+          oneditprofile: () {
+            Navigator.pushNamed(context, RouteName.edituserProfileScreen);
+          },
+          oneditcoverimage: () {
+            profileController.isCoverPhoto.value = true;
+            Navigator.pushNamed(context, RouteName.selectProfilePhoto);
+          },
+        ),
       ),
     );
   }
@@ -101,8 +101,6 @@ class _UserPageInfoState extends State<UserPageInfo> {
   @override
   void initState() {
     super.initState();
-
-    _profileController.currentPage.value = 1;
 
     _scrollController.addListener(() async {
       if (_scrollController.position.maxScrollExtent ==

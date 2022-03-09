@@ -8,6 +8,7 @@ import 'package:fitbasix/core/universal_widgets/right_tick.dart';
 import 'package:fitbasix/feature/posts/model/media_response_model.dart';
 import 'package:fitbasix/feature/posts/view/cached_network_image.dart';
 import 'package:fitbasix/feature/posts/view/camera_screen.dart';
+import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:fitbasix/feature/profile/view/profile_camera_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,6 +20,7 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import '../../Home/controller/Home_Controller.dart';
 import '../../posts/services/post_service.dart';
 import '../controller/profile_controller.dart';
 
@@ -33,7 +35,7 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
   // final PostController _postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
   final ProfileController profileController = Get.find();
-
+  final HomeController homeController = Get.find();
   File? selectedMediaFile;
   AssetEntity? selectedAssestEntity;
   List<DropdownMenuItem<AssetPathEntity>> buildDropdownMenuItems(
@@ -97,75 +99,91 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
         title: Transform(
           transform: Matrix4.translationValues(-20, 0, 0),
           child: Text(
-            'create_post'.tr,
+            'gallery'.tr,
             style: AppTextStyle.titleText.copyWith(
                 color: Theme.of(context).appBarTheme.titleTextStyle?.color,
                 fontSize: 16 * SizeConfig.textMultiplier!),
           ),
         ),
         actions: [
-          selectedMediaFile != null
-              ? RightTick(
-                  onTap: () async {
-                    MediaUrl mediaUrl = await PostService.uploadMedia(
-                        [File(selectedMediaFile!.path)]);
-                    profileController.profilePhoto.value =
-                        mediaUrl.response!.data![0];
-                    Navigator.pop(context);
-                  },
-                )
-              : Row(
-                  children: [
-                    IconButton(
-                        onPressed: () async {
-                          final ImagePicker picker = ImagePicker();
-                          XFile? file = await picker.pickImage(
-                              source: ImageSource.camera);
-                          if (file != null) {
-                            profileController.imageFile = File(file.path);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CameraProfileViewScreen(
-                                        imageFile: File(file.path),
-                                      )),
-                            );
-                          }
-                        },
-                        icon: Icon(
-                          Icons.camera_alt,
-                          color: Theme.of(context).primaryColor,
-                        )),
-                    // GestureDetector(
-                    //   onTap: () async {
-                    //     final ImagePicker picker = ImagePicker();
-                    //     XFile? file =
-                    //         await picker.pickVideo(source: ImageSource.camera);
-                    //     if (file != null) {
-                    //       profileController.imageFile = File(file.path);
-                    //       final fileName = await profileController
-                    //           .genThumbnailFile(file.path);
-                    //       print(fileName);
-                    //       Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (context) => CameraViewScreen(
-                    //                   imageFile: fileName,
-                    //                   isVideo: true,
-                    //                 )),
-                    //       );
-                    //     }
-                    //   },
-                    //   child: SvgPicture.asset(
-                    //     ImagePath.videoIcon,
-                    //     color: Theme.of(context).primaryColor,
-                    //   ),
-                    // ),
-                    SizedBox(
-                      width: 17.66 * SizeConfig.widthMultiplier!,
+          Obx(() => profileController.isLoading.value
+              ? CustomizedCircularProgress()
+              : (selectedMediaFile != null
+                  ? RightTick(
+                      onTap: () async {
+                        profileController.isLoading.value = true;
+                        if (profileController.isCoverPhoto.value == false) {
+                          MediaUrl mediaUrl = await PostService.uploadMedia(
+                              [File(selectedMediaFile!.path)]);
+                          profileController.profilePhoto.value =
+                              mediaUrl.response!.data![0];
+                        } else {
+                          MediaUrl mediaUrl = await PostService.uploadMedia(
+                              [File(selectedMediaFile!.path)]);
+                          profileController.coverPhoto.value =
+                              mediaUrl.response!.data![0];
+                          await ProfileServices.UpdateCoverPhoto(
+                              coverPhoto: profileController.coverPhoto.value);
+                          homeController.coverPhoto.value =
+                              mediaUrl.response!.data![0];
+                        }
+                        profileController.isLoading.value = false;
+                        Navigator.pop(context);
+                      },
                     )
-                  ],
-                )
+                  : Row(
+                      children: [
+                        IconButton(
+                            onPressed: () async {
+                              final ImagePicker picker = ImagePicker();
+                              XFile? file = await picker.pickImage(
+                                  source: ImageSource.camera, imageQuality: 20);
+                              if (file != null) {
+                                profileController.imageFile = File(file.path);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CameraProfileViewScreen(
+                                            imageFile: File(file.path),
+                                          )),
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              Icons.camera_alt,
+                              color: Theme.of(context).primaryColor,
+                            )),
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     final ImagePicker picker = ImagePicker();
+                        //     XFile? file =
+                        //         await picker.pickVideo(source: ImageSource.camera);
+                        //     if (file != null) {
+                        //       profileController.imageFile = File(file.path);
+                        //       final fileName = await profileController
+                        //           .genThumbnailFile(file.path);
+                        //       print(fileName);
+                        //       Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //             builder: (context) => CameraViewScreen(
+                        //                   imageFile: fileName,
+                        //                   isVideo: true,
+                        //                 )),
+                        //       );
+                        //     }
+                        //   },
+                        //   child: SvgPicture.asset(
+                        //     ImagePath.videoIcon,
+                        //     color: Theme.of(context).primaryColor,
+                        //   ),
+                        // ),
+                        SizedBox(
+                          width: 17.66 * SizeConfig.widthMultiplier!,
+                        )
+                      ],
+                    )))
         ],
       ),
       body: Stack(
