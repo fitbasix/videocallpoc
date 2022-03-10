@@ -12,8 +12,9 @@ final ProfileController _profileController = Get.find();
 Widget dobPicker() => Container(
       child: DatePickerWidget(
         looping: true,
-        initialDate: DateTime.parse(_profileController
-            .homeController.userProfileData.value.response!.data!.profile!.dob!
+        initialDate: DateTime.parse((_profileController.homeController
+                    .userProfileData.value.response!.data!.profile!.dob ??
+                DateTime.now())
             .toString()),
         firstDate: DateTime(1900), //DateTime(1960),
         lastDate: DateTime.now(),

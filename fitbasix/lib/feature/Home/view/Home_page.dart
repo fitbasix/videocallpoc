@@ -366,6 +366,7 @@ class _HomePageState extends State<HomePage> {
                                                           .totalWaterRequired!
                                                           .toDouble(),
                                                       () async {
+                                                        print("homeController.waterLevel.value"+_homeController.waterLevel.value.toString());
                                                   _homeController
                                                       .isConsumptionLoading
                                                       .value = true;
@@ -1120,6 +1121,7 @@ class _HomePageState extends State<HomePage> {
                                                         _homeController
                                                             .commentsList
                                                             .clear();
+                                                        _homeController.replyList.clear();
                                                         Navigator.pushNamed(
                                                             context,
                                                             RouteName

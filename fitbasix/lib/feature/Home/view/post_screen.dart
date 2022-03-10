@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
@@ -53,8 +55,7 @@ class _PostScreenState extends State<PostScreen> {
             transform: Matrix4.translationValues(
                 -20 * SizeConfig.widthMultiplier!, 0, 0),
             child: Text('post'.tr,
-                style: AppTextStyle.titleText
-                    .copyWith(
+                style: AppTextStyle.titleText.copyWith(
                     color: Theme.of(context).appBarTheme.titleTextStyle?.color,
                     fontSize: 16 * SizeConfig.textMultiplier!)),
           ),
@@ -116,9 +117,10 @@ class _PostScreenState extends State<PostScreen> {
                     isLiked: _homeController.post.value.isLiked!,
                     comments: _homeController.post.value.comments.toString(),
                     addComment: () async {
+                      log("reply test");
                       HomeService.addComment(_homeController.post.value.id!,
                           _homeController.comment.value);
-
+                      log("reply test");
                       _homeController.commentController.clear();
 
                       var postData = await HomeService.getPostById(
@@ -142,11 +144,14 @@ class _PostScreenState extends State<PostScreen> {
                     comment: null,
                     people: _homeController.post.value.people!,
                     commentsList: _homeController.commentsList,
-                    onReply: () {},
+                    onReply: () {
+                      print("reply");
+                    },
                     onTap: () {},
                     onViewPreviousComments: () async {
                       if (_homeController.post.value.comments! / 5 >
                           _homeController.skipCommentCount.value) {
+                        _homeController.commentController.clear();
                         var moreComments = await HomeService.fetchComment(
                             postId: _homeController.post.value.id!,
                             skip: _homeController.skipCommentCount.value);

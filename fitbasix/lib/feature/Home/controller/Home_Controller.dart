@@ -195,7 +195,12 @@ class HomeController extends GetxController {
 
   Future<void> setup() async {
     isLoading.value = true;
+    print("test");
     userProfileData.value = await CreatePostService.getUserProfile();
+
+    log(userProfileData.value.response!.data!.profile!.nutrition == Nutrition()
+        ? "1"
+        : "2");
 
     ///todo after
     if (userProfileData.value.response!.data!.profile!.name == null) {
@@ -203,15 +208,21 @@ class HomeController extends GetxController {
       Get.deleteAll();
       Get.toNamed(RouteName.enterDetails);
     }
+
     coverPhoto.value =
         userProfileData.value.response!.data!.profile!.coverPhoto.toString();
     print(userProfileData.value.response!.data!.profile!.nutrition.toString());
     if (userProfileData
             .value.response!.data!.profile!.nutrition!.totalRequiredCalories !=
         null) {
+      waterLevel.value = (userProfileData.value.response!.data!.profile!
+                  .nutrition!.totalWaterConsumed ??
+              0) /
+          (userProfileData
+              .value.response!.data!.profile!.nutrition!.totalWaterRequired!);
       spgStatus.value = true;
     }
-
+    print("ooooo");
     isLoading.value = false;
     await getTrendingPost();
   }

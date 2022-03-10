@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -457,7 +458,7 @@ class _FullPostTileState extends State<FullPostTile> {
                   ),
                   Icon(
                     Icons.mode_comment_outlined,
-                    size: 16*SizeConfig.widthMultiplier!,
+                    size: 16 * SizeConfig.widthMultiplier!,
                     color: kPureWhite,
                   ),
                   SizedBox(
@@ -575,6 +576,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                               _homeController
                                                                   .replyController,
                                                           onChanged: (value) {
+                                                            log("replllllll");
                                                             _homeController
                                                                 .reply
                                                                 .value = value;
@@ -632,6 +634,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                     ),
                                                     IconButton(
                                                         onPressed: () async {
+                                                          log("Icon");
                                                           Navigator.pop(
                                                               context);
                                                           FocusScope.of(context)
@@ -645,7 +648,17 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                   _homeController
                                                                       .reply
                                                                       .value);
+                                                          _homeController
+                                                              .replyController
+                                                              .clear();
 
+                                                          _homeController
+                                                              .commentController
+                                                              .clear();
+                                                          log(_homeController
+                                                              .commentController
+                                                              .value
+                                                              .text);
                                                           _homeController
                                                                   .postComments
                                                                   .value =
@@ -729,7 +742,8 @@ class _FullPostTileState extends State<FullPostTile> {
                                     minWidth: Get.width -
                                         80 * SizeConfig.widthMultiplier!,
                                     taggedPersonName: '',
-                                    maxWidth: Get.width*SizeConfig.widthMultiplier!,
+                                    maxWidth:
+                                        Get.width * SizeConfig.widthMultiplier!,
                                   ),
                                   Obx(() => _homeController
                                                   .commentsList[index].reply! >
@@ -738,9 +752,12 @@ class _FullPostTileState extends State<FullPostTile> {
                                               false
                                       ? Padding(
                                           padding: EdgeInsets.only(
-                                              left: 64 * SizeConfig.widthMultiplier!,
-                                              top: 4 * SizeConfig.heightMultiplier!,
-                                              bottom: 12 * SizeConfig.heightMultiplier!),
+                                              left: 64 *
+                                                  SizeConfig.widthMultiplier!,
+                                              top: 4 *
+                                                  SizeConfig.heightMultiplier!,
+                                              bottom: 12 *
+                                                  SizeConfig.heightMultiplier!),
                                           child: InkWell(
                                               onTap: () {
                                                 _homeController.viewReplies!
@@ -844,12 +861,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                                                   child: Container(
                                                                                                     // height: 40,
                                                                                                     // width: 260 * SizeConfig.widthMultiplier!,
-                                                                                                    margin: EdgeInsets.only(
-                                                                                                        left: 16*SizeConfig.widthMultiplier!,
-                                                                                                        right: 16*SizeConfig.widthMultiplier!,
-                                                                                                        top: 16*SizeConfig.heightMultiplier!,
-                                                                                                        bottom: 16*SizeConfig.heightMultiplier!
-                                                                                                    ),
+                                                                                                    margin: EdgeInsets.only(left: 16 * SizeConfig.widthMultiplier!, right: 16 * SizeConfig.widthMultiplier!, top: 16 * SizeConfig.heightMultiplier!, bottom: 16 * SizeConfig.heightMultiplier!),
                                                                                                     decoration: BoxDecoration(
                                                                                                       color: Theme.of(context).cardColor,
                                                                                                       borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
@@ -861,24 +873,18 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                                                       },
                                                                                                       autofocus: true,
                                                                                                       maxLines: null,
-                                                                                                      style: AppTextStyle.lightMediumBlackText.copyWith(
-                                                                                                          fontWeight: FontWeight.w600,
-                                                                                                          color: Theme.of(context).textTheme.bodyText1?.color),
+                                                                                                      style: AppTextStyle.lightMediumBlackText.copyWith(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.bodyText1?.color),
                                                                                                       decoration: InputDecoration(
                                                                                                           enabled: true,
                                                                                                           border: InputBorder.none,
                                                                                                           hintText: 'add_comment'.tr,
-                                                                                                          hintStyle: AppTextStyle.smallGreyText.copyWith(
-                                                                                                              fontSize: 12 * SizeConfig.textMultiplier!,
-                                                                                                              color: Theme.of(context).textTheme.headline1?.color
-                                                                                                          ),
+                                                                                                          hintStyle: AppTextStyle.smallGreyText.copyWith(fontSize: 12 * SizeConfig.textMultiplier!, color: Theme.of(context).textTheme.headline1?.color),
                                                                                                           contentPadding: EdgeInsets.only(
                                                                                                             bottom: 12 * SizeConfig.heightMultiplier!,
                                                                                                             top: 12 * SizeConfig.heightMultiplier!,
                                                                                                             left: 16 * SizeConfig.widthMultiplier!,
                                                                                                             right: 16 * SizeConfig.widthMultiplier!,
-                                                                                                          )
-                                                                                                      ),
+                                                                                                          )),
                                                                                                     ),
                                                                                                   ),
                                                                                                 ),
@@ -886,7 +892,9 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                                                     onPressed: () async {
                                                                                                       Navigator.pop(context);
                                                                                                       FocusScope.of(context).unfocus();
+                                                                                                      _homeController.replyController.clear();
                                                                                                       await HomeService.replyComment(commentId: widget.commentsList[index].id!, taggedPerson: snapshot.data![index2].user!.id, comment: _homeController.reply.value);
+                                                                                                      _postController.postTextController.clear();
 
                                                                                                       _homeController.postComments.value = await HomeService.fetchComment(postId: _homeController.post.value.id!);
 
@@ -973,7 +981,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                                 style: AppTextStyle
                                                     .boldBlackText
                                                     .copyWith(
-                                                  color: Theme.of(context).textTheme.headline6?.color,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .headline6
+                                                            ?.color,
                                                         fontSize: 14 *
                                                             SizeConfig
                                                                 .textMultiplier!)),
@@ -996,8 +1007,8 @@ class _FullPostTileState extends State<FullPostTile> {
                       // height: 40,
                       // width: 260 * SizeConfig.widthMultiplier!,
                       margin: EdgeInsets.only(
-                          left: 16*SizeConfig.widthMultiplier!,
-                          right: 16*SizeConfig.widthMultiplier!),
+                          left: 16 * SizeConfig.widthMultiplier!,
+                          right: 16 * SizeConfig.widthMultiplier!),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(
@@ -1006,20 +1017,24 @@ class _FullPostTileState extends State<FullPostTile> {
                       child: TextField(
                         controller: _homeController.commentController,
                         onChanged: (value) {
+                          log("pop1");
                           _homeController.comment.value = value;
                         },
                         maxLines: null,
                         style: AppTextStyle.lightMediumBlackText.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: Theme.of(context).textTheme.bodyText1?.color),
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                         decoration: InputDecoration(
                             enabled: true,
                             border: InputBorder.none,
                             hintText: 'add_comment'.tr,
                             hintStyle: AppTextStyle.smallGreyText.copyWith(
                                 fontSize: 12 * SizeConfig.textMultiplier!,
-                                color: Theme.of(context).textTheme.headline1?.color
-                            ),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    ?.color),
                             contentPadding: EdgeInsets.only(
                               bottom: 12 * SizeConfig.heightMultiplier!,
                               top: 12 * SizeConfig.heightMultiplier!,
@@ -1032,9 +1047,9 @@ class _FullPostTileState extends State<FullPostTile> {
                   IconButton(
                       onPressed: widget.addComment,
                       icon: Icon(
-                      Icons.send,
-                    color: Theme.of(context).primaryColor,
-                  ))
+                        Icons.send,
+                        color: Theme.of(context).primaryColor,
+                      ))
                 ],
               ),
             ),
