@@ -30,27 +30,31 @@ String about_user =
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final HomeController _homeController = Get.find();
+  final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: UserPageInfo(
-        username:
-            _homeController.userProfileData.value.response!.data!.profile!.name,
-        userfollowerscount: _homeController
-            .userProfileData.value.response!.data!.profile!.followers
-            .toString(),
-        userfollowingscount: _homeController
-            .userProfileData.value.response!.data!.profile!.following
-            .toString(),
-        aboutuser: about_user.tr,
-        userImage: _homeController
-            .userProfileData.value.response!.data!.profile!.profilePhoto,
-        userCoverImage: _homeController
-            .userProfileData.value.response!.data!.profile!.coverPhoto,
-        oneditprofile: () {
-          Navigator.pushNamed(context, RouteName.edituserProfileScreen);
-        },
-        oneditcoverimage: () {},
+      body: Obx(
+        () => UserPageInfo(
+          username: _homeController
+              .userProfileData.value.response!.data!.profile!.name,
+          userfollowerscount: _homeController
+              .userProfileData.value.response!.data!.profile!.followers
+              .toString(),
+          userfollowingscount: _homeController
+              .userProfileData.value.response!.data!.profile!.following
+              .toString(),
+          aboutuser: about_user.tr,
+          userImage: profileController.profilePhoto.value,
+          userCoverImage: profileController.coverPhoto.toString(),
+          oneditprofile: () {
+            Navigator.pushNamed(context, RouteName.edituserProfileScreen);
+          },
+          oneditcoverimage: () {
+            profileController.isCoverPhoto.value = true;
+            Navigator.pushNamed(context, RouteName.selectProfilePhoto);
+          },
+        ),
       ),
     );
   }
@@ -98,8 +102,6 @@ class _UserPageInfoState extends State<UserPageInfo> {
   void initState() {
     super.initState();
 
-    _profileController.currentPage.value = 1;
-
     _scrollController.addListener(() async {
       if (_scrollController.position.maxScrollExtent ==
           _scrollController.position.pixels) {
@@ -137,7 +139,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       body: SafeArea(
         child: SingleChildScrollView(
           controller: _scrollController,
@@ -165,6 +167,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                   Text(
                                     widget.username!,
                                     style: AppTextStyle.titleText.copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                         fontSize:
                                             18 * SizeConfig.textMultiplier!),
                                   ),
@@ -215,6 +221,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                       Text(widget.userfollowerscount!,
                                           style: AppTextStyle.hmedium13Text
                                               .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: (18) *
                                                 SizeConfig.textMultiplier!,
                                           )),
@@ -225,6 +235,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                       Text('follower'.tr,
                                           style: AppTextStyle.hmediumBlackText
                                               .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: (12) *
                                                 SizeConfig.textMultiplier!,
                                           )),
@@ -239,6 +253,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                       Text(widget.userfollowingscount!,
                                           style: AppTextStyle.hmedium13Text
                                               .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: (18) *
                                                 SizeConfig.textMultiplier!,
                                           )),
@@ -249,6 +267,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                       Text('following'.tr,
                                           style: AppTextStyle.hmediumBlackText
                                               .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color,
                                             fontSize: (12) *
                                                 SizeConfig.textMultiplier!,
                                           )),
@@ -268,7 +290,13 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                 children: [
                                   Text(
                                     'about'.tr,
-                                    style: AppTextStyle.hblackSemiBoldText,
+                                    style: AppTextStyle.hblackSemiBoldText
+                                        .copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,
@@ -277,6 +305,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     widget.aboutuser!,
                                     style: AppTextStyle.hblackSemiBoldText
                                         .copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -285,7 +317,12 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                   ),
                                   Text(
                                     'interested_in'.tr,
-                                    style: AppTextStyle.hblackSemiBoldText,
+                                    style: AppTextStyle.hblackSemiBoldText
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color),
                                   ),
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,

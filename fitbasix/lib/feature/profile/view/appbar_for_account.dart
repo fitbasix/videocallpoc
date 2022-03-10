@@ -15,24 +15,26 @@ class AppBarForAccount extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: kPureWhite,
-      elevation: 0,
-      leading: IconButton(
-        onPressed: onback,
-        icon: Container(
-            color: Colors.transparent,
-            child: SvgPicture.asset(
-              ImagePath.backIcon,
-              width: 7.41 * SizeConfig.widthMultiplier!,
-              height: 12 * SizeConfig.heightMultiplier!,
-              fit: BoxFit.contain,
-            )),
-      ),
-      title: Text(
-        title!,
-        style: AppTextStyle.NormalBlackTitleText,
-      ),
-    );
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: onback,
+          icon: Container(
+              color: Colors.transparent,
+              child: SvgPicture.asset(
+                ImagePath.backIcon,
+                color: Theme.of(context).textTheme.bodyText1?.color,
+                width: 7.41 * SizeConfig.widthMultiplier!,
+                height: 12 * SizeConfig.heightMultiplier!,
+                // color: Theme.of(context).primaryColor,
+                fit: BoxFit.contain,
+              )),
+        ),
+        title: Text(
+          title!,
+          style: AppTextStyle.NormalBlackTitleText.copyWith(
+              color: Theme.of(context).appBarTheme.titleTextStyle?.color),
+        ));
   }
 
   @override

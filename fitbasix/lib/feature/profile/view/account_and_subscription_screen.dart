@@ -18,13 +18,14 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
     final HomeController _homeController = Get.find();
     return WillPopScope(
       onWillPop: () async {
+
         _homeController.selectedIndex.value = 0;
         Navigator.pop(context);
         Navigator.pop(context);
         return false;
       },
       child: Scaffold(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBarForAccount(
           title: "Account & Subscription",
           onback: () {
@@ -52,6 +53,7 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                       ImagePath.addPersonIcon,
                       width: 16 * SizeConfig.widthMultiplier!,
                       height: 16 * SizeConfig.heightMultiplier!,
+                      color: Theme.of(context).primaryColor,
                       fit: BoxFit.contain,
                     )),
                     SizedBox(
@@ -59,6 +61,38 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                     ),
                     Text(
                       "Edit_personal_info".tr,
+                      style: AppTextStyle.NormalBlackTitleText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30 * SizeConfig.heightMultiplier!,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 18 * SizeConfig.widthMultiplier!),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, RouteName.resetPassword);
+                },
+                child: Row(
+                  children: [
+                    GestureDetector(
+                        child: SvgPicture.asset(
+                      ImagePath.addPersonIcon,
+                      width: 16 * SizeConfig.widthMultiplier!,
+                      height: 16 * SizeConfig.heightMultiplier!,
+                      fit: BoxFit.contain,
+                    )),
+                    SizedBox(
+                      width: 16.59 * SizeConfig.widthMultiplier!,
+                    ),
+                    Text(
+                      "reset_password".tr,
                       style: AppTextStyle.NormalBlackTitleText,
                     ),
                   ],
@@ -79,13 +113,16 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                     width: 24 * SizeConfig.imageSizeMultiplier!,
                     height: 24 * SizeConfig.imageSizeMultiplier!,
                     fit: BoxFit.contain,
+                        color: Theme.of(context).primaryColor,
                   )),
                   SizedBox(
                     width: 12 * SizeConfig.widthMultiplier!,
                   ),
                   Text(
                     "subscription_details".tr,
-                    style: AppTextStyle.NormalBlackTitleText,
+                    style: AppTextStyle.NormalBlackTitleText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color
+                    ),
                   ),
                 ],
               ),

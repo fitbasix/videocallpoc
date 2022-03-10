@@ -89,6 +89,16 @@ class ProfileServices {
     log(response.toString());
   }
 
+  static Future<void> UpdateCoverPhoto({String? coverPhoto}) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    // print(interests);
+    final response = await dio!.put(ApiUrl.editProfile, data: {
+      "coverPhoto": coverPhoto,
+    });
+    print(response.toString());
+  }
+
   static Future<void> UpdateProfileData(
       {String? name,
       String? bio,
@@ -99,6 +109,7 @@ class ProfileServices {
       String? profilePhoto}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    print(interests);
     final response = await dio!.put(ApiUrl.editProfile, data: {
       "name": name,
       "bio": bio,
@@ -106,7 +117,7 @@ class ProfileServices {
       "weight": weight,
       "gender": gender,
       "interests": interests,
-      "profilePhoto": profilePhoto
+      "profilePhoto": profilePhoto,
     });
     print(response.toString());
   }

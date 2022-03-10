@@ -98,6 +98,7 @@ flutter_native_splash:
   background_image: "assets/log_in/welcome_image.png"
   background_image_dark: "assets/log_in/welcome_image.png"
   fullscreen: true
+  ios_content_mode: scaleAspectFill
   android: true
   ios: true
   

@@ -22,6 +22,9 @@ class ProfileController extends GetxController {
   TextEditingController nameController = TextEditingController();
   TextEditingController DOBController = TextEditingController();
   TextEditingController bioController = TextEditingController();
+  TextEditingController currentPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   RxString selectedDate = DateTime.now().toString().obs;
   RxString otp = "".obs;
   RxInt lastPage = RxInt(0);
@@ -46,6 +49,9 @@ class ProfileController extends GetxController {
   RxList<AssetEntity> assets = RxList();
   RxList<AssetEntity> selectedMediaAsset = RxList<AssetEntity>([]);
   RxList<AssetPathEntity> foldersAvailable = RxList<AssetPathEntity>([]);
+  RxBool isCoverPhoto = false.obs;
+  RxString coverPhoto = "".obs;
+
   void editUserPersonalInfo() {
     //todo import API for user data updating
     //user email
@@ -101,7 +107,8 @@ class ProfileController extends GetxController {
       currentPage.value,
       100,
     );
-    print("AssetList " + assetList.toString());
+
+    print("AssetList " + currentPage.value.toString());
     currentPage++;
     print("AssetList " + assetList.toString());
     return assetList;
@@ -118,6 +125,9 @@ class ProfileController extends GetxController {
         .toString();
     nameController.text = homeController
         .userProfileData.value.response!.data!.profile!.name
+        .toString();
+    coverPhoto.value = homeController
+        .userProfileData.value.response!.data!.profile!.coverPhoto
         .toString();
     bioController.text =
         homeController.userProfileData.value.response!.data!.profile!.bio ==

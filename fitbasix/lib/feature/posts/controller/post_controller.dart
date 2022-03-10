@@ -60,6 +60,7 @@ class PostController extends GetxController {
   RxList<File> selectedFiles = RxList<File>([]);
   RxBool deletingFile = RxBool(false);
   RxBool iscreateingPost = RxBool(false);
+  RxBool isUpdated = RxBool(false);
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
@@ -82,6 +83,10 @@ class PostController extends GetxController {
     currentPage++;
 
     return assetList;
+  }
+
+  void updatePostId() {
+    postId.value == "";
   }
 
   Future<void> getCategory() async {

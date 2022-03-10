@@ -127,7 +127,9 @@ class Profile {
           ? Nutrition()
           : Nutrition.fromJson(json["nutrition"]),
       following: json["following"],
-      selectedInterest: json["interests"] == null ? [] :json["interests"],
+
+      selectedInterest: List<int>.from(json["interests"].map((x) => x)),
+
       followers: json["followers"],
       quickBloxId: json["quickBlox"]);
 

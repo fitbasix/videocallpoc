@@ -20,7 +20,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
       _privacyPolicyController.getPrivacyPolicyContent();
     }
     return Scaffold(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBarForAccount(
           title: "privacy_policy".tr,
           onback: () {
@@ -45,7 +45,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
                               DateFormat(" dd MMM yy").format(
                                   _privacyPolicyController.privacyPolicyModel!
                                       .response!.data!.updatedAt!),
-                          style: AppTextStyle.grey400Text,
+                          style: AppTextStyle.grey400Text.copyWith(
+                            color: Theme.of(context).textTheme.headline6?.color
+                          ),
                         )),
 
                     SizedBox(
