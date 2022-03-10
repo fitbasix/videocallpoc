@@ -154,7 +154,7 @@ class GoalCard extends StatelessWidget {
           decoration: BoxDecoration(
               color: isSelected ? kSelectedGreen : kPureWhite,
               border: Border.all(color: isSelected ? kGreenColor : Colors.black),
-              borderRadius: BorderRadius.circular(10*SizeConfig.imageSizeMultiplier!),
+              borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!),
               boxShadow: [
                 BoxShadow(
                     color: Colors.black.withOpacity(0.05),
@@ -167,11 +167,14 @@ class GoalCard extends StatelessWidget {
               Container(
                   // height: 60 * SizeConfig.heightMultiplier!,
                   // width: 60 * SizeConfig.heightMultiplier!,
-                  child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      // height: 60 * SizeConfig.heightMultiplier!,
-                      // width: 60 * SizeConfig.heightMultiplier!,
-                      fit: BoxFit.cover)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(7*SizeConfig.imageSizeMultiplier!),
+                    child: CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        // height: 60 * SizeConfig.heightMultiplier!,
+                        // width: 60 * SizeConfig.heightMultiplier!,
+                        fit: BoxFit.cover),
+                  )),
               Container(
                 margin: EdgeInsets.only(left: 12*SizeConfig.widthMultiplier!,top: 12*SizeConfig.heightMultiplier!,right: 15*SizeConfig.widthMultiplier!),
                 child: Text(

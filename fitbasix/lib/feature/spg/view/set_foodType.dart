@@ -33,11 +33,17 @@ class SetFoodType extends StatelessWidget {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Stack(children: [
+            Container(
+              color: Theme.of(context).primaryColor,
+              height: 2 * SizeConfig.heightMultiplier!,
+              width: Get.width,
+            ),
           Container(
             color: kGreenColor,
             height: 2 * SizeConfig.heightMultiplier!,
             width: Get.width * (7 / 8),
-          ),
+          ),]),
           Padding(
             padding: EdgeInsets.only(
                 left: 16 * SizeConfig.widthMultiplier!,

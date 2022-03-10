@@ -12,6 +12,9 @@ import '../../plans/models/FullPlanDetailModel.dart';
 import '../../plans/models/allTimeSlot.dart';
 
 class TrainerController extends GetxController {
+
+  var fromTimeForFilter = DateTime.now().obs;
+  var toTimeForFilter = DateTime.now().obs;
   RxBool isSelected = RxBool(false);
   RxBool isLoading = RxBool(false);
   Rx<Trainer> atrainerDetail = Trainer().obs;
@@ -71,6 +74,13 @@ class TrainerController extends GetxController {
     interests.value = await TrainerServices.getAllInterest();
     getTrainedIsLoading.value = false;
   }
+
+  List<String> filterOptions = [
+    "sort_by".tr,
+    "most_popularity".tr,
+    "top_rated".tr,
+    "low_rated".tr
+  ];
 
   @override
   void onInit() {

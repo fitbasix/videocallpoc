@@ -76,12 +76,6 @@ class InitializeQuickBlox{
       //await QB.settings.enableAutoReconnect(false);
       await QB.chat.disconnect();
       await QB.auth.logout();
-
-      // var v = await QB.subscriptions.get().then((value) {
-      //   QB.events.remove(value.first!.id!);
-      //   return value;
-      // });
-
       logOutFromVideoCall();
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
