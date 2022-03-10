@@ -16,7 +16,7 @@ class SetBodyFat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: PreferredSize(
           child: SPGAppBar(
               title:
@@ -29,18 +29,25 @@ class SetBodyFat extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Stack(
+              children: [
+                Container(
+                  color: kPureWhite,
+                  height: 2 * SizeConfig.heightMultiplier!,
+                  width: Get.width * (8 / 8),
+                ),
           Container(
             color: kGreenColor,
             height: 2 * SizeConfig.heightMultiplier!,
             width: Get.width * 0.75,
-          ),
+          ),]),
           SizedBox(
             height: 40 * SizeConfig.heightMultiplier!,
           ),
           Center(
             child: Text(
               'set_body_fat'.tr,
-              style: AppTextStyle.boldBlackText,
+              style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
               textAlign: TextAlign.center,
             ),
           ),
@@ -52,7 +59,9 @@ class SetBodyFat extends StatelessWidget {
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  crossAxisSpacing: 10 * SizeConfig.heightMultiplier!),
+                  mainAxisSpacing: 5*SizeConfig.widthMultiplier!
+              ),
+
               itemBuilder: (_, index) {
                 if (_spgController.selectedBodyFat.value.serialId == null) {
                   _spgController.selectedBodyFat.value =
@@ -118,6 +127,7 @@ class BodyFatTile extends StatelessWidget {
       child: Container(
         color: Colors.transparent,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Stack(
               children: [
@@ -129,7 +139,7 @@ class BodyFatTile extends StatelessWidget {
                           width: 1.5 * SizeConfig.widthMultiplier!,
                           color:
                               isSelected! ? kGreenColor : Colors.transparent),
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8*SizeConfig.widthMultiplier!),
                     ),
                     child: Stack(
                       children: [
@@ -161,7 +171,7 @@ class BodyFatTile extends StatelessWidget {
             SizedBox(height: 17 * SizeConfig.heightMultiplier!),
             Text(StartRange + (EndRange == "+" ? "" : "-") + EndRange + "%",
                 style: AppTextStyle.normalWhiteText
-                    .copyWith(height: 0, color: lightBlack)),
+                    .copyWith(height: 0, color: Theme.of(context).textTheme.bodyText1!.color)),
             SizedBox(height: 6 * SizeConfig.heightMultiplier!)
           ],
         ),

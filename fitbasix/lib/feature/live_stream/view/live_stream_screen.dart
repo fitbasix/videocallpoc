@@ -161,16 +161,21 @@ class LiveStreamScreen extends StatelessWidget {
                   height: 12 * SizeConfig.heightMultiplier!,
                   color: kPureBlack,
                 ),
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: 16 * SizeConfig.widthMultiplier!,
-                        bottom: 10 * SizeConfig.heightMultiplier!,
-                        top: 15 * SizeConfig.heightMultiplier!),
-                    child: Text(
-                      "trending_posts".tr,
-                      style: AppTextStyle.NormalBlackTitleText.copyWith(
-                          color: Theme.of(context).textTheme.bodyText1?.color),
-                    )),
+                GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: Padding(
+                      padding: EdgeInsets.only(
+                          left: 16 * SizeConfig.widthMultiplier!,
+                          bottom: 10 * SizeConfig.heightMultiplier!,
+                          top: 15 * SizeConfig.heightMultiplier!),
+                      child: Text(
+                        "trending_posts".tr,
+                        style: AppTextStyle.NormalBlackTitleText.copyWith(
+                            color: Theme.of(context).textTheme.bodyText1?.color),
+                      )),
+                ),
               ],
             ),
           ),

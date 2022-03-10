@@ -115,6 +115,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                                   builder: (context) => ChatScreen(
                                     userDialogForChat: value[i],
                                     opponentID: UserQuickBloxId,
+                                      trainerTitle: trainerController.atrainerDetail.value.user!.name!,
+
                                   )));
                           ++openPage;
                         }
@@ -141,6 +143,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                                     builder: (context) => ChatScreen(
                                       userDialogForChat: value,
                                       opponentID: UserQuickBloxId,
+                                        trainerTitle: trainerController.atrainerDetail.value.user!.name!
                                     )));
                             ++openPage;
                           }

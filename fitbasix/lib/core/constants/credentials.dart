@@ -62,8 +62,8 @@ class InitializeQuickBlox{
 
   }
   Future<void> enableAutoReconnect() async {
-    await QB.settings.enableAutoReconnect(true);
-    await QB.settings.enableCarbons();
+    // await QB.settings.enableAutoReconnect(true);
+    // await QB.settings.enableCarbons();
     // bool enable = true;
     // try {
     //   await QB.settings.enableAutoReconnect(enable);}
@@ -73,15 +73,9 @@ class InitializeQuickBlox{
     HomeController _homeController = Get.find();
     try {
       _homeController.userQuickBloxId.value = 0;
-      await QB.settings.enableAutoReconnect(false);
+      //await QB.settings.enableAutoReconnect(false);
       await QB.chat.disconnect();
       await QB.auth.logout();
-
-      var v = await QB.subscriptions.get().then((value) {
-        QB.events.remove(value.first!.id!);
-        return value;
-      });
-
       logOutFromVideoCall();
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
