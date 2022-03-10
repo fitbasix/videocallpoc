@@ -108,16 +108,20 @@ class CreatePostService {
     log(response.data.toString());
     UserProfileModel _userProfileModel =
         userProfileModelFromJson(response.toString());
+    update(_userProfileModel);
 
-    if (_userProfileModel.response!.data!.profile!.quickBloxId != null) {
+    return _userProfileModel;
+  }
 
+  static Future<void> update(UserProfileModel userProfileModel) async {
+    if (userProfileModel.response!.data!.profile!.quickBloxId != null) {
       try {
-        String userId = _userProfileModel.response!.data!.profile!.id!;
+        String userId = userProfileModel.response!.data!.profile!.id!;
         final password = Crypt.sha256(
-            _userProfileModel.response!.data!.profile!.id!,
+            userProfileModel.response!.data!.profile!.id!,
             salt: '10');
         bool loggedIn = await LogInUserToQuickBlox(userId, password.hash,
-            _userProfileModel.response!.data!.profile!.quickBloxId!);
+            userProfileModel.response!.data!.profile!.quickBloxId!);
       } catch (e) {}
 
       //await InitializeQuickBlox().initWebRTC();
@@ -125,16 +129,17 @@ class CreatePostService {
 
     } else {
       try {
-        String userId = _userProfileModel.response!.data!.profile!.id!;
+        String userId = userProfileModel.response!.data!.profile!.id!;
         final password = Crypt.sha256(
-            _userProfileModel.response!.data!.profile!.id!,
+            userProfileModel.response!.data!.profile!.id!,
             salt: '10');
-        String userName = _userProfileModel.response!.data!.profile!.name!;
+        String userName = userProfileModel.response!.data!.profile!.name!;
         int? userQuickBloxId = await createUserOnQuickBlox(
             name: userName, loginId: userId, password: password.hash);
 
         int response = await updateUserQuickBloxId(userQuickBloxId!);
-        bool loggedIn = await LogInUserToQuickBlox(userId, password.hash, userQuickBloxId);
+        bool loggedIn =
+            await LogInUserToQuickBlox(userId, password.hash, userQuickBloxId);
 
         //await InitializeQuickBlox().initWebRTC();
         // await InitializeQuickBlox().subscribeCall();
@@ -144,8 +149,6 @@ class CreatePostService {
 
       }
     }
-
-    return _userProfileModel;
   }
 
   static Future<CategoryModel> getCategory() async {
