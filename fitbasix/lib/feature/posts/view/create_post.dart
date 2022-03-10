@@ -42,6 +42,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     print(_postController.postId.value.toString() + "  postId");
+    print(_postController.isUpdated.value.toString() + "  post Updated");
     return GestureDetector(
       onTap: () async {
         FocusScope.of(context).unfocus();
@@ -118,13 +119,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     _postController.isLoading.value = false;
                                     if (_postController.postData.value.code ==
                                         0) {
-                                      Get.showSnackbar(GetSnackBar(
-                                        message: 'post_successfull'.tr,
-                                        duration: Duration(seconds: 3),
-                                      ));
-                                      await _homeController.getTrendingPost();
-                                      // Navigator.pop(context);
-                                      _postController.postId.value == "";
+                                      //   _postController.updatePostId();
+                                      _postController.postId.value = "";
+                                      // print(_postController.postId.value
+                                      //         .toString() +
+                                      //     "  dfgdfg");
+                                      // _postController.postId.value == "";
                                       _postController.postTextController
                                           .clear();
                                       _postController.postText.value = '';
@@ -142,6 +142,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       _postController.selectedFiles.clear();
                                       _homeController.selectedIndex.value = 0;
                                       _homeController.currentPage.value = 1;
+
+                                      // Navigator.pop(context);
+                                      setState(() {});
+                                      Get.showSnackbar(GetSnackBar(
+                                        message: 'post_successfull'.tr,
+                                        duration: Duration(seconds: 3),
+                                      ));
+                                      await _homeController.getTrendingPost();
                                     }
                                   },
                                   child: Text(
