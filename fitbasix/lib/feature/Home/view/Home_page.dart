@@ -29,12 +29,15 @@ import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../get_trained/view/get_trained_screen.dart';
+
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
   final List<Widget> screens = [
     HomePage(),
-    MyTrainersScreen(),
+    GetTrainedScreen(),
+    //MyTrainersScreen(),
     CreatePostScreen(),
     ToolsScreen()
   ];
@@ -268,8 +271,8 @@ class _HomePageState extends State<HomePage> {
                                   title: 'trainers'.tr,
                                   icon: Icons.person,
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, RouteName.getTrainedScreen);
+                                    // Navigator.pushNamed(
+                                    //     context, RouteName.getTrainedScreen);
                                   },
                                 ),
                                 HomeTile(
