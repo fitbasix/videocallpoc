@@ -1,3 +1,4 @@
+import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,6 +13,7 @@ Widget CountryDropDown(
     child: Container(
       width: 70,
       child: DropdownButton(
+        dropdownColor: kPureBlack,
           isDense: true,
           isExpanded: true,
           elevation: 0,

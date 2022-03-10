@@ -15,7 +15,7 @@ class ProceedButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: size.width,
-        height: 45 * SizeConfig.heightMultiplier!,
+        height: 48 * SizeConfig.heightMultiplier!,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
           color: kgreen49,
