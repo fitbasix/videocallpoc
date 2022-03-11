@@ -25,7 +25,7 @@ Widget DailyGoalDropDown(
             child: Icon(Icons.arrow_drop_down),
           ),
           hint: Padding(
-              padding: EdgeInsets.only(left: 9 * SizeConfig.widthMultiplier!),
+              padding: EdgeInsets.only(left: 8 * SizeConfig.widthMultiplier!),
               child: hint == null
                   ? Row(
                       children: [

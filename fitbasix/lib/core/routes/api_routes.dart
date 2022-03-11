@@ -1,6 +1,6 @@
 class ApiUrl {
   static String liveBaseURL = 'http://3.131.171.176';
-  // static String liveBaseURL = 'https://7cb5-103-15-254-183.ngrok.io';
+  // static String liveBaseURL = 'https://cabf-103-15-254-183.ngrok.io';
   // static String liveBaseURL = 'https://8b4c-103-15-254-242.ngrok.io';
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
@@ -54,6 +54,7 @@ class ApiUrl {
   static String explorePost = liveBaseURL + '/api/posts/explorePage';
   static String getPostById = liveBaseURL + '/api/posts/getPostById';
   static String replyComment = liveBaseURL + '/api/comment/reply';
+  static String recentComment = liveBaseURL + '/api/comment/recentComment';
 
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';

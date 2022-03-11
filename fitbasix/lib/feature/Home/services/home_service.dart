@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/model/post_model.dart';
@@ -138,6 +139,18 @@ class HomeService {
 
     log(response.toString());
     print(response.data['code']);
+  }
+
+  static Future<RecentCommentModel> recentComment({String? postId}) async {
+    var access = await LogInService.getAccessToken();
+    print(access);
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response =
+        await dio!.post(ApiUrl.recentComment, data: {"postId": postId});
+    RecentCommentModel recentComment =
+        recentCommentModelFromJson(response.toString());
+    return recentComment;
   }
 
   static Future<CommentModel> fetchComment(
