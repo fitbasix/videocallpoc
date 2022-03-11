@@ -20,7 +20,6 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 class EnterOTPGoogle extends StatelessWidget {
   EnterOTPGoogle({Key? key}) : super(key: key);
   final LoginController _loginController = Get.find();
-
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -95,6 +94,7 @@ class EnterOTPGoogle extends StatelessWidget {
                         'enter_otp_text'
                             .trParams({'number': _loginController.mobile.value}),
                         style: AppTextStyle.NormalText.copyWith(
+                            fontSize: (12) * SizeConfig.textMultiplier!,
                             color: Theme.of(context).textTheme.bodyText1?.color
                         ),
                       ),
@@ -107,7 +107,7 @@ class EnterOTPGoogle extends StatelessWidget {
                         onChanged: (value) {
                           _loginController.otp.value = value;
                         },
-                        enableActiveFill: true,
+                        enableActiveFill: false,
                         keyboardType: TextInputType.number,
                         textStyle: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1?.color,
@@ -115,8 +115,8 @@ class EnterOTPGoogle extends StatelessWidget {
                         pinTheme: PinTheme(
                           shape: PinCodeFieldShape.underline,
                           borderRadius: BorderRadius.circular(8),
-                          fieldHeight: 56 * SizeConfig.widthMultiplier!,
-                          fieldWidth: 56 * SizeConfig.widthMultiplier!,
+                          fieldHeight: 48 * SizeConfig.widthMultiplier!,
+                          fieldWidth: 48 * SizeConfig.widthMultiplier!,
                           selectedColor: greyBorder,
                           // activeFillColor: kLightGrey,
                           inactiveColor: greyBorder,
@@ -125,12 +125,15 @@ class EnterOTPGoogle extends StatelessWidget {
                           //  selectedFillColor: kLightGrey,
                         ),
                       ),
-                       Spacer(),
+                      SizedBox(
+                        height: 16 * SizeConfig.heightMultiplier!,
+                      ),
+                     //  Spacer(),
                       Obx(() => _loginController.isLoading.value
                           ? Center(child: CustomizedCircularProgress(),)
-                          : ProceedButton(
-                          title: 'proceed'.tr,
-                          onPressed: () async {
+                          : ProceedButtonWithArrow(
+                           title: 'proceed'.tr,
+                           onPressed: () async {
                             _loginController.isLoading.value = true;
                             final redScreen = await LogInService.loginAndSignup(
                                 _loginController.mobile.value,
