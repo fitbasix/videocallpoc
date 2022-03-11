@@ -105,8 +105,8 @@ class ConsumptionScreen extends StatelessWidget {
                                                 borderRadius:
                                                     BorderRadius.circular(8.0),
                                                 border: Border.all(
-                                                    width: 1.5,
-                                                    color: lightGrey)),
+                                                    width: 1,
+                                                    color: greyBorder)),
                                             width: 132 *
                                                 SizeConfig.widthMultiplier!,
                                             height: 48 *
@@ -233,16 +233,16 @@ class ConsumptionScreen extends StatelessWidget {
                                   children: [
                                     Expanded(
                                         child: GestureDetector(
-                                      onTap: () {
+                                          onTap: () {
                                         _homeController.selectTime(context);
                                       },
-                                      child: Container(
+                                         child: Container(
                                         decoration: BoxDecoration(
                                             color: Colors.transparent,
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
                                             border: Border.all(
-                                                width: 1.5, color: lightGrey)),
+                                                width: 1, color: greyBorder)),
                                         height:
                                             48 * SizeConfig.heightMultiplier!,
                                         child: Padding(
@@ -283,16 +283,16 @@ class ConsumptionScreen extends StatelessWidget {
                                     ),
                                     Expanded(
                                         child: GestureDetector(
-                                      onTap: () {
+                                         onTap: () {
                                         _homeController.selectTime2(context);
                                       },
-                                      child: Container(
-                                        decoration: BoxDecoration(
+                                         child: Container(
+                                         decoration: BoxDecoration(
                                             color: Colors.transparent,
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
                                             border: Border.all(
-                                                width: 1.5, color: lightGrey)),
+                                                width: 1, color: greyBorder)),
                                         height:
                                             48 * SizeConfig.heightMultiplier!,
                                         child: Padding(
@@ -339,7 +339,8 @@ class ConsumptionScreen extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                           border: Border.all(
-                                              width: 1.5, color: lightGrey)),
+                                              width: 1, color: greyBorder
+                                          )),
                                       height: 48 * SizeConfig.heightMultiplier!,
                                       child: ReminderDropDown(
                                           listofItems: _homeController
@@ -583,6 +584,7 @@ class __ChartAppState extends State<ChartApp> {
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
+      enableAxisAnimation: true,
         plotAreaBorderWidth: 0,
         // Axis
         primaryXAxis: CategoryAxis(
@@ -590,11 +592,13 @@ class __ChartAppState extends State<ChartApp> {
           interval: 1.0,
           majorTickLines:
               MajorTickLines(size: 0, width: 0, color: Colors.transparent),
-          //axisLine: AxisLine(color: Colors.transparent),
+          majorGridLines: MajorGridLines(color: greyBorder,width: 0.2),
+          axisLine: AxisLine(color: greyBorder,width: 0.5),
           labelStyle: AppTextStyle.normalWhiteText
               .copyWith(fontSize: 10 * SizeConfig.textMultiplier!),
           // majorGridLines: MajorGridLines(width: 0),
         ),
+
         primaryYAxis: NumericAxis(
           isVisible: false,
           majorGridLines: MajorGridLines(width: 0),
@@ -609,9 +613,9 @@ class __ChartAppState extends State<ChartApp> {
               dataSource: widget.waterDetails,
               opacity: 0.5,
               // gradient color
-              gradient: const LinearGradient(colors: [
-                grey2B,
+              gradient: LinearGradient(colors: [
                 Colors.white,
+                grey2B,
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               xValueMapper: (ConsumedWater sales, _) =>
                   DateFormat('EEEE')
