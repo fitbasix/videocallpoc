@@ -75,6 +75,10 @@ class HomeController extends GetxController {
   RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
     {},
   );
+  RxMap<String, UpdateCount?> updateCount = RxMap<String, UpdateCount?>(
+    {},
+  );
+  RxList<String> alreadyRenderedPostId = <String>[].obs;
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,

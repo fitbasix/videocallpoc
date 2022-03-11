@@ -39,13 +39,13 @@ class _PostScreenState extends State<PostScreen> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
-        log("comment id" + _homeController.post.value.id.toString());
         RecentCommentModel recentComment = RecentCommentModel();
         recentComment = await HomeService.recentComment(
             postId: _homeController.post.value.id);
-        log("re");
         _homeController.commentsMap[_homeController.post.value.id.toString()] =
             recentComment.response!.data!.comment;
+        _homeController.updateCount[_homeController.post.value.id.toString()] =
+            recentComment.response!.data!.data;
         _homeController.replyList.clear();
         return true;
       },
@@ -62,9 +62,10 @@ class _PostScreenState extends State<PostScreen> {
                   RecentCommentModel recentComment = RecentCommentModel();
                   recentComment = await HomeService.recentComment(
                       postId: _homeController.post.value.id);
-                  log("re");
                   _homeController.commentsMap[_homeController.post.value.id
                       .toString()] = recentComment.response!.data!.comment;
+                  _homeController.updateCount[_homeController.post.value.id
+                      .toString()] = recentComment.response!.data!.data;
                   _homeController.replyList.clear();
                 },
                 icon: SvgPicture.asset(
