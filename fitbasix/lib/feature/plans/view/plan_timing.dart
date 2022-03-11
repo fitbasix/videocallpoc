@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/plans/view/plan_info.dart';
@@ -457,6 +459,60 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                 ),
         ),
       )),
+    );
+  }
+
+    void showDialogForSessionBooked(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                insetPadding: EdgeInsets.zero,
+                titlePadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 10*SizeConfig.widthMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Stack(
+                  children: [
+                    SizedBox(
+                      height: 330*SizeConfig.heightMultiplier!,
+                      width: 250*SizeConfig.widthMultiplier!,
+                      child: Image.asset(ImagePath.animatedCongratulationIcon,fit: BoxFit.cover,),),
+                    Container(
+                      height: 330*SizeConfig.heightMultiplier!,
+                      width: 250*SizeConfig.widthMultiplier!,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              height: 42*SizeConfig.heightMultiplier!,
+                              width: 42*SizeConfig.widthMultiplier!,
+                              child: SvgPicture.asset(ImagePath.greenRightTick),),
+                            SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                            Text("congratulations!".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                            SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                            Text("Your  free demo plan has\nbeen unlocked.",style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w600),textAlign: TextAlign.center,),
+
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+          ),
+        );
+
+
+
+      },
     );
   }
 }

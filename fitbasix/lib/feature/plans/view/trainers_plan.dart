@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -29,9 +32,9 @@ class TrainerPlansScreen extends StatelessWidget {
         ? []
         : trainerController.planModel.value.response!.data!;
     return Scaffold(
-      backgroundColor: kGreyBackground,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
             onPressed: () {
@@ -41,206 +44,193 @@ class TrainerPlansScreen extends StatelessWidget {
               ImagePath.backIcon,
               width: 7.41 * SizeConfig.widthMultiplier!,
               height: 12 * SizeConfig.heightMultiplier!,
+              color: Theme.of(context).primaryColor,
             )),
         title:
-            Text('select_plans_proceed'.tr, style: AppTextStyle.hblack600Text),
+            Text('select_plans_proceed'.tr, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color)),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                left: 12 * SizeConfig.widthMultiplier!,
-                top: 12 * SizeConfig.widthMultiplier!,
-                right: 12 * SizeConfig.widthMultiplier!,
+      ///remove ||plans.length==0 after testing
+      body: plans.length != 0 ||plans.length==0
+          ? Padding(
+        padding: EdgeInsets.only(top: 32*SizeConfig.heightMultiplier!),
+            child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: BouncingScrollPhysics(),
+                child: Row(
+                  ///remove plans.length+2 after testing
+                  children: List.generate(plans.length+2, (index) =>   BuildPlancard(
+                  // planImage: plans[index].planIcon.toString(),
+                  // planName: plans[index].planName.toString(),
+                  // planPrize: 'AED ' + plans[index].prize.toString(),
+                  // onPlanSelect: () async {
+                  //   trainerController.selectedPlanId.value =
+                  //       plans[index].id!;
+                  //   Navigator.pushNamed(
+                  //       context, RouteName.planInformationScreen);
+                  // },
+                  // peopleEnrolled: plans[index].trainees.toString() +
+                  //     " " +
+                  //     'people_enrolled'.tr,
+                  // planDuration: plans[index].planDuration.toString() +
+                  //     " " +
+                  //     'week_plan'.tr,
+                  // ratingCounts: plans[index].plansRating.toString(),
+                  ///give the backend values here
+                  context: context,
+                  planImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9ydHJhaXR8ZW58MHx8MHx8&w=1000&q=80",
+                  planName: "FreeBee",
+                  planTitle: "Plan A",
+                  planDescription: "Get 3 slots free!",
+                  sessionCount: "3",
+                  sessionDescription: "This session will be covered over 1 week",
+                      ////remove index==0 after testing
+                  isActive:index==0,
+                  planPrice: "AED 0",
+                  onPlanEnrollTapped: (){
+
+                  },
+                  planFeaturesList:["Diet Chart","24/7  support","Advanced analytics by trainer"]
               ),
-              child: Text(
-                'plans_by'.tr +
-                    " " +
-                    trainerController.atrainerDetail.value.user!.name
-                        .toString(),
-                style: AppTextStyle.hblack600Text,
-              ),
-            ),
-            plans.length != 0
-                ? ListView.builder(
-                    itemCount: plans.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                            left: 12 * SizeConfig.widthMultiplier!,
-                            right: 12 * SizeConfig.widthMultiplier!),
-                        child: BuildPlancard(
-                            planImage: plans[index].planIcon.toString(),
-                            planName: plans[index].planName.toString(),
-                            planPrize: 'AED ' + plans[index].prize.toString(),
-                            onPlanSelect: () async {
-                              trainerController.selectedPlanId.value =
-                                  plans[index].id!;
-                              Navigator.pushNamed(
-                                  context, RouteName.planInformationScreen);
-                            },
-                            peopleEnrolled: plans[index].trainees.toString() +
-                                " " +
-                                'people_enrolled'.tr,
-                            planDuration: plans[index].planDuration.toString() +
-                                " " +
-                                'week_plan'.tr,
-                            ratingCounts: plans[index].plansRating.toString()),
-                      );
-                    })
-                : SizedBox(),
-            // ListView(
-            //   shrinkWrap: true,
-            //   padding: EdgeInsets.only(
-            //       left: 16 * SizeConfig.widthMultiplier!,
-            //       right: 16 * SizeConfig.widthMultiplier!,
-            //       top: 0 * SizeConfig.heightMultiplier!),
-            //   children: [
-            //     BuildPlancard(
-            //         planImage:plans[i],
-            //         planName: "",
-            //         planPrize: '\$120',
-            //         peopleEnrolled: '234 ' + 'people_enrolled'.tr,
-            //         planDuration: '12 ' + 'week_plan'.tr,
-            //         ratingCounts: "131")
-            //   ],
-            // ),
-          ],
-        ),
-      ),
+               ))),
+          )
+          : SizedBox(),
     );
   }
 
+
+
+
   Widget BuildPlancard(
           {required String planImage,
+            required String planTitle,
           required String planName,
-          required String planPrize,
-          required String peopleEnrolled,
-          required String planDuration,
-          required VoidCallback onPlanSelect,
-          required String ratingCounts}) =>
+            String? planDescription,
+          required String planPrice,
+            String? sessionCount,
+            String? sessionDescription,
+          required VoidCallback onPlanEnrollTapped,
+          required BuildContext context,
+            bool? isActive,
+            List<String>? planFeaturesList
+          }) =>
       Container(
-        padding: EdgeInsets.only(
-          top: 24 * SizeConfig.heightMultiplier!,
-          bottom: 24 * SizeConfig.heightMultiplier!,
-        ),
-        child: GestureDetector(
-          onTap: onPlanSelect,
-          child: Container(
-            decoration: BoxDecoration(
-                color: kPureWhite,
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
-                  ),
-                  child: Container(
-                      child: Image.network(
-                    planImage,
-                    height: 120 * SizeConfig.heightMultiplier!,
-                    width: 328 * SizeConfig.widthMultiplier!,
-                    fit: BoxFit.cover,
-                  )),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 12 * SizeConfig.widthMultiplier!,
-                    top: 12 * SizeConfig.widthMultiplier!,
-                    bottom: 12 * SizeConfig.widthMultiplier!,
-                    right: 12 * SizeConfig.widthMultiplier!,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            planName,
-                            style: AppTextStyle.hblackSemiBoldText,
-                          ),
-                          SizedBox(
-                            height: 8 * SizeConfig.heightMultiplier!,
-                          ),
-                          //rating
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              StarRating(
-                                color: Color(0xffFFB548),
-                                rating: double.parse(ratingCounts),
-                              ),
-                              SizedBox(
-                                width: 4 * SizeConfig.widthMultiplier!,
-                              ),
-                              Text(
-                                '(' + ratingCounts + ')',
-                                style: AppTextStyle.lightMediumBlackText
-                                    .copyWith(color: Color(0xff929292)),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8 * SizeConfig.heightMultiplier!,
-                          ),
-                          //Plan detail
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                ImagePath.plantimerIcon,
-                                width: 12 * SizeConfig.widthMultiplier!,
-                                height: 14 * SizeConfig.heightMultiplier!,
-                              ),
-                              SizedBox(
-                                width: 6 * SizeConfig.widthMultiplier!,
-                              ),
-                              Text(
-                                planDuration,
-                                style: AppTextStyle.hsmallhintText,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 4 * SizeConfig.heightMultiplier!,
-                          ),
-                          //enrolledpersonDetail
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                ImagePath.planpersonenrolledIcon,
-                                width: 10.67 * SizeConfig.widthMultiplier!,
-                                height: 10.67 * SizeConfig.heightMultiplier!,
-                              ),
-                              SizedBox(
-                                width: 6 * SizeConfig.widthMultiplier!,
-                              ),
-                              Text(
-                                peopleEnrolled,
-                                style: AppTextStyle.hsmallhintText,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      Text(
-                        planPrize,
-                        style: AppTextStyle.hblackSemiBoldText.copyWith(
-                            fontSize: (24) * SizeConfig.textMultiplier!,
-                            letterSpacing: 1),
-                      )
-                    ],
-                  ),
-                )
-              ],
+        width: MediaQuery.of(context).size.width-30*SizeConfig.widthMultiplier!,
+        padding: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!,vertical: 32*SizeConfig.heightMultiplier!),
+          decoration: BoxDecoration(
+            // image: DecorationImage(image: AssetImage(ImagePath.unselectedPlanBackgroundImage)),
+            gradient: LinearGradient(colors: [
+              isActive!?Color(0xff404040):Color(0xff333E33),
+              isActive?Color(0xff111111):Color(0xff1C1E1C),
+
+            ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight
+
             ),
+              borderRadius: BorderRadius.all(Radius.circular(20*SizeConfig.widthMultiplier!))),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                planTitle,
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:36*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+              ),
+              SizedBox(
+                height: 32 * SizeConfig.heightMultiplier!,
+              ),
+              Text(
+                planName,
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+              ),
+              SizedBox(
+                height: 4 * SizeConfig.heightMultiplier!,
+              ),
+
+              Text(
+                planDescription!,
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:12*SizeConfig.textMultiplier!,fontWeight: FontWeight.w400,color: Theme.of(context).textTheme.headline6!.color,),
+              ),
+
+              SizedBox(
+                height: 24 * SizeConfig.heightMultiplier!,
+              ),
+
+              Text(
+                sessionCount!+" Sessions",
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+              ),
+              SizedBox(
+                height: 4 * SizeConfig.heightMultiplier!,
+              ),
+
+              Text(
+                sessionDescription!,
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:12*SizeConfig.textMultiplier!,fontWeight: FontWeight.w400,color: Theme.of(context).textTheme.headline6!.color,),
+              ),
+
+              SizedBox(
+                height: 24 * SizeConfig.heightMultiplier!,
+              ),
+
+
+              Text(
+                planPrice,
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:36*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+              ),
+              SizedBox(
+                height: 24 * SizeConfig.heightMultiplier!,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: isActive?null:onPlanEnrollTapped,
+                      child: Container(
+                        width: 264*SizeConfig.widthMultiplier!,
+                        height: 45 * SizeConfig.heightMultiplier!,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                          color: isActive?hintGrey:kgreen49,
+                        ),
+                        child: Center(
+                          child: Text(
+                            isActive?"already_taken".tr:"enroll".tr,
+                            style: AppTextStyle.normalWhiteText.copyWith(color: isActive?Color(0xff333333):kPureWhite),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 32*SizeConfig.heightMultiplier!,),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(planFeaturesList!.length, (index) => Container(
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 15*SizeConfig.heightMultiplier!),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(ImagePath.rightTickIcon,color:kgreen49,height: 15*SizeConfig.imageSizeMultiplier!,),
+                        SizedBox(width: 11*SizeConfig.widthMultiplier!,),
+                        Expanded(child: Text(planFeaturesList[index],style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:16*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,height: 1),))
+                      ],
+                    ),
+                  ),
+                )),
+              ),
+              SizedBox(
+                height: 15 * SizeConfig.heightMultiplier!,
+              ),
+
+
+            ],
           ),
         ),
       );
