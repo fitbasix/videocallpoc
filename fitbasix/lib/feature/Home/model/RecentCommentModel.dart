@@ -61,7 +61,8 @@ class ResponseData {
   UpdateCount? data;
 
   factory ResponseData.fromJson(Map<String, dynamic> json) => ResponseData(
-        comment: Comment.fromJson(json["comment"]),
+        comment:
+            json["comment"] == null ? null : Comment.fromJson(json["comment"]),
         data: UpdateCount.fromJson(json["data"]),
       );
 

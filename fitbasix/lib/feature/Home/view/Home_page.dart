@@ -1098,10 +1098,23 @@ class _HomePageState extends State<HomePage> {
                                                         index]
                                                             .id!]!.comments!.toString(),
                                                         hitLike: () async {
-                                                          if (_homeController
+                                                          _homeController.LikedPostMap[ _homeController
                                                               .trendingPostList[
-                                                                  index]
-                                                              .isLiked!) {
+                                                          index]
+                                                              .id!]=_homeController.LikedPostMap[ _homeController
+                                                              .trendingPostList[
+                                                          index]
+                                                              .id!]==null? !(_homeController
+                                                              .trendingPostList[
+                                                          index]
+                                                              .isLiked!):!(_homeController.LikedPostMap[ _homeController
+                                                              .trendingPostList[
+                                                          index]
+                                                              .id!]!);
+                                                          if ( _homeController.LikedPostMap[ _homeController
+                                                              .trendingPostList[
+                                                          index]
+                                                              .id!]! ==false) {
                                                             _homeController
                                                                 .trendingPostList[
                                                                     index]
@@ -1113,32 +1126,13 @@ class _HomePageState extends State<HomePage> {
                                                                         index]
                                                                     .id!);
 
-                                                            _homeController
-                                                                        .likedPost
-                                                                        .indexOf(_homeController
-                                                                            .trendingPostList[
-                                                                                index]
-                                                                            .id!) ==
-                                                                    -1
-                                                                ? null
-                                                                : _homeController
-                                                                    .likedPost
-                                                                    .remove(_homeController
-                                                                        .trendingPostList[
-                                                                            index]
-                                                                        .id!);
+
                                                           } else {
                                                             _homeController
                                                                 .trendingPostList[
                                                                     index]
                                                                 .isLiked = true;
 
-                                                            _homeController
-                                                                .likedPost
-                                                                .add(_homeController
-                                                                    .trendingPostList[
-                                                                        index]
-                                                                    .id!);
                                                             _homeController
                                                                 .likedPost
                                                                 .toSet()
@@ -1150,6 +1144,7 @@ class _HomePageState extends State<HomePage> {
                                                                         index]
                                                                     .id!);
                                                           }
+
                                                           log("hit Like");
                                                           RecentCommentModel recentComment = RecentCommentModel();
                                                           recentComment = await HomeService.recentComment(
@@ -1163,7 +1158,18 @@ class _HomePageState extends State<HomePage> {
                                                               .trendingPostList[
                                                           index]
                                                               .id!]= recentComment.response!.data!.data;
-                                                          log("hit Like");
+                                                          log("hit Like"+(_homeController
+                                                              .likedPost
+                                                              .indexOf(_homeController
+                                                              .trendingPostList[
+                                                          index]
+                                                              .id) ==
+                                                              -1
+                                                              ? _homeController
+                                                              .trendingPostList[
+                                                          index]
+                                                              .isLiked!.toString()
+                                                              : true.toString()));
                                                           setState(() {});
                                                         },
                                                         addComment: () {
@@ -1185,18 +1191,18 @@ class _HomePageState extends State<HomePage> {
                                                             .trendingPostList[
                                                                 index]
                                                             .id!,
-                                                        isLiked: _homeController
-                                                                    .likedPost
-                                                                    .indexOf(_homeController
-                                                                        .trendingPostList[
-                                                                            index]
-                                                                        .id) ==
-                                                                -1
+                                                        isLiked:_homeController.LikedPostMap[ _homeController
+                                                            .trendingPostList[
+                                                        index]
+                                                            .id!]==null
                                                             ? _homeController
                                                                 .trendingPostList[
                                                                     index]
                                                                 .isLiked!
-                                                            : true,
+                                                            : _homeController.LikedPostMap[ _homeController
+                                                            .trendingPostList[
+                                                        index]
+                                                            .id!]!,
                                                         onTap: () async {
                                                           _homeController
                                                               .commentsList
