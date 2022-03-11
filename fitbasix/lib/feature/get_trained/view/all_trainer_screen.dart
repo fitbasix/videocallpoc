@@ -115,103 +115,97 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
                       ),
-                      child: Center(
-                        child: TextField(
-                          controller: _trainerController.searchController,
-                          style: AppTextStyle.smallGreyText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!,
-                              color: kBlack),
-                          onChanged: (value) async {
-                            if (_trainerController.search.value != value) {
-                              _trainerController.search.value = value;
-                              if (value.length >= 3) {
-                                _trainerController.filterIsLoading.value = true;
-                                _trainerController.searchedName.value = value;
-                                _trainerController.allTrainer.value =
-                                    await TrainerServices.getAllTrainer(
-                                  name: value,
-                                  interests: _trainerController
-                                      .SelectedInterestIndex.value,
-                                  trainerType:
-                                      _trainerController.trainerType.value,
-                                );
-                                _scrollController.jumpTo(0);
-                                _trainerController.filterIsLoading.value =
-                                    false;
-                              }
-                              if (value.length == 0) {
-                                _trainerController.filterIsLoading.value = true;
-                                _trainerController.searchedName.value = value;
-                                _trainerController.allTrainer.value =
-                                    await TrainerServices.getAllTrainer(
-                                  name: value,
-                                  interests: _trainerController
-                                      .SelectedInterestIndex.value,
-                                  trainerType:
-                                      _trainerController.trainerType.value,
-                                );
-                                _scrollController.jumpTo(0);
-                                _trainerController.filterIsLoading.value =
-                                    false;
-                              }
+                      child: TextField(
+                        controller: _trainerController.searchController,
+                        style: AppTextStyle.smallGreyText.copyWith(
+                            fontSize: 14 * SizeConfig.textMultiplier!,
+                            color: kBlack),
+                        onChanged: (value) async {
+                          if (_trainerController.search.value != value) {
+                            _trainerController.search.value = value;
+                            if (value.length >= 3) {
+                              _trainerController.filterIsLoading.value = true;
+                              _trainerController.searchedName.value = value;
+                              _trainerController.allTrainer.value =
+                                  await TrainerServices.getAllTrainer(
+                                name: value,
+                                interests: _trainerController
+                                    .SelectedInterestIndex.value,
+                                trainerType:
+                                    _trainerController.trainerType.value,
+                              );
+                              _scrollController.jumpTo(0);
+                              _trainerController.filterIsLoading.value = false;
                             }
-                          },
-                          // onSubmitted: (value) async {
-                          //   if (value.length >= 3) {
-                          //     _trainerController.filterIsLoading.value = true;
-                          //     _trainerController.searchedName.value = value;
-                          //     _trainerController.allTrainer.value =
-                          //         await TrainerServices.getAllTrainer(
-                          //             name: value,
-                          //             interests: _trainerController
-                          //                 .SelectedInterestIndex.value,
-                          //             trainerType:
-                          //                 _trainerController.trainerType.value);
-                          //
-                          //     _scrollController.jumpTo(0);
-                          //     _trainerController.filterIsLoading.value = false;
-                          //   } else {
-                          //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          //         content:
-                          //             Text('Please enter atleast 3 character')));
-                          //   }
-                          // },
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10.5 * SizeConfig.widthMultiplier!,
-                                  right: 5 * SizeConfig.widthMultiplier!),
-                              child: Icon(
-                                Icons.search,
-                                color: hintGrey,
-                                size: 22 * SizeConfig.heightMultiplier!,
-                              ),
+                            if (value.length == 0) {
+                              _trainerController.filterIsLoading.value = true;
+                              _trainerController.searchedName.value = value;
+                              _trainerController.allTrainer.value =
+                                  await TrainerServices.getAllTrainer(
+                                name: value,
+                                interests: _trainerController
+                                    .SelectedInterestIndex.value,
+                                trainerType:
+                                    _trainerController.trainerType.value,
+                              );
+                              _scrollController.jumpTo(0);
+                              _trainerController.filterIsLoading.value = false;
+                            }
+                          }
+                        },
+                        // onSubmitted: (value) async {
+                        //   if (value.length >= 3) {
+                        //     _trainerController.filterIsLoading.value = true;
+                        //     _trainerController.searchedName.value = value;
+                        //     _trainerController.allTrainer.value =
+                        //         await TrainerServices.getAllTrainer(
+                        //             name: value,
+                        //             interests: _trainerController
+                        //                 .SelectedInterestIndex.value,
+                        //             trainerType:
+                        //                 _trainerController.trainerType.value);
+                        //
+                        //     _scrollController.jumpTo(0);
+                        //     _trainerController.filterIsLoading.value = false;
+                        //   } else {
+                        //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        //         content:
+                        //             Text('Please enter atleast 3 character')));
+                        //   }
+                        // },
+                        decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.only(
+                                left: 10.5 * SizeConfig.widthMultiplier!,
+                                right: 5 * SizeConfig.widthMultiplier!),
+                            child: Icon(
+                              Icons.search,
+                              color: hintGrey,
+                              size: 22 * SizeConfig.heightMultiplier!,
                             ),
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                _trainerController
-                                            .searchController.text.length ==
-                                        0
-                                    ? _trainerController.isSearchActive.value =
-                                        false
-                                    : _trainerController.searchController
-                                        .clear();
-                              },
-                              child: Icon(
-                                Icons.clear,
-                                color: hintGrey,
-                                size: 18 * SizeConfig.heightMultiplier!,
-                              ),
-                            ),
-                            border: InputBorder.none,
-                            hintText: 'searchHint'.tr,
-                            hintStyle: AppTextStyle.smallGreyText.copyWith(
-                                fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: hintGrey),
-                            /*contentPadding: EdgeInsets.only(
-                                top: -2,
-                              )*/
                           ),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              _trainerController.searchController.text.length ==
+                                      0
+                                  ? _trainerController.isSearchActive.value =
+                                      false
+                                  : _trainerController.searchController.clear();
+                            },
+                            child: Icon(
+                              Icons.clear,
+                              color: hintGrey,
+                              size: 18 * SizeConfig.heightMultiplier!,
+                            ),
+                          ),
+                          border: InputBorder.none,
+                          hintText: 'searchHint'.tr,
+                          hintStyle: AppTextStyle.smallGreyText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: hintGrey),
+                          /*contentPadding: EdgeInsets.only(
+                              top: -2,
+                            )*/
                         ),
                       ),
                     ),
@@ -262,10 +256,10 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           child: Text(
                             'interests'.tr,
                             style: AppTextStyle.titleText.copyWith(
-                                fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: Theme.of(context).textTheme.bodyText1?.color,
-                                ),
-                            
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color,
+                            ),
                           ),
                         ),
                         Spacer(),
@@ -273,41 +267,74 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           data: ThemeData(
                               cardColor: kBlack,
                               highlightColor: Theme.of(context).hintColor,
-                            textTheme: TextTheme(
-                              bodyText1: TextStyle(color: kPureWhite),)
-                          ),
+                              textTheme: TextTheme(
+                                bodyText1: TextStyle(color: kPureWhite),
+                              )),
                           child: PopupMenuButton(
-                            offset: Offset(-10*SizeConfig.widthMultiplier!,35*SizeConfig.heightMultiplier!),
+                            offset: Offset(-10 * SizeConfig.widthMultiplier!,
+                                35 * SizeConfig.heightMultiplier!),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!),
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.imageSizeMultiplier!),
                             ),
-                            icon: SvgPicture.asset(ImagePath.filterIcon,height: 18.23*SizeConfig.imageSizeMultiplier!,),
-                            itemBuilder: (BuildContext context) =>List.generate(_trainerController.filterOptions.length, (index) =>  PopupMenuItem<int>(
-                                child:  Text(_trainerController.filterOptions[index],style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),enabled: index==0?false:true,)),
+                            icon: SvgPicture.asset(
+                              ImagePath.filterIcon,
+                              height: 18.23 * SizeConfig.imageSizeMultiplier!,
+                            ),
+                            itemBuilder: (BuildContext context) =>
+                                List.generate(
+                                    _trainerController.filterOptions.length,
+                                    (index) => PopupMenuItem<int>(
+                                          child: Text(
+                                            _trainerController
+                                                .filterOptions[index],
+                                            style: AppTextStyle.black400Text
+                                                .copyWith(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1!
+                                                        .color),
+                                          ),
+                                          enabled: index == 0 ? false : true,
+                                        )),
                           ),
                         ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             createMenuDialog(context);
-
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8*SizeConfig.widthMultiplier!,vertical:4*SizeConfig.heightMultiplier!),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8 * SizeConfig.widthMultiplier!,
+                                  vertical: 4 * SizeConfig.heightMultiplier!),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                              ),
+                                  color: Theme.of(context).cardColor,
+                                  borderRadius: BorderRadius.circular(
+                                      8 * SizeConfig.imageSizeMultiplier!)),
                               child: Row(
                                 children: [
-                                  Text("availability".tr,style: AppTextStyle.lightMediumBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
-                                  SizedBox(width: 8*SizeConfig.widthMultiplier!,),
-                                  SvgPicture.asset(ImagePath.availableClockIcon,height: 22*SizeConfig.imageSizeMultiplier!),
+                                  Text(
+                                    "availability".tr,
+                                    style: AppTextStyle.lightMediumBlackText
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color),
+                                  ),
+                                  SizedBox(
+                                    width: 8 * SizeConfig.widthMultiplier!,
+                                  ),
+                                  SvgPicture.asset(ImagePath.availableClockIcon,
+                                      height:
+                                          22 * SizeConfig.imageSizeMultiplier!),
                                 ],
                               )),
                         ),
-                        SizedBox(width: 16*SizeConfig.widthMultiplier!,),
+                        SizedBox(
+                          width: 16 * SizeConfig.widthMultiplier!,
+                        ),
                       ],
-
                     ),
                     SizedBox(
                       height: 12 * SizeConfig.heightMultiplier!,
@@ -635,230 +662,379 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
       ),
     );
   }
+
   void createMenuDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Obx(
-            ()=> Container(
+          () => Container(
             color: kBlack.withOpacity(0.6),
             child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
                 child: AlertDialog(
                   insetPadding: EdgeInsets.zero,
-                  contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 30 * SizeConfig.heightMultiplier!),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                  ),
+                      borderRadius: BorderRadius.circular(
+                          8 * SizeConfig.imageSizeMultiplier!)),
                   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   title: Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("available_timings".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
-                          SizedBox(
-                            height: 16*SizeConfig.heightMultiplier!,
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              GestureDetector(
-                                  onTap: (){
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          color: kBlack.withOpacity(0.6),
-                                          child: BackdropFilter(
-                                              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                                              child: AlertDialog(
-                                                insetPadding: EdgeInsets.zero,
-                                                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                                                ),
-                                                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                                title: Container(
-                                                  width: 280*SizeConfig.widthMultiplier!,
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Stack(
-                                                        children: [
-                                                          Container(
-                                                            height: 196*SizeConfig.heightMultiplier!,
-                                                            child: Center(
-                                                              child: Container(
-                                                                height: 54*SizeConfig.heightMultiplier!,
-                                                                decoration: BoxDecoration(
-                                                                    border: Border(top: BorderSide(color: greyBorder,width: 0.5),bottom: BorderSide(color: greyBorder,width: 0.5))
-                                                                ),),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "available_timings".tr,
+                          style: AppTextStyle.black400Text.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color),
+                        ),
+                        SizedBox(
+                          height: 16 * SizeConfig.heightMultiplier!,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        color: kBlack.withOpacity(0.6),
+                                        child: BackdropFilter(
+                                            filter: ImageFilter.blur(
+                                                sigmaX: 2, sigmaY: 2),
+                                            child: AlertDialog(
+                                              insetPadding: EdgeInsets.zero,
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 30 *
+                                                          SizeConfig
+                                                              .heightMultiplier!),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8 *
+                                                          SizeConfig
+                                                              .imageSizeMultiplier!)),
+                                              backgroundColor: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                              title: Container(
+                                                width: 280 *
+                                                    SizeConfig.widthMultiplier!,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Stack(
+                                                      children: [
+                                                        Container(
+                                                          height: 196 *
+                                                              SizeConfig
+                                                                  .heightMultiplier!,
+                                                          child: Center(
+                                                            child: Container(
+                                                              height: 54 *
+                                                                  SizeConfig
+                                                                      .heightMultiplier!,
+                                                              decoration: BoxDecoration(
+                                                                  border: Border(
+                                                                      top: BorderSide(
+                                                                          color:
+                                                                              greyBorder,
+                                                                          width:
+                                                                              0.5),
+                                                                      bottom: BorderSide(
+                                                                          color:
+                                                                              greyBorder,
+                                                                          width:
+                                                                              0.5))),
                                                             ),
                                                           ),
-                                                          Container(
-                                                            height: 196*SizeConfig.heightMultiplier!,
-                                                            child: TimePickerSpinner(
-                                                              time: _trainerController.fromTimeForFilter.value,
-                                                              is24HourMode: false,
-                                                              normalTextStyle: AppTextStyle.normalPureBlackText.copyWith(
-                                                                color: hintGrey,
-                                                                fontSize: 24*SizeConfig.textMultiplier!,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                              highlightedTextStyle: AppTextStyle.normalPureBlackText.copyWith(
-                                                                color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                fontSize: 32*SizeConfig.textMultiplier!,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                              spacing: 33*SizeConfig.widthMultiplier!,
-                                                              itemHeight: 60*SizeConfig.heightMultiplier!,
-                                                              isForce2Digits: true,
-                                                              minutesInterval: 1,
-                                                              onTimeChange: (time) {
-                                                                _trainerController.fromTimeForFilter.value = time;
-
-                                                              },
+                                                        ),
+                                                        Container(
+                                                          height: 196 *
+                                                              SizeConfig
+                                                                  .heightMultiplier!,
+                                                          child:
+                                                              TimePickerSpinner(
+                                                            time: _trainerController
+                                                                .fromTimeForFilter
+                                                                .value,
+                                                            is24HourMode: false,
+                                                            normalTextStyle:
+                                                                AppTextStyle
+                                                                    .normalPureBlackText
+                                                                    .copyWith(
+                                                              color: hintGrey,
+                                                              fontSize: 24 *
+                                                                  SizeConfig
+                                                                      .textMultiplier!,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
+                                                            highlightedTextStyle:
+                                                                AppTextStyle
+                                                                    .normalPureBlackText
+                                                                    .copyWith(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyText1!
+                                                                  .color,
+                                                              fontSize: 32 *
+                                                                  SizeConfig
+                                                                      .textMultiplier!,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                            spacing: 33 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!,
+                                                            itemHeight: 60 *
+                                                                SizeConfig
+                                                                    .heightMultiplier!,
+                                                            isForce2Digits:
+                                                                true,
+                                                            minutesInterval: 1,
+                                                            onTimeChange:
+                                                                (time) {
+                                                              _trainerController
+                                                                  .fromTimeForFilter
+                                                                  .value = time;
+                                                            },
                                                           ),
-                                                        ],
-                                                      ),
-                                                      ProceedButton(title: "Confirm",onPressed: (){
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    ProceedButton(
+                                                      title: "Confirm",
+                                                      onPressed: () {
                                                         Navigator.pop(context);
-                                                      },)
-                                                    ],
-                                                  ),
+                                                      },
+                                                    )
+                                                  ],
                                                 ),
-                                              )
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: timeTile(time: DateFormat("hh : mm").format(_trainerController.fromTimeForFilter.value),trailing: DateFormat("a").format(_trainerController.fromTimeForFilter.value))),
-                              Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 8*SizeConfig.widthMultiplier!),
-                                  child: Text("to".tr,style: AppTextStyle.hblack400Text.copyWith(color: Theme.of(context).textTheme.headline4!.color),)),
-                              GestureDetector(
-                                  onTap: (){
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          color: kBlack.withOpacity(0.6),
-                                          child: BackdropFilter(
-                                              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                                              child: AlertDialog(
-                                                insetPadding: EdgeInsets.zero,
-                                                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                                                ),
-                                                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                                title: Container(
-                                                  width: 280*SizeConfig.widthMultiplier!,
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Stack(
-                                                        children: [
-                                                          Container(
-                                                            height: 196*SizeConfig.heightMultiplier!,
-                                                            child: Center(
-                                                              child: Container(
-                                                                height: 54*SizeConfig.heightMultiplier!,
-                                                                decoration: BoxDecoration(
-                                                                    border: Border(top: BorderSide(color: greyBorder,width: 0.5),bottom: BorderSide(color: greyBorder,width: 0.5))
-                                                                ),),
+                                              ),
+                                            )),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: timeTile(
+                                    time: DateFormat("hh : mm").format(
+                                        _trainerController
+                                            .fromTimeForFilter.value),
+                                    trailing: DateFormat("a").format(
+                                        _trainerController
+                                            .fromTimeForFilter.value))),
+                            Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal:
+                                        8 * SizeConfig.widthMultiplier!),
+                                child: Text(
+                                  "to".tr,
+                                  style: AppTextStyle.hblack400Text.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .headline4!
+                                          .color),
+                                )),
+                            GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        color: kBlack.withOpacity(0.6),
+                                        child: BackdropFilter(
+                                            filter: ImageFilter.blur(
+                                                sigmaX: 2, sigmaY: 2),
+                                            child: AlertDialog(
+                                              insetPadding: EdgeInsets.zero,
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 30 *
+                                                          SizeConfig
+                                                              .heightMultiplier!),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8 *
+                                                          SizeConfig
+                                                              .imageSizeMultiplier!)),
+                                              backgroundColor: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                              title: Container(
+                                                width: 280 *
+                                                    SizeConfig.widthMultiplier!,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Stack(
+                                                      children: [
+                                                        Container(
+                                                          height: 196 *
+                                                              SizeConfig
+                                                                  .heightMultiplier!,
+                                                          child: Center(
+                                                            child: Container(
+                                                              height: 54 *
+                                                                  SizeConfig
+                                                                      .heightMultiplier!,
+                                                              decoration: BoxDecoration(
+                                                                  border: Border(
+                                                                      top: BorderSide(
+                                                                          color:
+                                                                              greyBorder,
+                                                                          width:
+                                                                              0.5),
+                                                                      bottom: BorderSide(
+                                                                          color:
+                                                                              greyBorder,
+                                                                          width:
+                                                                              0.5))),
                                                             ),
                                                           ),
-                                                          Container(
-                                                            height: 196*SizeConfig.heightMultiplier!,
-                                                            child: TimePickerSpinner(
-                                                              time: _trainerController.toTimeForFilter.value,
-                                                              is24HourMode: false,
-                                                              normalTextStyle: AppTextStyle.normalPureBlackText.copyWith(
-                                                                color: hintGrey,
-                                                                fontSize: 24*SizeConfig.textMultiplier!,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                              highlightedTextStyle: AppTextStyle.normalPureBlackText.copyWith(
-                                                                color: Theme.of(context).textTheme.bodyText1!.color,
-                                                                fontSize: 32*SizeConfig.textMultiplier!,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                              spacing: 33*SizeConfig.widthMultiplier!,
-                                                              itemHeight: 60*SizeConfig.heightMultiplier!,
-                                                              isForce2Digits: true,
-                                                              minutesInterval: 1,
-                                                              onTimeChange: (time) {
-                                                                _trainerController.toTimeForFilter.value = time;
-                                                              },
+                                                        ),
+                                                        Container(
+                                                          height: 196 *
+                                                              SizeConfig
+                                                                  .heightMultiplier!,
+                                                          child:
+                                                              TimePickerSpinner(
+                                                            time: _trainerController
+                                                                .toTimeForFilter
+                                                                .value,
+                                                            is24HourMode: false,
+                                                            normalTextStyle:
+                                                                AppTextStyle
+                                                                    .normalPureBlackText
+                                                                    .copyWith(
+                                                              color: hintGrey,
+                                                              fontSize: 24 *
+                                                                  SizeConfig
+                                                                      .textMultiplier!,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
                                                             ),
+                                                            highlightedTextStyle:
+                                                                AppTextStyle
+                                                                    .normalPureBlackText
+                                                                    .copyWith(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyText1!
+                                                                  .color,
+                                                              fontSize: 32 *
+                                                                  SizeConfig
+                                                                      .textMultiplier!,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            ),
+                                                            spacing: 33 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!,
+                                                            itemHeight: 60 *
+                                                                SizeConfig
+                                                                    .heightMultiplier!,
+                                                            isForce2Digits:
+                                                                true,
+                                                            minutesInterval: 1,
+                                                            onTimeChange:
+                                                                (time) {
+                                                              _trainerController
+                                                                  .toTimeForFilter
+                                                                  .value = time;
+                                                            },
                                                           ),
-                                                        ],
-                                                      ),
-                                                      ProceedButton(title: "Confirm",onPressed: (){
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    ProceedButton(
+                                                      title: "Confirm",
+                                                      onPressed: () {
                                                         Navigator.pop(context);
-                                                      },)
-                                                    ],
-                                                  ),
+                                                      },
+                                                    )
+                                                  ],
                                                 ),
-                                              )
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: timeTile(time: DateFormat("hh : mm").format(_trainerController.toTimeForFilter.value),trailing: DateFormat("a").format(_trainerController.toTimeForFilter.value))),
-                            ],
-                          ),
-                          SizedBox(height: 26*SizeConfig.heightMultiplier!,),
-                          SizedBox(
-                            width: 280*SizeConfig.widthMultiplier!,
-                            child: ProceedButton(title: "confirm".tr, onPressed: (){
-                              //todo add filter feature here
-                              Navigator.pop(context);
-
-                            }),
-                          )
-
-                        ],
-                      ),
+                                              ),
+                                            )),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: timeTile(
+                                    time: DateFormat("hh : mm").format(
+                                        _trainerController
+                                            .toTimeForFilter.value),
+                                    trailing: DateFormat("a").format(
+                                        _trainerController
+                                            .toTimeForFilter.value))),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 26 * SizeConfig.heightMultiplier!,
+                        ),
+                        SizedBox(
+                          width: 280 * SizeConfig.widthMultiplier!,
+                          child: ProceedButton(
+                              title: "confirm".tr,
+                              onPressed: () {
+                                //todo add filter feature here
+                                Navigator.pop(context);
+                              }),
+                        )
+                      ],
+                    ),
                   ),
-                )
-            ),
+                )),
           ),
         );
-
-
-
       },
     );
-
-
   }
-  Widget timeTile({String? time, String? trailing}){
+
+  Widget timeTile({String? time, String? trailing}) {
     return Container(
-      padding: EdgeInsets.all(12*SizeConfig.imageSizeMultiplier!),
+      padding: EdgeInsets.all(12 * SizeConfig.imageSizeMultiplier!),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!),
-          border: Border.all(color: greyBorder)
+          borderRadius:
+              BorderRadius.circular(8 * SizeConfig.imageSizeMultiplier!),
+          border: Border.all(color: greyBorder)),
+      child: RichText(
+        text: TextSpan(children: [
+          TextSpan(
+              text: time,
+              style: AppTextStyle.hintText.copyWith(
+                  color: Theme.of(context).textTheme.bodyText1!.color)),
+          TextSpan(text: " " + trailing!, style: AppTextStyle.hintText),
+          WidgetSpan(
+              child: SizedBox(
+            width: 5 * SizeConfig.widthMultiplier!,
+          )),
+          WidgetSpan(
+              child: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Theme.of(context).primaryColor,
+            size: 18 * SizeConfig.imageSizeMultiplier!,
+          ))
+        ]),
       ),
-      child: RichText(text: TextSpan(
-          children: [
-            TextSpan(text: time,style: AppTextStyle.hintText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color)),
-            TextSpan(text: " "+trailing!,style: AppTextStyle.hintText),
-            WidgetSpan(child: SizedBox(width: 5*SizeConfig.widthMultiplier!,)),
-            WidgetSpan(child: Icon(Icons.keyboard_arrow_down_rounded,color: Theme.of(context).primaryColor,size: 18*SizeConfig.imageSizeMultiplier!,))
-          ]
-      ),),
     );
   }
-
-
 }
 
 class TrainerTile extends StatelessWidget {
@@ -1135,7 +1311,6 @@ class TrainerTile extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class StrengthTile extends StatelessWidget {
