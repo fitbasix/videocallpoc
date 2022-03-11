@@ -6,6 +6,7 @@ class ImagePath {
   static const String availableClockIcon = "assets/mytrainers/available_clock_icon.svg";
   static const String animatedErrorIcon = "assets/gif/error_animated.gif";
   static const String animatedCongratulationIcon = "assets/plans/animated_congratulations.gif";
+  static const String animatedLiveLimitErrorIcon = "assets/gif/animated_error_for_live.gif";
   static const String commentIcon = "assets/Icons/comment_icon.svg";
   static const String downloadDocIcon = "assets/Icons/download_icon.png";
   static const String docFileIcon = "assets/Icons/doc_file_icon.png";
