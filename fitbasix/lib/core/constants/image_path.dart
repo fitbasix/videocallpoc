@@ -63,13 +63,11 @@ class ImagePath {
   static const String logOut = "assets/menuSlider/logout.svg";
   static const String settings = "assets/menuSlider/settings.svg";
   static const String support = "assets/menuSlider/support.svg";
-  static const String feedbackdialogframe =
-      "assets/menuSlider/feedbackdialogframe.svg";
-  static const String starrating_full =
-      "assets/get_trained/starfullratingIcon.png";
-  static const String starrating_half =
-      "assets/get_trained/starhalfratingIcon.png";
+  static const String feedbackdialogframe = "assets/menuSlider/feedbackdialogframe.svg";
+  static const String starrating_full = "assets/get_trained/starfullratingIcon.png";
+  static const String starrating_half = "assets/get_trained/starhalfratingIcon.png";
   static const String starrating_no = "assets/get_trained/starnoratingIcon.png";
+  static const String resetpasskeyIcon = "assets/menuSlider/resetpassKeyIcon.svg";
 
   ///home healthImage
   static const String carbsIcon = "assets/home/carbs.svg";

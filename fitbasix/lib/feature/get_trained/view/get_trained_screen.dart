@@ -109,10 +109,8 @@ class GetTrainedScreen extends StatelessWidget {
                                           rating: 0,
                                           onTap: () {}),
                                     ),
-                                    baseColor:
-                                        const Color.fromRGBO(230, 230, 230, 1),
-                                    highlightColor:
-                                        const Color.fromRGBO(242, 245, 245, 1),
+                                    baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
+                                    highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                                   )
                                 : Padding(
                                     padding: index == 0
@@ -335,10 +333,8 @@ class GetTrainedScreen extends StatelessWidget {
                                         rating: 0,
                                         onTap: () {}),
                                   ),
-                                  baseColor:
-                                      const Color.fromRGBO(230, 230, 230, 1),
-                                  highlightColor:
-                                      const Color.fromRGBO(242, 245, 245, 1),
+                                   baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
+                                   highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                                 )
                               : Padding(
                                   padding: index == 0
@@ -556,10 +552,8 @@ class GetTrainedScreen extends StatelessWidget {
                                         rating: 0,
                                         onTap: () {}),
                                   ),
-                                  baseColor:
-                                      const Color.fromRGBO(230, 230, 230, 1),
-                                  highlightColor:
-                                      const Color.fromRGBO(242, 245, 245, 1),
+                                   baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
+                                   highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                                 )
                               : Padding(
                                   padding: index == 0
