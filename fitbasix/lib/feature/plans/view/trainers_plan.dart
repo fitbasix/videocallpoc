@@ -114,7 +114,7 @@ class TrainerPlansScreen extends StatelessWidget {
             List<String>? planFeaturesList
           }) =>
       Container(
-        width: MediaQuery.of(context).size.width-30*SizeConfig.widthMultiplier!,
+        width: MediaQuery.of(context).size.width-40*SizeConfig.widthMultiplier!,
         padding: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!),
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -137,18 +137,16 @@ class TrainerPlansScreen extends StatelessWidget {
             children: [
               Text(
                 planTitle,
-                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:36*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:36*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,height: 1),
               ),
               SizedBox(
                 height: 32 * SizeConfig.heightMultiplier!,
               ),
               Text(
                 planName,
-                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,height: 1),
               ),
-              SizedBox(
-                height: 4 * SizeConfig.heightMultiplier!,
-              ),
+
 
               Text(
                 planDescription!,
@@ -161,10 +159,7 @@ class TrainerPlansScreen extends StatelessWidget {
 
               Text(
                 sessionCount!+" Sessions",
-                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,),
-              ),
-              SizedBox(
-                height: 4 * SizeConfig.heightMultiplier!,
+                style: AppTextStyle.hblackSemiBoldText.copyWith(fontSize:24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w600,color: Theme.of(context).textTheme.bodyText1!.color,height: 1),
               ),
 
               Text(

@@ -496,9 +496,9 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                               width: 42*SizeConfig.widthMultiplier!,
                               child: SvgPicture.asset(ImagePath.greenRightTick),),
                             SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-                            Text("congratulations!".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                            Text("congratulations".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
                             SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-                            Text("Your  free demo plan has\nbeen unlocked.",style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w600),textAlign: TextAlign.center,),
+                            Text("plan_booked_text".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w600),textAlign: TextAlign.center,),
 
                           ],
                         ),
