@@ -78,6 +78,9 @@ class HomeController extends GetxController {
   RxMap<String, UpdateCount?> updateCount = RxMap<String, UpdateCount?>(
     {},
   );
+  RxMap<String, bool?> LikedPostMap = RxMap<String, bool?>(
+    {},
+  );
   RxList<String> alreadyRenderedPostId = <String>[].obs;
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
