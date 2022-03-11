@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -31,9 +32,10 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(imageUrl);
+    log(name.toString());
     print(imageCoverPic);
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
+        color: Theme.of(context).scaffoldBackgroundColor,
         width: 300 * SizeConfig.widthMultiplier!,
         child: Column(
           children: [
@@ -196,8 +198,7 @@ class MenuItem extends StatelessWidget {
                 SizedBox(width: 15 * SizeConfig.widthMultiplier!),
                 Text(
                   menuItemText,
-                  style: AppTextStyle.boldBlackText
-                      .copyWith(
+                  style: AppTextStyle.boldBlackText.copyWith(
                       color: Theme.of(context).textTheme.bodyText1?.color,
                       fontSize: 14 * SizeConfig.textMultiplier!),
                 )
