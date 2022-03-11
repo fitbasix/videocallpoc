@@ -47,7 +47,9 @@ Widget ReminderDropDown(
                           width: 4,
                         ),
                         Text(
-                          hint.optionString.toString().split(" ")[1],
+                          hint.optionString.toString().split(" ").length == 1
+                              ? ""
+                              : hint.optionString.toString().split(" ")[1],
                           style: AppTextStyle.normalBlackText
                               .copyWith(color: grey183),
                         ),

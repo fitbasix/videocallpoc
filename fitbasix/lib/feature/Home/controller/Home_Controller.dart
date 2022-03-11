@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
@@ -71,7 +72,9 @@ class HomeController extends GetxController {
   RxBool isPostUpdate = false.obs;
   RxString coverPhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
-
+  RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
+    {},
+  );
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,

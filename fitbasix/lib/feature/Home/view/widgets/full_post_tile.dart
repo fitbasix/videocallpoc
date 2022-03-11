@@ -7,6 +7,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 // import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
