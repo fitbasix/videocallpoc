@@ -20,7 +20,7 @@ class UserHeightDialog extends StatelessWidget {
     final ProfileController _heightController = Get.put(ProfileController());
 
     return Dialog(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       insetPadding: EdgeInsets.fromLTRB(
         32 * SizeConfig.widthMultiplier!,
         48 * SizeConfig.heightMultiplier!,
@@ -43,7 +43,7 @@ class UserHeightDialog extends StatelessWidget {
                   child: Text(
                     'ask_height'.tr,
                     style: AppTextStyle.boldBlackText.copyWith(
-                      color: kBlack
+                      color: Theme.of(context).textTheme.bodyText1?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -78,8 +78,12 @@ class UserHeightDialog extends StatelessWidget {
                               'inch'.tr,
                               style: _heightController.heightType == "inch"
                                   ? AppTextStyle.white400Text
-                                  : AppTextStyle.white400Text
-                                      .copyWith(color: lightBlack),
+                                  : AppTextStyle.white400Text.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
+                                    ),
                             )),
                           ),
                         ),
@@ -107,8 +111,12 @@ class UserHeightDialog extends StatelessWidget {
                               'cm'.tr,
                               style: _heightController.heightType != "inch"
                                   ? AppTextStyle.white400Text
-                                  : AppTextStyle.white400Text
-                                      .copyWith(color: lightBlack),
+                                  : AppTextStyle.white400Text.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
+                                    ),
                             )),
                           ),
                         ),
@@ -129,7 +137,10 @@ class UserHeightDialog extends StatelessWidget {
                                     .toString(),
                                 style: AppTextStyle.normalBlackText.copyWith(
                                     fontSize: 48 * SizeConfig.textMultiplier!,
-                                    color: kBlack,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
                                     height: 0),
                               ),
                               SizedBox(width: 4 * SizeConfig.widthMultiplier!),
@@ -137,7 +148,10 @@ class UserHeightDialog extends StatelessWidget {
                                   textAlign: TextAlign.start,
                                   style: AppTextStyle.normalBlackText.copyWith(
                                       fontSize: 18 * SizeConfig.textMultiplier!,
-                                      color: kBlack,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
                                       height: 0))
                             ],
                           )
@@ -153,7 +167,10 @@ class UserHeightDialog extends StatelessWidget {
                                     .split(".")[0],
                                 style: AppTextStyle.normalBlackText.copyWith(
                                     fontSize: 48 * SizeConfig.textMultiplier!,
-                                    color: kBlack,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
                                     height: 0),
                               ),
                               SizedBox(width: 4 * SizeConfig.widthMultiplier!),
@@ -161,7 +178,10 @@ class UserHeightDialog extends StatelessWidget {
                                   textAlign: TextAlign.start,
                                   style: AppTextStyle.normalBlackText.copyWith(
                                       fontSize: 18 * SizeConfig.textMultiplier!,
-                                      color: kBlack,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
                                       height: 0)),
                               SizedBox(width: 7 * SizeConfig.widthMultiplier!),
                               Text(
@@ -176,7 +196,10 @@ class UserHeightDialog extends StatelessWidget {
                                     .replaceAll(".", ""),
                                 style: AppTextStyle.normalBlackText.copyWith(
                                     fontSize: 48 * SizeConfig.textMultiplier!,
-                                    color: kBlack,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
                                     height: 0),
                               ),
                               SizedBox(width: 4 * SizeConfig.widthMultiplier!),
@@ -184,7 +207,10 @@ class UserHeightDialog extends StatelessWidget {
                                   textAlign: TextAlign.start,
                                   style: AppTextStyle.normalBlackText.copyWith(
                                       fontSize: 18 * SizeConfig.textMultiplier!,
-                                      color: kBlack,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
                                       height: 0))
                             ],
                           ),
@@ -194,7 +220,7 @@ class UserHeightDialog extends StatelessWidget {
                   height: 15 * SizeConfig.heightMultiplier!,
                 ),
 
-              // ruler
+                // ruler
                 Padding(
                   padding: EdgeInsets.only(
                       left: 31 * SizeConfig.widthMultiplier!,
@@ -214,7 +240,7 @@ class UserHeightDialog extends StatelessWidget {
                         width: 1.5 * SizeConfig.widthMultiplier!,
                         height: 50 * SizeConfig.heightMultiplier!,
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: Theme.of(context).textTheme.bodyText1?.color,
                             borderRadius: BorderRadius.circular(5))),
                     onValueChange: (value) {
                       _heightController.currentHeight.value = value;
@@ -230,7 +256,7 @@ class UserHeightDialog extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 32 * SizeConfig.heightMultiplier!,
+                  height: 30 * SizeConfig.heightMultiplier!,
                 ),
                 // okay button
                 Padding(

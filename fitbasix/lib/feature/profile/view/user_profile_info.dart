@@ -190,7 +190,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                           horizontal:
                                               16 * SizeConfig.widthMultiplier!),
                                       decoration: BoxDecoration(
-                                          color: greyB7,
+                                          color: Theme.of(context).cardColor,
                                           borderRadius:
                                               BorderRadius.circular(8.0)),
                                       child: Text(
@@ -636,7 +636,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
               padding: EdgeInsets.only(left: 8.0 * SizeConfig.widthMultiplier!),
               child: Container(
                 decoration: BoxDecoration(
-                    color: greyF6,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(
                         14 * SizeConfig.heightMultiplier!)),
                 child: Padding(
@@ -646,7 +646,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                     child: Text(
                       list[index],
                       style: AppTextStyle.lightMediumBlackText.copyWith(
-                        color: kBlack,
+                        color: Theme.of(context).textTheme.bodyText1?.color,
                       ),
                     ),
                   ),

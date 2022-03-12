@@ -8,7 +8,7 @@ import 'package:fitbasix/feature/profile/view/set_userweight_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:images_picker/images_picker.dart';
+// import 'package:images_picker/images_picker.dart';
 
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
@@ -63,7 +63,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: CustomizedCircularProgress(),
             )
           : Scaffold(
-              backgroundColor: kPureWhite,
+              backgroundColor: Theme.of(context).secondaryHeaderColor,
               appBar: AppBarForAccount(
                 title: 'edit_profile'.tr,
                 onback: () {
@@ -83,7 +83,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       Text(
                         "profile_picture".tr,
-                        style: AppTextStyle.hblackSemiBoldText,
+                        style: AppTextStyle.hblackSemiBoldText.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                       ),
                       SizedBox(
                         height: 8 * SizeConfig.heightMultiplier!,
@@ -109,8 +111,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 child: GestureDetector(
                                   onTap: () async {
                                     print("pppp");
-                                    profileController.isCoverPhoto.value =
-                                        false;
                                     Navigator.pushNamed(
                                         context, RouteName.selectProfilePhoto);
                                     // final pickedFile = await ImagesPicker.pick(
@@ -145,7 +145,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       //user full name
                       Text(
                         "full_name".tr,
-                        style: AppTextStyle.hblackSemiBoldText,
+                        style: AppTextStyle.hblackSemiBoldText.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                       ),
                       SizedBox(
                         height: 12 * SizeConfig.heightMultiplier!,
@@ -156,8 +158,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           //implement controller for storing user full name
                         },
                         controller: profileController.nameController,
-                        style: AppTextStyle.normalBlackText
-                            .copyWith(color: kBlack),
+                        style: AppTextStyle.normalBlackText.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(
                               12 * SizeConfig.widthMultiplier!,
@@ -168,13 +171,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!),
                             borderSide:
-                                BorderSide(color: kLightGrey, width: 1.0),
+                                BorderSide(color: greyBorder, width: 1.0),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!),
                             borderSide:
-                                BorderSide(color: kLightGrey, width: 1.5),
+                                BorderSide(color: greyBorder, width: 1.5),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
@@ -186,7 +189,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!),
                             borderSide:
-                                BorderSide(color: kLightGrey, width: 1.0),
+                                BorderSide(color: greyBorder, width: 1.0),
                           ),
                         ),
                       ),
@@ -195,7 +198,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       Text(
                         "bio".tr,
-                        style: AppTextStyle.hblackSemiBoldText,
+                        style: AppTextStyle.hblackSemiBoldText.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                       ),
                       SizedBox(
                         height: 12 * SizeConfig.heightMultiplier!,
@@ -206,8 +211,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           //implement controller for storing user bio
                         },
                         controller: profileController.bioController,
-                        style: AppTextStyle.normalBlackText
-                            .copyWith(color: kBlack),
+                        style: AppTextStyle.normalBlackText.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(
                               12 * SizeConfig.widthMultiplier!,
@@ -218,13 +224,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!),
                             borderSide:
-                                BorderSide(color: kLightGrey, width: 1.0),
+                                BorderSide(color: greyBorder, width: 1.0),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!),
                             borderSide:
-                                BorderSide(color: kLightGrey, width: 1.5),
+                                BorderSide(color: greyBorder, width: 1.5),
                           ),
                           errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
@@ -236,7 +242,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!),
                             borderSide:
-                                BorderSide(color: kLightGrey, width: 1.0),
+                                BorderSide(color: greyBorder, width: 1.0),
                           ),
                         ),
                       ),
@@ -246,7 +252,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       // Gender
                       Text(
                         "gender".tr,
-                        style: AppTextStyle.hblackSemiBoldText,
+                        style: AppTextStyle.hblackSemiBoldText.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                       ),
                       SizedBox(
                         height: 12 * SizeConfig.heightMultiplier!,
@@ -256,34 +264,54 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           // male radio button
-                          Radio(
-                              value: 1,
-                              groupValue: selectedRadio,
-                              activeColor: kgreen49,
-                              onChanged: (val) {
-                                setSelectedRadio(val);
-                              }),
+                          Theme(
+                            data: ThemeData(
+                              //here change to your color
+                              unselectedWidgetColor:
+                                  Theme.of(context).primaryColor,
+                            ),
+                            child: Radio(
+                                value: 1,
+                                groupValue: selectedRadio,
+                                activeColor: kgreen49,
+                                onChanged: (val) {
+                                  setSelectedRadio(val);
+                                }),
+                          ),
                           //SizedBox(width: 14 * SizeConfig.widthMultiplier!,),
                           Text(
                             'm'.tr,
-                            style: AppTextStyle.boldBlackText
-                                .copyWith(color: kBlack),
+                            style: AppTextStyle.boldBlackText.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color),
                           ),
                           SizedBox(
                             width: 20 * SizeConfig.widthMultiplier!,
                           ),
                           //female radio button
-                          Radio(
-                              value: 2,
-                              groupValue: selectedRadio,
-                              activeColor: kgreen49,
-                              onChanged: (val) {
-                                setSelectedRadio(val);
-                              }),
+                          Theme(
+                            data: ThemeData(
+                              //here change to your color
+                              unselectedWidgetColor:
+                                  Theme.of(context).primaryColor,
+                            ),
+                            child: Radio(
+                                value: 2,
+                                groupValue: selectedRadio,
+                                activeColor: kgreen49,
+                                onChanged: (val) {
+                                  setSelectedRadio(val);
+                                }),
+                          ),
                           Text(
                             'f'.tr,
-                            style: AppTextStyle.boldBlackText
-                                .copyWith(color: kBlack),
+                            style: AppTextStyle.boldBlackText.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color),
                           ),
                         ],
                       ),
@@ -299,7 +327,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             children: [
                               Text(
                                 "height".tr,
-                                style: AppTextStyle.hblackSemiBoldText,
+                                style: AppTextStyle.hblackSemiBoldText.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color),
                               ),
                               SizedBox(
                                 height: 12 * SizeConfig.heightMultiplier!,
@@ -320,7 +352,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       border: Border.all(
                                           width:
                                               1 * SizeConfig.widthMultiplier!,
-                                          color: kLightGrey)),
+                                          color: greyBorder)),
                                   child: Center(
                                     child: Obx(
                                       () => profileController
@@ -336,7 +368,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                       .toString(),
                                                   style: AppTextStyle
                                                       .normalBlackText
-                                                      .copyWith(color: kBlack),
+                                                      .copyWith(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        ?.color,
+                                                  ),
                                                 ),
                                                 SizedBox(
                                                     width: 4 *
@@ -367,7 +404,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                       .split(".")[0],
                                                   style: AppTextStyle
                                                       .normalBlackText
-                                                      .copyWith(color: kBlack),
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1
+                                                                  ?.color),
                                                 ),
                                                 SizedBox(
                                                     width: 4 *
@@ -397,7 +439,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                       .replaceAll(".", ""),
                                                   style: AppTextStyle
                                                       .normalBlackText
-                                                      .copyWith(color: kBlack),
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1
+                                                                  ?.color),
                                                 ),
                                                 SizedBox(
                                                     width: 4 *
@@ -426,7 +473,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             children: [
                               Text(
                                 "weight".tr,
-                                style: AppTextStyle.hblackSemiBoldText,
+                                style: AppTextStyle.hblackSemiBoldText.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color),
                               ),
                               SizedBox(
                                 height: 12 * SizeConfig.heightMultiplier!,
@@ -447,7 +498,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       border: Border.all(
                                           width:
                                               1 * SizeConfig.widthMultiplier!,
-                                          color: kLightGrey)),
+                                          color: greyBorder)),
                                   child: Center(
                                     child: Obx(
                                       () => Row(
@@ -461,7 +512,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                 .currentWeight.value
                                                 .toString(),
                                             style: AppTextStyle.normalBlackText
-                                                .copyWith(color: kBlack)
+                                                .copyWith(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        ?.color)
                                                 .copyWith(
                                                   fontSize: 16 *
                                                       SizeConfig
@@ -498,7 +553,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       //Interests
                       Text(
                         "interests".tr,
-                        style: AppTextStyle.hblackSemiBoldText,
+                        style: AppTextStyle.hblackSemiBoldText.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                       ),
                       SizedBox(
                         height: 12 * SizeConfig.heightMultiplier!,
@@ -620,9 +677,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       CheckboxListTile(
           controlAffinity: ListTileControlAffinity.leading,
           activeColor: kgreen49,
+          side: BorderSide(color: kPureWhite),
           title: Text(
             checkbox.name!,
-            style: AppTextStyle.hblack400Text.copyWith(color: kBlack),
+            style: AppTextStyle.hblack400Text
+                .copyWith(color: Theme.of(context).textTheme.bodyText1?.color),
           ),
           value: selectedIndex,
           onChanged: (value) {

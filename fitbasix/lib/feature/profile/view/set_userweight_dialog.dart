@@ -24,7 +24,7 @@ class UserWeightDialog extends StatelessWidget {
         32 * SizeConfig.widthMultiplier!,
         48 * SizeConfig.heightMultiplier!,
       ),
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       child: Container(
@@ -41,7 +41,7 @@ class UserWeightDialog extends StatelessWidget {
                   child: Text(
                     'your_weight'.tr,
                     style: AppTextStyle.boldBlackText.copyWith(
-                      color: kBlack
+                      color: Theme.of(context).textTheme.bodyText1?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -81,8 +81,12 @@ class UserWeightDialog extends StatelessWidget {
                             'kg'.tr,
                             style: _weightController.weightType == "kg"
                                 ? AppTextStyle.white400Text
-                                : AppTextStyle.white400Text
-                                    .copyWith(color: lightBlack),
+                                : AppTextStyle.white400Text.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
+                                  ),
                           )),
                         ),
                       ),
@@ -114,8 +118,12 @@ class UserWeightDialog extends StatelessWidget {
                             'lb'.tr,
                             style: _weightController.weightType != "kg"
                                 ? AppTextStyle.white400Text
-                                : AppTextStyle.white400Text
-                                    .copyWith(color: lightBlack),
+                                : AppTextStyle.white400Text.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
+                                  ),
                           )),
                         ),
                       )
@@ -134,7 +142,8 @@ class UserWeightDialog extends StatelessWidget {
                         Text(
                           _weightController.currentWeight.value.toString(),
                           style: AppTextStyle.normalBlackText.copyWith(
-                            color: kBlack,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: 48 * SizeConfig.textMultiplier!,
                               height: 0),
                           textAlign: TextAlign.center,
@@ -146,7 +155,10 @@ class UserWeightDialog extends StatelessWidget {
                                 : 'lb'.tr,
                             textAlign: TextAlign.start,
                             style: AppTextStyle.normalBlackText.copyWith(
-                                color: kBlack,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color,
                                 fontSize: 18 * SizeConfig.textMultiplier!))
                       ],
                     ),
@@ -235,7 +247,6 @@ class UserWeightDialog extends StatelessWidget {
                       onPressed: () {
                         print(_weightController.currentHeight.value);
                         Navigator.pop(context);
-
                       }),
                 ),
                 SizedBox(
