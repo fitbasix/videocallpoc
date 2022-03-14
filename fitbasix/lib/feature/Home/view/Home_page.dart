@@ -1207,6 +1207,7 @@ class _HomePageState extends State<HomePage> {
                                                           _homeController
                                                               .commentsList
                                                               .clear();
+                                                          _homeController.viewReplies!.clear();
                                                           // _homeController.replyList.clear();
                                                           Navigator.pushNamed(
                                                               context,
