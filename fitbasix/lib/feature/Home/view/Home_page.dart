@@ -1,4 +1,8 @@
+
+import 'dart:ui';
+
 import 'dart:developer';
+
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -275,6 +279,7 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 16 * SizeConfig.heightMultiplier!,
                           ),
+
                           // Padding(
                           //   padding: EdgeInsets.only(
                           //       left: 16 * SizeConfig.widthMultiplier!,
@@ -1320,6 +1325,64 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ))),
+    );
+  }
+
+  void showDialogForLiveLimitExceeded(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                insetPadding: EdgeInsets.zero,
+                titlePadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.symmetric(horizontal: 20*SizeConfig.widthMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Transform.translate(
+                        offset: Offset(10*SizeConfig.widthMultiplier!,0),
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Theme.of(context).cardColor,
+                            radius: 20*SizeConfig.imageSizeMultiplier!,
+                            child: Icon(Icons.close,color: Theme.of(context).primaryColor,),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 150*SizeConfig.heightMultiplier!,
+                      width: 150*SizeConfig.widthMultiplier!,
+                      child: Image.asset(ImagePath.animatedLiveLimitErrorIcon,fit: BoxFit.cover,),),
+                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
+                    SizedBox(width: 250*SizeConfig.widthMultiplier!,),
+                    Text("Something went wrong!".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 16*SizeConfig.textMultiplier!,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
+                    Text("There is already 200 people in\nthis please join later.".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w400,fontSize: 14),textAlign: TextAlign.center,),
+                    SizedBox(height: 40*SizeConfig.heightMultiplier!,),
+                  ],
+                ),
+              )
+          ),
+        );
+
+
+
+      },
     );
   }
 }

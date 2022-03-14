@@ -94,6 +94,7 @@ class Trainer {
     this.isNutritionConsultant,
     this.certificates,
     this.isFollowing,
+    this.isEnrolled
   });
 
   String? followers;
@@ -116,6 +117,7 @@ class Trainer {
   final bool? isNutritionConsultant;
   final List<Certificate>? certificates;
   bool? isFollowing;
+  bool? isEnrolled;
 
   factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
       followers: json["followers"].toString(),
@@ -145,7 +147,10 @@ class Trainer {
           ? []
           : List<Certificate>.from(json["certificate"]["certificates"]
               .map((x) => Certificate.fromJson(x))),
-      isFollowing: json["isFollowing"]);
+      isFollowing: json["isFollowing"],
+      isEnrolled: json["isEnrolled"]
+
+  );
 
   Map<String, dynamic> toJson() => {
         "followers": followers,

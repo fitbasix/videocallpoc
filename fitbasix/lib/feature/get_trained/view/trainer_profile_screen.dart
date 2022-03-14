@@ -45,11 +45,30 @@ class TrainerProfileScreen extends StatefulWidget {
 class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   HomeController _homeController = Get.find();
   bool isMessageLoading = false;
+  TrainerController _trainerController = Get.find();
+  var isPlanLoading = true.obs;
+
+  getAllTrainerPlanData()async{
+    _trainerController.planModel.value = PlanModel();
+    print(_trainerController.atrainerDetail.value.id!.toString() +"eeeeee");
+    _trainerController.planModel.value = await TrainerServices.getPlanByTrainerId(_trainerController.atrainerDetail.value.user!.id!).then((value) {
+      isPlanLoading.value = false;
+      return value;
+    });
+
+  }
+  @override
+  void initState() {
+    getAllTrainerPlanData();
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-
     final TrainerController trainerController = Get.put(TrainerController());
+
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -60,7 +79,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             trainerCoverImage: trainerController
                 .atrainerDetail.value.user!.coverPhoto!
                 .toString(),
-            isEnrolled: true,
+            isEnrolled: _trainerController.atrainerDetail.value.isEnrolled!,
             onFollow: () {
               if (trainerController.atrainerDetail.value.isFollowing!) {
                 trainerController.atrainerDetail.value.isFollowing = false;
@@ -167,7 +186,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
             },
             onEnroll: () {
 
-              Navigator.pushNamed(context, RouteName.trainerplanScreen);
+                  Navigator.pushNamed(context, RouteName.trainerplanScreen);
+
               // showDialog(
               //     context: context,
               //     builder: (BuildContext context) => EnrollTrainerDialog());
@@ -648,134 +668,134 @@ class _TrainerPageState extends State<TrainerPage> {
                                   SizedBox(
                                       height:
                                           24 * SizeConfig.heightMultiplier!),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      left: 24.0 * SizeConfig.widthMultiplier!,
-                                    ),
-                                    child: Obx(() => trainerController
-                                            .isProfileLoading.value
-                                        ? Text('plan'.tr,
-                                            style: AppTextStyle
-                                                .greenSemiBoldText
-                                                .copyWith(
-                                              color: Theme.of(context).textTheme.bodyText1?.color,
-                                            ))
-                                        : widget.allPlans.length != 0
-                                            ? Text('plan'.tr,
-                                                style: AppTextStyle
-                                                    .greenSemiBoldText
-                                                    .copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color,
-                                                ))
-                                            : SizedBox()),
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          12 * SizeConfig.heightMultiplier!),
-                                  Obx(() => trainerController
-                                          .isProfileLoading.value
-                                      ? Container(
-                                          height: 250 *
-                                              SizeConfig.heightMultiplier!,
-                                          child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: 4,
-                                              shrinkWrap: true,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Shimmer.fromColors(
-                                                  baseColor:
-                                                      const Color.fromRGBO(
-                                                          230, 230, 230, 1),
-                                                  highlightColor:
-                                                      const Color.fromRGBO(
-                                                          242, 245, 245, 1),
-                                                  child: Padding(
-                                                    padding: index == 0
-                                                        ? EdgeInsets.only(
-                                                            left: 24.0 *
-                                                                SizeConfig
-                                                                    .widthMultiplier!)
-                                                        : EdgeInsets.only(
-                                                            right: 8.0 *
-                                                                SizeConfig
-                                                                    .widthMultiplier!),
-                                                    child: PlanTile(
-                                                      rating: double.parse("2"),
-                                                      planTitle: "",
-                                                      planImage:
-                                                          "https://randomuser.me/api/portraits/men/1.jpg",
-                                                      palnTime: "",
-                                                      likesCount: "",
-                                                      ratingCount: "",
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                        )
-                                      : (widget.allPlans.length != 0
-                                          ? Container(
-                                              height: 250 *
-                                                  SizeConfig.heightMultiplier!,
-                                              child: ListView.builder(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemCount:
-                                                      widget.allPlans.length,
-                                                  shrinkWrap: true,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Padding(
-                                                      padding: index == 0
-                                                          ? EdgeInsets.only(
-                                                              left: 24.0 *
-                                                                  SizeConfig
-                                                                      .widthMultiplier!,
-                                                              right: 8.0 *
-                                                                  SizeConfig
-                                                                      .widthMultiplier!)
-                                                          : EdgeInsets.only(
-                                                              right: 8.0 *
-                                                                  SizeConfig
-                                                                      .widthMultiplier!),
-                                                      child: PlanTile(
-                                                        rating: double.parse(
-                                                            widget
-                                                                .allPlans[index]
-                                                                .plansRating
-                                                                .toString()),
-                                                        planTitle: widget
-                                                            .allPlans[index]
-                                                            .planName!,
-                                                        planImage: widget
-                                                            .allPlans[index]
-                                                            .planIcon!,
-                                                        palnTime: 'planTime'
-                                                            .trParams({
-                                                          'duration': (widget
-                                                                      .allPlans[
-                                                                          index]
-                                                                      .planDuration! %
-                                                                  5)
-                                                              .toString()
-                                                        }),
-                                                        likesCount: NumberFormatter
-                                                            .textFormatter(widget
-                                                                .allPlans[index]
-                                                                .likesCount!
-                                                                .toString()),
-                                                        ratingCount: NumberFormatter
-                                                            .textFormatter(widget
-                                                                .allPlans[index]
-                                                                .raters!
-                                                                .toString()),
-                                                      ),
-                                                    );
-                                                  }),
-                                            )
-                                          : SizedBox())),
+                                  // Padding(
+                                  //   padding: EdgeInsets.only(
+                                  //     left: 24.0 * SizeConfig.widthMultiplier!,
+                                  //   ),
+                                  //   child: Obx(() => trainerController
+                                  //           .isProfileLoading.value
+                                  //       ? Text('plan'.tr,
+                                  //           style: AppTextStyle
+                                  //               .greenSemiBoldText
+                                  //               .copyWith(
+                                  //             color: Theme.of(context).textTheme.bodyText1?.color,
+                                  //           ))
+                                  //       : widget.allPlans.length != 0
+                                  //           ? Text('plan'.tr,
+                                  //               style: AppTextStyle
+                                  //                   .greenSemiBoldText
+                                  //                   .copyWith(
+                                  //                 color: Theme.of(context).textTheme.bodyText1?.color,
+                                  //               ))
+                                  //           : SizedBox()),
+                                  // ),
+                                  // SizedBox(
+                                  //     height:
+                                  //         12 * SizeConfig.heightMultiplier!),
+                                  // Obx(() => trainerController
+                                  //         .isProfileLoading.value
+                                  //     ? Container(
+                                  //         height: 250 *
+                                  //             SizeConfig.heightMultiplier!,
+                                  //         child: ListView.builder(
+                                  //             scrollDirection: Axis.horizontal,
+                                  //             itemCount: 4,
+                                  //             shrinkWrap: true,
+                                  //             itemBuilder:
+                                  //                 (BuildContext context,
+                                  //                     int index) {
+                                  //               return Shimmer.fromColors(
+                                  //                 baseColor:
+                                  //                     const Color.fromRGBO(
+                                  //                         230, 230, 230, 1),
+                                  //                 highlightColor:
+                                  //                     const Color.fromRGBO(
+                                  //                         242, 245, 245, 1),
+                                  //                 child: Padding(
+                                  //                   padding: index == 0
+                                  //                       ? EdgeInsets.only(
+                                  //                           left: 24.0 *
+                                  //                               SizeConfig
+                                  //                                   .widthMultiplier!)
+                                  //                       : EdgeInsets.only(
+                                  //                           right: 8.0 *
+                                  //                               SizeConfig
+                                  //                                   .widthMultiplier!),
+                                  //                   child: PlanTile(
+                                  //                     rating: double.parse("2"),
+                                  //                     planTitle: "",
+                                  //                     planImage:
+                                  //                         "https://randomuser.me/api/portraits/men/1.jpg",
+                                  //                     palnTime: "",
+                                  //                     likesCount: "",
+                                  //                     ratingCount: "",
+                                  //                   ),
+                                  //                 ),
+                                  //               );
+                                  //             }),
+                                  //       )
+                                  //     : (widget.allPlans.length != 0
+                                  //         ? Container(
+                                  //             height: 250 *
+                                  //                 SizeConfig.heightMultiplier!,
+                                  //             child: ListView.builder(
+                                  //                 scrollDirection:
+                                  //                     Axis.horizontal,
+                                  //                 itemCount:
+                                  //                     widget.allPlans.length,
+                                  //                 shrinkWrap: true,
+                                  //                 itemBuilder:
+                                  //                     (BuildContext context,
+                                  //                         int index) {
+                                  //                   return Padding(
+                                  //                     padding: index == 0
+                                  //                         ? EdgeInsets.only(
+                                  //                             left: 24.0 *
+                                  //                                 SizeConfig
+                                  //                                     .widthMultiplier!,
+                                  //                             right: 8.0 *
+                                  //                                 SizeConfig
+                                  //                                     .widthMultiplier!)
+                                  //                         : EdgeInsets.only(
+                                  //                             right: 8.0 *
+                                  //                                 SizeConfig
+                                  //                                     .widthMultiplier!),
+                                  //                     child: PlanTile(
+                                  //                       rating: double.parse(
+                                  //                           widget
+                                  //                               .allPlans[index]
+                                  //                               .plansRating
+                                  //                               .toString()),
+                                  //                       planTitle: widget
+                                  //                           .allPlans[index]
+                                  //                           .planName!,
+                                  //                       planImage: widget
+                                  //                           .allPlans[index]
+                                  //                           .planIcon!,
+                                  //                       palnTime: 'planTime'
+                                  //                           .trParams({
+                                  //                         'duration': (widget
+                                  //                                     .allPlans[
+                                  //                                         index]
+                                  //                                     .planDuration! %
+                                  //                                 5)
+                                  //                             .toString()
+                                  //                       }),
+                                  //                       likesCount: NumberFormatter
+                                  //                           .textFormatter(widget
+                                  //                               .allPlans[index]
+                                  //                               .likesCount!
+                                  //                               .toString()),
+                                  //                       ratingCount: NumberFormatter
+                                  //                           .textFormatter(widget
+                                  //                               .allPlans[index]
+                                  //                               .raters!
+                                  //                               .toString()),
+                                  //                     ),
+                                  //                   );
+                                  //                 }),
+                                  //           )
+                                  //         : SizedBox())),
                                 ],
                               ),
                             ),
@@ -1046,7 +1066,6 @@ class _TrainerPageState extends State<TrainerPage> {
                 ),
               ),
             ),
-
             Obx(() => _trainerController.loadingIndicator.value
                 ? Positioned(
                     bottom: 90 * SizeConfig.heightMultiplier!,
@@ -1066,17 +1085,17 @@ class _TrainerPageState extends State<TrainerPage> {
                     left: 24 * SizeConfig.widthMultiplier!,
                     right: 24 * SizeConfig.widthMultiplier!),
                 child: GestureDetector(
-                  onTap: widget.onEnroll,
+                  onTap: widget.isEnrolled?null:widget.onEnroll,
                   child: Container(
                     decoration: BoxDecoration(
-                        color: kgreen4F,
+                        color: widget.isEnrolled?hintGrey:kgreen4F,
                         borderRadius: BorderRadius.circular(8.0)),
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 31.0 * SizeConfig.widthMultiplier!,
                           vertical: 14 * SizeConfig.heightMultiplier!),
                       child: Text(
-                        'enroll'.tr,
+                        widget.isEnrolled?'already_enrolled'.tr:'enroll_trainer'.tr,
                         textAlign: TextAlign.center,
                         style: AppTextStyle.titleText.copyWith(
                             fontSize: 18 * SizeConfig.textMultiplier!,

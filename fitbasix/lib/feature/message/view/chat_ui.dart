@@ -23,6 +23,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -138,10 +139,11 @@ class _ChatScreenState extends State<ChatScreen> {
         onHangUpTapped: (value) {
           //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
           callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => VideoCallScreen(
-                      sessionIdForVideoCall: value!,
-                    )));
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (context) => VideoCallScreen(
+            //           sessionIdForVideoCall: value!,
+            //         )));
+            showDialogForVideoCallNotPossible(context);
           });
         },
         onMenuTap: () {
@@ -699,6 +701,44 @@ class _ChatScreenState extends State<ChatScreen> {
                         ],
                       ),
                     ),
+
+                  ],
+                ),
+              )
+          ),
+        );
+
+
+
+      },
+    );
+  }
+
+  void showDialogForVideoCallNotPossible(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!,horizontal: 30*SizeConfig.widthMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                        height: 100*SizeConfig.heightMultiplier!,
+                        width: 100*SizeConfig.widthMultiplier!,
+                        child: Image.asset(ImagePath.animatedErrorIcon),),
+                    SizedBox(height: 26*SizeConfig.heightMultiplier!,),
+                    Text("You are only able to make calls\nduring your training time slot Only".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),textAlign: TextAlign.center,),
+                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
+                    Text("i.e 5:30 PM to 6:30 PM\n Mon, Tue & Wed",style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
 
                   ],
                 ),
