@@ -111,7 +111,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                     child: Container(
                       height: 32 * SizeConfig.heightMultiplier!,
                       decoration: BoxDecoration(
-                        color: lightGrey,
+                        color: kLightGrey,
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
                       ),
@@ -471,7 +471,43 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           )
                         : Container(
                             // height: Get.height,
-                            child: ListView.builder(
+                            child: _trainerController.allTrainer.
+                            value.response!.data!.trainers!.length ==0
+                                ?Container(
+                              padding: EdgeInsets.only(
+                                top: 71*SizeConfig.heightMultiplier!,
+                                left: 56*SizeConfig.widthMultiplier!,
+                                right: 55*SizeConfig.widthMultiplier!
+                              ),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    ImagePath.nomatchesfoundImage,
+                                    height: 102*SizeConfig.heightMultiplier!,
+                                    width: 100*SizeConfig.widthMultiplier!,
+                                  ),
+                                  SizedBox(
+                                    height: 8.78*SizeConfig.heightMultiplier!,
+                                  ),
+                                  Text('Sorry we couldn’t find any matches',
+                                  style: AppTextStyle.black400Text.copyWith(
+                                    fontSize: (24) * SizeConfig.textMultiplier!,
+                                    color: Theme.of(context).textTheme.bodyText1?.color
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 8*SizeConfig.heightMultiplier!,
+                                  ),
+                                  Text('Please try a different search ',
+                                    style: AppTextStyle.black400Text.copyWith(
+                                        color: Theme.of(context).textTheme.bodyText1?.color
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              )
+                                :ListView.builder(
                                 itemCount: _trainerController.allTrainer.value
                                             .response!.data!.trainers!.length ==
                                         0
