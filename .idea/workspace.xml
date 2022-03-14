@@ -8,22 +8,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/.run/Flavor_ dev.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/.run/Flavor_ dev.run.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/api_service/dio_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/api_service/dio_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/posts/services/createPost_Services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/posts/services/createPost_Services.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/assets/get_trained/no_matchesfoundImage.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/constants/image_path.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/constants/image_path.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/custom_bottom_nav_bar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/custom_bottom_nav_bar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/all_trainer_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/all_trainer_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/get_trained_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/get_trained_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/log_in/view/enter_details_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/log_in/view/enter_details_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/dob_picker.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/dob_picker.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/edit_personal_info_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/edit_personal_info_screen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[9637547346000CB]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -79,7 +78,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
   <component name="SvnConfiguration">
     <configuration />
   </component>

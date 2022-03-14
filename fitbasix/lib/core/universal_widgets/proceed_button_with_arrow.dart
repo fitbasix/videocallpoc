@@ -18,10 +18,10 @@ class ProceedButtonWithArrow extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: size.width,
-        height: 56 * SizeConfig.heightMultiplier!,
+        height: 48 * SizeConfig.heightMultiplier!,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-          color: kGreenColor,
+          color: kgreen49,
         ),
         child: Center(
           child: Row(

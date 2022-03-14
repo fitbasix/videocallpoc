@@ -83,17 +83,20 @@ class AccountAndSubscriptionScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                         child: SvgPicture.asset(
-                      ImagePath.addPersonIcon,
-                      width: 16 * SizeConfig.widthMultiplier!,
-                      height: 16 * SizeConfig.heightMultiplier!,
+                      ImagePath.resetpasskeyIcon,
+                      width: 9.9 * SizeConfig.widthMultiplier!,
+                      height: 20 * SizeConfig.heightMultiplier!,
                       fit: BoxFit.contain,
+                          color: Theme.of(context).primaryColor,
                     )),
                     SizedBox(
                       width: 16.59 * SizeConfig.widthMultiplier!,
                     ),
                     Text(
                       "reset_password".tr,
-                      style: AppTextStyle.NormalBlackTitleText,
+                      style: AppTextStyle.NormalBlackTitleText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color
+                      ),
                     ),
                   ],
                 ),

@@ -1,8 +1,10 @@
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -33,6 +35,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
+    log("profilePhoto" + profileController.profilePhoto.value);
     return Scaffold(
       body: Obx(
         () => UserPageInfo(
@@ -45,8 +48,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               .userProfileData.value.response!.data!.profile!.following
               .toString(),
           aboutuser: about_user.tr,
-          userImage: profileController.profilePhoto.value,
-          userCoverImage: profileController.coverPhoto.toString(),
+          userImage: profileController.profilePhoto.value == ""
+              ? _homeController
+                  .userProfileData.value.response!.data!.profile!.profilePhoto
+              : profileController.profilePhoto.value,
+          userCoverImage: profileController.coverPhoto.value == ""
+              ? _homeController
+                  .userProfileData.value.response!.data!.profile!.coverPhoto
+              : profileController.coverPhoto.value,
           oneditprofile: () {
             Navigator.pushNamed(context, RouteName.edituserProfileScreen);
           },
@@ -190,7 +199,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                           horizontal:
                                               16 * SizeConfig.widthMultiplier!),
                                       decoration: BoxDecoration(
-                                          color: greyB7,
+                                          color: Theme.of(context).cardColor,
                                           borderRadius:
                                               BorderRadius.circular(8.0)),
                                       child: Text(
@@ -540,8 +549,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                         Container(
                           width: double.infinity,
                           height: 177 * SizeConfig.heightMultiplier!,
-                          child: Image.network(
-                            widget.userCoverImage!,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.userCoverImage!,
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -636,7 +645,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
               padding: EdgeInsets.only(left: 8.0 * SizeConfig.widthMultiplier!),
               child: Container(
                 decoration: BoxDecoration(
-                    color: greyF6,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(
                         14 * SizeConfig.heightMultiplier!)),
                 child: Padding(
@@ -646,7 +655,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                     child: Text(
                       list[index],
                       style: AppTextStyle.lightMediumBlackText.copyWith(
-                        color: kBlack,
+                        color: Theme.of(context).textTheme.bodyText1?.color,
                       ),
                     ),
                   ),

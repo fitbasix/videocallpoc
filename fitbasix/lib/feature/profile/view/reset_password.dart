@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../Home/controller/Home_Controller.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  final ProfileController _profileController = Get.put(ProfileController());
+  final ProfileController _profileController = Get.find();
   final HomeController homeController = Get.find();
   ResetPasswordScreen({Key? key}) : super(key: key);
   var isVisible = false.obs;
@@ -18,6 +18,7 @@ class ResetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Theme.of(context).secondaryHeaderColor,
         appBar: AppBarForAccount(
           title: "Reset Password",
@@ -79,12 +80,12 @@ class ResetPasswordScreen extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                          borderSide: BorderSide(color: greyBorder, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.5),
+                          borderSide: BorderSide(color: greyBorder, width: 1.5),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
@@ -95,7 +96,7 @@ class ResetPasswordScreen extends StatelessWidget {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                          borderSide: BorderSide(color: greyBorder, width: 1.0),
                         ),
                       ),
                     ),
@@ -140,12 +141,12 @@ class ResetPasswordScreen extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                          borderSide: BorderSide(color: greyBorder, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.5),
+                          borderSide: BorderSide(color: greyBorder, width: 1.5),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
@@ -156,7 +157,7 @@ class ResetPasswordScreen extends StatelessWidget {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                          borderSide: BorderSide(color: greyBorder, width: 1.0),
                         ),
                       ),
                     ),
@@ -201,12 +202,12 @@ class ResetPasswordScreen extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                          borderSide: BorderSide(color: greyBorder, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.5),
+                          borderSide: BorderSide(color: greyBorder, width: 1.5),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
@@ -217,7 +218,7 @@ class ResetPasswordScreen extends StatelessWidget {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                          borderSide: BorderSide(color: greyBorder, width: 1.0),
                         ),
                       ),
                     ),
@@ -233,7 +234,7 @@ class ResetPasswordScreen extends StatelessWidget {
                             style: ButtonStyle(
                                 elevation: MaterialStateProperty.all(0),
                                 backgroundColor:
-                                    MaterialStateProperty.all(kGreenColor),
+                                    MaterialStateProperty.all(kgreen4F),
                                 shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(

@@ -20,9 +20,20 @@ class GetTrainedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            child: CustomAppBar(titleOfModule: 'getTrainedTitle'.tr),
-            preferredSize: const Size(double.infinity, kToolbarHeight)),
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: false,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Text('getTrainedTitle'.tr,
+              style: AppTextStyle.titleText
+                  .copyWith(
+                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                  fontSize: 16 * SizeConfig.textMultiplier!)),
+        ),
+        // PreferredSize(
+        //     child: CustomAppBar(titleOfModule: 'getTrainedTitle'.tr),
+        //     preferredSize: const Size(double.infinity, kToolbarHeight)),
         // backgroundColor: kGreyBackground,
         body: SafeArea(
             child: SingleChildScrollView(
@@ -109,10 +120,8 @@ class GetTrainedScreen extends StatelessWidget {
                                           rating: 0,
                                           onTap: () {}),
                                     ),
-                                    baseColor:
-                                        const Color.fromRGBO(230, 230, 230, 1),
-                                    highlightColor:
-                                        const Color.fromRGBO(242, 245, 245, 1),
+                                    baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
+                                    highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                                   )
                                 : Padding(
                                     padding: index == 0
@@ -335,10 +344,8 @@ class GetTrainedScreen extends StatelessWidget {
                                         rating: 0,
                                         onTap: () {}),
                                   ),
-                                  baseColor:
-                                      const Color.fromRGBO(230, 230, 230, 1),
-                                  highlightColor:
-                                      const Color.fromRGBO(242, 245, 245, 1),
+                                   baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
+                                   highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                                 )
                               : Padding(
                                   padding: index == 0
@@ -556,10 +563,8 @@ class GetTrainedScreen extends StatelessWidget {
                                         rating: 0,
                                         onTap: () {}),
                                   ),
-                                  baseColor:
-                                      const Color.fromRGBO(230, 230, 230, 1),
-                                  highlightColor:
-                                      const Color.fromRGBO(242, 245, 245, 1),
+                                   baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
+                                   highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                                 )
                               : Padding(
                                   padding: index == 0

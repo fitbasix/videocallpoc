@@ -19,7 +19,7 @@ import '../../log_in/view/widgets/country_dropdown.dart';
 import '../../posts/services/createPost_Services.dart';
 
 class EditPersonalInfoScreen extends StatelessWidget {
-  final ProfileController _profileController = Get.put(ProfileController());
+  final ProfileController _profileController = Get.find();
   final HomeController homeController = Get.find();
   EditPersonalInfoScreen({Key? key}) : super(key: key);
 
@@ -48,8 +48,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
             Text(
               "email".tr,
               style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
-                color: Theme.of(context).textTheme.bodyText1?.color
-              ),
+                  color: Theme.of(context).textTheme.bodyText1?.color),
             ),
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field for user email
@@ -59,8 +58,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 //storing user input in email controller
               },
               style: AppTextStyle.normalBlackText.copyWith(
-                color: Theme.of(context).textTheme.bodyText1?.color
-              ),
+                  color: Theme.of(context).textTheme.bodyText1?.color),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(
                     12 * SizeConfig.widthMultiplier!,
@@ -97,14 +95,13 @@ class EditPersonalInfoScreen extends StatelessWidget {
             Text(
               "mobile_no".tr,
               style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
-                  color: Theme.of(context).textTheme.bodyText1?.color
-              ),
+                  color: Theme.of(context).textTheme.bodyText1?.color),
             ),
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field Phone no
             Obx(
               () => CutomizedTextField(
-               // wantWhiteBG: true,
+                // wantWhiteBG: true,
                 color: greyBorder,
                 child: TextFieldContainer(
                     inputFormatters: [
@@ -150,8 +147,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
             Text(
               "date_of_birth".tr,
               style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
-                  color: Theme.of(context).textTheme.bodyText1?.color
-              ),
+                  color: Theme.of(context).textTheme.bodyText1?.color),
             ),
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field for user email
@@ -163,8 +159,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                     controller: _profileController.DOBController,
                     enabled: false,
                     style: AppTextStyle.normalBlackText.copyWith(
-                      color: Theme.of(context).textTheme.bodyText1?.color
-                    ),
+                        color: Theme.of(context).textTheme.bodyText1?.color),
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(
                           12 * SizeConfig.widthMultiplier!,
@@ -206,7 +201,8 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
-                        context: context, builder: (context) => dobPicker());
+                        context: context,
+                        builder: (context) => dobPicker(context));
                   },
                   child: SvgPicture.asset(
                     ImagePath.calanderIcon,
