@@ -32,9 +32,9 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPureWhite,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: kPureWhite,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
           onPressed: () {
@@ -44,9 +44,10 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
             ImagePath.backIcon,
             width: 7.41 * SizeConfig.widthMultiplier!,
             height: 12 * SizeConfig.heightMultiplier!,
+            color: Theme.of(context).primaryColor,
           ),
         ),
-        title: Text('plan_timings'.tr, style: AppTextStyle.hblack600Text),
+        title: Text('plan_timings'.tr, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color)),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
@@ -81,39 +82,42 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'week_free_demo'.tr,
+                              trainerController.selectedPlan.value.planName.toString(),
                               style: AppTextStyle.hnormal600BlackText.copyWith(
                                 fontSize: (24) * SizeConfig.textMultiplier!,
+                                color: Theme.of(context).textTheme.bodyText1!.color
                               ),
                             ),
                             SizedBox(
                               height: 8 * SizeConfig.heightMultiplier!,
                             ),
-                            Text(
-                                trainerController.fullPlanDetails.value
-                                        .response!.data!.planName
-                                        .toString() +
-                                    " by " +
-                                    trainerController.fullPlanDetails.value
-                                        .response!.data!.trainer!.name
-                                        .toString(),
-                                style: AppTextStyle.hblack400Text),
+                            // Text(
+                            //     trainerController.fullPlanDetails.value
+                            //             .response!.data!.planName
+                            //             .toString() +
+                            //         " by " +
+                            //         trainerController.fullPlanDetails.value
+                            //             .response!.data!.trainer!.name
+                            //             .toString(),
+                            //     style: AppTextStyle.hblack400Text),
                             SizedBox(
                               height: 32 * SizeConfig.heightMultiplier!,
                             ),
                             Text('plan_pricing'.tr,
                                 style: AppTextStyle.hblackSemiBoldText
-                                    .copyWith(letterSpacing: -0.08)),
+                                    .copyWith(letterSpacing: -0.08,color: Theme.of(context).textTheme.bodyText1!.color,height: 1)),
                             SizedBox(
                               height: 12 * SizeConfig.heightMultiplier!,
                             ),
                             Text(
                               'AED ' +
                                   trainerController.fullPlanDetails.value
-                                      .response!.data!.prize
+                                      .response!.data!.price
                                       .toString(),
                               style: AppTextStyle.hblackSemiBoldText.copyWith(
                                   fontSize: (24) * SizeConfig.textMultiplier!,
+                                  color: Theme.of(context).textTheme.bodyText1!.color,
+                                  height: 1,
                                   letterSpacing: 1),
                             ),
                             SizedBox(
@@ -123,66 +127,42 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                             //select week
                             Text('select_week'.tr,
                                 style: AppTextStyle.hblackSemiBoldText
-                                    .copyWith(letterSpacing: -0.08)),
+                                    .copyWith(letterSpacing: -0.08,color: Theme.of(context).textTheme.bodyText1!.color)),
                             SizedBox(
                               height: 12 * SizeConfig.heightMultiplier!,
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 16 * SizeConfig.heightMultiplier!,
-                                  horizontal: 54 * SizeConfig.widthMultiplier!),
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: SvgPicture.asset(
-                                      ImagePath.backIcon,
-                                      width: 7.41 * SizeConfig.widthMultiplier!,
-                                      height: 12 * SizeConfig.heightMultiplier!,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 32 * SizeConfig.widthMultiplier!,
-                                  ),
-                                  //week dates
-                                  Text(
-                                      DateFormat("dd MMM").format(
-                                              trainerController
-                                                  .availableSlots
-                                                  .value
-                                                  .response!
-                                                  .data![0]
-                                                  .date!) +
-                                          " to " +
-                                          DateFormat("dd MMM").format(
-                                              trainerController
-                                                  .availableSlots
-                                                  .value
-                                                  .response!
-                                                  .data![trainerController
-                                                          .availableSlots
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .length -
-                                                      1]
-                                                  .date!),
-                                      style: AppTextStyle.normalBlackText
-                                          .copyWith(
-                                              letterSpacing: -0.08,
-                                              color: kBlack)),
-                                  SizedBox(
-                                    width: 32 * SizeConfig.widthMultiplier!,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: SvgPicture.asset(
-                                      ImagePath.reverseBackIcon,
-                                      width: 7.41 * SizeConfig.widthMultiplier!,
-                                      height: 12 * SizeConfig.heightMultiplier!,
-                                    ),
-                                  ),
-                                ],
+                            Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 16 * SizeConfig.heightMultiplier!,),
+                                child: Text(
+                                    DateFormat("dd MMM").format(
+                                            trainerController
+                                                .availableSlots
+                                                .value
+                                                .response!
+                                                .data![0]
+                                                .date!) +
+                                        " to " +
+                                        DateFormat("dd MMM").format(
+                                            trainerController
+                                                .availableSlots
+                                                .value
+                                                .response!
+                                                .data![trainerController
+                                                        .availableSlots
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .length -
+                                                    1]
+                                                .date!),
+                                    style: AppTextStyle.normalBlackText
+                                        .copyWith(
+                                        color: Theme.of(context).textTheme.bodyText1!.color,
+                                            letterSpacing: -0.08,
+                                           )),
                               ),
                             ),
                             SizedBox(
@@ -192,13 +172,22 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                             //select timeslot
                             Text('select_timeslot'.tr,
                                 style: AppTextStyle.hblackSemiBoldText
-                                    .copyWith(letterSpacing: -0.08)),
+                                    .copyWith(letterSpacing: -0.08,color: Theme.of(context).textTheme.bodyText1!.color)),
                             SizedBox(
                               height: 12 * SizeConfig.heightMultiplier!,
                             ),
                             //grid view of time slot
                             Obx(
-                              () => GridView.builder(
+                              () {
+                                print(trainerController
+                                    .availableSlots.value.response!.data!
+                                    .where((element) =>
+                                element.date ==
+                                    trainerController.availableSlots.value
+                                        .response!.data![0].date)
+                                    .length.toString() +" nnnnn");
+                                return GridView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   itemCount: trainerController
@@ -228,12 +217,13 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                               .value
                                                               .response!
                                                               .data![index]
-                                                              .time]
+                                                              .time!]
                                                       .serialId
                                               ? true
                                               : false,
                                           isDisabled: false.obs,
                                           onTap: () async {
+                                            trainerController.selectedTimeSlot.value = index;
                                             trainerController
                                                     .TimeSlotSelected.value =
                                                 trainerController
@@ -243,7 +233,7 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                             .value
                                                             .response!
                                                             .data![index]
-                                                            .time]
+                                                            .time!]
                                                     .serialId!;
                                             trainerController
                                                 .weekAvailableSlots.value = [];
@@ -251,13 +241,7 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                 .selectedDays.value = [];
                                             var output = await TrainerServices
                                                 .getAllWeekDays(
-                                                    trainerController
-                                                        .fullPlanDetails
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .trainer!
-                                                        .trainerId!,
+                                                trainerController.atrainerDetail.value.user!.id!,
                                                     trainerController
                                                         .TimeSlotSelected
                                                         .value);
@@ -271,18 +255,22 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                   .value
                                                   .response!
                                                   .data![index]
-                                                  .time]
+                                                  .time!]
                                               .name,
                                         ),
-                                      )),
+                                      ));}
                             ),
                             // select days
                             SizedBox(
                               height: 32 * SizeConfig.heightMultiplier!,
                             ),
-                            Text('select_days'.tr,
-                                style: AppTextStyle.hblackSemiBoldText
-                                    .copyWith(letterSpacing: -0.08)),
+                            Obx(
+                                ()=> trainerController
+                                    .weekAvailableSlots.length ==
+                                    0? Container():Text('select_days'.tr,
+                                  style: AppTextStyle.hblackSemiBoldText
+                                      .copyWith(letterSpacing: -0.08,color: Theme.of(context).textTheme.bodyText1!.color)),
+                            ),
                             SizedBox(
                               height: 12 * SizeConfig.heightMultiplier!,
                             ),
@@ -293,105 +281,96 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                   ? Container()
                                   : Container(
                                       height: 46 * SizeConfig.heightMultiplier!,
-                                      child: ListView.builder(
-                                          itemCount: trainerController
-                                              .weekAvailableSlots.length,
-                                          scrollDirection: Axis.horizontal,
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemBuilder: (_, index) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                if (trainerController
-                                                        .selectedDays
-                                                        .indexOf(trainerController
-                                                            .weekAvailableSlots[
-                                                                index]
-                                                            .id!) !=
-                                                    -1) {
-                                                  trainerController.selectedDays
-                                                      .remove(trainerController
-                                                          .weekAvailableSlots[
-                                                              index]
-                                                          .id!);
-                                                } else {
-                                                  trainerController.selectedDays
-                                                      .add(trainerController
-                                                          .weekAvailableSlots[
-                                                              index]
-                                                          .id!);
-                                                }
+                                      child:  Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: List.generate(trainerController
+                                            .weekAvailableSlots.length, (index){
+                               
+                                          return GestureDetector(
+                                          onTap: () {
+                                            if(trainerController.weekAvailableSlots[index].isAvailable != 0 && trainerController.weekAvailableSlots[index].isAvailable != 3){
+                                              if (trainerController.selectedDays.indexOf(trainerController.weekAvailableSlots[index]
+                                                  .id!) !=
+                                                  -1) {
+                                                trainerController.selectedDays
+                                                    .remove(trainerController
+                                                    .weekAvailableSlots[
+                                                index]
+                                                    .id!);
+                                              } else {
+                                                trainerController.selectedDays
+                                                    .add(trainerController
+                                                    .weekAvailableSlots[
+                                                index]
+                                                    .id!);
+                                              }
 
-                                                setState(() {});
-                                                // setState(() {
-                                                //   isDaySelected =
-                                                //       !isDaySelected;
-                                                // });
-                                                // });
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: trainerController
-                                                                  .selectedDays
-                                                                  .indexOf(trainerController
-                                                                      .weekAvailableSlots[
-                                                                          index]
-                                                                      .id!) !=
-                                                              -1
-                                                          ? kgreen49
-                                                          : kLightGrey,
-                                                      width: trainerController
-                                                                  .selectedDays
-                                                                  .indexOf(trainerController
-                                                                      .weekAvailableSlots[
-                                                                          index]
-                                                                      .id!) !=
-                                                              -1
-                                                          ? 1.5 *
-                                                              SizeConfig
-                                                                  .widthMultiplier!
-                                                          : 1 *
-                                                              SizeConfig
-                                                                  .widthMultiplier!),
-                                                  color: kPureWhite,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                width: 40 *
-                                                    SizeConfig.widthMultiplier!,
-                                                height: 46 *
-                                                    SizeConfig
-                                                        .heightMultiplier!,
-                                                child: Center(
-                                                  child: Text(
-                                                    DateFormat("EEE")
-                                                        .format(trainerController
-                                                            .weekAvailableSlots[
-                                                                index]
-                                                            .date!)
-                                                        .toString(),
-                                                    style: trainerController
-                                                                .selectedDays
-                                                                .indexOf(trainerController
-                                                                    .weekAvailableSlots[
-                                                                        index]
-                                                                    .id!) !=
-                                                            -1
-                                                        ? AppTextStyle
-                                                            .hblackSemiBoldText
-                                                            .copyWith(
-                                                                color: kgreen49)
-                                                        : AppTextStyle
-                                                            .hblack400Text
-                                                            .copyWith(
-                                                                color: greyB7),
-                                                  ),
-                                                ),
+                                              setState(() {});
+                                            }
+
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: (trainerController.weekAvailableSlots[index].isAvailable != 0 && trainerController.weekAvailableSlots[index].isAvailable != 3)?Border.all(
+                                                  color: trainerController
+                                                      .selectedDays
+                                                      .indexOf(trainerController
+                                                      .weekAvailableSlots[
+                                                  index].id!) !=
+                                                      -1
+                                                      ? kgreen49
+                                                      : kLightGrey,
+                                                  width: trainerController
+                                                      .selectedDays
+                                                      .indexOf(trainerController
+                                                      .weekAvailableSlots[
+                                                  index]
+                                                      .id!) !=
+                                                      -1
+                                                      ? 1.5 *
+                                                      SizeConfig
+                                                          .widthMultiplier!
+                                                      : 1 *
+                                                      SizeConfig
+                                                          .widthMultiplier!
+                                              ):Border.all(color: Colors.transparent),
+                                              color: (trainerController.weekAvailableSlots[index].isAvailable != 0 && trainerController.weekAvailableSlots[index].isAvailable != 3)?Colors.transparent:kBlack,
+                                              borderRadius:
+                                              BorderRadius.circular(8),
+                                            ),
+                                            width: 40 *
+                                                SizeConfig.widthMultiplier!,
+                                            height: 46 *
+                                                SizeConfig
+                                                    .heightMultiplier!,
+                                            child: Center(
+                                              child: Text(
+                                                DateFormat("EEE")
+                                                    .format(trainerController
+                                                    .weekAvailableSlots[
+                                                index]
+                                                    .date!)
+                                                    .toString(),
+                                                style: trainerController
+                                                    .selectedDays
+                                                    .indexOf(trainerController
+                                                    .weekAvailableSlots[
+                                                index]
+                                                    .id!) !=
+                                                    -1
+                                                    ? AppTextStyle
+                                                    .hblackSemiBoldText
+                                                    .copyWith(
+                                                    color: kgreen49)
+                                                    : AppTextStyle
+                                                    .hblack400Text
+                                                    .copyWith(
+                                                    color: greyB7),
                                               ),
-                                            );
-                                          }),
+                                            ),
+                                          ),
+                                        );}),
+                                      )
                                     ),
                             ),
 
@@ -411,11 +390,10 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                         trainerController.selectedDays.length !=
                                                     0 &&
                                                 (trainerController.selectedDays
-                                                            .length %
-                                                        3 ==
-                                                    0)
+                                                            .length ==
+                                                        3)
                                             ? kgreen4F
-                                            : kLightGrey,
+                                            : hintGrey,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   width: double.infinity *
@@ -430,10 +408,31 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                       .selectedDays.length %
                                                   3 ==
                                               0)) {
-                                        await TrainerServices.bookSlot(
-                                            trainerController.selectedDays);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
+                                        List<int> selectedDays = [];
+                                        trainerController.selectedDays.forEach((days) {
+                                          selectedDays.add(trainerController.weekAvailableSlots[trainerController.weekAvailableSlots.indexWhere((element) => element.id ==days)].day!);
+                                        });
+
+                                       await TrainerServices.bookSlot(
+                                         trainerController.selectedDays,
+                                          trainerController.selectedPlan.value.id!,
+                                           trainerController
+                                               .availableSlots
+                                               .value
+                                               .response!
+                                               .data![trainerController.selectedTimeSlot.value].time!,
+                                         selectedDays
+                                       ).then((value){
+                                         showDialogForSessionBooked(context);
+                                         Future.delayed(Duration(seconds: 3),(){
+                                           Navigator.pop(context);
+                                           Navigator.pop(context);
+                                           Navigator.pop(context);
+                                         });
+                                       });
+
+                                        // Navigator.pop(context);
+                                        // Navigator.pop(context);
                                         // Navigator.pushAndRemoveUntil(
                                         //     context,
                                         //     MaterialPageRoute(
@@ -446,7 +445,7 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                         style: isDaySelected
                                             ? AppTextStyle.hboldWhiteText
                                             : AppTextStyle.hboldWhiteText
-                                                .copyWith(color: greyB7)),
+                                                .copyWith(color: Theme.of(context).textTheme.bodyText1!.color)),
                                   ),
                                 ),
                               ),
@@ -466,47 +465,54 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          color: kBlack.withOpacity(0.6),
-          child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-              child: AlertDialog(
-                insetPadding: EdgeInsets.zero,
-                titlePadding: EdgeInsets.zero,
-                contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 10*SizeConfig.widthMultiplier!),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                ),
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                content: Stack(
-                  children: [
-                    SizedBox(
-                      height: 330*SizeConfig.heightMultiplier!,
-                      width: 250*SizeConfig.widthMultiplier!,
-                      child: Image.asset(ImagePath.animatedCongratulationIcon,fit: BoxFit.cover,),),
-                    Container(
-                      height: 330*SizeConfig.heightMultiplier!,
-                      width: 250*SizeConfig.widthMultiplier!,
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              height: 42*SizeConfig.heightMultiplier!,
-                              width: 42*SizeConfig.widthMultiplier!,
-                              child: SvgPicture.asset(ImagePath.greenRightTick),),
-                            SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-                            Text("congratulations".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
-                            SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-                            Text("plan_booked_text".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w600),textAlign: TextAlign.center,),
+        return GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+          child: Container(
+            color: kBlack.withOpacity(0.6),
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                child: AlertDialog(
+                  insetPadding: EdgeInsets.zero,
+                  titlePadding: EdgeInsets.zero,
+                  contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 10*SizeConfig.widthMultiplier!),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
+                  ),
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  content: Stack(
+                    children: [
+                      SizedBox(
+                        height: 330*SizeConfig.heightMultiplier!,
+                        width: 250*SizeConfig.widthMultiplier!,
+                        child: Image.asset(ImagePath.animatedCongratulationIcon,fit: BoxFit.cover,),),
+                      Container(
+                        height: 330*SizeConfig.heightMultiplier!,
+                        width: 250*SizeConfig.widthMultiplier!,
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 42*SizeConfig.heightMultiplier!,
+                                width: 42*SizeConfig.widthMultiplier!,
+                                child: SvgPicture.asset(ImagePath.greenRightTick),),
+                              SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                              Text("congratulations".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 24*SizeConfig.textMultiplier!,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                              SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                              Text("plan_booked_text".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w600),textAlign: TextAlign.center,),
 
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              )
+                      )
+                    ],
+                  ),
+                )
+            ),
           ),
         );
 
@@ -538,12 +544,12 @@ class TimeSLotSelect extends StatelessWidget {
         () => Container(
           decoration: BoxDecoration(
             border: Border.all(
-                color: istimeSlotSelected ? kgreen49 : kLightGrey,
+                color: istimeSlotSelected ? kgreen49 : greyBorder,
                 width: 1 * SizeConfig.widthMultiplier!),
             color: !isDisabled!.value
                 ? istimeSlotSelected
                     ? kgreen49
-                    : kPureWhite
+                    : Colors.transparent
                 : kLightGrey,
             borderRadius: BorderRadius.circular(8),
           ),
@@ -555,8 +561,8 @@ class TimeSLotSelect extends StatelessWidget {
               style: !isDisabled!.value
                   ? istimeSlotSelected
                       ? AppTextStyle.hnormal600BlackText
-                          .copyWith(color: kPureWhite)
-                      : AppTextStyle.hblack400Text.copyWith(color: kBlack)
+                          .copyWith(color: Theme.of(context).textTheme.bodyText1!.color)
+                      : AppTextStyle.hblack400Text.copyWith( color: Theme.of(context).textTheme.bodyText1!.color)
                   : AppTextStyle.black400Text.copyWith(color: hintGrey),
             ),
           ),

@@ -58,18 +58,18 @@ class FullPlan {
     this.planDuration,
     this.planIcon,
     this.description,
-    this.likesCount,
-    this.plansRating,
-    this.raters,
-    this.trainees,
+    // this.likesCount,
+    // this.plansRating,
+    // this.raters,
+    // this.trainees,
     this.keyPoints,
-    this.equipments,
+    //this.equipments,
     this.trainer,
-    this.prize,
+    this.price,
     this.isEnrolled,
-    this.language,
+    //this.language,
     this.isDemoAvailable,
-    this.isFollowing,
+    //this.isFollowing,
   });
 
   String? id;
@@ -77,18 +77,18 @@ class FullPlan {
   int? planDuration;
   String? planIcon;
   String? description;
-  String? language;
-  int? likesCount;
-  double? plansRating;
-  int? raters;
-  int? trainees;
+  //String? language;
+  //int? likesCount;
+  //double? plansRating;
+  //int? raters;
+  //int? trainees;
   List<String>? keyPoints;
-  List<String>? equipments;
-  TrainerDetail? trainer;
-  int? prize;
+  //List<String>? equipments;
+  String? trainer;
+  int? price;
   bool? isEnrolled;
   bool? isDemoAvailable;
-  bool? isFollowing;
+  //bool? isFollowing;
 
   factory FullPlan.fromJson(Map<String, dynamic> json) => FullPlan(
         id: json["_id"],
@@ -96,22 +96,22 @@ class FullPlan {
         planDuration: json["planDuration"],
         planIcon: json["planIcon"],
         description: json['description'],
-        language: json["planLanguage"],
-        likesCount: json["likesCount"],
-        plansRating: json["plansRating"].toDouble(),
-        raters: json["raters"],
-        trainees: json["trainees"],
+        // language: json["planLanguage"],
+        // likesCount: json["likesCount"],
+        // plansRating: json["plansRating"].toDouble(),
+        // raters: json["raters"],
+        // trainees: json["trainees"],
         keyPoints: json["keyPoints"] == null
             ? []
             : List<String>.from(json["keyPoints"].map((x) => x)),
-        equipments: json["equipments"] == null
-            ? []
-            : List<String>.from(json["equipments"].map((x) => x)),
-        trainer: TrainerDetail.fromJson(json["trainer"]),
-        prize: json["prize"],
+        // equipments: json["equipments"] == null
+        //     ? []
+        //     : List<String>.from(json["equipments"].map((x) => x)),
+        trainer: json["trainer"],
+        price: json["price"],
         isEnrolled: json["isEnrolled"],
         isDemoAvailable: json["isDemoAvailable"],
-        isFollowing: json["isFollowing"],
+        // isFollowing: json["isFollowing"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -119,17 +119,17 @@ class FullPlan {
         "planName": planName,
         "planDuration": planDuration,
         "planIcon": planIcon,
-        "likesCount": likesCount,
-        "plansRating": plansRating,
-        "raters": raters,
-        "trainees": trainees,
+        // "likesCount": likesCount,
+        // "plansRating": plansRating,
+        // "raters": raters,
+        // "trainees": trainees,
         "keyPoints": List<dynamic>.from(keyPoints!.map((x) => x)),
-        "equipments": List<dynamic>.from(equipments!.map((x) => x)),
-        "trainer": trainer!.toJson(),
-        "prize": prize,
+        // "equipments": List<dynamic>.from(equipments!.map((x) => x)),
+        "trainer": trainer!.toString(),
+        "prize": price,
         "isEnrolled": isEnrolled,
         "isDemoAvailable": isDemoAvailable,
-        "isFollowing": isFollowing,
+        //"isFollowing": isFollowing,
       };
 }
 

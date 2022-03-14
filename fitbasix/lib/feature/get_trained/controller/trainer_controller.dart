@@ -20,6 +20,7 @@ class TrainerController extends GetxController {
   Rx<Trainer> atrainerDetail = Trainer().obs;
   Rx<PlanModel> planModel = PlanModel().obs;
   Rx<AllTrainer> allTrainer = AllTrainer().obs;
+  Rx<Plan> selectedPlan = Plan().obs;
   // Rx<AllTrainer> fitnessConsultant = AllTrainer().obs;
   // Rx<AllTrainer> nutritionConsultant = AllTrainer().obs;
   // Rx<AllTrainer> trainer = AllTrainer().obs;
@@ -51,6 +52,7 @@ class TrainerController extends GetxController {
   RxBool isAvailableSlotDataLoading = false.obs;
   RxInt TimeSlotSelected = RxInt(-1);
   RxList<Slot> weekAvailableSlots = <Slot>[].obs;
+  Rx<int> selectedTimeSlot = 0.obs;
   RxList<String> selectedDays = <String>[].obs;
 
   List<bool> UpdatedInterestStatus(int index) {
