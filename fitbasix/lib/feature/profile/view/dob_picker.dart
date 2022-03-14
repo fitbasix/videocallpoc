@@ -9,7 +9,9 @@ import '../controller/profile_controller.dart';
 
 final ProfileController _profileController = Get.find();
 
-Widget dobPicker() => Container(
+Widget dobPicker(
+    BuildContext context
+    ) => Container(
       child: DatePickerWidget(
         looping: true,
         initialDate: DateTime.parse(_profileController
@@ -30,11 +32,12 @@ Widget dobPicker() => Container(
           // ignore: avoid_print
         },
         pickerTheme: DateTimePickerTheme(
-          backgroundColor: Colors.transparent,
-          itemHeight: 75,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          itemHeight: 75*SizeConfig.heightMultiplier!,
           pickerHeight: 270 * SizeConfig.heightMultiplier!,
           itemTextStyle: TextStyle(
-              color: lightBlack, fontSize: 28 * SizeConfig.heightMultiplier!),
+              color: Theme.of(context).textTheme.bodyText1?.color,
+              fontSize: 28 * SizeConfig.heightMultiplier!),
           dividerColor: Colors.transparent,
         ),
       ),

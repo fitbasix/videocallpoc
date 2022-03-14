@@ -206,7 +206,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
-                        context: context, builder: (context) => dobPicker());
+                        context: context, builder: (context) => dobPicker(context));
                   },
                   child: SvgPicture.asset(
                     ImagePath.calanderIcon,

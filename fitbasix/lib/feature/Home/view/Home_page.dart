@@ -250,43 +250,43 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 16 * SizeConfig.heightMultiplier!,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 16 * SizeConfig.widthMultiplier!,
-                                right: 16 * SizeConfig.widthMultiplier!),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                HomeTile(
-                                  color: kPurple,
-                                  title: 'live_stream'.tr,
-                                  icon: Icons.videocam,
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, RouteName.liveStream);
-                                  },
-                                ),
-                                HomeTile(
-                                  color: kBlue,
-                                  title: 'trainers'.tr,
-                                  icon: Icons.person,
-                                  onTap: () {
-                                    // Navigator.pushNamed(
-                                    //     context, RouteName.getTrainedScreen);
-                                  },
-                                ),
-                                HomeTile(
-                                  color: kLightGreen,
-                                  title: 'my_plan'.tr,
-                                  icon: Icons.list_alt,
-                                  onTap: () {},
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 38 * SizeConfig.heightMultiplier!,
-                          ),
+                          // Padding(
+                          //   padding: EdgeInsets.only(
+                          //       left: 16 * SizeConfig.widthMultiplier!,
+                          //       right: 16 * SizeConfig.widthMultiplier!),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       HomeTile(
+                          //         color: kPurple,
+                          //         title: 'live_stream'.tr,
+                          //         icon: Icons.videocam,
+                          //         onTap: () {
+                          //           Navigator.pushNamed(
+                          //               context, RouteName.liveStream);
+                          //         },
+                          //       ),
+                          //       HomeTile(
+                          //         color: kBlue,
+                          //         title: 'trainers'.tr,
+                          //         icon: Icons.person,
+                          //         onTap: () {
+                          //           // Navigator.pushNamed(
+                          //           //     context, RouteName.getTrainedScreen);
+                          //         },
+                          //       ),
+                          //       HomeTile(
+                          //         color: kLightGreen,
+                          //         title: 'my_plan'.tr,
+                          //         icon: Icons.list_alt,
+                          //         onTap: () {},
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: 38 * SizeConfig.heightMultiplier!,
+                          // ),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,
