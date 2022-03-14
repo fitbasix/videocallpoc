@@ -20,9 +20,20 @@ class GetTrainedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            child: CustomAppBar(titleOfModule: 'getTrainedTitle'.tr),
-            preferredSize: const Size(double.infinity, kToolbarHeight)),
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: false,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Text('getTrainedTitle'.tr,
+              style: AppTextStyle.titleText
+                  .copyWith(
+                  color: Theme.of(context).appBarTheme.titleTextStyle?.color,
+                  fontSize: 16 * SizeConfig.textMultiplier!)),
+        ),
+        // PreferredSize(
+        //     child: CustomAppBar(titleOfModule: 'getTrainedTitle'.tr),
+        //     preferredSize: const Size(double.infinity, kToolbarHeight)),
         // backgroundColor: kGreyBackground,
         body: SafeArea(
             child: SingleChildScrollView(

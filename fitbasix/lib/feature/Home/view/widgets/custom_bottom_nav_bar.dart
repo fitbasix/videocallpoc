@@ -28,15 +28,15 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-      decoration: BoxDecoration(
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Theme.of(context).primaryColor.withOpacity(0.2),
-            blurRadius: 15*SizeConfig.imageSizeMultiplier!,
+          decoration: BoxDecoration(
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Theme.of(context).primaryColor.withOpacity(0.2),
+                blurRadius: 15 * SizeConfig.imageSizeMultiplier!,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: BottomNavigationBar(
+          child: BottomNavigationBar(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             type: BottomNavigationBarType.fixed,
             selectedItemColor: kgreen49,
@@ -52,7 +52,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   icon: new Icon(
                     Icons.chat_bubble_outline,
                   ),
-                  label: 'my_trainers'.tr),
+                  label: 'getTrainedTitle'.tr),
+
               BottomNavigationBarItem(
                   icon: new Icon(
                     Icons.add,
@@ -74,6 +75,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               onTapped(value);
             },
           ),
-    ));
+        ));
   }
 }

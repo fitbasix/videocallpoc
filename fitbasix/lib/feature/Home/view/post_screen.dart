@@ -39,13 +39,13 @@ class _PostScreenState extends State<PostScreen> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
-        log("comment id" + _homeController.post.value.id.toString());
         RecentCommentModel recentComment = RecentCommentModel();
         recentComment = await HomeService.recentComment(
             postId: _homeController.post.value.id);
-        log("re");
         _homeController.commentsMap[_homeController.post.value.id.toString()] =
             recentComment.response!.data!.comment;
+        _homeController.updateCount[_homeController.post.value.id.toString()] =
+            recentComment.response!.data!.data;
         _homeController.replyList.clear();
         return true;
       },
@@ -62,9 +62,10 @@ class _PostScreenState extends State<PostScreen> {
                   RecentCommentModel recentComment = RecentCommentModel();
                   recentComment = await HomeService.recentComment(
                       postId: _homeController.post.value.id);
-                  log("re");
                   _homeController.commentsMap[_homeController.post.value.id
                       .toString()] = recentComment.response!.data!.comment;
+                  _homeController.updateCount[_homeController.post.value.id
+                      .toString()] = recentComment.response!.data!.data;
                   _homeController.replyList.clear();
                 },
                 icon: SvgPicture.asset(
@@ -117,28 +118,40 @@ class _PostScreenState extends State<PostScreen> {
 
                           HomeService.unlikePost(
                               postId: _homeController.post.value.id);
-
-                          _homeController.likedPost.indexOf(
-                                      _homeController.post.value.id!) ==
-                                  -1
-                              ? null
-                              : _homeController.likedPost
-                                  .remove(_homeController.post.value.id!);
                         } else {
                           _homeController.post.value.isLiked = true;
                           _homeController.post.value.likes =
                               _homeController.post.value.likes! + 1;
-                          _homeController.likedPost
-                              .add(_homeController.post.value.id!);
+
                           _homeController.likedPost.toSet().toList();
 
                           HomeService.likePost(
                               postId: _homeController.post.value.id);
                         }
+                        _homeController.LikedPostMap[_homeController
+                            .post.value.id!] = _homeController.LikedPostMap[
+                                    _homeController.post.value.id!] ==
+                                null
+                            ? (_homeController.post.value.isLiked!)
+                            : !(_homeController
+                                .LikedPostMap[_homeController.post.value.id!]!);
+                        _homeController.likedPost.toSet();
+                        _homeController.likedPost
+                                    .indexOf(_homeController.post.value.id!) ==
+                                -1
+                            ? _homeController.likedPost
+                                .add(_homeController.post.value.id!)
+                            : _homeController.likedPost
+                                .remove(_homeController.post.value.id!);
 
                         setState(() {});
                       },
-                      isLiked: _homeController.post.value.isLiked!,
+                      isLiked: _homeController.LikedPostMap[
+                                  _homeController.post.value.id] ==
+                              null
+                          ? _homeController.post.value.isLiked!
+                          : _homeController
+                              .LikedPostMap[_homeController.post.value.id]!,
                       comments: _homeController.post.value.comments.toString(),
                       addComment: () async {
                         log("reply test");

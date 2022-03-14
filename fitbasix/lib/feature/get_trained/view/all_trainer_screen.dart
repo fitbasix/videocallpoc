@@ -111,107 +111,101 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                     child: Container(
                       height: 32 * SizeConfig.heightMultiplier!,
                       decoration: BoxDecoration(
-                        color: lightGrey,
+                        color: kLightGrey,
                         borderRadius: BorderRadius.circular(
                             8 * SizeConfig.widthMultiplier!),
                       ),
-                      child: Center(
-                        child: TextField(
-                          controller: _trainerController.searchController,
-                          style: AppTextStyle.smallGreyText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!,
-                              color: kBlack),
-                          onChanged: (value) async {
-                            if (_trainerController.search.value != value) {
-                              _trainerController.search.value = value;
-                              if (value.length >= 3) {
-                                _trainerController.filterIsLoading.value = true;
-                                _trainerController.searchedName.value = value;
-                                _trainerController.allTrainer.value =
-                                    await TrainerServices.getAllTrainer(
-                                  name: value,
-                                  interests: _trainerController
-                                      .SelectedInterestIndex.value,
-                                  trainerType:
-                                      _trainerController.trainerType.value,
-                                );
-                                _scrollController.jumpTo(0);
-                                _trainerController.filterIsLoading.value =
-                                    false;
-                              }
-                              if (value.length == 0) {
-                                _trainerController.filterIsLoading.value = true;
-                                _trainerController.searchedName.value = value;
-                                _trainerController.allTrainer.value =
-                                    await TrainerServices.getAllTrainer(
-                                  name: value,
-                                  interests: _trainerController
-                                      .SelectedInterestIndex.value,
-                                  trainerType:
-                                      _trainerController.trainerType.value,
-                                );
-                                _scrollController.jumpTo(0);
-                                _trainerController.filterIsLoading.value =
-                                    false;
-                              }
+                      child: TextField(
+                        controller: _trainerController.searchController,
+                        style: AppTextStyle.smallGreyText.copyWith(
+                            fontSize: 14 * SizeConfig.textMultiplier!,
+                            color: kBlack),
+                        onChanged: (value) async {
+                          if (_trainerController.search.value != value) {
+                            _trainerController.search.value = value;
+                            if (value.length >= 3) {
+                              _trainerController.filterIsLoading.value = true;
+                              _trainerController.searchedName.value = value;
+                              _trainerController.allTrainer.value =
+                                  await TrainerServices.getAllTrainer(
+                                name: value,
+                                interests: _trainerController
+                                    .SelectedInterestIndex.value,
+                                trainerType:
+                                    _trainerController.trainerType.value,
+                              );
+                              _scrollController.jumpTo(0);
+                              _trainerController.filterIsLoading.value = false;
                             }
-                          },
-                          // onSubmitted: (value) async {
-                          //   if (value.length >= 3) {
-                          //     _trainerController.filterIsLoading.value = true;
-                          //     _trainerController.searchedName.value = value;
-                          //     _trainerController.allTrainer.value =
-                          //         await TrainerServices.getAllTrainer(
-                          //             name: value,
-                          //             interests: _trainerController
-                          //                 .SelectedInterestIndex.value,
-                          //             trainerType:
-                          //                 _trainerController.trainerType.value);
-                          //
-                          //     _scrollController.jumpTo(0);
-                          //     _trainerController.filterIsLoading.value = false;
-                          //   } else {
-                          //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          //         content:
-                          //             Text('Please enter atleast 3 character')));
-                          //   }
-                          // },
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10.5 * SizeConfig.widthMultiplier!,
-                                  right: 5 * SizeConfig.widthMultiplier!),
-                              child: Icon(
-                                Icons.search,
-                                color: hintGrey,
-                                size: 22 * SizeConfig.heightMultiplier!,
-                              ),
+                            if (value.length == 0) {
+                              _trainerController.filterIsLoading.value = true;
+                              _trainerController.searchedName.value = value;
+                              _trainerController.allTrainer.value =
+                                  await TrainerServices.getAllTrainer(
+                                name: value,
+                                interests: _trainerController
+                                    .SelectedInterestIndex.value,
+                                trainerType:
+                                    _trainerController.trainerType.value,
+                              );
+                              _scrollController.jumpTo(0);
+                              _trainerController.filterIsLoading.value = false;
+                            }
+                          }
+                        },
+                        // onSubmitted: (value) async {
+                        //   if (value.length >= 3) {
+                        //     _trainerController.filterIsLoading.value = true;
+                        //     _trainerController.searchedName.value = value;
+                        //     _trainerController.allTrainer.value =
+                        //         await TrainerServices.getAllTrainer(
+                        //             name: value,
+                        //             interests: _trainerController
+                        //                 .SelectedInterestIndex.value,
+                        //             trainerType:
+                        //                 _trainerController.trainerType.value);
+                        //
+                        //     _scrollController.jumpTo(0);
+                        //     _trainerController.filterIsLoading.value = false;
+                        //   } else {
+                        //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        //         content:
+                        //             Text('Please enter atleast 3 character')));
+                        //   }
+                        // },
+                        decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.only(
+                                left: 10.5 * SizeConfig.widthMultiplier!,
+                                right: 5 * SizeConfig.widthMultiplier!),
+                            child: Icon(
+                              Icons.search,
+                              color: hintGrey,
+                              size: 22 * SizeConfig.heightMultiplier!,
                             ),
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                _trainerController
-                                            .searchController.text.length ==
-                                        0
-                                    ? _trainerController.isSearchActive.value =
-                                        false
-                                    : _trainerController.searchController
-                                        .clear();
-                              },
-                              child: Icon(
-                                Icons.clear,
-                                color: hintGrey,
-                                size: 18 * SizeConfig.heightMultiplier!,
-                              ),
-                            ),
-                            border: InputBorder.none,
-                            hintText: 'searchHint'.tr,
-                            hintStyle: AppTextStyle.smallGreyText.copyWith(
-                                fontSize: 14 * SizeConfig.textMultiplier!,
-                                color: hintGrey),
-                            /*contentPadding: EdgeInsets.only(
-                                top: -2,
-                              )*/
                           ),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              _trainerController.searchController.text.length ==
+                                      0
+                                  ? _trainerController.isSearchActive.value =
+                                      false
+                                  : _trainerController.searchController.clear();
+                            },
+                            child: Icon(
+                              Icons.clear,
+                              color: hintGrey,
+                              size: 18 * SizeConfig.heightMultiplier!,
+                            ),
+                          ),
+                          border: InputBorder.none,
+                          hintText: 'searchHint'.tr,
+                          hintStyle: AppTextStyle.smallGreyText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: hintGrey),
+                          /*contentPadding: EdgeInsets.only(
+                              top: -2,
+                            )*/
                         ),
                       ),
                     ),
@@ -287,6 +281,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                               ImagePath.filterIcon,
                               height: 18.23 * SizeConfig.imageSizeMultiplier!,
                             ),
+
                             itemBuilder: (BuildContext context) =>
                                 List.generate(
                                     _trainerController.filterOptions.length,
@@ -477,7 +472,43 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           )
                         : Container(
                             // height: Get.height,
-                            child: ListView.builder(
+                            child: _trainerController.allTrainer.
+                            value.response!.data!.trainers!.length ==0
+                                ?Container(
+                              padding: EdgeInsets.only(
+                                top: 71*SizeConfig.heightMultiplier!,
+                                left: 56*SizeConfig.widthMultiplier!,
+                                right: 55*SizeConfig.widthMultiplier!
+                              ),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    ImagePath.nomatchesfoundImage,
+                                    height: 102*SizeConfig.heightMultiplier!,
+                                    width: 100*SizeConfig.widthMultiplier!,
+                                  ),
+                                  SizedBox(
+                                    height: 8.78*SizeConfig.heightMultiplier!,
+                                  ),
+                                  Text('Sorry we couldn’t find any matches',
+                                  style: AppTextStyle.black400Text.copyWith(
+                                    fontSize: (24) * SizeConfig.textMultiplier!,
+                                    color: Theme.of(context).textTheme.bodyText1?.color
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 8*SizeConfig.heightMultiplier!,
+                                  ),
+                                  Text('Please try a different search ',
+                                    style: AppTextStyle.black400Text.copyWith(
+                                        color: Theme.of(context).textTheme.bodyText1?.color
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              )
+                                :ListView.builder(
                                 itemCount: _trainerController.allTrainer.value
                                             .response!.data!.trainers!.length ==
                                         0
