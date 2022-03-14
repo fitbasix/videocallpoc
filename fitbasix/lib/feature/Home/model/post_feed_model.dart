@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
+
 PostsModel postsModelFromJson(String str) =>
     PostsModel.fromJson(json.decode(str));
 
@@ -121,87 +123,87 @@ class Post {
       };
 }
 
-class Comment {
-  Comment({
-    this.id,
-    this.postId,
-    this.comment,
-    this.user,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
-    this.reply,
-    this.likes,
-    this.commentId,
-    this.isLiked,
-  });
-
-  String? id;
-  String? postId;
-  String? comment;
-  UserId? user;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  int? v;
-  int? reply;
-  int? likes;
-  String? commentId;
-  bool? isLiked;
-
-  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-      id: json["_id"],
-      postId: json["postId"],
-      comment: json["comment"],
-      user: UserId.fromJson(json["user"]),
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]),
-      v: json["__v"],
-      reply: json["reply"],
-      likes: json["likes"],
-      commentId: json["id"],
-      isLiked: json['isLiked']);
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "postId": postId,
-        "comment": comment,
-        "user": user!.toJson(),
-        "createdAt": createdAt!.toIso8601String(),
-        "updatedAt": updatedAt!.toIso8601String(),
-        "__v": v,
-        "reply": reply,
-        "likes": likes,
-        "id": commentId,
-      };
-}
-
-class UserId {
-  UserId({
-    this.id,
-    this.name,
-    this.profilePhoto,
-    this.userIdId,
-  });
-
-  String? id;
-  String? name;
-  String? profilePhoto;
-  String? userIdId;
-
-  factory UserId.fromJson(Map<String, dynamic> json) => UserId(
-        id: json["_id"],
-        name: json["name"],
-        profilePhoto: json["profilePhoto"],
-        userIdId: json["id"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "name": name,
-        "profilePhoto": profilePhoto,
-        "id": userIdId,
-      };
-}
+// class Comment {
+//   Comment({
+//     this.id,
+//     //this.postId,
+//     this.comment,
+//     this.user,
+//     this.createdAt,
+//     this.updatedAt,
+//     this.v,
+//     this.reply,
+//     this.likes,
+//     this.commentId,
+//     this.isLiked,
+//   });
+//
+//   String? id;
+//   // String? postId;
+//   String? comment;
+//   UserId? user;
+//   DateTime? createdAt;
+//   DateTime? updatedAt;
+//   int? v;
+//   int? reply;
+//   int? likes;
+//   String? commentId;
+//   bool? isLiked;
+//
+//   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
+//       id: json["_id"],
+//       //   postId: json["postId"],
+//       comment: json["comment"],
+//       user: UserId.fromJson(json["user"]),
+//       createdAt: DateTime.parse(json["createdAt"]),
+//       updatedAt: DateTime.parse(json["updatedAt"]),
+//       v: json["__v"],
+//       reply: json["reply"],
+//       likes: json["likes"],
+//       commentId: json["id"],
+//       isLiked: json['isLiked']);
+//
+//   Map<String, dynamic> toJson() => {
+//         "_id": id,
+//         // "postId": postId,
+//         "comment": comment,
+//         "user": user!.toJson(),
+//         "createdAt": createdAt!.toIso8601String(),
+//         "updatedAt": updatedAt!.toIso8601String(),
+//         "__v": v,
+//         "reply": reply,
+//         "likes": likes,
+//         "id": commentId,
+//       };
+// }
+//
+// class UserId {
+//   UserId({
+//     this.id,
+//     this.name,
+//     this.profilePhoto,
+//     this.userIdId,
+//   });
+//
+//   String? id;
+//   String? name;
+//   String? profilePhoto;
+//   String? userIdId;
+//
+//   factory UserId.fromJson(Map<String, dynamic> json) => UserId(
+//         id: json["_id"],
+//         name: json["name"],
+//         profilePhoto: json["profilePhoto"],
+//         // userIdId: json["id"],
+//       );
+//
+//   Map<String, dynamic> toJson() => {
+//         "_id": id,
+//         "name": name,
+//         "profilePhoto": profilePhoto,
+//         "id": userIdId,
+//       };
+// }
 
 class Location {
   Location({

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
@@ -71,7 +72,16 @@ class HomeController extends GetxController {
   RxBool isPostUpdate = false.obs;
   RxString coverPhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
-
+  RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
+    {},
+  );
+  RxMap<String, UpdateCount?> updateCount = RxMap<String, UpdateCount?>(
+    {},
+  );
+  RxMap<String, bool?> LikedPostMap = RxMap<String, bool?>(
+    {},
+  );
+  RxList<String> alreadyRenderedPostId = <String>[].obs;
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
         context: context,
@@ -195,7 +205,12 @@ class HomeController extends GetxController {
 
   Future<void> setup() async {
     isLoading.value = true;
+    print("test");
     userProfileData.value = await CreatePostService.getUserProfile();
+
+    log(userProfileData.value.response!.data!.profile!.nutrition == Nutrition()
+        ? "1"
+        : "2");
 
     ///todo after
     if (userProfileData.value.response!.data!.profile!.name == null) {
@@ -203,15 +218,21 @@ class HomeController extends GetxController {
       Get.deleteAll();
       Get.toNamed(RouteName.enterDetails);
     }
+
     coverPhoto.value =
         userProfileData.value.response!.data!.profile!.coverPhoto.toString();
     print(userProfileData.value.response!.data!.profile!.nutrition.toString());
     if (userProfileData
             .value.response!.data!.profile!.nutrition!.totalRequiredCalories !=
         null) {
+      waterLevel.value = (userProfileData.value.response!.data!.profile!
+                  .nutrition!.totalWaterConsumed ??
+              0) /
+          (userProfileData
+              .value.response!.data!.profile!.nutrition!.totalWaterRequired!);
       spgStatus.value = true;
     }
-
+    print("ooooo");
     isLoading.value = false;
     await getTrendingPost();
   }

@@ -76,6 +76,7 @@ class LogInService {
     var refreshToken = await getRefreshToken();
     print(refreshToken);
     dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.updateToken, data: {
       "refreshToken": refreshToken,
     });

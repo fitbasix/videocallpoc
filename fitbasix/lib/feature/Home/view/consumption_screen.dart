@@ -108,6 +108,7 @@ class ConsumptionScreen extends StatelessWidget {
                                                     width: 1,
                                                     color: greyBorder)),
                                             width: 132 *
+
                                                 SizeConfig.widthMultiplier!,
                                             height: 48 *
                                                 SizeConfig.heightMultiplier!,
@@ -383,19 +384,39 @@ class ConsumptionScreen extends StatelessWidget {
                                     await HomeService
                                         .updateWaterNotificationDetails(
                                             _homeController.goalWater.value,
-                                            _homeController.waterTimingFrom.value.hour.toString() +
+                                            _homeController
+                                                    .waterTimingFrom.value.hour
+                                                    .toString() +
                                                 ":" +
-                                                _homeController.waterTimingFrom.value.minute.toString(),
-                                            _homeController.waterTimingTo.value.hour.toString() +
-                                                ":" + _homeController.waterTimingTo.value.minute.toString(),
-                                            _homeController.waterReminder.value.serialId!);
+                                                _homeController.waterTimingFrom
+                                                    .value.minute
+                                                    .toString(),
+                                            _homeController
+                                                    .waterTimingTo.value.hour
+                                                    .toString() +
+                                                ":" +
+                                                _homeController
+                                                    .waterTimingTo.value.minute
+                                                    .toString(),
+                                            _homeController
+                                                .waterReminder.value.serialId!);
                                     _homeController.userProfileData.value =
                                         await CreatePostService
                                             .getUserProfile();
                                     _homeController
                                         .iswaterNotificationDataUpdating
                                         .value = false;
-                                    setNotificationDetailsForConsumption(_homeController.waterTimingFrom.value.hour, _homeController.waterTimingFrom.value.minute,_homeController.waterTimingTo.value.hour,_homeController.waterTimingTo.value.minute,_homeController.waterReminder.value.serialId!);
+                                    setNotificationDetailsForConsumption(
+                                        _homeController
+                                            .waterTimingFrom.value.hour,
+                                        _homeController
+                                            .waterTimingFrom.value.minute,
+                                        _homeController
+                                            .waterTimingTo.value.hour,
+                                        _homeController
+                                            .waterTimingTo.value.minute,
+                                        _homeController
+                                            .waterReminder.value.serialId!);
                                   },
                                   child: Container(
                                       width: Get.width -
@@ -559,10 +580,17 @@ class ConsumptionScreen extends StatelessWidget {
   //   });
   // }
 
-  void setNotificationDetailsForConsumption(int fromHour,int fromMinute,int toHour,int toMinute, int reminderSerialNo) async{
+  void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
+      int toHour, int toMinute, int reminderSerialNo) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool canceled = await AndroidAlarmManager.cancel(0).then((value){
-      AndroidAlarmManager.periodic(Duration(minutes: reminderSerialNo), 0, showWaterConsumptionNotification,allowWhileIdle: true,exact: true,startAt: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute),rescheduleOnReboot: true);
+    bool canceled = await AndroidAlarmManager.cancel(0).then((value) {
+      AndroidAlarmManager.periodic(Duration(minutes: reminderSerialNo), 0,
+          showWaterConsumptionNotification,
+          allowWhileIdle: true,
+          exact: true,
+          startAt: DateTime(DateTime.now().year, DateTime.now().month,
+              DateTime.now().day, fromHour, fromMinute),
+          rescheduleOnReboot: true);
       sharedPreferences.setInt("endMinute", 7);
       sharedPreferences.setInt("endHour", 18);
       //sharedPreferences.setInt("endMinute", toMinute);
@@ -669,25 +697,27 @@ class __ChartAppState extends State<ChartApp> {
   }
 }
 
-
 void showWaterConsumptionNotification(int id) async {
   print("calledddd1123");
   print(DateTime.now());
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance().then((value) {
-    DateTime endTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,value.getInt("endHour")!,value.getInt("endMinute")!);
-    if(DateTime.now().isBefore(endTime)){
+  SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance().then((value) {
+    DateTime endTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        value.getInt("endHour")!,
+        value.getInt("endMinute")!);
+    if (DateTime.now().isBefore(endTime)) {
       print("calledddd");
       AwesomeNotifications().createNotification(
           content: NotificationContent(
-            id: 10,
-            channelKey: 'basic_channel',
-            title: 'Water',
-            body: 'Drink water',
-          )
-      );}
-      return value;
+        id: 10,
+        channelKey: 'basic_channel',
+        title: 'Water',
+        body: 'Drink water',
+      ));
+    }
+    return value;
   });
-
-
-
 }

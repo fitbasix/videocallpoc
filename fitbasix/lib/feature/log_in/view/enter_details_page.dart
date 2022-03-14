@@ -29,6 +29,7 @@ class EnterDetailsPage extends StatelessWidget {
             ImagePath.detail_intro_image,
             height: 400 * SizeConfig.heightMultiplier!,
             width: double.infinity,
+
             fit: BoxFit.fill,
           ),
           Positioned(
@@ -69,18 +70,17 @@ class EnterDetailsPage extends StatelessWidget {
                   ),
                   Text(
                     'Hi'.tr,
-                    style: AppTextStyle.titleText.copyWith(
-                        color: kPureWhite
-                    ),
+                    style: AppTextStyle.titleText.copyWith(color: kPureWhite),
                   ),
                   SizedBox(
                     height: 8 * SizeConfig.heightMultiplier!,
                   ),
                   Text(
                     'fillDetailsHeader'.tr,
-                    style: AppTextStyle.normalBlackText
-                        .copyWith(color: kPureWhite,
-                      fontSize: (12) * SizeConfig.textMultiplier!,),
+                    style: AppTextStyle.normalBlackText.copyWith(
+                      color: kPureWhite,
+                      fontSize: (12) * SizeConfig.textMultiplier!,
+                    ),
                   ),
                   SizedBox(
                     height: 16 * SizeConfig.heightMultiplier!,
@@ -89,14 +89,17 @@ class EnterDetailsPage extends StatelessWidget {
                     wantWhiteBG: true,
                     color: Colors.transparent,
                     child: TextFieldContainer(
-                        onChanged: (value) {
-                          _loginController.name.value = value;
-                        },
-                        textEditingController: _loginController.nameController,
-                        isNumber: false,
-                        preFixWidget: SvgPicture.asset(ImagePath.profileIcon,
-                        color: kPureWhite,),
-                        hint: 'enterNameHint'.tr,),
+                      onChanged: (value) {
+                        _loginController.name.value = value;
+                      },
+                      textEditingController: _loginController.nameController,
+                      isNumber: false,
+                      preFixWidget: SvgPicture.asset(
+                        ImagePath.profileIcon,
+                        color: kPureWhite,
+                      ),
+                      hint: 'enterNameHint'.tr,
+                    ),
                   ),
                   SizedBox(
                     height: 16 * SizeConfig.heightMultiplier!,
@@ -110,8 +113,9 @@ class EnterDetailsPage extends StatelessWidget {
                         },
                         textEditingController: _loginController.emailController,
                         isNumber: false,
-                        preFixWidget: SvgPicture.asset(ImagePath.mailIcon,
-                        color: kPureWhite,
+                        preFixWidget: SvgPicture.asset(
+                          ImagePath.mailIcon,
+                          color: kPureWhite,
                         ),
                         hint: 'enterEmailHint'.tr),
                   ),

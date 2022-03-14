@@ -174,8 +174,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                   transform: Matrix4.translationValues(-20, 0, 0),
                   child: Text(
                     'explore'.tr,
-                    style: AppTextStyle.titleText
-                        .copyWith(
+                    style: AppTextStyle.titleText.copyWith(
                         color: Theme.of(context).textTheme.bodyText1?.color,
                         fontSize: 16 * SizeConfig.textMultiplier!),
                   ),
@@ -457,6 +456,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                               false;
                                           homeController.commentsLoading.value =
                                               true;
+
                                           homeController.postComments.value =
                                               await HomeService.fetchComment(
                                                   postId: homeController
@@ -502,8 +502,6 @@ class _ExploreFeedState extends State<ExploreFeed> {
   }
 }
 
-
-
 class ExploreItemCategory extends StatelessWidget {
   const ExploreItemCategory({
     Key? key,
@@ -524,13 +522,14 @@ class ExploreItemCategory extends StatelessWidget {
         child: Container(
           height: 30 * SizeConfig.heightMultiplier!,
           decoration: BoxDecoration(
-              color: isSelected ?
-              kgreen49 : Theme.of(context).textTheme.headline4?.color,
-              borderRadius:
-              BorderRadius.circular(14 * SizeConfig.heightMultiplier!),
-              // border: Border.all(
-              //   color: kBlack,
-              // )
+            color: isSelected
+                ? kgreen49
+                : Theme.of(context).textTheme.headline4?.color,
+            borderRadius:
+                BorderRadius.circular(14 * SizeConfig.heightMultiplier!),
+            // border: Border.all(
+            //   color: kBlack,
+            // )
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -538,8 +537,8 @@ class ExploreItemCategory extends StatelessWidget {
             child: Center(
               child: Text(
                 interest,
-                style: AppTextStyle.lightMediumBlackText
-                    .copyWith(color: Theme.of(context).textTheme.bodyText1?.color),
+                style: AppTextStyle.lightMediumBlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1?.color),
               ),
             ),
           ),
