@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -34,6 +35,7 @@ import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../get_trained/view/get_trained_screen.dart';
+import '../../profile/services/profile_services.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -87,6 +89,7 @@ class _HomePageState extends State<HomePage> {
   final HomeController _homeController = Get.find();
   final PostController postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
+
 
   @override
   void initState() {
@@ -172,82 +175,100 @@ class _HomePageState extends State<HomePage> {
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,
                                 right: 16 * SizeConfig.widthMultiplier!),
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  top: 8 * SizeConfig.heightMultiplier!,
-                                  bottom: 8 * SizeConfig.heightMultiplier!),
-                              child: Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        30 * SizeConfig.widthMultiplier!),
-                                    child: Obx(() => CachedNetworkImage(
-                                        imageUrl: _homeController
-                                            .userProfileData
-                                            .value
-                                            .response!
-                                            .data!
-                                            .profile!
-                                            .profilePhoto
-                                            .toString(),
-                                        fit: BoxFit.cover,
-                                        height:
-                                            60 * SizeConfig.widthMultiplier!,
-                                        width:
-                                            60 * SizeConfig.widthMultiplier!)),
-                                  ),
-                                  SizedBox(
-                                    width: 15*SizeConfig.widthMultiplier!,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        // mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          _homeController.userProfileData.value
-                                                      .response ==
-                                                  null
-                                              ? Container()
-                                              : Text(
-                                                  'hi_name'.trParams({
-                                                    'name': _homeController
-                                                        .userProfileData
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .profile!
-                                                        .name.toString()
-                                                  }),
-                                                  style: AppTextStyle
-                                                      .boldBlackText.copyWith(
-                                                    color: Theme.of(context).textTheme.bodyText1?.color
+                            child: GestureDetector(
+                              onTap: () async{
+                                final ProfileController _profileController=Get.put(ProfileController());
+                                Navigator.pushNamed(context, RouteName.userprofileinfo);
+                                _profileController.initialPostData.value =
+                                    await ProfileServices.getUserPosts();
+
+                                if (_profileController
+                                    .initialPostData.value.response!.data!.length !=
+                                    0) {
+                                  _profileController.userPostList.value =
+                                  _profileController.initialPostData.value.response!.data!;
+                                } else {
+                                  _profileController.userPostList.clear();
+                                }
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                padding: EdgeInsets.only(
+                                    top: 8 * SizeConfig.heightMultiplier!,
+                                    bottom: 8 * SizeConfig.heightMultiplier!),
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          30 * SizeConfig.widthMultiplier!),
+                                      child: Obx(() => CachedNetworkImage(
+                                          imageUrl: _homeController
+                                              .userProfileData
+                                              .value
+                                              .response!
+                                              .data!
+                                              .profile!
+                                              .profilePhoto
+                                              .toString(),
+                                          fit: BoxFit.cover,
+                                          height:
+                                              60 * SizeConfig.widthMultiplier!,
+                                          width:
+                                              60 * SizeConfig.widthMultiplier!)),
+                                    ),
+                                    SizedBox(
+                                      width: 15*SizeConfig.widthMultiplier!,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          // mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            _homeController.userProfileData.value
+                                                        .response ==
+                                                    null
+                                                ? Container()
+                                                : Text(
+                                                    'hi_name'.trParams({
+                                                      'name': _homeController
+                                                          .userProfileData
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .profile!
+                                                          .name.toString()
+                                                    }),
+                                                    style: AppTextStyle
+                                                        .boldBlackText.copyWith(
+                                                      color: Theme.of(context).textTheme.bodyText1?.color
+                                                    ),
                                                   ),
-                                                ),
-                                          // SizedBox(
-                                          //   width: 31 *
-                                          //       SizeConfig.widthMultiplier!,
-                                          // ),
-                                        ],
-                                      ),
-                                      Text(
-                                        'home_page_subtitle'.tr,
-                                        style: AppTextStyle.normalBlackText
-                                            .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
-                                                fontSize: 12 *
-                                                    SizeConfig.textMultiplier!),
-                                      )
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  SvgPicture.asset(ImagePath.bellIcon,
-                                    color: Theme.of(context).primaryIconTheme.color,
-                                  ),
-                                ],
+                                            // SizedBox(
+                                            //   width: 31 *
+                                            //       SizeConfig.widthMultiplier!,
+                                            // ),
+                                          ],
+                                        ),
+                                        Text(
+                                          'home_page_subtitle'.tr,
+                                          style: AppTextStyle.normalBlackText
+                                              .copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                                  fontSize: 12 *
+                                                      SizeConfig.textMultiplier!),
+                                        )
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    SvgPicture.asset(ImagePath.bellIcon,
+                                      color: Theme.of(context).primaryIconTheme.color,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

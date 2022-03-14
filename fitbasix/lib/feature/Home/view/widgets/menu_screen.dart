@@ -28,7 +28,7 @@ class MenuScreen extends StatelessWidget {
       required this.imageCoverPic,
       required this.name});
 
-  final ProfileController _profileController = Get.put(ProfileController());
+  final ProfileController _profileController = Get.find();
   @override
   Widget build(BuildContext context) {
     print(imageUrl);
