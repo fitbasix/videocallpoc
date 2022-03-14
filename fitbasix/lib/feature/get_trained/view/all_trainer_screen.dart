@@ -281,6 +281,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                               ImagePath.filterIcon,
                               height: 18.23 * SizeConfig.imageSizeMultiplier!,
                             ),
+
                             itemBuilder: (BuildContext context) =>
                                 List.generate(
                                     _trainerController.filterOptions.length,
