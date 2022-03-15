@@ -8,6 +8,7 @@ import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
+import 'package:fitbasix/feature/get_trained/model/sortbymodel.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/plans/models/AvailableSlot.dart';
@@ -63,7 +64,11 @@ class TrainerServices {
       {int? currentPage,
       String? name,
       int? trainerType,
-      int? interests}) async {
+      int? interests,
+      int? sortBy
+      }) async {
+    int sortMethod = sortBy == null?_trainerController.SelectedSortMethod.value:sortBy;
+    print(sortBy == null?[_trainerController.SelectedSortMethod.value]:sortBy.toString()+ "iiii");
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     print(name == null ? _trainerController.searchedName.value : name);
@@ -75,7 +80,7 @@ class TrainerServices {
     print(interests == null
         ? [_trainerController.SelectedInterestIndex.value]
         : [interests]);
-    var response = await dio!.post(ApiUrl.getAllTrainer, data: {
+    var response = await dio!.post(ApiUrl.getAllTrainer+"?sortBy=$sortMethod", data: {
       "skip": currentPage == null ? 0 : currentPage * 5,
       "name": name == null ? _trainerController.searchedName.value : name,
       "trainerType": trainerType == null
@@ -85,16 +90,25 @@ class TrainerServices {
           : [trainerType],
       "interests": interests == null
           ? [_trainerController.SelectedInterestIndex.value]
-          : [interests]
+          : [interests],
+
     });
-    print(response.toString());
+    print("jjjj "+response.toString());
     return allTrainerFromJson(response.toString());
+  }
+
+  static Future<SortByModel> getSortByData() async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.get(ApiUrl.getSortByData,);
+    return sortByModelFromJson(response.toString());
   }
 
   static Future<GetTrainerModel> getTrainers() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getTrainers, data: {});
+    print("kkkkk"+response.data.toString());
     return getTrainerModelFromJson(response.toString());
   }
 

@@ -42,6 +42,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
 
   @override
   void initState() {
+    getSortByData();
     _scrollController.addListener(() async {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -281,14 +282,29 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                               ImagePath.filterIcon,
                               height: 18.23 * SizeConfig.imageSizeMultiplier!,
                             ),
-
                             itemBuilder: (BuildContext context) =>
                                 List.generate(
-                                    _trainerController.filterOptions.length,
+                                    _trainerController.filterOptions.value.response !=null?_trainerController.filterOptions.value.response!.data!.length+1:1,
                                     (index) => PopupMenuItem<int>(
-                                          child: Text(
+                                      onTap: () async {
+                                        _trainerController.filterIsLoading.value = true;
+                                        _trainerController.SelectedSortMethod.value = index-1;
+                                        _trainerController.allTrainer.value = await TrainerServices.getAllTrainer(
+                                            sortBy: _trainerController.SelectedSortMethod.value);
+                                        _scrollController.jumpTo(0);
+                                        _trainerController.filterIsLoading.value = false;
+                                      },
+                                          child: (index ==0)?Text(
+                                            "sort_by".tr,
+                                            style: AppTextStyle.black400Text
+                                                .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .color),
+                                          ):Text(
                                             _trainerController
-                                                .filterOptions[index],
+                                                .filterOptions.value.response!.data![index-1].title!.split("-").first,
                                             style: AppTextStyle.black400Text
                                                 .copyWith(
                                                     color: Theme.of(context)
@@ -296,7 +312,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                         .bodyText1!
                                                         .color),
                                           ),
-                                          enabled: index == 0 ? false : true,
+                                      enabled: index==0?false:true,
+
                                         )),
                           ),
                         ),
@@ -1071,6 +1088,11 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
         ]),
       ),
     );
+  }
+
+  void getSortByData() async {
+    _trainerController.filterOptions.value = await TrainerServices.getSortByData();
+
   }
 }
 

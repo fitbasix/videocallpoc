@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -26,8 +27,7 @@ class GetTrainedScreen extends StatelessWidget {
           elevation: 0,
           automaticallyImplyLeading: false,
           title: Text('getTrainedTitle'.tr,
-              style: AppTextStyle.titleText
-                  .copyWith(
+              style: AppTextStyle.titleText.copyWith(
                   color: Theme.of(context).appBarTheme.titleTextStyle?.color,
                   fontSize: 16 * SizeConfig.textMultiplier!)),
         ),
@@ -45,6 +45,106 @@ class GetTrainedScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                //My trainers tile
+                Obx(() {
+                  if (_trainerController.trainers.value.response != null) {
+                    return _trainerController.trainers.value.response!.data!
+                                .myTrainers!.length ==
+                            0
+                        ? Container()
+                        : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        12 * SizeConfig.widthMultiplier!),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      ImagePath.myTrainersIcon,
+                                      height:
+                                          24 * SizeConfig.imageSizeMultiplier!,
+                                      width:
+                                          24 * SizeConfig.imageSizeMultiplier!,
+                                    ),
+                                    SizedBox(
+                                      width: 7 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    GetTrainedTitle(
+                                      title: 'my_trainers'.tr,
+                                    ),
+                                    Spacer(),
+                                    Obx(() => _trainerController
+                                            .getTrainedIsLoading.value
+                                        ? Container()
+                                        : SeeAllButton(
+                                            title: "see_all_trainer".tr,
+                                            onTap: () async {},
+                                          ))
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30 * SizeConfig.heightMultiplier!,
+                              ),
+                              Container(
+                                height: 110 * SizeConfig.heightMultiplier!,
+                                margin: EdgeInsets.only(
+                                    left: 16 * SizeConfig.widthMultiplier!),
+                                child: ListView.builder(
+                                    physics: BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: _trainerController.trainers.value
+                                        .response!.data!.myTrainers!.length,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                          margin: EdgeInsets.only(
+                                              right: 16 *
+                                                  SizeConfig.widthMultiplier!),
+                                          child: MyTrainersTile(
+                                              name: _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .myTrainers![index]
+                                                  .name!,
+                                              imageUrl: _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .myTrainers![index]
+                                                  .profilePhoto!,
+                                            isCurrentlyEnrolled: _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .myTrainers![index].isCurrentlyEnrolled!,
+                                          ));
+                                    }),
+                              ),
+                              SizedBox(
+                                height: 16 * SizeConfig.heightMultiplier!,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 4 * SizeConfig.heightMultiplier!,
+                                color: Theme.of(context).cardColor,
+                              ),
+                              SizedBox(
+                                height: 19 * SizeConfig.heightMultiplier!,
+                              ),
+                            ],
+                          );
+                  } else {
+                    return Container();
+                  }
+                }),
+
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: 12 * SizeConfig.widthMultiplier!),
@@ -69,6 +169,8 @@ class GetTrainedScreen extends StatelessWidget {
                                 _trainerController.isLoading.value = true;
                                 _trainerController.pageTitle.value =
                                     'trainers'.tr;
+                                _trainerController.SelectedSortMethod.value =
+                                    -1;
                                 _trainerController.SelectedInterestIndex.value =
                                     0;
                                 _trainerController.trainerType.value = 0;
@@ -120,8 +222,11 @@ class GetTrainedScreen extends StatelessWidget {
                                           rating: 0,
                                           onTap: () {}),
                                     ),
-                                    baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
-                                    highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
+                                    baseColor: Color.fromARGB(0, 255, 255, 255)
+                                        .withOpacity(0),
+                                    highlightColor:
+                                        Color.fromARGB(1, 255, 255, 255)
+                                            .withOpacity(0.46),
                                   )
                                 : Padding(
                                     padding: index == 0
@@ -344,8 +449,11 @@ class GetTrainedScreen extends StatelessWidget {
                                         rating: 0,
                                         onTap: () {}),
                                   ),
-                                   baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
-                                   highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
+                                  baseColor: Color.fromARGB(0, 255, 255, 255)
+                                      .withOpacity(0),
+                                  highlightColor:
+                                      Color.fromARGB(1, 255, 255, 255)
+                                          .withOpacity(0.46),
                                 )
                               : Padding(
                                   padding: index == 0
@@ -563,8 +671,11 @@ class GetTrainedScreen extends StatelessWidget {
                                         rating: 0,
                                         onTap: () {}),
                                   ),
-                                   baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
-                                   highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
+                                  baseColor: Color.fromARGB(0, 255, 255, 255)
+                                      .withOpacity(0),
+                                  highlightColor:
+                                      Color.fromARGB(1, 255, 255, 255)
+                                          .withOpacity(0.46),
                                 )
                               : Padding(
                                   padding: index == 0
@@ -738,22 +849,55 @@ class GetTrainedTitle extends StatelessWidget {
 }
 
 class SeeAllButton extends StatelessWidget {
-  const SeeAllButton({
-    Key? key,
-    required this.onTap,
-  }) : super(key: key);
+  SeeAllButton({Key? key, required this.onTap, this.title}) : super(key: key);
   final VoidCallback onTap;
+  String? title;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: onTap,
         child: Text(
-          'seeAll'.tr,
+          title != null ? title!.tr : 'seeAll'.tr,
           style: AppTextStyle.NormalText.copyWith(
               fontSize: 14 * SizeConfig.textMultiplier!,
               decoration: TextDecoration.underline,
               color: Theme.of(context).textTheme.headline1?.color),
         ));
+  }
+}
+
+class MyTrainersTile extends StatelessWidget {
+  MyTrainersTile({Key? key, required this.name, required this.imageUrl,required this.isCurrentlyEnrolled})
+      : super(key: key);
+  String imageUrl;
+  String name;
+  bool isCurrentlyEnrolled;
+
+  @override
+  Widget build(BuildContext context) {
+    print(isCurrentlyEnrolled.toString());
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CircleAvatar(
+          radius: 32 * SizeConfig.imageSizeMultiplier!,
+          backgroundImage: NetworkImage(imageUrl),
+        ),
+        SizedBox(
+          height: 8 * SizeConfig.heightMultiplier!,
+        ),
+        Container(
+            width: 64 * SizeConfig.widthMultiplier!,
+            child: Text(
+              name,
+              style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
+                  color: isCurrentlyEnrolled?Theme.of(context).textTheme.bodyText1!.color:Theme.of(context).textTheme.headline1!.color),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ))
+      ],
+    );
   }
 }

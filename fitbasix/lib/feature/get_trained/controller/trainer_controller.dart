@@ -3,6 +3,7 @@ import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
+import 'package:fitbasix/feature/get_trained/model/sortbymodel.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,6 +33,7 @@ class TrainerController extends GetxController {
   RxString search = RxString('');
   RxInt trainerType = RxInt(0);
   RxInt SelectedInterestIndex = RxInt(0);
+  RxInt SelectedSortMethod = RxInt(-1);
   RxString searchedName = RxString('');
   RxInt currentPage = RxInt(1);
   RxBool getTrainedIsLoading = RxBool(false);
@@ -72,17 +74,13 @@ class TrainerController extends GetxController {
   Future<void> setUp() async {
     getTrainedIsLoading.value = true;
     trainers.value = await TrainerServices.getTrainers();
-
     interests.value = await TrainerServices.getAllInterest();
     getTrainedIsLoading.value = false;
   }
 
-  List<String> filterOptions = [
-    "sort_by".tr,
-    "most_popularity".tr,
-    "top_rated".tr,
-    "low_rated".tr
-  ];
+  Rx<SortByModel> filterOptions = SortByModel().obs;
+
+
 
   @override
   void onInit() {
