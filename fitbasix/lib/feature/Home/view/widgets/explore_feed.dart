@@ -95,7 +95,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                 Text(
                                   widget.name,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      color: Theme.of(context).textTheme.bodyText1?.color,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
                                       fontSize:
                                           14 * SizeConfig.textMultiplier!),
                                 ),
@@ -103,10 +106,12 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                     width: 12 * SizeConfig.widthMultiplier!),
                                 widget.isFollowing
                                     ? Container(
-                                        height: 4*SizeConfig.heightMultiplier!,
-                                        width: 4*SizeConfig.widthMultiplier!,
+                                        height:
+                                            4 * SizeConfig.heightMultiplier!,
+                                        width: 4 * SizeConfig.widthMultiplier!,
                                         decoration: BoxDecoration(
-                                            color: Theme.of(context).primaryColor,
+                                            color:
+                                                Theme.of(context).primaryColor,
                                             shape: BoxShape.circle),
                                       )
                                     : Container(),
@@ -135,7 +140,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         widget.name,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -143,15 +151,24 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
                                       Container(
-                                        height: 1*SizeConfig.heightMultiplier!,
-                                        width: 15*SizeConfig.widthMultiplier!,
-                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                        height:
+                                            1 * SizeConfig.heightMultiplier!,
+                                        width: 15 * SizeConfig.widthMultiplier!,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
-                                      Text('with'.tr,style: AppTextStyle.normalGreenText.copyWith(
-                                        color: Theme.of(context).textTheme.bodyText1?.color)),
+                                      Text('with'.tr,
+                                          style: AppTextStyle.normalGreenText
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      ?.color)),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
@@ -159,7 +176,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         widget.people[0].name!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       )
@@ -176,16 +196,24 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         widget.name,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
-                                                fontSize: 14 * SizeConfig.textMultiplier!),
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
                                       ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
                                       Container(
-                                        height: 1*SizeConfig.heightMultiplier!,
-                                        width: 15*SizeConfig.widthMultiplier!,
-                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                        height:
+                                            1 * SizeConfig.heightMultiplier!,
+                                        width: 15 * SizeConfig.widthMultiplier!,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
@@ -194,7 +222,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         'with'.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -205,7 +236,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         widget.people[0].name!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -216,7 +250,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         'and'.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       ),
@@ -228,7 +265,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         }),
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 14 *
                                                     SizeConfig.textMultiplier!),
                                       )
@@ -240,40 +280,44 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                           Text(widget.category,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context).textTheme.headline3?.color
-                              )),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color)),
                           SizedBox(
                             width: 13 * SizeConfig.widthMultiplier!,
                           ),
-                          Icon(
-                            Icons.access_time,
-                            size: 16*SizeConfig.textMultiplier!,
-                              color: Theme.of(context).textTheme.headline3?.color
-                          ),
+                          Icon(Icons.access_time,
+                              size: 16 * SizeConfig.textMultiplier!,
+                              color:
+                                  Theme.of(context).textTheme.headline3?.color),
                           SizedBox(
                             width: 5 * SizeConfig.widthMultiplier!,
                           ),
                           Text(widget.date,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.widthMultiplier!,
-                                  color: Theme.of(context).textTheme.headline3?.color
-                              )),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color)),
                           SizedBox(
                             width: 14 * SizeConfig.widthMultiplier!,
                           ),
-                          Icon(
-                            Icons.place,
-                              size: 16*SizeConfig.widthMultiplier!,
-                              color: Theme.of(context).textTheme.headline3?.color
-                          ),
+                          Icon(Icons.place,
+                              size: 16 * SizeConfig.widthMultiplier!,
+                              color:
+                                  Theme.of(context).textTheme.headline3?.color),
                           SizedBox(
                             width: 6.5 * SizeConfig.widthMultiplier!,
                           ),
                           Text(widget.place,
                               style: AppTextStyle.normalBlackText.copyWith(
                                   fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context).textTheme.headline3?.color
-                              ))
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.color))
                         ],
                       )
                     ],
@@ -294,6 +338,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                 trimExpandedText: 'see_less'.tr,
                 colorClickableText: hintGrey,
                 style: AppTextStyle.NormalText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: 14 * SizeConfig.textMultiplier!),
               ),
             ),
@@ -411,7 +456,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                     child: widget.isLiked
                         ? Icon(
                             Icons.favorite,
-                      color: Color(0xFFF66868),
+                            color: Color(0xFFF66868),
                           )
                         : Icon(
                             Icons.favorite_outline,
@@ -423,8 +468,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                   ),
                   Text(
                     'likes'.trParams({'no_likes': widget.likes}),
-                    style: AppTextStyle.boldBlackText
-                        .copyWith(
+                    style: AppTextStyle.boldBlackText.copyWith(
                         color: Theme.of(context).textTheme.bodyText1?.color,
                         fontSize: 12 * SizeConfig.textMultiplier!),
                   ),
@@ -433,7 +477,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                   ),
                   Icon(
                     Icons.mode_comment_outlined,
-                    size: 16*SizeConfig.widthMultiplier!,
+                    size: 16 * SizeConfig.widthMultiplier!,
                     color: kPureWhite,
                   ),
                   SizedBox(
@@ -441,8 +485,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                   ),
                   Text(
                     'comments'.trParams({'no_comments': widget.comments}),
-                    style: AppTextStyle.boldBlackText
-                        .copyWith(
+                    style: AppTextStyle.boldBlackText.copyWith(
                         color: Theme.of(context).textTheme.bodyText1?.color,
                         fontSize: 12 * SizeConfig.textMultiplier!),
                   )

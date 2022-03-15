@@ -640,6 +640,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                               context);
                                                           FocusScope.of(context)
                                                               .unfocus();
+
                                                           await HomeService.replyComment(
                                                               commentId: widget
                                                                   .commentsList[
@@ -669,7 +670,9 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                           .post
                                                                           .value
                                                                           .id!);
-
+                                                          // _homeController
+                                                          //     .viewReplies!
+                                                          //     .clear();
                                                           if (_homeController
                                                                   .postComments
                                                                   .value

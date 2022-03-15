@@ -1197,18 +1197,7 @@ class _HomePageState extends State<HomePage> {
                                                               .trendingPostList[
                                                           index]
                                                               .id!]= recentComment.response!.data!.data;
-                                                          log("hit Like"+(_homeController
-                                                              .likedPost
-                                                              .indexOf(_homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .id) ==
-                                                              -1
-                                                              ? _homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .isLiked!.toString()
-                                                              : true.toString()));
+
                                                           setState(() {});
                                                         },
                                                         addComment: () {
