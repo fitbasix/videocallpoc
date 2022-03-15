@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-
 import 'package:fitbasix/core/constants/app_text_style.dart';
-import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
@@ -109,8 +107,11 @@ class GetTrainedScreen extends StatelessWidget {
                                           rating: 0,
                                           onTap: () {}),
                                     ),
-                                    baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
-                                    highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
+                                    baseColor: Color.fromARGB(0, 255, 255, 255)
+                                        .withOpacity(0),
+                                    highlightColor:
+                                        Color.fromARGB(1, 255, 255, 255)
+                                            .withOpacity(0.46),
                                   )
                                 : Padding(
                                     padding: index == 0
@@ -333,8 +334,11 @@ class GetTrainedScreen extends StatelessWidget {
                                         rating: 0,
                                         onTap: () {}),
                                   ),
-                                   baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
-                                   highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
+                                  baseColor: Color.fromARGB(0, 255, 255, 255)
+                                      .withOpacity(0),
+                                  highlightColor:
+                                      Color.fromARGB(1, 255, 255, 255)
+                                          .withOpacity(0.46),
                                 )
                               : Padding(
                                   padding: index == 0
@@ -552,8 +556,11 @@ class GetTrainedScreen extends StatelessWidget {
                                         rating: 0,
                                         onTap: () {}),
                                   ),
-                                   baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0),
-                                   highlightColor: Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
+                                  baseColor: Color.fromARGB(0, 255, 255, 255)
+                                      .withOpacity(0),
+                                  highlightColor:
+                                      Color.fromARGB(1, 255, 255, 255)
+                                          .withOpacity(0.46),
                                 )
                               : Padding(
                                   padding: index == 0
