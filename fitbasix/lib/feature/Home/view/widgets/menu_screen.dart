@@ -6,6 +6,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
@@ -28,12 +29,10 @@ class MenuScreen extends StatelessWidget {
       required this.imageCoverPic,
       required this.name});
 
-  final ProfileController _profileController = Get.find();
+  final ProfileController _profileController = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
-    print(imageUrl);
-    log(name.toString());
-    print(imageCoverPic);
+    final HomeController homeController = Get.find();
     return Container(
         color: Theme.of(context).scaffoldBackgroundColor,
         width: 300 * SizeConfig.widthMultiplier!,
@@ -137,6 +136,8 @@ class MenuScreen extends StatelessWidget {
                 menuItemImage: ImagePath.feedback,
                 menuItemText: 'feedback'.tr,
                 onTap: () {
+                  homeController.selectedIndex.value = 0;
+                  Navigator.pop(context);
                   showDialog(
                       context: context,
                       builder: (BuildContext context) =>

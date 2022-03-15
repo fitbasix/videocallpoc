@@ -72,6 +72,7 @@ class HomeController extends GetxController {
   RxBool isPostUpdate = false.obs;
   RxString coverPhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
+
   RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
     {},
   );
