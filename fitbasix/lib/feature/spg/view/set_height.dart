@@ -73,7 +73,7 @@ class SetHeight extends StatelessWidget {
                       style: _spgController.heightType == "inch"
                           ? AppTextStyle.white400Text
                           : AppTextStyle.white400Text
-                              .copyWith(color: Theme.of(context).textTheme.headline6!.color),
+                              .copyWith(color: Theme.of(context).primaryColorDark),
                     )),
                   ),
                 ),
@@ -101,7 +101,7 @@ class SetHeight extends StatelessWidget {
                       style: _spgController.heightType != "inch"
                           ? AppTextStyle.white400Text
                           : AppTextStyle.white400Text
-                              .copyWith(color: Theme.of(context).textTheme.headline6!.color),
+                              .copyWith(color: Theme.of(context).primaryColorDark),
                     )),
                   ),
                 )

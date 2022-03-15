@@ -115,10 +115,10 @@ class MenuScreen extends StatelessWidget {
             ),
             MenuItem(
                 menuItemImage: ImagePath.account,
-                menuItemText: 'account'.tr,
+                menuItemText: 'my_account'.tr,
                 onTap: () {
                   Navigator.pushNamed(
-                      context, RouteName.accountAndSubscription);
+                      context, RouteName.editPersonalInfo);
                 }),
             MenuItem(
                 menuItemImage: ImagePath.settings,

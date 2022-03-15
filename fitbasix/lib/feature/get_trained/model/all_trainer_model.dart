@@ -183,9 +183,7 @@ class Strength {
 
   final List<String>? strength;
 
-  factory Strength.fromJson(Map<String, dynamic> json) => Strength(
-        strength: List<String>.from(json["strength"].map((x) => x)),
-      );
+  factory Strength.fromJson(Map<String, dynamic> json) => Strength(strength: List<String>.from(json["strength"].map((x) => x)),);
 
   Map<String, dynamic> toJson() => {
         "strength": List<dynamic>.from(strength!.map((x) => x)),
