@@ -32,6 +32,7 @@ import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
+import '../../Home/model/RecentCommentModel.dart';
 import '../../Home/view/my_trainers_screen.dart';
 import '../../message/view/chat_ui.dart';
 
@@ -895,9 +896,23 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   color: kBackgroundColor,
                                                 ),
                                                 PostTile(
-                                                  comment: _trainerController
-                                                      .trainerPostList[index]
-                                                      .commentgiven,
+                                                  comment: _homeController
+                                                                  .commentsMap[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id!] ==
+                                                          null
+                                                      ? _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .commentgiven
+                                                      : _homeController
+                                                              .commentsMap[
+                                                          _trainerController
+                                                              .trainerPostList[
+                                                                  index]
+                                                              .id],
                                                   name: _trainerController
                                                       .trainerPostList[index]
                                                       .userId!
@@ -948,18 +963,65 @@ class _TrainerPageState extends State<TrainerPage> {
                                                               index]
                                                           .caption ??
                                                       '',
-                                                  likes: _trainerController
-                                                      .trainerPostList[index]
-                                                      .likes
-                                                      .toString(),
-                                                  comments: _trainerController
-                                                      .trainerPostList[index]
-                                                      .comments
-                                                      .toString(),
+                                                  likes: _homeController
+                                                                  .updateCount[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id] ==
+                                                          null
+                                                      ? _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .likes
+                                                          .toString()
+                                                      : _homeController
+                                                          .updateCount[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id]!
+                                                          .likes!
+                                                          .toString(),
+                                                  comments: _homeController
+                                                                  .updateCount[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id] ==
+                                                          null
+                                                      ? _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .comments
+                                                          .toString()
+                                                      : _homeController
+                                                          .updateCount[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id]!
+                                                          .comments!
+                                                          .toString(),
                                                   hitLike: () async {
-                                                    if (_trainerController
-                                                        .trainerPostList[index]
-                                                        .isLiked!) {
+                                                    bool val = _homeController
+                                                                    .LikedPostMap[
+                                                                _trainerController
+                                                                    .trainerPostList[
+                                                                        index]
+                                                                    .id!] ==
+                                                            null
+                                                        ? _trainerController
+                                                            .trainerPostList[
+                                                                index]
+                                                            .isLiked!
+                                                        : _homeController
+                                                                .LikedPostMap[
+                                                            _trainerController
+                                                                .trainerPostList[
+                                                                    index]
+                                                                .id!]!;
+                                                    if (val) {
                                                       _trainerController
                                                           .trainerPostList[
                                                               index]
@@ -973,7 +1035,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                                                       index]
                                                                   .likes! -
                                                               1);
-                                                      HomeService.unlikePost(
+                                                      await HomeService.unlikePost(
                                                           postId:
                                                               _trainerController
                                                                   .trainerPostList[
@@ -993,13 +1055,30 @@ class _TrainerPageState extends State<TrainerPage> {
                                                                       index]
                                                                   .likes! +
                                                               1);
-                                                      HomeService.likePost(
+                                                      await HomeService.likePost(
                                                           postId:
                                                               _trainerController
                                                                   .trainerPostList[
                                                                       index]
                                                                   .id!);
                                                     }
+                                                    RecentCommentModel
+                                                        recentComment =
+                                                        RecentCommentModel();
+                                                    recentComment = await HomeService
+                                                        .recentComment(
+                                                            postId: _trainerController
+                                                                .trainerPostList[
+                                                                    index]
+                                                                .id!);
+                                                    // _homeController.commentsMap[_homeController.post.value.id.toString()] =
+                                                    //     recentComment.response!.data!.comment;
+                                                    _homeController.updateCount[
+                                                        _trainerController
+                                                            .trainerPostList[
+                                                                index]
+                                                            .id!] = recentComment
+                                                        .response!.data!.data;
                                                     setState(() {});
                                                   },
                                                   addComment: () {
@@ -1020,11 +1099,27 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   postId: _trainerController
                                                       .trainerPostList[index]
                                                       .id!,
-                                                  isLiked: _trainerController
-                                                      .trainerPostList[index]
-                                                      .isLiked!,
+                                                  isLiked: _homeController
+                                                                  .LikedPostMap[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id!] ==
+                                                          null
+                                                      ? _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .isLiked!
+                                                      : _homeController
+                                                              .LikedPostMap[
+                                                          _trainerController
+                                                              .trainerPostList[
+                                                                  index]
+                                                              .id]!,
                                                   onTap: () async {
                                                     _homeController.commentsList
+                                                        .clear();
+                                                    _homeController.viewReplies!
                                                         .clear();
                                                     Navigator.pushNamed(context,
                                                         RouteName.postScreen);

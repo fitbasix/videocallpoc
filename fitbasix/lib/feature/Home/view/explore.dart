@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/explore_feed.dart';
@@ -38,7 +41,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
       if (_scrollController.position.maxScrollExtent ==
           _scrollController.position.pixels) {
         homeController.nextDataLoad.value = true;
-
+        print("llllll" + homeController.explorePageCount.value.toString());
         final postQuery = await HomeService.getExplorePosts(
             skip: homeController.explorePageCount.value * 5);
 
@@ -46,7 +49,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
           homeController.explorePostList.addAll(postQuery.response!.data!);
           // homeController.explorePageCount.value++;
           homeController.nextDataLoad.value = false;
-          return;
+          //   return;
         } else {
           // if (_homeController.trendingPostList.last.id ==
           //     postQuery.response!.data!.last.id) {
@@ -58,7 +61,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
               postQuery.response!.data!.last.id) {
             // homeController.explorePageCount.value++;
             homeController.nextDataLoad.value = false;
-            return;
+            //  return;
           }
 
           // homeController.explorePageCount.value++;
@@ -66,6 +69,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
           homeController.nextDataLoad.value = false;
         }
         homeController.explorePageCount.value++;
+        log("explore_page" + homeController.explorePageCount.value.toString());
         homeController.nextDataLoad.value = false;
         setState(() {});
       }
@@ -375,29 +379,65 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                             : homeController
                                                 .explorePostList[index].files!,
                                         caption: homeController
-                                                .explorePostList[index]
-                                                .caption ??
-                                            '',
-                                        likes: homeController
-                                            .explorePostList[index].likes
+                                            .explorePostList[index].caption
                                             .toString(),
-                                        comments: homeController
-                                            .explorePostList[index].comments
-                                            .toString(),
+                                        likes: homeController.updateCount[
+                                                    homeController
+                                                        .explorePostList[index]
+                                                        .id] ==
+                                                null
+                                            ? homeController
+                                                .explorePostList[index].likes
+                                                .toString()
+                                            : homeController
+                                                .updateCount[homeController
+                                                    .explorePostList[index].id]!
+                                                .likes!
+                                                .toString(),
+                                        comments: homeController.updateCount[
+                                                    homeController
+                                                        .explorePostList[index]
+                                                        .id] ==
+                                                null
+                                            ? homeController
+                                                .explorePostList[index].comments
+                                                .toString()
+                                            : homeController
+                                                .updateCount[homeController
+                                                    .explorePostList[index].id]!
+                                                .comments!
+                                                .toString(),
                                         hitLike: () async {
-                                          if (homeController
-                                              .explorePostList[index]
-                                              .isLiked!) {
+                                          bool val = homeController
+                                                          .LikedPostMap[
+                                                      homeController
+                                                          .explorePostList[
+                                                              index]
+                                                          .id!] ==
+                                                  null
+                                              ? homeController
+                                                  .explorePostList[index]
+                                                  .isLiked!
+                                              : homeController.LikedPostMap[
+                                                  homeController
+                                                      .explorePostList[index]
+                                                      .id!]!;
+                                          // if()
+                                          if (val) {
                                             homeController
                                                 .explorePostList[index]
                                                 .isLiked = false;
+                                            homeController.LikedPostMap[
+                                                homeController
+                                                    .explorePostList[index]
+                                                    .id!] = false;
                                             homeController
                                                 .explorePostList[index]
                                                 .likes = (homeController
                                                     .explorePostList[index]
                                                     .likes! -
                                                 1);
-                                            HomeService.unlikePost(
+                                            await HomeService.unlikePost(
                                                 postId: homeController
                                                     .explorePostList[index]
                                                     .id!);
@@ -411,11 +451,29 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                                     .explorePostList[index]
                                                     .likes! +
                                                 1);
-                                            HomeService.likePost(
+                                            homeController.LikedPostMap[
+                                                homeController
+                                                    .explorePostList[index]
+                                                    .id!] = true;
+                                            await HomeService.likePost(
                                                 postId: homeController
                                                     .explorePostList[index]
                                                     .id!);
                                           }
+                                          RecentCommentModel recentComment =
+                                              RecentCommentModel();
+                                          recentComment =
+                                              await HomeService.recentComment(
+                                                  postId: homeController
+                                                      .explorePostList[index]
+                                                      .id!);
+                                          // _homeController.commentsMap[_homeController.post.value.id.toString()] =
+                                          //     recentComment.response!.data!.comment;
+                                          homeController.updateCount[
+                                              homeController
+                                                  .explorePostList[index]
+                                                  .id!] = recentComment
+                                              .response!.data!.data;
                                           setState(() {});
                                         },
                                         addComment: () {
@@ -435,10 +493,20 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                         },
                                         postId: homeController
                                             .explorePostList[index].id!,
-                                        isLiked: homeController
-                                            .explorePostList[index].isLiked!,
+                                        isLiked: homeController.LikedPostMap[
+                                                    homeController
+                                                        .explorePostList[index]
+                                                        .id!] ==
+                                                null
+                                            ? homeController
+                                                .explorePostList[index].isLiked!
+                                            : homeController.LikedPostMap[
+                                                homeController
+                                                    .explorePostList[index]
+                                                    .id]!,
                                         onTap: () async {
                                           homeController.commentsList.clear();
+                                          homeController.viewReplies!.clear();
                                           Navigator.pushNamed(
                                               context, RouteName.postScreen);
                                           homeController.postLoading.value =
@@ -448,7 +516,6 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                                   homeController
                                                       .explorePostList[index]
                                                       .id!);
-
                                           homeController.post.value =
                                               postData.response!.data!;
 
