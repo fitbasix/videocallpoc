@@ -1,7 +1,8 @@
 class ApiUrl {
 
-  //static String liveBaseURL = 'http://3.131.171.176';
-  static String liveBaseURL = 'https://8737-103-15-255-207.ngrok.io';
+
+  static String liveBaseURL = 'http://3.131.171.176';
+
 
 
   // static String liveBaseURL = 'https://8b4c-103-15-254-242.ngrok.io';
