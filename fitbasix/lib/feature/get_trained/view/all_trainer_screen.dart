@@ -507,7 +507,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                   SizedBox(
                                     height: 8.78*SizeConfig.heightMultiplier!,
                                   ),
-                                  Text('Sorry we couldn’t find any matches',
+                                  Text('no_matches_description'.tr,
                                   style: AppTextStyle.black400Text.copyWith(
                                     fontSize: (24) * SizeConfig.textMultiplier!,
                                     color: Theme.of(context).textTheme.bodyText1?.color
@@ -517,7 +517,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                   SizedBox(
                                     height: 8*SizeConfig.heightMultiplier!,
                                   ),
-                                  Text('Please try a different search ',
+                                  Text('different_search'.tr,
                                     style: AppTextStyle.black400Text.copyWith(
                                         color: Theme.of(context).textTheme.bodyText1?.color
                                     ),

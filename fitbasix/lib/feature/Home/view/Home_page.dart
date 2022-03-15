@@ -292,7 +292,87 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             height: 16 * SizeConfig.heightMultiplier!,
                           ),
-
+                          //live stream
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16*SizeConfig.widthMultiplier!,
+                              vertical: 8*SizeConfig.heightMultiplier!,
+                            ),
+                            color: kBlack,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                               Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 mainAxisAlignment: MainAxisAlignment.start,
+                                 children: [
+                                 Text('Jonathan is streaming live now',
+                                   style: AppTextStyle.black600Text.copyWith(
+                                     color: Theme.of(context).textTheme.bodyText1?.color
+                                   ),
+                                 ),
+                                 SizedBox(height: 8*SizeConfig.heightMultiplier!),
+                                 Container(
+                                   padding: EdgeInsets.only(
+                                     top: 4*SizeConfig.heightMultiplier!,
+                                     bottom: 4*SizeConfig.heightMultiplier!,
+                                     right: 8*SizeConfig.widthMultiplier!,
+                                     left: 8.67*SizeConfig.widthMultiplier!
+                                   ),
+                                   height: 24*SizeConfig.heightMultiplier!,
+                                 //  width:98*SizeConfig.widthMultiplier!,
+                                   decoration: BoxDecoration(
+                                     color: Theme.of(context).textTheme.headline4?.color,
+                                     borderRadius:
+                                     BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                                   ),
+                                   child: Row(
+                                     crossAxisAlignment: CrossAxisAlignment.center,
+                                     mainAxisAlignment: MainAxisAlignment.center,
+                                     children: [
+                                       Icon(
+                                         Icons.visibility,
+                                         color: Theme.of(context).primaryColor,
+                                         size: 20,
+                                       ),
+                                       SizedBox(
+                                         width: 4.67*SizeConfig.widthMultiplier!,
+                                       ),
+                                   Text('28 viewers',
+                                     style: AppTextStyle.black600Text.copyWith(
+                                         fontSize: (12) * SizeConfig.textMultiplier!,
+                                         color: Theme.of(context).textTheme.bodyText1?.color
+                                     )),
+                                     ],
+                                   ),
+                                 )
+                               ],
+                               ),
+                                Spacer(),
+                                //join button
+                                GestureDetector(
+                                  onTap: (){},
+                                  child: Container(
+                                    height: 36*SizeConfig.heightMultiplier!,
+                                    width:96*SizeConfig.widthMultiplier!,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFFF5A5A),
+                                      borderRadius: BorderRadius.circular(
+                                          8 * SizeConfig.heightMultiplier!),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 35*SizeConfig.widthMultiplier!,
+                                      vertical: 8*SizeConfig.heightMultiplier!
+                                    ),
+                                    child: Text('Join'.tr,style: AppTextStyle.black600Text.copyWith(
+                                      color: Theme.of(context).textTheme.bodyText1?.color
+                                    ),),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                           // Padding(
                           //   padding: EdgeInsets.only(
                           //       left: 16 * SizeConfig.widthMultiplier!,
