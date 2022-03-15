@@ -14,6 +14,8 @@ import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/custom_app_bar.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/trainer_card.dart';
 
+import '../model/all_trainer_model.dart';
+
 class GetTrainedScreen extends StatelessWidget {
   GetTrainedScreen({Key? key}) : super(key: key);
   final TrainerController _trainerController = Get.put(TrainerController());
@@ -124,7 +126,57 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .response!
                                                 .data!
                                                 .myTrainers![index].isCurrentlyEnrolled!,
-                                          ));
+                                            onMyTrainerTileTapped: () async{
+                                                print(_trainerController.trainers.value.response!.data!.myTrainers![index].quickBlox.toString()+ " quickbloxid");
+                                              // Trainer selectedTrainer = _trainerController
+                                              //     .trainers
+                                              //     .value
+                                              //     .response!
+                                              //     .data!
+                                              //     .trainers![_trainerController
+                                              //     .trainers
+                                              //     .value
+                                              //     .response!
+                                              //     .data!
+                                              //     .trainers!.indexWhere((element) => element.id == _trainerController.trainers.value.response!.data!.myTrainers![index].id)];
+                                              //
+                                              // Navigator.pushNamed(context,
+                                              //     RouteName.trainerProfileScreen);
+                                              // _trainerController
+                                              //     .isProfileLoading.value = true;
+                                              // _trainerController
+                                              //     .atrainerDetail.value = selectedTrainer;
+                                              //
+                                              //   _trainerController.planModel.value =
+                                              //     await TrainerServices
+                                              //     .getPlanByTrainerId(
+                                              //     selectedTrainer.id!);
+                                              //
+                                              // _trainerController
+                                              //     .loadingIndicator.value = false;
+                                              // _trainerController
+                                              //     .initialPostData.value =
+                                              //     await TrainerServices
+                                              //     .getTrainerPosts(
+                                              //         selectedTrainer.id!,
+                                              //     0);
+                                              // if (_trainerController.initialPostData
+                                              //     .value.response!.data!.length !=
+                                              //     0) {
+                                              //   _trainerController
+                                              //       .trainerPostList.value =
+                                              //   _trainerController.initialPostData
+                                              //       .value.response!.data!;
+                                              // } else {
+                                              //   _trainerController.trainerPostList
+                                              //       .clear();
+                                              // }
+                                              // _trainerController
+                                              //     .isProfileLoading.value = false;
+                                            },
+                                          )
+
+                                      );
                                     }),
                               ),
                               SizedBox(
@@ -868,36 +920,39 @@ class SeeAllButton extends StatelessWidget {
 }
 
 class MyTrainersTile extends StatelessWidget {
-  MyTrainersTile({Key? key, required this.name, required this.imageUrl,required this.isCurrentlyEnrolled})
+  MyTrainersTile({Key? key, required this.name, required this.imageUrl,required this.isCurrentlyEnrolled,this.onMyTrainerTileTapped})
       : super(key: key);
   String imageUrl;
   String name;
   bool isCurrentlyEnrolled;
-
+  GestureTapCallback? onMyTrainerTileTapped;
   @override
   Widget build(BuildContext context) {
     print(isCurrentlyEnrolled.toString());
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CircleAvatar(
-          radius: 32 * SizeConfig.imageSizeMultiplier!,
-          backgroundImage: NetworkImage(imageUrl),
-        ),
-        SizedBox(
-          height: 8 * SizeConfig.heightMultiplier!,
-        ),
-        Container(
-            width: 64 * SizeConfig.widthMultiplier!,
-            child: Text(
-              name,
-              style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
-                  color: isCurrentlyEnrolled?Theme.of(context).textTheme.bodyText1!.color:Theme.of(context).textTheme.headline1!.color),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ))
-      ],
+    return GestureDetector(
+      onTap: onMyTrainerTileTapped,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: 32 * SizeConfig.imageSizeMultiplier!,
+            backgroundImage: NetworkImage(imageUrl),
+          ),
+          SizedBox(
+            height: 8 * SizeConfig.heightMultiplier!,
+          ),
+          Container(
+              width: 64 * SizeConfig.widthMultiplier!,
+              child: Text(
+                name,
+                style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
+                    color: isCurrentlyEnrolled?Theme.of(context).textTheme.bodyText1!.color:Theme.of(context).textTheme.headline1!.color),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ))
+        ],
+      ),
     );
   }
 }
