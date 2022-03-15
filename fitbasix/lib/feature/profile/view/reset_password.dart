@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../Home/controller/Home_Controller.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  final ProfileController _profileController = Get.put(ProfileController());
+  final ProfileController _profileController = Get.find();
   final HomeController homeController = Get.find();
   ResetPasswordScreen({Key? key}) : super(key: key);
   var isVisible = false.obs;

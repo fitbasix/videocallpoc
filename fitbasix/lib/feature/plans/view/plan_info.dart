@@ -70,10 +70,10 @@ class _PlanInformationUIState extends State<PlanInformationUI> {
                     trainerController.getAllSlots.value =
                         output.response!.data!;
 
-                    trainerController.availableSlots.value =
-                        await TrainerServices.getEnrolledPlanDetails(
-                            trainerController.fullPlanDetails.value.response!
-                                .data!.trainer!.trainerId!);
+                    // trainerController.availableSlots.value =
+                    //     await TrainerServices.getEnrolledPlanDetails(
+                    //         trainerController.fullPlanDetails.value.response!
+                    //             .data!.trainer!.trainerId!);
                     trainerController.isAvailableSlotDataLoading.value = false;
                   },
                   onEnrollnow: () async {
@@ -90,38 +90,38 @@ class _PlanInformationUIState extends State<PlanInformationUI> {
                     trainerController.getAllSlots.value =
                         output.response!.data!;
 
-                    trainerController.availableSlots.value =
-                        await TrainerServices.getEnrolledPlanDetails(
-                            trainerController.fullPlanDetails.value.response!
-                                .data!.trainer!.trainerId!);
+                    // trainerController.availableSlots.value =
+                    //     await TrainerServices.getEnrolledPlanDetails(
+                    //         trainerController.fullPlanDetails.value.response!
+                    //             .data!.trainer!.trainerId!);
                     trainerController.isAvailableSlotDataLoading.value = false;
                   },
                   onfollowtrainer: () {
-                    trainerController.fullPlanDetails.value.response!.data!
-                        .trainer!.isFollowing = true;
-                    trainerController.fullPlanDetails.value.response!.data!
-                        .trainer!.followers = (int.tryParse(trainerController
-                            .fullPlanDetails
-                            .value
-                            .response!
-                            .data!
-                            .trainer!
-                            .followers!
-                            .toString())! +
-                        1);
+                    // trainerController.fullPlanDetails.value.response!.data!
+                    //     .trainer!.isFollowing = true;
+                    // trainerController.fullPlanDetails.value.response!.data!
+                    //     .trainer!.followers = (int.tryParse(trainerController
+                    //         .fullPlanDetails
+                    //         .value
+                    //         .response!
+                    //         .data!
+                    //         .trainer!
+                    //         .followers!
+                    //         .toString())! +
+                    //     1);
                     TrainerServices.followTrainer(
                         trainerController.atrainerDetail.value.user!.id!);
                     setState(() {});
                   },
-                  isFollowing: trainerController.fullPlanDetails.value.response!
-                      .data!.trainer!.isFollowing,
+                  // isFollowing: trainerController.fullPlanDetails.value.response!
+                  //     .data!.trainer!.isFollowing,
                   onmessagetrainer: () {},
-                  trainerName: trainerController
-                      .fullPlanDetails.value.response!.data!.trainer!.name
-                      .toString(),
-                  planLanguage: trainerController
-                      .fullPlanDetails.value.response!.data!.language
-                      .toString(),
+                  // trainerName: trainerController
+                  //     .fullPlanDetails.value.response!.data!.trainer!.name
+                  //     .toString(),
+                  // planLanguage: trainerController
+                  //     .fullPlanDetails.value.response!.data!.language
+                  //     .toString(),
                   planduration: trainerController
                           .fullPlanDetails.value.response!.data!.planDuration
                           .toString() +
@@ -131,31 +131,31 @@ class _PlanInformationUIState extends State<PlanInformationUI> {
                       .toString(),
                   plankeypoints: trainerController
                       .fullPlanDetails.value.response!.data!.keyPoints!,
-                  planequipment: trainerController
-                      .fullPlanDetails.value.response!.data!.equipments!,
+                  // planequipment: trainerController
+                  //     .fullPlanDetails.value.response!.data!.equipments!,
                   planprizing: 'AED ' +
                       trainerController
-                          .fullPlanDetails.value.response!.data!.prize
+                          .fullPlanDetails.value.response!.data!.price
                           .toString(),
-                  traineravatarUrl: trainerController.fullPlanDetails.value
-                      .response!.data!.trainer!.profilePhoto,
-                  followerscount: NumberFormatter.textFormatter(
-                      trainerController.fullPlanDetails.value.response!.data!
-                          .trainer!.followers!
-                          .toString()),
-                  followingcount: NumberFormatter.textFormatter(
-                      trainerController.fullPlanDetails.value.response!.data!
-                          .trainer!.followings!
-                          .toString()),
-                  rating: trainerController
-                      .fullPlanDetails.value.response!.data!.plansRating!,
-                  ratingCount: NumberFormatter.textFormatter(trainerController
-                      .fullPlanDetails.value.response!.data!.raters
-                      .toString()),
-                  totalPeopleTrained: NumberFormatter.textFormatter(
-                      trainerController
-                          .fullPlanDetails.value.response!.data!.trainees
-                          .toString()),
+                  // traineravatarUrl: trainerController.fullPlanDetails.value
+                  //     .response!.data!.trainer!.profilePhoto,
+                  // followerscount: NumberFormatter.textFormatter(
+                  //     trainerController.fullPlanDetails.value.response!.data!
+                  //         .trainer!.followers!
+                  //         .toString()),
+                  // followingcount: NumberFormatter.textFormatter(
+                  //     trainerController.fullPlanDetails.value.response!.data!
+                  //         .trainer!.followings!
+                  //         .toString()),
+                  // rating: trainerController
+                  //     .fullPlanDetails.value.response!.data!.plansRating!,
+                  // ratingCount: NumberFormatter.textFormatter(trainerController
+                  //     .fullPlanDetails.value.response!.data!.raters
+                  //     .toString()),
+                  // totalPeopleTrained: NumberFormatter.textFormatter(
+                  //     trainerController
+                  //         .fullPlanDetails.value.response!.data!.trainees
+                  //         .toString()),
                   // reviewdiscription:
                   //     'Venenatis, feugiat quis nibh faucibus pellentesque. '
                   //     'Dignissim sed feugiat turpis tortor. Viverra sed '
@@ -178,18 +178,18 @@ class TrainerPlanScreen extends StatefulWidget {
   final VoidCallback? onEnrollnow;
   final VoidCallback? onfollowtrainer;
   final VoidCallback? onmessagetrainer;
-  final String? planLanguage;
+  //final String? planLanguage;
   final String? planduration;
   final String? plandescription;
   final List<String> plankeypoints;
-  final List<String> planequipment;
+  //final List<String> planequipment;
   final String? planprizing;
   final String? trainerName;
   final String? followerscount;
   final String? followingcount;
-  final String? ratingCount;
-  final String? totalPeopleTrained;
-  final double? rating;
+  //final String? ratingCount;
+  //final String? totalPeopleTrained;
+  //final double? rating;
   final String? reviewdiscription;
   final String? reviewdate;
   final String? reviewStarcount;
@@ -209,13 +209,13 @@ class TrainerPlanScreen extends StatefulWidget {
       this.trainerName,
       this.plandescription,
       this.planduration,
-      required this.planequipment,
+      //required this.planequipment,
       required this.plankeypoints,
-      this.planLanguage,
+      //this.planLanguage,
       this.planprizing,
-      this.rating,
-      this.ratingCount,
-      this.totalPeopleTrained,
+      //this.rating,
+      // this.ratingCount,
+      // this.totalPeopleTrained,
       this.traineravatarUrl,
       this.onfollowtrainer,
       this.onmessagetrainer,
@@ -257,7 +257,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                   ),
                   //
                   //trainerinfoWidget
-                  _BuildTrainerinfo(),
+                  // _BuildTrainerinfo(),
                   Divider(
                     color: greyBorder,
                     thickness: 1 * SizeConfig.heightMultiplier!,
@@ -407,15 +407,15 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
               height: 12 * SizeConfig.heightMultiplier!,
             ),
             //plan duration & language
-            _BuildIcon(
-                widget.planLanguage!.tr,
-                ImageIcon(
-                  AssetImage(
-                    ImagePath.planlanguageIcon,
-                  ),
-                  size: 15 * SizeConfig.imageSizeMultiplier!,
-                  color: hintGrey,
-                )),
+            // _BuildIcon(
+            //     widget.planLanguage!.tr,
+            //     ImageIcon(
+            //       AssetImage(
+            //         ImagePath.planlanguageIcon,
+            //       ),
+            //       size: 15 * SizeConfig.imageSizeMultiplier!,
+            //       color: hintGrey,
+            //     )),
 
             _BuildIcon(
                 widget.planduration!.tr,
@@ -478,19 +478,19 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
-            ListView.builder(
-                itemCount: widget.planequipment.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return _BuildIcon(
-                      widget.planequipment[index],
-                      ImageIcon(
-                        AssetImage(ImagePath.planredIcon),
-                        size: 8 * SizeConfig.imageSizeMultiplier!,
-                        color: Color(0xFFD05252),
-                      ));
-                }),
+            // ListView.builder(
+            //     itemCount: widget.planequipment.length,
+            //     shrinkWrap: true,
+            //     physics: NeverScrollableScrollPhysics(),
+            //     itemBuilder: (BuildContext context, int index) {
+            //       return _BuildIcon(
+            //           widget.planequipment[index],
+            //           ImageIcon(
+            //             AssetImage(ImagePath.planredIcon),
+            //             size: 8 * SizeConfig.imageSizeMultiplier!,
+            //             color: Color(0xFFD05252),
+            //           ));
+            //     }),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
@@ -515,182 +515,173 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
       );
 
   //Trainer info widget
-  Widget _BuildTrainerinfo() => Container(
-        padding: EdgeInsets.all(24 * SizeConfig.widthMultiplier!),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 30 * SizeConfig.heightMultiplier!,
-                  backgroundImage: NetworkImage(widget.traineravatarUrl!),
-                ),
-                SizedBox(
-                  width: 16 * SizeConfig.widthMultiplier!,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.trainerName!.tr,
-                      style: AppTextStyle.boldBlackText
-                          .copyWith(
-                          color: Theme.of(context).textTheme.bodyText1?.color,
-                          letterSpacing: -0.08),
-                    ),
-                    SizedBox(
-                      height: 8 * SizeConfig.heightMultiplier!,
-                    ),
-                    Row(
-                      children: [
-                        widget.isFollowing == true
-                            ? CustomButtonPlanScreen(
-                                colour: kgreen4F,
-                                width: 102 * SizeConfig.widthMultiplier!,
-                                height: 28 * SizeConfig.heightMultiplier!,
-                                onpressed: () {},
-                                Text: Text(
-                                  'following'.tr,
-                                  style: AppTextStyle.hboldWhiteText.copyWith(
-                                    fontSize: (12) * SizeConfig.textMultiplier!,
-                                  ),
-                                ),
-                              )
-                            : CustomButtonPlanScreen(
-                                colour: kgreen4F,
-                                width: 102 * SizeConfig.widthMultiplier!,
-                                height: 28 * SizeConfig.heightMultiplier!,
-                                onpressed: widget.onfollowtrainer!,
-                                Text: Text(
-                                  'follow'.tr,
-                                  style: AppTextStyle.hboldWhiteText.copyWith(
-                                    fontSize: (12) * SizeConfig.textMultiplier!,
-                                  ),
-                                ),
-                              ),
-                        SizedBox(
-                          width: 12 * SizeConfig.widthMultiplier!,
-                        ),
-                        CustomButtonPlanScreen(
-                          colour: greyB7,
-                          width: 102 * SizeConfig.widthMultiplier!,
-                          height: 28 * SizeConfig.heightMultiplier!,
-                          onpressed: widget.onmessagetrainer!,
-                          Text: Text(
-                            'message'.tr,
-                            style: AppTextStyle.hboldWhiteText.copyWith(
-                              fontSize: (12) * SizeConfig.textMultiplier!,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-            SizedBox(
-              height: 24 * SizeConfig.heightMultiplier!,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    //following
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(widget.followerscount!.tr,
-                            style: AppTextStyle.boldBlackText
-                                .copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color,
-                                letterSpacing: -0.08)),
-                        Text('follower'.tr,
-                            style: AppTextStyle.smallBlackText
-                                .copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color,
-                                letterSpacing: -0.08))
-                      ],
-                    ),
-                    SizedBox(width: 25 * SizeConfig.widthMultiplier!),
-                    //following
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(widget.followingcount!.tr,
-                            style: AppTextStyle.boldBlackText
-                                .copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color,
-                                letterSpacing: -0.08)),
-                        Text('following'.tr,
-                            style: AppTextStyle.smallBlackText.copyWith(
-                              color: Theme.of(context).textTheme.bodyText1?.color,
-                              letterSpacing: -0.08,
-                            ))
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                  width: 1 * SizeConfig.widthMultiplier!,
-                  height: 56 * SizeConfig.heightMultiplier!,
-                  color: greyC4,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          widget.ratingCount!.tr,
-                          style: AppTextStyle.greenSemiBoldText.copyWith(
-                            color: kgreen4F,
-                            letterSpacing: -0.08,
-                          ),
-                        ),
-                        SizedBox(width: 8 * SizeConfig.widthMultiplier!),
-                        StarRating(
-                          rating: widget.rating!,
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          widget.totalPeopleTrained!,
-                          style: AppTextStyle.greenSemiBoldText.copyWith(
-                            color: Theme.of(context).textTheme.bodyText1?.color,
-                            letterSpacing: -0.08,
-                          ),
-                        ),
-                        SizedBox(width: 8 * SizeConfig.widthMultiplier!),
-                        Text(
-                          'people_trained'.tr,
-                          style: AppTextStyle.smallBlackText.copyWith(
-                              letterSpacing: -0.08,
-                            color: Theme.of(context).textTheme.bodyText1?.color,
-                          ),
-                        )
-                      ],
-                    ),
-                    Text(
-                      //extra text
-                      'view_and_review'.tr,
-                      style: AppTextStyle.smallBlackText.copyWith(
-                          color: grey92,
-                          decoration: TextDecoration.underline),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
-        ),
-      );
+  // Widget _BuildTrainerinfo() => Container(
+  //       padding: EdgeInsets.all(24 * SizeConfig.widthMultiplier!),
+  //       child: Column(
+  //         children: [
+  //           Row(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             mainAxisAlignment: MainAxisAlignment.start,
+  //             children: [
+  //               CircleAvatar(
+  //                 radius: 30 * SizeConfig.heightMultiplier!,
+  //                 backgroundImage: NetworkImage(widget.traineravatarUrl!),
+  //               ),
+  //               SizedBox(
+  //                 width: 16 * SizeConfig.widthMultiplier!,
+  //               ),
+  //               Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 mainAxisAlignment: MainAxisAlignment.start,
+  //                 children: [
+  //                   Text(
+  //                     widget.trainerName!.tr,
+  //                     style: AppTextStyle.boldBlackText
+  //                         .copyWith(color: kBlack, letterSpacing: -0.08),
+  //                   ),
+  //                   SizedBox(
+  //                     height: 8 * SizeConfig.heightMultiplier!,
+  //                   ),
+  //                   Row(
+  //                     children: [
+  //                       widget.isFollowing == true
+  //                           ? CustomButtonPlanScreen(
+  //                               colour: kgreen4F,
+  //                               width: 102 * SizeConfig.widthMultiplier!,
+  //                               height: 28 * SizeConfig.heightMultiplier!,
+  //                               onpressed: () {},
+  //                               Text: Text(
+  //                                 'following'.tr,
+  //                                 style: AppTextStyle.hboldWhiteText.copyWith(
+  //                                   fontSize: (12) * SizeConfig.textMultiplier!,
+  //                                 ),
+  //                               ),
+  //                             )
+  //                           : CustomButtonPlanScreen(
+  //                               colour: kgreen4F,
+  //                               width: 102 * SizeConfig.widthMultiplier!,
+  //                               height: 28 * SizeConfig.heightMultiplier!,
+  //                               onpressed: widget.onfollowtrainer!,
+  //                               Text: Text(
+  //                                 'follow'.tr,
+  //                                 style: AppTextStyle.hboldWhiteText.copyWith(
+  //                                   fontSize: (12) * SizeConfig.textMultiplier!,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                       SizedBox(
+  //                         width: 12 * SizeConfig.widthMultiplier!,
+  //                       ),
+  //                       CustomButtonPlanScreen(
+  //                         colour: greyB7,
+  //                         width: 102 * SizeConfig.widthMultiplier!,
+  //                         height: 28 * SizeConfig.heightMultiplier!,
+  //                         onpressed: widget.onmessagetrainer!,
+  //                         Text: Text(
+  //                           'message'.tr,
+  //                           style: AppTextStyle.hboldWhiteText.copyWith(
+  //                             fontSize: (12) * SizeConfig.textMultiplier!,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               )
+  //             ],
+  //           ),
+  //           SizedBox(
+  //             height: 24 * SizeConfig.heightMultiplier!,
+  //           ),
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Row(
+  //                 children: [
+  //                   //following
+  //                   Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Text(widget.followerscount!.tr,
+  //                           style: AppTextStyle.boldBlackText
+  //                               .copyWith(color: kBlack, letterSpacing: -0.08)),
+  //                       Text('follower'.tr,
+  //                           style: AppTextStyle.smallBlackText
+  //                               .copyWith(color: kBlack, letterSpacing: -0.08))
+  //                     ],
+  //                   ),
+  //                   SizedBox(width: 25 * SizeConfig.widthMultiplier!),
+  //                   //following
+  //                   Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Text(widget.followingcount!.tr,
+  //                           style: AppTextStyle.boldBlackText
+  //                               .copyWith(color: kBlack, letterSpacing: -0.08)),
+  //                       Text('following'.tr,
+  //                           style: AppTextStyle.smallBlackText.copyWith(
+  //                             color: kBlack,
+  //                             letterSpacing: -0.08,
+  //                           ))
+  //                     ],
+  //                   ),
+  //                 ],
+  //               ),
+  //               Container(
+  //                 width: 1 * SizeConfig.widthMultiplier!,
+  //                 height: 56 * SizeConfig.heightMultiplier!,
+  //                 color: kDarkGrey,
+  //               ),
+  //               Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Row(
+  //                     children: [
+  //                       Text(
+  //                         widget.ratingCount!.tr,
+  //                         style: AppTextStyle.greenSemiBoldText.copyWith(
+  //                           color: kgreen4F,
+  //                           letterSpacing: -0.08,
+  //                         ),
+  //                       ),
+  //                       SizedBox(width: 8 * SizeConfig.widthMultiplier!),
+  //                       StarRating(
+  //                         rating: widget.rating!,
+  //                       )
+  //                     ],
+  //                   ),
+  //                   Row(
+  //                     children: [
+  //                       Text(
+  //                         widget.totalPeopleTrained!,
+  //                         style: AppTextStyle.greenSemiBoldText.copyWith(
+  //                           color: kPureBlack,
+  //                           letterSpacing: -0.08,
+  //                         ),
+  //                       ),
+  //                       SizedBox(width: 8 * SizeConfig.widthMultiplier!),
+  //                       Text(
+  //                         'people_trained'.tr,
+  //                         style: AppTextStyle.smallBlackText.copyWith(
+  //                             letterSpacing: -0.08, color: kPureBlack),
+  //                       )
+  //                     ],
+  //                   ),
+  //                   Text(
+  //                     //extra text
+  //                     'view_and_review'.tr,
+  //                     style: AppTextStyle.smallBlackText.copyWith(
+  //                         color: greyColor,
+  //                         decoration: TextDecoration.underline),
+  //                   ),
+  //                 ],
+  //               )
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     );
+
 
   //Widget review of plan
   Widget _BuildReviewofPlan() => Container(

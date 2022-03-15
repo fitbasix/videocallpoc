@@ -16,7 +16,7 @@ class UserWeightDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController _weightController = Get.put(ProfileController());
+    final ProfileController _weightController = Get.find();
     return Dialog(
       insetPadding: EdgeInsets.fromLTRB(
         32 * SizeConfig.widthMultiplier!,

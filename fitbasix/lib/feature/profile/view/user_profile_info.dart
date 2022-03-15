@@ -1,8 +1,10 @@
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,7 @@ import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/universal_widgets/customized_circular_indicator.dart';
+import '../../Home/model/RecentCommentModel.dart';
 import '../../Home/services/home_service.dart';
 import '../../Home/view/widgets/post_tile.dart';
 
@@ -33,6 +36,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
+    log("profilePhoto" + profileController.profilePhoto.value);
     return Scaffold(
       body: Obx(
         () => UserPageInfo(
@@ -45,8 +49,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               .userProfileData.value.response!.data!.profile!.following
               .toString(),
           aboutuser: about_user.tr,
-          userImage: profileController.profilePhoto.value,
-          userCoverImage: profileController.coverPhoto.toString(),
+          userImage: profileController.profilePhoto.value == ""
+              ? _homeController
+                  .userProfileData.value.response!.data!.profile!.profilePhoto
+              : profileController.profilePhoto.value,
+          userCoverImage: profileController.coverPhoto.value == ""
+              ? _homeController
+                  .userProfileData.value.response!.data!.profile!.coverPhoto
+              : profileController.coverPhoto.value,
           oneditprofile: () {
             Navigator.pushNamed(context, RouteName.edituserProfileScreen);
           },
@@ -357,9 +367,22 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                   color: kBackgroundColor,
                                                 ),
                                                 PostTile(
-                                                  comment: _profileController
-                                                      .userPostList[index]
-                                                      .commentgiven,
+                                                  comment: _homeController
+                                                                  .commentsMap[
+                                                              _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id] ==
+                                                          null
+                                                      ? _profileController
+                                                          .userPostList[index]
+                                                          .commentgiven
+                                                      : _homeController
+                                                              .commentsMap[
+                                                          _profileController
+                                                              .userPostList[
+                                                                  index]
+                                                              .id],
                                                   name: _profileController
                                                       .userPostList[index]
                                                       .userId!
@@ -405,17 +428,62 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                           .userPostList[index]
                                                           .caption ??
                                                       '',
-                                                  likes: _profileController
-                                                      .userPostList[index].likes
-                                                      .toString(),
-                                                  comments: _profileController
-                                                      .userPostList[index]
-                                                      .comments
-                                                      .toString(),
+                                                  likes: _homeController
+                                                                  .updateCount[
+                                                              _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id] ==
+                                                          null
+                                                      ? _profileController
+                                                          .userPostList[index]
+                                                          .likes
+                                                          .toString()
+                                                      : _homeController
+                                                          .updateCount[
+                                                              _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id]!
+                                                          .likes!
+                                                          .toString(),
+                                                  comments: _homeController
+                                                                  .updateCount[
+                                                              _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id] ==
+                                                          null
+                                                      ? _profileController
+                                                          .userPostList[index]
+                                                          .comments
+                                                          .toString()
+                                                      : _homeController
+                                                          .updateCount[
+                                                              _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id]!
+                                                          .comments!
+                                                          .toString(),
                                                   hitLike: () async {
-                                                    if (_profileController
-                                                        .userPostList[index]
-                                                        .isLiked!) {
+                                                    bool val = _homeController
+                                                                    .LikedPostMap[
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id] ==
+                                                            null
+                                                        ? _profileController
+                                                            .userPostList[index]
+                                                            .isLiked!
+                                                        : _homeController
+                                                                .LikedPostMap[
+                                                            _profileController
+                                                                .userPostList[
+                                                                    index]
+                                                                .id]!;
+                                                    if (val) {
                                                       _profileController
                                                           .userPostList[index]
                                                           .isLiked = false;
@@ -427,7 +495,13 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                                       index]
                                                                   .likes! -
                                                               1);
-                                                      HomeService.unlikePost(
+                                                      _homeController
+                                                              .LikedPostMap[
+                                                          _profileController
+                                                              .userPostList[
+                                                                  index]
+                                                              .id!] = false;
+                                                      await HomeService.unlikePost(
                                                           postId:
                                                               _profileController
                                                                   .userPostList[
@@ -445,13 +519,36 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                                       index]
                                                                   .likes! +
                                                               1);
-                                                      HomeService.likePost(
+                                                      _homeController
+                                                              .LikedPostMap[
+                                                          _profileController
+                                                              .userPostList[
+                                                                  index]
+                                                              .id!] = true;
+                                                      await HomeService.likePost(
                                                           postId:
                                                               _profileController
                                                                   .userPostList[
                                                                       index]
                                                                   .id!);
                                                     }
+                                                    RecentCommentModel
+                                                        recentComment =
+                                                        RecentCommentModel();
+                                                    recentComment = await HomeService
+                                                        .recentComment(
+                                                            postId:
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id!);
+                                                    // _homeController.commentsMap[_homeController.post.value.id.toString()] =
+                                                    //     recentComment.response!.data!.comment;
+                                                    _homeController.updateCount[
+                                                        _profileController
+                                                            .userPostList[index]
+                                                            .id!] = recentComment
+                                                        .response!.data!.data;
                                                     setState(() {});
                                                   },
                                                   addComment: () {
@@ -471,11 +568,26 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                   },
                                                   postId: _profileController
                                                       .userPostList[index].id!,
-                                                  isLiked: _profileController
-                                                      .userPostList[index]
-                                                      .isLiked!,
+                                                  isLiked: _homeController
+                                                                  .LikedPostMap[
+                                                              _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id!] ==
+                                                          null
+                                                      ? _profileController
+                                                          .userPostList[index]
+                                                          .isLiked!
+                                                      : _homeController
+                                                              .LikedPostMap[
+                                                          _profileController
+                                                              .userPostList[
+                                                                  index]
+                                                              .id!]!,
                                                   onTap: () async {
                                                     _homeController.commentsList
+                                                        .clear();
+                                                    _homeController.viewReplies!
                                                         .clear();
                                                     Navigator.pushNamed(context,
                                                         RouteName.postScreen);
@@ -540,9 +652,9 @@ class _UserPageInfoState extends State<UserPageInfo> {
                         Container(
                           width: double.infinity,
                           height: 177 * SizeConfig.heightMultiplier!,
-                          child: Image.network(
-                            widget.userCoverImage!,
-                            fit: BoxFit.fill,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.userCoverImage!,
+                            fit: BoxFit.cover,
                           ),
                         ),
                         Positioned(

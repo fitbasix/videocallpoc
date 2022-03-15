@@ -17,7 +17,7 @@ class UserHeightDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final ProfileController _heightController = Get.find();
-    final ProfileController _heightController = Get.put(ProfileController());
+    final ProfileController _heightController = Get.find();
 
     return Dialog(
       backgroundColor: Theme.of(context).secondaryHeaderColor,

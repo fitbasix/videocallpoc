@@ -29,101 +29,112 @@ class SetGoalScreen extends StatelessWidget {
               onSkip: () {}),
           preferredSize: const Size(double.infinity, kToolbarHeight)),
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Obx(
-          ()=>_spgController.isLoading.value ?
-          Center(child: CustomizedCircularProgress())
-          : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              Stack(
+              SingleChildScrollView(
+        child: Obx(
+              ()=>_spgController.isLoading.value ?
+              Center(child: CustomizedCircularProgress())
+              : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    color: Theme.of(context).primaryColor,
-                    height: 2 * SizeConfig.heightMultiplier!,
-                    width: Get.width,
+                  Stack(
+                    children: [
+                      Container(
+                        color: Theme.of(context).primaryColor,
+                        height: 2 * SizeConfig.heightMultiplier!,
+                        width: Get.width,
+                      ),
+                      Container(
+                        color: kGreenColor,
+                        height: 2 * SizeConfig.heightMultiplier!,
+                        width: Get.width * (1 / 8),
+                      ),
+                    ],
                   ),
-                  Container(
-                    color: kGreenColor,
-                    height: 2 * SizeConfig.heightMultiplier!,
-                    width: Get.width * (1 / 8),
-                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 16 * SizeConfig.widthMultiplier!,
+                        right: 16 * SizeConfig.widthMultiplier!,
+                        top: 40 * SizeConfig.heightMultiplier!,
+                        bottom: 16 * SizeConfig.widthMultiplier!),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'what_is_your_goal'.tr,
+                          style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
+                        ),
+                        SizedBox(
+                          height: 40 * SizeConfig.heightMultiplier!,
+                        ),
+                        _spgController
+                                .spgData.value.response==null?
+                                Container()
+                                :GridView.builder(
+                            itemCount: _spgController
+                                .spgData.value.response!.data!.goalType!.length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
+                              crossAxisSpacing: 16*SizeConfig.widthMultiplier!,
+                              mainAxisSpacing: 16*SizeConfig.widthMultiplier!,
+                            ),
+                            itemBuilder: (BuildContext context, int index){
+                              if (_spgController.selectedGoalIndex.value.serialId ==
+                                  null) {
+                                _spgController.selectedGoalIndex.value =
+                                    _spgController
+                                        .spgData.value.response!.data!.goalType![0];
+                              }
+                              return Obx(() => GoalCard(
+                                    title: _spgController.spgData.value.response!
+                                        .data!.goalType![index].name!,
+                                    imageUrl: _spgController.spgData.value.response!
+                                        .data!.goalType![index].image!,
+                                    onTap: () {
+                                      _spgController.selectedGoalIndex.value =
+                                          _spgController.spgData.value.response!.data!
+                                              .goalType![index];
+
+                                      // _spgController.updatedGoalStatus(
+                                      //     _spgController.selectedGoalIndex.value);
+                                    },
+                                    isSelected: _spgController.spgData.value.response!
+                                                .data!.goalType![index] ==
+                                            _spgController.selectedGoalIndex.value
+                                        ? true
+                                        : false,
+                                  ));
+                            }),
+
+                        SizedBox(
+                          height: 32 * SizeConfig.heightMultiplier!,
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: 16 * SizeConfig.widthMultiplier!,
-                    right: 16 * SizeConfig.widthMultiplier!,
-                    top: 40 * SizeConfig.heightMultiplier!,
-                    bottom: 16 * SizeConfig.widthMultiplier!),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'what_is_your_goal'.tr,
-                      style: AppTextStyle.boldBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
-                    ),
-                    SizedBox(
-                      height: 40 * SizeConfig.heightMultiplier!,
-                    ),
-                    _spgController
-                            .spgData.value.response==null?
-                            Container()
-                            :GridView.builder(
-                        itemCount: _spgController
-                            .spgData.value.response!.data!.goalType!.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
-                          crossAxisSpacing: 16*SizeConfig.widthMultiplier!,
-                          mainAxisSpacing: 16*SizeConfig.widthMultiplier!,
-                        ),
-                        itemBuilder: (BuildContext context, int index){
-                          if (_spgController.selectedGoalIndex.value.serialId ==
-                              null) {
-                            _spgController.selectedGoalIndex.value =
-                                _spgController
-                                    .spgData.value.response!.data!.goalType![0];
-                          }
-                          return Obx(() => GoalCard(
-                                title: _spgController.spgData.value.response!
-                                    .data!.goalType![index].name!,
-                                imageUrl: _spgController.spgData.value.response!
-                                    .data!.goalType![index].image!,
-                                onTap: () {
-                                  _spgController.selectedGoalIndex.value =
-                                      _spgController.spgData.value.response!.data!
-                                          .goalType![index];
-        
-                                  // _spgController.updatedGoalStatus(
-                                  //     _spgController.selectedGoalIndex.value);
-                                },
-                                isSelected: _spgController.spgData.value.response!
-                                            .data!.goalType![index] ==
-                                        _spgController.selectedGoalIndex.value
-                                    ? true
-                                    : false,
-                              ));
-                        }),
-                    SizedBox(
-                      height: 32 * SizeConfig.heightMultiplier!,
-                    ),
-                    ProceedButton(
-                        title: 'proceed'.tr,
-                        onPressed: () {
-                          print(_spgController.selectedGoalIndex.value.serialId);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => SelectGenderScreen()));
-                        }),
-                  ],
-                ),
-              )
-            ],
-          ),
         ),
-      )),
+      ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!,vertical: 16*SizeConfig.heightMultiplier!),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ProceedButton(
+                      title: 'proceed'.tr,
+                      onPressed: () {
+                        print(_spgController.selectedGoalIndex.value.serialId);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => SelectGenderScreen()));
+                      }),
+                ),
+              ),
+            ],
+          )),
     );
   }
 }

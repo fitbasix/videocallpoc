@@ -1,10 +1,15 @@
+
+import 'dart:ui';
+
 import 'dart:developer';
+
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -34,6 +39,7 @@ import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../get_trained/view/get_trained_screen.dart';
+import '../../profile/services/profile_services.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -60,9 +66,9 @@ class HomeAndTrainerPage extends StatelessWidget {
               imageCoverPic:
                   homeController.userProfileData.value.response == null
                       ? ""
-                      : homeController.userProfileData.value.response!.data!
+                      :homeController.coverPhoto.value==""? homeController.userProfileData.value.response!.data!
                           .profile!.coverPhoto
-                          .toString(),
+                          .toString():homeController.coverPhoto.value,
               name: homeController.userProfileData.value.response == null
                   ? ""
                   : homeController
@@ -87,6 +93,7 @@ class _HomePageState extends State<HomePage> {
   final HomeController _homeController = Get.find();
   final PostController postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
+
 
   @override
   void initState() {
@@ -172,82 +179,113 @@ class _HomePageState extends State<HomePage> {
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,
                                 right: 16 * SizeConfig.widthMultiplier!),
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  top: 8 * SizeConfig.heightMultiplier!,
-                                  bottom: 8 * SizeConfig.heightMultiplier!),
-                              child: Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        30 * SizeConfig.widthMultiplier!),
-                                    child: Obx(() => CachedNetworkImage(
-                                        imageUrl: _homeController
-                                            .userProfileData
-                                            .value
-                                            .response!
-                                            .data!
-                                            .profile!
-                                            .profilePhoto
-                                            .toString(),
-                                        fit: BoxFit.cover,
-                                        height:
-                                            60 * SizeConfig.widthMultiplier!,
-                                        width:
-                                            60 * SizeConfig.widthMultiplier!)),
-                                  ),
-                                  SizedBox(
-                                    width: 15*SizeConfig.widthMultiplier!,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        // mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          _homeController.userProfileData.value
-                                                      .response ==
-                                                  null
-                                              ? Container()
-                                              : Text(
-                                                  'hi_name'.trParams({
-                                                    'name': _homeController
-                                                        .userProfileData
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .profile!
-                                                        .name.toString()
-                                                  }),
-                                                  style: AppTextStyle
-                                                      .boldBlackText.copyWith(
-                                                    color: Theme.of(context).textTheme.bodyText1?.color
+                            child: GestureDetector(
+                              onTap: () async{
+                                final ProfileController _profileController=Get.put(ProfileController());
+                                Navigator.pushNamed(context, RouteName.userprofileinfo);
+                                _profileController.initialPostData.value =
+                                    await ProfileServices.getUserPosts();
+
+                                if (_profileController
+                                    .initialPostData.value.response!.data!.length !=
+                                    0) {
+                                  _profileController.userPostList.value =
+                                  _profileController.initialPostData.value.response!.data!;
+                                } else {
+                                  _profileController.userPostList.clear();
+                                }
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                padding: EdgeInsets.only(
+                                    top: 8 * SizeConfig.heightMultiplier!,
+                                    bottom: 8 * SizeConfig.heightMultiplier!),
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          30 * SizeConfig.widthMultiplier!),
+                                      child: Obx(() => CachedNetworkImage(
+                                          imageUrl: _homeController
+                                              .userProfileData
+                                              .value
+                                              .response!
+                                              .data!
+                                              .profile!
+                                              .profilePhoto
+                                              .toString(),
+                                          fit: BoxFit.cover,
+                                          height:
+                                              60 * SizeConfig.widthMultiplier!,
+                                          width:
+                                              60 * SizeConfig.widthMultiplier!)),
+                                    ),
+                                    SizedBox(
+                                      width: 15*SizeConfig.widthMultiplier!,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          // mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            _homeController.userProfileData.value
+                                                        .response ==
+                                                    null
+                                                ? Container()
+                                                : Text(
+                                                    'hi_name'.trParams({
+                                                      'name': _homeController
+                                                          .userProfileData
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .profile!
+                                                          .name.toString()
+                                                    }),
+                                                    style: AppTextStyle
+                                                        .boldBlackText.copyWith(
+                                                      color: Theme.of(context).textTheme.bodyText1?.color
+                                                    ),
                                                   ),
-                                                ),
-                                          // SizedBox(
-                                          //   width: 31 *
-                                          //       SizeConfig.widthMultiplier!,
-                                          // ),
-                                        ],
-                                      ),
-                                      Text(
-                                        'home_page_subtitle'.tr,
-                                        style: AppTextStyle.normalBlackText
-                                            .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
-                                                fontSize: 12 *
-                                                    SizeConfig.textMultiplier!),
-                                      )
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  SvgPicture.asset(ImagePath.bellIcon,
-                                    color: Theme.of(context).primaryIconTheme.color,
-                                  ),
-                                ],
+                                            // SizedBox(
+                                            //   width: 31 *
+                                            //       SizeConfig.widthMultiplier!,
+                                            // ),
+                                          ],
+                                        ),
+                                        Obx(
+                                          ()=> Text(
+                                            _homeController
+                                                .userProfileData
+                                                .value
+                                                .response!
+                                                .data!
+                                                .profile!.bio == null?'home_page_subtitle'.tr:_homeController
+                                                .userProfileData
+                                                .value
+                                                .response!
+                                                .data!
+                                                .profile!.bio.toString(),
+
+                                            style: AppTextStyle.normalBlackText
+                                                .copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                                    fontSize: 12 *
+                                                        SizeConfig.textMultiplier!),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    SvgPicture.asset(ImagePath.bellIcon,
+                                      color: Theme.of(context).primaryIconTheme.color,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -1239,18 +1277,7 @@ class _HomePageState extends State<HomePage> {
                                                               .trendingPostList[
                                                           index]
                                                               .id!]= recentComment.response!.data!.data;
-                                                          log("hit Like"+(_homeController
-                                                              .likedPost
-                                                              .indexOf(_homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .id) ==
-                                                              -1
-                                                              ? _homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .isLiked!.toString()
-                                                              : true.toString()));
+
                                                           setState(() {});
                                                         },
                                                         addComment: () {
@@ -1380,6 +1407,64 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ))),
+    );
+  }
+
+  void showDialogForLiveLimitExceeded(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                insetPadding: EdgeInsets.zero,
+                titlePadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.symmetric(horizontal: 20*SizeConfig.widthMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Transform.translate(
+                        offset: Offset(10*SizeConfig.widthMultiplier!,0),
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Theme.of(context).cardColor,
+                            radius: 20*SizeConfig.imageSizeMultiplier!,
+                            child: Icon(Icons.close,color: Theme.of(context).primaryColor,),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 150*SizeConfig.heightMultiplier!,
+                      width: 150*SizeConfig.widthMultiplier!,
+                      child: Image.asset(ImagePath.animatedLiveLimitErrorIcon,fit: BoxFit.cover,),),
+                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
+                    SizedBox(width: 250*SizeConfig.widthMultiplier!,),
+                    Text("Something went wrong!".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 16*SizeConfig.textMultiplier!,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
+                    Text("There is already 200 people in\nthis please join later.".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w400,fontSize: 14),textAlign: TextAlign.center,),
+                    SizedBox(height: 40*SizeConfig.heightMultiplier!,),
+                  ],
+                ),
+              )
+          ),
+        );
+
+
+
+      },
     );
   }
 }
