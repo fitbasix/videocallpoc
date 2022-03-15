@@ -12,7 +12,6 @@ import '../../plans/models/FullPlanDetailModel.dart';
 import '../../plans/models/allTimeSlot.dart';
 
 class TrainerController extends GetxController {
-
   var fromTimeForFilter = DateTime.now().obs;
   var toTimeForFilter = DateTime.now().obs;
   RxBool isSelected = RxBool(false);
@@ -54,6 +53,7 @@ class TrainerController extends GetxController {
   RxList<Slot> weekAvailableSlots = <Slot>[].obs;
   Rx<int> selectedTimeSlot = 0.obs;
   RxList<String> selectedDays = <String>[].obs;
+  RxList<String> enrolledTrainer = <String>[].obs;
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;

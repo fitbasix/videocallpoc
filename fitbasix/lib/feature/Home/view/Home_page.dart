@@ -66,9 +66,9 @@ class HomeAndTrainerPage extends StatelessWidget {
               imageCoverPic:
                   homeController.userProfileData.value.response == null
                       ? ""
-                      : homeController.userProfileData.value.response!.data!
+                      :homeController.coverPhoto.value==""? homeController.userProfileData.value.response!.data!
                           .profile!.coverPhoto
-                          .toString(),
+                          .toString():homeController.coverPhoto.value,
               name: homeController.userProfileData.value.response == null
                   ? ""
                   : homeController
@@ -257,13 +257,26 @@ class _HomePageState extends State<HomePage> {
                                             // ),
                                           ],
                                         ),
-                                        Text(
-                                          'home_page_subtitle'.tr,
-                                          style: AppTextStyle.normalBlackText
-                                              .copyWith(
-                                              color: Theme.of(context).textTheme.bodyText1?.color,
-                                                  fontSize: 12 *
-                                                      SizeConfig.textMultiplier!),
+                                        Obx(
+                                          ()=> Text(
+                                            _homeController
+                                                .userProfileData
+                                                .value
+                                                .response!
+                                                .data!
+                                                .profile!.bio == null?'home_page_subtitle'.tr:_homeController
+                                                .userProfileData
+                                                .value
+                                                .response!
+                                                .data!
+                                                .profile!.bio.toString(),
+
+                                            style: AppTextStyle.normalBlackText
+                                                .copyWith(
+                                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                                    fontSize: 12 *
+                                                        SizeConfig.textMultiplier!),
+                                          ),
                                         )
                                       ],
                                     ),

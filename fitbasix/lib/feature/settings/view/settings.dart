@@ -25,7 +25,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     final HomeController _homeController = Get.find();
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.pop(context);
         return false;
@@ -117,7 +117,8 @@ class _SettingScreenState extends State<SettingScreen> {
             width: 16 * SizeConfig.widthMultiplier!,
             height: 19.5 * SizeConfig.heightMultiplier!,
             fit: BoxFit.contain,
-            color: textcolor!=null?textcolor:Theme.of(context).primaryColor,
+            color:
+                textcolor != null ? textcolor : Theme.of(context).primaryColor,
           ),
           SizedBox(
             width: 16.59 * SizeConfig.widthMultiplier!,
@@ -129,7 +130,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   style: GoogleFonts.openSans(
                     fontSize: 16 * SizeConfig.textMultiplier!,
                     fontWeight: FontWeight.w600,
-                    color: textcolor != null ? textcolor : Theme.of(context).textTheme.bodyText1?.color,
+                    color: textcolor != null
+                        ? textcolor
+                        : Theme.of(context).textTheme.bodyText1?.color,
                   )),
               SizedBox(
                 height: 12 * SizeConfig.heightMultiplier!,
@@ -138,11 +141,11 @@ class _SettingScreenState extends State<SettingScreen> {
                 //  padding: EdgeInsets.only(right: ),
                 width: (wantbutton!)
                     ? 230 * SizeConfig.widthMultiplier!
-                    : 285 * SizeConfig.widthMultiplier!,
+                    : 284 * SizeConfig.widthMultiplier!,
                 //  height: 32 * SizeConfig.heightMultiplier!,
-                child: Text(description!, style: AppTextStyle.hmediumBlackText.copyWith(
-                  color: Theme.of(context).textTheme.bodyText1?.color
-                )),
+                child: Text(description!,
+                    style: AppTextStyle.hmediumBlackText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color)),
               )
             ],
           ),

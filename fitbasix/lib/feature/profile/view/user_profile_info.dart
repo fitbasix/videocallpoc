@@ -551,7 +551,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                           height: 177 * SizeConfig.heightMultiplier!,
                           child: CachedNetworkImage(
                             imageUrl: widget.userCoverImage!,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                           ),
                         ),
                         Positioned(
