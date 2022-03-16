@@ -129,52 +129,46 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .data!
                                                 .myTrainers![index].isCurrentlyEnrolled!,
                                             onMyTrainerTileTapped: () async{
-                                                print(_trainerController.trainers.value.response!.data!.myTrainers![index].quickBlox.toString()+ " quickbloxid");
-                                              // Trainer selectedTrainer = _trainerController
-                                              //     .trainers
-                                              //     .value
-                                              //     .response!
-                                              //     .data!
-                                              //     .trainers![_trainerController
-                                              //     .trainers
-                                              //     .value
-                                              //     .response!
-                                              //     .data!
-                                              //     .trainers!.indexWhere((element) => element.id == _trainerController.trainers.value.response!.data!.myTrainers![index].id)];
-                                              //
-                                              // Navigator.pushNamed(context,
-                                              //     RouteName.trainerProfileScreen);
-                                              // _trainerController
-                                              //     .isProfileLoading.value = true;
-                                              // _trainerController
-                                              //     .atrainerDetail.value = selectedTrainer;
-                                              //
-                                              //   _trainerController.planModel.value =
-                                              //     await TrainerServices
-                                              //     .getPlanByTrainerId(
-                                              //     selectedTrainer.id!);
-                                              //
-                                              // _trainerController
-                                              //     .loadingIndicator.value = false;
-                                              // _trainerController
-                                              //     .initialPostData.value =
-                                              //     await TrainerServices
-                                              //     .getTrainerPosts(
-                                              //         selectedTrainer.id!,
-                                              //     0);
-                                              // if (_trainerController.initialPostData
-                                              //     .value.response!.data!.length !=
-                                              //     0) {
-                                              //   _trainerController
-                                              //       .trainerPostList.value =
-                                              //   _trainerController.initialPostData
-                                              //       .value.response!.data!;
-                                              // } else {
-                                              //   _trainerController.trainerPostList
-                                              //       .clear();
-                                              // }
-                                              // _trainerController
-                                              //     .isProfileLoading.value = false;
+
+                                                String trainerId = _trainerController.trainers.value.response!.data!.myTrainers![index].user!;
+                                                _trainerController.atrainerDetail.value = Trainer();
+                                                print(trainerId);
+                                                
+                                                _trainerController
+                                                    .isProfileLoading.value = true;
+                                              Navigator.pushNamed(context,
+                                                  RouteName.trainerProfileScreen);
+
+                                                var result = await TrainerServices.getATrainerDetail(trainerId);
+                                                _trainerController.atrainerDetail.value = result.response!.data!;
+
+                                                _trainerController.planModel.value =
+                                                  await TrainerServices
+                                                  .getPlanByTrainerId(
+                                                      trainerId);
+
+
+                                              _trainerController
+                                                  .initialPostData.value =
+                                                  await TrainerServices
+                                                  .getTrainerPosts(
+                                                      trainerId,
+                                                  0);
+                                                _trainerController
+                                                    .loadingIndicator.value = false;
+                                              if (_trainerController.initialPostData
+                                                  .value.response!.data!.length !=
+                                                  0) {
+                                                _trainerController
+                                                    .trainerPostList.value =
+                                                _trainerController.initialPostData
+                                                    .value.response!.data!;
+                                              } else {
+                                                _trainerController.trainerPostList
+                                                    .clear();
+                                              }
+                                              _trainerController
+                                                  .isProfileLoading.value = false;
                                             },
                                           )
 

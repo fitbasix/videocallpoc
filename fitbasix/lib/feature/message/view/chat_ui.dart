@@ -60,6 +60,7 @@ import 'package:quickblox_sdk/webrtc/constants.dart';
 import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
 import '../../get_trained/model/PlanModel.dart';
+import '../../get_trained/model/all_trainer_model.dart';
 import '../../get_trained/services/trainer_services.dart';
 import '../../posts/services/createPost_Services.dart';
 import '../controller/chat_controller.dart';
@@ -719,8 +720,45 @@ class _ChatScreenState extends State<ChatScreen> {
                     Text(widget.trainerTitle!,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
                     SizedBox(height: 26*SizeConfig.heightMultiplier!,),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () async {
 
+                        _trainerController.atrainerDetail.value = Trainer();
+
+                        _trainerController
+                            .isProfileLoading.value = true;
+                        Navigator.pushNamed(context,
+                            RouteName.trainerProfileScreen);
+
+                        var result = await TrainerServices.getATrainerDetail(widget.trainerId!);
+                        _trainerController.atrainerDetail.value = result.response!.data!;
+
+                        _trainerController.planModel.value =
+                            await TrainerServices
+                            .getPlanByTrainerId(
+                                widget.trainerId!);
+
+
+                        _trainerController
+                            .initialPostData.value =
+                            await TrainerServices
+                            .getTrainerPosts(
+                                widget.trainerId!,
+                            0);
+                        _trainerController
+                            .loadingIndicator.value = false;
+                        if (_trainerController.initialPostData
+                            .value.response!.data!.length !=
+                            0) {
+                          _trainerController
+                              .trainerPostList.value =
+                          _trainerController.initialPostData
+                              .value.response!.data!;
+                        } else {
+                          _trainerController.trainerPostList
+                              .clear();
+                        }
+                        _trainerController
+                            .isProfileLoading.value = false;
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

@@ -76,7 +76,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Obx(
-          () => TrainerPage(
+          () => !_trainerController.isProfileLoading.value?TrainerPage(
             trainerImage:
                 trainerController.atrainerDetail.value.user!.profilePhoto!,
             trainerCoverImage: trainerController
@@ -241,7 +241,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 ? []
                 : trainerController.planModel.value.response!.data!,
             isFollowing: trainerController.atrainerDetail.value.isFollowing!,
-          ),
+          ):Center(child: CustomizedCircularProgress())
         ),
       ),
     );
