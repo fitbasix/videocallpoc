@@ -1,6 +1,7 @@
 import 'package:fitbasix/feature/Bmr_calculator/view/bmr_resultpage.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
+import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/explore.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
@@ -101,6 +102,7 @@ abstract class RouteName {
   static const planTimingScreen = "/plan_timing.dart";
   static const otpReScreen = "/otp_screen";
   static const selectProfilePhoto = "/select_profile_photo";
+  static const myTrainersScreen = "/my_trainer_screen";
   RouteName._();
 }
 
@@ -121,6 +123,14 @@ class GenerateRoute {
           BuildContext context,
         ) =>
             LoginScreen(),
+      );
+    }
+    if (route == RouteName.myTrainersScreen) {
+      return MaterialPageRoute(
+        builder: (
+            BuildContext context,
+            ) =>
+            MyTrainersScreen(),
       );
     }
     if (route == RouteName.otpReScreen) {

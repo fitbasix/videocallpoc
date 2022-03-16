@@ -5,6 +5,8 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
 import 'package:crypt/crypt.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -57,6 +59,9 @@ import 'package:quickblox_sdk/webrtc/constants.dart';
 
 import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
+import '../../get_trained/model/PlanModel.dart';
+import '../../get_trained/model/all_trainer_model.dart';
+import '../../get_trained/services/trainer_services.dart';
 import '../../posts/services/createPost_Services.dart';
 import '../controller/chat_controller.dart';
 
@@ -65,9 +70,13 @@ import '../controller/chat_controller.dart';
 class ChatScreen extends StatefulWidget {
   int? opponentID;
   QBDialog? userDialogForChat;
+  bool? isCurrentlyEnrolled;
   String? trainerTitle;
+  String? profilePicURL;
+  String? trainerId;
 
-  ChatScreen({Key? key, this.userDialogForChat, this.opponentID,this.trainerTitle})
+
+  ChatScreen({Key? key, this.userDialogForChat, this.opponentID,this.trainerTitle,this.isCurrentlyEnrolled,this.profilePicURL,this.trainerId})
       : super(key: key);
 
   @override
@@ -77,6 +86,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
 
   ChatController _chatController = Get.put(ChatController());
+  var isPlanLoading = false.obs;
+  final TrainerController _trainerController = Get.find();
   HomeController _homeController = Get.find();
   QBDialog? userDialogForChat;
   var _massageController = TextEditingController().obs;
@@ -136,6 +147,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: kPureBlack,
       appBar: AppbarforChat(
+        trainerProfilePicUrl: widget.profilePicURL,
         onHangUpTapped: (value) {
           //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
           callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
@@ -186,7 +198,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Center(
                       child: Text("no message yet"),
                     )),
-              Align(
+              widget.isCurrentlyEnrolled!?Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
@@ -278,12 +290,51 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                 ),
-              ),
+              ):Obx(()=>!isPlanLoading.value?Container(
+                margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text:"enroll_expired_chat".tr,
+                          style: AppTextStyle.hblack400Text.copyWith(color: hintGrey)
+                      ),
+                      TextSpan(
+                          text:" ",
+                          style: AppTextStyle.hblack400Text.copyWith(color: hintGrey)
+                      ),
+                      WidgetSpan(
+                          child: GestureDetector(
+                            onTap: (){
+                              getAllTrainerPlanData(widget.trainerId!);
+                            },
+                            child: Text("enroll_again".tr,style: AppTextStyle.hblack400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color, decoration: TextDecoration.underline ),),
+                          ),
+                      ),
+                    ]
+                  ),
+                ),
+              ):CustomizedCircularProgress())
             ],
           ),
         ),
       ),
     );
+  }
+
+
+  getAllTrainerPlanData(String trainerId) async {
+    _trainerController.planModel.value = PlanModel();
+    isPlanLoading.value = true;
+    _trainerController.planModel.value =
+    await TrainerServices.getPlanByTrainerId(
+        trainerId)
+        .then((value) {
+      Navigator.pushNamed(context, RouteName.trainerplanScreen);
+      return value;
+    });
+    isPlanLoading.value = false;
   }
 
   void initStreamManagement() async {
@@ -669,8 +720,45 @@ class _ChatScreenState extends State<ChatScreen> {
                     Text(widget.trainerTitle!,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
                     SizedBox(height: 26*SizeConfig.heightMultiplier!,),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () async {
 
+                        _trainerController.atrainerDetail.value = Trainer();
+
+                        _trainerController
+                            .isProfileLoading.value = true;
+                        Navigator.pushNamed(context,
+                            RouteName.trainerProfileScreen);
+
+                        var result = await TrainerServices.getATrainerDetail(widget.trainerId!);
+                        _trainerController.atrainerDetail.value = result.response!.data!;
+
+                        _trainerController.planModel.value =
+                            await TrainerServices
+                            .getPlanByTrainerId(
+                                widget.trainerId!);
+
+
+                        _trainerController
+                            .initialPostData.value =
+                            await TrainerServices
+                            .getTrainerPosts(
+                                widget.trainerId!,
+                            0);
+                        _trainerController
+                            .loadingIndicator.value = false;
+                        if (_trainerController.initialPostData
+                            .value.response!.data!.length !=
+                            0) {
+                          _trainerController
+                              .trainerPostList.value =
+                          _trainerController.initialPostData
+                              .value.response!.data!;
+                        } else {
+                          _trainerController.trainerPostList
+                              .clear();
+                        }
+                        _trainerController
+                            .isProfileLoading.value = false;
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1251,8 +1339,7 @@ class MessageBubbleOpponent extends StatelessWidget {
 
 // Appbar
 class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
-  String trainerProfilePicUrl =
-      'http://www.pixelmator.com/community/download/file.php?avatar=17785_1569233053.png';
+  String? trainerProfilePicUrl;
   String? trainertitle;
   String? trainerstatus;
   BuildContext? parentContext;
@@ -1261,6 +1348,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
 
   AppbarforChat(
       {Key? key,
+        this.trainerProfilePicUrl,
       this.trainertitle,
       this.parentContext,
       this.trainerstatus,
@@ -1294,12 +1382,12 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
             width: 16.59 * SizeConfig.widthMultiplier!,
           ),
           CircleAvatar(
-            child: Image.network(
-              trainerProfilePicUrl,
-              width: 40 * SizeConfig.widthMultiplier!,
-              height: 40 * SizeConfig.heightMultiplier!,
+            radius: 20*SizeConfig.imageSizeMultiplier!,
+            backgroundImage:  NetworkImage(
+              trainerProfilePicUrl!,
             ),
           ),
+
           SizedBox(
             width: 12 * SizeConfig.widthMultiplier!,
           ),

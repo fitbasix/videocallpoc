@@ -81,7 +81,9 @@ class GetTrainedScreen extends StatelessWidget {
                                         ? Container()
                                         : SeeAllButton(
                                             title: "see_all_trainer".tr,
-                                            onTap: () async {},
+                                            onTap: () async {
+                                              Navigator.pushNamed(context, RouteName.myTrainersScreen);
+                                            },
                                           ))
                                   ],
                                 ),
@@ -125,52 +127,47 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .data!
                                                 .myTrainers![index].isCurrentlyEnrolled!,
                                             onMyTrainerTileTapped: () async{
-                                                print(_trainerController.trainers.value.response!.data!.myTrainers![index].quickBlox.toString()+ " quickbloxid");
-                                              // Trainer selectedTrainer = _trainerController
-                                              //     .trainers
-                                              //     .value
-                                              //     .response!
-                                              //     .data!
-                                              //     .trainers![_trainerController
-                                              //     .trainers
-                                              //     .value
-                                              //     .response!
-                                              //     .data!
-                                              //     .trainers!.indexWhere((element) => element.id == _trainerController.trainers.value.response!.data!.myTrainers![index].id)];
-                                              //
-                                              // Navigator.pushNamed(context,
-                                              //     RouteName.trainerProfileScreen);
-                                              // _trainerController
-                                              //     .isProfileLoading.value = true;
-                                              // _trainerController
-                                              //     .atrainerDetail.value = selectedTrainer;
-                                              //
-                                              //   _trainerController.planModel.value =
-                                              //     await TrainerServices
-                                              //     .getPlanByTrainerId(
-                                              //     selectedTrainer.id!);
-                                              //
-                                              // _trainerController
-                                              //     .loadingIndicator.value = false;
-                                              // _trainerController
-                                              //     .initialPostData.value =
-                                              //     await TrainerServices
-                                              //     .getTrainerPosts(
-                                              //         selectedTrainer.id!,
-                                              //     0);
-                                              // if (_trainerController.initialPostData
-                                              //     .value.response!.data!.length !=
-                                              //     0) {
-                                              //   _trainerController
-                                              //       .trainerPostList.value =
-                                              //   _trainerController.initialPostData
-                                              //       .value.response!.data!;
-                                              // } else {
-                                              //   _trainerController.trainerPostList
-                                              //       .clear();
-                                              // }
-                                              // _trainerController
-                                              //     .isProfileLoading.value = false;
+
+                                                String trainerId = _trainerController.trainers.value.response!.data!.myTrainers![index].user!;
+                                                _trainerController.atrainerDetail.value = Trainer();
+                                                _trainerController
+                                                    .isMyTrainerProfileLoading.value = true;
+                                                _trainerController.isProfileLoading.value = true;
+                                              Navigator.pushNamed(context,
+                                                  RouteName.trainerProfileScreen);
+
+                                                var result = await TrainerServices.getATrainerDetail(trainerId);
+                                                _trainerController.atrainerDetail.value = result.response!.data!;
+                                                _trainerController
+                                                    .isMyTrainerProfileLoading.value = false;
+                                                _trainerController.isProfileLoading.value = true;
+                                                _trainerController.isPlanLoading.value = true;
+                                                _trainerController.planModel.value =
+                                                await TrainerServices
+                                                    .getPlanByTrainerId(
+                                                    trainerId);
+                                                _trainerController.isPlanLoading.value = false;
+                                                _trainerController
+                                                  .initialPostData.value =
+                                                  await TrainerServices
+                                                  .getTrainerPosts(
+                                                      trainerId,
+                                                  0);
+
+                                              if (_trainerController.initialPostData
+                                                  .value.response!.data!.length !=
+                                                  0) {
+                                                _trainerController
+                                                    .trainerPostList.value =
+                                                _trainerController.initialPostData
+                                                    .value.response!.data!;
+                                              } else {
+                                                _trainerController.trainerPostList
+                                                    .clear();
+                                              }
+
+
+
                                             },
                                           )
 
@@ -380,19 +377,21 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .response!
                                                 .data!
                                                 .trainers![index];
-                                        _trainerController.planModel.value =
-                                            await TrainerServices
-                                                .getPlanByTrainerId(
-                                                    _trainerController
-                                                        .trainers
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .trainers![index]
-                                                        .user!
-                                                        .id!);
                                         _trainerController
                                             .loadingIndicator.value = false;
+                                        _trainerController.isPlanLoading.value = true;
+                                        _trainerController.planModel.value =
+                                        await TrainerServices
+                                            .getPlanByTrainerId(
+                                            _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .id!);
+                                        _trainerController.isPlanLoading.value = false;
                                         _trainerController
                                                 .initialPostData.value =
                                             await TrainerServices
@@ -419,6 +418,7 @@ class GetTrainedScreen extends StatelessWidget {
                                         }
                                         _trainerController
                                             .isProfileLoading.value = false;
+
                                       },
                                     ),
                                   )
@@ -606,6 +606,7 @@ class GetTrainedScreen extends StatelessWidget {
                                               .response!
                                               .data!
                                               .fitnessConsultant![index];
+                                      _trainerController.isPlanLoading.value = true;
                                       _trainerController.planModel.value =
                                           await TrainerServices
                                               .getPlanByTrainerId(
@@ -617,6 +618,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                       .fitnessConsultant![index]
                                                       .user!
                                                       .id!);
+                                      _trainerController.isPlanLoading.value = false;
                                       _trainerController
                                           .loadingIndicator.value = false;
                                       _trainerController.initialPostData.value =
@@ -828,6 +830,7 @@ class GetTrainedScreen extends StatelessWidget {
                                               .response!
                                               .data!
                                               .nutritionConsultant![index];
+                                      _trainerController.isPlanLoading.value = true;
                                       _trainerController.planModel.value =
                                           await TrainerServices
                                               .getPlanByTrainerId(
@@ -840,6 +843,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                           index]
                                                       .user!
                                                       .id!);
+                                      _trainerController.isPlanLoading.value = false;
                                       _trainerController
                                           .loadingIndicator.value = false;
                                       _trainerController.initialPostData.value =

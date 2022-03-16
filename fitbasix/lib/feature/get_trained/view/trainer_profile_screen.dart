@@ -76,7 +76,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Obx(
-          () => TrainerPage(
+          () => !_trainerController.isMyTrainerProfileLoading.value?TrainerPage(
             trainerImage:
                 trainerController.atrainerDetail.value.user!.profilePhoto!,
             trainerCoverImage: trainerController
@@ -123,9 +123,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 _homeController.userQuickBloxId.value =
                     sharedPreferences.getInt("userQuickBloxId")!;
                 int UserQuickBloxId =
-                    _homeController.userQuickBloxId.value == 133817477
-                        ? 133815819
-                        : 133817477;
+                    _homeController.userQuickBloxId.value == 133815819
+                        ? 133819788
+                        : 133815819;
                 print(UserQuickBloxId.toString() +
                     "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
                 QBSort sort = QBSort();
@@ -241,7 +241,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 ? []
                 : trainerController.planModel.value.response!.data!,
             isFollowing: trainerController.atrainerDetail.value.isFollowing!,
-          ),
+          ):Center(child: CustomizedCircularProgress(),),
         ),
       ),
     );
@@ -1244,7 +1244,7 @@ class _TrainerPageState extends State<TrainerPage> {
                 : SizedBox()),
 
             //To be docked at bottom center
-            Align(
+            Obx(()=>!_trainerController.isPlanLoading.value?Align(
               alignment: Alignment.bottomCenter,
               child: Container(
                 color: Theme.of(context).scaffoldBackgroundColor,
@@ -1277,7 +1277,7 @@ class _TrainerPageState extends State<TrainerPage> {
                   ),
                 ),
               ),
-            )
+            ):Container())
           ],
         ),
       ),

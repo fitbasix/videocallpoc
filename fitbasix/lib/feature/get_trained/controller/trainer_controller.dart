@@ -18,6 +18,8 @@ class TrainerController extends GetxController {
   RxBool isSelected = RxBool(false);
   RxBool isLoading = RxBool(false);
   Rx<Trainer> atrainerDetail = Trainer().obs;
+  Rx<bool> isPlanLoading = RxBool(false);
+  Rx<bool> isMyTrainerProfileLoading = RxBool(false);
   Rx<PlanModel> planModel = PlanModel().obs;
   Rx<AllTrainer> allTrainer = AllTrainer().obs;
   Rx<Plan> selectedPlan = Plan().obs;

@@ -142,12 +142,11 @@ class Strength {
     this.name,
     this.serialId,
   });
-
-  Name? name;
+  String? name;
   int? serialId;
 
   factory Strength.fromJson(Map<String, dynamic> json) => Strength(
-    name: json["name"] == null ? null : nameValues.map![json["name"]],
+    name: json["name"],
     serialId: json["serialId"] == null ? null : json["serialId"],
   );
 
