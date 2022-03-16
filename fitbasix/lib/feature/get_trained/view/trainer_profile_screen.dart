@@ -76,7 +76,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Obx(
-          () => !_trainerController.isProfileLoading.value?TrainerPage(
+          () => !_trainerController.isMyTrainerProfileLoading.value?TrainerPage(
             trainerImage:
                 trainerController.atrainerDetail.value.user!.profilePhoto!,
             trainerCoverImage: trainerController
@@ -241,7 +241,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 ? []
                 : trainerController.planModel.value.response!.data!,
             isFollowing: trainerController.atrainerDetail.value.isFollowing!,
-          ):Center(child: CustomizedCircularProgress())
+          ):Center(child: CustomizedCircularProgress(),),
         ),
       ),
     );
@@ -1244,7 +1244,7 @@ class _TrainerPageState extends State<TrainerPage> {
                 : SizedBox()),
 
             //To be docked at bottom center
-            Align(
+            Obx(()=>!_trainerController.isPlanLoading.value?Align(
               alignment: Alignment.bottomCenter,
               child: Container(
                 color: Theme.of(context).scaffoldBackgroundColor,
@@ -1277,7 +1277,7 @@ class _TrainerPageState extends State<TrainerPage> {
                   ),
                 ),
               ),
-            )
+            ):Container())
           ],
         ),
       ),

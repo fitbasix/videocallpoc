@@ -132,30 +132,30 @@ class GetTrainedScreen extends StatelessWidget {
 
                                                 String trainerId = _trainerController.trainers.value.response!.data!.myTrainers![index].user!;
                                                 _trainerController.atrainerDetail.value = Trainer();
-                                                print(trainerId);
-                                                
                                                 _trainerController
-                                                    .isProfileLoading.value = true;
+                                                    .isMyTrainerProfileLoading.value = true;
+                                                _trainerController.isProfileLoading.value = true;
                                               Navigator.pushNamed(context,
                                                   RouteName.trainerProfileScreen);
 
                                                 var result = await TrainerServices.getATrainerDetail(trainerId);
                                                 _trainerController.atrainerDetail.value = result.response!.data!;
-
+                                                _trainerController
+                                                    .isMyTrainerProfileLoading.value = false;
+                                                _trainerController.isProfileLoading.value = true;
+                                                _trainerController.isPlanLoading.value = true;
                                                 _trainerController.planModel.value =
-                                                  await TrainerServices
-                                                  .getPlanByTrainerId(
-                                                      trainerId);
-
-
-                                              _trainerController
+                                                await TrainerServices
+                                                    .getPlanByTrainerId(
+                                                    trainerId);
+                                                _trainerController.isPlanLoading.value = false;
+                                                _trainerController
                                                   .initialPostData.value =
                                                   await TrainerServices
                                                   .getTrainerPosts(
                                                       trainerId,
                                                   0);
-                                                _trainerController
-                                                    .loadingIndicator.value = false;
+
                                               if (_trainerController.initialPostData
                                                   .value.response!.data!.length !=
                                                   0) {
@@ -167,8 +167,9 @@ class GetTrainedScreen extends StatelessWidget {
                                                 _trainerController.trainerPostList
                                                     .clear();
                                               }
-                                              _trainerController
-                                                  .isProfileLoading.value = false;
+
+
+
                                             },
                                           )
 
@@ -378,19 +379,21 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .response!
                                                 .data!
                                                 .trainers![index];
-                                        _trainerController.planModel.value =
-                                            await TrainerServices
-                                                .getPlanByTrainerId(
-                                                    _trainerController
-                                                        .trainers
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .trainers![index]
-                                                        .user!
-                                                        .id!);
                                         _trainerController
                                             .loadingIndicator.value = false;
+                                        _trainerController.isPlanLoading.value = true;
+                                        _trainerController.planModel.value =
+                                        await TrainerServices
+                                            .getPlanByTrainerId(
+                                            _trainerController
+                                                .trainers
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .user!
+                                                .id!);
+                                        _trainerController.isPlanLoading.value = false;
                                         _trainerController
                                                 .initialPostData.value =
                                             await TrainerServices
@@ -417,6 +420,7 @@ class GetTrainedScreen extends StatelessWidget {
                                         }
                                         _trainerController
                                             .isProfileLoading.value = false;
+
                                       },
                                     ),
                                   )
@@ -604,6 +608,7 @@ class GetTrainedScreen extends StatelessWidget {
                                               .response!
                                               .data!
                                               .fitnessConsultant![index];
+                                      _trainerController.isPlanLoading.value = true;
                                       _trainerController.planModel.value =
                                           await TrainerServices
                                               .getPlanByTrainerId(
@@ -615,6 +620,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                       .fitnessConsultant![index]
                                                       .user!
                                                       .id!);
+                                      _trainerController.isPlanLoading.value = false;
                                       _trainerController
                                           .loadingIndicator.value = false;
                                       _trainerController.initialPostData.value =
@@ -826,6 +832,7 @@ class GetTrainedScreen extends StatelessWidget {
                                               .response!
                                               .data!
                                               .nutritionConsultant![index];
+                                      _trainerController.isPlanLoading.value = true;
                                       _trainerController.planModel.value =
                                           await TrainerServices
                                               .getPlanByTrainerId(
@@ -838,6 +845,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                           index]
                                                       .user!
                                                       .id!);
+                                      _trainerController.isPlanLoading.value = false;
                                       _trainerController
                                           .loadingIndicator.value = false;
                                       _trainerController.initialPostData.value =
