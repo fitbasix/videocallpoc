@@ -83,7 +83,9 @@ class GetTrainedScreen extends StatelessWidget {
                                         ? Container()
                                         : SeeAllButton(
                                             title: "see_all_trainer".tr,
-                                            onTap: () async {},
+                                            onTap: () async {
+                                              Navigator.pushNamed(context, RouteName.myTrainersScreen);
+                                            },
                                           ))
                                   ],
                                 ),

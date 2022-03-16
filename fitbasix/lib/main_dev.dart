@@ -67,11 +67,10 @@ Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
     initializeNotification();
     await Firebase.initializeApp();
+
     if (Platform.isAndroid) {
        await AndroidAlarmManager.initialize();
     }
-
-   
 
     FirebaseMessaging.instance.getToken().then((value) {
       print("fcm token" + value.toString());
@@ -118,6 +117,7 @@ Future<void> main() async {
     var accessToken = prefs.getString('AccessToken');
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     setupApp();
+
     //await AndroidAlarmManager.oneShotAt(date, 0, printHello);
   }, (error, stackTrace) {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);

@@ -123,9 +123,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 _homeController.userQuickBloxId.value =
                     sharedPreferences.getInt("userQuickBloxId")!;
                 int UserQuickBloxId =
-                    _homeController.userQuickBloxId.value == 133817477
-                        ? 133815819
-                        : 133817477;
+                    _homeController.userQuickBloxId.value == 133815819
+                        ? 133819788
+                        : 133815819;
                 print(UserQuickBloxId.toString() +
                     "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
                 QBSort sort = QBSort();

@@ -32,10 +32,8 @@ class TrainerServices {
   }
 
   static Future<TrainerModel> getATrainerDetail(String trainerId) async {
-
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-
     var response =
         await dio!.post(ApiUrl.getTrainerById, data: {"trainerId": trainerId});
     print(response.toString());
