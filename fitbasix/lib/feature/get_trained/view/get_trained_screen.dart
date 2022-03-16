@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-
 import 'package:fitbasix/core/constants/app_text_style.dart';
-import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
