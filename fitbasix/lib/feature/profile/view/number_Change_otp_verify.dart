@@ -133,9 +133,9 @@ class NumberChangeOtpVerify extends StatelessWidget {
                           if (numberNotRegistered == false) {
                             log(homeController.userProfileData.value.response!
                                 .data!.profile!.mobileNumber!);
-                            Navigator.pop(context);
-                            homeController.userProfileData.value =
-                                await CreatePostService.getUserProfile();
+                            // Navigator.pop(context);
+                            // homeController.userProfileData.value =
+                            //     await CreatePostService.getUserProfile();
                             // profileController.selectedDate.value =
                             //     homeController.userProfileData.value.response!
                             //                 .data!.profile!.dob ==

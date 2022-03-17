@@ -23,7 +23,6 @@ class ProfileServices {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
 
-    print("otp done");
     String token = await LogInService.getAccessToken();
     dio!.options.headers["language"] = "1";
     try {
@@ -35,13 +34,19 @@ class ProfileServices {
           },
           body: phone == null && dob != null
               ? jsonEncode(<String, String>{"DOB": dob})
-              : jsonEncode(<String, String>{
-                  "countryCode": countryCode!,
-                  "phone": phone!,
-                  "otp": otp!,
-                  "DOB": dob!
-                }));
-      log(response.body.toString());
+              : dob == null
+                  ? jsonEncode(<String, String>{
+                      "countryCode": countryCode!,
+                      "phone": phone!,
+                      "otp": otp!,
+                    })
+                  : jsonEncode(<String, String>{
+                      "countryCode": countryCode!,
+                      "phone": phone!,
+                      "otp": otp!,
+                      "DOB": dob
+                    }));
+      log("kjj" + response.body.toString());
       final responseData = jsonDecode(response.body);
       if (response.statusCode == 409) {
         ScaffoldMessenger.of(context).showSnackBar(
