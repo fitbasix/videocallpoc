@@ -72,6 +72,7 @@ class HomeController extends GetxController {
   RxBool isPostUpdate = false.obs;
   RxString coverPhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
+  RxBool updateWaterData = false.obs;
 
   RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
     {},
@@ -233,7 +234,6 @@ class HomeController extends GetxController {
               .value.response!.data!.profile!.nutrition!.totalWaterRequired!);
       spgStatus.value = true;
     }
-    print("ooooo");
     isLoading.value = false;
     await getTrendingPost();
   }
@@ -244,6 +244,7 @@ class HomeController extends GetxController {
 
     if (initialPostData.value.response!.data!.length != 0) {
       trendingPostList.value = initialPostData.value.response!.data!;
+      log("wwww" + trendingPostList.toString());
     }
     print(trendingPostList.value.length.toString() + "length");
     if (trendingPostList.value.length < 5) {
