@@ -123,10 +123,15 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                 final sharedPreferences = await SharedPreferences.getInstance();
                 _homeController.userQuickBloxId.value =
                     sharedPreferences.getInt("userQuickBloxId")!;
-                int UserQuickBloxId =
-                    _homeController.userQuickBloxId.value == 133815819
-                        ? 133819788
-                        : 133815819;
+                int UserQuickBloxId = _trainerController.atrainerDetail.value.quickBlox!;
+
+                // _homeController.userQuickBloxId.value == 133815819
+                //     ? 133819788
+                //    : 133815819;
+
+
+                print(UserQuickBloxId.toString() + "qqqqq");
+
                 print(UserQuickBloxId.toString() +
                     "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
                 QBSort sort = QBSort();
@@ -150,10 +155,16 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ChatScreen(
-                                        userDialogForChat: value[i],
-                                        opponentID: UserQuickBloxId,
-                                        trainerTitle: trainerController
-                                            .atrainerDetail.value.user!.name!,
+                                      userDialogForChat: value[i],
+                                      opponentID: UserQuickBloxId,
+                                      profilePicURL: _trainerController.atrainerDetail.value.user!.profilePhoto,
+                                      trainerId: _trainerController.atrainerDetail.value.user!.id,
+                                      isCurrentlyEnrolled: _trainerController.atrainerDetail.value.isEnrolled,
+                                      trainerTitle: trainerController
+                                          .atrainerDetail
+                                          .value
+                                          .user!
+                                          .name!
                                       )));
                           ++openPage;
                         }
@@ -189,6 +200,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                                     builder: (context) => ChatScreen(
                                         userDialogForChat: value,
                                         opponentID: UserQuickBloxId,
+                                        profilePicURL: _trainerController.atrainerDetail.value.user!.profilePhoto,
+                                        trainerId: _trainerController.atrainerDetail.value.user!.id,
+                                        isCurrentlyEnrolled: _trainerController.atrainerDetail.value.isEnrolled,
                                         trainerTitle: trainerController
                                             .atrainerDetail
                                             .value

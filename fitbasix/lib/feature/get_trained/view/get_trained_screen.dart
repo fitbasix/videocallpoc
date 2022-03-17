@@ -141,7 +141,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                 _trainerController.atrainerDetail.value = result.response!.data!;
                                                 _trainerController
                                                     .isMyTrainerProfileLoading.value = false;
-                                                _trainerController.isProfileLoading.value = false;
+
                                                 _trainerController.isPlanLoading.value = true;
                                                 _trainerController.planModel.value =
                                                 await TrainerServices
@@ -154,6 +154,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                   .getTrainerPosts(
                                                       trainerId,
                                                   0);
+                                                _trainerController.isProfileLoading.value = false;
 
 
                                               if (_trainerController.initialPostData

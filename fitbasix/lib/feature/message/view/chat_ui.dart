@@ -291,7 +291,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
               ):Obx(()=>!isPlanLoading.value?Container(
-                margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!),
+                margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
@@ -315,7 +315,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     ]
                   ),
                 ),
-              ):CustomizedCircularProgress())
+              ):Container(
+                  margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
+                  child: CustomizedCircularProgress()))
             ],
           ),
         ),
@@ -824,10 +826,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         width: 100*SizeConfig.widthMultiplier!,
                         child: Image.asset(ImagePath.animatedErrorIcon),),
                     SizedBox(height: 26*SizeConfig.heightMultiplier!,),
-                    Text("You are only able to make calls\nduring your training time slot Only".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),textAlign: TextAlign.center,),
+                    Text("call_not_possible".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),textAlign: TextAlign.center,),
                     SizedBox(height: 16*SizeConfig.heightMultiplier!,),
-                    Text("i.e 5:30 PM to 6:30 PM\n Mon, Tue & Wed",style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
-
+                    Text("call_not_possible_time".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
                   ],
                 ),
               )
