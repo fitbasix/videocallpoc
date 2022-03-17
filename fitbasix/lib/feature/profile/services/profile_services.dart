@@ -1,92 +1,89 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 import '../../../core/api_service/dio_service.dart';
 import '../../Home/model/post_feed_model.dart';
 import '../../log_in/services/login_services.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileServices {
   static var dio = DioUtil().getInstance();
 
-  static Future<void> editProfile(
-      {String? email,
-      String? countryCode,
+  static Future<bool> editProfile(
+      {String? countryCode,
       String? phone,
       String? dob,
-      String? otp}) async {
+      String? otp,
+      required BuildContext context}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    String? verifiedNumber;
-    print(email);
-    print(countryCode);
-    print(phone);
-    print(dob);
-    if (phone != null) {
-      print("otp verify");
-      // await LogInService.getOTP(phone, "000000");
-    }
-    Map editEmail = {"email": email};
-    Map editPhone = {"countryCode": countryCode, "phone": phone, "otp": otp};
-    Map editDob = {"DOB": dob};
-    Map editEmailPhone = {
-      "email": email,
-      "countryCode": countryCode,
-      "otp": otp,
-      "phone": phone
-    };
-    Map editEmailDob = {"email": email, "DOB": dob};
-    Map editPhoneDob = {
-      "countryCode": countryCode,
-      "phone": phone,
-      "otp": otp,
-      "DOB": dob
-    };
-    Map editAll = {
-      "email": email,
-      "countryCode": countryCode,
-      "phone": phone,
-      "otp": otp,
-      "DOB": dob
-    };
+
     print("otp done");
+    String token = await LogInService.getAccessToken();
     dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    print("profile update" +
-        (email != null && phone != null && dob != null
-                ? editAll
-                : email != null && phone != null && dob == null
-                    ? editEmailPhone
-                    : email != null && phone == null && dob != null
-                        ? editEmailDob
-                        : email != null && phone == null && dob == null
-                            ? editEmail
-                            : phone != null && dob != null
-                                ? editPhoneDob
-                                : phone != null && dob == null
-                                    ? editPhone
-                                    : dob != null
-                                        ? editDob
-                                        : null)
-            .toString());
-    final response = await dio!.put(ApiUrl.editProfile,
-        data: email != null && phone != null && dob != null
-            ? editAll
-            : email != null && phone != null && dob == null
-                ? editEmailPhone
-                : email != null && phone == null && dob != null
-                    ? editEmailDob
-                    : email != null && phone == null && dob == null
-                        ? editEmail
-                        : phone != null && dob != null
-                            ? editPhoneDob
-                            : phone != null && dob == null
-                                ? editPhone
-                                : dob != null
-                                    ? editDob
-                                    : null);
-    log("response   " + response.data.toString());
-    log(response.toString());
+    try {
+      final response = await http.put(Uri.parse(ApiUrl.editProfile),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'language': '1',
+            "Authorization": token
+          },
+          body: phone == null && dob != null
+              ? jsonEncode(<String, String>{"DOB": dob})
+              : jsonEncode(<String, String>{
+                  "countryCode": countryCode!,
+                  "phone": phone!,
+                  "otp": otp!,
+                  "DOB": dob!
+                }));
+      log(response.body.toString());
+      final responseData = jsonDecode(response.body);
+      if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(responseData["response"]["message"])));
+        return false;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      // if()
+      // print(e.);
+      return true;
+    }
+  }
+
+  static Future<bool> getOTP(
+      String mobile, String countryCode, BuildContext context) async {
+    dio!.options.headers["language"] = "1";
+    String token = await LogInService.getAccessToken();
+    try {
+      var response = await http.post(Uri.parse(ApiUrl.editNumberOtp),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'language': '1',
+            "Authorization": token
+          },
+          body: jsonEncode(
+              <String, String>{"phone": mobile, "countryCode": countryCode}));
+      final responseData = jsonDecode(response.body);
+      log(response.body.toString());
+      if (response.statusCode == 409) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(responseData["response"]["message"])));
+        return false;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      return true;
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text('number_used'.tr)));
+    }
   }
 
   static Future<void> UpdateCoverPhoto({String? coverPhoto}) async {

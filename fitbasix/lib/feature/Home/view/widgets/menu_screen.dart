@@ -15,6 +15,7 @@ import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/credentials.dart';
@@ -117,8 +118,36 @@ class MenuScreen extends StatelessWidget {
                 menuItemImage: ImagePath.account,
                 menuItemText: 'my_account'.tr,
                 onTap: () {
-                  Navigator.pushNamed(
-                      context, RouteName.editPersonalInfo);
+                  _profileController.loginController!.mobileController.text =
+                      homeController.userProfileData.value.response!.data!
+                          .profile!.mobileNumber
+                          .toString();
+                  _profileController.loginController!.mobile.value =
+                      homeController.userProfileData.value.response!.data!
+                          .profile!.mobileNumber!;
+                  _profileController.selectedDate.value = homeController
+                              .userProfileData
+                              .value
+                              .response!
+                              .data!
+                              .profile!
+                              .dob ==
+                          null
+                      ? DateTime.now().toString()
+                      : DateFormat("dd/LL/yyyy").format(homeController
+                          .userProfileData.value.response!.data!.profile!.dob!);
+                  _profileController.DOBController.text = homeController
+                              .userProfileData
+                              .value
+                              .response!
+                              .data!
+                              .profile!
+                              .dob ==
+                          null
+                      ? ""
+                      : DateFormat("dd/LL/yyyy").format(homeController
+                          .userProfileData.value.response!.data!.profile!.dob!);
+                  Navigator.pushNamed(context, RouteName.editPersonalInfo);
                 }),
             MenuItem(
                 menuItemImage: ImagePath.settings,
