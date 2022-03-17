@@ -26,7 +26,8 @@ class HealthScreen extends StatelessWidget {
 Widget WaterConsumed(double consumedWater, double totalWater,
         VoidCallback onAddWater, HomeController homeController,
     BuildContext context) =>
-    Container(
+    GestureDetector(
+      onTap: onAddWater,
       child: Container(
         decoration: BoxDecoration(
             borderRadius:
@@ -128,16 +129,13 @@ Widget WaterConsumed(double consumedWater, double totalWater,
                         //  color: hintGrey
                       )),
                   Spacer(),
-                  GestureDetector(
-                    onTap: onAddWater,
-                    child: Container(
-                      color: Colors.transparent,
-                      child: SvgPicture.asset(
-                        ImagePath.add,
-                        height: 14 * SizeConfig.widthMultiplier!,
-                        width: 14 * SizeConfig.widthMultiplier!,
-                        color: Theme.of(context).textTheme.bodyText2?.color,
-                      ),
+                  Container(
+                    color: Colors.transparent,
+                    child: SvgPicture.asset(
+                      ImagePath.add,
+                      height: 14 * SizeConfig.widthMultiplier!,
+                      width: 14 * SizeConfig.widthMultiplier!,
+                      color: Theme.of(context).textTheme.bodyText2?.color,
                     ),
                   )
                 ],
@@ -331,128 +329,128 @@ class CirclePainter extends CustomPainter {
 }
 
 Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,BuildContext context) => Container(
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-            color: Theme.of(context).cardColor
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: 12.0 * SizeConfig.widthMultiplier!,
-              vertical: 7 * SizeConfig.heightMultiplier!),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 5 * SizeConfig.heightMultiplier!,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'caloriesBurnt'.tr,
-                    style: AppTextStyle.boldBlackText
-                        .copyWith(
-                        color: Theme.of(context).textTheme.bodyText1?.color,
-                        fontSize: 14 * SizeConfig.textMultiplier!),
-                  ),
-                  Image.asset(
-                    ImagePath.fireIcon,
-                    height: 22.5 * SizeConfig.heightMultiplier!,
-                    width: 17.64 * SizeConfig.widthMultiplier!,
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 12 * SizeConfig.heightMultiplier!,
-              ),
-              Container(
-                height: 100* SizeConfig.heightMultiplier!,
-                width: 148* SizeConfig.widthMultiplier!,
-                child: SfRadialGauge(
-                  enableLoadingAnimation: true,
-                  //animationDuration: 1000,
-                  axes: [
-                    RadialAxis(
-                      startAngle: 180,
-                      endAngle: 0,
-                      interval: 10,
-                      canScaleToFit: true,
-                      showTicks: false,
-                      showLabels: false,
-                      axisLineStyle: AxisLineStyle(
-                           color: kPureWhite,
-                          thickness: 6.0 * SizeConfig.widthMultiplier!,
-                          thicknessUnit: GaugeSizeUnit.logicalPixel),
-                      // pointer marker & needle pointer
-                      pointers: [
-                        RangePointer(
-                            value: isConnected?burntCalories:100,
-                            color: isConnected?kgreen49:Color(0xFFFF5A5A),
-                            width: 6 * SizeConfig.widthMultiplier!,
-                            sizeUnit: GaugeSizeUnit.logicalPixel),
-                        NeedlePointer(
-                            value: isConnected?burntCalories:0,
-                            needleLength: 45*SizeConfig.heightMultiplier!,
-                            lengthUnit: GaugeSizeUnit.logicalPixel,
-                            needleColor: Theme.of(context).primaryIconTheme.color,
-                            needleStartWidth: 0.5 * SizeConfig.widthMultiplier!,
-                            needleEndWidth: 4 * SizeConfig.widthMultiplier!,
-                            knobStyle: KnobStyle(
-                                knobRadius: 3 * SizeConfig.widthMultiplier!,
-                                sizeUnit: GaugeSizeUnit.logicalPixel,
-                                borderColor: Theme.of(context).primaryIconTheme.color,
-                                borderWidth: 2 * SizeConfig.widthMultiplier!,
-                                color: kgreen49)
-                            )
-                      ],
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+              color: Theme.of(context).cardColor
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 12.0 * SizeConfig.widthMultiplier!,
+                vertical: 7 * SizeConfig.heightMultiplier!),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 5 * SizeConfig.heightMultiplier!,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'caloriesBurnt'.tr,
+                      style: AppTextStyle.boldBlackText
+                          .copyWith(
+                          color: Theme.of(context).textTheme.bodyText1?.color,
+                          fontSize: 14 * SizeConfig.textMultiplier!),
                     ),
+                    Image.asset(
+                      ImagePath.fireIcon,
+                      height: 22.5 * SizeConfig.heightMultiplier!,
+                      width: 17.64 * SizeConfig.widthMultiplier!,
+                    )
                   ],
                 ),
-              ),
-              // CustomPaint(
-              //   foregroundPainter: CirclePainter(100.0, lightGrey),
-              //   child: Container(
-              //     width: 120,
-              //     height: 120,
-              //     color: Colors.white,
-              //     child: Center(
-              //       child: Column(
-              //         crossAxisAlignment: CrossAxisAlignment.center,
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           Text(
-              //             burntCalories.toString() + " kcal",
-              //             style: AppTextStyle.boldBlackText.copyWith(
-              //                 fontSize: 14 * SizeConfig.textMultiplier!),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              SizedBox(
-                height: 13 * SizeConfig.heightMultiplier!,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  isConnected?Text(
-                    burntCalories.toString() + " kcal",
-                    style: AppTextStyle.boldBlackText
-                        .copyWith(
-                        color: Theme.of(context).textTheme.bodyText1?.color,
-                        fontSize: 14 * SizeConfig.textMultiplier!),
-                  )
-                      :Text('Not Connected',
-                  style: AppTextStyle.hmediumBlackText.copyWith(
-                    color: Theme.of(context).textTheme.bodyText1?.color,
-                  ),),
-                  Spacer(),
-                  GestureDetector(
-                    onTap: onTap,
-                    child: Container(
+                SizedBox(
+                  height: 12 * SizeConfig.heightMultiplier!,
+                ),
+                Container(
+                  height: 100* SizeConfig.heightMultiplier!,
+                  width: 148* SizeConfig.widthMultiplier!,
+                  child: SfRadialGauge(
+                    enableLoadingAnimation: true,
+                    //animationDuration: 1000,
+                    axes: [
+                      RadialAxis(
+                        startAngle: 180,
+                        endAngle: 0,
+                        interval: 10,
+                        canScaleToFit: true,
+                        showTicks: false,
+                        showLabels: false,
+                        axisLineStyle: AxisLineStyle(
+                             color: kPureWhite,
+                            thickness: 6.0 * SizeConfig.widthMultiplier!,
+                            thicknessUnit: GaugeSizeUnit.logicalPixel),
+                        // pointer marker & needle pointer
+                        pointers: [
+                          RangePointer(
+                              value: isConnected?burntCalories:100,
+                              color: isConnected?kgreen49:Color(0xFFFF5A5A),
+                              width: 6 * SizeConfig.widthMultiplier!,
+                              sizeUnit: GaugeSizeUnit.logicalPixel),
+                          NeedlePointer(
+                              value: isConnected?burntCalories:0,
+                              needleLength: 45*SizeConfig.heightMultiplier!,
+                              lengthUnit: GaugeSizeUnit.logicalPixel,
+                              needleColor: Theme.of(context).primaryIconTheme.color,
+                              needleStartWidth: 0.5 * SizeConfig.widthMultiplier!,
+                              needleEndWidth: 4 * SizeConfig.widthMultiplier!,
+                              knobStyle: KnobStyle(
+                                  knobRadius: 3 * SizeConfig.widthMultiplier!,
+                                  sizeUnit: GaugeSizeUnit.logicalPixel,
+                                  borderColor: Theme.of(context).primaryIconTheme.color,
+                                  borderWidth: 2 * SizeConfig.widthMultiplier!,
+                                  color: kgreen49)
+                              )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                // CustomPaint(
+                //   foregroundPainter: CirclePainter(100.0, lightGrey),
+                //   child: Container(
+                //     width: 120,
+                //     height: 120,
+                //     color: Colors.white,
+                //     child: Center(
+                //       child: Column(
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           Text(
+                //             burntCalories.toString() + " kcal",
+                //             style: AppTextStyle.boldBlackText.copyWith(
+                //                 fontSize: 14 * SizeConfig.textMultiplier!),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                SizedBox(
+                  height: 13 * SizeConfig.heightMultiplier!,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    isConnected?Text(
+                      burntCalories.toString() + " kcal",
+                      style: AppTextStyle.boldBlackText
+                          .copyWith(
+                          color: Theme.of(context).textTheme.bodyText1?.color,
+                          fontSize: 14 * SizeConfig.textMultiplier!),
+                    )
+                        :Text('Not Connected',
+                    style: AppTextStyle.hmediumBlackText.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1?.color,
+                    ),),
+                    Spacer(),
+                    Container(
                       color: Colors.transparent,
                       child: SvgPicture.asset(
                         ImagePath.power,
@@ -460,14 +458,14 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
                         width: 18 * SizeConfig.widthMultiplier!,
                         color: Theme.of(context).primaryColor,
                       ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 4*SizeConfig.heightMultiplier!,
-              )
-            ],
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 4*SizeConfig.heightMultiplier!,
+                )
+              ],
+            ),
           ),
         ),
       ),

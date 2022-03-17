@@ -53,6 +53,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field for user email
             TextFormField(
+              enabled: false,
               controller: _profileController.emailController,
               onChanged: (value) {
                 //storing user input in email controller
@@ -84,6 +85,11 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 enabledBorder: OutlineInputBorder(
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                  borderSide: BorderSide(color: greyBorder, width: 1.0),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                   borderSide: BorderSide(color: greyBorder, width: 1.0),
                 ),
               ),

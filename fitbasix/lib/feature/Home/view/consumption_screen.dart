@@ -56,7 +56,10 @@ class ConsumptionScreen extends StatelessWidget {
         child: Obx(
           () => _homeController.isConsumptionLoading.value
               ? Center(
-                  child: CustomizedCircularProgress(),
+                  child: SizedBox
+                    (
+                    height: MediaQuery.of(context).size.height-100*SizeConfig.heightMultiplier!,
+                      child: CustomizedCircularProgress()),
                 )
               : Container(
                   color: Theme.of(context).secondaryHeaderColor,

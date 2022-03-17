@@ -25,16 +25,14 @@ class TrainerPlansScreen extends StatelessWidget {
   // var peopleEnrolled = '234 ' + 'people_enrolled'.tr;
   // var planDuration = '12 '+'week_plan'.tr;
   // String ratingcount = '131';
-  void getPlan(TrainerController trainerController) async {
-    trainerController.fullPlanInfoLoading.value = true;
-
-
-    trainerController.fullPlanInfoLoading.value = false;
-  }
+  // void getPlan(TrainerController trainerController) async {
+  //   trainerController.fullPlanInfoLoading.value = true;
+  //   trainerController.fullPlanInfoLoading.value = false;
+  // }
 
   Widget build(BuildContext context) {
     final TrainerController trainerController = Get.find();
-    getPlan(trainerController);
+    //getPlan(trainerController);
     List<Plan> plans = trainerController.isProfileLoading.value
         ? []
         : trainerController.planModel.value.response!.data!;
