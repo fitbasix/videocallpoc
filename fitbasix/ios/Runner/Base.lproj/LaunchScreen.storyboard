@@ -50,7 +50,7 @@
     </scenes>
     <resources>
         <image name="BrandingImage" width="808" height="248"/>
-        <image name="LaunchBackground" width="480" height="853.33331298828125"/>
+        <image name="LaunchBackground" width="763.33331298828125" height="1365.3333740234375"/>
         <image name="LaunchImage" width="0.3333333432674408" height="0.3333333432674408"/>
     </resources>
 </document>

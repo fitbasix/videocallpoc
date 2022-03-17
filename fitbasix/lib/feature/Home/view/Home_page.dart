@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
-import 'package:fitbasix/feature/Home/model/comment_model.dart';
+
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,8 +18,7 @@ import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
-import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
-import 'package:fitbasix/feature/Home/view/post_screen.dart';
+
 import 'package:fitbasix/feature/Home/view/tools_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/caloriesDetails.dart';
 import 'package:fitbasix/feature/Home/view/widgets/custom_bottom_nav_bar.dart';
@@ -28,9 +27,9 @@ import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
 import 'package:fitbasix/feature/Home/view/widgets/home_tile.dart';
 import 'package:fitbasix/feature/Home/view/widgets/menu_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
-import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+
 import 'package:fitbasix/feature/posts/view/create_post.dart';
-import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
+
 import 'package:shimmer/shimmer.dart';
 
 import '../../get_trained/view/get_trained_screen.dart';
@@ -197,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                                             60 * SizeConfig.widthMultiplier!)),
                                   ),
                                   SizedBox(
-                                    width: 15*SizeConfig.widthMultiplier!,
+                                    width: 15 * SizeConfig.widthMultiplier!,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -220,12 +219,17 @@ class _HomePageState extends State<HomePage> {
                                                         .response!
                                                         .data!
                                                         .profile!
-                                                        .name.toString()
+                                                        .name
+                                                        .toString()
                                                   }),
                                                   style: AppTextStyle
-                                                      .boldBlackText.copyWith(
-                                                    color: Theme.of(context).textTheme.bodyText1?.color
-                                                  ),
+                                                      .boldBlackText
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1
+                                                                  ?.color),
                                                 ),
                                           // SizedBox(
                                           //   width: 31 *
@@ -237,15 +241,21 @@ class _HomePageState extends State<HomePage> {
                                         'home_page_subtitle'.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
                                                 fontSize: 12 *
                                                     SizeConfig.textMultiplier!),
                                       )
                                     ],
                                   ),
                                   Spacer(),
-                                  SvgPicture.asset(ImagePath.bellIcon,
-                                    color: Theme.of(context).primaryIconTheme.color,
+                                  SvgPicture.asset(
+                                    ImagePath.bellIcon,
+                                    color: Theme.of(context)
+                                        .primaryIconTheme
+                                        .color,
                                   ),
                                 ],
                               ),
@@ -301,18 +311,20 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   'today'.tr,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      fontSize:
-                                          16 * SizeConfig.textMultiplier!,
-                                    color: Theme.of(context).textTheme.bodyText2?.color
-                                  ),
+                                      fontSize: 16 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          ?.color),
                                 ),
                                 Text(
                                   formatter,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      fontSize:
-                                          14 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context).textTheme.bodyText2?.color
-                                  ),
+                                      fontSize: 14 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          ?.color),
                                 )
                               ],
                             ),
@@ -373,7 +385,11 @@ class _HomePageState extends State<HomePage> {
                                                           .totalWaterRequired!
                                                           .toDouble(),
                                                       () async {
-                                                        print("homeController.waterLevel.value"+_homeController.waterLevel.value.toString());
+                                                  print(
+                                                      "homeController.waterLevel.value" +
+                                                          _homeController
+                                                              .waterLevel.value
+                                                              .toString());
                                                   _homeController
                                                       .isConsumptionLoading
                                                       .value = true;
@@ -485,7 +501,7 @@ class _HomePageState extends State<HomePage> {
                                                       //homecontroller
                                                       _homeController,
                                                       //Passing context for theme
-                                                  context))),
+                                                      context))),
                                           SizedBox(
                                             width: 8.0 *
                                                 SizeConfig.widthMultiplier!,
@@ -506,10 +522,10 @@ class _HomePageState extends State<HomePage> {
                                                     builder: (_) =>
                                                         HealthApp());
                                               },
-                                              //is connected
-                                              true,
+                                                  //is connected
+                                                  true,
                                                   //Passing context for theme
-                                              context),
+                                                  context),
                                             ),
                                           )
                                         ],
@@ -601,9 +617,8 @@ class _HomePageState extends State<HomePage> {
                                                   .toInt()
                                                   .toString() +
                                               " kcal",
-                                      //passing context for theme
-                                      context
-                                      ),
+                                          //passing context for theme
+                                          context),
                                       SizedBox(
                                           height: 20 *
                                               SizeConfig.heightMultiplier!),
@@ -620,7 +635,11 @@ class _HomePageState extends State<HomePage> {
                                                     style: AppTextStyle
                                                         .normalBlackText
                                                         .copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1?.color,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!)),
@@ -639,13 +658,15 @@ class _HomePageState extends State<HomePage> {
                                                         horizontal: 23 *
                                                             SizeConfig
                                                                 .widthMultiplier!),
-                                                    child: Text('update'.tr,
-                                                        style: AppTextStyle
-                                                            .normalWhiteText
-                                                            .copyWith(
-                                                                fontSize: 14 *
-                                                                    SizeConfig
-                                                                        .textMultiplier!),),
+                                                    child: Text(
+                                                      'update'.tr,
+                                                      style: AppTextStyle
+                                                          .normalWhiteText
+                                                          .copyWith(
+                                                              fontSize: 14 *
+                                                                  SizeConfig
+                                                                      .textMultiplier!),
+                                                    ),
                                                   ),
                                                 )
                                               ],
@@ -706,44 +727,53 @@ class _HomePageState extends State<HomePage> {
                                           children: [
                                             ClipRRect(
                                               borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(8),
-                                                topRight: Radius.circular(8)
-                                              ),
+                                                  topLeft: Radius.circular(8),
+                                                  topRight: Radius.circular(8)),
                                               child: Image.asset(
                                                 ImagePath.setgoalfeedImage,
-                                                height: 125 * SizeConfig.heightMultiplier!,
+                                                height: 125 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
                                                 width: Get.width,
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
                                             Container(
-                                              height: 125 * SizeConfig.heightMultiplier!,
+                                              height: 125 *
+                                                  SizeConfig.heightMultiplier!,
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.only(
                                                     topLeft: Radius.circular(8),
-                                                    topRight: Radius.circular(8)
-                                                ),
+                                                    topRight:
+                                                        Radius.circular(8)),
                                                 gradient: RadialGradient(
-                                                  colors: [
-                                                  Color(0xff000000).withOpacity(0),
-                                                  Color(0xff000000).withOpacity(0.22),
-                                                  Color(0xff000000).withOpacity(1.0),
-                                                ],
-                                                  focal: Alignment.center,
-                                                  radius: 8.0
-                                                ),
+                                                    colors: [
+                                                      Color(0xff000000)
+                                                          .withOpacity(0),
+                                                      Color(0xff000000)
+                                                          .withOpacity(0.22),
+                                                      Color(0xff000000)
+                                                          .withOpacity(1.0),
+                                                    ],
+                                                    focal: Alignment.center,
+                                                    radius: 8.0),
                                               ),
                                             ),
                                             Positioned(
                                                 top: 63,
                                                 left: 16,
                                                 right: 178,
-                                                child: Text('set_goal_heading'.tr,
-                                                style: AppTextStyle.boldBlackText.copyWith(
-                                                  fontSize: 14*SizeConfig.textMultiplier!,
-                                                  color: kPureWhite
-                                                ),
-                                                maxLines: 3,))
+                                                child: Text(
+                                                  'set_goal_heading'.tr,
+                                                  style: AppTextStyle
+                                                      .boldBlackText
+                                                      .copyWith(
+                                                          fontSize: 14 *
+                                                              SizeConfig
+                                                                  .textMultiplier!,
+                                                          color: kPureWhite),
+                                                  maxLines: 3,
+                                                ))
                                           ],
                                         ),
                                         SizedBox(
@@ -751,8 +781,8 @@ class _HomePageState extends State<HomePage> {
                                                 SizeConfig.widthMultiplier!),
                                         // above
                                         Container(
-                                          padding:
-                                          EdgeInsets.only(left: 16, bottom: 16),
+                                          padding: EdgeInsets.only(
+                                              left: 16, bottom: 16),
                                           child: Row(
                                             children: [
                                               Column(
@@ -783,7 +813,11 @@ class _HomePageState extends State<HomePage> {
                                                         style: AppTextStyle
                                                             .smallBlackText
                                                             .copyWith(
-                                                          color: Theme.of(context).textTheme.bodyText1?.color,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    ?.color,
                                                                 fontSize: 14 *
                                                                     SizeConfig
                                                                         .textMultiplier!),
@@ -819,7 +853,11 @@ class _HomePageState extends State<HomePage> {
                                                         style: AppTextStyle
                                                             .smallBlackText
                                                             .copyWith(
-                                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    ?.color,
                                                                 fontSize: 14 *
                                                                     SizeConfig
                                                                         .textMultiplier!),
@@ -872,7 +910,7 @@ class _HomePageState extends State<HomePage> {
                               child: Row(
                                 children: [
                                   SvgPicture.asset(
-                                      ImagePath.searchFavoriteIcon,
+                                    ImagePath.searchFavoriteIcon,
                                   ),
                                   SizedBox(
                                     width: 16 * SizeConfig.widthMultiplier!,
@@ -883,7 +921,10 @@ class _HomePageState extends State<HomePage> {
                                       'explore_fitbasix'.tr,
                                       style:
                                           AppTextStyle.boldBlackText.copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                         fontSize:
                                             14 * SizeConfig.textMultiplier!,
                                       ),
@@ -929,7 +970,10 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     'trending_posts'.tr,
                                     style: AppTextStyle.boldBlackText.copyWith(
-                                      color: Theme.of(context).textTheme.bodyText1?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                         fontSize:
                                             16 * SizeConfig.textMultiplier!),
                                   ),
@@ -955,11 +999,14 @@ class _HomePageState extends State<HomePage> {
                                                 NeverScrollableScrollPhysics(),
                                             itemBuilder: (_, index) {
                                               log("can not");
-                                              _homeController.alreadyRenderedPostId.add(_homeController
-                                                  .trendingPostList[
-                                              index]
-                                                  .id!);
-                                              _homeController.alreadyRenderedPostId.toSet();
+                                              _homeController
+                                                  .alreadyRenderedPostId
+                                                  .add(_homeController
+                                                      .trendingPostList[index]
+                                                      .id!);
+                                              _homeController
+                                                  .alreadyRenderedPostId
+                                                  .toSet();
                                               // if(_homeController.alreadyRenderedPostId.indexOf(_homeController
                                               //     .trendingPostList[
                                               // index]
@@ -992,13 +1039,11 @@ class _HomePageState extends State<HomePage> {
                                               //       ));
                                               // }
 
-
 // log(_homeController
 //     .commentsMap[_homeController
 //     .trendingPostList[
 // index]
 //     .id!]!.comment.toString());
-
 
                                               if (_homeController
                                                       .trendingPostList.length <
@@ -1009,18 +1054,23 @@ class _HomePageState extends State<HomePage> {
                                               return Obx(() => Column(
                                                     children: [
                                                       PostTile(
-                                                        comment:_homeController
-                                                            .commentsMap[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]==null? _homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .commentgiven:_homeController
-                                                            .commentsMap[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!],
+                                                        comment: _homeController
+                                                                        .commentsMap[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                null
+                                                            ? _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .commentgiven
+                                                            : _homeController
+                                                                    .commentsMap[
+                                                                _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .id!],
                                                         name: _homeController
                                                             .trendingPostList[
                                                                 index]
@@ -1073,30 +1123,46 @@ class _HomePageState extends State<HomePage> {
                                                                     index]
                                                                 .caption ??
                                                             '',
-                                                        likes:_homeController
-                                                            .updateCount[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]==null? _homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .likes!.toString():_homeController
-                                                            .updateCount[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]!.likes!.toString(),
+                                                        likes: _homeController
+                                                                        .updateCount[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                null
+                                                            ? _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .likes!
+                                                                .toString()
+                                                            : _homeController
+                                                                .updateCount[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!]!
+                                                                .likes!
+                                                                .toString(),
                                                         comments: _homeController
-                                                            .updateCount[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]==null? _homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .comments!.toString():_homeController
-                                                            .updateCount[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]!.comments!.toString(),
+                                                                        .updateCount[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                null
+                                                            ? _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .comments!
+                                                                .toString()
+                                                            : _homeController
+                                                                .updateCount[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!]!
+                                                                .comments!
+                                                                .toString(),
                                                         hitLike: () async {
                                                           if (_homeController
                                                               .trendingPostList[
@@ -1107,18 +1173,16 @@ class _HomePageState extends State<HomePage> {
                                                                     index]
                                                                 .isLiked = false;
 
-                                                           await HomeService.unlikePost(
+                                                            await HomeService.unlikePost(
                                                                 postId: _homeController
                                                                     .trendingPostList[
                                                                         index]
                                                                     .id!);
 
-                                                            _homeController
-                                                                        .likedPost
-                                                                        .indexOf(_homeController
-                                                                            .trendingPostList[
-                                                                                index]
-                                                                            .id!) ==
+                                                            _homeController.likedPost.indexOf(_homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!) ==
                                                                     -1
                                                                 ? null
                                                                 : _homeController
@@ -1144,25 +1208,33 @@ class _HomePageState extends State<HomePage> {
                                                                 .toSet()
                                                                 .toList();
 
-                                                           await HomeService.likePost(
+                                                            await HomeService.likePost(
                                                                 postId: _homeController
                                                                     .trendingPostList[
                                                                         index]
                                                                     .id!);
                                                           }
                                                           log("hit Like");
-                                                          RecentCommentModel recentComment = RecentCommentModel();
-                                                          recentComment = await HomeService.recentComment(
-                                                              postId: _homeController
-                                                                  .trendingPostList[
-                                                              index]
-                                                                  .id!);
+                                                          RecentCommentModel
+                                                              recentComment =
+                                                              RecentCommentModel();
+                                                          recentComment = await HomeService
+                                                              .recentComment(
+                                                                  postId: _homeController
+                                                                      .trendingPostList[
+                                                                          index]
+                                                                      .id!);
                                                           // _homeController.commentsMap[_homeController.post.value.id.toString()] =
                                                           //     recentComment.response!.data!.comment;
-                                                          _homeController.updateCount[ _homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .id!]= recentComment.response!.data!.data;
+                                                          _homeController
+                                                                  .updateCount[
+                                                              _homeController
+                                                                  .trendingPostList[
+                                                                      index]
+                                                                  .id!] = recentComment
+                                                              .response!
+                                                              .data!
+                                                              .data;
                                                           log("hit Like");
                                                           setState(() {});
                                                         },
@@ -1173,7 +1245,8 @@ class _HomePageState extends State<HomePage> {
                                                                       index]
                                                                   .id!,
                                                               _homeController
-                                                                  .comment.value);
+                                                                  .comment
+                                                                  .value);
 
                                                           setState(() {});
 
@@ -1270,7 +1343,9 @@ class _HomePageState extends State<HomePage> {
                                                         height: 16 *
                                                             SizeConfig
                                                                 .heightMultiplier!,
-                                                        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.1),
+                                                        color: Theme.of(context)
+                                                            .scaffoldBackgroundColor
+                                                            .withOpacity(0.1),
                                                       )
                                                     ],
                                                   ));
