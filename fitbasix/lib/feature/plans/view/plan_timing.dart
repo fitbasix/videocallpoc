@@ -55,7 +55,11 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
           child: SingleChildScrollView(
         child: Obx(
           () => trainerController.isAvailableSlotDataLoading.value
-              ? Center(child: CustomizedCircularProgress())
+              ? Column(
+                children: [
+                  Center(child: CustomizedCircularProgress()),
+                ],
+              )
               : Container(
                   width: double.infinity,
                   child: Column(

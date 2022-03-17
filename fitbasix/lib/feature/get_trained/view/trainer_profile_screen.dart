@@ -50,9 +50,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   var isPlanLoading = true.obs;
 
   getAllTrainerPlanData() async {
+    if(!_trainerController.isMyTrainerProfileLoading.value){
     _trainerController.planModel.value = PlanModel();
     isPlanLoading.value = true;
-    print(_trainerController.atrainerDetail.value.id!.toString() + "eeeeee");
     _trainerController.planModel.value =
         await TrainerServices.getPlanByTrainerId(
                 _trainerController.atrainerDetail.value.user!.id!)
@@ -60,6 +60,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
       isPlanLoading.value = false;
       return value;
     });
+    }
   }
 
   @override
