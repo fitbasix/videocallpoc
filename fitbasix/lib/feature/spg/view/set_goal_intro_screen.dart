@@ -47,19 +47,13 @@ class SetGoalIntroScreen extends StatelessWidget {
             SizedBox(
               height: 90 * SizeConfig.heightMultiplier!,
             ),
-            Obx(() => _spgController.isLoading.value
-                ? Shimmer.fromColors(
-                    child: Container(
-                      color: kGreyColor,
-                      width: double.infinity,
-                      height: 280 * SizeConfig.heightMultiplier!,
-                    ),
-                    baseColor: const Color.fromRGBO(230, 230, 230, 1),
-                    highlightColor: const Color.fromRGBO(242, 245, 245, 1),
-                  )
+            Obx(() => _spgController.isLoading.value == false
+                ? ShimmerEffect()
                 : CachedNetworkImage(
                     imageUrl: _spgController
                         .spgData.value.response!.data!.setGoalIntroImage!,
+                    placeholder: (context, url) => ShimmerEffect(),
+                    errorWidget: (context, url, error) => ShimmerEffect(),
                     height: 280 * SizeConfig.heightMultiplier!,
                     fit: BoxFit.fitWidth,
                   )),

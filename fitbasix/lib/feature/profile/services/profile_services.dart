@@ -1,11 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:dio/dio.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
-
 import '../../../core/api_service/dio_service.dart';
 import '../../Home/model/post_feed_model.dart';
 import '../../log_in/services/login_services.dart';

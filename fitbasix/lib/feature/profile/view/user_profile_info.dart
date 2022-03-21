@@ -17,6 +17,7 @@ import '../../../core/universal_widgets/customized_circular_indicator.dart';
 import '../../Home/model/RecentCommentModel.dart';
 import '../../Home/services/home_service.dart';
 import '../../Home/view/widgets/post_tile.dart';
+import '../../spg/view/set_goal_screen.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -654,6 +655,9 @@ class _UserPageInfoState extends State<UserPageInfo> {
                           height: 177 * SizeConfig.heightMultiplier!,
                           child: CachedNetworkImage(
                             imageUrl: widget.userCoverImage!,
+                            placeholder: (context, url) => ShimmerEffect(),
+                            errorWidget: (context, url, error) =>
+                                ShimmerEffect(),
                             fit: BoxFit.cover,
                           ),
                         ),

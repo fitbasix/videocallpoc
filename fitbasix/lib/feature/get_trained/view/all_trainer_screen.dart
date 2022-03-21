@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ffi';
 import 'dart:ui';
 
@@ -27,6 +28,8 @@ import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
+
+import '../model/timing_model.dart';
 
 class AllTrainerScreen extends StatefulWidget {
   AllTrainerScreen({Key? key}) : super(key: key);
@@ -284,42 +287,76 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             ),
                             itemBuilder: (BuildContext context) =>
                                 List.generate(
-                                    _trainerController.filterOptions.value.response !=null?_trainerController.filterOptions.value.response!.data!.length+1:1,
+                                    _trainerController
+                                                .filterOptions.value.response !=
+                                            null
+                                        ? _trainerController.filterOptions.value
+                                                .response!.data!.length +
+                                            1
+                                        : 1,
                                     (index) => PopupMenuItem<int>(
-                                      onTap: () async {
-                                        _trainerController.filterIsLoading.value = true;
-                                        _trainerController.SelectedSortMethod.value = index-1;
-                                        _trainerController.allTrainer.value = await TrainerServices.getAllTrainer(
-                                            sortBy: _trainerController.SelectedSortMethod.value);
-                                        _scrollController.jumpTo(0);
-                                        _trainerController.filterIsLoading.value = false;
-                                      },
-                                          child: (index ==0)?Text(
-                                            "sort_by".tr,
-                                            style: AppTextStyle.black400Text
-                                                .copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1!
-                                                    .color),
-                                          ):Text(
+                                          onTap: () async {
                                             _trainerController
-                                                .filterOptions.value.response!.data![index-1].title!.split("-").first,
-                                            style: AppTextStyle.black400Text
-                                                .copyWith(
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1!
-                                                        .color),
-                                          ),
-                                      enabled: index==0?false:true,
-
+                                                .filterIsLoading.value = true;
+                                            _trainerController
+                                                .SelectedSortMethod
+                                                .value = index - 1;
+                                            _trainerController
+                                                    .allTrainer.value =
+                                                await TrainerServices
+                                                    .getAllTrainer(
+                                                        sortBy: _trainerController
+                                                            .SelectedSortMethod
+                                                            .value);
+                                            _scrollController.jumpTo(0);
+                                            _trainerController
+                                                .filterIsLoading.value = false;
+                                          },
+                                          child: (index == 0)
+                                              ? Text(
+                                                  "sort_by".tr,
+                                                  style: AppTextStyle
+                                                      .black400Text
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1!
+                                                                  .color),
+                                                )
+                                              : Text(
+                                                  _trainerController
+                                                      .filterOptions
+                                                      .value
+                                                      .response!
+                                                      .data![index - 1]
+                                                      .title!
+                                                      .split("-")
+                                                      .first,
+                                                  style: AppTextStyle
+                                                      .black400Text
+                                                      .copyWith(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1!
+                                                                  .color),
+                                                ),
+                                          enabled: index == 0 ? false : true,
                                         )),
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            _trainerController.isTiming.value = true;
                             createMenuDialog(context);
+                            if (_trainerController.timingModel.value.response ==
+                                null) {
+                              _trainerController.timingModel.value =
+                                  await TrainerServices.getAllTime();
+                            }
+
+                            _trainerController.isTiming.value = false;
                           },
                           child: Container(
                               padding: EdgeInsets.symmetric(
@@ -385,9 +422,9 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                         onTap: () {},
                                         isSelected: false),
                                     baseColor:
-                                        const Color.fromRGBO(230, 230, 230, 1),
+                                        const Color.fromRGBO(30, 30, 30, 1),
                                     highlightColor:
-                                        const Color.fromRGBO(242, 245, 245, 1),
+                                        const Color.fromRGBO(30, 30, 30, 0.9),
                                   )
                                 : Padding(
                                     padding: index == 0
@@ -481,223 +518,261 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                       onTap: () {},
                                     ),
                                     baseColor:
-                                        const Color.fromRGBO(230, 230, 230, 1),
+                                        const Color.fromRGBO(30, 30, 30, 1),
                                     highlightColor:
-                                        const Color.fromRGBO(242, 245, 245, 1),
+                                        const Color.fromRGBO(30, 30, 30, 0.9),
                                   );
                                 }),
                           )
                         : Container(
                             // height: Get.height,
-                            child: _trainerController.allTrainer.
-                            value.response!.data!.trainers!.length ==0
-                                ?Container(
-                              padding: EdgeInsets.only(
-                                top: 71*SizeConfig.heightMultiplier!,
-                                left: 56*SizeConfig.widthMultiplier!,
-                                right: 55*SizeConfig.widthMultiplier!
-                              ),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    ImagePath.nomatchesfoundImage,
-                                    height: 102*SizeConfig.heightMultiplier!,
-                                    width: 100*SizeConfig.widthMultiplier!,
-                                  ),
-                                  SizedBox(
-                                    height: 8.78*SizeConfig.heightMultiplier!,
-                                  ),
-                                  Text('no_matches_description'.tr,
-                                  style: AppTextStyle.black400Text.copyWith(
-                                    fontSize: (24) * SizeConfig.textMultiplier!,
-                                    color: Theme.of(context).textTheme.bodyText1?.color
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    height: 8*SizeConfig.heightMultiplier!,
-                                  ),
-                                  Text('different_search'.tr,
-                                    style: AppTextStyle.black400Text.copyWith(
-                                        color: Theme.of(context).textTheme.bodyText1?.color
+                            child: _trainerController.allTrainer.value.response!
+                                        .data!.trainers!.length ==
+                                    0
+                                ? Container(
+                                    padding: EdgeInsets.only(
+                                        top: 71 * SizeConfig.heightMultiplier!,
+                                        left: 56 * SizeConfig.widthMultiplier!,
+                                        right:
+                                            55 * SizeConfig.widthMultiplier!),
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          ImagePath.nomatchesfoundImage,
+                                          height: 102 *
+                                              SizeConfig.heightMultiplier!,
+                                          width:
+                                              100 * SizeConfig.widthMultiplier!,
+                                        ),
+                                        SizedBox(
+                                          height: 8.78 *
+                                              SizeConfig.heightMultiplier!,
+                                        ),
+                                        Text(
+                                          'no_matches_description'.tr,
+                                          style: AppTextStyle.black400Text
+                                              .copyWith(
+                                                  fontSize:
+                                                      (24) *
+                                                          SizeConfig
+                                                              .textMultiplier!,
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      ?.color),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(
+                                          height:
+                                              8 * SizeConfig.heightMultiplier!,
+                                        ),
+                                        Text(
+                                          'different_search'.tr,
+                                          style: AppTextStyle.black400Text
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      ?.color),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                              )
-                                :ListView.builder(
-                                itemCount: _trainerController.allTrainer.value
-                                            .response!.data!.trainers!.length ==
-                                        0
-                                    ? 0
-                                    : _trainerController.allTrainer.value
-                                        .response!.data!.trainers!.length,
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  print(_trainerController
-                                      .allTrainer
-                                      .value
-                                      .response!
-                                      .data!
-                                      .trainers![index]
-                                      .certificates!
-                                      .length);
-                                  return TrainerTile(
-                                    name: _trainerController
+                                  )
+                                : ListView.builder(
+                                    itemCount: _trainerController
                                                 .allTrainer
                                                 .value
                                                 .response!
                                                 .data!
-                                                .trainers![index]
-                                                .user !=
-                                            null
-                                        ? _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index]
-                                                .user!
-                                                .name ??
-                                            ''
-                                        : '',
-                                    strength: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .strength![0]
-                                        .name
-                                        .toString(),
-                                    strengthCount: _trainerController
+                                                .trainers!
+                                                .length ==
+                                            0
+                                        ? 0
+                                        : _trainerController.allTrainer.value
+                                            .response!.data!.trainers!.length,
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      print(_trainerController
+                                          .allTrainer
+                                          .value
+                                          .response!
+                                          .data!
+                                          .trainers![index]
+                                          .certificates!
+                                          .length);
+                                      return TrainerTile(
+                                        name: _trainerController
+                                                    .allTrainer
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index]
+                                                    .user !=
+                                                null
+                                            ? _trainerController
+                                                    .allTrainer
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index]
+                                                    .user!
+                                                    .name ??
+                                                ''
+                                            : '',
+                                        strength: _trainerController
                                             .allTrainer
                                             .value
                                             .response!
                                             .data!
                                             .trainers![index]
-                                            .strength!
-                                            .length -
-                                        1,
-                                    description: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .about!,
-                                    certifcateTitle: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .certificates!,
-                                    traineeCount: int.tryParse(
-                                        _trainerController
+                                            .strength![0]
+                                            .name
+                                            .toString(),
+                                        strengthCount: _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .strength!
+                                                .length -
+                                            1,
+                                        description: _trainerController
                                             .allTrainer
                                             .value
                                             .response!
                                             .data!
                                             .trainers![index]
-                                            .trainees!)!,
-                                    rating: double.tryParse(_trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .rating!)!,
-                                    numberRated: int.tryParse(_trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .totalRating!)!,
-                                    profilePhoto: _trainerController
+                                            .about!,
+                                        certifcateTitle: _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .certificates!,
+                                        traineeCount: int.tryParse(
+                                            _trainerController
                                                 .allTrainer
                                                 .value
                                                 .response!
                                                 .data!
                                                 .trainers![index]
-                                                .user !=
-                                            null
-                                        ? _trainerController
+                                                .trainees!)!,
+                                        rating: double.tryParse(
+                                            _trainerController
                                                 .allTrainer
                                                 .value
                                                 .response!
                                                 .data!
                                                 .trainers![index]
-                                                .user!
-                                                .profilePhoto ??
-                                            ''
-                                        : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
-                                    slotLeft: _trainerController
-                                        .allTrainer
-                                        .value
-                                        .response!
-                                        .data!
-                                        .trainers![index]
-                                        .slotsFeft!,
-                                    onTap: () async {
-                                      _trainerController.atrainerDetail.value =
-                                          _trainerController.allTrainer.value
-                                              .response!.data!.trainers![index];
-                                      Navigator.pushNamed(context,
-                                          RouteName.trainerProfileScreen);
-                                      _trainerController
-                                          .isProfileLoading.value = true;
-                                      // await TrainerServices.getATrainerDetail(
-                                      //     _trainerController
-                                      //         .allTrainer
-                                      //         .value
-                                      //         .response!
-                                      //         .data!
-                                      //         .trainers![index]
-                                      //         .user!
-                                      //         .id!);
-                                      _trainerController.planModel.value =
-                                          await TrainerServices
-                                              .getPlanByTrainerId(
-                                                  _trainerController
-                                                      .allTrainer
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .trainers![index]
-                                                      .user!
-                                                      .id!);
-                                      _trainerController
-                                          .loadingIndicator.value = false;
-                                      _trainerController.initialPostData.value =
-                                          await TrainerServices.getTrainerPosts(
+                                                .rating!)!,
+                                        numberRated: int.tryParse(
+                                            _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .totalRating!)!,
+                                        profilePhoto: _trainerController
+                                                    .allTrainer
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index]
+                                                    .user !=
+                                                null
+                                            ? _trainerController
+                                                    .allTrainer
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index]
+                                                    .user!
+                                                    .profilePhoto ??
+                                                ''
+                                            : 'https://upload.wikimedia.org/wikipedia/commons/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
+                                        slotLeft: _trainerController
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers![index]
+                                            .slotsFeft!,
+                                        onTap: () async {
+                                          _trainerController
+                                                  .atrainerDetail.value =
                                               _trainerController
                                                   .allTrainer
                                                   .value
                                                   .response!
                                                   .data!
-                                                  .trainers![index]
-                                                  .user!
-                                                  .id!,
-                                              0);
-                                      if (_trainerController.initialPostData
-                                              .value.response!.data!.length !=
-                                          0) {
-                                        _trainerController
-                                                .trainerPostList.value =
-                                            _trainerController.initialPostData
-                                                .value.response!.data!;
-                                      } else {
-                                        _trainerController.trainerPostList
-                                            .clear();
-                                      }
-                                      _trainerController
-                                          .isProfileLoading.value = false;
-                                    },
-                                  );
-                                }),
+                                                  .trainers![index];
+                                          Navigator.pushNamed(context,
+                                              RouteName.trainerProfileScreen);
+                                          _trainerController
+                                              .isProfileLoading.value = true;
+                                          // await TrainerServices.getATrainerDetail(
+                                          //     _trainerController
+                                          //         .allTrainer
+                                          //         .value
+                                          //         .response!
+                                          //         .data!
+                                          //         .trainers![index]
+                                          //         .user!
+                                          //         .id!);
+                                          _trainerController.planModel.value =
+                                              await TrainerServices
+                                                  .getPlanByTrainerId(
+                                                      _trainerController
+                                                          .allTrainer
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .trainers![index]
+                                                          .user!
+                                                          .id!);
+                                          _trainerController
+                                              .loadingIndicator.value = false;
+                                          _trainerController
+                                                  .initialPostData.value =
+                                              await TrainerServices
+                                                  .getTrainerPosts(
+                                                      _trainerController
+                                                          .allTrainer
+                                                          .value
+                                                          .response!
+                                                          .data!
+                                                          .trainers![index]
+                                                          .user!
+                                                          .id!,
+                                                      0);
+                                          if (_trainerController
+                                                  .initialPostData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .length !=
+                                              0) {
+                                            _trainerController
+                                                    .trainerPostList.value =
+                                                _trainerController
+                                                    .initialPostData
+                                                    .value
+                                                    .response!
+                                                    .data!;
+                                          } else {
+                                            _trainerController.trainerPostList
+                                                .clear();
+                                          }
+                                          _trainerController
+                                              .isProfileLoading.value = false;
+                                        },
+                                      );
+                                    }),
                           )),
                   ],
                 ),
@@ -721,341 +796,126 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Obx(
-          () => Container(
-            color: kBlack.withOpacity(0.6),
-            child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                child: AlertDialog(
-                  insetPadding: EdgeInsets.zero,
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 30 * SizeConfig.heightMultiplier!),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          8 * SizeConfig.imageSizeMultiplier!)),
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  title: Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "available_timings".tr,
-                          style: AppTextStyle.black400Text.copyWith(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1!.color),
-                        ),
-                        SizedBox(
-                          height: 16 * SizeConfig.heightMultiplier!,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Container(
-                                        color: kBlack.withOpacity(0.6),
-                                        child: BackdropFilter(
-                                            filter: ImageFilter.blur(
-                                                sigmaX: 2, sigmaY: 2),
-                                            child: AlertDialog(
-                                              insetPadding: EdgeInsets.zero,
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 30 *
-                                                          SizeConfig
-                                                              .heightMultiplier!),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8 *
-                                                          SizeConfig
-                                                              .imageSizeMultiplier!)),
-                                              backgroundColor: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
-                                              title: Container(
-                                                width: 280 *
-                                                    SizeConfig.widthMultiplier!,
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Stack(
-                                                      children: [
-                                                        Container(
-                                                          height: 196 *
-                                                              SizeConfig
-                                                                  .heightMultiplier!,
-                                                          child: Center(
-                                                            child: Container(
-                                                              height: 54 *
-                                                                  SizeConfig
-                                                                      .heightMultiplier!,
-                                                              decoration: BoxDecoration(
-                                                                  border: Border(
-                                                                      top: BorderSide(
-                                                                          color:
-                                                                              greyBorder,
-                                                                          width:
-                                                                              0.5),
-                                                                      bottom: BorderSide(
-                                                                          color:
-                                                                              greyBorder,
-                                                                          width:
-                                                                              0.5))),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          height: 196 *
-                                                              SizeConfig
-                                                                  .heightMultiplier!,
-                                                          child:
-                                                              TimePickerSpinner(
-                                                            time: _trainerController
-                                                                .fromTimeForFilter
-                                                                .value,
-                                                            is24HourMode: false,
-                                                            normalTextStyle:
-                                                                AppTextStyle
-                                                                    .normalPureBlackText
-                                                                    .copyWith(
-                                                              color: hintGrey,
-                                                              fontSize: 24 *
-                                                                  SizeConfig
-                                                                      .textMultiplier!,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                            highlightedTextStyle:
-                                                                AppTextStyle
-                                                                    .normalPureBlackText
-                                                                    .copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyText1!
-                                                                  .color,
-                                                              fontSize: 32 *
-                                                                  SizeConfig
-                                                                      .textMultiplier!,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                            spacing: 33 *
-                                                                SizeConfig
-                                                                    .widthMultiplier!,
-                                                            itemHeight: 60 *
-                                                                SizeConfig
-                                                                    .heightMultiplier!,
-                                                            isForce2Digits:
-                                                                true,
-                                                            minutesInterval: 1,
-                                                            onTimeChange:
-                                                                (time) {
-                                                              _trainerController
-                                                                  .fromTimeForFilter
-                                                                  .value = time;
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    ProceedButton(
-                                                      title: "Confirm",
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            )),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: timeTile(
-                                    time: DateFormat("hh : mm").format(
-                                        _trainerController
-                                            .fromTimeForFilter.value),
-                                    trailing: DateFormat("a").format(
-                                        _trainerController
-                                            .fromTimeForFilter.value))),
-                            Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal:
-                                        8 * SizeConfig.widthMultiplier!),
-                                child: Text(
-                                  "to".tr,
-                                  style: AppTextStyle.hblack400Text.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline4!
-                                          .color),
-                                )),
-                            GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Container(
-                                        color: kBlack.withOpacity(0.6),
-                                        child: BackdropFilter(
-                                            filter: ImageFilter.blur(
-                                                sigmaX: 2, sigmaY: 2),
-                                            child: AlertDialog(
-                                              insetPadding: EdgeInsets.zero,
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 30 *
-                                                          SizeConfig
-                                                              .heightMultiplier!),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8 *
-                                                          SizeConfig
-                                                              .imageSizeMultiplier!)),
-                                              backgroundColor: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
-                                              title: Container(
-                                                width: 280 *
-                                                    SizeConfig.widthMultiplier!,
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Stack(
-                                                      children: [
-                                                        Container(
-                                                          height: 196 *
-                                                              SizeConfig
-                                                                  .heightMultiplier!,
-                                                          child: Center(
-                                                            child: Container(
-                                                              height: 54 *
-                                                                  SizeConfig
-                                                                      .heightMultiplier!,
-                                                              decoration: BoxDecoration(
-                                                                  border: Border(
-                                                                      top: BorderSide(
-                                                                          color:
-                                                                              greyBorder,
-                                                                          width:
-                                                                              0.5),
-                                                                      bottom: BorderSide(
-                                                                          color:
-                                                                              greyBorder,
-                                                                          width:
-                                                                              0.5))),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          height: 196 *
-                                                              SizeConfig
-                                                                  .heightMultiplier!,
-                                                          child:
-                                                              TimePickerSpinner(
-                                                            time: _trainerController
-                                                                .toTimeForFilter
-                                                                .value,
-                                                            is24HourMode: false,
-                                                            normalTextStyle:
-                                                                AppTextStyle
-                                                                    .normalPureBlackText
-                                                                    .copyWith(
-                                                              color: hintGrey,
-                                                              fontSize: 24 *
-                                                                  SizeConfig
-                                                                      .textMultiplier!,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                            highlightedTextStyle:
-                                                                AppTextStyle
-                                                                    .normalPureBlackText
-                                                                    .copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyText1!
-                                                                  .color,
-                                                              fontSize: 32 *
-                                                                  SizeConfig
-                                                                      .textMultiplier!,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                            ),
-                                                            spacing: 33 *
-                                                                SizeConfig
-                                                                    .widthMultiplier!,
-                                                            itemHeight: 60 *
-                                                                SizeConfig
-                                                                    .heightMultiplier!,
-                                                            isForce2Digits:
-                                                                true,
-                                                            minutesInterval: 1,
-                                                            onTimeChange:
-                                                                (time) {
-                                                              _trainerController
-                                                                  .toTimeForFilter
-                                                                  .value = time;
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    ProceedButton(
-                                                      title: "Confirm",
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            )),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: timeTile(
-                                    time: DateFormat("hh : mm").format(
-                                        _trainerController
-                                            .toTimeForFilter.value),
-                                    trailing: DateFormat("a").format(
-                                        _trainerController
-                                            .toTimeForFilter.value))),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 26 * SizeConfig.heightMultiplier!,
-                        ),
-                        SizedBox(
-                          width: 280 * SizeConfig.widthMultiplier!,
-                          child: ProceedButton(
-                              title: "confirm".tr,
-                              onPressed: () {
-                                //todo add filter feature here
-                                Navigator.pop(context);
-                              }),
-                        )
-                      ],
-                    ),
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                insetPadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 30 * SizeConfig.heightMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                title: Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "available_timings".tr,
+                        style: AppTextStyle.black400Text.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1!.color),
+                      ),
+                      SizedBox(
+                        height: 16 * SizeConfig.heightMultiplier!,
+                      ),
+                      Obx(
+                        () => _trainerController.isTiming.value
+                            ? Center(
+                                child: CustomizedCircularProgress(),
+                              )
+                            : Container(
+                                width: Get.width -
+                                    60 * SizeConfig.widthMultiplier!,
+                                height: 356 * SizeConfig.heightMultiplier!,
+                                child: GridView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: _trainerController
+                                      .timingModel.value.response!.data!.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          crossAxisSpacing:
+                                              8 * SizeConfig.widthMultiplier!,
+                                          mainAxisSpacing:
+                                              8 * SizeConfig.heightMultiplier!,
+                                          mainAxisExtent: 46 *
+                                              SizeConfig.heightMultiplier!),
+                                  itemBuilder: (context, index) => Obx(
+                                    () => TimeSLotSelect(
+                                      istimeSlotSelected: _trainerController
+                                                  .availability
+                                                  .indexOf(_trainerController
+                                                      .timingModel
+                                                      .value
+                                                      .response!
+                                                      .data![index]
+                                                      .serialId) ==
+                                              -1
+                                          ? false
+                                          : true,
+                                      // isDisabled: false.obs,
+                                      onTap: () {
+                                        if (_trainerController.availability
+                                                .indexOf(_trainerController
+                                                    .timingModel
+                                                    .value
+                                                    .response!
+                                                    .data![index]
+                                                    .serialId) ==
+                                            -1) {
+                                          _trainerController.availability.add(
+                                              _trainerController
+                                                  .timingModel
+                                                  .value
+                                                  .response!
+                                                  .data![index]
+                                                  .serialId!);
+                                        } else {
+                                          _trainerController.availability
+                                              .remove(_trainerController
+                                                  .timingModel
+                                                  .value
+                                                  .response!
+                                                  .data![index]
+                                                  .serialId!);
+                                        }
+                                        setState(() {});
+                                      },
+                                      time: _trainerController.timingModel.value
+                                          .response!.data![index].name,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                      SizedBox(
+                        height: 26 * SizeConfig.heightMultiplier!,
+                      ),
+                      SizedBox(
+                        width: 280 * SizeConfig.widthMultiplier!,
+                        child: ProceedButton(
+                            title: "confirm".tr,
+                            onPressed: () async {
+                              _trainerController.filterIsLoading.value = true;
+                              Navigator.pop(context);
+                              _trainerController.allTrainer.value =
+                                  await TrainerServices.getAllTrainer(
+                                      availability:
+                                          _trainerController.availability);
+                              _scrollController.jumpTo(0);
+                              _trainerController.filterIsLoading.value = false;
+                              //todo add filter feature here
+                            }),
+                      )
+                    ],
                   ),
-                )),
-          ),
+                ),
+              )),
         );
       },
     );
@@ -1091,8 +951,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
   }
 
   void getSortByData() async {
-    _trainerController.filterOptions.value = await TrainerServices.getSortByData();
-
+    _trainerController.filterOptions.value =
+        await TrainerServices.getSortByData();
   }
 }
 
@@ -1444,6 +1304,46 @@ class ItemCategory extends StatelessWidget {
                         : Theme.of(context).primaryColorLight),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TimeSLotSelect extends StatelessWidget {
+  TimeSLotSelect(
+      {this.time,
+      required this.istimeSlotSelected,
+      required this.onTap,
+      Key? key})
+      : super(key: key);
+  String? time;
+  bool istimeSlotSelected;
+  int? status;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: istimeSlotSelected ? kgreen49 : greyBorder,
+              width: 1 * SizeConfig.widthMultiplier!),
+          color: istimeSlotSelected ? kgreen49 : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        width: 104 * SizeConfig.widthMultiplier!,
+        height: 46 * SizeConfig.heightMultiplier!,
+        child: Center(
+          child: Text(
+            time.toString(),
+            style: istimeSlotSelected
+                ? AppTextStyle.hnormal600BlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color)
+                : AppTextStyle.hblack400Text.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color),
           ),
         ),
       ),
