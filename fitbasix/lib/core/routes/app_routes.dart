@@ -41,6 +41,7 @@ import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_height.dart';
 import 'package:fitbasix/feature/spg/view/set_weight.dart';
+import 'package:fitbasix/feature/view_documents/view/view_all_user_with_document.dart';
 import '../../feature/message/view/chat_videocallscreen.dart';
 import '../../feature/plans/view/plan_info.dart';
 import '../../feature/plans/view/trainers_plan.dart';
@@ -103,6 +104,7 @@ abstract class RouteName {
   static const otpReScreen = "/otp_screen";
   static const selectProfilePhoto = "/select_profile_photo";
   static const myTrainersScreen = "/my_trainer_screen";
+  static const viewAllUserWithDoc = "/view_all_user_with_document";
   RouteName._();
 }
 
@@ -123,6 +125,14 @@ class GenerateRoute {
           BuildContext context,
         ) =>
             LoginScreen(),
+      );
+    }
+    if (route == RouteName.viewAllUserWithDoc) {
+      return MaterialPageRoute(
+        builder: (
+          BuildContext context,
+        ) =>
+            ViewAllUsersWithDocuments(),
       );
     }
     if (route == RouteName.myTrainersScreen) {
