@@ -5,9 +5,15 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
 import 'package:crypt/crypt.dart';
+import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/instance_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -22,7 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -41,6 +47,7 @@ import 'package:quickblox_sdk/models/qb_subscription.dart';
 import 'package:quickblox_sdk/notifications/constants.dart';
 import 'package:quickblox_sdk/push/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import '../../../core/api_service/dio_service.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/reponsive/SizeConfig.dart';
@@ -62,6 +69,7 @@ import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 import '../../get_trained/model/PlanModel.dart';
 import '../../get_trained/model/all_trainer_model.dart';
 import '../../get_trained/services/trainer_services.dart';
+import '../../log_in/services/login_services.dart';
 import '../../posts/services/createPost_Services.dart';
 import '../controller/chat_controller.dart';
 
@@ -198,7 +206,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Center(
                       child: Text("no message yet"),
                     )),
-              widget.isCurrentlyEnrolled!?Align(
+              !widget.isCurrentlyEnrolled!?Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
@@ -554,6 +562,7 @@ class _ChatScreenState extends State<ChatScreen> {
     XFile? pickedFile = await pickFromCamera();
     if (pickedFile != null) {
       try {
+        uploadFileToServerDB(pickedFile.path,pickedFile.path.split('.').last);
         QBFile? file = await QB.content.upload(pickedFile.path, public: false);
         if (file != null) {
           int? id = file.id;
@@ -631,6 +640,7 @@ class _ChatScreenState extends State<ChatScreen> {
       try {
         List<QBAttachment>? attachmentsList = [];
         for (int i = 0; i < pickedFiles.files.length; i++) {
+          uploadFileToServerDB(pickedFiles.files[i].path!,pickedFiles.files[i].path!.split('.').last);
           QBFile? file = await QB.content
               .upload(pickedFiles.files[i].path!, public: false);
           if (file != null) {
@@ -840,6 +850,19 @@ class _ChatScreenState extends State<ChatScreen> {
       },
     );
   }
+
+  void uploadFileToServerDB(String path, String fileType) async {
+     var dio = DioUtil().getInstance();
+     dio!.options.headers["language"] = "1";
+     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+     FormData data = FormData.fromMap({
+        'files':await MultipartFile.fromFile(path),
+        'trainerId':widget.trainerId!,
+     });
+     var response = await dio.post(ApiUrl.uploadChatFileToDb,data: data);
+     print(response.data.toString()+" iiiii");
+  }
+
 }
 
 class MessageBubbleSender extends StatelessWidget {

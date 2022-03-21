@@ -5,6 +5,7 @@ class ApiUrl {
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
+  static String uploadChatFileToDb = liveBaseURL + '/api/documents/createDocument';
   static String editNumberOtp = liveBaseURL + '/api/auth/generateOtp';
   static String getTermOfUseContents = liveBaseURL + '/api/auth/termsOfService';
   static String getPrivacyPolicyContents =
