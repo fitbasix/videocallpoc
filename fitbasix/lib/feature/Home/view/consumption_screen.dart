@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -56,9 +59,9 @@ class ConsumptionScreen extends StatelessWidget {
         child: Obx(
           () => _homeController.isConsumptionLoading.value
               ? Center(
-                  child: SizedBox
-                    (
-                    height: MediaQuery.of(context).size.height-100*SizeConfig.heightMultiplier!,
+                  child: SizedBox(
+                      height: MediaQuery.of(context).size.height -
+                          100 * SizeConfig.heightMultiplier!,
                       child: CustomizedCircularProgress()),
                 )
               : Container(
@@ -593,6 +596,7 @@ class ConsumptionScreen extends StatelessWidget {
   void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
       int toHour, int toMinute, int reminderSerialNo) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    log("hhh");
     bool canceled = await AndroidAlarmManager.cancel(0).then((value) {
       AndroidAlarmManager.periodic(Duration(minutes: reminderSerialNo), 0,
           showWaterConsumptionNotification,
@@ -601,8 +605,8 @@ class ConsumptionScreen extends StatelessWidget {
           startAt: DateTime(DateTime.now().year, DateTime.now().month,
               DateTime.now().day, fromHour, fromMinute),
           rescheduleOnReboot: true);
-      sharedPreferences.setInt("endMinute", 7);
-      sharedPreferences.setInt("endHour", 18);
+      sharedPreferences.setInt("endMinute", 11);
+      sharedPreferences.setInt("endHour", 10);
       //sharedPreferences.setInt("endMinute", toMinute);
       //sharedPreferences.setInt("endHour", toHour);
       return value;

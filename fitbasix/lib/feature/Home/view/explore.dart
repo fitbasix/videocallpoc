@@ -41,14 +41,14 @@ class _ExploreFeedState extends State<ExploreFeed> {
       if (_scrollController.position.maxScrollExtent ==
           _scrollController.position.pixels) {
         homeController.nextDataLoad.value = true;
-        print("llllll" + homeController.explorePageCount.value.toString());
+        log(homeController.explorePageCount.value.toString() + "KKKK");
         final postQuery = await HomeService.getExplorePosts(
             skip: homeController.explorePageCount.value * 5);
 
         if (postQuery.response!.data!.length < 5) {
           homeController.explorePostList.addAll(postQuery.response!.data!);
           // homeController.explorePageCount.value++;
-          homeController.nextDataLoad.value = false;
+
           //   return;
         } else {
           // if (_homeController.trendingPostList.last.id ==
@@ -60,13 +60,11 @@ class _ExploreFeedState extends State<ExploreFeed> {
           if (homeController.explorePostList.last.id ==
               postQuery.response!.data!.last.id) {
             // homeController.explorePageCount.value++;
-            homeController.nextDataLoad.value = false;
             //  return;
           }
 
           // homeController.explorePageCount.value++;
           homeController.explorePostList.addAll(postQuery.response!.data!);
-          homeController.nextDataLoad.value = false;
         }
         homeController.explorePageCount.value++;
         log("explore_page" + homeController.explorePageCount.value.toString());
@@ -114,7 +112,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                             if (value.length > 2) {
                               homeController.exploreSearchText.value = value;
                               homeController.isExploreDataLoading.value = true;
-                              homeController.explorePageCount.value = 0;
+                              homeController.explorePageCount.value = 1;
                               homeController.explorePostModel.value =
                                   await HomeService.getExplorePosts();
                               homeController.explorePostList.value =
@@ -145,7 +143,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                 homeController.searchController.clear();
                                 homeController.isExploreDataLoading.value =
                                     true;
-                                homeController.explorePageCount.value = 0;
+                                homeController.explorePageCount.value = 1;
                                 homeController.explorePostModel.value =
                                     await HomeService.getExplorePosts();
                                 homeController.explorePostList.value =
@@ -217,7 +215,8 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                 left: 16 * SizeConfig.widthMultiplier!),
                             child: ExploreItemCategory(
                               onTap: () async {
-                                homeController.explorePageCount.value = 0;
+                                homeController.explorePageCount.value = 1;
+                                _scrollController.jumpTo(0);
                                 homeController.selectedPostCategoryIndex.value =
                                     -1;
                                 homeController.isExploreDataLoading.value =
@@ -275,7 +274,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                             child: ExploreItemCategory(
                                               onTap: () async {
                                                 homeController
-                                                    .explorePageCount.value = 0;
+                                                    .explorePageCount.value = 1;
                                                 homeController
                                                         .selectedPostCategoryIndex
                                                         .value =

@@ -18,6 +18,8 @@ import 'package:fitbasix/feature/Home/view/widgets/comments_tile.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../spg/view/set_goal_screen.dart';
+
 class PostTile extends StatefulWidget {
   PostTile(
       {Key? key,
@@ -361,6 +363,10 @@ class _PostTileState extends State<PostTile> {
                                       0
                                   ? CachedNetworkImage(
                                       imageUrl: widget.imageUrl[index],
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
                                       height: 360 * SizeConfig.widthMultiplier!,
                                       width: 360 * SizeConfig.widthMultiplier!,
                                       fit: BoxFit.contain,

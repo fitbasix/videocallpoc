@@ -1,7 +1,7 @@
 class ApiUrl {
   static String liveBaseURL = 'http://3.131.171.176';
 
-  // static String liveBaseURL = 'https://d38b-103-15-254-119.ngrok.io';
+  // static String liveBaseURL = 'https://9f48-103-15-254-218.ngrok.io';
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
@@ -21,7 +21,8 @@ class ApiUrl {
   static String getSortByData =
       liveBaseURL + '/api/optionData/sorting/getOptions';
   static String getMytainers = liveBaseURL + '/api/trainer/myTrainers';
-
+  static String getAllSlots =
+      liveBaseURL + '/api/optionData/timeSlots/getSlots';
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
   static String loginAndSignup = liveBaseURL + '/api/auth/login';
   static String registerUser = liveBaseURL + '/api/auth/create';
@@ -70,4 +71,8 @@ class ApiUrl {
   static String getAllPlans =
       liveBaseURL + "/api/optionData/timeSlots/getSlots";
   static String bookDemo = liveBaseURL + "/api/schedule/appointment";
+
+  /// de Active account
+  static String deActiveAccount = liveBaseURL + "/api/auth/deactivateAccount";
+  static String deleteAccount = liveBaseURL + "/api/auth/deleteAccount";
 }

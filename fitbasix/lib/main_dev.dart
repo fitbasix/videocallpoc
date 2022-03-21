@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'dart:isolate';
-
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -11,13 +9,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fitbasix/setup-my-app.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'feature/settings/view/settings.dart';
 
 initializeNotification() {
   AwesomeNotifications().initialize(
@@ -69,7 +64,7 @@ Future<void> main() async {
     await Firebase.initializeApp();
 
     if (Platform.isAndroid) {
-       await AndroidAlarmManager.initialize();
+      await AndroidAlarmManager.initialize();
     }
 
     FirebaseMessaging.instance.getToken().then((value) {
