@@ -11,6 +11,7 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 
 class LoginController extends GetxController {
   final googleSignIn = GoogleSignIn().obs;
+  Rx<bool> isGoogleSignInLoading = false.obs;
   //GoogleSignInAccount? _user;
   var _user = Rx<GoogleSignInAccount?>(null);
   //GoogleSignInAccount get user => _user!;

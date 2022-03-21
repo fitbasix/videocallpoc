@@ -1,6 +1,10 @@
+
+import 'dart:io';
+
 import 'dart:developer';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -20,6 +24,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:shared_preferences_android/shared_preferences_android.dart';
+import 'package:shared_preferences_ios/shared_preferences_ios.dart';
 
 import 'widgets/water_capsule.dart';
 
@@ -593,24 +599,25 @@ class ConsumptionScreen extends StatelessWidget {
   //   });
   // }
 
-  void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
+    void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
       int toHour, int toMinute, int reminderSerialNo) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    log("hhh");
-    bool canceled = await AndroidAlarmManager.cancel(0).then((value) {
-      AndroidAlarmManager.periodic(Duration(minutes: reminderSerialNo), 0,
+    await AndroidAlarmManager.cancel(0);
+    if(reminderSerialNo>0){
+      print("got here");
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      sharedPreferences.setInt("endMinute", toMinute);
+      sharedPreferences.setInt("endHour", toHour);
+      sharedPreferences.setInt("startMinute", fromMinute);
+      sharedPreferences.setInt("startHour", fromHour);
+      AndroidAlarmManager.periodic(Duration(minutes:1
+        //reminderSerialNo
+      ), 0,
           showWaterConsumptionNotification,
           allowWhileIdle: true,
           exact: true,
-          startAt: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day, fromHour, fromMinute),
+          startAt: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, fromHour, fromMinute),
           rescheduleOnReboot: true);
-      sharedPreferences.setInt("endMinute", 11);
-      sharedPreferences.setInt("endHour", 10);
-      //sharedPreferences.setInt("endMinute", toMinute);
-      //sharedPreferences.setInt("endHour", toHour);
-      return value;
-    });
+    }
   }
 }
 
@@ -710,7 +717,9 @@ class __ChartAppState extends State<ChartApp> {
   }
 }
 
-void showWaterConsumptionNotification(int id) async {
+void showWaterConsumptionNotification(int time) async {
+  if (Platform.isAndroid) SharedPreferencesAndroid.registerWith();
+  if (Platform.isIOS) SharedPreferencesIOS.registerWith();
   print("calledddd1123");
   print(DateTime.now());
   SharedPreferences sharedPreferences =
@@ -720,8 +729,16 @@ void showWaterConsumptionNotification(int id) async {
         DateTime.now().month,
         DateTime.now().day,
         value.getInt("endHour")!,
-        value.getInt("endMinute")!);
-    if (DateTime.now().isBefore(endTime)) {
+        value.getInt("endMinute")!
+    );
+    DateTime startTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        value.getInt("startHour")!,
+        value.getInt("startMinute")!
+    );
+    if (DateTime.now().isBefore(endTime)&&DateTime.now().isAfter(startTime)) {
       print("calledddd");
       AwesomeNotifications().createNotification(
           content: NotificationContent(
