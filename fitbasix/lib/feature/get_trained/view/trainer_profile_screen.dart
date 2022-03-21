@@ -50,16 +50,16 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   var isPlanLoading = true.obs;
 
   getAllTrainerPlanData() async {
-    if(!_trainerController.isMyTrainerProfileLoading.value){
-    _trainerController.planModel.value = PlanModel();
-    isPlanLoading.value = true;
-    _trainerController.planModel.value =
-        await TrainerServices.getPlanByTrainerId(
-                _trainerController.atrainerDetail.value.user!.id!)
-            .then((value) {
-      isPlanLoading.value = false;
-      return value;
-    });
+    if (!_trainerController.isMyTrainerProfileLoading.value) {
+      _trainerController.planModel.value = PlanModel();
+      isPlanLoading.value = true;
+      _trainerController.planModel.value =
+          await TrainerServices.getPlanByTrainerId(
+                  _trainerController.atrainerDetail.value.user!.id!)
+              .then((value) {
+        isPlanLoading.value = false;
+        return value;
+      });
     }
   }
 
@@ -77,186 +77,216 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Obx(
-          () => !_trainerController.isMyTrainerProfileLoading.value?TrainerPage(
-            trainerImage:
-                trainerController.atrainerDetail.value.user!.profilePhoto!,
-            trainerCoverImage: trainerController
-                .atrainerDetail.value.user!.coverPhoto!
-                .toString(),
-            isEnrolled: _trainerController.enrolledTrainer
-                        .indexOf(trainerController.atrainerDetail.value.id!) ==
-                    -1
-                ? _trainerController.atrainerDetail.value.isEnrolled!
-                : true,
-            onFollow: () {
-              if (trainerController.atrainerDetail.value.isFollowing!) {
-                trainerController.atrainerDetail.value.isFollowing = false;
-                trainerController.atrainerDetail.value.followers =
-                    (int.tryParse(trainerController
-                                .atrainerDetail.value.followers!)! -
-                            1)
-                        .toString();
-                TrainerServices.unFollowTrainer(
-                    trainerController.atrainerDetail.value.user!.id!);
-              } else {
-                trainerController.atrainerDetail.value.isFollowing = true;
-                trainerController.atrainerDetail.value.followers =
-                    (int.tryParse(trainerController
-                                .atrainerDetail.value.followers!)! +
-                            1)
-                        .toString();
-                TrainerServices.followTrainer(
-                    trainerController.atrainerDetail.value.user!.id!);
-              }
-
-              setState(() {});
-            },
-            onMessage: () async {
-              print("the button value is:" + isMessageLoading.toString());
-              if (!isMessageLoading) {
-                isMessageLoading = true;
-                bool dialogCreatedPreviously = false;
-                int openPage = 0;
-                //133817477	user1
-                //133815819 trainer1
-                //133612091 trainer
-                final sharedPreferences = await SharedPreferences.getInstance();
-                _homeController.userQuickBloxId.value =
-                    sharedPreferences.getInt("userQuickBloxId")!;
-                int UserQuickBloxId = _trainerController.atrainerDetail.value.quickBlox!;
-
-                // _homeController.userQuickBloxId.value == 133815819
-                //     ? 133819788
-                //    : 133815819;
-
-
-                print(UserQuickBloxId.toString() + "qqqqq");
-
-                print(UserQuickBloxId.toString() +
-                    "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
-                QBSort sort = QBSort();
-                sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
-                sort.ascending = true;
-                try {
-                  List<QBDialog?> dialogs = await QB.chat
-                      .getDialogs(
-                    sort: sort,
-                  )
-                      .then((value) async {
-                    for (int i = 0; i < value.length; i++) {
-                      if (value[i]!.occupantsIds!.contains(
-                              _homeController.userQuickBloxId.value) &&
-                          value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
-                        dialogCreatedPreviously = true;
-                        print(value[i]!.id.toString() + "maxxxx");
-                        isMessageLoading = false;
-                        if (openPage < 1) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ChatScreen(
-                                      userDialogForChat: value[i],
-                                      opponentID: UserQuickBloxId,
-                                      profilePicURL: _trainerController.atrainerDetail.value.user!.profilePhoto,
-                                      trainerId: _trainerController.atrainerDetail.value.user!.id,
-                                      isCurrentlyEnrolled: _trainerController.atrainerDetail.value.isEnrolled,
-                                      trainerTitle: trainerController
-                                          .atrainerDetail
-                                          .value
-                                          .user!
-                                          .name!
-                                      )));
-                          ++openPage;
-                        }
-                        isMessageLoading = false;
-                        break;
-                      }
+          () => !_trainerController.isMyTrainerProfileLoading.value
+              ? TrainerPage(
+                  trainerImage: trainerController
+                      .atrainerDetail.value.user!.profilePhoto!,
+                  trainerCoverImage: trainerController
+                      .atrainerDetail.value.user!.coverPhoto!
+                      .toString(),
+                  isEnrolled: _trainerController.enrolledTrainer.indexOf(
+                              trainerController.atrainerDetail.value.id!) ==
+                          -1
+                      ? _trainerController.atrainerDetail.value.isEnrolled!
+                      : true,
+                  onFollow: () {
+                    if (trainerController.atrainerDetail.value.isFollowing!) {
+                      trainerController.atrainerDetail.value.isFollowing =
+                          false;
+                      trainerController.atrainerDetail.value.followers =
+                          (int.tryParse(trainerController
+                                      .atrainerDetail.value.followers!)! -
+                                  1)
+                              .toString();
+                      TrainerServices.unFollowTrainer(
+                          trainerController.atrainerDetail.value.user!.id!);
+                    } else {
+                      trainerController.atrainerDetail.value.isFollowing = true;
+                      trainerController.atrainerDetail.value.followers =
+                          (int.tryParse(trainerController
+                                      .atrainerDetail.value.followers!)! +
+                                  1)
+                              .toString();
+                      TrainerServices.followTrainer(
+                          trainerController.atrainerDetail.value.user!.id!);
                     }
-                    if (!dialogCreatedPreviously) {
-                      List<int> occupantsIds = [
-                        _homeController.userQuickBloxId.value,
-                        UserQuickBloxId
-                      ];
-                      String dialogName = UserQuickBloxId.toString() +
-                          _homeController.userQuickBloxId.value.toString() +
-                          DateTime.now().millisecond.toString();
-                      int dialogType = QBChatDialogTypes.CHAT;
-                      print("got here too");
+
+                    setState(() {});
+                  },
+                  onMessage: () async {
+                    print("the button value is:" + isMessageLoading.toString());
+                    if (!isMessageLoading) {
+                      isMessageLoading = true;
+                      bool dialogCreatedPreviously = false;
+                      int openPage = 0;
+                      //133817477	user1
+                      //133815819 trainer1
+                      //133612091 trainer
+                      final sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      _homeController.userQuickBloxId.value =
+                          sharedPreferences.getInt("userQuickBloxId")!;
+                      int UserQuickBloxId =
+                          _trainerController.atrainerDetail.value.quickBlox!;
+
+                      // _homeController.userQuickBloxId.value == 133815819
+                      //     ? 133819788
+                      //    : 133815819;
+
+                      print(UserQuickBloxId.toString() + "qqqqq");
+
+                      print(UserQuickBloxId.toString() +
+                          "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
+                      QBSort sort = QBSort();
+                      sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+                      sort.ascending = true;
                       try {
-                        QBDialog? createdDialog = await QB.chat
-                            .createDialog(
-                          occupantsIds,
-                          dialogName,
-                          dialogType: QBChatDialogTypes.CHAT,
+                        List<QBDialog?> dialogs = await QB.chat
+                            .getDialogs(
+                          sort: sort,
                         )
-                            .then((value) {
-                          print("dialog id is:" + value!.id!);
-                          isMessageLoading = false;
-                          if (openPage < 1) {
-                            isMessageLoading = false;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChatScreen(
-                                        userDialogForChat: value,
-                                        opponentID: UserQuickBloxId,
-                                        profilePicURL: _trainerController.atrainerDetail.value.user!.profilePhoto,
-                                        trainerId: _trainerController.atrainerDetail.value.user!.id,
-                                        isCurrentlyEnrolled: _trainerController.atrainerDetail.value.isEnrolled,
-                                        trainerTitle: trainerController
-                                            .atrainerDetail
-                                            .value
-                                            .user!
-                                            .name!)));
-                            ++openPage;
+                            .then((value) async {
+                          for (int i = 0; i < value.length; i++) {
+                            if (value[i]!.occupantsIds!.contains(
+                                    _homeController.userQuickBloxId.value) &&
+                                value[i]!
+                                    .occupantsIds!
+                                    .contains(UserQuickBloxId)) {
+                              dialogCreatedPreviously = true;
+                              print(value[i]!.id.toString() + "maxxxx");
+                              isMessageLoading = false;
+                              if (openPage < 1) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChatScreen(
+                                            userDialogForChat: value[i],
+                                            opponentID: UserQuickBloxId,
+                                            profilePicURL: _trainerController
+                                                .atrainerDetail
+                                                .value
+                                                .user!
+                                                .profilePhoto,
+                                            trainerId: _trainerController
+                                                .atrainerDetail.value.user!.id,
+                                            isCurrentlyEnrolled:
+                                                _trainerController
+                                                    .atrainerDetail
+                                                    .value
+                                                    .isEnrolled,
+                                            trainerTitle: trainerController
+                                                .atrainerDetail
+                                                .value
+                                                .user!
+                                                .name!)));
+                                ++openPage;
+                              }
+                              isMessageLoading = false;
+                              break;
+                            }
                           }
+                          if (!dialogCreatedPreviously) {
+                            List<int> occupantsIds = [
+                              _homeController.userQuickBloxId.value,
+                              UserQuickBloxId
+                            ];
+                            String dialogName = UserQuickBloxId.toString() +
+                                _homeController.userQuickBloxId.value
+                                    .toString() +
+                                DateTime.now().millisecond.toString();
+                            int dialogType = QBChatDialogTypes.CHAT;
+                            print("got here too");
+                            try {
+                              QBDialog? createdDialog = await QB.chat
+                                  .createDialog(
+                                occupantsIds,
+                                dialogName,
+                                dialogType: QBChatDialogTypes.CHAT,
+                              )
+                                  .then((value) {
+                                print("dialog id is:" + value!.id!);
+                                isMessageLoading = false;
+                                if (openPage < 1) {
+                                  isMessageLoading = false;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChatScreen(
+                                              userDialogForChat: value,
+                                              opponentID: UserQuickBloxId,
+                                              profilePicURL: _trainerController
+                                                  .atrainerDetail
+                                                  .value
+                                                  .user!
+                                                  .profilePhoto,
+                                              trainerId: _trainerController
+                                                  .atrainerDetail
+                                                  .value
+                                                  .user!
+                                                  .id,
+                                              isCurrentlyEnrolled:
+                                                  _trainerController
+                                                      .atrainerDetail
+                                                      .value
+                                                      .isEnrolled,
+                                              trainerTitle: trainerController
+                                                  .atrainerDetail
+                                                  .value
+                                                  .user!
+                                                  .name!)));
+                                  ++openPage;
+                                }
+                              });
+                            } on PlatformException catch (e) {
+                              isMessageLoading = false;
+                              print(e.toString());
+                            }
+                          }
+                          return value;
                         });
                       } on PlatformException catch (e) {
                         isMessageLoading = false;
-                        print(e.toString());
+                        // some error occurred, look at the exception message for more details
                       }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Message is loading")));
                     }
-                    return value;
-                  });
-                } on PlatformException catch (e) {
-                  isMessageLoading = false;
-                  // some error occurred, look at the exception message for more details
-                }
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Message is loading")));
-              }
-            },
-            onEnroll: () {
-              Navigator.pushNamed(context, RouteName.trainerplanScreen);
+                  },
+                  onEnroll: () {
+                    Navigator.pushNamed(context, RouteName.trainerplanScreen);
 
-              // showDialog(
-              //     context: context,
-              //     builder: (BuildContext context) => EnrollTrainerDialog());
-            },
-            onBack: () {
-              Navigator.pop(context);
-            },
-            name: trainerController.atrainerDetail.value.user!.name!,
-            followersCount: NumberFormatter.textFormatter(
-                trainerController.atrainerDetail.value.followers!),
-            followingCount: NumberFormatter.textFormatter(
-                trainerController.atrainerDetail.value.following!),
-            rating:
-                double.parse(trainerController.atrainerDetail.value.rating!),
-            ratingCount: NumberFormatter.textFormatter(
-                trainerController.atrainerDetail.value.totalRating!),
-            totalPeopleTrained: NumberFormatter.textFormatter(
-                trainerController.atrainerDetail.value.trainees!),
-            strengths: trainerController.atrainerDetail.value.strength!,
-            aboutTrainer: trainerController.atrainerDetail.value.about!,
-            certifcateTitle:
-                trainerController.atrainerDetail.value.certificates!,
-            allPlans: trainerController.isProfileLoading.value
-                ? []
-                : trainerController.planModel.value.response!.data!,
-            isFollowing: trainerController.atrainerDetail.value.isFollowing!,
-          ):Center(child: CustomizedCircularProgress(),),
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) => EnrollTrainerDialog());
+                  },
+                  onBack: () {
+                    Navigator.pop(context);
+                  },
+                  name: trainerController.atrainerDetail.value.user!.name!,
+                  followersCount: NumberFormatter.textFormatter(
+                      trainerController.atrainerDetail.value.followers!),
+                  followingCount: NumberFormatter.textFormatter(
+                      trainerController.atrainerDetail.value.following!),
+                  rating: double.parse(
+                      trainerController.atrainerDetail.value.rating!),
+                  ratingCount: NumberFormatter.textFormatter(
+                      trainerController.atrainerDetail.value.totalRating!),
+                  totalPeopleTrained: NumberFormatter.textFormatter(
+                      trainerController.atrainerDetail.value.trainees!),
+                  strengths: trainerController.atrainerDetail.value.strength!,
+                  aboutTrainer: trainerController.atrainerDetail.value.about!,
+                  certifcateTitle:
+                      trainerController.atrainerDetail.value.certificates!,
+                  allPlans: trainerController.isProfileLoading.value
+                      ? []
+                      : trainerController.planModel.value.response!.data!,
+                  isFollowing:
+                      trainerController.atrainerDetail.value.isFollowing!,
+                )
+              : Center(
+                  child: CustomizedCircularProgress(),
+                ),
         ),
       ),
     );
@@ -1259,40 +1289,42 @@ class _TrainerPageState extends State<TrainerPage> {
                 : SizedBox()),
 
             //To be docked at bottom center
-            Obx(()=>!_trainerController.isPlanLoading.value?Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                width: double.infinity,
-                padding: EdgeInsets.only(
-                    top: 8 * SizeConfig.heightMultiplier!,
-                    bottom: 16 * SizeConfig.heightMultiplier!,
-                    left: 24 * SizeConfig.widthMultiplier!,
-                    right: 24 * SizeConfig.widthMultiplier!),
-                child: GestureDetector(
-                  onTap: widget.isEnrolled ? null : widget.onEnroll,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: widget.isEnrolled ? hintGrey : kgreen4F,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 31.0 * SizeConfig.widthMultiplier!,
-                          vertical: 14 * SizeConfig.heightMultiplier!),
-                      child: Text(
-                        widget.isEnrolled
-                            ? 'already_enrolled'.tr
-                            : 'enroll_trainer'.tr,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.titleText.copyWith(
-                            fontSize: 18 * SizeConfig.textMultiplier!,
-                            color: kPureWhite),
+            Obx(() => !_trainerController.isPlanLoading.value
+                ? Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                          top: 8 * SizeConfig.heightMultiplier!,
+                          bottom: 16 * SizeConfig.heightMultiplier!,
+                          left: 24 * SizeConfig.widthMultiplier!,
+                          right: 24 * SizeConfig.widthMultiplier!),
+                      child: GestureDetector(
+                        onTap: widget.isEnrolled ? null : widget.onEnroll,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: widget.isEnrolled ? hintGrey : kgreen4F,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 31.0 * SizeConfig.widthMultiplier!,
+                                vertical: 14 * SizeConfig.heightMultiplier!),
+                            child: Text(
+                              widget.isEnrolled
+                                  ? 'already_enrolled'.tr
+                                  : 'enroll_trainer'.tr,
+                              textAlign: TextAlign.center,
+                              style: AppTextStyle.titleText.copyWith(
+                                  fontSize: 18 * SizeConfig.textMultiplier!,
+                                  color: kPureWhite),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ):Container())
+                  )
+                : Container())
           ],
         ),
       ),

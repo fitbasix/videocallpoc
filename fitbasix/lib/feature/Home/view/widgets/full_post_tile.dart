@@ -20,6 +20,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../spg/view/set_goal_screen.dart';
+
 class FullPostTile extends StatefulWidget {
   FullPostTile(
       {Key? key,
@@ -341,6 +343,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                       imageUrl: widget.imageUrl[index],
                                       height: 360 * SizeConfig.widthMultiplier!,
                                       width: 360 * SizeConfig.widthMultiplier!,
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
                                       fit: BoxFit.cover,
                                     )
                                   : Container(
@@ -366,6 +372,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                       0
                                   ? CachedNetworkImage(
                                       imageUrl: widget.imageUrl[index],
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
                                       height: 360 * SizeConfig.widthMultiplier!,
                                       width: 360 * SizeConfig.widthMultiplier!,
                                       fit: BoxFit.contain,

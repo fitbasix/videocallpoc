@@ -40,6 +40,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../get_trained/view/get_trained_screen.dart';
 import '../../profile/services/profile_services.dart';
+import '../../spg/view/set_goal_screen.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -224,6 +225,8 @@ class _HomePageState extends State<HomePage> {
                                                     .profile!
                                                     .profilePhoto
                                                     .toString(),
+                                                placeholder: (context, url) => ShimmerEffect(),
+                                                errorWidget: (context, url, error) => ShimmerEffect(),
                                                 fit: BoxFit.cover,
                                                 height:
                                                     60 * SizeConfig.widthMultiplier!,

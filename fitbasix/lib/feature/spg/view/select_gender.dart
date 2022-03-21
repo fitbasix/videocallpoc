@@ -6,6 +6,7 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/widgets/spg_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -167,6 +168,8 @@ class GenderCard extends StatelessWidget {
                     height: 204 * SizeConfig.heightMultiplier!,
                     width: (Get.width - 54 * SizeConfig.widthMultiplier!) / 2,
                     imageUrl: imageUrl,
+                    placeholder: (context, url) => ShimmerEffect(),
+                    errorWidget: (context, url, error) => ShimmerEffect(),
                     fit: BoxFit.cover,
                   ),
                 ),

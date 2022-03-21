@@ -1,4 +1,9 @@
+
 import 'dart:io';
+
+import 'dart:developer';
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -60,9 +65,9 @@ class ConsumptionScreen extends StatelessWidget {
         child: Obx(
           () => _homeController.isConsumptionLoading.value
               ? Center(
-                  child: SizedBox
-                    (
-                    height: MediaQuery.of(context).size.height-100*SizeConfig.heightMultiplier!,
+                  child: SizedBox(
+                      height: MediaQuery.of(context).size.height -
+                          100 * SizeConfig.heightMultiplier!,
                       child: CustomizedCircularProgress()),
                 )
               : Container(
@@ -594,7 +599,7 @@ class ConsumptionScreen extends StatelessWidget {
   //   });
   // }
 
-  void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
+    void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
       int toHour, int toMinute, int reminderSerialNo) async {
     await AndroidAlarmManager.cancel(0);
     if(reminderSerialNo>0){
