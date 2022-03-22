@@ -12,6 +12,7 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -239,6 +240,69 @@ class MenuItem extends StatelessWidget {
                       fontSize: 14 * SizeConfig.textMultiplier!),
                 )
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RedButton extends StatelessWidget {
+  final String? text;
+  final VoidCallback? onTap;
+  RedButton({this.text, this.onTap});
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 44 * SizeConfig.heightMultiplier!,
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.circular(12 * SizeConfig.heightMultiplier!),
+          color: kPink,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 12 * SizeConfig.widthMultiplier!),
+          child: Center(
+            child: Text(
+              text.toString(),
+              style: AppTextStyle.black600Text.copyWith(
+                  color: kPureWhite, fontSize: 14 * SizeConfig.textMultiplier!),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProceedButton extends StatelessWidget {
+  final String? text;
+  final VoidCallback? onTap;
+  ProceedButton({this.text, this.onTap});
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 44 * SizeConfig.heightMultiplier!,
+        decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.circular(12 * SizeConfig.heightMultiplier!),
+            color: Colors.transparent,
+            border: Border.all(
+                width: 1 * SizeConfig.heightMultiplier!, color: kPureWhite)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 12 * SizeConfig.widthMultiplier!),
+          child: Center(
+            child: Text(
+              text.toString(),
+              style: AppTextStyle.black600Text.copyWith(
+                  color: kPureWhite, fontSize: 14 * SizeConfig.textMultiplier!),
             ),
           ),
         ),

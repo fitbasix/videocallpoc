@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
@@ -47,17 +48,18 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   HomeController _homeController = Get.find();
   bool isMessageLoading = false;
   TrainerController _trainerController = Get.find();
-  var isPlanLoading = true.obs;
+  // var isPlanLoading = true.obs;
 
   getAllTrainerPlanData() async {
     if (!_trainerController.isMyTrainerProfileLoading.value) {
       _trainerController.planModel.value = PlanModel();
-      isPlanLoading.value = true;
+      _trainerController.isPlanLoading.value = true;
       _trainerController.planModel.value =
           await TrainerServices.getPlanByTrainerId(
                   _trainerController.atrainerDetail.value.user!.id!)
               .then((value) {
-        isPlanLoading.value = false;
+        _trainerController.isPlanLoading.value = false;
+        setState(() {});
         return value;
       });
     }
@@ -278,9 +280,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   aboutTrainer: trainerController.atrainerDetail.value.about!,
                   certifcateTitle:
                       trainerController.atrainerDetail.value.certificates!,
-                  allPlans: trainerController.isProfileLoading.value
-                      ? []
-                      : trainerController.planModel.value.response!.data!,
+                  allPlans: trainerController.isProfileLoading.value ? [] : [],
                   isFollowing:
                       trainerController.atrainerDetail.value.isFollowing!,
                 )
@@ -1289,7 +1289,7 @@ class _TrainerPageState extends State<TrainerPage> {
                 : SizedBox()),
 
             //To be docked at bottom center
-            Obx(() => !_trainerController.isPlanLoading.value
+            Obx(() => _trainerController.isPlanLoading.value == false
                 ? Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(

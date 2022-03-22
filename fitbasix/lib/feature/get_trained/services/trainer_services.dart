@@ -23,13 +23,10 @@ class TrainerServices {
   static var dio = DioUtil().getInstance();
   static TrainerController _trainerController = Get.find();
   static Future<PlanModel> getPlanByTrainerId(String trainerId) async {
-    print(trainerId + "llll");
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    print("trainer id " + trainerId.toString());
     var response = await dio!
         .post(ApiUrl.getPlanByTrainerId, data: {"trainerId": trainerId});
-    print("plan " + "llll $trainerId" + response.toString());
     return planModelFromJson(response.toString());
   }
 

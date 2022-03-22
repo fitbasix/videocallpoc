@@ -724,17 +724,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                           //         .trainers![index]
                                           //         .user!
                                           //         .id!);
-                                          _trainerController.planModel.value =
-                                              await TrainerServices
-                                                  .getPlanByTrainerId(
-                                                      _trainerController
-                                                          .allTrainer
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .trainers![index]
-                                                          .user!
-                                                          .id!);
+
                                           _trainerController
                                               .loadingIndicator.value = false;
                                           _trainerController
