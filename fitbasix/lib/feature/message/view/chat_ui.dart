@@ -206,7 +206,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Center(
                       child: Text("no message yet"),
                     )),
-              !widget.isCurrentlyEnrolled!?Align(
+              ///todo remove this ! sign
+              widget.isCurrentlyEnrolled!?Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
@@ -573,7 +574,7 @@ class _ChatScreenState extends State<ChatScreen> {
           attachment.id = id.toString();
           attachment.contentType = contentType;
           attachment.url = file.uid;
-          attachment.name = file.name;
+          attachment.name = pickedFile.name;
           //Required parameter
           attachment.type = "PHOTO";
           attachment.data = pickedFile.path;
@@ -613,6 +614,11 @@ class _ChatScreenState extends State<ChatScreen> {
         'jpg',
         'pdf',
         'doc',
+        'docx',
+        'ppt',
+        'pptx',
+        'xls',
+        'xlsx'
         'png',
         'jpeg',
         'mp3',
@@ -651,7 +657,7 @@ class _ChatScreenState extends State<ChatScreen> {
             attachment.contentType = contentType;
             print(contentType + " dddd");
             attachment.url = file.uid;
-            attachment.name = file.name;
+            attachment.name = pickedFiles.files[i].name;
             attachment.data = pickedFiles.files[i].path!;
             //Required parameter
             attachment.type = "PHOTO";
@@ -988,7 +994,7 @@ class MessageBubbleSender extends StatelessWidget {
                                 width: 220*SizeConfig.widthMultiplier!,
                                 child: Row(
                                   children: [
-                                    Image.asset((fileExtension == "JPEG"||fileExtension == "JPG"||fileExtension == "PNG"||fileExtension == "SVG")?ImagePath.jpgFileIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,),
+                                    Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,height: 32*SizeConfig.imageSizeMultiplier!,),
                                     SizedBox(width: 7*SizeConfig.widthMultiplier!,),
                                     Expanded(
                                       child: Column(
@@ -1017,6 +1023,57 @@ class MessageBubbleSender extends StatelessWidget {
     }
   }
 
+  // Future<bool> _getImageUrl(String id, String fileName) async {
+  //   print(fileName + "this is the file name");
+  //   try {
+  //     String? url = await QB.content.getPrivateURL(id);
+  //     bool flag = false;
+  //
+  //     //FlutterDownloader.registerCallback(downloadCallback);
+  //     try {
+  //       PermissionStatus status = await Permission.storage.request();
+  //       PermissionStatus status1 =
+  //           await Permission.manageExternalStorage.request();
+  //       print(status1.toString() + "hhhhh");
+  //       if (status == PermissionStatus.granted) {
+  //         String? path;
+  //         final Directory _appDocDir = await getApplicationDocumentsDirectory();
+  //         //App Document Directory + folder name
+  //         final Directory _appDocDirFolder =
+  //             Directory('storage/emulated/0/fitBasix/media');
+  //         //Environment.getExternalStoragePublicDirectory(...);
+  //         if (await _appDocDirFolder.exists()) {
+  //           //if folder already exists return path
+  //           path = _appDocDirFolder.path;
+  //         } else {
+  //           //if folder not exists create folder and then return its path
+  //           final Directory _appDocDirNewFolder =
+  //               await _appDocDirFolder.create(recursive: true);
+  //           path = _appDocDirNewFolder.path;
+  //         }
+  //         print(path + "pp dir");
+  //         Dio dio = Dio();
+  //         dio.download(url!, path + "/" + fileName,
+  //             onReceiveProgress: (received, total) {
+  //           downloadProgress.value = ((received / total));
+  //           print(downloadProgress.value);
+  //           if (((received / total) * 100).floor() == 100) {
+  //             checkFileExistence(fileName);
+  //           }
+  //         });
+  //       }
+  //     } catch (e) {
+  //       print(e.toString());
+  //     }
+  //
+  //     return false;
+  //   } on PlatformException catch (e) {
+  //     print(e);
+  //     return false;
+  //     // Some error occurred, look at the exception message for more details
+  //   }
+  // }
+
   Future<bool> _getImageUrl(String id, String fileName) async {
     print(fileName + "this is the file name");
     try {
@@ -1025,37 +1082,58 @@ class MessageBubbleSender extends StatelessWidget {
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        PermissionStatus status = await Permission.storage.request();
-        PermissionStatus status1 =
-            await Permission.manageExternalStorage.request();
-        print(status1.toString() + "hhhhh");
-        if (status == PermissionStatus.granted) {
+        print("jjjjjjj");
+        if(Platform.isAndroid){
+          PermissionStatus status  = await Permission.storage.request();
+          PermissionStatus status1 = await Permission.manageExternalStorage.request();
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
-          final Directory _appDocDirFolder =
-              Directory('storage/emulated/0/fitBasix/media');
-          //Environment.getExternalStoragePublicDirectory(...);
+          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
           } else {
             //if folder not exists create folder and then return its path
             final Directory _appDocDirNewFolder =
-                await _appDocDirFolder.create(recursive: true);
+            await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-            downloadProgress.value = ((received / total));
-            print(downloadProgress.value);
-            if (((received / total) * 100).floor() == 100) {
-              checkFileExistence(fileName);
-            }
-          });
+                downloadProgress.value = ((received / total));
+                print(downloadProgress.value);
+                if (((received / total) * 100).floor() == 100) {
+                  checkFileExistence(fileName);
+                }
+              });
         }
+        else{
+          print("yyyyyy");
+          String? path;
+          final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+          print(_appDocDir.path.toString()+" uuuuu");
+          //App Document Directory + folder name
+          if ((await _appDocDir.exists())) {
+            path = _appDocDir.path;
+          } else {
+            _appDocDir.create();
+            path = _appDocDir.path;
+          }
+          print(path + "pp dir");
+          Dio dio = Dio();
+          dio.download(url!, path + "/" + fileName,
+              onReceiveProgress: (received, total) {
+                downloadProgress.value = ((received / total));
+                print(downloadProgress.value);
+                if (((received / total) * 100).floor() == 100) {
+                  checkFileExistence(fileName);
+                }
+              });
+        }
+
       } catch (e) {
         print(e.toString());
       }
@@ -1069,33 +1147,58 @@ class MessageBubbleSender extends StatelessWidget {
   }
 
   void checkFileExistence(String? fileName) async {
-    PermissionStatus status = await Permission.storage.request();
-    PermissionStatus status1 = await Permission.manageExternalStorage.request();
-    if (status == PermissionStatus.granted) {
+
+    if(Platform.isAndroid){
+      PermissionStatus status = await Permission.storage.request();
+      PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      if (status == PermissionStatus.granted) {
+        String? path;
+        final downloadsPath = Directory('/storage/emulated/0/Download');
+        final Directory _appDocDir = await getApplicationDocumentsDirectory();
+        final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+
+        if (await _appDocDirFolder.exists()) {
+          path = _appDocDirFolder.path;
+        } else {
+          //if folder not exists create folder and then return its path
+          final Directory _appDocDirNewFolder =
+          await _appDocDirFolder.create(recursive: true);
+          path = _appDocDirNewFolder.path;
+        }
+        //if(File(message!.attachments![0]!.data!).existsSync())
+        if (File(path + "/" + fileName!).existsSync()) {
+          print("file exists in " + path + "/$fileName");
+          filePath.value = path + "/$fileName";
+        }
+
+        if (File(downloadsPath.path + "/" + fileName).existsSync()) {
+          print("file exists in " + downloadsPath.path + "/$fileName");
+          filePath.value = downloadsPath.path + "/" + fileName;
+        }
+
+    }
+
+
+
+
+
+    }
+    else{
       String? path;
-      final downloadsPath = Directory('/storage/emulated/0/Download');
-      final Directory _appDocDir = await getApplicationDocumentsDirectory();
-      final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
-
-      if (await _appDocDirFolder.exists()) {
-        path = _appDocDirFolder.path;
+      final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+      print(_appDocDir.path.toString()+" uuuuu");
+      //App Document Directory + folder name
+      if ((await _appDocDir.exists())) {
+        path = _appDocDir.path;
       } else {
-        //if folder not exists create folder and then return its path
-        final Directory _appDocDirNewFolder =
-            await _appDocDirFolder.create(recursive: true);
-        path = _appDocDirNewFolder.path;
+        _appDocDir.create();
+        path = _appDocDir.path;
       }
-
-      //if(File(message!.attachments![0]!.data!).existsSync())
       if (File(path + "/" + fileName!).existsSync()) {
         print("file exists in " + path + "/$fileName");
         filePath.value = path + "/$fileName";
       }
 
-      if (File(downloadsPath.path + "/" + fileName).existsSync()) {
-        print("file exists in " + downloadsPath.path + "/$fileName");
-        filePath.value = downloadsPath.path + "/" + fileName;
-      }
     }
   }
 
@@ -1236,7 +1339,7 @@ class MessageBubbleOpponent extends StatelessWidget {
                               width: 220*SizeConfig.widthMultiplier!,
                               child: Row(
                                 children: [
-                                  Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,),
+                                  Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,height: 32*SizeConfig.imageSizeMultiplier!,),
                                   SizedBox(width: 7*SizeConfig.widthMultiplier!,),
                                   Expanded(
                                     child: Column(
@@ -1273,9 +1376,10 @@ class MessageBubbleOpponent extends StatelessWidget {
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        PermissionStatus status  = await Permission.storage.request();
-        PermissionStatus status1 = await Permission.manageExternalStorage.request();
-        if (status == PermissionStatus.granted) {
+        print("jjjjjjj");
+        if(Platform.isAndroid){
+          PermissionStatus status  = await Permission.storage.request();
+          PermissionStatus status1 = await Permission.manageExternalStorage.request();
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
@@ -1286,7 +1390,7 @@ class MessageBubbleOpponent extends StatelessWidget {
           } else {
             //if folder not exists create folder and then return its path
             final Directory _appDocDirNewFolder =
-                await _appDocDirFolder.create(recursive: true);
+            await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
@@ -1295,11 +1399,35 @@ class MessageBubbleOpponent extends StatelessWidget {
               onReceiveProgress: (received, total) {
                 downloadProgress.value = ((received / total));
                 print(downloadProgress.value);
-            if (((received / total) * 100).floor() == 100) {
-              checkFileExistence(fileName);
-            }
-          });
+                if (((received / total) * 100).floor() == 100) {
+                  checkFileExistence(fileName);
+                }
+              });
         }
+        else{
+          print("yyyyyy");
+          String? path;
+          final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+          print(_appDocDir.path.toString()+" uuuuu");
+          //App Document Directory + folder name
+          if ((await _appDocDir.exists())) {
+            path = _appDocDir.path;
+          } else {
+            _appDocDir.create();
+            path = _appDocDir.path;
+          }
+          print(path + "pp dir");
+          Dio dio = Dio();
+          dio.download(url!, path + "/" + fileName,
+              onReceiveProgress: (received, total) {
+                downloadProgress.value = ((received / total));
+                print(downloadProgress.value);
+                if (((received / total) * 100).floor() == 100) {
+                  checkFileExistence(fileName);
+                }
+              });
+        }
+
       } catch (e) {
         print(e.toString());
       }
@@ -1313,33 +1441,58 @@ class MessageBubbleOpponent extends StatelessWidget {
   }
 
   void checkFileExistence(String? fileName) async {
-    PermissionStatus status = await Permission.storage.request();
-    if (status == PermissionStatus.granted) {
-      String? path;
-      final downloadsPath = Directory('/storage/emulated/0/Download');
-      final Directory _appDocDir = await getApplicationDocumentsDirectory();
-      final Directory _appDocDirFolder =
-          Directory('storage/emulated/0/fitBasix/media');
 
-      if (await _appDocDirFolder.exists()) {
-        path = _appDocDirFolder.path;
-      } else {
-        //if folder not exists create folder and then return its path
-        final Directory _appDocDirNewFolder =
-            await _appDocDirFolder.create(recursive: true);
-        path = _appDocDirNewFolder.path;
+    if(Platform.isAndroid){
+      PermissionStatus status = await Permission.storage.request();
+      PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      if (status == PermissionStatus.granted) {
+        String? path;
+        final downloadsPath = Directory('/storage/emulated/0/Download');
+        final Directory _appDocDir = await getApplicationDocumentsDirectory();
+        final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+
+        if (await _appDocDirFolder.exists()) {
+          path = _appDocDirFolder.path;
+        } else {
+          //if folder not exists create folder and then return its path
+          final Directory _appDocDirNewFolder =
+          await _appDocDirFolder.create(recursive: true);
+          path = _appDocDirNewFolder.path;
+        }
+        //if(File(message!.attachments![0]!.data!).existsSync())
+        if (File(path + "/" + fileName!).existsSync()) {
+          print("file exists in " + path + "/$fileName");
+          filePath.value = path + "/$fileName";
+        }
+
+        if (File(downloadsPath.path + "/" + fileName).existsSync()) {
+          print("file exists in " + downloadsPath.path + "/$fileName");
+          filePath.value = downloadsPath.path + "/" + fileName;
+        }
+
       }
 
-      //if(File(message!.attachments![0]!.data!).existsSync())
+
+
+
+
+    }
+    else{
+      String? path;
+      final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+      print(_appDocDir.path.toString()+" uuuuu");
+      //App Document Directory + folder name
+      if ((await _appDocDir.exists())) {
+        path = _appDocDir.path;
+      } else {
+        _appDocDir.create();
+        path = _appDocDir.path;
+      }
       if (File(path + "/" + fileName!).existsSync()) {
         print("file exists in " + path + "/$fileName");
         filePath.value = path + "/$fileName";
       }
 
-      if (File(downloadsPath.path + "/" + fileName).existsSync()) {
-        print("file exists in " + downloadsPath.path + "/$fileName");
-        filePath.value = downloadsPath.path + "/" + fileName;
-      }
     }
   }
 
@@ -1352,7 +1505,6 @@ class MessageBubbleOpponent extends StatelessWidget {
   }
 
   Future<String> getFileSizeFromLocal() async {
-
     File file = File(filePath.value);
     int sizeInBytes = (await file.length());
     var size = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
