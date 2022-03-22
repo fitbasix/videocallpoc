@@ -79,7 +79,7 @@ dependencies:
   flutter_switch: ^0.3.2
   open_file: ^3.2.1
   firebase_messaging: ^11.2.8
-  flutter_local_notifications: ^9.3.2
+#  flutter_local_notifications: ^9.3.2
   connectycube_flutter_call_kit: ^2.0.2
   percent_indicator: ^4.0.0
   syncfusion_flutter_gauges: ^19.4.54

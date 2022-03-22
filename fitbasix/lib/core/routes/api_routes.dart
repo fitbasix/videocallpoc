@@ -7,6 +7,7 @@ class ApiUrl {
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String uploadChatFileToDb = liveBaseURL + '/api/documents/createDocument';
   static String getUserWithDocuments = liveBaseURL + '/api/documents/getUsers';
+  static String getUserAllDocuments = liveBaseURL + '/api/documents/getDocumentByTrainer';
   static String editNumberOtp = liveBaseURL + '/api/auth/generateOtp';
   static String getTermOfUseContents = liveBaseURL + '/api/auth/termsOfService';
   static String getPrivacyPolicyContents =
