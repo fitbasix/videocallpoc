@@ -406,21 +406,21 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .trainers![index];
                                         _trainerController
                                             .loadingIndicator.value = false;
-                                        _trainerController.isPlanLoading.value =
-                                            true;
-                                        _trainerController.planModel.value =
-                                            await TrainerServices
-                                                .getPlanByTrainerId(
-                                                    _trainerController
-                                                        .trainers
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .trainers![index]
-                                                        .user!
-                                                        .id!);
-                                        _trainerController.isPlanLoading.value =
-                                            false;
+                                        // _trainerController.isPlanLoading.value =
+                                        //     true;
+                                        // _trainerController.planModel.value =
+                                        //     await TrainerServices
+                                        //         .getPlanByTrainerId(
+                                        //             _trainerController
+                                        //                 .trainers
+                                        //                 .value
+                                        //                 .response!
+                                        //                 .data!
+                                        //                 .trainers![index]
+                                        //                 .user!
+                                        //                 .id!);
+                                        // _trainerController.isPlanLoading.value =
+                                        //     false;
                                         _trainerController
                                                 .initialPostData.value =
                                             await TrainerServices
@@ -635,21 +635,21 @@ class GetTrainedScreen extends StatelessWidget {
                                               .response!
                                               .data!
                                               .fitnessConsultant![index];
-                                      _trainerController.isPlanLoading.value =
-                                          true;
-                                      _trainerController.planModel.value =
-                                          await TrainerServices
-                                              .getPlanByTrainerId(
-                                                  _trainerController
-                                                      .trainers
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .fitnessConsultant![index]
-                                                      .user!
-                                                      .id!);
-                                      _trainerController.isPlanLoading.value =
-                                          false;
+                                      // _trainerController.isPlanLoading.value =
+                                      //     true;
+                                      // _trainerController.planModel.value =
+                                      //     await TrainerServices
+                                      //         .getPlanByTrainerId(
+                                      //             _trainerController
+                                      //                 .trainers
+                                      //                 .value
+                                      //                 .response!
+                                      //                 .data!
+                                      //                 .fitnessConsultant![index]
+                                      //                 .user!
+                                      //                 .id!);
+                                      // _trainerController.isPlanLoading.value =
+                                      //     false;
                                       _trainerController
                                           .loadingIndicator.value = false;
                                       _trainerController.initialPostData.value =
@@ -862,22 +862,22 @@ class GetTrainedScreen extends StatelessWidget {
                                               .response!
                                               .data!
                                               .nutritionConsultant![index];
-                                      _trainerController.isPlanLoading.value =
-                                          true;
-                                      _trainerController.planModel.value =
-                                          await TrainerServices
-                                              .getPlanByTrainerId(
-                                                  _trainerController
-                                                      .trainers
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .nutritionConsultant![
-                                                          index]
-                                                      .user!
-                                                      .id!);
-                                      _trainerController.isPlanLoading.value =
-                                          false;
+                                      // _trainerController.isPlanLoading.value =
+                                      //     true;
+                                      // _trainerController.planModel.value =
+                                      //     await TrainerServices
+                                      //         .getPlanByTrainerId(
+                                      //             _trainerController
+                                      //                 .trainers
+                                      //                 .value
+                                      //                 .response!
+                                      //                 .data!
+                                      //                 .nutritionConsultant![
+                                      //                     index]
+                                      //                 .user!
+                                      //                 .id!);
+                                      // _trainerController.isPlanLoading.value =
+                                      //     false;
                                       _trainerController
                                           .loadingIndicator.value = false;
                                       _trainerController.initialPostData.value =

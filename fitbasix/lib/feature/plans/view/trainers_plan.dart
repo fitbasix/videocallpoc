@@ -34,9 +34,7 @@ class TrainerPlansScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TrainerController trainerController = Get.find();
     //getPlan(trainerController);
-    List<Plan> plans = trainerController.isProfileLoading.value
-        ? []
-        : trainerController.planModel.value.response!.data!;
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -68,7 +66,7 @@ class TrainerPlansScreen extends StatelessWidget {
 
                       ///remove plans.length+2 after testing
                       children: List.generate(
-                    plans.length,
+                    trainerController.planModel.value.response!.data!.length,
                     (index) => BuildPlancard(
                         // planImage: plans[index].planIcon.toString(),
                         // planName: plans[index].planName.toString(),
@@ -90,20 +88,29 @@ class TrainerPlansScreen extends StatelessWidget {
                         context: context,
                         planImage:
                             "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9ydHJhaXR8ZW58MHx8MHx8&w=1000&q=80",
-                        planName: plans[index].planName!,
-                        planTitle: plans[index].planType!,
-                        planDescription: plans[index].description!,
-                        sessionCount: plans[index].session!,
-                        planDuration: plans[index].planDuration!,
+                        planName: trainerController
+                            .planModel.value.response!.data![index].planName!,
+                        planTitle: trainerController
+                            .planModel.value.response!.data![index].planType!,
+                        planDescription: trainerController.planModel.value
+                            .response!.data![index].description!,
+                        sessionCount: trainerController
+                            .planModel.value.response!.data![index].session!,
+                        planDuration: trainerController.planModel.value
+                            .response!.data![index].planDuration!,
                         ////remove index==0 after testing
-                        isDemoExpired:
-                            index == 0 && !plans[index].isDemoAvailable!,
-                        planPrice: plans[index].price!,
+                        isDemoExpired: index == 0 &&
+                            !trainerController.planModel.value.response!
+                                .data![index].isDemoAvailable!,
+                        planPrice: trainerController
+                            .planModel.value.response!.data![index].price!,
                         onPlanEnrollTapped: () async {
                           trainerController.weekAvailableSlots.value = [];
                           Navigator.pushNamed(
                               context, RouteName.planTimingScreen);
-                          trainerController.selectedPlan.value = plans[index];
+                          trainerController.selectedPlan.value =
+                              trainerController
+                                  .planModel.value.response!.data![index];
 
                           // trainerController.fullPlanDetails.value.response!.data!
                           //             .isEnrolled ==
@@ -118,15 +125,18 @@ class TrainerPlansScreen extends StatelessWidget {
                               output.response!.data!;
                           trainerController.fullPlanDetails.value =
                               await TrainerServices.getPlanById(
-                                  plans[index].id!);
+                                  trainerController.planModel.value.response!
+                                      .data![index].id!);
 
                           trainerController.availableSlots.value =
                               await TrainerServices.getEnrolledPlanDetails(
-                                  plans[index].trainer!);
+                                  trainerController.planModel.value.response!
+                                      .data![index].trainer!);
                           trainerController.isAvailableSlotDataLoading.value =
                               false;
                         },
-                        planFeaturesList: plans[index].keyPoints),
+                        planFeaturesList: trainerController
+                            .planModel.value.response!.data![index].keyPoints),
                   ))),
             )
           : Center(child: CustomizedCircularProgress())),

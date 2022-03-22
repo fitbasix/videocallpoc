@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/settings/controller/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ import '../../../core/routes/api_routes.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../Home/controller/Home_Controller.dart';
 import '../../Home/services/home_service.dart';
+import '../../Home/view/widgets/menu_screen.dart';
 import '../../log_in/controller/login_controller.dart';
 import '../../log_in/services/login_services.dart';
 import '../../profile/view/appbar_for_account.dart';
@@ -82,17 +85,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   wantbutton: false,
                   switchcontroller: _settingController.notificationSwitch,
                   onTap: () async {
-                    await HomeService.deActiveAccount();
-                    final LoginController _controller =
-                        Get.put(LoginController());
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.clear();
-                    await _controller.googleSignout();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, RouteName.loginScreen, (route) => false);
-
-                    Get.deleteAll();
+                    deActiveAccount(context);
                   }),
               // delete account
               _settingField(
@@ -102,24 +95,8 @@ class _SettingScreenState extends State<SettingScreen> {
                   description: 'delete_subtitle'.tr,
                   wantbutton: false,
                   switchcontroller: _settingController.notificationSwitch,
-                  onTap: () async {
-                    var dio = DioUtil().getInstance();
-                    dio!.options.headers["language"] = "1";
-                    String token = await LogInService.getAccessToken();
-                    dio.options.headers['Authorization'] =
-                        await LogInService.getAccessToken();
-                    var response = await dio.post(ApiUrl.deleteAccount);
-                    // await HomeService.deleteAccount();
-                    final LoginController _controller =
-                        Get.put(LoginController());
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.clear();
-                    await _controller.googleSignout();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, RouteName.loginScreen, (route) => false);
-
-                    Get.deleteAll();
+                  onTap: () {
+                    deleteAccount(context);
                   }),
             ],
           ),
@@ -211,4 +188,204 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
     );
   }
+}
+
+void deleteAccount(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      SettingController _settingController = Get.find();
+      return Container(
+        color: kBlack.withOpacity(0.6),
+        child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: AlertDialog(
+                insetPadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 30 * SizeConfig.heightMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                title: Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "delete_account_heading".tr,
+                        style: AppTextStyle.black600Text.copyWith(
+                            color: kRed,
+                            fontSize: 18 * SizeConfig.textMultiplier!),
+                      ),
+                      SizedBox(
+                        height: 24 * SizeConfig.heightMultiplier!,
+                      ),
+                      Text(
+                        "delete_account_subheading".tr,
+                        style: AppTextStyle.black400Text.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1!.color),
+                      ),
+                      SizedBox(
+                        height: 32 * SizeConfig.heightMultiplier!,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Obx(
+                            () => _settingController.isLoading.value
+                                ? Padding(
+                                    padding: EdgeInsets.only(right: 30),
+                                    child: CustomizedCircularProgress())
+                                : RedButton(
+                                    text: 'delete_option1'.tr,
+                                    onTap: () async {
+                                      _settingController.isLoading.value = true;
+                                      var dio = DioUtil().getInstance();
+                                      dio!.options.headers["language"] = "1";
+                                      String token =
+                                          await LogInService.getAccessToken();
+                                      dio.options.headers['Authorization'] =
+                                          await LogInService.getAccessToken();
+                                      var response =
+                                          await dio.post(ApiUrl.deleteAccount);
+                                      // await HomeService.deleteAccount();
+                                      final LoginController _controller =
+                                          Get.put(LoginController());
+                                      final SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      prefs.clear();
+                                      await _controller.googleSignout();
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          RouteName.loginScreen,
+                                          (route) => false);
+
+                                      Get.deleteAll();
+                                      _settingController.isLoading.value =
+                                          false;
+                                    },
+                                  ),
+                          ),
+                          SizedBox(
+                            width: 12 * SizeConfig.widthMultiplier!,
+                          ),
+                          ProceedButton(
+                            text: 'delete_option2'.tr,
+                            onTap: () async {
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30 * SizeConfig.heightMultiplier!,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )),
+      );
+    },
+  );
+}
+
+void deActiveAccount(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      SettingController _settingController = Get.find();
+      return Container(
+        color: kBlack.withOpacity(0.6),
+        child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: AlertDialog(
+                insetPadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 30 * SizeConfig.heightMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                title: Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "deactive_account_heading".tr,
+                        style: AppTextStyle.black600Text.copyWith(
+                            color: kRed,
+                            fontSize: 18 * SizeConfig.textMultiplier!),
+                      ),
+                      SizedBox(
+                        height: 24 * SizeConfig.heightMultiplier!,
+                      ),
+                      Text(
+                        "deactive_account_subheading".tr,
+                        style: AppTextStyle.black400Text.copyWith(
+                            color:
+                                Theme.of(context).textTheme.bodyText1!.color),
+                      ),
+                      SizedBox(
+                        height: 32 * SizeConfig.heightMultiplier!,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Obx(
+                            () => _settingController.isLoading.value
+                                ? Padding(
+                                    padding: EdgeInsets.only(right: 30),
+                                    child: CustomizedCircularProgress())
+                                : RedButton(
+                                    text: 'deactive_option1'.tr,
+                                    onTap: () async {
+                                      _settingController.isLoading.value = true;
+                                      await HomeService.deActiveAccount();
+                                      final LoginController _controller =
+                                          Get.put(LoginController());
+                                      final SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      prefs.clear();
+                                      await _controller.googleSignout();
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          RouteName.loginScreen,
+                                          (route) => false);
+
+                                      Get.deleteAll();
+                                      _settingController.isLoading.value =
+                                          false;
+                                    },
+                                  ),
+                          ),
+                          SizedBox(
+                            width: 12 * SizeConfig.widthMultiplier!,
+                          ),
+                          ProceedButton(
+                            text: 'delete_option2'.tr,
+                            onTap: () async {
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30 * SizeConfig.heightMultiplier!,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )),
+      );
+    },
+  );
 }
