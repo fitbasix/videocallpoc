@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:fitbasix/core/api_service/dio_service.dart';
@@ -12,8 +13,9 @@ import 'package:fitbasix/feature/get_trained/model/sortbymodel.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/plans/models/AvailableSlot.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:http/http.dart' as http;
 import '../../plans/models/FullPlanDetailModel.dart';
 import '../../plans/models/allTimeSlot.dart';
 import '../model/timing_model.dart';
@@ -128,13 +130,27 @@ class TrainerServices {
     return availableSlotFromJson(response.toString());
   }
 
-  static Future<void> bookSlot(
-      List<String> slots, String id, int time, List<int> days) async {
+  static Future<bool> bookSlot(List<String> slots, String id, int time,
+      List<int> days, BuildContext context) async {
     dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.bookDemo,
-        data: {"days": slots, "planId": id, "time": time, "day": days});
-    print(response.toString());
+    var token = await LogInService.getAccessToken();
+    var response = await http.post(Uri.parse(ApiUrl.bookDemo),
+        headers: {"language": "1", "Authorization": token},
+        body: jsonEncode(<String, dynamic>{
+          "days": slots,
+          "planId": id,
+          "time": time,
+          "day": days
+        }));
+
+    final responseData = jsonDecode(response.body);
+    if (response.statusCode == 500) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(responseData["response"]["message"])));
+      return false;
+    } else {
+      return true;
+    }
   }
 
   static Future<AllTrainer> getFitnessConsultant() async {
