@@ -76,7 +76,7 @@ class SetWeight extends StatelessWidget {
                       style: _spgController.weightType == "kg"
                           ? AppTextStyle.white400Text
                           : AppTextStyle.white400Text
-                              .copyWith(color: Theme.of(context).textTheme.headline6!.color),
+                              .copyWith(color: Theme.of(context).primaryColorDark),
                     )),
                   ),
                 ),

@@ -9,8 +9,6 @@ class NumberFormatter {
     if (value > 1000 && value < 1000000) {
       // less than a million
 
-      print("bbb");
-
       value = value / 1000;
 
       return value.toStringAsFixed(1) + "K";

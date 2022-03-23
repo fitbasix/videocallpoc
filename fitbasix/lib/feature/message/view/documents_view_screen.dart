@@ -213,13 +213,12 @@ class DocumentTiles extends StatelessWidget {
   }
 
   Future<String> getFileSizeFromLocal() async {
-
     File file = File(filePath.value);
     int sizeInBytes = (await file.length());
     var size = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
     return size;
-
   }
+
   setDocumentDate(){
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);

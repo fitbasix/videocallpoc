@@ -1,9 +1,14 @@
 class ImagePath {
   static const String arrowRightIcon = "assets/Icons/arrow-right.svg";
+  static const String selectImageIcon = "assets/Icons/gallary_icon.svg";
   static const String fileIcon = "assets/Icons/file_icon.svg";
   static const String muteBell = "assets/Icons/mute_bell.svg";
   static const String filterIcon = "assets/mytrainers/filter_icon.svg";
   static const String availableClockIcon = "assets/mytrainers/available_clock_icon.svg";
+  static const String animatedErrorIcon = "assets/gif/error_animated.gif";
+  static const String animatedCongratulationIcon = "assets/plans/animated_congratulations.gif";
+  static const String myTrainersIcon = "assets/mytrainers/my_tainers_logo.png";
+  static const String animatedLiveLimitErrorIcon = "assets/gif/animated_error_for_live.gif";
   static const String commentIcon = "assets/Icons/comment_icon.svg";
   static const String downloadDocIcon = "assets/Icons/download_icon.png";
   static const String docFileIcon = "assets/Icons/doc_file_icon.png";
@@ -99,15 +104,14 @@ class ImagePath {
       "assets/message/sharefeedbackIcon.svg";
 
   ///my trainer
-  static const String notrainerenrollframe =
-      "assets/mytrainers/notrainerframe.svg";
+  static const String notrainerenrollframe = "assets/mytrainers/notrainerframe.svg";
   static const String closedialogIcon = "assets/mytrainers/closedialogicon.svg";
+  static const String nomatchesfoundImage = "assets/get_trained/no_matchesfoundImage.png";
 
   ///UI chat
   static const String chatdocumentIcon = "assets/message/documentIcon.svg";
   static const String chatpopupmenuIcon = "assets/message/popmenuitem.svg";
-  static const String attachdocumentIcon =
-      "assets/message/attachdocumentIcon.svg";
+  static const String attachdocumentIcon = "assets/message/attachdocumentIcon.svg";
   static const String openCameraIcon = "assets/message/opencameraIcon.svg";
   static const String chatMicIcon = "assets/message/chatMicIcon.svg";
   static const String videomicON = "assets/message/videomicON.svg";
@@ -118,16 +122,14 @@ class ImagePath {
   static const String videocameraOFF = "assets/message/videocameraOFF.svg";
 
   ///BMR chat
-  static const String circlequestionmarkIcon =
-      "assets/message/circlequestionmark.svg";
+  static const String circlequestionmarkIcon = "assets/message/circlequestionmark.svg";
   static const String plusIconbmr = "assets/bmrscreen/plusIconbmr.svg";
   static const String minuscircleIcon = "assets/bmrscreen/minuscirlceIcon.svg";
   static const String bmrinfoImage = "assets/bmrscreen/bmrimage.svg";
 
   ///plan screen
   static const String plantimerIcon = "assets/plans/plantimerIcon.svg";
-  static const String planpersonenrolledIcon =
-      "assets/plans/planpersonenrolledIcon.svg";
+  static const String planpersonenrolledIcon = "assets/plans/planpersonenrolledIcon.svg";
   static const String planlanguageIcon = "assets/plans/planLanguageIcon.png";
   static const String plangreentickIcon = "assets/plans/plangreentickIcon.png";
   static const String planredIcon = "assets/plans/planredcircleIcon.png";
@@ -138,8 +140,7 @@ class ImagePath {
   static const String login_intro_image = "assets/log_in/login_image.png";
   static const String black_rectangle = "assets/log_in/black_rectangle.png";
   static const String otp_intro_image = "assets/log_in/otp_screenImage.png";
-  static const String detail_intro_image =
-      "assets/log_in/detail_screenImage.png";
+  static const String detail_intro_image = "assets/log_in/detail_screenImage.png";
 
   //PASSWORD
 }

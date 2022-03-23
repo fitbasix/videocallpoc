@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../core/constants/app_text_style.dart';
@@ -118,15 +121,34 @@ class NumberChangeOtpVerify extends StatelessWidget {
                                           .response!.data!.profile!.dob
                                   ? null
                                   : profileController.DOBController.text;
-                          await ProfileServices.editProfile(
-                              email: updatedEmailId,
-                              countryCode: updatedCountryCode,
-                              phone: updatedPhnNumber,
-                              dob: updatedDob == "" ? null : updatedDob,
-                              otp: profileController.otp.value);
-                          Navigator.pop(context);
-                          homeController.userProfileData.value =
-                              await CreatePostService.getUserProfile();
+                          log("status");
+                          bool numberNotRegistered =
+                              await ProfileServices.editProfile(
+                                  countryCode: updatedCountryCode,
+                                  phone: updatedPhnNumber,
+                                  dob: updatedDob == "" ? null : updatedDob,
+                                  otp: profileController.otp.value,
+                                  context: context);
+                          log("status" + numberNotRegistered.toString());
+                          if (numberNotRegistered == false) {
+                            log(homeController.userProfileData.value.response!
+                                .data!.profile!.mobileNumber!);
+                            // Navigator.pop(context);
+                            // homeController.userProfileData.value =
+                            //     await CreatePostService.getUserProfile();
+                            // profileController.selectedDate.value =
+                            //     homeController.userProfileData.value.response!
+                            //                 .data!.profile!.dob ==
+                            //             null
+                            //         ? DateTime.now().toString()
+                            //         : DateFormat("dd/LL/yyyy").format(
+                            //             homeController.userProfileData.value
+                            //                 .response!.data!.profile!.dob!);
+                          } else {
+                            Navigator.pop(context);
+                            homeController.userProfileData.value =
+                                await CreatePostService.getUserProfile();
+                          }
                         }
                       },
                       child: Text(

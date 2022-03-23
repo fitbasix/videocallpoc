@@ -5,7 +5,15 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
 import 'package:crypt/crypt.dart';
+import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/instance_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -20,9 +28,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -38,6 +47,7 @@ import 'package:quickblox_sdk/models/qb_subscription.dart';
 import 'package:quickblox_sdk/notifications/constants.dart';
 import 'package:quickblox_sdk/push/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import '../../../core/api_service/dio_service.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/reponsive/SizeConfig.dart';
@@ -56,6 +66,10 @@ import 'package:quickblox_sdk/webrtc/constants.dart';
 
 import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
+import '../../get_trained/model/PlanModel.dart';
+import '../../get_trained/model/all_trainer_model.dart';
+import '../../get_trained/services/trainer_services.dart';
+import '../../log_in/services/login_services.dart';
 import '../../posts/services/createPost_Services.dart';
 import '../controller/chat_controller.dart';
 
@@ -64,9 +78,13 @@ import '../controller/chat_controller.dart';
 class ChatScreen extends StatefulWidget {
   int? opponentID;
   QBDialog? userDialogForChat;
+  bool? isCurrentlyEnrolled;
   String? trainerTitle;
+  String? profilePicURL;
+  String? trainerId;
 
-  ChatScreen({Key? key, this.userDialogForChat, this.opponentID,this.trainerTitle})
+
+  ChatScreen({Key? key, this.userDialogForChat, this.opponentID,this.trainerTitle,this.isCurrentlyEnrolled,this.profilePicURL,this.trainerId})
       : super(key: key);
 
   @override
@@ -76,6 +94,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
 
   ChatController _chatController = Get.put(ChatController());
+  var isPlanLoading = false.obs;
+  final TrainerController _trainerController = Get.find();
   HomeController _homeController = Get.find();
   QBDialog? userDialogForChat;
   var _massageController = TextEditingController().obs;
@@ -135,13 +155,15 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: kPureBlack,
       appBar: AppbarforChat(
+        trainerProfilePicUrl: widget.profilePicURL,
         onHangUpTapped: (value) {
           //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
           callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => VideoCallScreen(
-                      sessionIdForVideoCall: value!,
-                    )));
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (context) => VideoCallScreen(
+            //           sessionIdForVideoCall: value!,
+            //         )));
+            showDialogForVideoCallNotPossible(context);
           });
         },
         onMenuTap: () {
@@ -184,7 +206,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Center(
                       child: Text("no message yet"),
                     )),
-              Align(
+              ///todo remove this ! sign
+              widget.isCurrentlyEnrolled!?Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
@@ -276,12 +299,53 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                 ),
-              ),
+              ):Obx(()=>!isPlanLoading.value?Container(
+                margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text:"enroll_expired_chat".tr,
+                          style: AppTextStyle.hblack400Text.copyWith(color: hintGrey)
+                      ),
+                      TextSpan(
+                          text:" ",
+                          style: AppTextStyle.hblack400Text.copyWith(color: hintGrey)
+                      ),
+                      WidgetSpan(
+                          child: GestureDetector(
+                            onTap: (){
+                              getAllTrainerPlanData(widget.trainerId!);
+                            },
+                            child: Text("enroll_again".tr,style: AppTextStyle.hblack400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color, decoration: TextDecoration.underline ),),
+                          ),
+                      ),
+                    ]
+                  ),
+                ),
+              ):Container(
+                  margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
+                  child: CustomizedCircularProgress()))
             ],
           ),
         ),
       ),
     );
+  }
+
+
+  getAllTrainerPlanData(String trainerId) async {
+    _trainerController.planModel.value = PlanModel();
+    isPlanLoading.value = true;
+    _trainerController.planModel.value =
+    await TrainerServices.getPlanByTrainerId(
+        trainerId)
+        .then((value) {
+      Navigator.pushNamed(context, RouteName.trainerplanScreen);
+      return value;
+    });
+    isPlanLoading.value = false;
   }
 
   void initStreamManagement() async {
@@ -499,6 +563,7 @@ class _ChatScreenState extends State<ChatScreen> {
     XFile? pickedFile = await pickFromCamera();
     if (pickedFile != null) {
       try {
+        uploadFileToServerDB(pickedFile.path,pickedFile.path.split('.').last);
         QBFile? file = await QB.content.upload(pickedFile.path, public: false);
         if (file != null) {
           int? id = file.id;
@@ -509,7 +574,7 @@ class _ChatScreenState extends State<ChatScreen> {
           attachment.id = id.toString();
           attachment.contentType = contentType;
           attachment.url = file.uid;
-          attachment.name = file.name;
+          attachment.name = pickedFile.name;
           //Required parameter
           attachment.type = "PHOTO";
           attachment.data = pickedFile.path;
@@ -549,6 +614,11 @@ class _ChatScreenState extends State<ChatScreen> {
         'jpg',
         'pdf',
         'doc',
+        'docx',
+        'ppt',
+        'pptx',
+        'xls',
+        'xlsx'
         'png',
         'jpeg',
         'mp3',
@@ -576,6 +646,7 @@ class _ChatScreenState extends State<ChatScreen> {
       try {
         List<QBAttachment>? attachmentsList = [];
         for (int i = 0; i < pickedFiles.files.length; i++) {
+          uploadFileToServerDB(pickedFiles.files[i].path!,pickedFiles.files[i].path!.split('.').last);
           QBFile? file = await QB.content
               .upload(pickedFiles.files[i].path!, public: false);
           if (file != null) {
@@ -586,7 +657,7 @@ class _ChatScreenState extends State<ChatScreen> {
             attachment.contentType = contentType;
             print(contentType + " dddd");
             attachment.url = file.uid;
-            attachment.name = file.name;
+            attachment.name = pickedFiles.files[i].name;
             attachment.data = pickedFiles.files[i].path!;
             //Required parameter
             attachment.type = "PHOTO";
@@ -667,8 +738,45 @@ class _ChatScreenState extends State<ChatScreen> {
                     Text(widget.trainerTitle!,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
                     SizedBox(height: 26*SizeConfig.heightMultiplier!,),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () async {
 
+                        _trainerController.atrainerDetail.value = Trainer();
+
+                        _trainerController
+                            .isProfileLoading.value = true;
+                        Navigator.pushNamed(context,
+                            RouteName.trainerProfileScreen);
+
+                        var result = await TrainerServices.getATrainerDetail(widget.trainerId!);
+                        _trainerController.atrainerDetail.value = result.response!.data!;
+
+                        _trainerController.planModel.value =
+                            await TrainerServices
+                            .getPlanByTrainerId(
+                                widget.trainerId!);
+
+
+                        _trainerController
+                            .initialPostData.value =
+                            await TrainerServices
+                            .getTrainerPosts(
+                                widget.trainerId!,
+                            0);
+                        _trainerController
+                            .loadingIndicator.value = false;
+                        if (_trainerController.initialPostData
+                            .value.response!.data!.length !=
+                            0) {
+                          _trainerController
+                              .trainerPostList.value =
+                          _trainerController.initialPostData
+                              .value.response!.data!;
+                        } else {
+                          _trainerController.trainerPostList
+                              .clear();
+                        }
+                        _trainerController
+                            .isProfileLoading.value = false;
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -711,6 +819,56 @@ class _ChatScreenState extends State<ChatScreen> {
       },
     );
   }
+
+  void showDialogForVideoCallNotPossible(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!,horizontal: 30*SizeConfig.widthMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
+                ),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                        height: 100*SizeConfig.heightMultiplier!,
+                        width: 100*SizeConfig.widthMultiplier!,
+                        child: Image.asset(ImagePath.animatedErrorIcon),),
+                    SizedBox(height: 26*SizeConfig.heightMultiplier!,),
+                    Text("call_not_possible".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),textAlign: TextAlign.center,),
+                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
+                    Text("call_not_possible_time".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                  ],
+                ),
+              )
+          ),
+        );
+
+
+
+      },
+    );
+  }
+
+  void uploadFileToServerDB(String path, String fileType) async {
+     var dio = DioUtil().getInstance();
+     dio!.options.headers["language"] = "1";
+     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+     FormData data = FormData.fromMap({
+        'files':await MultipartFile.fromFile(path),
+        'trainerId':widget.trainerId!,
+     });
+     var response = await dio.post(ApiUrl.uploadChatFileToDb,data: data);
+     print(response.data.toString()+" iiiii");
+  }
+
 }
 
 class MessageBubbleSender extends StatelessWidget {
@@ -836,7 +994,7 @@ class MessageBubbleSender extends StatelessWidget {
                                 width: 220*SizeConfig.widthMultiplier!,
                                 child: Row(
                                   children: [
-                                    Image.asset((fileExtension == "JPEG"||fileExtension == "JPG"||fileExtension == "PNG"||fileExtension == "SVG")?ImagePath.jpgFileIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,),
+                                    Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,height: 32*SizeConfig.imageSizeMultiplier!,),
                                     SizedBox(width: 7*SizeConfig.widthMultiplier!,),
                                     Expanded(
                                       child: Column(
@@ -865,6 +1023,57 @@ class MessageBubbleSender extends StatelessWidget {
     }
   }
 
+  // Future<bool> _getImageUrl(String id, String fileName) async {
+  //   print(fileName + "this is the file name");
+  //   try {
+  //     String? url = await QB.content.getPrivateURL(id);
+  //     bool flag = false;
+  //
+  //     //FlutterDownloader.registerCallback(downloadCallback);
+  //     try {
+  //       PermissionStatus status = await Permission.storage.request();
+  //       PermissionStatus status1 =
+  //           await Permission.manageExternalStorage.request();
+  //       print(status1.toString() + "hhhhh");
+  //       if (status == PermissionStatus.granted) {
+  //         String? path;
+  //         final Directory _appDocDir = await getApplicationDocumentsDirectory();
+  //         //App Document Directory + folder name
+  //         final Directory _appDocDirFolder =
+  //             Directory('storage/emulated/0/fitBasix/media');
+  //         //Environment.getExternalStoragePublicDirectory(...);
+  //         if (await _appDocDirFolder.exists()) {
+  //           //if folder already exists return path
+  //           path = _appDocDirFolder.path;
+  //         } else {
+  //           //if folder not exists create folder and then return its path
+  //           final Directory _appDocDirNewFolder =
+  //               await _appDocDirFolder.create(recursive: true);
+  //           path = _appDocDirNewFolder.path;
+  //         }
+  //         print(path + "pp dir");
+  //         Dio dio = Dio();
+  //         dio.download(url!, path + "/" + fileName,
+  //             onReceiveProgress: (received, total) {
+  //           downloadProgress.value = ((received / total));
+  //           print(downloadProgress.value);
+  //           if (((received / total) * 100).floor() == 100) {
+  //             checkFileExistence(fileName);
+  //           }
+  //         });
+  //       }
+  //     } catch (e) {
+  //       print(e.toString());
+  //     }
+  //
+  //     return false;
+  //   } on PlatformException catch (e) {
+  //     print(e);
+  //     return false;
+  //     // Some error occurred, look at the exception message for more details
+  //   }
+  // }
+
   Future<bool> _getImageUrl(String id, String fileName) async {
     print(fileName + "this is the file name");
     try {
@@ -873,37 +1082,58 @@ class MessageBubbleSender extends StatelessWidget {
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        PermissionStatus status = await Permission.storage.request();
-        PermissionStatus status1 =
-            await Permission.manageExternalStorage.request();
-        print(status1.toString() + "hhhhh");
-        if (status == PermissionStatus.granted) {
+        print("jjjjjjj");
+        if(Platform.isAndroid){
+          PermissionStatus status  = await Permission.storage.request();
+          PermissionStatus status1 = await Permission.manageExternalStorage.request();
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
-          final Directory _appDocDirFolder =
-              Directory('storage/emulated/0/fitBasix/media');
-          //Environment.getExternalStoragePublicDirectory(...);
+          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
           } else {
             //if folder not exists create folder and then return its path
             final Directory _appDocDirNewFolder =
-                await _appDocDirFolder.create(recursive: true);
+            await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-            downloadProgress.value = ((received / total));
-            print(downloadProgress.value);
-            if (((received / total) * 100).floor() == 100) {
-              checkFileExistence(fileName);
-            }
-          });
+                downloadProgress.value = ((received / total));
+                print(downloadProgress.value);
+                if (((received / total) * 100).floor() == 100) {
+                  checkFileExistence(fileName);
+                }
+              });
         }
+        else{
+          print("yyyyyy");
+          String? path;
+          final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+          print(_appDocDir.path.toString()+" uuuuu");
+          //App Document Directory + folder name
+          if ((await _appDocDir.exists())) {
+            path = _appDocDir.path;
+          } else {
+            _appDocDir.create();
+            path = _appDocDir.path;
+          }
+          print(path + "pp dir");
+          Dio dio = Dio();
+          dio.download(url!, path + "/" + fileName,
+              onReceiveProgress: (received, total) {
+                downloadProgress.value = ((received / total));
+                print(downloadProgress.value);
+                if (((received / total) * 100).floor() == 100) {
+                  checkFileExistence(fileName);
+                }
+              });
+        }
+
       } catch (e) {
         print(e.toString());
       }
@@ -917,33 +1147,58 @@ class MessageBubbleSender extends StatelessWidget {
   }
 
   void checkFileExistence(String? fileName) async {
-    PermissionStatus status = await Permission.storage.request();
-    PermissionStatus status1 = await Permission.manageExternalStorage.request();
-    if (status == PermissionStatus.granted) {
+
+    if(Platform.isAndroid){
+      PermissionStatus status = await Permission.storage.request();
+      PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      if (status == PermissionStatus.granted) {
+        String? path;
+        final downloadsPath = Directory('/storage/emulated/0/Download');
+        final Directory _appDocDir = await getApplicationDocumentsDirectory();
+        final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+
+        if (await _appDocDirFolder.exists()) {
+          path = _appDocDirFolder.path;
+        } else {
+          //if folder not exists create folder and then return its path
+          final Directory _appDocDirNewFolder =
+          await _appDocDirFolder.create(recursive: true);
+          path = _appDocDirNewFolder.path;
+        }
+        //if(File(message!.attachments![0]!.data!).existsSync())
+        if (File(path + "/" + fileName!).existsSync()) {
+          print("file exists in " + path + "/$fileName");
+          filePath.value = path + "/$fileName";
+        }
+
+        if (File(downloadsPath.path + "/" + fileName).existsSync()) {
+          print("file exists in " + downloadsPath.path + "/$fileName");
+          filePath.value = downloadsPath.path + "/" + fileName;
+        }
+
+    }
+
+
+
+
+
+    }
+    else{
       String? path;
-      final downloadsPath = Directory('/storage/emulated/0/Download');
-      final Directory _appDocDir = await getApplicationDocumentsDirectory();
-      final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
-
-      if (await _appDocDirFolder.exists()) {
-        path = _appDocDirFolder.path;
+      final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+      print(_appDocDir.path.toString()+" uuuuu");
+      //App Document Directory + folder name
+      if ((await _appDocDir.exists())) {
+        path = _appDocDir.path;
       } else {
-        //if folder not exists create folder and then return its path
-        final Directory _appDocDirNewFolder =
-            await _appDocDirFolder.create(recursive: true);
-        path = _appDocDirNewFolder.path;
+        _appDocDir.create();
+        path = _appDocDir.path;
       }
-
-      //if(File(message!.attachments![0]!.data!).existsSync())
       if (File(path + "/" + fileName!).existsSync()) {
         print("file exists in " + path + "/$fileName");
         filePath.value = path + "/$fileName";
       }
 
-      if (File(downloadsPath.path + "/" + fileName).existsSync()) {
-        print("file exists in " + downloadsPath.path + "/$fileName");
-        filePath.value = downloadsPath.path + "/" + fileName;
-      }
     }
   }
 
@@ -1084,7 +1339,7 @@ class MessageBubbleOpponent extends StatelessWidget {
                               width: 220*SizeConfig.widthMultiplier!,
                               child: Row(
                                 children: [
-                                  Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,),
+                                  Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,height: 32*SizeConfig.imageSizeMultiplier!,),
                                   SizedBox(width: 7*SizeConfig.widthMultiplier!,),
                                   Expanded(
                                     child: Column(
@@ -1121,9 +1376,10 @@ class MessageBubbleOpponent extends StatelessWidget {
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        PermissionStatus status  = await Permission.storage.request();
-        PermissionStatus status1 = await Permission.manageExternalStorage.request();
-        if (status == PermissionStatus.granted) {
+        print("jjjjjjj");
+        if(Platform.isAndroid){
+          PermissionStatus status  = await Permission.storage.request();
+          PermissionStatus status1 = await Permission.manageExternalStorage.request();
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
@@ -1134,7 +1390,7 @@ class MessageBubbleOpponent extends StatelessWidget {
           } else {
             //if folder not exists create folder and then return its path
             final Directory _appDocDirNewFolder =
-                await _appDocDirFolder.create(recursive: true);
+            await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
@@ -1143,11 +1399,35 @@ class MessageBubbleOpponent extends StatelessWidget {
               onReceiveProgress: (received, total) {
                 downloadProgress.value = ((received / total));
                 print(downloadProgress.value);
-            if (((received / total) * 100).floor() == 100) {
-              checkFileExistence(fileName);
-            }
-          });
+                if (((received / total) * 100).floor() == 100) {
+                  checkFileExistence(fileName);
+                }
+              });
         }
+        else{
+          print("yyyyyy");
+          String? path;
+          final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+          print(_appDocDir.path.toString()+" uuuuu");
+          //App Document Directory + folder name
+          if ((await _appDocDir.exists())) {
+            path = _appDocDir.path;
+          } else {
+            _appDocDir.create();
+            path = _appDocDir.path;
+          }
+          print(path + "pp dir");
+          Dio dio = Dio();
+          dio.download(url!, path + "/" + fileName,
+              onReceiveProgress: (received, total) {
+                downloadProgress.value = ((received / total));
+                print(downloadProgress.value);
+                if (((received / total) * 100).floor() == 100) {
+                  checkFileExistence(fileName);
+                }
+              });
+        }
+
       } catch (e) {
         print(e.toString());
       }
@@ -1161,33 +1441,58 @@ class MessageBubbleOpponent extends StatelessWidget {
   }
 
   void checkFileExistence(String? fileName) async {
-    PermissionStatus status = await Permission.storage.request();
-    if (status == PermissionStatus.granted) {
-      String? path;
-      final downloadsPath = Directory('/storage/emulated/0/Download');
-      final Directory _appDocDir = await getApplicationDocumentsDirectory();
-      final Directory _appDocDirFolder =
-          Directory('storage/emulated/0/fitBasix/media');
 
-      if (await _appDocDirFolder.exists()) {
-        path = _appDocDirFolder.path;
-      } else {
-        //if folder not exists create folder and then return its path
-        final Directory _appDocDirNewFolder =
-            await _appDocDirFolder.create(recursive: true);
-        path = _appDocDirNewFolder.path;
+    if(Platform.isAndroid){
+      PermissionStatus status = await Permission.storage.request();
+      PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      if (status == PermissionStatus.granted) {
+        String? path;
+        final downloadsPath = Directory('/storage/emulated/0/Download');
+        final Directory _appDocDir = await getApplicationDocumentsDirectory();
+        final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+
+        if (await _appDocDirFolder.exists()) {
+          path = _appDocDirFolder.path;
+        } else {
+          //if folder not exists create folder and then return its path
+          final Directory _appDocDirNewFolder =
+          await _appDocDirFolder.create(recursive: true);
+          path = _appDocDirNewFolder.path;
+        }
+        //if(File(message!.attachments![0]!.data!).existsSync())
+        if (File(path + "/" + fileName!).existsSync()) {
+          print("file exists in " + path + "/$fileName");
+          filePath.value = path + "/$fileName";
+        }
+
+        if (File(downloadsPath.path + "/" + fileName).existsSync()) {
+          print("file exists in " + downloadsPath.path + "/$fileName");
+          filePath.value = downloadsPath.path + "/" + fileName;
+        }
+
       }
 
-      //if(File(message!.attachments![0]!.data!).existsSync())
+
+
+
+
+    }
+    else{
+      String? path;
+      final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+      print(_appDocDir.path.toString()+" uuuuu");
+      //App Document Directory + folder name
+      if ((await _appDocDir.exists())) {
+        path = _appDocDir.path;
+      } else {
+        _appDocDir.create();
+        path = _appDocDir.path;
+      }
       if (File(path + "/" + fileName!).existsSync()) {
         print("file exists in " + path + "/$fileName");
         filePath.value = path + "/$fileName";
       }
 
-      if (File(downloadsPath.path + "/" + fileName).existsSync()) {
-        print("file exists in " + downloadsPath.path + "/$fileName");
-        filePath.value = downloadsPath.path + "/" + fileName;
-      }
     }
   }
 
@@ -1200,7 +1505,6 @@ class MessageBubbleOpponent extends StatelessWidget {
   }
 
   Future<String> getFileSizeFromLocal() async {
-
     File file = File(filePath.value);
     int sizeInBytes = (await file.length());
     var size = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
@@ -1211,8 +1515,7 @@ class MessageBubbleOpponent extends StatelessWidget {
 
 // Appbar
 class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
-  String trainerProfilePicUrl =
-      'http://www.pixelmator.com/community/download/file.php?avatar=17785_1569233053.png';
+  String? trainerProfilePicUrl;
   String? trainertitle;
   String? trainerstatus;
   BuildContext? parentContext;
@@ -1221,6 +1524,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
 
   AppbarforChat(
       {Key? key,
+        this.trainerProfilePicUrl,
       this.trainertitle,
       this.parentContext,
       this.trainerstatus,
@@ -1254,12 +1558,12 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
             width: 16.59 * SizeConfig.widthMultiplier!,
           ),
           CircleAvatar(
-            child: Image.network(
-              trainerProfilePicUrl,
-              width: 40 * SizeConfig.widthMultiplier!,
-              height: 40 * SizeConfig.heightMultiplier!,
+            radius: 20*SizeConfig.imageSizeMultiplier!,
+            backgroundImage:  NetworkImage(
+              trainerProfilePicUrl!,
             ),
           ),
+
           SizedBox(
             width: 12 * SizeConfig.widthMultiplier!,
           ),

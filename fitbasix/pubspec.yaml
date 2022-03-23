@@ -74,12 +74,12 @@ dependencies:
   mime_type: ^1.0.0
   permission_handler:
   url_launcher: ^6.0.20
-  flutter_native_splash: ^2.0.4
+  flutter_native_splash: ^2.1.1
   sliding_up_panel: ^2.0.0+1
   flutter_switch: ^0.3.2
   open_file: ^3.2.1
   firebase_messaging: ^11.2.8
-  flutter_local_notifications: ^9.3.2
+#  flutter_local_notifications: ^9.3.2
   connectycube_flutter_call_kit: ^2.0.2
   percent_indicator: ^4.0.0
   syncfusion_flutter_gauges: ^19.4.54
@@ -88,19 +88,21 @@ dependencies:
   images_picker: ^1.2.10
   flutter_time_picker_spinner: ^2.0.0
   lottie: ^1.2.2
+  shared_preferences_ios: ^2.1.0
+  shared_preferences_android: ^2.0.11
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-flutter_native_splash:
-  background_image: "assets/log_in/welcome_image.png"
-  background_image_dark: "assets/log_in/welcome_image.png"
-  fullscreen: true
-  ios_content_mode: scaleAspectFill
-  android: true
-  ios: true
+#flutter_native_splash:
+#  background_image: "assets/log_in/welcome_image.png"
+#  background_image_dark: "assets/log_in/welcome_image.png"
+#  fullscreen: true
+#  ios_content_mode: scaleAspectFill
+#  android: true
+#  ios: true
   
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -135,6 +137,7 @@ flutter:
     - assets/bmrscreen/
     - assets/plans/
     - assets/log_in/
+    - assets/gif/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
