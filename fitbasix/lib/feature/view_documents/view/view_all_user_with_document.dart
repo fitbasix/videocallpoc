@@ -39,7 +39,8 @@ class ViewAllUsersWithDocuments extends StatelessWidget {
               onTap: () async {
                 _documentsController.listOfDocuments.value = [AllDocuments()];
                 Get.to(()=>ViewAllDocumentsOfUser());
-                _documentsController.isAllDocumentsLoading.value = true;
+                _documentsController.opponentName = usersWithDocs.value.response!.data![index].name;
+                    _documentsController.isAllDocumentsLoading.value = true;
                 _documentsController.allDocuments.value = await DocumentServices.getAllDocumentsOfUser(trainerId: usersWithDocs.value.response!.data![index].id!);
                 _documentsController.listOfDocuments.value = _documentsController.allDocuments.value.response!.data!;
                 _documentsController.isAllDocumentsLoading.value = false;

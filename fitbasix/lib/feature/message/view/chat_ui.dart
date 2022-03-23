@@ -1317,7 +1317,6 @@ class MessageBubbleOpponent extends StatelessWidget {
                                         child: Image.asset(ImagePath.downloadDocIcon,width: 16.79*SizeConfig.widthMultiplier!,height: 22.4*SizeConfig.heightMultiplier!,)):SizedBox(
                                         height: 22*SizeConfig.heightMultiplier!,
                                         width: 22*SizeConfig.heightMultiplier!,
-
                                         child: CircularProgressIndicator(color: kPureWhite,value: downloadProgress.value,backgroundColor: Colors.grey.withOpacity(0.2),strokeWidth: 2.5*SizeConfig.imageSizeMultiplier!,)),
                                     SizedBox(width: 12*SizeConfig.widthMultiplier!,),
                                   ],
@@ -1356,8 +1355,6 @@ class MessageBubbleOpponent extends StatelessWidget {
                                         })
                                     ],),
                                   )
-
-
                                 ],
                               )
                             )),
@@ -1404,7 +1401,7 @@ class MessageBubbleOpponent extends StatelessWidget {
                 }
               });
         }
-        else{
+        if(Platform.isIOS){
           print("yyyyyy");
           String? path;
           final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
@@ -1471,13 +1468,8 @@ class MessageBubbleOpponent extends StatelessWidget {
         }
 
       }
-
-
-
-
-
     }
-    else{
+    if(Platform.isIOS){
       String? path;
       final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
       print(_appDocDir.path.toString()+" uuuuu");
