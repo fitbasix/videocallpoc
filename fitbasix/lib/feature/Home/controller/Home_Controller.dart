@@ -73,6 +73,7 @@ class HomeController extends GetxController {
   RxString coverPhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
   RxBool updateWaterData = false.obs;
+  RxString openCommentId = "".obs;
 
   RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
     {},

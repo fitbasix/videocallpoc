@@ -137,7 +137,7 @@ class HomeService {
       "comment": comment
     });
 
-    log(response.toString());
+    log("reply of comment");
     print(response.data['code']);
   }
 
@@ -172,7 +172,7 @@ class HomeService {
     var response = await dio!.post(ApiUrl.getComment,
         data: postId == null ? getCommentReply : getPostComment);
 
-    log(response.toString());
+    log("nnnnn");
 
     return commentModelFromJson(response.toString());
   }
