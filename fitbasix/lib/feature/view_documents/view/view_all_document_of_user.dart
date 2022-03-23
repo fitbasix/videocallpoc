@@ -6,10 +6,11 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/reponsive/SizeConfig.dart';
 import '../../message/view/documents_view_screen.dart';
+import '../../profile/view/appbar_for_account.dart';
 import '../controller/documents_controller.dart';
 
 class ViewAllDocumentsOfUser extends StatefulWidget {
-  const ViewAllDocumentsOfUser({Key? key}) : super(key: key);
+  ViewAllDocumentsOfUser({Key? key,}) : super(key: key);
 
   @override
   State<ViewAllDocumentsOfUser> createState() => _ViewAllDocumentsOfUserState();
@@ -19,9 +20,14 @@ class _ViewAllDocumentsOfUserState extends State<ViewAllDocumentsOfUser> {
   final DocumentsController _documentsController = Get.find();
   String ShowDay = "demo";
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+ appBar: AppBarForAccount(
+        onback: (){Navigator.pop(context);},
+    title: _documentsController.opponentName!.trim(),
+    ),
       body: Obx(
               ()=>_documentsController.isAllDocumentsLoading.value?Center(
             child: CustomizedCircularProgress(),
@@ -45,7 +51,7 @@ class _ViewAllDocumentsOfUserState extends State<ViewAllDocumentsOfUser> {
                   _getGroupByDate(_documentsController.listOfDocuments[index].showDate!),
                   Container(
                     margin: EdgeInsets.only(bottom: 16*SizeConfig.heightMultiplier!,left: 29*SizeConfig.widthMultiplier!),
-                    child: DocumentTiles(documentName: _documentsController.listOfDocuments[index].fileName!,date: _documentsController.listOfDocuments[index].createdAt!.millisecondsSinceEpoch,),
+                    child: DocumentTiles(documentName: _documentsController.listOfDocuments[index].fileName!,date: _documentsController.listOfDocuments[index].createdAt!.millisecondsSinceEpoch,fileSizeFromDb: _documentsController.listOfDocuments[index].sizeInMb!,wantDownloadFeature: true,fileURL: _documentsController.listOfDocuments[index].url,),
                   ),
                 ],
               );
@@ -74,8 +80,6 @@ class _ViewAllDocumentsOfUserState extends State<ViewAllDocumentsOfUser> {
       return Container();
     }
   }
-
-
   String? _getGroupByDateString(DateTime dateSent) {
     final now = DateTime.now();
     final lastMonth = DateTime(now.year, now.month-1, now.day);
