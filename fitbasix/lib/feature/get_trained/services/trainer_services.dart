@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
@@ -133,24 +134,30 @@ class TrainerServices {
   static Future<bool> bookSlot(List<String> slots, String id, int time,
       List<int> days, BuildContext context) async {
     dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var token = await LogInService.getAccessToken();
-    var response = await http.post(Uri.parse(ApiUrl.bookDemo),
-        headers: {"language": "1", "Authorization": token},
-        body: jsonEncode(<String, dynamic>{
-          "days": slots,
-          "planId": id,
-          "time": time,
-          "day": days
-        }));
-
-    final responseData = jsonDecode(response.body);
-    if (response.statusCode == 500) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseData["response"]["message"])));
-      return false;
-    } else {
+    log(jsonEncode(<String, dynamic>{
+      "days": slots,
+      "planId": id,
+      "time": time,
+      "day": days
+    }).toString());
+    var response;
+    try {
+      response = await Dio().post(ApiUrl.bookDemo,
+          options: Options(headers: {"language": 1, "Authorization": token}),
+          data: {"days": slots, "planId": id, "time": time, "day": days});
       return true;
+    } on DioError catch (e) {
+      final responseData = jsonDecode(e.response.toString());
+      if (e.response!.statusCode == 500 || e.response!.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(responseData["response"]["message"])));
+        return false;
+      }
     }
+
+    return false;
   }
 
   static Future<AllTrainer> getFitnessConsultant() async {
@@ -163,14 +170,11 @@ class TrainerServices {
   }
 
   static Future<AllTrainer> getNutritionConsultant() async {
-    print('before');
-    print(await LogInService.getAccessToken());
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getAllTrainer, data: {
       "trainerType": [2]
     });
-    print(response.toString());
     return allTrainerFromJson(response.toString());
   }
 
