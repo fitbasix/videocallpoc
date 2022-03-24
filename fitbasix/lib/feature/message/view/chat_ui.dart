@@ -8,6 +8,7 @@ import 'package:crypt/crypt.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
@@ -47,6 +48,7 @@ import 'package:quickblox_sdk/models/qb_subscription.dart';
 import 'package:quickblox_sdk/notifications/constants.dart';
 import 'package:quickblox_sdk/push/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/api_service/dio_service.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
@@ -203,9 +205,75 @@ class _ChatScreenState extends State<ChatScreen> {
                           }),
                     )
                   : Expanded(
+                    child: Shimmer.fromColors(
+                      child: Expanded(
+                        child: Column(
+
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Spacer(),
+                            Container(
+                              margin: EdgeInsets.only(left: 48*SizeConfig.widthMultiplier!),
+                              height: 28*SizeConfig.heightMultiplier!,
+                              width: 176*SizeConfig.widthMultiplier!,
+                              color: Color(0xFF3646464),
+                            ),
+                            SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                            Container(
+                              margin: EdgeInsets.only(left: 48*SizeConfig.widthMultiplier!),
+                              height: 49*SizeConfig.heightMultiplier!,
+                              width: 215*SizeConfig.widthMultiplier!,
+                              color: Color(0xFF3646464),
+                            ),
+                            SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                            Container(
+                              margin: EdgeInsets.only(left: 48*SizeConfig.widthMultiplier!),
+                              height: 28*SizeConfig.heightMultiplier!,
+                              width: 176*SizeConfig.widthMultiplier!,
+                              color: Color(0xFF3646464),
+                            ),
+                            SizedBox(height: 16*SizeConfig.heightMultiplier!),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                margin: EdgeInsets.only(right: 16*SizeConfig.widthMultiplier!),
+                                height: 42*SizeConfig.heightMultiplier!,
+                                width: 191*SizeConfig.widthMultiplier!,
+                                color: Color(0xFF3646464),
+                              ),
+                            ),
+                            SizedBox(height: 16*SizeConfig.heightMultiplier!),
+                            Container(
+                              margin: EdgeInsets.only(left: 48*SizeConfig.widthMultiplier!),
+                              height: 28*SizeConfig.heightMultiplier!,
+                              width: 176*SizeConfig.widthMultiplier!,
+                              color: Color(0xFF3646464),
+                            ),
+                            SizedBox(height: 16*SizeConfig.heightMultiplier!),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                margin: EdgeInsets.only(right: 16*SizeConfig.widthMultiplier!),
+                                height: 78*SizeConfig.heightMultiplier!,
+                                width: 232*SizeConfig.widthMultiplier!,
+                                color: Color(0xFF3646464),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      baseColor: Color.fromARGB(0, 255, 255, 255)
+                      .withOpacity(0),
+                      highlightColor:
+                    Color.fromARGB(1, 255, 255, 255)
+                      .withOpacity(0.46),),
+                  )
+
+              /*Expanded(
                       child: Center(
                       child: Text("no message yet"),
-                    )),
+                    ))
+*/              ,
               ///todo remove this ! sign
               widget.isCurrentlyEnrolled!?Align(
                 alignment: Alignment.bottomCenter,

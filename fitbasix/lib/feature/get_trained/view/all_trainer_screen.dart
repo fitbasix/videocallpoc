@@ -803,11 +803,28 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "available_timings".tr,
-                        style: AppTextStyle.black400Text.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1!.color),
+                      Row(
+                        children: [
+                          Text(
+                            "available_timings".tr,
+                            style: AppTextStyle.black400Text.copyWith(
+                                color:
+                                    Theme.of(context).textTheme.bodyText1!.color),
+                          ),
+                          Spacer(),
+                          IconButton(
+                            onPressed: () {
+                              //_homeController.selectedIndex.value = 0;
+                              Navigator.pop(context);
+                            },
+                            icon: SvgPicture.asset(
+                              ImagePath.closedialogIcon,
+                              color: hintGrey,
+                              width: 15.55 * SizeConfig.widthMultiplier!,
+                              height: 15.55 * SizeConfig.heightMultiplier!,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 16 * SizeConfig.heightMultiplier!,
@@ -883,24 +900,26 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                 ),
                               ),
                       ),
-                      SizedBox(
-                        height: 26 * SizeConfig.heightMultiplier!,
-                      ),
-                      SizedBox(
-                        width: 280 * SizeConfig.widthMultiplier!,
-                        child: ProceedButton(
-                            title: "confirm".tr,
-                            onPressed: () async {
-                              _trainerController.filterIsLoading.value = true;
-                              Navigator.pop(context);
-                              _trainerController.allTrainer.value =
-                                  await TrainerServices.getAllTrainer(
-                                      availability:
-                                          _trainerController.availability);
-                              _scrollController.jumpTo(0);
-                              _trainerController.filterIsLoading.value = false;
-                              //todo add filter feature here
-                            }),
+                      // SizedBox(
+                      //   height: 26 * SizeConfig.heightMultiplier!,
+                      // ),
+                      Center(
+                        child: SizedBox(
+                          width: 280 * SizeConfig.widthMultiplier!,
+                          child: ProceedButton(
+                              title: "confirm".tr,
+                              onPressed: () async {
+                                _trainerController.filterIsLoading.value = true;
+                                Navigator.pop(context);
+                                _trainerController.allTrainer.value =
+                                    await TrainerServices.getAllTrainer(
+                                        availability:
+                                            _trainerController.availability);
+                                _scrollController.jumpTo(0);
+                                _trainerController.filterIsLoading.value = false;
+                                //todo add filter feature here
+                              }),
+                        ),
                       )
                     ],
                   ),
