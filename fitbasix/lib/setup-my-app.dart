@@ -19,7 +19,6 @@ import 'package:fitbasix/fitbasix_app.dart';
 import 'feature/Home/view/consumption_screen.dart';
 
 Future<void> setupApp() async {
-
   Get.put(AppTranslations());
   await RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -28,7 +27,6 @@ Future<void> setupApp() async {
   final translations = GetTranslations.loadTranslations();
   runApp(FitBasixApp(
     translations: translations,
-    child: accessToken == null ?  LoginScreen(): HomeAndTrainerPage(),
-
+    child: GetStartedPage(),
   ));
 }
