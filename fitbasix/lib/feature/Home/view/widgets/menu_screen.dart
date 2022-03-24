@@ -151,7 +151,8 @@ class MenuScreen extends StatelessWidget {
                   Navigator.pushNamed(context, RouteName.editPersonalInfo);
                 }),
             MenuItem(
-                menuItemImage: ImagePath.account,
+                menuItemImage: ImagePath.fileIcon,
+                imageWidth: 20,
                 menuItemText: 'view_document'.tr,
                 onTap: () {
                   Navigator.pushNamed(context, RouteName.viewAllUserWithDoc);
@@ -211,17 +212,19 @@ class MenuItem extends StatelessWidget {
   final String menuItemImage;
   final String menuItemText;
   final VoidCallback onTap;
+  double? imageWidth;
   MenuItem(
       {required this.menuItemImage,
       required this.menuItemText,
-      required this.onTap});
+      required this.onTap,
+      this.imageWidth});
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
         padding: EdgeInsets.only(
             top: 29 * SizeConfig.heightMultiplier!,
-            left: 18 * SizeConfig.widthMultiplier!),
+            left: imageWidth!=null?20*SizeConfig.widthMultiplier!:18 * SizeConfig.widthMultiplier!),
         child: GestureDetector(
           onTap: onTap,
           child: Container(
@@ -229,10 +232,10 @@ class MenuItem extends StatelessWidget {
             child: Row(
               children: [
                 SvgPicture.asset(menuItemImage,
-                    width: 22 * SizeConfig.heightMultiplier!,
+                    width: imageWidth!=null?imageWidth!*SizeConfig.imageSizeMultiplier!:22 * SizeConfig.heightMultiplier!,
                     color: Theme.of(context).textTheme.headline1?.color,
                     fit: BoxFit.contain),
-                SizedBox(width: 15 * SizeConfig.widthMultiplier!),
+                SizedBox(width: imageWidth!=null?17*SizeConfig.widthMultiplier!:15 * SizeConfig.widthMultiplier!),
                 Text(
                   menuItemText,
                   style: AppTextStyle.boldBlackText.copyWith(
