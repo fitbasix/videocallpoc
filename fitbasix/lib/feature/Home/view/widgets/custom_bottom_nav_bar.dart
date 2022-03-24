@@ -52,7 +52,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   icon: new Icon(
                     Icons.chat_bubble_outline,
                   ),
-                  label: 'get_trained'.tr),
+                  label: 'getTrainedTitle'.tr),
+
               BottomNavigationBarItem(
                   icon: new Icon(
                     Icons.add,

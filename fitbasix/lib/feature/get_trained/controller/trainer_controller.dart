@@ -3,6 +3,7 @@ import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
+import 'package:fitbasix/feature/get_trained/model/sortbymodel.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,16 +11,19 @@ import 'package:get/get.dart';
 import '../../plans/models/AvailableSlot.dart';
 import '../../plans/models/FullPlanDetailModel.dart';
 import '../../plans/models/allTimeSlot.dart';
+import '../model/timing_model.dart';
 
 class TrainerController extends GetxController {
-
   var fromTimeForFilter = DateTime.now().obs;
   var toTimeForFilter = DateTime.now().obs;
   RxBool isSelected = RxBool(false);
   RxBool isLoading = RxBool(false);
   Rx<Trainer> atrainerDetail = Trainer().obs;
+  Rx<bool> isPlanLoading = RxBool(true);
+  Rx<bool> isMyTrainerProfileLoading = RxBool(false);
   Rx<PlanModel> planModel = PlanModel().obs;
   Rx<AllTrainer> allTrainer = AllTrainer().obs;
+  Rx<Plan> selectedPlan = Plan().obs;
   // Rx<AllTrainer> fitnessConsultant = AllTrainer().obs;
   // Rx<AllTrainer> nutritionConsultant = AllTrainer().obs;
   // Rx<AllTrainer> trainer = AllTrainer().obs;
@@ -32,6 +36,7 @@ class TrainerController extends GetxController {
   RxString search = RxString('');
   RxInt trainerType = RxInt(0);
   RxInt SelectedInterestIndex = RxInt(0);
+  RxInt SelectedSortMethod = RxInt(-1);
   RxString searchedName = RxString('');
   RxInt currentPage = RxInt(1);
   RxBool getTrainedIsLoading = RxBool(false);
@@ -51,7 +56,12 @@ class TrainerController extends GetxController {
   RxBool isAvailableSlotDataLoading = false.obs;
   RxInt TimeSlotSelected = RxInt(-1);
   RxList<Slot> weekAvailableSlots = <Slot>[].obs;
+  Rx<int> selectedTimeSlot = 0.obs;
   RxList<String> selectedDays = <String>[].obs;
+  RxList<String> enrolledTrainer = <String>[].obs;
+  Rx<TimingModel> timingModel = TimingModel().obs;
+  RxBool isTiming = false.obs;
+  RxList<int> availability = <int>[].obs;
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;
@@ -70,17 +80,11 @@ class TrainerController extends GetxController {
   Future<void> setUp() async {
     getTrainedIsLoading.value = true;
     trainers.value = await TrainerServices.getTrainers();
-
     interests.value = await TrainerServices.getAllInterest();
     getTrainedIsLoading.value = false;
   }
 
-  List<String> filterOptions = [
-    "sort_by".tr,
-    "most_popularity".tr,
-    "top_rated".tr,
-    "low_rated".tr
-  ];
+  Rx<SortByModel> filterOptions = SortByModel().obs;
 
   @override
   void onInit() {

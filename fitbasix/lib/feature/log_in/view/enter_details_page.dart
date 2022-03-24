@@ -27,8 +27,9 @@ class EnterDetailsPage extends StatelessWidget {
           ),
           Image.asset(
             ImagePath.detail_intro_image,
-            height: 540 * SizeConfig.heightMultiplier!,
-            width: Get.width,
+            height: 400 * SizeConfig.heightMultiplier!,
+            width: double.infinity,
+
             fit: BoxFit.fill,
           ),
           Positioned(
@@ -178,7 +179,7 @@ class EnterDetailsPage extends StatelessWidget {
                           ),
                   ),
                   SizedBox(
-                    height: 32 * SizeConfig.heightMultiplier!,
+                    height: 16 * SizeConfig.heightMultiplier!,
                   ),
                 ],
               ),

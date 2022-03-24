@@ -62,7 +62,7 @@ class Slot {
 
   String? id;
   String? trainerId;
-  dynamic time;
+  int? time;
   int? day;
   DateTime? date;
   String? planId;

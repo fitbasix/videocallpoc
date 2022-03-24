@@ -94,6 +94,8 @@ class Trainer {
     this.isNutritionConsultant,
     this.certificates,
     this.isFollowing,
+    this.isEnrolled,
+    this.quickBlox
   });
 
   String? followers;
@@ -116,6 +118,8 @@ class Trainer {
   final bool? isNutritionConsultant;
   final List<Certificate>? certificates;
   bool? isFollowing;
+  bool? isEnrolled;
+  int? quickBlox;
 
   factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
       followers: json["followers"].toString(),
@@ -145,7 +149,11 @@ class Trainer {
           ? []
           : List<Certificate>.from(json["certificate"]["certificates"]
               .map((x) => Certificate.fromJson(x))),
-      isFollowing: json["isFollowing"]);
+      isFollowing: json["isFollowing"],
+      isEnrolled: json["isEnrolled"],
+      quickBlox: json["quickBlox"],
+
+  );
 
   Map<String, dynamic> toJson() => {
         "followers": followers,
@@ -178,9 +186,7 @@ class Strength {
 
   final List<String>? strength;
 
-  factory Strength.fromJson(Map<String, dynamic> json) => Strength(
-        strength: List<String>.from(json["strength"].map((x) => x)),
-      );
+  factory Strength.fromJson(Map<String, dynamic> json) => Strength(strength: List<String>.from(json["strength"].map((x) => x)),);
 
   Map<String, dynamic> toJson() => {
         "strength": List<dynamic>.from(strength!.map((x) => x)),

@@ -1,6 +1,7 @@
 import 'package:fitbasix/feature/Bmr_calculator/view/bmr_resultpage.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
+import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/explore.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
@@ -40,6 +41,7 @@ import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/set_height.dart';
 import 'package:fitbasix/feature/spg/view/set_weight.dart';
+import 'package:fitbasix/feature/view_documents/view/view_all_user_with_document.dart';
 import '../../feature/message/view/chat_videocallscreen.dart';
 import '../../feature/plans/view/plan_info.dart';
 import '../../feature/plans/view/trainers_plan.dart';
@@ -101,6 +103,8 @@ abstract class RouteName {
   static const planTimingScreen = "/plan_timing.dart";
   static const otpReScreen = "/otp_screen";
   static const selectProfilePhoto = "/select_profile_photo";
+  static const myTrainersScreen = "/my_trainer_screen";
+  static const viewAllUserWithDoc = "/view_all_user_with_document";
   RouteName._();
 }
 
@@ -121,6 +125,22 @@ class GenerateRoute {
           BuildContext context,
         ) =>
             LoginScreen(),
+      );
+    }
+    if (route == RouteName.viewAllUserWithDoc) {
+      return MaterialPageRoute(
+        builder: (
+          BuildContext context,
+        ) =>
+            ViewAllUsersWithDocuments(),
+      );
+    }
+    if (route == RouteName.myTrainersScreen) {
+      return MaterialPageRoute(
+        builder: (
+            BuildContext context,
+            ) =>
+            MyTrainersScreen(),
       );
     }
     if (route == RouteName.otpReScreen) {

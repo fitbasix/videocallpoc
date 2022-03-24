@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
@@ -102,7 +103,6 @@ class ProfileController extends GetxController {
 //             (element) => element.name.toLowerCase().contains("all photos")));
 //     }
     var assetList = <AssetEntity>[];
-
     assetList = await foldersAvailable[0].getAssetListPaged(
       currentPage.value,
       100,
@@ -114,10 +114,12 @@ class ProfileController extends GetxController {
     return assetList;
   }
 
-  void setEditProfileData() async {
+  Future<void> setEditProfileData() async {
+    log("dfgdsg");
     loginController!.mobileController.text = homeController
         .userProfileData.value.response!.data!.profile!.mobileNumber
         .toString();
+    log("dfgdsg");
     interestList.value = homeController
         .userProfileData.value.response!.data!.profile!.selectedInterest!;
     loginController!.mobile.value = homeController
@@ -135,6 +137,7 @@ class ProfileController extends GetxController {
             ? ""
             : homeController.userProfileData.value.response!.data!.profile!.bio
                 .toString();
+    log("dfgdsg");
     currentWeight.value = homeController
                 .userProfileData.value.response!.data!.profile!.weight ==
             null
@@ -171,6 +174,7 @@ class ProfileController extends GetxController {
         ? ""
         : DateFormat("dd/LL/yyyy").format(
             homeController.userProfileData.value.response!.data!.profile!.dob!);
+    log("dfgdsg");
     await loginController!.getCountries();
     loginController!.selectedCountry.value = loginController!.countryList
         .singleWhere((element) =>
@@ -186,7 +190,7 @@ class ProfileController extends GetxController {
 
     print("asset list " + assets.toString());
     loginController = Get.put(LoginController());
-    setEditProfileData();
+    await setEditProfileData();
     interests.value = await TrainerServices.getAllInterest();
     isLoading.value = false;
     super.onInit();

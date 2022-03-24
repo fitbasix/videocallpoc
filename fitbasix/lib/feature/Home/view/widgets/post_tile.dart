@@ -18,6 +18,8 @@ import 'package:fitbasix/feature/Home/view/widgets/comments_tile.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../spg/view/set_goal_screen.dart';
+
 class PostTile extends StatefulWidget {
   PostTile(
       {Key? key,
@@ -361,6 +363,10 @@ class _PostTileState extends State<PostTile> {
                                       0
                                   ? CachedNetworkImage(
                                       imageUrl: widget.imageUrl[index],
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
                                       height: 360 * SizeConfig.widthMultiplier!,
                                       width: 360 * SizeConfig.widthMultiplier!,
                                       fit: BoxFit.contain,
@@ -546,45 +552,45 @@ class _PostTileState extends State<PostTile> {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
-            Row(
-              // mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 40 * SizeConfig.heightMultiplier!,
-                    // width: 260 * SizeConfig.widthMultiplier!,
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(
-                          8 * SizeConfig.widthMultiplier!),
-                    ),
-                    child: TextField(
-                      controller: _homeController.commentController,
-                      onChanged: (value) {
-                        _homeController.comment.value = value;
-                      },
-                      decoration: InputDecoration(
-                          enabled: false,
-                          border: InputBorder.none,
-                          hintText: 'add_comment'.tr,
-                          hintStyle: AppTextStyle.smallGreyText.copyWith(
-                              color:
-                                  Theme.of(context).textTheme.headline1?.color),
-                          contentPadding: EdgeInsets.only(
-                              bottom: 10 * SizeConfig.heightMultiplier!,
-                              left: 16 * SizeConfig.widthMultiplier!)),
-                    ),
-                  ),
-                ),
-                IconButton(
-                    onPressed: widget.onTap,
-                    icon: Icon(
-                      Icons.send,
-                      color: Theme.of(context).primaryColor,
-                    ))
-              ],
-            ),
+            // Row(
+            //   // mainAxisSize: MainAxisSize.min,
+            //   children: [
+            //     Expanded(
+            //       child: Container(
+            //         height: 40 * SizeConfig.heightMultiplier!,
+            //         // width: 260 * SizeConfig.widthMultiplier!,
+            //         margin: EdgeInsets.only(left: 16, right: 16),
+            //         decoration: BoxDecoration(
+            //           color: Theme.of(context).cardColor,
+            //           borderRadius: BorderRadius.circular(
+            //               8 * SizeConfig.widthMultiplier!),
+            //         ),
+            //         child: TextField(
+            //           controller: _homeController.commentController,
+            //           onChanged: (value) {
+            //             _homeController.comment.value = value;
+            //           },
+            //           decoration: InputDecoration(
+            //               enabled: false,
+            //               border: InputBorder.none,
+            //               hintText: 'add_comment'.tr,
+            //               hintStyle: AppTextStyle.smallGreyText.copyWith(
+            //                   color:
+            //                       Theme.of(context).textTheme.headline1?.color),
+            //               contentPadding: EdgeInsets.only(
+            //                   bottom: 10 * SizeConfig.heightMultiplier!,
+            //                   left: 16 * SizeConfig.widthMultiplier!)),
+            //         ),
+            //       ),
+            //     ),
+            //     IconButton(
+            //         onPressed: widget.onTap,
+            //         icon: Icon(
+            //           Icons.send,
+            //           color: Theme.of(context).primaryColor,
+            //         ))
+            //   ],
+            // ),
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),

@@ -141,13 +141,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.1"
   device_info_plus:
     dependency: transitive
     description:
@@ -377,27 +370,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1+2"
-  flutter_local_notifications:
-    dependency: "direct main"
+  flutter_lints:
+    dependency: "direct dev"
     description:
-      name: flutter_local_notifications
+      name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.3.2"
-  flutter_local_notifications_linux:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_linux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.2"
-  flutter_local_notifications_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0"
+    version: "1.0.4"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -576,6 +555,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
+  lints:
+    dependency: transitive
+    description:
+      name: lints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   liquid_progress_indicator:
     dependency: "direct main"
     description:
@@ -822,19 +808,19 @@ packages:
     source: hosted
     version: "2.0.13"
   shared_preferences_android:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences_android
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.11"
   shared_preferences_ios:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.10"
+    version: "2.1.0"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -994,13 +980,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.8"
-  timezone:
-    dependency: transitive
-    description:
-      name: timezone
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.0"
   typed_data:
     dependency: transitive
     description:

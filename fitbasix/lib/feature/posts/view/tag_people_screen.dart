@@ -13,6 +13,8 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 
+import '../../spg/view/set_goal_screen.dart';
+
 class CheckboxState {
   final String title;
   bool value;
@@ -115,8 +117,8 @@ class TagPeopleScreen extends StatelessWidget {
                             print(_postController.users.value);
                           },
                           style: AppTextStyle.normalGreenText.copyWith(
-                              color: Theme.of(context).textTheme.bodyText1?.color
-                          ),
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
                           onSubmitted: (value) {
                             print(value);
                           },
@@ -173,6 +175,12 @@ class TagPeopleScreen extends StatelessWidget {
                                                     imageUrl: _postController
                                                         .selectedUserData[index]
                                                         .profilePhoto!,
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            ShimmerEffect(),
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            ShimmerEffect(),
                                                     fit: BoxFit.cover,
                                                     height: 64 *
                                                         SizeConfig
@@ -193,7 +201,10 @@ class TagPeopleScreen extends StatelessWidget {
                                                 style: AppTextStyle
                                                     .boldBlackText
                                                     .copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color,
                                                         fontSize: 14 *
                                                             SizeConfig
                                                                 .textMultiplier!),
@@ -338,6 +349,8 @@ class PeopleTile extends StatelessWidget {
                 BorderRadius.circular(16 * SizeConfig.widthMultiplier!),
             child: CachedNetworkImage(
                 imageUrl: image,
+                placeholder: (context, url) => ShimmerEffect(),
+                errorWidget: (context, url, error) => ShimmerEffect(),
                 fit: BoxFit.cover,
                 height: 32 * SizeConfig.widthMultiplier!,
                 width: 32 * SizeConfig.widthMultiplier!),
@@ -350,8 +363,7 @@ class PeopleTile extends StatelessWidget {
             children: [
               Text(
                 name,
-                style: AppTextStyle.boldBlackText
-                    .copyWith(
+                style: AppTextStyle.boldBlackText.copyWith(
                     color: Theme.of(context).textTheme.bodyText1?.color,
                     fontSize: 14 * SizeConfig.textMultiplier!),
               ),
@@ -360,8 +372,7 @@ class PeopleTile extends StatelessWidget {
               ),
               Text(
                 subtitle,
-                style: AppTextStyle.normalBlackText
-                    .copyWith(
+                style: AppTextStyle.normalBlackText.copyWith(
                     color: Theme.of(context).textTheme.bodyText1?.color,
                     fontSize: 12 * SizeConfig.textMultiplier!),
               )
@@ -370,7 +381,7 @@ class PeopleTile extends StatelessWidget {
           Spacer(),
           Checkbox(
             value: value,
-           checkColor: kPureBlack,
+            checkColor: kPureBlack,
             side: BorderSide(
               color: hintGrey,
             ),

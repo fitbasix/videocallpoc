@@ -2,33 +2,37 @@ import 'dart:ui';
 
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:quickblox_sdk/chat/constants.dart';
 import 'package:quickblox_sdk/models/qb_dialog.dart';
+import 'package:quickblox_sdk/models/qb_sort.dart';
+import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../get_trained/model/get_trained_model.dart';
+import 'chat_ui.dart';
 
 class MyTrainerTileScreen extends StatelessWidget {
+  bool isMessageLoading = false;
+ final HomeController _homeController = Get.find();
   MyTrainerTileScreen({
     Key? key,
     this.chatHistoryList,
+    this.myTrainers
   }) : super(key: key);
-  List<String> taggedPersonList = [
-    "Sports Nutrition",
-    "Hi",
-    "Hk",
-    "Hx",
-    "Hz",
-  ];
+
 
   List<QBDialog>? chatHistoryList;
-  var trainerName = 'Jonathan Swift'.obs;
-  var trainerStatus = "".obs;
-  String trainerProfilePicUrl =
-      'http://www.pixelmator.com/community/download/file.php?avatar=17785_1569233053.png';
+
+  List<MyTrainer>? myTrainers;
 
   @override
   Widget build(BuildContext context) {
@@ -39,66 +43,26 @@ class MyTrainerTileScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
+        leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                ImagePath.backIcon,
+                width: 7 * SizeConfig.widthMultiplier!,
+                height: 12 * SizeConfig.heightMultiplier!,
+                color: Theme.of(context).primaryColor,
+              ),
+            )),
         title: Padding(
             padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
             child: Text('my_trainer'.tr, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color))),
         actions: [
           IconButton(
               onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Container(
-                        height: 345 * SizeConfig.heightMultiplier!,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 32 * SizeConfig.heightMultiplier!,
-                                  left: 16 * SizeConfig.widthMultiplier!,
-                                  bottom: 30 * SizeConfig.heightMultiplier!),
-                              child: Text(
-                                trainerName.value.isNotEmpty
-                                    ? trainerName.value
-                                    : "Loading..",
-                                style: AppTextStyle.hblackSemiBoldText,
-                              ),
-                            ),
-                            //bottomsheet open profile
-                            BottomSheetField(
-                              BottomFieldImage: ImagePath.penIcon,
-                              BottomFieldText: 'open_profile'.tr,
-                              onTap: () {},
-                            ),
-                            //bottomsheet mute notification
-                            BottomSheetField(
-                              BottomFieldImage: ImagePath.unmuteIcon,
-                              BottomFieldText: 'mute_notification'.tr,
-                              onTap: () {},
-                            ),
-                            // mark as unread
-                            BottomSheetField(
-                              BottomFieldImage: ImagePath.penIcon,
-                              BottomFieldText: 'mark_as_unread'.tr,
-                              onTap: () {},
-                            ),
-                            // cancel enrollment
-                            BottomSheetField(
-                              BottomFieldImage: ImagePath.cancelEnrollmentIcon,
-                              BottomFieldText: 'cancel_enrollment'.tr,
-                              onTap: () {},
-                            ),
-                            // share feedback
-                            BottomSheetField(
-                              BottomFieldImage: ImagePath.sharefeedbackIcon,
-                              BottomFieldText: 'share_feedback'.tr,
-                              onTap: () {},
-                            ),
-                          ],
-                        ),
-                      );
-                    });
+
               },
               icon: Icon(
                 Icons.search,
@@ -108,14 +72,127 @@ class MyTrainerTileScreen extends StatelessWidget {
         ],
       ),
       body: ListView.builder(
-          itemCount: chatHistoryList!.length,
+          itemCount: myTrainers!.length,
           physics: const BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
+            int indexWhereChatPresent = -1;
+            if(chatHistoryList != null&&chatHistoryList![0].id!=null){
+              indexWhereChatPresent = chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers![index].quickBlox));
+            }
             return TrainersTileUI(
-              taggedPersonList: taggedPersonList,
-              trainerName: trainerName.value,
-              lastMessage: chatHistoryList![index].lastMessage!.capitalized(),
-              trainerProfilePicUrl: trainerProfilePicUrl,
+              taggedPersonList: List.generate(myTrainers![index].strengths!.length, (i) => myTrainers![index].strengths![i].name!),
+              trainerName: myTrainers![index].name,
+              lastMessage: indexWhereChatPresent!=-1?chatHistoryList![indexWhereChatPresent].lastMessage!.capitalized():"",
+              trainerProfilePicUrl: myTrainers![index].profilePhoto,
+              isCurrentlyEnrolled:myTrainers![index].isCurrentlyEnrolled,
+              userHasChatHistory:indexWhereChatPresent!=-1?true:false,
+              enrolledDate: myTrainers![index].isCurrentlyEnrolled!?myTrainers![index].startDate:myTrainers![index].endDate,
+              lastMessageTime: indexWhereChatPresent!=-1?chatHistoryList![indexWhereChatPresent].lastMessageDateSent:0,
+              onTrainerTapped: ()async{
+
+                if (!isMessageLoading) {
+                  isMessageLoading = true;
+                  bool dialogCreatedPreviously = false;
+                  int openPage = 0;
+                  //133817477	user1
+                  //133815819 trainer1
+                  //133612091 trainer
+                  final sharedPreferences = await SharedPreferences.getInstance();
+                  _homeController.userQuickBloxId.value =
+                  sharedPreferences.getInt("userQuickBloxId")!;
+                  int UserQuickBloxId = myTrainers![index].quickBlox!;//133819788;
+                  String trainerName = myTrainers![index].name!;
+                  bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
+
+                  print(UserQuickBloxId.toString() +
+                      "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
+                  QBSort sort = QBSort();
+                  sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+                  sort.ascending = true;
+                  try {
+                    List<QBDialog?> dialogs = await QB.chat
+                        .getDialogs(
+                      sort: sort,
+                    )
+                        .then((value) async {
+                      for (int i = 0; i < value.length; i++) {
+                        if (value[i]!.occupantsIds!.contains(
+                            _homeController.userQuickBloxId.value) &&
+                            value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
+                          dialogCreatedPreviously = true;
+                          print(value[i]!.id.toString() + "maxxxx");
+                          isMessageLoading = false;
+                          if (openPage < 1) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                      userDialogForChat: value[i],
+                                      opponentID: UserQuickBloxId,
+                                      trainerTitle:trainerName,
+                                      isCurrentlyEnrolled: isCurrentlyEnrolled,
+                                      profilePicURL: myTrainers![index].profilePhoto!,
+                                      trainerId: myTrainers![index].user,
+                                    )));
+                            ++openPage;
+                          }
+                          isMessageLoading = false;
+                          break;
+                        }
+                      }
+                      if (!dialogCreatedPreviously) {
+                        List<int> occupantsIds = [
+                          _homeController.userQuickBloxId.value,
+                          UserQuickBloxId
+                        ];
+                        String dialogName = UserQuickBloxId.toString() +
+                            _homeController.userQuickBloxId.value.toString() +
+                            DateTime.now().millisecond.toString();
+                        int dialogType = QBChatDialogTypes.CHAT;
+                        print("got here too");
+                        try {
+                          QBDialog? createdDialog = await QB.chat
+                              .createDialog(
+                            occupantsIds,
+                            dialogName,
+                            dialogType: QBChatDialogTypes.CHAT,
+                          )
+                              .then((value) {
+                            print("dialog id is:" + value!.id!);
+                            isMessageLoading = false;
+                            if (openPage < 1) {
+                              isMessageLoading = false;
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                          userDialogForChat: value,
+                                          opponentID: UserQuickBloxId,
+                                          trainerTitle: trainerName,
+                                          isCurrentlyEnrolled: isCurrentlyEnrolled,
+                                        profilePicURL: myTrainers![index].profilePhoto!,
+                                        trainerId: myTrainers![index].user,
+                                      )));
+                              ++openPage;
+                            }
+                          });
+                        } on PlatformException catch (e) {
+                          isMessageLoading = false;
+                          print(e.toString());
+                        }
+                      }
+                      return value;
+                    });
+                  } on PlatformException catch (e) {
+                    isMessageLoading = false;
+                    // some error occurred, look at the exception message for more details
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Message is loading")));
+                }
+
+              },
             );
           },
       )
@@ -135,23 +212,36 @@ class TrainersTileUI extends StatelessWidget {
       required this.taggedPersonList,
       this.trainerName,
       this.trainerProfilePicUrl,
-      this.lastMessage})
+      this.lastMessage,
+      this.isCurrentlyEnrolled,
+      this.userHasChatHistory,
+      this.enrolledDate,
+      this.lastMessageTime,
+      this.onTrainerTapped})
       : super(key: key);
   List<String> taggedPersonList;
   String? trainerName;
   String? lastMessage;
   String? trainerProfilePicUrl;
+  bool? isCurrentlyEnrolled;
+  bool? userHasChatHistory = true;
+  DateTime? enrolledDate;
+  int? lastMessageTime;
+  var lastMessageDateToShow = "".obs;
+  GestureTapCallback? onTrainerTapped;
+
+
 
   @override
   Widget build(BuildContext context) {
+    setLastMessageDate();
     return GestureDetector(
-      onTap: (){
-        createMenuDialog(context);
-      },
+      onTap: onTrainerTapped,
       child: Container(
         margin: EdgeInsets.only(bottom: 8*SizeConfig.heightMultiplier!),
         color: Theme.of(context).secondaryHeaderColor,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 24 * SizeConfig.heightMultiplier!,
@@ -169,11 +259,11 @@ class TrainersTileUI extends StatelessWidget {
                     child: InkWell(
                       onTap: null,
                       child: CircleAvatar(
-                        child: Image.network(
+                        backgroundImage: NetworkImage(
                           trainerProfilePicUrl!,
-                          width: 40 * SizeConfig.widthMultiplier!,
-                          height: 40 * SizeConfig.heightMultiplier!,
+
                         ),
+                        radius: 25*SizeConfig.imageSizeMultiplier!,
                       ),
                     )),
                 SizedBox(
@@ -183,16 +273,18 @@ class TrainersTileUI extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(trainerName!.isNotEmpty ? trainerName! : "Loading..",
-                        style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color)),
+                        style: AppTextStyle.hnormal600BlackText.copyWith(color: isCurrentlyEnrolled!?Theme.of(context).textTheme.bodyText1!.color:greyB7)),
                     //_taggedBar Widget
                     _taggedBar(list: taggedPersonList,context: context)
                   ],
                 ),
                 Spacer(),
-                Padding(
-                  padding:
-                      EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
-                  child: Text('1:29 pm'.tr, style: AppTextStyle.hsmallhintText),
+                Obx(
+                    ()=> lastMessageDateToShow.value.isNotEmpty?Padding(
+                    padding:
+                        EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
+                    child: Text(userHasChatHistory!?lastMessageDateToShow.value:"", style: AppTextStyle.hsmallhintText),
+                  ):Container(),
                 )
               ],
             ),
@@ -203,8 +295,8 @@ class TrainersTileUI extends StatelessWidget {
                     right: 38 * SizeConfig.widthMultiplier!,
                     top: 16 * SizeConfig.heightMultiplier!,
                     bottom: 16 * SizeConfig.heightMultiplier!),
-                child: Text(lastMessage!.isNotEmpty ? lastMessage! : "loading...",
-                    style: AppTextStyle.hmedium13Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color)),
+                child: Text(lastMessage!.isNotEmpty ? lastMessage! : (userHasChatHistory!? "loading...":"lets_start_conversation".tr),
+                    style: AppTextStyle.hmedium13Text.copyWith(color: isCurrentlyEnrolled!?Theme.of(context).textTheme.bodyText1!.color:greyB7)),
               ),
             ),
             Container(
@@ -214,11 +306,11 @@ class TrainersTileUI extends StatelessWidget {
                     bottom: 24 * SizeConfig.heightMultiplier!),
                 child: Row(
                   children: [
-                    Text('enrolled_on'.tr, style: AppTextStyle.hsmallhintText),
+                    Text(isCurrentlyEnrolled!?'enrolled_on'.tr:"enrolled_end_on", style: AppTextStyle.hsmallhintText),
                     SizedBox(
                       width: 4 * SizeConfig.widthMultiplier!,
                     ),
-                    Text('7 Nov 2021'.tr, style: AppTextStyle.hsmallGreenText)
+                    Text(DateFormat("d MMM yyyy").format(enrolledDate!), style: isCurrentlyEnrolled!?AppTextStyle.hsmallGreenText:AppTextStyle.hsmallGreenText.copyWith(color: hintGrey))
                   ],
                 ),
               ),
@@ -298,6 +390,22 @@ class TrainersTileUI extends StatelessWidget {
       },
     );
   }
+  setLastMessageDate(){
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    DateTime dateOfFile = DateTime.fromMicrosecondsSinceEpoch(lastMessageTime! * 1000);
+    final checkDate = DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
+    if(checkDate == today){
+      lastMessageDateToShow.value = "Today";
+    }
+    else if(checkDate == yesterday){
+      lastMessageDateToShow.value = "Yesterday";
+    }
+    else{
+      lastMessageDateToShow.value = DateFormat("dd MMM yy").format(checkDate);
+    }
+  }
 
   Widget _taggedBar({List<String>? list,required BuildContext context}) {
     return Row(
@@ -322,7 +430,7 @@ class TrainersTileUI extends StatelessWidget {
         SizedBox(
           width: 8 * SizeConfig.widthMultiplier!,
         ),
-        Container(
+        list.length>1?Container(
           height: 28 * SizeConfig.heightMultiplier!,
           decoration: BoxDecoration(
               color: Color(0xff747474),
@@ -338,7 +446,7 @@ class TrainersTileUI extends StatelessWidget {
               ),
             ),
           ),
-        ),
+        ):Container(),
       ],
     );
   }

@@ -1,23 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'dart:isolate';
-
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fitbasix/setup-my-app.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'feature/settings/view/settings.dart';
 
 initializeNotification() {
   AwesomeNotifications().initialize(
@@ -41,37 +38,56 @@ initializeNotification() {
       debug: true);
 }
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  AndroidNotificationChannel channel = AndroidNotificationChannel(
-      "channel_id", "some_title",
-      description: "some_description", importance: Importance.high);
-  AndroidNotificationDetails details = AndroidNotificationDetails(
-      channel.id, channel.name,
-      channelDescription: channel.description, icon: "launch_background");
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-  var messageData = jsonDecode(message.data["message"]);
-  int id = message.hashCode;
-  String title = messageData["message"]["notification"]["name"].toString();
-  String body = messageData["message"]["notification"]["body"].toString();
-  flutterLocalNotificationsPlugin.show(
-      id, title, body, NotificationDetails(android: details));
+
+void selectNotification(String? payload) async {
+  if (payload != null) {
+    debugPrint('notification payload: $payload');
+  }
+
+
 }
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // AndroidNotificationChannel channel = AndroidNotificationChannel(
+  //     "channel_id", "some_title",
+  //     description: "some_description", importance: Importance.high);
+  // AndroidNotificationDetails details = AndroidNotificationDetails(
+  //     channel.id,
+  //     channel.name,
+  //     channelDescription: channel.description,
+  //     icon: "launch_background");
+  //
+  //
+  //
+  // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  //     FlutterLocalNotificationsPlugin();
+  // final IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings();
+  // final InitializationSettings initializationSettings = InitializationSettings(
+  //     iOS: initializationSettingsIOS
+  // );
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: selectNotification);
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //         AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(channel);
+  // var messageData = jsonDecode(message.data["message"]);
+  // int id = message.hashCode;
+  // String title = messageData["message"]["notification"]["name"].toString();
+  // String body = messageData["message"]["notification"]["body"].toString();
+  // flutterLocalNotificationsPlugin.show(
+  //     id, title, body, NotificationDetails(android: details));
+}
+
 
 Future<void> main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     initializeNotification();
     await Firebase.initializeApp();
-    if (Platform.isAndroid) {
-       await AndroidAlarmManager.initialize();
-    }
 
-   
+    if (Platform.isAndroid) {
+      await AndroidAlarmManager.initialize();
+    }
 
     FirebaseMessaging.instance.getToken().then((value) {
       print("fcm token" + value.toString());
@@ -88,26 +104,28 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((message) async {
-      print(message.data["message"]);
-      AndroidNotificationChannel channel = AndroidNotificationChannel(
-          "channel_id", "some_title",
-          description: "some_description", importance: Importance.high);
-      AndroidNotificationDetails details = AndroidNotificationDetails(
-          channel.id, channel.name,
-          channelDescription: channel.description, icon: "launch_background");
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
-      var messageData = jsonDecode(message.data["message"]);
-      int id = message.hashCode;
-      String title = messageData["message"]["notification"]["name"].toString();
-      String body = messageData["message"]["notification"]["body"].toString();
-      flutterLocalNotificationsPlugin.show(
-          id, title, body, NotificationDetails(android: details));
-    });
+      // print(message.data["message"]);
+      // AndroidNotificationChannel channel = AndroidNotificationChannel(
+      //     "channel_id", "some_title",
+      //     description: "some_description", importance: Importance.high);
+      // AndroidNotificationDetails details = AndroidNotificationDetails(
+      //     channel.id, channel.name,
+      //     channelDescription: channel.description, icon: "launch_background");
+      //
+      // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      //     FlutterLocalNotificationsPlugin();
+      // await flutterLocalNotificationsPlugin
+      //     .resolvePlatformSpecificImplementation<
+      //         AndroidFlutterLocalNotificationsPlugin>()
+      //     ?.createNotificationChannel(channel);
+      // var messageData = jsonDecode(message.data["message"]);
+      // int id = message.hashCode;
+      // String title = messageData["message"]["notification"]["name"].toString();
+      // String body = messageData["message"]["notification"]["body"].toString();
+      // flutterLocalNotificationsPlugin.show(
+      //     id, title, body, NotificationDetails(android: details));
+    }
+    );
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print("background tap called");
@@ -118,6 +136,7 @@ Future<void> main() async {
     var accessToken = prefs.getString('AccessToken');
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     setupApp();
+
     //await AndroidAlarmManager.oneShotAt(date, 0, printHello);
   }, (error, stackTrace) {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);

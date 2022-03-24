@@ -16,7 +16,7 @@ class DialogboxForFeedback extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController _homeController = Get.find();
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.pop(context);
         return false;
@@ -26,8 +26,7 @@ class DialogboxForFeedback extends StatelessWidget {
           left: 32 * SizeConfig.widthMultiplier!,
           right: 32 * SizeConfig.widthMultiplier!,
         ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor
-        ,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         child: Container(
@@ -48,8 +47,7 @@ class DialogboxForFeedback extends StatelessWidget {
                     child: Text(
                       'Your opinion matters to us!'.tr,
                       style: AppTextStyle.hblack600Text.copyWith(
-                        color: Theme.of(context).textTheme.bodyText1?.color
-                      ),
+                          color: Theme.of(context).textTheme.bodyText1?.color),
                     ),
                   ),
                   SizedBox(
@@ -61,11 +59,12 @@ class DialogboxForFeedback extends StatelessWidget {
                       right: 31 * SizeConfig.widthMultiplier!,
                     ),
                     child: Text(
-                        'Rate us on the App Store and send us your feedback ⭐'.tr,
+                        'Rate us on the App Store and send us your feedback ⭐'
+                            .tr,
                         style: AppTextStyle.hnormal600BlackText.copyWith(
-                          fontWeight: FontWeight.w400,
-                            color: Theme.of(context).textTheme.bodyText1?.color
-                        ),
+                            fontWeight: FontWeight.w400,
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
                         textAlign: TextAlign.center),
                   ),
                   // SizedBox(
@@ -105,7 +104,6 @@ class DialogboxForFeedback extends StatelessWidget {
                 child: IconButton(
                   onPressed: () {
                     _homeController.selectedIndex.value = 0;
-                    Navigator.pop(context);
                     Navigator.pop(context);
                   },
                   icon: SvgPicture.asset(

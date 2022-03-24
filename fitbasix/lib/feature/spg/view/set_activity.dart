@@ -9,6 +9,7 @@ import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
 import 'package:fitbasix/feature/spg/services/spg_service.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/widgets/spg_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -75,6 +76,8 @@ class SetActivity extends StatelessWidget {
                               .activenessType![
                                   _spgController.activityNumber.value.toInt()]
                               .image!,
+                          placeholder: (context, url) => ShimmerEffect(),
+                          errorWidget: (context, url, error) => ShimmerEffect(),
                           height: 346 * SizeConfig.heightMultiplier!,
                           width: Get.width,
                           fit: BoxFit.cover,

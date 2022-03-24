@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
@@ -32,6 +33,7 @@ import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
+import '../../Home/model/RecentCommentModel.dart';
 import '../../Home/view/my_trainers_screen.dart';
 import '../../message/view/chat_ui.dart';
 
@@ -45,156 +47,246 @@ class TrainerProfileScreen extends StatefulWidget {
 class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   HomeController _homeController = Get.find();
   bool isMessageLoading = false;
+  TrainerController _trainerController = Get.find();
+  // var isPlanLoading = true.obs;
+
+  getAllTrainerPlanData() async {
+    if (!_trainerController.isMyTrainerProfileLoading.value) {
+      _trainerController.planModel.value = PlanModel();
+      _trainerController.isPlanLoading.value = true;
+      _trainerController.planModel.value =
+          await TrainerServices.getPlanByTrainerId(
+                  _trainerController.atrainerDetail.value.user!.id!)
+              .then((value) {
+        _trainerController.isPlanLoading.value = false;
+        setState(() {});
+        return value;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getAllTrainerPlanData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     final TrainerController trainerController = Get.put(TrainerController());
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Obx(
-          () => TrainerPage(
-            trainerImage:
-                trainerController.atrainerDetail.value.user!.profilePhoto!,
-            trainerCoverImage: trainerController
-                .atrainerDetail.value.user!.coverPhoto!
-                .toString(),
-            isEnrolled: true,
-            onFollow: () {
-              if (trainerController.atrainerDetail.value.isFollowing!) {
-                trainerController.atrainerDetail.value.isFollowing = false;
-                trainerController.atrainerDetail.value.followers =
-                    (int.tryParse(trainerController
-                                .atrainerDetail.value.followers!)! -
-                            1)
-                        .toString();
-                TrainerServices.unFollowTrainer(
-                    trainerController.atrainerDetail.value.user!.id!
-                );
-              } else {
-                trainerController.atrainerDetail.value.isFollowing = true;
-                trainerController.atrainerDetail.value.followers =
-                    (int.tryParse(trainerController
-                                .atrainerDetail.value.followers!)! +
-                            1)
-                        .toString();
-                TrainerServices.followTrainer(
-                    trainerController.atrainerDetail.value.user!.id!);
-              }
-
-              setState(() {});
-            },
-            onMessage: () async {
-              print("the button value is:" +isMessageLoading.toString());
-              if(!isMessageLoading){
-                isMessageLoading = true;
-                bool dialogCreatedPreviously = false;
-                int openPage = 0;
-                //133817477	user1
-                //133815819 trainer1
-                //133612091 trainer
-                final sharedPreferences = await SharedPreferences.getInstance();
-                _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
-                int UserQuickBloxId = _homeController.userQuickBloxId.value==133817477?133815819:133817477;
-                print(UserQuickBloxId.toString() +"this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id" );
-                QBSort sort = QBSort();
-                sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
-                sort.ascending = true;
-                try {
-                  List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) async {
-                    for(int i =0; i<value.length;i++){
-                      if(value[i]!.occupantsIds!.contains(_homeController.userQuickBloxId.value)&&value[i]!.occupantsIds!.contains(UserQuickBloxId)){
-                        dialogCreatedPreviously = true;
-                        print(value[i]!.id.toString() + "maxxxx");
-                        isMessageLoading = false;
-                        if(openPage<1){
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ChatScreen(
-                                    userDialogForChat: value[i],
-                                    opponentID: UserQuickBloxId,
-                                      trainerTitle: trainerController.atrainerDetail.value.user!.name!,
-
-                                  )));
-                          ++openPage;
-                        }
-                        isMessageLoading = false;
-                        break;
-                      }
+          () => !_trainerController.isMyTrainerProfileLoading.value
+              ? TrainerPage(
+                  trainerImage: trainerController
+                      .atrainerDetail.value.user!.profilePhoto!,
+                  trainerCoverImage: trainerController
+                      .atrainerDetail.value.user!.coverPhoto!
+                      .toString(),
+                  isEnrolled: _trainerController.enrolledTrainer.indexOf(
+                              trainerController.atrainerDetail.value.id!) ==
+                          -1
+                      ? _trainerController.atrainerDetail.value.isEnrolled!
+                      : true,
+                  onFollow: () {
+                    if (trainerController.atrainerDetail.value.isFollowing!) {
+                      trainerController.atrainerDetail.value.isFollowing =
+                          false;
+                      trainerController.atrainerDetail.value.followers =
+                          (int.tryParse(trainerController
+                                      .atrainerDetail.value.followers!)! -
+                                  1)
+                              .toString();
+                      TrainerServices.unFollowTrainer(
+                          trainerController.atrainerDetail.value.user!.id!);
+                    } else {
+                      trainerController.atrainerDetail.value.isFollowing = true;
+                      trainerController.atrainerDetail.value.followers =
+                          (int.tryParse(trainerController
+                                      .atrainerDetail.value.followers!)! +
+                                  1)
+                              .toString();
+                      TrainerServices.followTrainer(
+                          trainerController.atrainerDetail.value.user!.id!);
                     }
-                    if(!dialogCreatedPreviously){
-                      List<int> occupantsIds = [_homeController.userQuickBloxId.value, UserQuickBloxId];
-                      String dialogName =  UserQuickBloxId.toString()+_homeController.userQuickBloxId.value.toString() + DateTime.now().millisecond.toString();
-                      int dialogType = QBChatDialogTypes.CHAT;
-                      print("got here too");
+
+                    setState(() {});
+                  },
+                  onMessage: () async {
+                    print("the button value is:" + isMessageLoading.toString());
+                    if (!isMessageLoading) {
+                      isMessageLoading = true;
+                      bool dialogCreatedPreviously = false;
+                      int openPage = 0;
+                      //133817477	user1
+                      //133815819 trainer1
+                      //133612091 trainer
+                      final sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      _homeController.userQuickBloxId.value =
+                          sharedPreferences.getInt("userQuickBloxId")!;
+                      int UserQuickBloxId =
+                          _trainerController.atrainerDetail.value.quickBlox!;
+
+                      // _homeController.userQuickBloxId.value == 133815819
+                      //     ? 133819788
+                      //    : 133815819;
+
+                      print(UserQuickBloxId.toString() + "qqqqq");
+
+                      print(UserQuickBloxId.toString() +
+                          "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
+                      QBSort sort = QBSort();
+                      sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+                      sort.ascending = true;
                       try {
-                        QBDialog? createdDialog = await QB.chat.createDialog(
-                          occupantsIds, dialogName,
-                          dialogType: QBChatDialogTypes.CHAT, ).then((value) {
-                          print("dialog id is:"+value!.id!);
-                          isMessageLoading = false;
-                          if(openPage<1){
-                            isMessageLoading = false;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChatScreen(
-                                      userDialogForChat: value,
-                                      opponentID: UserQuickBloxId,
-                                        trainerTitle: trainerController.atrainerDetail.value.user!.name!
-                                    )));
-                            ++openPage;
+                        List<QBDialog?> dialogs = await QB.chat
+                            .getDialogs(
+                          sort: sort,
+                        )
+                            .then((value) async {
+                          for (int i = 0; i < value.length; i++) {
+                            if (value[i]!.occupantsIds!.contains(
+                                    _homeController.userQuickBloxId.value) &&
+                                value[i]!
+                                    .occupantsIds!
+                                    .contains(UserQuickBloxId)) {
+                              dialogCreatedPreviously = true;
+                              print(value[i]!.id.toString() + "maxxxx");
+                              isMessageLoading = false;
+                              if (openPage < 1) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChatScreen(
+                                            userDialogForChat: value[i],
+                                            opponentID: UserQuickBloxId,
+                                            profilePicURL: _trainerController
+                                                .atrainerDetail
+                                                .value
+                                                .user!
+                                                .profilePhoto,
+                                            trainerId: _trainerController
+                                                .atrainerDetail.value.user!.id,
+                                            isCurrentlyEnrolled:
+                                                _trainerController
+                                                    .atrainerDetail
+                                                    .value
+                                                    .isEnrolled,
+                                            trainerTitle: trainerController
+                                                .atrainerDetail
+                                                .value
+                                                .user!
+                                                .name!)));
+                                ++openPage;
+                              }
+                              isMessageLoading = false;
+                              break;
+                            }
                           }
+                          if (!dialogCreatedPreviously) {
+                            List<int> occupantsIds = [
+                              _homeController.userQuickBloxId.value,
+                              UserQuickBloxId
+                            ];
+                            String dialogName = UserQuickBloxId.toString() +
+                                _homeController.userQuickBloxId.value
+                                    .toString() +
+                                DateTime.now().millisecond.toString();
+                            int dialogType = QBChatDialogTypes.CHAT;
+                            print("got here too");
+                            try {
+                              QBDialog? createdDialog = await QB.chat
+                                  .createDialog(
+                                occupantsIds,
+                                dialogName,
+                                dialogType: QBChatDialogTypes.CHAT,
+                              )
+                                  .then((value) {
+                                print("dialog id is:" + value!.id!);
+                                isMessageLoading = false;
+                                if (openPage < 1) {
+                                  isMessageLoading = false;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChatScreen(
+                                              userDialogForChat: value,
+                                              opponentID: UserQuickBloxId,
+                                              profilePicURL: _trainerController
+                                                  .atrainerDetail
+                                                  .value
+                                                  .user!
+                                                  .profilePhoto,
+                                              trainerId: _trainerController
+                                                  .atrainerDetail
+                                                  .value
+                                                  .user!
+                                                  .id,
+                                              isCurrentlyEnrolled:
+                                                  _trainerController
+                                                      .atrainerDetail
+                                                      .value
+                                                      .isEnrolled,
+                                              trainerTitle: trainerController
+                                                  .atrainerDetail
+                                                  .value
+                                                  .user!
+                                                  .name!)));
+                                  ++openPage;
+                                }
+                              });
+                            } on PlatformException catch (e) {
+                              isMessageLoading = false;
+                              print(e.toString());
+                            }
+                          }
+                          return value;
                         });
                       } on PlatformException catch (e) {
                         isMessageLoading = false;
-                        print(e.toString());
+                        // some error occurred, look at the exception message for more details
                       }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Message is loading")));
                     }
-                    return value;
-                  });
+                  },
+                  onEnroll: () {
+                    Navigator.pushNamed(context, RouteName.trainerplanScreen);
 
-                } on PlatformException catch (e) {
-                  isMessageLoading = false;
-                  // some error occurred, look at the exception message for more details
-                }
-              }
-              else{
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Message is loading")));
-              }
-            },
-            onEnroll: () {
-
-              Navigator.pushNamed(context, RouteName.trainerplanScreen);
-              // showDialog(
-              //     context: context,
-              //     builder: (BuildContext context) => EnrollTrainerDialog());
-            },
-            onBack: () {
-              Navigator.pop(context);
-            },
-            name: trainerController.atrainerDetail.value.user!.name!,
-            followersCount: NumberFormatter.textFormatter(
-                trainerController.atrainerDetail.value.followers!),
-            followingCount: NumberFormatter.textFormatter(
-                trainerController.atrainerDetail.value.following!),
-            rating:
-                double.parse(trainerController.atrainerDetail.value.rating!),
-            ratingCount: NumberFormatter.textFormatter(
-                trainerController.atrainerDetail.value.totalRating!),
-            totalPeopleTrained: NumberFormatter.textFormatter(
-                trainerController.atrainerDetail.value.trainees!),
-            strengths: trainerController.atrainerDetail.value.strength!,
-            aboutTrainer: trainerController.atrainerDetail.value.about!,
-            certifcateTitle:
-                trainerController.atrainerDetail.value.certificates!,
-            allPlans: trainerController.isProfileLoading.value
-                ? []
-                : trainerController.planModel.value.response!.data!,
-            isFollowing: trainerController.atrainerDetail.value.isFollowing!,
-          ),
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) => EnrollTrainerDialog());
+                  },
+                  onBack: () {
+                    Navigator.pop(context);
+                  },
+                  name: trainerController.atrainerDetail.value.user!.name!,
+                  followersCount: NumberFormatter.textFormatter(
+                      trainerController.atrainerDetail.value.followers!),
+                  followingCount: NumberFormatter.textFormatter(
+                      trainerController.atrainerDetail.value.following!),
+                  rating: double.parse(
+                      trainerController.atrainerDetail.value.rating!),
+                  ratingCount: NumberFormatter.textFormatter(
+                      trainerController.atrainerDetail.value.totalRating!),
+                  totalPeopleTrained: NumberFormatter.textFormatter(
+                      trainerController.atrainerDetail.value.trainees!),
+                  strengths: trainerController.atrainerDetail.value.strength!,
+                  aboutTrainer: trainerController.atrainerDetail.value.about!,
+                  certifcateTitle:
+                      trainerController.atrainerDetail.value.certificates!,
+                  allPlans: trainerController.isProfileLoading.value ? [] : [],
+                  isFollowing:
+                      trainerController.atrainerDetail.value.isFollowing!,
+                )
+              : Center(
+                  child: CustomizedCircularProgress(),
+                ),
         ),
       ),
     );
@@ -323,9 +415,12 @@ class _TrainerPageState extends State<TrainerPage> {
                                   Text(
                                     widget.name,
                                     style: AppTextStyle.titleText.copyWith(
-                                        fontSize: 18 * SizeConfig.textMultiplier!,
-                                        color: Theme.of(context).textTheme.bodyText1?.color
-                                    ),
+                                        fontSize:
+                                            18 * SizeConfig.textMultiplier!,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color),
                                   ),
                                   SizedBox(
                                     height: 12 * SizeConfig.heightMultiplier!,
@@ -338,15 +433,16 @@ class _TrainerPageState extends State<TrainerPage> {
                                             ? CustomButton(
                                                 title: 'following'.tr,
                                                 onPress: widget.onFollow,
-                                                color: Theme.of(context).scaffoldBackgroundColor,
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor,
                                                 textColor: kgreen49,
                                               )
                                             : CustomButton(
                                                 title: 'follow'.tr,
                                                 onPress: widget.onFollow,
                                                 color: kGreenColor,
-                                                textColor: Theme.of(context).primaryColor
-                                              ),
+                                                textColor: Theme.of(context)
+                                                    .primaryColor),
                                       ),
                                       SizedBox(
                                         width: 8 * SizeConfig.widthMultiplier!,
@@ -354,7 +450,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                       CustomButton(
                                         title: 'message'.tr,
                                         onPress: widget.onMessage,
-                                        color: Theme.of(context).scaffoldBackgroundColor,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
                                         textColor: kgreen49,
                                       ),
                                     ],
@@ -380,12 +477,17 @@ class _TrainerPageState extends State<TrainerPage> {
                                           Text(widget.followersCount,
                                               style: AppTextStyle.boldBlackText
                                                   .copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color
-                                              )),
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color)),
                                           Text('follower'.tr,
                                               style: AppTextStyle.smallBlackText
                                                   .copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color,
                                                       fontSize: 12 *
                                                           SizeConfig
                                                               .textMultiplier!))
@@ -399,12 +501,17 @@ class _TrainerPageState extends State<TrainerPage> {
                                           Text(widget.followingCount,
                                               style: AppTextStyle.boldBlackText
                                                   .copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color
-                                              )),
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color)),
                                           Text('following'.tr,
                                               style: AppTextStyle.smallBlackText
                                                   .copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color,
                                                       fontSize: 12 *
                                                           SizeConfig
                                                               .textMultiplier!))
@@ -415,7 +522,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                   Container(
                                     width: 1,
                                     height: 56 * SizeConfig.widthMultiplier!,
-                                    color: Theme.of(context).textTheme.headline2?.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        ?.color,
                                   ),
                                   Column(
                                     crossAxisAlignment:
@@ -444,7 +554,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                             style: AppTextStyle
                                                 .greenSemiBoldText
                                                 .copyWith(
-                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
                                             ),
                                           ),
                                           SizedBox(
@@ -454,10 +567,12 @@ class _TrainerPageState extends State<TrainerPage> {
                                             'people_trained'.tr,
                                             style: AppTextStyle.smallBlackText
                                                 .copyWith(
-                                                    fontSize: (12) *
-                                                        SizeConfig
-                                                            .textMultiplier!,
-                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                              fontSize: (12) *
+                                                  SizeConfig.textMultiplier!,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
                                             ),
                                           )
                                         ],
@@ -470,7 +585,11 @@ class _TrainerPageState extends State<TrainerPage> {
                                             .copyWith(
                                                 fontSize: (12) *
                                                     SizeConfig.textMultiplier!,
-                                                color: Theme.of(context).textTheme.headline3?.color,
+                                                color:
+                                                    Theme.of(context)
+                                                        .textTheme
+                                                        .headline3
+                                                        ?.color,
                                                 decoration:
                                                     TextDecoration.underline),
                                       )
@@ -494,7 +613,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                       'strength'.tr,
                                       style: AppTextStyle.greenSemiBoldText
                                           .copyWith(
-                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                     ),
                                   ),
@@ -523,7 +645,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                               height: 28 *
                                                   SizeConfig.heightMultiplier!,
                                               decoration: BoxDecoration(
-                                                  color: Theme.of(context).textTheme.headline4?.color,
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      ?.color,
                                                   borderRadius:
                                                       BorderRadius.circular(28 *
                                                           SizeConfig
@@ -538,8 +663,12 @@ class _TrainerPageState extends State<TrainerPage> {
                                                     widget.strengths[index].name
                                                         .toString(),
                                                     style: AppTextStyle
-                                                        .lightMediumBlackText.copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1?.color,
+                                                        .lightMediumBlackText
+                                                        .copyWith(
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color,
                                                     ),
                                                   ),
                                                 ),
@@ -563,7 +692,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                             style: AppTextStyle
                                                 .greenSemiBoldText
                                                 .copyWith(
-                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
                                             ),
                                           ),
                                         ),
@@ -604,8 +736,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                                               index]
                                                           .url!,
                                                       color: index % 2 == 0
-                                                          ? Theme.of(context).highlightColor
-                                                          : Theme.of(context).indicatorColor,
+                                                          ? Theme.of(context)
+                                                              .highlightColor
+                                                          : Theme.of(context)
+                                                              .indicatorColor,
                                                     ),
                                                   ),
                                                 );
@@ -622,7 +756,10 @@ class _TrainerPageState extends State<TrainerPage> {
                                       'about'.tr,
                                       style: AppTextStyle.greenSemiBoldText
                                           .copyWith(
-                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                     ),
                                   ),
@@ -639,143 +776,146 @@ class _TrainerPageState extends State<TrainerPage> {
                                       widget.aboutTrainer,
                                       style: AppTextStyle.lightMediumBlackText
                                           .copyWith(
-                                              fontSize: (14) *
-                                                  SizeConfig.textMultiplier!,
-                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                        fontSize:
+                                            (14) * SizeConfig.textMultiplier!,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                       ),
                                     ),
                                   ),
                                   SizedBox(
                                       height:
                                           24 * SizeConfig.heightMultiplier!),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      left: 24.0 * SizeConfig.widthMultiplier!,
-                                    ),
-                                    child: Obx(() => trainerController
-                                            .isProfileLoading.value
-                                        ? Text('plan'.tr,
-                                            style: AppTextStyle
-                                                .greenSemiBoldText
-                                                .copyWith(
-                                              color: Theme.of(context).textTheme.bodyText1?.color,
-                                            ))
-                                        : widget.allPlans.length != 0
-                                            ? Text('plan'.tr,
-                                                style: AppTextStyle
-                                                    .greenSemiBoldText
-                                                    .copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color,
-                                                ))
-                                            : SizedBox()),
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          12 * SizeConfig.heightMultiplier!),
-                                  Obx(() => trainerController
-                                          .isProfileLoading.value
-                                      ? Container(
-                                          height: 250 *
-                                              SizeConfig.heightMultiplier!,
-                                          child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: 4,
-                                              shrinkWrap: true,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Shimmer.fromColors(
-                                                  baseColor:
-                                                      const Color.fromRGBO(
-                                                          230, 230, 230, 1),
-                                                  highlightColor:
-                                                      const Color.fromRGBO(
-                                                          242, 245, 245, 1),
-                                                  child: Padding(
-                                                    padding: index == 0
-                                                        ? EdgeInsets.only(
-                                                            left: 24.0 *
-                                                                SizeConfig
-                                                                    .widthMultiplier!)
-                                                        : EdgeInsets.only(
-                                                            right: 8.0 *
-                                                                SizeConfig
-                                                                    .widthMultiplier!),
-                                                    child: PlanTile(
-                                                      rating: double.parse("2"),
-                                                      planTitle: "",
-                                                      planImage:
-                                                          "https://randomuser.me/api/portraits/men/1.jpg",
-                                                      palnTime: "",
-                                                      likesCount: "",
-                                                      ratingCount: "",
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                        )
-                                      : (widget.allPlans.length != 0
-                                          ? Container(
-                                              height: 250 *
-                                                  SizeConfig.heightMultiplier!,
-                                              child: ListView.builder(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemCount:
-                                                      widget.allPlans.length,
-                                                  shrinkWrap: true,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Padding(
-                                                      padding: index == 0
-                                                          ? EdgeInsets.only(
-                                                              left: 24.0 *
-                                                                  SizeConfig
-                                                                      .widthMultiplier!,
-                                                              right: 8.0 *
-                                                                  SizeConfig
-                                                                      .widthMultiplier!)
-                                                          : EdgeInsets.only(
-                                                              right: 8.0 *
-                                                                  SizeConfig
-                                                                      .widthMultiplier!),
-                                                      child: PlanTile(
-                                                        rating: double.parse(
-                                                            widget
-                                                                .allPlans[index]
-                                                                .plansRating
-                                                                .toString()),
-                                                        planTitle: widget
-                                                            .allPlans[index]
-                                                            .planName!,
-                                                        planImage: widget
-                                                            .allPlans[index]
-                                                            .planIcon!,
-                                                        palnTime: 'planTime'
-                                                            .trParams({
-                                                          'duration': (widget
-                                                                      .allPlans[
-                                                                          index]
-                                                                      .planDuration! %
-                                                                  5)
-                                                              .toString()
-                                                        }),
-                                                        likesCount: NumberFormatter
-                                                            .textFormatter(widget
-                                                                .allPlans[index]
-                                                                .likesCount!
-                                                                .toString()),
-                                                        ratingCount: NumberFormatter
-                                                            .textFormatter(widget
-                                                                .allPlans[index]
-                                                                .raters!
-                                                                .toString()),
-                                                      ),
-                                                    );
-                                                  }),
-                                            )
-                                          : SizedBox())),
+                                  // Padding(
+                                  //   padding: EdgeInsets.only(
+                                  //     left: 24.0 * SizeConfig.widthMultiplier!,
+                                  //   ),
+                                  //   child: Obx(() => trainerController
+                                  //           .isProfileLoading.value
+                                  //       ? Text('plan'.tr,
+                                  //           style: AppTextStyle
+                                  //               .greenSemiBoldText
+                                  //               .copyWith(
+                                  //             color: Theme.of(context).textTheme.bodyText1?.color,
+                                  //           ))
+                                  //       : widget.allPlans.length != 0
+                                  //           ? Text('plan'.tr,
+                                  //               style: AppTextStyle
+                                  //                   .greenSemiBoldText
+                                  //                   .copyWith(
+                                  //                 color: Theme.of(context).textTheme.bodyText1?.color,
+                                  //               ))
+                                  //           : SizedBox()),
+                                  // ),
+                                  // SizedBox(
+                                  //     height:
+                                  //         12 * SizeConfig.heightMultiplier!),
+                                  // Obx(() => trainerController
+                                  //         .isProfileLoading.value
+                                  //     ? Container(
+                                  //         height: 250 *
+                                  //             SizeConfig.heightMultiplier!,
+                                  //         child: ListView.builder(
+                                  //             scrollDirection: Axis.horizontal,
+                                  //             itemCount: 4,
+                                  //             shrinkWrap: true,
+                                  //             itemBuilder:
+                                  //                 (BuildContext context,
+                                  //                     int index) {
+                                  //               return Shimmer.fromColors(
+                                  //                 baseColor:
+                                  //                     const Color.fromRGBO(
+                                  //                         230, 230, 230, 1),
+                                  //                 highlightColor:
+                                  //                     const Color.fromRGBO(
+                                  //                         242, 245, 245, 1),
+                                  //                 child: Padding(
+                                  //                   padding: index == 0
+                                  //                       ? EdgeInsets.only(
+                                  //                           left: 24.0 *
+                                  //                               SizeConfig
+                                  //                                   .widthMultiplier!)
+                                  //                       : EdgeInsets.only(
+                                  //                           right: 8.0 *
+                                  //                               SizeConfig
+                                  //                                   .widthMultiplier!),
+                                  //                   child: PlanTile(
+                                  //                     rating: double.parse("2"),
+                                  //                     planTitle: "",
+                                  //                     planImage:
+                                  //                         "https://randomuser.me/api/portraits/men/1.jpg",
+                                  //                     palnTime: "",
+                                  //                     likesCount: "",
+                                  //                     ratingCount: "",
+                                  //                   ),
+                                  //                 ),
+                                  //               );
+                                  //             }),
+                                  //       )
+                                  //     : (widget.allPlans.length != 0
+                                  //         ? Container(
+                                  //             height: 250 *
+                                  //                 SizeConfig.heightMultiplier!,
+                                  //             child: ListView.builder(
+                                  //                 scrollDirection:
+                                  //                     Axis.horizontal,
+                                  //                 itemCount:
+                                  //                     widget.allPlans.length,
+                                  //                 shrinkWrap: true,
+                                  //                 itemBuilder:
+                                  //                     (BuildContext context,
+                                  //                         int index) {
+                                  //                   return Padding(
+                                  //                     padding: index == 0
+                                  //                         ? EdgeInsets.only(
+                                  //                             left: 24.0 *
+                                  //                                 SizeConfig
+                                  //                                     .widthMultiplier!,
+                                  //                             right: 8.0 *
+                                  //                                 SizeConfig
+                                  //                                     .widthMultiplier!)
+                                  //                         : EdgeInsets.only(
+                                  //                             right: 8.0 *
+                                  //                                 SizeConfig
+                                  //                                     .widthMultiplier!),
+                                  //                     child: PlanTile(
+                                  //                       rating: double.parse(
+                                  //                           widget
+                                  //                               .allPlans[index]
+                                  //                               .plansRating
+                                  //                               .toString()),
+                                  //                       planTitle: widget
+                                  //                           .allPlans[index]
+                                  //                           .planName!,
+                                  //                       planImage: widget
+                                  //                           .allPlans[index]
+                                  //                           .planIcon!,
+                                  //                       palnTime: 'planTime'
+                                  //                           .trParams({
+                                  //                         'duration': (widget
+                                  //                                     .allPlans[
+                                  //                                         index]
+                                  //                                     .planDuration! %
+                                  //                                 5)
+                                  //                             .toString()
+                                  //                       }),
+                                  //                       likesCount: NumberFormatter
+                                  //                           .textFormatter(widget
+                                  //                               .allPlans[index]
+                                  //                               .likesCount!
+                                  //                               .toString()),
+                                  //                       ratingCount: NumberFormatter
+                                  //                           .textFormatter(widget
+                                  //                               .allPlans[index]
+                                  //                               .raters!
+                                  //                               .toString()),
+                                  //                     ),
+                                  //                   );
+                                  //                 }),
+                                  //           )
+                                  //         : SizedBox())),
                                 ],
                               ),
                             ),
@@ -801,9 +941,23 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   color: kBackgroundColor,
                                                 ),
                                                 PostTile(
-                                                  comment: _trainerController
-                                                      .trainerPostList[index]
-                                                      .commentgiven,
+                                                  comment: _homeController
+                                                                  .commentsMap[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id!] ==
+                                                          null
+                                                      ? _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .commentgiven
+                                                      : _homeController
+                                                              .commentsMap[
+                                                          _trainerController
+                                                              .trainerPostList[
+                                                                  index]
+                                                              .id],
                                                   name: _trainerController
                                                       .trainerPostList[index]
                                                       .userId!
@@ -854,18 +1008,65 @@ class _TrainerPageState extends State<TrainerPage> {
                                                               index]
                                                           .caption ??
                                                       '',
-                                                  likes: _trainerController
-                                                      .trainerPostList[index]
-                                                      .likes
-                                                      .toString(),
-                                                  comments: _trainerController
-                                                      .trainerPostList[index]
-                                                      .comments
-                                                      .toString(),
+                                                  likes: _homeController
+                                                                  .updateCount[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id] ==
+                                                          null
+                                                      ? _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .likes
+                                                          .toString()
+                                                      : _homeController
+                                                          .updateCount[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id]!
+                                                          .likes!
+                                                          .toString(),
+                                                  comments: _homeController
+                                                                  .updateCount[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id] ==
+                                                          null
+                                                      ? _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .comments
+                                                          .toString()
+                                                      : _homeController
+                                                          .updateCount[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id]!
+                                                          .comments!
+                                                          .toString(),
                                                   hitLike: () async {
-                                                    if (_trainerController
-                                                        .trainerPostList[index]
-                                                        .isLiked!) {
+                                                    bool val = _homeController
+                                                                    .LikedPostMap[
+                                                                _trainerController
+                                                                    .trainerPostList[
+                                                                        index]
+                                                                    .id!] ==
+                                                            null
+                                                        ? _trainerController
+                                                            .trainerPostList[
+                                                                index]
+                                                            .isLiked!
+                                                        : _homeController
+                                                                .LikedPostMap[
+                                                            _trainerController
+                                                                .trainerPostList[
+                                                                    index]
+                                                                .id!]!;
+                                                    if (val) {
                                                       _trainerController
                                                           .trainerPostList[
                                                               index]
@@ -879,7 +1080,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                                                       index]
                                                                   .likes! -
                                                               1);
-                                                      HomeService.unlikePost(
+                                                      await HomeService.unlikePost(
                                                           postId:
                                                               _trainerController
                                                                   .trainerPostList[
@@ -899,13 +1100,30 @@ class _TrainerPageState extends State<TrainerPage> {
                                                                       index]
                                                                   .likes! +
                                                               1);
-                                                      HomeService.likePost(
+                                                      await HomeService.likePost(
                                                           postId:
                                                               _trainerController
                                                                   .trainerPostList[
                                                                       index]
                                                                   .id!);
                                                     }
+                                                    RecentCommentModel
+                                                        recentComment =
+                                                        RecentCommentModel();
+                                                    recentComment = await HomeService
+                                                        .recentComment(
+                                                            postId: _trainerController
+                                                                .trainerPostList[
+                                                                    index]
+                                                                .id!);
+                                                    // _homeController.commentsMap[_homeController.post.value.id.toString()] =
+                                                    //     recentComment.response!.data!.comment;
+                                                    _homeController.updateCount[
+                                                        _trainerController
+                                                            .trainerPostList[
+                                                                index]
+                                                            .id!] = recentComment
+                                                        .response!.data!.data;
                                                     setState(() {});
                                                   },
                                                   addComment: () {
@@ -926,11 +1144,27 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   postId: _trainerController
                                                       .trainerPostList[index]
                                                       .id!,
-                                                  isLiked: _trainerController
-                                                      .trainerPostList[index]
-                                                      .isLiked!,
+                                                  isLiked: _homeController
+                                                                  .LikedPostMap[
+                                                              _trainerController
+                                                                  .trainerPostList[
+                                                                      index]
+                                                                  .id!] ==
+                                                          null
+                                                      ? _trainerController
+                                                          .trainerPostList[
+                                                              index]
+                                                          .isLiked!
+                                                      : _homeController
+                                                              .LikedPostMap[
+                                                          _trainerController
+                                                              .trainerPostList[
+                                                                  index]
+                                                              .id]!,
                                                   onTap: () async {
                                                     _homeController.commentsList
+                                                        .clear();
+                                                    _homeController.viewReplies!
                                                         .clear();
                                                     Navigator.pushNamed(context,
                                                         RouteName.postScreen);
@@ -1030,7 +1264,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                 width: 40 * SizeConfig.heightMultiplier!,
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Theme.of(context).scaffoldBackgroundColor),
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor),
                                 child: SvgPicture.asset(
                                   ImagePath.backIcon,
                                   color: Theme.of(context).primaryColor,
@@ -1046,7 +1281,6 @@ class _TrainerPageState extends State<TrainerPage> {
                 ),
               ),
             ),
-
             Obx(() => _trainerController.loadingIndicator.value
                 ? Positioned(
                     bottom: 90 * SizeConfig.heightMultiplier!,
@@ -1055,38 +1289,42 @@ class _TrainerPageState extends State<TrainerPage> {
                 : SizedBox()),
 
             //To be docked at bottom center
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                width: double.infinity,
-                padding: EdgeInsets.only(
-                    top: 8 * SizeConfig.heightMultiplier!,
-                    bottom: 16 * SizeConfig.heightMultiplier!,
-                    left: 24 * SizeConfig.widthMultiplier!,
-                    right: 24 * SizeConfig.widthMultiplier!),
-                child: GestureDetector(
-                  onTap: widget.onEnroll,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: kgreen4F,
-                        borderRadius: BorderRadius.circular(8.0)),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 31.0 * SizeConfig.widthMultiplier!,
-                          vertical: 14 * SizeConfig.heightMultiplier!),
-                      child: Text(
-                        'enroll'.tr,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.titleText.copyWith(
-                            fontSize: 18 * SizeConfig.textMultiplier!,
-                            color: kPureWhite),
+            Obx(() => _trainerController.isPlanLoading.value == false
+                ? Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                          top: 8 * SizeConfig.heightMultiplier!,
+                          bottom: 16 * SizeConfig.heightMultiplier!,
+                          left: 24 * SizeConfig.widthMultiplier!,
+                          right: 24 * SizeConfig.widthMultiplier!),
+                      child: GestureDetector(
+                        onTap: widget.isEnrolled ? null : widget.onEnroll,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: widget.isEnrolled ? hintGrey : kgreen4F,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 31.0 * SizeConfig.widthMultiplier!,
+                                vertical: 14 * SizeConfig.heightMultiplier!),
+                            child: Text(
+                              widget.isEnrolled
+                                  ? 'already_enrolled'.tr
+                                  : 'enroll_trainer'.tr,
+                              textAlign: TextAlign.center,
+                              style: AppTextStyle.titleText.copyWith(
+                                  fontSize: 18 * SizeConfig.textMultiplier!,
+                                  color: kPureWhite),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            )
+                  )
+                : Container())
           ],
         ),
       ),
@@ -1172,21 +1410,17 @@ class AchivementCertificateTile extends StatelessWidget {
                 //height: 30 * SizeConfig.widthMultiplier!,
                 width: 134 * SizeConfig.heightMultiplier!,
                 child: Text(certificateDescription,
-                    style: AppTextStyle.lightMediumBlackText
-                        .copyWith(
+                    style: AppTextStyle.lightMediumBlackText.copyWith(
                         fontWeight: FontWeight.w600,
-                      color: Theme.of(context).textTheme.bodyText1?.color
-                    )),
+                        color: Theme.of(context).textTheme.bodyText1?.color)),
               ),
               SizedBox(
                 height: 4 * SizeConfig.heightMultiplier!,
               ),
               Text('certified'.tr,
-                  style: AppTextStyle.lightMediumBlackText
-                      .copyWith(
+                  style: AppTextStyle.lightMediumBlackText.copyWith(
                       fontSize: 12 * SizeConfig.textMultiplier!,
-                    color: Theme.of(context).textTheme.bodyText1?.color
-                  ))
+                      color: Theme.of(context).textTheme.bodyText1?.color))
             ],
           )
         ],
@@ -1214,7 +1448,7 @@ class PlanTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-     // height: 250 * SizeConfig.heightMultiplier!,
+      // height: 250 * SizeConfig.heightMultiplier!,
       width: 160 * SizeConfig.widthMultiplier!,
       child: Card(
         color: Theme.of(context).textTheme.headline5?.color,
@@ -1259,19 +1493,18 @@ class PlanTile extends StatelessWidget {
                             axisAlignmentFromStart: true),
                         SizedBox(width: 4 * SizeConfig.widthMultiplier!),
                         Text('(' + ratingCount + ')',
-                            style: AppTextStyle.smallBlackText
-                                .copyWith(
-                                fontSize: (12) * SizeConfig.textMultiplier!,
-                                color: Theme.of(context).textTheme.headline3?.color,
+                            style: AppTextStyle.smallBlackText.copyWith(
+                              fontSize: (12) * SizeConfig.textMultiplier!,
+                              color:
+                                  Theme.of(context).textTheme.headline3?.color,
                             ))
                       ],
                     ),
                     SizedBox(height: 4 * SizeConfig.heightMultiplier!),
                     Text(
                       planTitle,
-                      style: AppTextStyle.lightMediumBlackText
-                          .copyWith(
-                          fontWeight: FontWeight.w600,
+                      style: AppTextStyle.lightMediumBlackText.copyWith(
+                        fontWeight: FontWeight.w600,
                         color: Theme.of(context).textTheme.bodyText1?.color,
                       ),
                     ),
@@ -1290,7 +1523,10 @@ class PlanTile extends StatelessWidget {
                         ),
                         Text(palnTime,
                             style: AppTextStyle.lightMediumBlackText.copyWith(
-                               color: Theme.of(context).textTheme.bodyText1?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color,
                                 fontSize: 12 * SizeConfig.textMultiplier!))
                       ],
                     ),
@@ -1304,10 +1540,11 @@ class PlanTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(likesCount,
-                              style: AppTextStyle.greenSemiBoldText
-                                  .copyWith(
-                                  color: Theme.of(context).textTheme.bodyText1?.color
-                              )),
+                              style: AppTextStyle.greenSemiBoldText.copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color)),
                           SizedBox(
                             width: 5.5 * SizeConfig.widthMultiplier!,
                           ),
@@ -1322,7 +1559,7 @@ class PlanTile extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 9*SizeConfig.heightMultiplier!,
+                      height: 9 * SizeConfig.heightMultiplier!,
                     )
                   ]),
             )

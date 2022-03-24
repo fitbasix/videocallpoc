@@ -1,3 +1,5 @@
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/message/view/my_trainer_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,15 +18,19 @@ import '../controller/Home_Controller.dart';
 class MyTrainersScreen extends StatelessWidget {
   MyTrainersScreen({Key? key}) : super(key: key);
   var userChatsHistory = [QBDialog()].obs;
+  TrainerController _trainerController = Get.find();
+
+
 
   @override
   Widget build(BuildContext context) {
+    List<MyTrainer> _myTrainers = _trainerController.trainers.value.response!.data!.myTrainers!;
     fetchAllChatOfUser();
     return Scaffold(
       body: Obx(()=>
          Center(
-            child: userChatsHistory[0].id!=null
-                ? MyTrainerTileScreen(chatHistoryList: userChatsHistory,)
+            child: userChatsHistory[0].id!=null||_myTrainers.length>0
+                ? MyTrainerTileScreen(chatHistoryList: userChatsHistory,myTrainers: _myTrainers,)
                 : NoTrainerScreen()),
       ),
 
@@ -39,11 +45,6 @@ class MyTrainersScreen extends StatelessWidget {
       List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) {
         if(value.isNotEmpty){
           userChatsHistory.value = List.from(value);
-          //todo remove below lines after done testing
-          userChatsHistory.add(userChatsHistory[0]);
-          userChatsHistory.add(userChatsHistory[0]);
-          userChatsHistory.add(userChatsHistory[0]);
-          userChatsHistory.add(userChatsHistory[0]);
         }
         return value;
       });
@@ -51,6 +52,7 @@ class MyTrainersScreen extends StatelessWidget {
       print(e);
     }
   }
+
 }
 
 class NoTrainerScreen extends StatelessWidget {
