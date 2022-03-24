@@ -75,7 +75,7 @@ class DioUtil {
             );
             Get.deleteAll();
           }
-          if (e.response!.statusCode == 401) {
+          if (e.response!.statusCode == 401 || e.response!.statusCode == 500) {
             final responseData = jsonDecode(e.response.toString());
             // print(e.requestOptions.path);
             final SnackBar snackBar =
