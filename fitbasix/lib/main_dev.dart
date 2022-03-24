@@ -29,7 +29,7 @@ initializeNotification() {
             channelName: 'Basic notifications',
             channelDescription: 'Notification channel for basic tests',
             defaultColor: Color(0xFF9D50DD),
-            importance: NotificationImportance.Default,
+            importance: NotificationImportance.Max,
             ledColor: Colors.white)
       ],
       // Channel groups are only visual and are not required
