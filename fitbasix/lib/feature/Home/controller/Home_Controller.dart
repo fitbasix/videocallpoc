@@ -86,7 +86,7 @@ class HomeController extends GetxController {
         builder: (BuildContext context, Widget? child) {
           return Theme(
               data: ThemeData.light().copyWith(
-                  colorScheme: ColorScheme.light(
+                  colorScheme: const ColorScheme.light(
                       primary: hintGrey, onPrimary: kPureBlack),
                   textButtonTheme: TextButtonThemeData(
                       style: TextButton.styleFrom(primary: hintGrey))),
@@ -107,7 +107,7 @@ class HomeController extends GetxController {
         builder: (BuildContext context, Widget? child) {
           return Theme(
               data: ThemeData.light().copyWith(
-                  colorScheme: ColorScheme.light(
+                  colorScheme: const ColorScheme.light(
                       primary: hintGrey, onPrimary: kPureBlack),
                   textButtonTheme: TextButtonThemeData(
                       style: TextButton.styleFrom(primary: hintGrey))),
@@ -124,7 +124,7 @@ class HomeController extends GetxController {
   }
 
   String formatTimeOfDay(TimeOfDay tod) {
-    final now = new DateTime.now();
+    final now = DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
     final format = DateFormat.jm(); //"6:00 AM"
     return format.format(dt);
