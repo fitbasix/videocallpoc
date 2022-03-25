@@ -76,7 +76,7 @@ class MyTrainerTileScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             int indexWhereChatPresent = -1;
-            if(chatHistoryList != null&&chatHistoryList![0].id!=null){
+            if(chatHistoryList != null&&chatHistoryList![0].lastMessage!=null){
               indexWhereChatPresent = chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers![index].quickBlox));
             }
             return TrainersTileUI(

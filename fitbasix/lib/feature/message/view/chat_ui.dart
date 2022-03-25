@@ -272,9 +272,11 @@ class _ChatScreenState extends State<ChatScreen> {
               /*Expanded(
                       child: Center(
                       child: Text("no message yet"),
+
                     ))
 */              ,
               ///todo remove this ! sign
+
               widget.isCurrentlyEnrolled!?Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(

@@ -4,54 +4,50 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
+import 'package:fitbasix/feature/Home/view/Home_page.dart';
+import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class GetStartedPage extends StatelessWidget {
+class GetStartedPage extends StatefulWidget {
+  @override
+  State<GetStartedPage> createState() => _GetStartedPageState();
+}
+
+class _GetStartedPageState extends State<GetStartedPage> {
+  @override
+  void initState() {
+    splashClose();
+    super.initState();
+  }
+
+  splashClose() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var accessToken = prefs.getString('AccessToken');
+    Future.delayed(const Duration(milliseconds: 700), () async {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                accessToken == null ? LoginScreen() : HomeAndTrainerPage()),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            height: size.height,
-            width: size.width,
-            child: Image.asset(
-              ImagePath.welcomeImage,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SvgPicture.asset(ImagePath.fitBasixIcon),
-                SizedBox(
-                  height: 4 * SizeConfig.heightMultiplier!,
-                ),
-                Text(
-                  'welcome_title'.tr,
-                  style: AppTextStyle.italicWelcomeText,
-                ),
-                SizedBox(
-                  height: 37 * SizeConfig.heightMultiplier!,
-                ),
-                ProceedButtonWithArrow(
-                  title: 'getStarted'.tr,
-                  onPressed: () {
-                    Navigator.pushNamed(context, RouteName.loginScreen);
-                  },
-                ),
-                SizedBox(
-                  height: 16 * SizeConfig.heightMultiplier!,
-                )
-              ],
-            ),
-          )
-        ],
+      body: SizedBox(
+        height: size.height,
+        width: size.width,
+        child: Image.asset(
+          "assets/log_in/welcome_image.png",
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }

@@ -3,9 +3,8 @@ import 'dart:io';
 
 import 'dart:developer';
 
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -386,6 +385,10 @@ class ConsumptionScreen extends StatelessWidget {
                                   height: 12 * SizeConfig.heightMultiplier!,
                                 ),
                                 GestureDetector(
+                                  onDoubleTap: (){
+                                    showDemoNotification();
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("showing demo notification")));
+                                  },
                                   onTap: () async {
                                     String s = "12:24";
                                     _homeController
@@ -601,22 +604,69 @@ class ConsumptionScreen extends StatelessWidget {
 
     void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
       int toHour, int toMinute, int reminderSerialNo) async {
-    await AndroidAlarmManager.cancel(0);
-    if(reminderSerialNo>0){
-      print("got here");
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.setInt("endMinute", toMinute);
-      sharedPreferences.setInt("endHour", toHour);
-      sharedPreferences.setInt("startMinute", fromMinute);
-      sharedPreferences.setInt("startHour", fromHour);
-      AndroidAlarmManager.periodic(Duration(minutes:1
-        //reminderSerialNo
-      ), 0,
-          showWaterConsumptionNotification,
-          allowWhileIdle: true,
-          exact: true,
-          startAt: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, fromHour, fromMinute),
-          rescheduleOnReboot: true);
+      AwesomeNotifications().cancelAll();
+      if(reminderSerialNo >0){
+        DateTime startTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute);
+        DateTime endTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,toHour,toMinute).subtract(Duration(minutes: reminderSerialNo));
+        int notificationId = 1;
+        while((startTime.isBefore(endTime)&&endTime.isAfter(startTime))){
+          startTime = startTime.add(Duration(minutes: reminderSerialNo));
+          await AwesomeNotifications().createNotification(
+              content: NotificationContent(
+                displayOnForeground: true,
+                displayOnBackground: true,
+                id: notificationId,
+                channelKey: 'basic_channel',
+                title: 'Water Reminder',
+                body: 'drink Water $notificationId',
+                wakeUpScreen: true,
+                category: NotificationCategory.Reminder,
+                payload: {'uuid': 'uuid-test'},
+                autoDismissible: false,
+              ),
+              schedule:NotificationCalendar(
+                  second: startTime.second,
+                  year: startTime.year,
+                  minute: startTime.minute,
+                  repeats: true,
+                  allowWhileIdle: true,
+                  preciseAlarm: true
+              )
+          );
+
+          print(startTime.toString()+" bbbbb");
+
+        }
+      }
+  }
+  void showDemoNotification() async {
+    DateTime time = DateTime.now();
+    AwesomeNotifications().cancelAll();
+    for(int i = 1;i<=20;i++){
+      await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            displayOnForeground: true,
+            displayOnBackground: true,
+            id: i,
+            channelKey: 'basic_channel',
+            title: 'water in take demo',
+            body: 'This notification was scheduled $i',
+            wakeUpScreen: true,
+            category: NotificationCategory.Reminder,
+            payload: {'uuid': 'uuid-test'},
+            autoDismissible: false,
+          ),
+          schedule:NotificationCalendar(
+              second: time.second,
+              year: time.year,
+              minute: time.minute,
+              repeats: true,
+              allowWhileIdle: true,
+              preciseAlarm: true
+          )
+      );
+      time = time.add(Duration(minutes: 1));
+      print(time);
     }
   }
 }
@@ -751,3 +801,5 @@ void showWaterConsumptionNotification(int time) async {
     return value;
   });
 }
+
+

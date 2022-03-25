@@ -25,6 +25,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   final HomeController _homeController = Get.put(HomeController());
+  bool test = false;
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
