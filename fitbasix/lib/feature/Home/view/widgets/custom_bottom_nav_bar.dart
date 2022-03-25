@@ -58,7 +58,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               BottomNavigationBarItem(
                   icon: new Icon(
                     Icons.add,
-                    color: kPureWhite,
+                 //   color: kPureWhite,
                   ),
                   label: 'post'.tr),
               BottomNavigationBarItem(

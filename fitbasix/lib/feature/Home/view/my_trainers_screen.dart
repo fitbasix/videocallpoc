@@ -198,7 +198,9 @@ class EnrollTrainerDialog extends StatelessWidget {
                         width: 156 * SizeConfig.widthMultiplier!,
                         height: 48 * SizeConfig.heightMultiplier!,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, RouteName.trainerplanScreen);
+                          },
                           child: Text('enroll_now'.tr,
                               style: AppTextStyle.hboldWhiteText),
                         ),
