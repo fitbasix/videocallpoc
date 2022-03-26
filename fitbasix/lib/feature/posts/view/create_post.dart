@@ -251,7 +251,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                           0
                                       ? Text(
                                           _homeController.userProfileData.value
-                                              .response!.data!.profile!.name!,
+                                              .response!.data!.profile!.name
+                                              .toString(),
                                           style: AppTextStyle.boldBlackText
                                               .copyWith(
                                                   color: Theme.of(context)

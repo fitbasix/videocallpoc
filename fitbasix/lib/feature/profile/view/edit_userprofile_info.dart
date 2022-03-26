@@ -646,9 +646,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       weight:
                                           profileController.currentWeight.value,
                                       gender: selectedRadio,
-                                      interests: profileController.interestList,
-                                      profilePhoto:
-                                          profileController.profilePhoto.value);
+                                      interests:
+                                          profileController.interestList);
                                   profileController.homeController
                                           .userProfileData.value =
                                       await CreatePostService.getUserProfile();

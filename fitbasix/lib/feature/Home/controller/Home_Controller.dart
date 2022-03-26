@@ -71,6 +71,7 @@ class HomeController extends GetxController {
   Future<List<Comments>>? future;
   RxBool isPostUpdate = false.obs;
   RxString coverPhoto = "".obs;
+  RxString profilePhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
   RxBool updateWaterData = false.obs;
   RxString openCommentId = "".obs;
@@ -125,7 +126,6 @@ class HomeController extends GetxController {
           DateTime(date.year, date.month, date.day, picked.hour, picked.minute);
       final format = DateFormat.jm();
       waterTimingTo.value = TimeOfDay(hour: picked.hour, minute: picked.minute);
-      ;
     }
   }
 
@@ -216,10 +216,9 @@ class HomeController extends GetxController {
         : "2");
 
     ///todo after
-    if (userProfileData.value.response!.data!.profile!.name == null) {
-      print("jdfjdsjkg");
+    if (userProfileData.value.response!.data!.profile!.email == null) {
       Get.deleteAll();
-      Get.toNamed(RouteName.enterDetails);
+      Get.offAndToNamed(RouteName.enterDetails);
     }
 
     coverPhoto.value =
@@ -260,7 +259,10 @@ class HomeController extends GetxController {
     final difference = date2.difference(notificationDate);
 
     if (difference.inDays > 8) {
-      return dateString;
+      var inputFormat = DateFormat('dd/MM/yyyy');
+      var inputDate = inputFormat.parse(dateString);
+      String date = DateFormat('dd LLLL yyyy').format(inputDate);
+      return date;
     } else if ((difference.inDays / 7).floor() >= 1) {
       return (numericDates) ? '1 week ago' : 'Last week';
     } else if (difference.inDays >= 2) {
