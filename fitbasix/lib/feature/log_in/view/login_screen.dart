@@ -20,11 +20,27 @@ import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
 
 import '../../../core/api_service/remote_config_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final LoginController _loginController = Get.put(LoginController());
+
   String title = RemoteConfigService.remoteConfig.getString('welcome');
+
+  void initRemoteConfigService() async {
+    await RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
+  }
+
+  @override
+  void initState() {
+    initRemoteConfigService();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
