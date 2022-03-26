@@ -1,11 +1,17 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:flutter/material.dart';
 import '../../../core/api_service/dio_service.dart';
 import '../../Home/model/post_feed_model.dart';
 import '../../log_in/services/login_services.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:dio/dio.dart';
+import 'package:fitbasix/core/api_service/dio_service.dart';
+import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 
 class ProfileServices {
   static var dio = DioUtil().getInstance();
@@ -87,14 +93,42 @@ class ProfileServices {
     }
   }
 
-  static Future<void> UpdateCoverPhoto({String? coverPhoto}) async {
+  static Future<String> UpdateProfilePhoto({List<File>? profilePhoto}) async {
+    var formData = FormData();
+    // formData.ad;
+    if (profilePhoto != null)
+      for (var file in profilePhoto) {
+        formData.files.addAll([
+          MapEntry(
+              'profilePhoto',
+              await MultipartFile.fromFile(file.path,
+                  filename: file.path.split('/').last)),
+        ]);
+      }
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    // print(interests);
-    final response = await dio!.put(ApiUrl.editProfile, data: {
-      "coverPhoto": coverPhoto,
-    });
-    print(response.toString());
+    final response = await dio!.post(ApiUrl.profilePic, data: formData);
+    final responseData = jsonDecode(response.toString());
+    return responseData["response"]["data"];
+  }
+
+  static Future<String> UpdateCoverPhoto({List<File>? coverPhoto}) async {
+    var formData = FormData();
+    // formData.ad;
+    if (coverPhoto != null)
+      for (var file in coverPhoto) {
+        formData.files.addAll([
+          MapEntry(
+              'coverPhoto',
+              await MultipartFile.fromFile(file.path,
+                  filename: file.path.split('/').last)),
+        ]);
+      }
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    final response = await dio!.post(ApiUrl.coverPic, data: formData);
+    final responseData = jsonDecode(response.toString());
+    return responseData["response"]["data"];
   }
 
   static Future<void> UpdateProfileData(
@@ -103,8 +137,7 @@ class ProfileServices {
       int? height,
       int? weight,
       int? gender,
-      List<int>? interests,
-      String? profilePhoto}) async {
+      List<int>? interests}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     print(interests);
@@ -115,7 +148,6 @@ class ProfileServices {
       "weight": weight,
       "gender": gender,
       "interests": interests,
-      "profilePhoto": profilePhoto,
     });
     print(response.toString());
   }

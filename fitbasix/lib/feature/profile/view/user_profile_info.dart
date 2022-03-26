@@ -54,10 +54,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ? _homeController
                   .userProfileData.value.response!.data!.profile!.profilePhoto
               : profileController.profilePhoto.value,
-          userCoverImage: profileController.coverPhoto.value == ""
-              ? _homeController
-                  .userProfileData.value.response!.data!.profile!.coverPhoto
-              : profileController.coverPhoto.value,
+          userCoverImage: _homeController.userProfileData.value.response == null
+              ? ""
+              : profileController.coverPhoto.value == ""
+                  ? _homeController
+                      .userProfileData.value.response!.data!.profile!.coverPhoto
+                      .toString()
+                  : profileController.coverPhoto.value,
           oneditprofile: () {
             Navigator.pushNamed(context, RouteName.edituserProfileScreen);
           },
@@ -176,7 +179,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     height: 187 * SizeConfig.heightMultiplier!,
                                   ),
                                   Text(
-                                    widget.username!,
+                                    widget.username.toString(),
                                     style: AppTextStyle.titleText.copyWith(
                                         color: Theme.of(context)
                                             .textTheme
@@ -387,7 +390,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                   name: _profileController
                                                       .userPostList[index]
                                                       .userId!
-                                                      .name!,
+                                                      .name
+                                                      .toString(),
                                                   profilePhoto:
                                                       _profileController
                                                           .userPostList[index]
