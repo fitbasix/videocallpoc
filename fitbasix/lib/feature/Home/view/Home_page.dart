@@ -72,12 +72,12 @@ class HomeAndTrainerPage extends StatelessWidget {
               name: homeController.userProfileData.value.response == null
                   ? ""
                   : homeController
-                      .userProfileData.value.response!.data!.profile!.name!,
+                      .userProfileData.value.response!.data!.profile!.name.toString(),
               imageUrl: homeController.userProfileData.value.response == null
                   ? ""
-                  : homeController.userProfileData.value.response!.data!
+                  : homeController.profilePhoto.value==""?homeController.userProfileData.value.response!.data!
                       .profile!.profilePhoto
-                      .toString()),
+                      .toString():homeController.profilePhoto.value),
         ),
       ),
     );
@@ -216,14 +216,14 @@ class _HomePageState extends State<HomePage> {
                                             borderRadius: BorderRadius.circular(
                                                 30 * SizeConfig.widthMultiplier!),
                                             child: Obx(() => CachedNetworkImage(
-                                                imageUrl: _homeController
+                                                imageUrl:_homeController.profilePhoto.value==""? _homeController
                                                     .userProfileData
                                                     .value
                                                     .response!
                                                     .data!
                                                     .profile!
                                                     .profilePhoto
-                                                    .toString(),
+                                                    .toString():_homeController.profilePhoto.value,
                                                 placeholder: (context, url) => ShimmerEffect(),
                                                 errorWidget: (context, url, error) => ShimmerEffect(),
                                                 fit: BoxFit.cover,
@@ -392,43 +392,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ),
-                          // Padding(
-                          //   padding: EdgeInsets.only(
-                          //       left: 16 * SizeConfig.widthMultiplier!,
-                          //       right: 16 * SizeConfig.widthMultiplier!),
-                          //   child: Row(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //     children: [
-                          //       HomeTile(
-                          //         color: kPurple,
-                          //         title: 'live_stream'.tr,
-                          //         icon: Icons.videocam,
-                          //         onTap: () {
-                          //           Navigator.pushNamed(
-                          //               context, RouteName.liveStream);
-                          //         },
-                          //       ),
-                          //       HomeTile(
-                          //         color: kBlue,
-                          //         title: 'trainers'.tr,
-                          //         icon: Icons.person,
-                          //         onTap: () {
-                          //           // Navigator.pushNamed(
-                          //           //     context, RouteName.getTrainedScreen);
-                          //         },
-                          //       ),
-                          //       HomeTile(
-                          //         color: kLightGreen,
-                          //         title: 'my_plan'.tr,
-                          //         icon: Icons.list_alt,
-                          //         onTap: () {},
-                          //       )
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: 38 * SizeConfig.heightMultiplier!,
-                          // ),
+
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,
@@ -1163,7 +1127,7 @@ class _HomePageState extends State<HomePage> {
                                                             .trendingPostList[
                                                                 index]
                                                             .userId!
-                                                            .name!,
+                                                            .name.toString(),
                                                         profilePhoto:
                                                             _homeController
                                                                 .trendingPostList[

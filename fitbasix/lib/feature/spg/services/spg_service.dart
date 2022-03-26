@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
@@ -11,10 +13,8 @@ class SPGService {
   static Future getSPGData() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    print("test1");
     var response = await dio!.post(ApiUrl.getSPGData, data: {});
-    print("test2");
-    print(response.data.toString());
+    log(response.toString());
     return spgModelFromJson(response.toString());
   }
 
@@ -30,9 +30,6 @@ class SPGService {
       int? foodType) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    print("goalType" + goalType.toString());
-    print("gender" + gender.toString());
-    print("height" + height.toString());
 
     ///step1
     Map updateGoal = {"goalType": goalType};

@@ -1,19 +1,25 @@
 class ApiUrl {
-  static String liveBaseURL = 'http://3.131.171.176';
+  // static String liveBaseURL = 'http://3.131.171.176';
 
-  // static String liveBaseURL = 'https://9f48-103-15-254-218.ngrok.io';
+  static String liveBaseURL = 'https://f953-103-15-254-145.ngrok.io';
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
-  static String uploadChatFileToDb = liveBaseURL + '/api/documents/createDocument';
+  static String uploadChatFileToDb =
+      liveBaseURL + '/api/documents/createDocument';
   static String getUserWithDocuments = liveBaseURL + '/api/documents/getUsers';
-  static String getUserAllDocuments = liveBaseURL + '/api/documents/getDocumentByTrainer';
+  static String getUserAllDocuments =
+      liveBaseURL + '/api/documents/getDocumentByTrainer';
   static String editNumberOtp = liveBaseURL + '/api/auth/generateOtp';
   static String getTermOfUseContents = liveBaseURL + '/api/auth/termsOfService';
   static String getPrivacyPolicyContents =
       liveBaseURL + '/api/auth/privacyPolicy';
 
   static String updateUserQuickBloxId = liveBaseURL + "/api/chat/add";
+
+  ///register device token
+  static String updateDeviceToken =
+      liveBaseURL + '/api/notification/registerDeviceToken';
 
   ///auth
   static String logOut = liveBaseURL + '/api/auth/logout';
@@ -67,6 +73,8 @@ class ApiUrl {
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';
   static String editProfile = liveBaseURL + '/api/auth/edit';
+  static String profilePic = liveBaseURL + '/api/user/addProfilePic';
+  static String coverPic = liveBaseURL + "/api/user/addCoverPic";
 
   ///plan demo
   static String planById = liveBaseURL + '/api/plan/getPlanById';
