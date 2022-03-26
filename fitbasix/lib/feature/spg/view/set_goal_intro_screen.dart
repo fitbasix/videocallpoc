@@ -47,7 +47,7 @@ class SetGoalIntroScreen extends StatelessWidget {
             SizedBox(
               height: 90 * SizeConfig.heightMultiplier!,
             ),
-            Obx(() => _spgController.isLoading.value == false
+            Obx(() => _spgController.isLoading.value == true
                 ? ShimmerEffect()
                 : CachedNetworkImage(
                     imageUrl: _spgController

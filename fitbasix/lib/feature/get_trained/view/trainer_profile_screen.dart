@@ -128,8 +128,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                           await SharedPreferences.getInstance();
                       _homeController.userQuickBloxId.value =
                           sharedPreferences.getInt("userQuickBloxId")!;
-                      int UserQuickBloxId =
-                          _trainerController.atrainerDetail.value.quickBlox!;
+                      int UserQuickBloxId = _trainerController.atrainerDetail.value.quickBlox!;
 
                       // _homeController.userQuickBloxId.value == 133815819
                       //     ? 133819788

@@ -44,6 +44,7 @@ import 'package:quickblox_sdk/models/qb_filter.dart';
 import 'package:quickblox_sdk/models/qb_message.dart';
 import 'package:quickblox_sdk/models/qb_sort.dart';
 import 'package:quickblox_sdk/models/qb_subscription.dart';
+import 'package:quickblox_sdk/models/qb_user.dart';
 import 'package:quickblox_sdk/notifications/constants.dart';
 import 'package:quickblox_sdk/push/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
@@ -640,6 +641,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+
   void sendAttachmentsFromDevice() async {
     FilePickerResult? pickedFiles = await pickAttachments();
     if (pickedFiles != null) {
@@ -647,8 +649,8 @@ class _ChatScreenState extends State<ChatScreen> {
         List<QBAttachment>? attachmentsList = [];
         for (int i = 0; i < pickedFiles.files.length; i++) {
           uploadFileToServerDB(pickedFiles.files[i].path!,pickedFiles.files[i].path!.split('.').last);
-          QBFile? file = await QB.content
-              .upload(pickedFiles.files[i].path!, public: false);
+          QBFile? file = await QB.content.upload(pickedFiles.files[i].path!, public: false);
+
           if (file != null) {
             int? id = file.id;
             String? contentType = pickedFiles.files[i].path!.split('.').last;
@@ -1111,10 +1113,8 @@ class MessageBubbleSender extends StatelessWidget {
               });
         }
         else{
-          print("yyyyyy");
           String? path;
           final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
-          print(_appDocDir.path.toString()+" uuuuu");
           //App Document Directory + folder name
           if ((await _appDocDir.exists())) {
             path = _appDocDir.path;
@@ -1122,7 +1122,6 @@ class MessageBubbleSender extends StatelessWidget {
             _appDocDir.create();
             path = _appDocDir.path;
           }
-          print(path + "pp dir");
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
@@ -1402,10 +1401,9 @@ class MessageBubbleOpponent extends StatelessWidget {
               });
         }
         if(Platform.isIOS){
-          print("yyyyyy");
+
           String? path;
           final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
-          print(_appDocDir.path.toString()+" uuuuu");
           //App Document Directory + folder name
           if ((await _appDocDir.exists())) {
             path = _appDocDir.path;
@@ -1413,7 +1411,7 @@ class MessageBubbleOpponent extends StatelessWidget {
             _appDocDir.create();
             path = _appDocDir.path;
           }
-          print(path + "pp dir");
+
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
@@ -1438,7 +1436,6 @@ class MessageBubbleOpponent extends StatelessWidget {
   }
 
   void checkFileExistence(String? fileName) async {
-
     if(Platform.isAndroid){
       PermissionStatus status = await Permission.storage.request();
       PermissionStatus status1 = await Permission.manageExternalStorage.request();
