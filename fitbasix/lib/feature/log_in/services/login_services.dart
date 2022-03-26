@@ -14,6 +14,8 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
 
+import '../view/login_screen.dart';
+
 class LogInService {
   static LoginController loginController = Get.put(LoginController());
   static var dio = DioUtil().getInstance();
@@ -112,7 +114,6 @@ class LogInService {
       if (responseData['code'] == 0) {
         loginController.token.value = responseData['response']['user']['token'];
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-
         prefs.setString(
             'AccessToken', responseData['response']['user']['token']);
         prefs.setString(
@@ -123,6 +124,11 @@ class LogInService {
             responseData['response']['message'];
       }
       print("login Response " + putResponse.body.toString());
+      print("pppp "+ putResponse.statusCode.toString());
+      if(putResponse.statusCode == 445){
+        Get.deleteAll();
+        Navigator.pop(context);
+      }
       return responseData['response']['screenId'];
     } on Exception catch (e) {
       log(e.toString());

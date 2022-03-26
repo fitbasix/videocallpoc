@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:ui';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -190,6 +191,7 @@ class MenuScreen extends StatelessWidget {
                 menuItemImage: ImagePath.logOut,
                 menuItemText: 'logOut'.tr,
                 onTap: () async {
+                  AwesomeNotifications().cancelAll();
                   InitializeQuickBlox().logOutUserSession();
                   final LoginController _controller =
                       Get.put(LoginController());

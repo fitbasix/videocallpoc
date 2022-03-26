@@ -117,6 +117,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   },
                   onMessage: () async {
                     print("the button value is:" + isMessageLoading.toString());
+                    ///remove ! after testing
                    if( _trainerController
                        .atrainerDetail
                        .value

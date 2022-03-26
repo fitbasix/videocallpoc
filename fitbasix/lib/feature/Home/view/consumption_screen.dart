@@ -633,7 +633,6 @@ class ConsumptionScreen extends StatelessWidget {
                   preciseAlarm: true
               )
           );
-
           print(startTime.toString()+" bbbbb");
 
         }
