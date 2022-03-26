@@ -42,41 +42,48 @@ class CreatePostService {
     int? category,
     bool? isPublish,
   }) async {
-    var access = await LogInService.getAccessToken();
-    print(access);
-    dio!.options.headers["language"] = "1";
-    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    try{
+      var access = await LogInService.getAccessToken();
+      print(access);
+      dio!.options.headers["language"] = "1";
+      dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
 
-    Map updateCaption = {"postId": postId, "caption": caption};
-    Map updateFiles = {"postId": postId, "files": files};
-    Map updateLocation = {
-      "postId": postId,
-      "location": {"placeName": placeName, "placeId": placeId}
-    };
-    Map updatePeople = {"postId": postId, "people": taggedPeople};
-    Map updateCategory = {"postId": postId, "category": category};
-    Map publishPost = {
-      "postId": postId,
-      "isPublished": isPublish,
-      "caption": caption
-    };
-    Map getPostData = {"postId": postId};
-    var response = await dio!.post(ApiUrl.createPost,
-        data: isPublish != null && caption != null
-            ? publishPost
-            : caption != null
-                ? updateCaption
-                : files != null
-                    ? updateFiles
-                    : placeId != null
-                        ? updateLocation
-                        : taggedPeople != null
-                            ? updatePeople
-                            : category != null
-                                ? updateCategory
-                                : getPostData);
-    log(response.data.toString());
-    return postDataFromJson(response.toString());
+      Map updateCaption = {"postId": postId, "caption": caption};
+      Map updateFiles = {"postId": postId, "files": files};
+      Map updateLocation = {
+        "postId": postId,
+        "location": {"placeName": placeName, "placeId": placeId}
+      };
+      Map updatePeople = {"postId": postId, "people": taggedPeople};
+      Map updateCategory = {"postId": postId, "category": category};
+      Map publishPost = {
+        "postId": postId,
+        "isPublished": isPublish,
+        "caption": caption
+      };
+      Map getPostData = {"postId": postId};
+      var response = await dio!.post(ApiUrl.createPost,
+          data: isPublish != null && caption != null
+              ? publishPost
+              : caption != null
+              ? updateCaption
+              : files != null
+              ? updateFiles
+              : placeId != null
+              ? updateLocation
+              : taggedPeople != null
+              ? updatePeople
+              : category != null
+              ? updateCategory
+              : getPostData).timeout(Duration(seconds: 3));
+      log(response.data.toString());
+      //todo handle null to stop timer of create post
+      return postDataFromJson(response.toString());
+    }
+    catch(e){
+      print(e);
+      return PostData();
+    }
     // return response.data['response']['data']["_id"];
   }
 
