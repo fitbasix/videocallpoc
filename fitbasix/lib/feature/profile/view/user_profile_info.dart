@@ -154,330 +154,451 @@ class _UserPageInfoState extends State<UserPageInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).secondaryHeaderColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: 152 * SizeConfig.widthMultiplier!),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 187 * SizeConfig.heightMultiplier!,
-                                  ),
-                                  Text(
-                                    widget.username.toString(),
-                                    style: AppTextStyle.titleText.copyWith(
+      body: WillPopScope(
+        onWillPop: () async {
+          if (_profileController.directFromHome.value == false) {
+            Navigator.pop(context);
+          }
+          Navigator.pop(context);
+          return false;
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: 152 * SizeConfig.widthMultiplier!),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height:
+                                          187 * SizeConfig.heightMultiplier!,
+                                    ),
+                                    Text(
+                                      widget.username.toString(),
+                                      style: AppTextStyle.titleText.copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.color,
+                                          fontSize:
+                                              18 * SizeConfig.textMultiplier!),
+                                    ),
+                                    SizedBox(
+                                      height: 14 * SizeConfig.heightMultiplier!,
+                                    ),
+                                    GestureDetector(
+                                      onTap: widget.oneditprofile!,
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                            right: 50 *
+                                                SizeConfig.widthMultiplier!),
+                                        height:
+                                            28 * SizeConfig.heightMultiplier!,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 4 *
+                                                SizeConfig.heightMultiplier!,
+                                            horizontal: 16 *
+                                                SizeConfig.widthMultiplier!),
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context).cardColor,
+                                            borderRadius:
+                                                BorderRadius.circular(8.0)),
+                                        child: Text(
+                                          'edit_yourprofile'.tr,
+                                          style: AppTextStyle.greenSemiBoldText
+                                              .copyWith(color: kPureWhite),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 24 * SizeConfig.heightMultiplier!,
+                              ),
+                              //Follwers & followimg
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: 11 * SizeConfig.heightMultiplier!,
+                                    left: 16.0 * SizeConfig.widthMultiplier!,
+                                    right: 27 * SizeConfig.widthMultiplier!),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(widget.userfollowerscount!,
+                                            style: AppTextStyle.hmedium13Text
+                                                .copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
+                                              fontSize: (18) *
+                                                  SizeConfig.textMultiplier!,
+                                            )),
+                                        SizedBox(
+                                          height:
+                                              4 * SizeConfig.heightMultiplier!,
+                                        ),
+                                        Text('follower'.tr,
+                                            style: AppTextStyle.hmediumBlackText
+                                                .copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
+                                              fontSize: (12) *
+                                                  SizeConfig.textMultiplier!,
+                                            )),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                        width:
+                                            32 * SizeConfig.widthMultiplier!),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(widget.userfollowingscount!,
+                                            style: AppTextStyle.hmedium13Text
+                                                .copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
+                                              fontSize: (18) *
+                                                  SizeConfig.textMultiplier!,
+                                            )),
+                                        SizedBox(
+                                          height:
+                                              4 * SizeConfig.heightMultiplier!,
+                                        ),
+                                        Text('following'.tr,
+                                            style: AppTextStyle.hmediumBlackText
+                                                .copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
+                                              fontSize: (12) *
+                                                  SizeConfig.textMultiplier!,
+                                            )),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                  height: 24 * SizeConfig.heightMultiplier!),
+                              //About
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: 16.0 * SizeConfig.widthMultiplier!,
+                                    right: 32 * SizeConfig.widthMultiplier!),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'about'.tr,
+                                      style: AppTextStyle.hblackSemiBoldText
+                                          .copyWith(
                                         color: Theme.of(context)
                                             .textTheme
                                             .bodyText1
                                             ?.color,
-                                        fontSize:
-                                            18 * SizeConfig.textMultiplier!),
-                                  ),
-                                  SizedBox(
-                                    height: 14 * SizeConfig.heightMultiplier!,
-                                  ),
-                                  GestureDetector(
-                                    onTap: widget.oneditprofile!,
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          right:
-                                              50 * SizeConfig.widthMultiplier!),
-                                      height: 28 * SizeConfig.heightMultiplier!,
-                                      padding: EdgeInsets.symmetric(
-                                          vertical:
-                                              4 * SizeConfig.heightMultiplier!,
-                                          horizontal:
-                                              16 * SizeConfig.widthMultiplier!),
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context).cardColor,
-                                          borderRadius:
-                                              BorderRadius.circular(8.0)),
-                                      child: Text(
-                                        'edit_yourprofile'.tr,
-                                        style: AppTextStyle.greenSemiBoldText
-                                            .copyWith(color: kPureWhite),
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 24 * SizeConfig.heightMultiplier!,
-                            ),
-                            //Follwers & followimg
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 11 * SizeConfig.heightMultiplier!,
-                                  left: 16.0 * SizeConfig.widthMultiplier!,
-                                  right: 27 * SizeConfig.widthMultiplier!),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(widget.userfollowerscount!,
-                                          style: AppTextStyle.hmedium13Text
-                                              .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                ?.color,
-                                            fontSize: (18) *
-                                                SizeConfig.textMultiplier!,
-                                          )),
-                                      SizedBox(
-                                        height:
-                                            4 * SizeConfig.heightMultiplier!,
-                                      ),
-                                      Text('follower'.tr,
-                                          style: AppTextStyle.hmediumBlackText
-                                              .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                ?.color,
-                                            fontSize: (12) *
-                                                SizeConfig.textMultiplier!,
-                                          )),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      width: 32 * SizeConfig.widthMultiplier!),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(widget.userfollowingscount!,
-                                          style: AppTextStyle.hmedium13Text
-                                              .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                ?.color,
-                                            fontSize: (18) *
-                                                SizeConfig.textMultiplier!,
-                                          )),
-                                      SizedBox(
-                                        height:
-                                            4 * SizeConfig.heightMultiplier!,
-                                      ),
-                                      Text('following'.tr,
-                                          style: AppTextStyle.hmediumBlackText
-                                              .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                ?.color,
-                                            fontSize: (12) *
-                                                SizeConfig.textMultiplier!,
-                                          )),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 24 * SizeConfig.heightMultiplier!),
-                            //About
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 16.0 * SizeConfig.widthMultiplier!,
-                                  right: 32 * SizeConfig.widthMultiplier!),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'about'.tr,
-                                    style: AppTextStyle.hblackSemiBoldText
-                                        .copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          ?.color,
+                                    SizedBox(
+                                      height: 12 * SizeConfig.heightMultiplier!,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 12 * SizeConfig.heightMultiplier!,
-                                  ),
-                                  Text(
-                                    widget.aboutuser!,
-                                    style: AppTextStyle.hblackSemiBoldText
-                                        .copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          ?.color,
-                                      fontWeight: FontWeight.w400,
+                                    Text(
+                                      widget.aboutuser!,
+                                      style: AppTextStyle.hblackSemiBoldText
+                                          .copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 24 * SizeConfig.heightMultiplier!,
-                                  ),
-                                  Text(
-                                    'interested_in'.tr,
-                                    style: AppTextStyle.hblackSemiBoldText
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                ?.color),
-                                  ),
-                                  SizedBox(
-                                    height: 12 * SizeConfig.heightMultiplier!,
-                                  ),
-                                  // common user interest list using a demo list
-                                  _userinterestBar(list: userinterestlist),
-                                ],
+                                    SizedBox(
+                                      height: 24 * SizeConfig.heightMultiplier!,
+                                    ),
+                                    Text(
+                                      'interested_in'.tr,
+                                      style: AppTextStyle.hblackSemiBoldText
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color),
+                                    ),
+                                    SizedBox(
+                                      height: 12 * SizeConfig.heightMultiplier!,
+                                    ),
+                                    // common user interest list using a demo list
+                                    _userinterestBar(list: userinterestlist),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 24 * SizeConfig.heightMultiplier!,
-                            ),
-                            Obx(
-                              () => _homeController.isLoading.value
-                                  ? CustomizedCircularProgress()
-                                  : ListView.builder(
-                                      itemCount: _profileController
-                                                  .userPostList.length ==
-                                              0
-                                          ? 0
-                                          : _profileController
-                                              .userPostList.length,
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemBuilder: (_, index) {
-                                        return Obx(() => Column(
-                                              children: [
-                                                Container(
-                                                  height: 16 *
-                                                      SizeConfig
-                                                          .heightMultiplier!,
-                                                  color: kBackgroundColor,
-                                                ),
-                                                PostTile(
-                                                  comment: _homeController
-                                                                  .commentsMap[
-                                                              _profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .id] ==
-                                                          null
-                                                      ? _profileController
-                                                          .userPostList[index]
-                                                          .commentgiven
-                                                      : _homeController
-                                                              .commentsMap[
-                                                          _profileController
-                                                              .userPostList[
-                                                                  index]
-                                                              .id],
-                                                  name: _profileController
-                                                      .userPostList[index]
-                                                      .userId!
-                                                      .name
-                                                      .toString(),
-                                                  profilePhoto:
-                                                      _profileController
-                                                          .userPostList[index]
-                                                          .userId!
-                                                          .profilePhoto!,
-                                                  category: _profileController
-                                                      .userPostList[index]
-                                                      .postCategory![0]
-                                                      .name!,
-                                                  date: DateFormat.d()
-                                                      .add_MMM()
-                                                      .format(_profileController
-                                                          .userPostList[index]
-                                                          .updatedAt!),
-                                                  place: _profileController
-                                                              .userPostList[
-                                                                  index]
-                                                              .location!
-                                                              .placeName!
-                                                              .length ==
-                                                          0
-                                                      ? ''
-                                                      : _profileController
-                                                          .userPostList[index]
-                                                          .location!
-                                                          .placeName![1]
-                                                          .toString(),
-                                                  imageUrl: _profileController
-                                                              .userPostList[
-                                                                  index]
-                                                              .files!
-                                                              .length ==
-                                                          0
-                                                      ? []
-                                                      : _profileController
-                                                          .userPostList[index]
-                                                          .files!,
-                                                  caption: _profileController
-                                                          .userPostList[index]
-                                                          .caption ??
-                                                      '',
-                                                  likes: _homeController
-                                                                  .updateCount[
-                                                              _profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .id] ==
-                                                          null
-                                                      ? _profileController
-                                                          .userPostList[index]
-                                                          .likes
-                                                          .toString()
-                                                      : _homeController
-                                                          .updateCount[
-                                                              _profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .id]!
-                                                          .likes!
-                                                          .toString(),
-                                                  comments: _homeController
-                                                                  .updateCount[
-                                                              _profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .id] ==
-                                                          null
-                                                      ? _profileController
-                                                          .userPostList[index]
-                                                          .comments
-                                                          .toString()
-                                                      : _homeController
-                                                          .updateCount[
-                                                              _profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .id]!
-                                                          .comments!
-                                                          .toString(),
-                                                  hitLike: () async {
-                                                    bool val = _homeController
-                                                                    .LikedPostMap[
+                              SizedBox(
+                                height: 24 * SizeConfig.heightMultiplier!,
+                              ),
+                              Obx(
+                                () => _homeController.isLoading.value
+                                    ? CustomizedCircularProgress()
+                                    : ListView.builder(
+                                        itemCount: _profileController
+                                                    .userPostList.length ==
+                                                0
+                                            ? 0
+                                            : _profileController
+                                                .userPostList.length,
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (_, index) {
+                                          return Obx(() => Column(
+                                                children: [
+                                                  Container(
+                                                    height: 16 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    color: kBackgroundColor,
+                                                  ),
+                                                  PostTile(
+                                                    comment: _homeController
+                                                                    .commentsMap[
                                                                 _profileController
                                                                     .userPostList[
                                                                         index]
                                                                     .id] ==
+                                                            null
+                                                        ? _profileController
+                                                            .userPostList[index]
+                                                            .commentgiven
+                                                        : _homeController
+                                                                .commentsMap[
+                                                            _profileController
+                                                                .userPostList[
+                                                                    index]
+                                                                .id],
+                                                    name: _profileController
+                                                        .userPostList[index]
+                                                        .userId!
+                                                        .name
+                                                        .toString(),
+                                                    profilePhoto:
+                                                        _profileController
+                                                            .userPostList[index]
+                                                            .userId!
+                                                            .profilePhoto!,
+                                                    category: _profileController
+                                                        .userPostList[index]
+                                                        .postCategory![0]
+                                                        .name!,
+                                                    date: DateFormat.d()
+                                                        .add_MMM()
+                                                        .format(
+                                                            _profileController
+                                                                .userPostList[
+                                                                    index]
+                                                                .updatedAt!),
+                                                    place: _profileController
+                                                                .userPostList[
+                                                                    index]
+                                                                .location!
+                                                                .placeName!
+                                                                .length ==
+                                                            0
+                                                        ? ''
+                                                        : _profileController
+                                                            .userPostList[index]
+                                                            .location!
+                                                            .placeName![1]
+                                                            .toString(),
+                                                    imageUrl: _profileController
+                                                                .userPostList[
+                                                                    index]
+                                                                .files!
+                                                                .length ==
+                                                            0
+                                                        ? []
+                                                        : _profileController
+                                                            .userPostList[index]
+                                                            .files!,
+                                                    caption: _profileController
+                                                            .userPostList[index]
+                                                            .caption ??
+                                                        '',
+                                                    likes: _homeController
+                                                                    .updateCount[
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id] ==
+                                                            null
+                                                        ? _profileController
+                                                            .userPostList[index]
+                                                            .likes
+                                                            .toString()
+                                                        : _homeController
+                                                            .updateCount[
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id]!
+                                                            .likes!
+                                                            .toString(),
+                                                    comments: _homeController
+                                                                    .updateCount[
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id] ==
+                                                            null
+                                                        ? _profileController
+                                                            .userPostList[index]
+                                                            .comments
+                                                            .toString()
+                                                        : _homeController
+                                                            .updateCount[
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id]!
+                                                            .comments!
+                                                            .toString(),
+                                                    hitLike: () async {
+                                                      bool val = _homeController
+                                                                      .LikedPostMap[
+                                                                  _profileController
+                                                                      .userPostList[
+                                                                          index]
+                                                                      .id] ==
+                                                              null
+                                                          ? _profileController
+                                                              .userPostList[
+                                                                  index]
+                                                              .isLiked!
+                                                          : _homeController
+                                                                  .LikedPostMap[
+                                                              _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id]!;
+                                                      if (val) {
+                                                        _profileController
+                                                            .userPostList[index]
+                                                            .isLiked = false;
+                                                        _profileController
+                                                                .userPostList[index]
+                                                                .likes =
+                                                            (_profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .likes! -
+                                                                1);
+                                                        _homeController
+                                                                .LikedPostMap[
+                                                            _profileController
+                                                                .userPostList[
+                                                                    index]
+                                                                .id!] = false;
+                                                        await HomeService.unlikePost(
+                                                            postId:
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id!);
+                                                      } else {
+                                                        _profileController
+                                                            .userPostList[index]
+                                                            .isLiked = true;
+                                                        _profileController
+                                                                .userPostList[index]
+                                                                .likes =
+                                                            (_profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .likes! +
+                                                                1);
+                                                        _homeController
+                                                                .LikedPostMap[
+                                                            _profileController
+                                                                .userPostList[
+                                                                    index]
+                                                                .id!] = true;
+                                                        await HomeService.likePost(
+                                                            postId:
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id!);
+                                                      }
+                                                      RecentCommentModel
+                                                          recentComment =
+                                                          RecentCommentModel();
+                                                      recentComment = await HomeService
+                                                          .recentComment(
+                                                              postId: _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id!);
+                                                      // _homeController.commentsMap[_homeController.post.value.id.toString()] =
+                                                      //     recentComment.response!.data!.comment;
+                                                      _homeController
+                                                                  .updateCount[
+                                                              _profileController
+                                                                  .userPostList[
+                                                                      index]
+                                                                  .id!] =
+                                                          recentComment
+                                                              .response!
+                                                              .data!
+                                                              .data;
+                                                      setState(() {});
+                                                    },
+                                                    addComment: () {
+                                                      //   HomeService.addComment(
+                                                      //       _profileController
+                                                      // .userPostList[
+                                                      //               index]
+                                                      //           .id!,
+                                                      //       _homeController
+                                                      //           .comment.value);
+
+                                                      //   setState(() {});
+
+                                                      //   _homeController
+                                                      //       .commentController
+                                                      //       .clear();
+                                                    },
+                                                    postId: _profileController
+                                                        .userPostList[index]
+                                                        .id!,
+                                                    isLiked: _homeController
+                                                                    .LikedPostMap[
+                                                                _profileController
+                                                                    .userPostList[
+                                                                        index]
+                                                                    .id!] ==
                                                             null
                                                         ? _profileController
                                                             .userPostList[index]
@@ -487,257 +608,169 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                             _profileController
                                                                 .userPostList[
                                                                     index]
-                                                                .id]!;
-                                                    if (val) {
-                                                      _profileController
-                                                          .userPostList[index]
-                                                          .isLiked = false;
-                                                      _profileController
-                                                              .userPostList[index]
-                                                              .likes =
-                                                          (_profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .likes! -
-                                                              1);
+                                                                .id!]!,
+                                                    onTap: () async {
                                                       _homeController
-                                                              .LikedPostMap[
-                                                          _profileController
-                                                              .userPostList[
-                                                                  index]
-                                                              .id!] = false;
-                                                      await HomeService.unlikePost(
-                                                          postId:
+                                                          .commentsList
+                                                          .clear();
+                                                      _homeController
+                                                          .viewReplies!
+                                                          .clear();
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          RouteName.postScreen);
+
+                                                      _homeController
+                                                          .postLoading
+                                                          .value = true;
+                                                      var postData = await HomeService
+                                                          .getPostById(
                                                               _profileController
                                                                   .userPostList[
                                                                       index]
                                                                   .id!);
-                                                    } else {
-                                                      _profileController
-                                                          .userPostList[index]
-                                                          .isLiked = true;
-                                                      _profileController
-                                                              .userPostList[index]
-                                                              .likes =
-                                                          (_profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .likes! +
-                                                              1);
+
                                                       _homeController
-                                                              .LikedPostMap[
-                                                          _profileController
-                                                              .userPostList[
-                                                                  index]
-                                                              .id!] = true;
-                                                      await HomeService.likePost(
-                                                          postId:
-                                                              _profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .id!);
-                                                    }
-                                                    RecentCommentModel
-                                                        recentComment =
-                                                        RecentCommentModel();
-                                                    recentComment = await HomeService
-                                                        .recentComment(
-                                                            postId:
-                                                                _profileController
-                                                                    .userPostList[
-                                                                        index]
-                                                                    .id!);
-                                                    // _homeController.commentsMap[_homeController.post.value.id.toString()] =
-                                                    //     recentComment.response!.data!.comment;
-                                                    _homeController.updateCount[
-                                                        _profileController
-                                                            .userPostList[index]
-                                                            .id!] = recentComment
-                                                        .response!.data!.data;
-                                                    setState(() {});
-                                                  },
-                                                  addComment: () {
-                                                    //   HomeService.addComment(
-                                                    //       _profileController
-                                                    // .userPostList[
-                                                    //               index]
-                                                    //           .id!,
-                                                    //       _homeController
-                                                    //           .comment.value);
+                                                              .post.value =
+                                                          postData
+                                                              .response!.data!;
 
-                                                    //   setState(() {});
-
-                                                    //   _homeController
-                                                    //       .commentController
-                                                    //       .clear();
-                                                  },
-                                                  postId: _profileController
-                                                      .userPostList[index].id!,
-                                                  isLiked: _homeController
-                                                                  .LikedPostMap[
-                                                              _profileController
-                                                                  .userPostList[
-                                                                      index]
-                                                                  .id!] ==
-                                                          null
-                                                      ? _profileController
-                                                          .userPostList[index]
-                                                          .isLiked!
-                                                      : _homeController
-                                                              .LikedPostMap[
-                                                          _profileController
-                                                              .userPostList[
-                                                                  index]
-                                                              .id!]!,
-                                                  onTap: () async {
-                                                    _homeController.commentsList
-                                                        .clear();
-                                                    _homeController.viewReplies!
-                                                        .clear();
-                                                    Navigator.pushNamed(context,
-                                                        RouteName.postScreen);
-
-                                                    _homeController.postLoading
-                                                        .value = true;
-                                                    var postData = await HomeService
-                                                        .getPostById(
-                                                            _profileController
-                                                                .userPostList[
-                                                                    index]
-                                                                .id!);
-
-                                                    _homeController.post.value =
-                                                        postData
-                                                            .response!.data!;
-
-                                                    _homeController.postLoading
-                                                        .value = false;
-                                                    _homeController
-                                                        .commentsLoading
-                                                        .value = true;
-                                                    _homeController.postComments
-                                                            .value =
-                                                        await HomeService.fetchComment(
-                                                            postId:
-                                                                _profileController
-                                                                    .userPostList[
-                                                                        index]
-                                                                    .id!);
-
-                                                    if (_homeController
-                                                            .postComments
-                                                            .value
-                                                            .response!
-                                                            .data!
-                                                            .length !=
-                                                        0) {
                                                       _homeController
-                                                              .commentsList
+                                                          .postLoading
+                                                          .value = false;
+                                                      _homeController
+                                                          .commentsLoading
+                                                          .value = true;
+                                                      _homeController
+                                                              .postComments
                                                               .value =
-                                                          _homeController
+                                                          await HomeService
+                                                              .fetchComment(
+                                                                  postId: _profileController
+                                                                      .userPostList[
+                                                                          index]
+                                                                      .id!);
+
+                                                      if (_homeController
                                                               .postComments
                                                               .value
                                                               .response!
-                                                              .data!;
-                                                    }
-                                                    _homeController
-                                                        .commentsLoading
-                                                        .value = false;
-                                                  },
-                                                  people: _profileController
-                                                      .userPostList[index]
-                                                      .people!,
-                                                ),
-                                              ],
-                                            ));
-                                      }),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: double.infinity,
-                          height: 177 * SizeConfig.heightMultiplier!,
-                          child: CachedNetworkImage(
-                            imageUrl: widget.userCoverImage!,
-                            placeholder: (context, url) => ShimmerEffect(),
-                            errorWidget: (context, url, error) =>
-                                ShimmerEffect(),
-                            fit: BoxFit.cover,
+                                                              .data!
+                                                              .length !=
+                                                          0) {
+                                                        _homeController
+                                                                .commentsList
+                                                                .value =
+                                                            _homeController
+                                                                .postComments
+                                                                .value
+                                                                .response!
+                                                                .data!;
+                                                      }
+                                                      _homeController
+                                                          .commentsLoading
+                                                          .value = false;
+                                                    },
+                                                    people: _profileController
+                                                        .userPostList[index]
+                                                        .people!,
+                                                  ),
+                                                ],
+                                              ));
+                                        }),
+                              ),
+                            ],
                           ),
-                        ),
-                        Positioned(
-                          top: 127 * SizeConfig.heightMultiplier!,
-                          left: 16 * SizeConfig.widthMultiplier!,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 4 * SizeConfig.widthMultiplier!,
-                                    color: kPureWhite),
-                                shape: BoxShape.circle),
-                            height: 120 * SizeConfig.widthMultiplier!,
-                            width: 120 * SizeConfig.widthMultiplier!,
-                            child: CircleAvatar(
-                              //  radius: 60 * SizeConfig.heightMultiplier!,
-                              backgroundImage: NetworkImage(widget.userImage!),
+                          Container(
+                            width: double.infinity,
+                            height: 177 * SizeConfig.heightMultiplier!,
+                            child: CachedNetworkImage(
+                              imageUrl: widget.userCoverImage!,
+                              placeholder: (context, url) => ShimmerEffect(),
+                              errorWidget: (context, url, error) =>
+                                  ShimmerEffect(),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                        Positioned(
-                            top: 16 * SizeConfig.heightMultiplier!,
+                          Positioned(
+                            top: 127 * SizeConfig.heightMultiplier!,
                             left: 16 * SizeConfig.widthMultiplier!,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: 40 * SizeConfig.heightMultiplier!,
-                                width: 40 * SizeConfig.heightMultiplier!,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white),
-                                child: SvgPicture.asset(
-                                  ImagePath.backIcon,
-                                  color: kPureBlack,
-                                  height: 12,
-                                  width: 7,
-                                  fit: BoxFit.scaleDown,
-                                ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 4 * SizeConfig.widthMultiplier!,
+                                      color: kPureWhite),
+                                  shape: BoxShape.circle),
+                              height: 120 * SizeConfig.widthMultiplier!,
+                              width: 120 * SizeConfig.widthMultiplier!,
+                              child: CircleAvatar(
+                                //  radius: 60 * SizeConfig.heightMultiplier!,
+                                backgroundImage:
+                                    NetworkImage(widget.userImage!),
                               ),
-                            )),
-                        Positioned(
-                            top: 16 * SizeConfig.heightMultiplier!,
-                            right: 16 * SizeConfig.widthMultiplier!,
-                            child: GestureDetector(
-                              //open camera icon
-                              onTap: widget.oneditcoverimage,
-                              child: Container(
-                                height: 40 * SizeConfig.heightMultiplier!,
-                                width: 40 * SizeConfig.heightMultiplier!,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: grey34.withOpacity(0.5)),
-                                child: SvgPicture.asset(
-                                  //replace icon with design
-                                  ImagePath.openCameraIcon,
-                                  color: kPureWhite,
-                                  height: 18,
-                                  width: 20,
-                                  fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                          Positioned(
+                              top: 16 * SizeConfig.heightMultiplier!,
+                              left: 16 * SizeConfig.widthMultiplier!,
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (_profileController.directFromHome.value ==
+                                      false) {
+                                    Navigator.pop(context);
+                                  }
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  height: 40 * SizeConfig.heightMultiplier!,
+                                  width: 40 * SizeConfig.heightMultiplier!,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white),
+                                  child: SvgPicture.asset(
+                                    ImagePath.backIcon,
+                                    color: kPureBlack,
+                                    height: 12,
+                                    width: 7,
+                                    fit: BoxFit.scaleDown,
+                                  ),
                                 ),
-                              ),
-                            )),
-                      ],
-                    ),
-                  ],
+                              )),
+                          Positioned(
+                              top: 16 * SizeConfig.heightMultiplier!,
+                              right: 16 * SizeConfig.widthMultiplier!,
+                              child: GestureDetector(
+                                //open camera icon
+                                onTap: widget.oneditcoverimage,
+                                child: Container(
+                                  height: 40 * SizeConfig.heightMultiplier!,
+                                  width: 40 * SizeConfig.heightMultiplier!,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: grey34.withOpacity(0.5)),
+                                  child: SvgPicture.asset(
+                                    //replace icon with design
+                                    ImagePath.openCameraIcon,
+                                    color: kPureWhite,
+                                    height: 18,
+                                    width: 20,
+                                    fit: BoxFit.scaleDown,
+                                  ),
+                                ),
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Obx(() => _profileController.showLoading.value
-                  ? Positioned(
-                      bottom: 20 * SizeConfig.heightMultiplier!,
-                      left: Get.width / 2 - 10,
-                      child: Center(child: CustomizedCircularProgress()))
-                  : SizedBox())
-            ],
+                Obx(() => _profileController.showLoading.value
+                    ? Positioned(
+                        bottom: 20 * SizeConfig.heightMultiplier!,
+                        left: Get.width / 2 - 10,
+                        child: Center(child: CustomizedCircularProgress()))
+                    : SizedBox())
+              ],
+            ),
           ),
         ),
       ),

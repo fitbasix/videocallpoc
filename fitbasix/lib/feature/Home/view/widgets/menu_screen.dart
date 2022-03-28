@@ -49,6 +49,7 @@ class MenuScreen extends StatelessWidget {
             GestureDetector(
               onTap: () async {
                 Navigator.pushNamed(context, RouteName.userprofileinfo);
+                _profileController.directFromHome.value = false;
                 _profileController.initialPostData.value =
                     await ProfileServices.getUserPosts();
 
@@ -207,7 +208,9 @@ class MenuItem extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(
             top: 29 * SizeConfig.heightMultiplier!,
-            left: imageWidth!=null?20*SizeConfig.widthMultiplier!:18 * SizeConfig.widthMultiplier!),
+            left: imageWidth != null
+                ? 20 * SizeConfig.widthMultiplier!
+                : 18 * SizeConfig.widthMultiplier!),
         child: GestureDetector(
           onTap: onTap,
           child: Container(
@@ -215,10 +218,15 @@ class MenuItem extends StatelessWidget {
             child: Row(
               children: [
                 SvgPicture.asset(menuItemImage,
-                    width: imageWidth!=null?imageWidth!*SizeConfig.imageSizeMultiplier!:22 * SizeConfig.heightMultiplier!,
+                    width: imageWidth != null
+                        ? imageWidth! * SizeConfig.imageSizeMultiplier!
+                        : 22 * SizeConfig.heightMultiplier!,
                     color: Theme.of(context).textTheme.headline1?.color,
                     fit: BoxFit.contain),
-                SizedBox(width: imageWidth!=null?17*SizeConfig.widthMultiplier!:15 * SizeConfig.widthMultiplier!),
+                SizedBox(
+                    width: imageWidth != null
+                        ? 17 * SizeConfig.widthMultiplier!
+                        : 15 * SizeConfig.widthMultiplier!),
                 Text(
                   menuItemText,
                   style: AppTextStyle.boldBlackText.copyWith(
