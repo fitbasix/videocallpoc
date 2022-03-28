@@ -118,13 +118,14 @@ class _ViewAllUsersWithDocumentsState extends State<ViewAllUsersWithDocuments> {
           ],
         ),
 
-      ),
 
+      ),
     );
   }
 
   void getAllDocuments({int? skip}) async{
     usersWithDocs.value = await DocumentServices.getUsersWithDocuments(skip: skip);
+
     isUsersLoading.value = false;
     if (usersWithDocs.value.response!.data!.length <
         10) {
@@ -133,8 +134,14 @@ class _ViewAllUsersWithDocumentsState extends State<ViewAllUsersWithDocuments> {
     }
   }
 }
+
 class TraineeDocumentTile extends StatelessWidget {
-  TraineeDocumentTile({this.networkImage, this.traineesName, Key? key,this.fileCount,this.onTap})
+  TraineeDocumentTile(
+      {this.networkImage,
+      this.traineesName,
+      Key? key,
+      this.fileCount,
+      this.onTap})
       : super(key: key);
 
   String? networkImage;
@@ -143,11 +150,11 @@ class TraineeDocumentTile extends StatelessWidget {
   GestureTapCallback? onTap;
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         width: Get.width,
-        margin: EdgeInsets.only(right: 16*SizeConfig.widthMultiplier!),
+        margin: EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
         padding: EdgeInsets.only(
             left: 16 * SizeConfig.widthMultiplier!,
             top: 16 * SizeConfig.heightMultiplier!,
@@ -178,27 +185,25 @@ class TraineeDocumentTile extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                          'Media, Documents, Links',
-                          style: AppTextStyle.black400Text.copyWith(
-                              fontSize: (12) * SizeConfig.textMultiplier!,
-                              color:
-                              Theme.of(context).textTheme.headline1!.color),
-                        ),
+                        'Media, Documents, Links',
+                        style: AppTextStyle.black400Text.copyWith(
+                            fontSize: (12) * SizeConfig.textMultiplier!,
+                            color:
+                                Theme.of(context).textTheme.headline1!.color),
+                      ),
                       Spacer(),
                       Text(
                         '$fileCount Files',
                         style: AppTextStyle.black400Text.copyWith(
                             fontSize: (12) * SizeConfig.textMultiplier!,
                             color:
-                            Theme.of(context).textTheme.headline1!.color),
+                                Theme.of(context).textTheme.headline1!.color),
                       ),
-
                     ],
                   )
                 ],
               ),
             ),
-
           ],
         ),
       ),

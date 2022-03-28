@@ -22,6 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/credentials.dart';
 import '../../../log_in/services/login_services.dart';
+import 'dart:convert';
 
 class MenuScreen extends StatelessWidget {
   final String imageCoverPic;
@@ -36,6 +37,10 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.find();
+    var dependencyupdate =
+        homeController.remoteConfig.getString('UiDependency');
+    var jsonOb = json.decode(dependencyupdate);
+
     return Container(
         color: Theme.of(context).scaffoldBackgroundColor,
         width: 300 * SizeConfig.widthMultiplier!,
@@ -44,6 +49,7 @@ class MenuScreen extends StatelessWidget {
             GestureDetector(
               onTap: () async {
                 Navigator.pushNamed(context, RouteName.userprofileinfo);
+                _profileController.directFromHome.value = false;
                 _profileController.initialPostData.value =
                     await ProfileServices.getUserPosts();
 
@@ -116,95 +122,71 @@ class MenuScreen extends StatelessWidget {
                 ),
               ),
             ),
-            MenuItem(
-                menuItemImage: ImagePath.account,
-                menuItemText: 'my_account'.tr,
-                onTap: () {
-                  _profileController.loginController!.mobileController.text =
-                      homeController.userProfileData.value.response!.data!
-                          .profile!.mobileNumber
-                          .toString();
-                  _profileController.loginController!.mobile.value =
-                      homeController.userProfileData.value.response!.data!
-                          .profile!.mobileNumber!;
-                  _profileController.selectedDate.value = homeController
-                              .userProfileData
-                              .value
-                              .response!
-                              .data!
-                              .profile!
-                              .dob ==
-                          null
-                      ? DateTime.now().toString()
-                      : DateFormat("dd/LL/yyyy").format(homeController
-                          .userProfileData.value.response!.data!.profile!.dob!);
-                  _profileController.DOBController.text = homeController
-                              .userProfileData
-                              .value
-                              .response!
-                              .data!
-                              .profile!
-                              .dob ==
-                          null
-                      ? ""
-                      : DateFormat("dd/LL/yyyy").format(homeController
-                          .userProfileData.value.response!.data!.profile!.dob!);
-                  Navigator.pushNamed(context, RouteName.editPersonalInfo);
-                }),
-            MenuItem(
-                menuItemImage: ImagePath.fileIcon,
-                imageWidth: 20,
-                menuItemText: 'view_document'.tr,
-                onTap: () {
-                  Navigator.pushNamed(context, RouteName.viewAllUserWithDoc);
-                }),
-            MenuItem(
-                menuItemImage: ImagePath.settings,
-                menuItemText: 'settings'.tr,
-                onTap: () {
-                  Navigator.pushNamed(context, RouteName.userSetting);
-                }),
-            MenuItem(
-                menuItemImage: ImagePath.support,
-                menuItemText: 'help'.tr,
-                onTap: () {
-                  Navigator.pushNamed(context, RouteName.helpAndSupport);
-                }),
-            MenuItem(
-                menuItemImage: ImagePath.feedback,
-                menuItemText: 'feedback'.tr,
-                onTap: () {
-                  homeController.selectedIndex.value = 0;
-                  Navigator.pop(context);
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          DialogboxForFeedback());
-                }),
-            MenuItem(
-                menuItemImage: ImagePath.legal,
-                menuItemText: 'legal'.tr,
-                onTap: () {
-                  Navigator.pushNamed(context, RouteName.legal);
-                }),
-            MenuItem(
-                menuItemImage: ImagePath.logOut,
-                menuItemText: 'logOut'.tr,
-                onTap: () async {
-                  AwesomeNotifications().cancelAll();
-                  InitializeQuickBlox().logOutUserSession();
-                  final LoginController _controller =
-                      Get.put(LoginController());
-                  await LogInService.logOut();
-                  final SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.clear();
-                  await _controller.googleSignout();
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, RouteName.loginScreen, (route) => false);
+            jsonOb['my_account'] == 1
+                ? MenuItem(
+                    menuItemImage: ImagePath.account,
+                    menuItemText: 'my_account'.tr,
+                    onTap: () {
+                      Navigator.pushNamed(context, RouteName.editPersonalInfo);
+                    })
+                : Container(),
+            jsonOb['setting'] == 1
+                ? MenuItem(
+                    menuItemImage: ImagePath.settings,
+                    menuItemText: 'settings'.tr,
+                    onTap: () {
+                      Navigator.pushNamed(context, RouteName.userSetting);
+                    })
+                : Container(),
+            jsonOb['help&support']['help'] == 1
+                ? MenuItem(
+                    menuItemImage: ImagePath.support,
+                    menuItemText: 'help'.tr,
+                    onTap: () {
+                      Navigator.pushNamed(context, RouteName.helpAndSupport);
+                    })
+                : Container(),
+            jsonOb['feedback'] == 1
+                ? MenuItem(
+                    menuItemImage: ImagePath.feedback,
+                    menuItemText: 'feedback'.tr,
+                    onTap: () {
+                      homeController.selectedIndex.value = 0;
+                      Navigator.pop(context);
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              DialogboxForFeedback());
+                    })
+                : Container(),
+            jsonOb['legal'] == 1
+                ? MenuItem(
+                    menuItemImage: ImagePath.legal,
+                    menuItemText: 'legal'.tr,
+                    onTap: () {
+                      Navigator.pushNamed(context, RouteName.legal);
+                    })
+                : Container(),
+            jsonOb['logout'] == 1
+                ? MenuItem(
+                    menuItemImage: ImagePath.logOut,
+                    menuItemText: 'logOut'.tr,
+                    onTap: () async {
+                      InitializeQuickBlox().logOutUserSession();
+                      final LoginController _controller =
+                          Get.put(LoginController());
+                      await LogInService.logOut();
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.clear();
+                      await _controller.googleSignout();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, RouteName.loginScreen, (route) => false);
 
-                  Get.deleteAll();
-                })
+
+                      Get.deleteAll();
+                    })
+                : Container()
           ],
         ));
   }
@@ -226,7 +208,9 @@ class MenuItem extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(
             top: 29 * SizeConfig.heightMultiplier!,
-            left: imageWidth!=null?20*SizeConfig.widthMultiplier!:18 * SizeConfig.widthMultiplier!),
+            left: imageWidth != null
+                ? 20 * SizeConfig.widthMultiplier!
+                : 18 * SizeConfig.widthMultiplier!),
         child: GestureDetector(
           onTap: onTap,
           child: Container(
@@ -234,10 +218,15 @@ class MenuItem extends StatelessWidget {
             child: Row(
               children: [
                 SvgPicture.asset(menuItemImage,
-                    width: imageWidth!=null?imageWidth!*SizeConfig.imageSizeMultiplier!:22 * SizeConfig.heightMultiplier!,
+                    width: imageWidth != null
+                        ? imageWidth! * SizeConfig.imageSizeMultiplier!
+                        : 22 * SizeConfig.heightMultiplier!,
                     color: Theme.of(context).textTheme.headline1?.color,
                     fit: BoxFit.contain),
-                SizedBox(width: imageWidth!=null?17*SizeConfig.widthMultiplier!:15 * SizeConfig.widthMultiplier!),
+                SizedBox(
+                    width: imageWidth != null
+                        ? 17 * SizeConfig.widthMultiplier!
+                        : 15 * SizeConfig.widthMultiplier!),
                 Text(
                   menuItemText,
                   style: AppTextStyle.boldBlackText.copyWith(
