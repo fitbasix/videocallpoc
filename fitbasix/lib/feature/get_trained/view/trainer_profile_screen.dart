@@ -39,7 +39,8 @@ import '../../message/view/chat_ui.dart';
 
 class TrainerProfileScreen extends StatefulWidget {
 
-  const TrainerProfileScreen({Key? key}) : super(key: key);
+  String? trainerId;
+  TrainerProfileScreen({Key? key,this.trainerId}) : super(key: key);
 
   @override
   State<TrainerProfileScreen> createState() => _TrainerProfileScreenState();

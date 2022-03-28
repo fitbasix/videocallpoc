@@ -33,7 +33,7 @@ class PlaceApiProvider {
   static Future<Suggestion?> fetchSuggestions(
       String input, String lang, String sessionToken) async {
     final request =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=(cities)&language=$lang&components=country:in&key=$apiKey&sessiontoken=$sessionToken';
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=(cities)&language=$lang&key=$apiKey&sessiontoken=$sessionToken';
     final response = await client.get(Uri.parse(request));
 
     if (response.statusCode == 200) {
