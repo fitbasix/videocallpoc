@@ -9,6 +9,7 @@ import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
 import 'package:fitbasix/feature/spg/services/spg_service.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:fitbasix/feature/spg/view/widgets/spg_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,6 +40,50 @@ class SetActivity extends StatelessWidget {
             color: kGreenColor,
             height: 2 * SizeConfig.heightMultiplier!,
             width: Get.width * (8 / 8),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: 16 * SizeConfig.widthMultiplier!,
+                  right: 16 * SizeConfig.widthMultiplier!),
+              child: Obx(() => _spgController.isLoading.value
+                  ? Center(
+                child: CustomizedCircularProgress(),
+              )
+                  : ProceedButton(
+                  title: 'proceed'.tr,
+                  onPressed: () async {
+                    _spgController.isLoading.value = true;
+                    await SPGService.updateSPGData(
+                        _spgController.selectedGoalIndex.value.serialId,
+                        _spgController
+                            .selectedGenderIndex.value.serialId,
+                        _spgController.selectedDate.value,
+                        _spgController.currentHeight.value,
+                        _spgController.weightType == "kg"
+                            ? _spgController.targetWeight.value
+                            : _spgController.targetWeight.value ~/
+                            2.205,
+                        _spgController.weightType == "kg"
+                            ? _spgController.currentWeight.value
+                            : _spgController.currentHeight.value ~/
+                            2.205,
+                        _spgController.activityNumber.value.toInt(),
+                        _spgController.selectedBodyFat.value.serialId,
+                        _spgController
+                            .selectedFoodIndex.value.serialId);
+                    homeController.userProfileData.value =
+                    await CreatePostService.getUserProfile();
+                    homeController.spgStatus.value = true;
+                    _spgController.isLoading.value = false;
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => HomeAndTrainerPage()),
+                            (route) => false);
+                  })),
+            ),
           ),
           Container(
             margin: EdgeInsets.only(
@@ -75,6 +120,8 @@ class SetActivity extends StatelessWidget {
                               .activenessType![
                                   _spgController.activityNumber.value.toInt()]
                               .image!,
+                          placeholder: (context, url) => ShimmerEffect(),
+                          errorWidget: (context, url, error) => ShimmerEffect(),
                           height: 346 * SizeConfig.heightMultiplier!,
                           width: Get.width,
                           fit: BoxFit.cover,
@@ -193,48 +240,6 @@ class SetActivity extends StatelessWidget {
                     ],
                   ),
                 ),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 16 * SizeConfig.widthMultiplier!,
-                      right: 16 * SizeConfig.widthMultiplier!),
-                  child: Obx(() => _spgController.isLoading.value
-                      ? Center(
-                          child: CustomizedCircularProgress(),
-                        )
-                      : ProceedButton(
-                          title: 'proceed'.tr,
-                          onPressed: () async {
-                            _spgController.isLoading.value = true;
-                            await SPGService.updateSPGData(
-                                _spgController.selectedGoalIndex.value.serialId,
-                                _spgController
-                                    .selectedGenderIndex.value.serialId,
-                                _spgController.selectedDate.value,
-                                _spgController.currentHeight.value,
-                                _spgController.weightType == "kg"
-                                    ? _spgController.targetWeight.value
-                                    : _spgController.targetWeight.value ~/
-                                        2.205,
-                                _spgController.weightType == "kg"
-                                    ? _spgController.currentWeight.value
-                                    : _spgController.currentHeight.value ~/
-                                        2.205,
-                                _spgController.activityNumber.value.toInt(),
-                                _spgController.selectedBodyFat.value.serialId,
-                                _spgController
-                                    .selectedFoodIndex.value.serialId);
-                            homeController.userProfileData.value =
-                                await CreatePostService.getUserProfile();
-                            homeController.spgStatus.value = true;
-                            _spgController.isLoading.value = false;
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => HomeAndTrainerPage()),
-                                (route) => false);
-                          })),
-                )
               ],
             ),
           ),

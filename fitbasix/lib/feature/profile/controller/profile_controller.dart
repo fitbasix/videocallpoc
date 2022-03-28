@@ -103,7 +103,6 @@ class ProfileController extends GetxController {
 //             (element) => element.name.toLowerCase().contains("all photos")));
 //     }
     var assetList = <AssetEntity>[];
-
     assetList = await foldersAvailable[0].getAssetListPaged(
       currentPage.value,
       100,

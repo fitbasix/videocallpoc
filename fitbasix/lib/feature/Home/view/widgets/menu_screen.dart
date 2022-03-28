@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:ui';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -12,9 +13,11 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/credentials.dart';
@@ -179,6 +182,7 @@ class MenuScreen extends StatelessWidget {
                       Navigator.pushNamedAndRemoveUntil(
                           context, RouteName.loginScreen, (route) => false);
 
+
                       Get.deleteAll();
                     })
                 : Container()
@@ -191,17 +195,19 @@ class MenuItem extends StatelessWidget {
   final String menuItemImage;
   final String menuItemText;
   final VoidCallback onTap;
+  double? imageWidth;
   MenuItem(
       {required this.menuItemImage,
       required this.menuItemText,
-      required this.onTap});
+      required this.onTap,
+      this.imageWidth});
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
         padding: EdgeInsets.only(
             top: 29 * SizeConfig.heightMultiplier!,
-            left: 18 * SizeConfig.widthMultiplier!),
+            left: imageWidth!=null?20*SizeConfig.widthMultiplier!:18 * SizeConfig.widthMultiplier!),
         child: GestureDetector(
           onTap: onTap,
           child: Container(
@@ -209,10 +215,10 @@ class MenuItem extends StatelessWidget {
             child: Row(
               children: [
                 SvgPicture.asset(menuItemImage,
-                    width: 22 * SizeConfig.heightMultiplier!,
+                    width: imageWidth!=null?imageWidth!*SizeConfig.imageSizeMultiplier!:22 * SizeConfig.heightMultiplier!,
                     color: Theme.of(context).textTheme.headline1?.color,
                     fit: BoxFit.contain),
-                SizedBox(width: 15 * SizeConfig.widthMultiplier!),
+                SizedBox(width: imageWidth!=null?17*SizeConfig.widthMultiplier!:15 * SizeConfig.widthMultiplier!),
                 Text(
                   menuItemText,
                   style: AppTextStyle.boldBlackText.copyWith(
@@ -220,6 +226,69 @@ class MenuItem extends StatelessWidget {
                       fontSize: 14 * SizeConfig.textMultiplier!),
                 )
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RedButton extends StatelessWidget {
+  final String? text;
+  final VoidCallback? onTap;
+  RedButton({this.text, this.onTap});
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 44 * SizeConfig.heightMultiplier!,
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.circular(12 * SizeConfig.heightMultiplier!),
+          color: kPink,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 12 * SizeConfig.widthMultiplier!),
+          child: Center(
+            child: Text(
+              text.toString(),
+              style: AppTextStyle.black600Text.copyWith(
+                  color: kPureWhite, fontSize: 14 * SizeConfig.textMultiplier!),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProceedButton extends StatelessWidget {
+  final String? text;
+  final VoidCallback? onTap;
+  ProceedButton({this.text, this.onTap});
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 44 * SizeConfig.heightMultiplier!,
+        decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.circular(12 * SizeConfig.heightMultiplier!),
+            color: Colors.transparent,
+            border: Border.all(
+                width: 1 * SizeConfig.heightMultiplier!, color: kPureWhite)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 12 * SizeConfig.widthMultiplier!),
+          child: Center(
+            child: Text(
+              text.toString(),
+              style: AppTextStyle.black600Text.copyWith(
+                  color: kPureWhite, fontSize: 14 * SizeConfig.textMultiplier!),
             ),
           ),
         ),

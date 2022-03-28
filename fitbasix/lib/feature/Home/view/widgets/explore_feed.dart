@@ -6,6 +6,7 @@ import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/video_player.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -357,6 +358,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                       0
                                   ? CachedNetworkImage(
                                       imageUrl: widget.imageUrl[index],
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
                                       height: 360 * SizeConfig.widthMultiplier!,
                                       width: 360 * SizeConfig.widthMultiplier!,
                                       fit: BoxFit.cover,
@@ -384,6 +389,10 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                       0
                                   ? CachedNetworkImage(
                                       imageUrl: widget.imageUrl[index],
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
                                       height: 360 * SizeConfig.widthMultiplier!,
                                       width: 360 * SizeConfig.widthMultiplier!,
                                       fit: BoxFit.contain,

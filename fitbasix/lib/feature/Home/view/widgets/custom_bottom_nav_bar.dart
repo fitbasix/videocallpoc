@@ -20,6 +20,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   final HomeController _homeController = Get.put(HomeController());
+  bool test = false;
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
@@ -68,7 +69,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               BottomNavigationBarItem(
                   icon: Icon(
                     Icons.add,
-                    color: kPureWhite,
+                 //   color: kPureWhite,
                   ),
                   label: 'post'.tr),
             if (jsonOb['tools'] == 1)

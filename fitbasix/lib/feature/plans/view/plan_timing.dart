@@ -55,7 +55,11 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
           child: SingleChildScrollView(
         child: Obx(
           () => trainerController.isAvailableSlotDataLoading.value
-              ? Center(child: CustomizedCircularProgress())
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height -
+                      50 * SizeConfig.heightMultiplier!,
+                  width: double.infinity,
+                  child: Center(child: CustomizedCircularProgress()))
               : Container(
                   width: double.infinity,
                   child: Column(
@@ -337,24 +341,44 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                               index]
                                                           .isAvailable !=
                                                       3) {
+                                                ///if selected days is less then 3 or user is de selecting a day
                                                 if (trainerController
+                                                            .selectedDays
+                                                            .length <
+                                                        3 ||
+                                                    trainerController
+                                                            .selectedDays
+                                                            .indexOf(
+                                                                trainerController
+                                                                    .weekAvailableSlots[
+                                                                        index]
+                                                                    .id!) !=
+                                                        -1) {
+                                                  if (trainerController
+                                                          .selectedDays
+                                                          .indexOf(trainerController
+                                                              .weekAvailableSlots[
+                                                                  index]
+                                                              .id!) !=
+                                                      -1) {
+                                                    trainerController
                                                         .selectedDays
-                                                        .indexOf(trainerController
+                                                        .remove(trainerController
                                                             .weekAvailableSlots[
                                                                 index]
-                                                            .id!) !=
-                                                    -1) {
-                                                  trainerController.selectedDays
-                                                      .remove(trainerController
-                                                          .weekAvailableSlots[
-                                                              index]
-                                                          .id!);
+                                                            .id!);
+                                                  } else {
+                                                    trainerController
+                                                        .selectedDays
+                                                        .add(trainerController
+                                                            .weekAvailableSlots[
+                                                                index]
+                                                            .id!);
+                                                  }
                                                 } else {
-                                                  trainerController.selectedDays
-                                                      .add(trainerController
-                                                          .weekAvailableSlots[
-                                                              index]
-                                                          .id!);
+                                                  ///show dialog that limit exceeded
+                                                  selectDaysLimitExceedDialog(
+                                                      context);
                                                 }
 
                                                 setState(() {});
@@ -479,7 +503,8 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                               .day!);
                                         });
 
-                                        await TrainerServices.bookSlot(
+                                        bool booked =
+                                            await TrainerServices.bookSlot(
                                                 trainerController.selectedDays,
                                                 trainerController
                                                     .selectedPlan.value.id!,
@@ -490,11 +515,13 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                     .data![trainerController
                                                         .selectedTimeSlot.value]
                                                     .time!,
-                                                selectedDays)
-                                            .then((value) {
+                                                selectedDays,
+                                                context);
+                                        if (booked == true) {
                                           trainerController.enrolledTrainer.add(
                                               trainerController
                                                   .atrainerDetail.value.id!);
+                                          trainerController.setUp();
                                           showDialogForSessionBooked(context);
                                           Future.delayed(Duration(seconds: 3),
                                               () {
@@ -502,7 +529,7 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                             Navigator.pop(context);
                                             Navigator.pop(context);
                                           });
-                                        });
+                                        }
 
                                         // Navigator.pop(context);
                                         // Navigator.pop(context);
@@ -535,6 +562,69 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                 ),
         ),
       )),
+    );
+  }
+
+  void selectDaysLimitExceedDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+              child: AlertDialog(
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 8 * SizeConfig.heightMultiplier!,
+                    horizontal: 8 * SizeConfig.widthMultiplier!),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        10 * SizeConfig.imageSizeMultiplier!)),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: CircleAvatar(
+                          radius: 20 * SizeConfig.imageSizeMultiplier!,
+                          child: Icon(
+                            Icons.close,
+                            size: 14 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          backgroundColor: Theme.of(context).cardColor,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10 * SizeConfig.heightMultiplier!,
+                    ),
+                    SizedBox(
+                      height: 100 * SizeConfig.heightMultiplier!,
+                      width: 100 * SizeConfig.widthMultiplier!,
+                      child: Image.asset(ImagePath.animatedErrorIcon),
+                    ),
+                    SizedBox(
+                      height: 26 * SizeConfig.heightMultiplier!,
+                    ),
+                    Text(
+                      "select_day_limit_exceed".tr,
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 50 * SizeConfig.heightMultiplier!,
+                    ),
+                  ],
+                ),
+              )),
+        );
+      },
     );
   }
 

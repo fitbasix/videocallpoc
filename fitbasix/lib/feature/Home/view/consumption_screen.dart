@@ -1,4 +1,10 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+
+import 'dart:io';
+
+import 'dart:developer';
+
+
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -17,6 +23,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:shared_preferences_android/shared_preferences_android.dart';
+import 'package:shared_preferences_ios/shared_preferences_ios.dart';
 
 import 'widgets/water_capsule.dart';
 
@@ -56,7 +64,10 @@ class ConsumptionScreen extends StatelessWidget {
         child: Obx(
           () => _homeController.isConsumptionLoading.value
               ? Center(
-                  child: CustomizedCircularProgress(),
+                  child: SizedBox(
+                      height: MediaQuery.of(context).size.height -
+                          100 * SizeConfig.heightMultiplier!,
+                      child: CustomizedCircularProgress()),
                 )
               : Container(
                   color: Theme.of(context).secondaryHeaderColor,
@@ -108,7 +119,6 @@ class ConsumptionScreen extends StatelessWidget {
                                                     width: 1,
                                                     color: greyBorder)),
                                             width: 132 *
-
                                                 SizeConfig.widthMultiplier!,
                                             height: 48 *
                                                 SizeConfig.heightMultiplier!,
@@ -234,10 +244,10 @@ class ConsumptionScreen extends StatelessWidget {
                                   children: [
                                     Expanded(
                                         child: GestureDetector(
-                                          onTap: () {
+                                      onTap: () {
                                         _homeController.selectTime(context);
                                       },
-                                         child: Container(
+                                      child: Container(
                                         decoration: BoxDecoration(
                                             color: Colors.transparent,
                                             borderRadius:
@@ -284,11 +294,11 @@ class ConsumptionScreen extends StatelessWidget {
                                     ),
                                     Expanded(
                                         child: GestureDetector(
-                                         onTap: () {
+                                      onTap: () {
                                         _homeController.selectTime2(context);
                                       },
-                                         child: Container(
-                                         decoration: BoxDecoration(
+                                      child: Container(
+                                        decoration: BoxDecoration(
                                             color: Colors.transparent,
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
@@ -340,8 +350,7 @@ class ConsumptionScreen extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                           border: Border.all(
-                                              width: 1, color: greyBorder
-                                          )),
+                                              width: 1, color: greyBorder)),
                                       height: 48 * SizeConfig.heightMultiplier!,
                                       child: ReminderDropDown(
                                           listofItems: _homeController
@@ -376,6 +385,10 @@ class ConsumptionScreen extends StatelessWidget {
                                   height: 12 * SizeConfig.heightMultiplier!,
                                 ),
                                 GestureDetector(
+                                  onDoubleTap: (){
+                                    showDemoNotification();
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("showing demo notification")));
+                                  },
                                   onTap: () async {
                                     String s = "12:24";
                                     _homeController
@@ -557,11 +570,20 @@ class ConsumptionScreen extends StatelessWidget {
                             ),
                             Container(
                                 height: 190 * SizeConfig.heightMultiplier!,
-                                child: Obx(() => ChartApp(
-                                      waterDetails: _homeController.waterDetails
-                                          .value.response!.data!.reversed
-                                          .toList(),
-                                    ))),
+                                child: Obx(
+                                    () => _homeController.updateWaterData.value
+                                        ? ChartApp(
+                                            waterDetails: [],
+                                          )
+                                        : ChartApp(
+                                            waterDetails: _homeController
+                                                .waterDetails
+                                                .value
+                                                .response!
+                                                .data!
+                                                .reversed
+                                                .toList(),
+                                          ))),
                           ],
                         ),
                       ),
@@ -580,23 +602,71 @@ class ConsumptionScreen extends StatelessWidget {
   //   });
   // }
 
-  void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
+    void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
       int toHour, int toMinute, int reminderSerialNo) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool canceled = await AndroidAlarmManager.cancel(0).then((value) {
-      AndroidAlarmManager.periodic(Duration(minutes: reminderSerialNo), 0,
-          showWaterConsumptionNotification,
-          allowWhileIdle: true,
-          exact: true,
-          startAt: DateTime(DateTime.now().year, DateTime.now().month,
-              DateTime.now().day, fromHour, fromMinute),
-          rescheduleOnReboot: true);
-      sharedPreferences.setInt("endMinute", 7);
-      sharedPreferences.setInt("endHour", 18);
-      //sharedPreferences.setInt("endMinute", toMinute);
-      //sharedPreferences.setInt("endHour", toHour);
-      return value;
-    });
+      AwesomeNotifications().cancelAll();
+      if(reminderSerialNo >0){
+        DateTime startTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute);
+        DateTime endTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,toHour,toMinute).subtract(Duration(minutes: reminderSerialNo));
+        int notificationId = 1;
+        while((startTime.isBefore(endTime)&&endTime.isAfter(startTime))){
+          startTime = startTime.add(Duration(minutes: reminderSerialNo));
+          await AwesomeNotifications().createNotification(
+              content: NotificationContent(
+                displayOnForeground: true,
+                displayOnBackground: true,
+                id: notificationId,
+                channelKey: 'basic_channel',
+                title: 'Water Reminder',
+                body: 'drink Water $notificationId',
+                wakeUpScreen: true,
+                category: NotificationCategory.Reminder,
+                payload: {'uuid': 'uuid-test'},
+                autoDismissible: false,
+              ),
+              schedule:NotificationCalendar(
+                  second: startTime.second,
+                  year: startTime.year,
+                  minute: startTime.minute,
+                  repeats: true,
+                  allowWhileIdle: true,
+                  preciseAlarm: true
+              )
+          );
+          print(startTime.toString()+" bbbbb");
+
+        }
+      }
+  }
+  void showDemoNotification() async {
+    DateTime time = DateTime.now();
+    AwesomeNotifications().cancelAll();
+    for(int i = 1;i<=20;i++){
+      await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            displayOnForeground: true,
+            displayOnBackground: true,
+            id: i,
+            channelKey: 'basic_channel',
+            title: 'water in take demo',
+            body: 'This notification was scheduled $i',
+            wakeUpScreen: true,
+            category: NotificationCategory.Reminder,
+            payload: {'uuid': 'uuid-test'},
+            autoDismissible: false,
+          ),
+          schedule:NotificationCalendar(
+              second: time.second,
+              year: time.year,
+              minute: time.minute,
+              repeats: true,
+              allowWhileIdle: true,
+              preciseAlarm: true
+          )
+      );
+      time = time.add(Duration(minutes: 1));
+      print(time);
+    }
   }
 }
 
@@ -612,7 +682,7 @@ class __ChartAppState extends State<ChartApp> {
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
-      enableAxisAnimation: true,
+        enableAxisAnimation: true,
         plotAreaBorderWidth: 0,
         // Axis
         primaryXAxis: CategoryAxis(
@@ -620,13 +690,12 @@ class __ChartAppState extends State<ChartApp> {
           interval: 1.0,
           majorTickLines:
               MajorTickLines(size: 0, width: 0, color: Colors.transparent),
-          majorGridLines: MajorGridLines(color: greyBorder,width: 0.2),
-          axisLine: AxisLine(color: greyBorder,width: 0.5),
+          majorGridLines: MajorGridLines(color: greyBorder, width: 0.2),
+          axisLine: AxisLine(color: greyBorder, width: 0.5),
           labelStyle: AppTextStyle.normalWhiteText
               .copyWith(fontSize: 10 * SizeConfig.textMultiplier!),
           // majorGridLines: MajorGridLines(width: 0),
         ),
-
         primaryYAxis: NumericAxis(
           isVisible: false,
           majorGridLines: MajorGridLines(width: 0),
@@ -697,7 +766,9 @@ class __ChartAppState extends State<ChartApp> {
   }
 }
 
-void showWaterConsumptionNotification(int id) async {
+void showWaterConsumptionNotification(int time) async {
+  if (Platform.isAndroid) SharedPreferencesAndroid.registerWith();
+  if (Platform.isIOS) SharedPreferencesIOS.registerWith();
   print("calledddd1123");
   print(DateTime.now());
   SharedPreferences sharedPreferences =
@@ -707,8 +778,16 @@ void showWaterConsumptionNotification(int id) async {
         DateTime.now().month,
         DateTime.now().day,
         value.getInt("endHour")!,
-        value.getInt("endMinute")!);
-    if (DateTime.now().isBefore(endTime)) {
+        value.getInt("endMinute")!
+    );
+    DateTime startTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        value.getInt("startHour")!,
+        value.getInt("startMinute")!
+    );
+    if (DateTime.now().isBefore(endTime)&&DateTime.now().isAfter(startTime)) {
       print("calledddd");
       AwesomeNotifications().createNotification(
           content: NotificationContent(
@@ -721,3 +800,5 @@ void showWaterConsumptionNotification(int id) async {
     return value;
   });
 }
+
+

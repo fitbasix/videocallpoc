@@ -50,6 +50,10 @@ class AnimatedLiquidCustomProgressIndicatorState
                 homeController.waterLevel.value *
                     homeController.waterDetails.value.response!.data![0]
                         .totalWaterRequired!);
+            homeController.updateWaterData.value = true;
+            homeController.waterDetails.value =
+                await HomeService.getWaterDetails();
+            homeController.updateWaterData.value = false;
             homeController.userProfileData.value =
                 await CreatePostService.getUserProfile();
             homeController.waterConsumedDataLoading.value = false;
@@ -135,6 +139,10 @@ class AnimatedLiquidCustomProgressIndicatorState
                 homeController.waterLevel.value *
                     homeController.waterDetails.value.response!.data![0]
                         .totalWaterRequired!);
+            homeController.updateWaterData.value = true;
+            homeController.waterDetails.value =
+                await HomeService.getWaterDetails();
+            homeController.updateWaterData.value = false;
             homeController.userProfileData.value =
                 await CreatePostService.getUserProfile();
             homeController.waterConsumedDataLoading.value = false;

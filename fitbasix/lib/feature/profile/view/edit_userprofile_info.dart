@@ -106,8 +106,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ),
                             ),
                             Positioned(
-                                top: 80 * SizeConfig.heightMultiplier!,
-                                left: 80 * SizeConfig.widthMultiplier!,
+                                top: 8 * SizeConfig.heightMultiplier!,
+                                left: 90 * SizeConfig.widthMultiplier!,
                                 child: GestureDetector(
                                   onTap: () async {
                                     print("pppp");
@@ -123,13 +123,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     // open user profilepic for change
                                   },
                                   child: Container(
-                                    height: 40 * SizeConfig.heightMultiplier!,
-                                    width: 40 * SizeConfig.heightMultiplier!,
+                                    height: 28 * SizeConfig.heightMultiplier!,
+                                    width: 28 * SizeConfig.heightMultiplier!,
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle, color: greyB7),
                                     child: SvgPicture.asset(
-                                      ImagePath.penIcon,
-                                      color: kPureWhite,
+                                      ImagePath.selectImageIcon,
+                                      color: kPureBlack,
                                       height: 18,
                                       width: 18,
                                       fit: BoxFit.scaleDown,
@@ -646,9 +646,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       weight:
                                           profileController.currentWeight.value,
                                       gender: selectedRadio,
-                                      interests: profileController.interestList,
-                                      profilePhoto:
-                                          profileController.profilePhoto.value);
+                                      interests:
+                                          profileController.interestList);
                                   profileController.homeController
                                           .userProfileData.value =
                                       await CreatePostService.getUserProfile();

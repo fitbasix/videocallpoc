@@ -137,7 +137,7 @@ class HomeService {
       "comment": comment
     });
 
-    log(response.toString());
+    log("reply of comment");
     print(response.data['code']);
   }
 
@@ -172,7 +172,7 @@ class HomeService {
     var response = await dio!.post(ApiUrl.getComment,
         data: postId == null ? getCommentReply : getPostComment);
 
-    log(response.toString());
+    log("nnnnn");
 
     return commentModelFromJson(response.toString());
   }
@@ -195,5 +195,23 @@ class HomeService {
     log(response.toString());
 
     return postModelFromJson(response.toString());
+  }
+
+  static Future<void> deActiveAccount() async {
+    var dio = DioUtil().getInstance();
+    dio!.options.headers["language"] = "1";
+    dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+    String token = await LogInService.getAccessToken();
+    var response = await dio.post(ApiUrl.deActiveAccount);
+  }
+
+  static Future<void> deleteAccount() async {
+    var dio = DioUtil().getInstance();
+    dio!.options.headers["language"] = "1";
+    String token = await LogInService.getAccessToken();
+    dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+    log(token);
+    var response = await dio.post(ApiUrl.deleteAccount);
+    log("oooo");
   }
 }

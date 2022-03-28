@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/log_in/model/third_party_login.dart';
+import 'package:fitbasix/main_dev.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +13,8 @@ import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
+
+import '../view/login_screen.dart';
 
 class LogInService {
   static LoginController loginController = Get.put(LoginController());
@@ -84,6 +86,7 @@ class LogInService {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('AccessToken', response.data['response']['token']);
     prefs.setString('RefreshToken', response.data['response']['refreshToken']);
+    registerFcmToken();
   }
 
   static Future<int?> loginAndSignup(String mobile, String otp,
@@ -112,22 +115,36 @@ class LogInService {
       if (responseData['code'] == 0) {
         loginController.token.value = responseData['response']['user']['token'];
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-
         prefs.setString(
             'AccessToken', responseData['response']['user']['token']);
         prefs.setString(
             'RefreshToken', responseData['response']['refreshToken']);
+        registerFcmToken();
         print(responseData['response']['refreshToken']);
       } else {
         loginController.otpErrorMessage.value =
             responseData['response']['message'];
       }
       print("login Response " + putResponse.body.toString());
+      print("pppp "+ putResponse.statusCode.toString());
+      if(putResponse.statusCode == 445){
+        Get.deleteAll();
+        Navigator.pop(context);
+      }
       return responseData['response']['screenId'];
     } on Exception catch (e) {
       log(e.toString());
       return null;
     }
+  }
+
+  static Future<void> RegisterDeviceToken(
+      String deviceToken, String deviceId) async {
+    var dio = DioUtil().getInstance();
+    dio!.options.headers["language"] = "1";
+    dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio.post(ApiUrl.updateDeviceToken,
+        data: {"deviceToken": deviceToken, "deviceId": deviceId});
   }
 
   static Future<int?> registerUser(String name, String email) async {

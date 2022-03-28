@@ -15,6 +15,7 @@ import '../../../core/routes/app_routes.dart';
 import '../../../core/universal_widgets/text_Field.dart';
 import '../../Home/controller/Home_Controller.dart';
 import '../../Home/view/Home_page.dart';
+import '../../log_in/services/login_services.dart';
 import '../../log_in/view/widgets/country_dropdown.dart';
 import '../../posts/services/createPost_Services.dart';
 
@@ -26,7 +27,6 @@ class EditPersonalInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(_profileController.DOBController.text);
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBarForAccount(
@@ -53,6 +53,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
             SizedBox(height: 11 * SizeConfig.heightMultiplier!),
             //text field for user email
             TextFormField(
+              enabled: false,
               controller: _profileController.emailController,
               onChanged: (value) {
                 //storing user input in email controller
@@ -84,6 +85,11 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 enabledBorder: OutlineInputBorder(
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                  borderSide: BorderSide(color: greyBorder, width: 1.0),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                   borderSide: BorderSide(color: greyBorder, width: 1.0),
                 ),
               ),
@@ -247,21 +253,20 @@ class EditPersonalInfoScreen extends StatelessWidget {
                                       .data!.profile!.dob
                               ? null
                               : _profileController.DOBController.text;
-                      print(updatedEmailId);
-                      print(updatedPhnNumber);
-                      print(updatedCountryCode);
-                      print(updatedDob);
                       if (updatedPhnNumber == null) {
                         await ProfileServices.editProfile(
-                            email: updatedEmailId,
                             countryCode: updatedCountryCode,
                             phone: updatedPhnNumber,
-                            dob: updatedDob == "" ? null : updatedDob);
+                            dob: updatedDob == "" ? null : updatedDob,
+                            context: context);
 
                         Navigator.pop(context);
                         homeController.userProfileData.value =
                             await CreatePostService.getUserProfile();
                       } else {
+                        // bool isNumberRegistered= await ProfileServices.getOTP(
+                        //      updatedPhnNumber, updatedCountryCode, context);
+
                         Navigator.pushNamed(context, RouteName.otpReScreen);
                       }
 

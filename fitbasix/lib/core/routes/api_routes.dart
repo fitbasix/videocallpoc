@@ -1,19 +1,26 @@
 class ApiUrl {
 
-
   static String liveBaseURL = 'http://3.131.171.176';
 
 
-
-  // static String liveBaseURL = 'https://8b4c-103-15-254-242.ngrok.io';
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
+  static String uploadChatFileToDb =
+      liveBaseURL + '/api/documents/createDocument';
+  static String getUserWithDocuments = liveBaseURL + '/api/documents/getUsers';
+  static String getUserAllDocuments =
+      liveBaseURL + '/api/documents/getDocumentByTrainer';
+  static String editNumberOtp = liveBaseURL + '/api/auth/generateOtp';
   static String getTermOfUseContents = liveBaseURL + '/api/auth/termsOfService';
   static String getPrivacyPolicyContents =
       liveBaseURL + '/api/auth/privacyPolicy';
 
   static String updateUserQuickBloxId = liveBaseURL + "/api/chat/add";
+
+  ///register device token
+  static String updateDeviceToken =
+      liveBaseURL + '/api/notification/registerDeviceToken';
 
   ///auth
   static String logOut = liveBaseURL + '/api/auth/logout';
@@ -21,15 +28,17 @@ class ApiUrl {
   static String getHelpAndSupportContents =
       liveBaseURL + '/api/auth/helpAndSupport';
   static String bmrcalculation = liveBaseURL + '/api/nutritions/getbmr';
-  static String getSortByData = liveBaseURL + '/api/optionData/sorting/getOptions';
-  static String getMytainers = liveBaseURL +'/api/trainer/myTrainers';
-
+  static String getSortByData =
+      liveBaseURL + '/api/optionData/sorting/getOptions';
+  static String getMytainers = liveBaseURL + '/api/trainer/myTrainers';
+  static String getAllSlots =
+      liveBaseURL + '/api/optionData/timeSlots/getSlots';
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
   static String loginAndSignup = liveBaseURL + '/api/auth/login';
   static String registerUser = liveBaseURL + '/api/auth/create';
   static String getCountries = liveBaseURL + '/api/country/get';
   static String updateToken = liveBaseURL + '/api/auth/generateToken';
-  static String getTrainerById = liveBaseURL + '/api/trainer/getTrainerById';
+  static String getTrainerById = liveBaseURL + '/api/trainer/getTrainerDetails';
   static String getStrength = liveBaseURL + '/api/trainer/getStrenght';
   static String getPlanByTrainerId = liveBaseURL + '/api/plan/getAllPlansById';
   static String getAllTrainer = liveBaseURL + '/api/trainer/getAll';
@@ -65,6 +74,8 @@ class ApiUrl {
   ///get users
   static String getUsers = liveBaseURL + '/api/auth/getAllUsers';
   static String editProfile = liveBaseURL + '/api/auth/edit';
+  static String profilePic = liveBaseURL + '/api/user/addProfilePic';
+  static String coverPic = liveBaseURL + "/api/user/addCoverPic";
 
   ///plan demo
   static String planById = liveBaseURL + '/api/plan/getPlanById';
@@ -72,4 +83,8 @@ class ApiUrl {
   static String getAllPlans =
       liveBaseURL + "/api/optionData/timeSlots/getSlots";
   static String bookDemo = liveBaseURL + "/api/schedule/appointment";
+
+  /// de Active account
+  static String deActiveAccount = liveBaseURL + "/api/auth/deactivateAccount";
+  static String deleteAccount = liveBaseURL + "/api/auth/deleteAccount";
 }

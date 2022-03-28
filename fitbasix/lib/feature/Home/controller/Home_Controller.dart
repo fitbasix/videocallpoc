@@ -73,7 +73,10 @@ class HomeController extends GetxController {
   Future<List<Comments>>? future;
   RxBool isPostUpdate = false.obs;
   RxString coverPhoto = "".obs;
+  RxString profilePhoto = "".obs;
   RxList<String> likedPost = RxList<String>([]);
+  RxBool updateWaterData = false.obs;
+  RxString openCommentId = "".obs;
 
   RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
     {},
@@ -92,7 +95,7 @@ class HomeController extends GetxController {
         builder: (BuildContext context, Widget? child) {
           return Theme(
               data: ThemeData.light().copyWith(
-                  colorScheme: ColorScheme.light(
+                  colorScheme: const ColorScheme.light(
                       primary: hintGrey, onPrimary: kPureBlack),
                   textButtonTheme: TextButtonThemeData(
                       style: TextButton.styleFrom(primary: hintGrey))),
@@ -113,7 +116,7 @@ class HomeController extends GetxController {
         builder: (BuildContext context, Widget? child) {
           return Theme(
               data: ThemeData.light().copyWith(
-                  colorScheme: ColorScheme.light(
+                  colorScheme: const ColorScheme.light(
                       primary: hintGrey, onPrimary: kPureBlack),
                   textButtonTheme: TextButtonThemeData(
                       style: TextButton.styleFrom(primary: hintGrey))),
@@ -125,12 +128,11 @@ class HomeController extends GetxController {
           DateTime(date.year, date.month, date.day, picked.hour, picked.minute);
       final format = DateFormat.jm();
       waterTimingTo.value = TimeOfDay(hour: picked.hour, minute: picked.minute);
-      ;
     }
   }
 
   String formatTimeOfDay(TimeOfDay tod) {
-    final now = new DateTime.now();
+    final now = DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
     final format = DateFormat.jm(); //"6:00 AM"
     return format.format(dt);
@@ -216,10 +218,9 @@ class HomeController extends GetxController {
         : "2");
 
     ///todo after
-    if (userProfileData.value.response!.data!.profile!.name == null) {
-      print("jdfjdsjkg");
+    if (userProfileData.value.response!.data!.profile!.email == null) {
       Get.deleteAll();
-      Get.toNamed(RouteName.enterDetails);
+      Get.offAndToNamed(RouteName.enterDetails);
     }
 
     coverPhoto.value =
@@ -235,7 +236,6 @@ class HomeController extends GetxController {
               .value.response!.data!.profile!.nutrition!.totalWaterRequired!);
       spgStatus.value = true;
     }
-    print("ooooo");
     isLoading.value = false;
     await getTrendingPost();
   }
@@ -246,6 +246,7 @@ class HomeController extends GetxController {
 
     if (initialPostData.value.response!.data!.length != 0) {
       trendingPostList.value = initialPostData.value.response!.data!;
+      log("wwww" + trendingPostList.toString());
     }
     print(trendingPostList.value.length.toString() + "length");
     if (trendingPostList.value.length < 5) {
@@ -260,7 +261,10 @@ class HomeController extends GetxController {
     final difference = date2.difference(notificationDate);
 
     if (difference.inDays > 8) {
-      return dateString;
+      var inputFormat = DateFormat('dd/MM/yyyy');
+      var inputDate = inputFormat.parse(dateString);
+      String date = DateFormat('dd LLLL yyyy').format(inputDate);
+      return date;
     } else if ((difference.inDays / 7).floor() >= 1) {
       return (numericDates) ? '1 week ago' : 'Last week';
     } else if (difference.inDays >= 2) {

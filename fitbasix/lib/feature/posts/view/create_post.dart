@@ -9,6 +9,7 @@ import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/posts/view/widgets/category_dropdown.dart';
 import 'package:fitbasix/feature/posts/view/widgets/discard_post_bottom_sheet.dart';
 import 'package:fitbasix/feature/posts/view/widgets/select_category_dialog.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -233,6 +234,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                             .profilePhoto
                                             .toString(),
                                         fit: BoxFit.cover,
+                                        placeholder: (context, url) =>
+                                            ShimmerEffect(),
+                                        errorWidget: (context, url, error) =>
+                                            ShimmerEffect(),
                                         height:
                                             40 * SizeConfig.widthMultiplier!,
                                         width:
@@ -246,7 +251,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                           0
                                       ? Text(
                                           _homeController.userProfileData.value
-                                              .response!.data!.profile!.name!,
+                                              .response!.data!.profile!.name
+                                              .toString(),
                                           style: AppTextStyle.boldBlackText
                                               .copyWith(
                                                   color: Theme.of(context)

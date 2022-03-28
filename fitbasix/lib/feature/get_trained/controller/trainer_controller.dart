@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import '../../plans/models/AvailableSlot.dart';
 import '../../plans/models/FullPlanDetailModel.dart';
 import '../../plans/models/allTimeSlot.dart';
+import '../model/timing_model.dart';
 
 class TrainerController extends GetxController {
   var fromTimeForFilter = DateTime.now().obs;
@@ -18,6 +19,8 @@ class TrainerController extends GetxController {
   RxBool isSelected = RxBool(false);
   RxBool isLoading = RxBool(false);
   Rx<Trainer> atrainerDetail = Trainer().obs;
+  Rx<bool> isPlanLoading = RxBool(true);
+  Rx<bool> isMyTrainerProfileLoading = RxBool(false);
   Rx<PlanModel> planModel = PlanModel().obs;
   Rx<AllTrainer> allTrainer = AllTrainer().obs;
   Rx<Plan> selectedPlan = Plan().obs;
@@ -56,6 +59,9 @@ class TrainerController extends GetxController {
   Rx<int> selectedTimeSlot = 0.obs;
   RxList<String> selectedDays = <String>[].obs;
   RxList<String> enrolledTrainer = <String>[].obs;
+  Rx<TimingModel> timingModel = TimingModel().obs;
+  RxBool isTiming = false.obs;
+  RxList<int> availability = <int>[].obs;
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;
@@ -79,8 +85,6 @@ class TrainerController extends GetxController {
   }
 
   Rx<SortByModel> filterOptions = SortByModel().obs;
-
-
 
   @override
   void onInit() {

@@ -155,20 +155,22 @@ class _PostScreenState extends State<PostScreen> {
                       comments: _homeController.post.value.comments.toString(),
                       addComment: () async {
                         log("reply test");
-                        HomeService.addComment(_homeController.post.value.id!,
+                        await HomeService.addComment(
+                            _homeController.post.value.id!,
                             _homeController.comment.value);
-                        log("reply test");
+
                         _homeController.commentController.clear();
 
                         var postData = await HomeService.getPostById(
                             _homeController.post.value.id!);
 
                         _homeController.post.value = postData.response!.data!;
-
+                        log("ccc" +
+                            _homeController.post.value.comments.toString());
                         _homeController.postComments.value =
                             await HomeService.fetchComment(
                                 postId: _homeController.post.value.id!);
-
+                        _homeController.viewReplies!.clear();
                         if (_homeController
                                 .postComments.value.response!.data!.length !=
                             0) {

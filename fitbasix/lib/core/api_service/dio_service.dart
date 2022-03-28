@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../feature/log_in/controller/login_controller.dart';
 import '../../feature/log_in/view/login_screen.dart';
+import '../constants/image_path.dart';
 
 class DioUtil {
   Dio? _instance;
@@ -71,8 +74,35 @@ class DioUtil {
               ModalRoute.withName('/'),
             );
             Get.deleteAll();
-          } else {
-            RequestOptions requestOptions = e.requestOptions;
+          }
+          if (e.response!.statusCode == 445) {
+            final responseData = jsonDecode(e.response.toString());
+            final SnackBar snackBar =
+            SnackBar(content: Text(responseData["response"]["message"]));
+            snackbarKey.currentState?.showSnackBar(snackBar);
+            InitializeQuickBlox().logOutUserSession();
+            final LoginController _controller = Get.put(LoginController());
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.clear();
+            await _controller.googleSignout();
+            navigator!.pushAndRemoveUntil<void>(
+              MaterialPageRoute<void>(
+                  builder: (BuildContext context) => LoginScreen()),
+              ModalRoute.withName('/'),
+            );
+            Get.deleteAll();
+          }
+          if (e.response!.statusCode == 446) {
+            final responseData = jsonDecode(e.response.toString());
+            final SnackBar snackBar = SnackBar(content: Text(responseData["response"]["message"]));
+            snackbarKey.currentState?.showSnackBar(snackBar);
+          }
+          if (e.response!.statusCode == 401 || e.response!.statusCode == 500) {
+            final responseData = jsonDecode(e.response.toString());
+            // print(e.requestOptions.path);
+            final SnackBar snackBar =
+                SnackBar(content: Text(responseData["response"]["message"]));
+            snackbarKey.currentState?.showSnackBar(snackBar);
           }
           handler.next(e);
         }

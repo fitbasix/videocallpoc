@@ -1,4 +1,6 @@
+
 import 'dart:convert';
+
 import 'dart:ui';
 
 import 'dart:developer';
@@ -39,6 +41,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../get_trained/view/get_trained_screen.dart';
 import '../../profile/services/profile_services.dart';
+import '../../spg/view/set_goal_screen.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -79,12 +82,12 @@ class HomeAndTrainerPage extends StatelessWidget {
               name: homeController.userProfileData.value.response == null
                   ? ""
                   : homeController
-                      .userProfileData.value.response!.data!.profile!.name!,
+                      .userProfileData.value.response!.data!.profile!.name.toString(),
               imageUrl: homeController.userProfileData.value.response == null
                   ? ""
-                  : homeController.userProfileData.value.response!.data!
+                  : homeController.profilePhoto.value==""?homeController.userProfileData.value.response!.data!
                       .profile!.profilePhoto
-                      .toString()),
+                      .toString():homeController.profilePhoto.value),
         ),
       ),
     );
@@ -123,6 +126,7 @@ class _HomePageState extends State<HomePage> {
 
             return;
           } else {
+            log(_homeController.trendingPostList.toString());
             if (_homeController.trendingPostList.last.id ==
                 postQuery.response!.data!.last.id) {
               _homeController.showLoader.value = false;
@@ -185,133 +189,132 @@ class _HomePageState extends State<HomePage> {
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,
                                 right: 16 * SizeConfig.widthMultiplier!),
-                            child: GestureDetector(
-                              onTap: () async {
-                                final ProfileController _profileController =
-                                    Get.put(ProfileController());
-                                Navigator.pushNamed(
-                                    context, RouteName.userprofileinfo);
-                                _profileController.initialPostData.value =
-                                    await ProfileServices.getUserPosts();
 
-                                if (_profileController.initialPostData.value
-                                        .response!.data!.length !=
-                                    0) {
-                                  _profileController.userPostList.value =
-                                      _profileController.initialPostData.value
-                                          .response!.data!;
-                                } else {
-                                  _profileController.userPostList.clear();
-                                }
-                              },
-                              child: Container(
-                                color: Colors.transparent,
-                                padding: EdgeInsets.only(
-                                    top: 8 * SizeConfig.heightMultiplier!,
-                                    bottom: 8 * SizeConfig.heightMultiplier!),
-                                child: Row(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                          30 * SizeConfig.widthMultiplier!),
-                                      child: Obx(() => CachedNetworkImage(
-                                          imageUrl: _homeController
-                                              .userProfileData
-                                              .value
-                                              .response!
-                                              .data!
-                                              .profile!
-                                              .profilePhoto
-                                              .toString(),
-                                          fit: BoxFit.cover,
-                                          height:
-                                              60 * SizeConfig.widthMultiplier!,
-                                          width: 60 *
-                                              SizeConfig.widthMultiplier!)),
+                            child: Container(
+                              color: Colors.transparent,
+                              padding: EdgeInsets.only(
+                                  top: 8 * SizeConfig.heightMultiplier!,
+                                  bottom: 8 * SizeConfig.heightMultiplier!),
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async{
+                                      final ProfileController _profileController=Get.put(ProfileController());
+                                      Navigator.pushNamed(context, RouteName.userprofileinfo);
+                                      _profileController.initialPostData.value =
+                                      await ProfileServices.getUserPosts();
+
+                                      if (_profileController
+                                          .initialPostData.value.response!.data!.length !=
+                                          0) {
+                                        _profileController.userPostList.value =
+                                        _profileController.initialPostData.value.response!.data!;
+                                      } else {
+                                        _profileController.userPostList.clear();
+                                      }
+                                    },
+                                    child: Container(
+                                      color: Colors.transparent,
+                                    constraints: BoxConstraints(
+                                      minWidth: Get.width-120*SizeConfig.widthMultiplier!,
+                                      // maxWidth: Get.width-100*SizeConfig.widthMultiplier!
                                     ),
-                                    SizedBox(
-                                      width: 15 * SizeConfig.widthMultiplier!,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          // mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            _homeController.userProfileData
-                                                        .value.response ==
-                                                    null
-                                                ? Container()
-                                                : Text(
-                                                    'hi_name'.trParams({
-                                                      'name': _homeController
-                                                          .userProfileData
-                                                          .value
-                                                          .response!
-                                                          .data!
-                                                          .profile!
-                                                          .name
-                                                          .toString()
-                                                    }),
-                                                    style: AppTextStyle
-                                                        .boldBlackText
-                                                        .copyWith(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText1
-                                                                ?.color),
-                                                  ),
-                                            // SizedBox(
-                                            //   width: 31 *
-                                            //       SizeConfig.widthMultiplier!,
-                                            // ),
-                                          ],
-                                        ),
-                                        Obx(
-                                          () => Text(
-                                            _homeController
-                                                        .userProfileData
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .profile!
-                                                        .bio ==
-                                                    null
-                                                ? 'home_page_subtitle'.tr
-                                                : _homeController
+
+                                      child: Row(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                30 * SizeConfig.widthMultiplier!),
+                                            child: Obx(() => CachedNetworkImage(
+                                                imageUrl:_homeController.profilePhoto.value==""? _homeController
                                                     .userProfileData
                                                     .value
                                                     .response!
                                                     .data!
                                                     .profile!
-                                                    .bio
-                                                    .toString(),
-                                            style: AppTextStyle.normalBlackText
-                                                .copyWith(
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1
-                                                        ?.color,
-                                                    fontSize: 12 *
-                                                        SizeConfig
-                                                            .textMultiplier!),
+                                                    .profilePhoto
+                                                    .toString():_homeController.profilePhoto.value,
+                                                placeholder: (context, url) => ShimmerEffect(),
+                                                errorWidget: (context, url, error) => ShimmerEffect(),
+                                                fit: BoxFit.cover,
+                                                height:
+                                                    60 * SizeConfig.widthMultiplier!,
+                                                width:
+                                                    60 * SizeConfig.widthMultiplier!)),
                                           ),
-                                        )
-                                      ],
+                                          SizedBox(
+                                            width: 15*SizeConfig.widthMultiplier!,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                // mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  _homeController.userProfileData.value
+                                                              .response ==
+                                                          null
+                                                      ? Container()
+                                                      : Text(
+                                                          'hi_name'.trParams({
+                                                            'name': _homeController
+                                                                .userProfileData
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .profile!
+                                                                .name.toString()
+                                                          }),
+                                                          style: AppTextStyle
+                                                              .boldBlackText.copyWith(
+                                                            color: Theme.of(context).textTheme.bodyText1?.color
+                                                          ),
+                                                        ),
+                                                  // SizedBox(
+                                                  //   width: 31 *
+                                                  //       SizeConfig.widthMultiplier!,
+                                                  // ),
+                                                ],
+                                              ),
+                                              Obx(
+                                                ()=> Container(
+                                                 width:  Get.width-130*SizeConfig.widthMultiplier!,
+                                                  child: Text(
+                                                    _homeController
+                                                        .userProfileData
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .profile!.bio == null?'home_page_subtitle'.tr:_homeController
+                                                        .userProfileData
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .profile!.bio.toString(),
+
+                                                    style: AppTextStyle.normalBlackText
+                                                        .copyWith(
+                                                        color: Theme.of(context).textTheme.bodyText1?.color,
+                                                            fontSize: 12 *
+                                                                SizeConfig.textMultiplier!),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        
+                                        ],
+                                      ),
                                     ),
-                                    Spacer(),
-                                    SvgPicture.asset(
-                                      ImagePath.bellIcon,
-                                      color: Theme.of(context)
-                                          .primaryIconTheme
-                                          .color,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  Spacer(),
+                                  SvgPicture.asset(ImagePath.bellIcon,
+                                    color: Theme.of(context).primaryIconTheme.color,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -424,43 +427,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ),
-                          // Padding(
-                          //   padding: EdgeInsets.only(
-                          //       left: 16 * SizeConfig.widthMultiplier!,
-                          //       right: 16 * SizeConfig.widthMultiplier!),
-                          //   child: Row(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //     children: [
-                          //       HomeTile(
-                          //         color: kPurple,
-                          //         title: 'live_stream'.tr,
-                          //         icon: Icons.videocam,
-                          //         onTap: () {
-                          //           Navigator.pushNamed(
-                          //               context, RouteName.liveStream);
-                          //         },
-                          //       ),
-                          //       HomeTile(
-                          //         color: kBlue,
-                          //         title: 'trainers'.tr,
-                          //         icon: Icons.person,
-                          //         onTap: () {
-                          //           // Navigator.pushNamed(
-                          //           //     context, RouteName.getTrainedScreen);
-                          //         },
-                          //       ),
-                          //       HomeTile(
-                          //         color: kLightGreen,
-                          //         title: 'my_plan'.tr,
-                          //         icon: Icons.list_alt,
-                          //         onTap: () {},
-                          //       )
-                          //     ],
-                          //   ),
-                          // ),
-                          // SizedBox(
-                          //   height: 38 * SizeConfig.heightMultiplier!,
-                          // ),
+
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,
@@ -1145,7 +1112,7 @@ class _HomePageState extends State<HomePage> {
                                   // height: 5000,
                                   child: Obx(
                                     () => _homeController.isPostUpdate.value
-                                        ? CustomizedCircularProgress()
+                                        ? Center(child: Container())
                                         : ListView.builder(
                                             itemCount: _homeController
                                                         .trendingPostList
@@ -1235,7 +1202,7 @@ class _HomePageState extends State<HomePage> {
                                                             .trendingPostList[
                                                                 index]
                                                             .userId!
-                                                            .name!,
+                                                            .name.toString(),
                                                         profilePhoto:
                                                             _homeController
                                                                 .trendingPostList[

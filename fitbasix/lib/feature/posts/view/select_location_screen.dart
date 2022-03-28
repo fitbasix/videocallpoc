@@ -50,6 +50,7 @@ class SelectLocationScreen extends StatelessWidget {
               ? Container()
               : _postController.isLoading.value == false
                   ? RightTick(onTap: () async {
+
                       _postController.isLoading.value = true;
                       _postController.postData.value =
                           await CreatePostService.createPost(
@@ -212,6 +213,7 @@ class SelectLocationScreen extends StatelessWidget {
                                             .secondaryText
                                             .toString(),
                                         onTap: () {
+                                          FocusScope.of(context).unfocus();
                                           print(_postController
                                               .searchSuggestion
                                               .value

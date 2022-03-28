@@ -20,6 +20,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../spg/view/set_goal_screen.dart';
+
 class FullPostTile extends StatefulWidget {
   FullPostTile(
       {Key? key,
@@ -341,6 +343,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                       imageUrl: widget.imageUrl[index],
                                       height: 360 * SizeConfig.widthMultiplier!,
                                       width: 360 * SizeConfig.widthMultiplier!,
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
                                       fit: BoxFit.cover,
                                     )
                                   : Container(
@@ -366,6 +372,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                       0
                                   ? CachedNetworkImage(
                                       imageUrl: widget.imageUrl[index],
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
                                       height: 360 * SizeConfig.widthMultiplier!,
                                       width: 360 * SizeConfig.widthMultiplier!,
                                       fit: BoxFit.contain,
@@ -577,7 +587,6 @@ class _FullPostTileState extends State<FullPostTile> {
                                                               _homeController
                                                                   .replyController,
                                                           onChanged: (value) {
-                                                            log("replllllll");
                                                             _homeController
                                                                 .reply
                                                                 .value = value;
@@ -640,7 +649,9 @@ class _FullPostTileState extends State<FullPostTile> {
                                                               context);
                                                           FocusScope.of(context)
                                                               .unfocus();
-
+                                                          _homeController
+                                                              .replyController
+                                                              .clear();
                                                           await HomeService.replyComment(
                                                               commentId: widget
                                                                   .commentsList[
@@ -661,6 +672,11 @@ class _FullPostTileState extends State<FullPostTile> {
                                                               .commentController
                                                               .value
                                                               .text);
+
+                                                          _homeController
+                                                                  .postComments
+                                                                  .value =
+                                                              CommentModel();
                                                           _homeController
                                                                   .postComments
                                                                   .value =
@@ -670,6 +686,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                           .post
                                                                           .value
                                                                           .id!);
+                                                          log(_homeController
+                                                              .postComments
+                                                              .value
+                                                              .toString());
                                                           // _homeController
                                                           //     .viewReplies!
                                                           //     .clear();
@@ -692,6 +712,17 @@ class _FullPostTileState extends State<FullPostTile> {
                                                           _homeController
                                                               .replyList
                                                               .clear();
+                                                          if (_homeController
+                                                                  .openCommentId
+                                                                  .value !=
+                                                              widget
+                                                                  .commentsList[
+                                                                      index]
+                                                                  .id!) {
+                                                            _homeController
+                                                                .viewReplies!
+                                                                .clear();
+                                                          }
 
                                                           setState(() {
                                                             _homeController
@@ -764,6 +795,11 @@ class _FullPostTileState extends State<FullPostTile> {
                                                   SizeConfig.heightMultiplier!),
                                           child: InkWell(
                                               onTap: () {
+                                                _homeController
+                                                        .openCommentId.value =
+                                                    _homeController
+                                                        .commentsList[index]
+                                                        .id!;
                                                 _homeController.viewReplies!
                                                     .replaceRange(
                                                         0,
@@ -897,6 +933,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                                                       Navigator.pop(context);
                                                                                                       FocusScope.of(context).unfocus();
                                                                                                       _homeController.replyController.clear();
+                                                                                                      print("iooo");
                                                                                                       await HomeService.replyComment(commentId: widget.commentsList[index].id!, taggedPerson: snapshot.data![index2].user!.id, comment: _homeController.reply.value);
                                                                                                       _postController.postTextController.clear();
 

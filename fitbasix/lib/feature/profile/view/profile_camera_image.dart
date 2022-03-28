@@ -12,7 +12,6 @@ import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -169,58 +168,29 @@ class _CameraProfileViewScreenState extends State<CameraProfileViewScreen> {
                           onTap: () async {
                             profileController.isLoading.value = true;
                             if (profileController.isCoverPhoto.value == false) {
-                              MediaUrl mediaUrl = await PostService.uploadMedia(
-                                  [File(profileController.imageFile!.path)]);
+                              homeController.profilePhoto.value =
+                                  await ProfileServices.UpdateProfilePhoto(
+                                      profilePhoto: [
+                                    File(profileController.imageFile!.path)
+                                  ]);
                               profileController.profilePhoto.value =
-                                  mediaUrl.response!.data![0];
+                                  homeController.profilePhoto.value;
                             } else {
-                              MediaUrl mediaUrl = await PostService.uploadMedia(
-                                  [File(profileController.imageFile!.path)]);
-                              profileController.coverPhoto.value =
-                                  mediaUrl.response!.data![0];
-                              await ProfileServices.UpdateCoverPhoto(
-                                  coverPhoto:
-                                      profileController.coverPhoto.value);
+                              // MediaUrl mediaUrl = await PostService.uploadMedia(
+                              //     [File(profileController.imageFile!.path)]);
+                              // profileController.coverPhoto.value =
+                              //     mediaUrl.response!.data![0];
                               homeController.coverPhoto.value =
-                                  mediaUrl.response!.data![0];
+                                  await ProfileServices.UpdateCoverPhoto(
+                                      coverPhoto: [
+                                    File(profileController.imageFile!.path)
+                                  ]);
+                              // homeController.coverPhoto.value =
+                              //     mediaUrl.response!.data![0];
                             }
 
                             profileController.isLoading.value = false;
                             Navigator.pop(context);
-                            // _postController.isLoading.value = true;
-                            //
-                            // // final List<File> selectedImage = [];
-                            // if (_postController.imageFile != null) {
-                            //   print('inside');
-                            //   _postController.selectedFiles
-                            //       .add(_postController.imageFile!);
-                            // }
-                            // // if (_postController.selectedMediaFiles.length != 0)
-                            // //   for (var item in _postController.selectedMediaFiles) {
-                            // //     _postController.selectedFiles.add(item);
-                            // //   }
-                            //
-                            // print(_postController.selectedFiles.length);
-                            // // selectedImage.addAllIf(
-                            // //     _postController.selectedMediaFiles.length != 0,
-                            // //     _postController.selectedMediaFiles);
-                            // _postController.imageFile = null;
-                            // _postController.uploadedFiles.value =
-                            // await PostService.uploadMedia(
-                            //   _postController.selectedFiles,
-                            // );
-                            //
-                            // _postController.isLoading.value = false;
-                            //
-                            // if (_postController.uploadedFiles.value.code == 0) {
-                            //   _postController.postData.value =
-                            //   await CreatePostService.createPost(
-                            //       postId: _postController.postId.value,
-                            //       files: _postController
-                            //           .uploadedFiles.value.response!.data);
-                            //   Navigator.pushNamed(context, RouteName.createPost);
-                            // }
-                            // _postController.isLoading.value = false;
                           },
                           child: Container(
                             height: 48 * SizeConfig.heightMultiplier!,
