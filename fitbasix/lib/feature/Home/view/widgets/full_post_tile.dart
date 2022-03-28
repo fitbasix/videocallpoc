@@ -74,6 +74,7 @@ class FullPostTile extends StatefulWidget {
 class _FullPostTileState extends State<FullPostTile> {
   final HomeController _homeController = Get.find();
   final PostController _postController = Get.find();
+  bool isReplyLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -649,97 +650,103 @@ class _FullPostTileState extends State<FullPostTile> {
                                                     ),
                                                     IconButton(
                                                         onPressed: () async {
-                                                          log("Icon");
-                                                          Navigator.pop(
-                                                              context);
-                                                          FocusScope.of(context)
-                                                              .unfocus();
-                                                          _homeController
-                                                              .replyController
-                                                              .clear();
-                                                          await HomeService.replyComment(
-                                                              commentId: widget
-                                                                  .commentsList[
-                                                                      index]
-                                                                  .id!,
-                                                              comment:
-                                                                  _homeController
-                                                                      .reply
-                                                                      .value);
-                                                          _homeController
-                                                              .replyController
-                                                              .clear();
+                                                          if(!isReplyLoading&&_homeController
+                                                              .replyController.text.isNotEmpty){
+                                                            isReplyLoading = true;
+                                                            log("Icon");
+                                                            Navigator.pop(
+                                                                context);
+                                                            FocusScope.of(context)
+                                                                .unfocus();
+                                                            _homeController
+                                                                .replyController
+                                                                .clear();
+                                                            await HomeService.replyComment(
+                                                                commentId: widget
+                                                                    .commentsList[
+                                                                index]
+                                                                    .id!,
+                                                                comment:
+                                                                _homeController
+                                                                    .reply
+                                                                    .value);
+                                                            _homeController
+                                                                .replyController
+                                                                .clear();
 
-                                                          _homeController
-                                                              .commentController
-                                                              .clear();
-                                                          log(_homeController
-                                                              .commentController
-                                                              .value
-                                                              .text);
+                                                            _homeController
+                                                                .commentController
+                                                                .clear();
+                                                            log(_homeController
+                                                                .commentController
+                                                                .value
+                                                                .text);
 
-                                                          _homeController
-                                                                  .postComments
+                                                            _homeController
+                                                                .postComments
+                                                                .value =
+                                                                CommentModel();
+                                                            _homeController
+                                                                .postComments
+                                                                .value =
+                                                            await HomeService
+                                                                .fetchComment(
+                                                                postId: _homeController
+                                                                    .post
+                                                                    .value
+                                                                    .id!);
+                                                            log(_homeController
+                                                                .postComments
+                                                                .value
+                                                                .toString());
+                                                            // _homeController
+                                                            //     .viewReplies!
+                                                            //     .clear();
+                                                            if (_homeController
+                                                                .postComments
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .length !=
+                                                                0) {
+                                                              _homeController
+                                                                  .commentsList
                                                                   .value =
-                                                              CommentModel();
-                                                          _homeController
-                                                                  .postComments
-                                                                  .value =
-                                                              await HomeService
-                                                                  .fetchComment(
-                                                                      postId: _homeController
-                                                                          .post
-                                                                          .value
-                                                                          .id!);
-                                                          log(_homeController
-                                                              .postComments
-                                                              .value
-                                                              .toString());
-                                                          // _homeController
-                                                          //     .viewReplies!
-                                                          //     .clear();
-                                                          if (_homeController
+                                                              _homeController
                                                                   .postComments
                                                                   .value
                                                                   .response!
-                                                                  .data!
-                                                                  .length !=
-                                                              0) {
+                                                                  .data!;
+                                                            }
                                                             _homeController
-                                                                    .commentsList
-                                                                    .value =
-                                                                _homeController
-                                                                    .postComments
-                                                                    .value
-                                                                    .response!
-                                                                    .data!;
-                                                          }
-                                                          _homeController
-                                                              .replyList
-                                                              .clear();
-                                                          if (_homeController
-                                                                  .openCommentId
-                                                                  .value !=
-                                                              widget
-                                                                  .commentsList[
-                                                                      index]
-                                                                  .id!) {
-                                                            _homeController
-                                                                .viewReplies!
+                                                                .replyList
                                                                 .clear();
-                                                          }
+                                                            if (_homeController
+                                                                .openCommentId
+                                                                .value !=
+                                                                widget
+                                                                    .commentsList[
+                                                                index]
+                                                                    .id!) {
+                                                              _homeController
+                                                                  .viewReplies!
+                                                                  .clear();
+                                                            }
 
-                                                          setState(() {
-                                                            _homeController
-                                                                    .future =
-                                                                _homeController.fetchReplyComment(
-                                                                    commentId: widget
-                                                                        .commentsList[
-                                                                            index]
-                                                                        .id!,
-                                                                    skip: 0,
-                                                                    limit: 1);
-                                                          });
+                                                            setState(() {
+                                                              _homeController
+                                                                  .future =
+                                                                  _homeController.fetchReplyComment(
+                                                                      commentId: widget
+                                                                          .commentsList[
+                                                                      index]
+                                                                          .id!,
+                                                                      skip: 0,
+                                                                      limit: 1);
+                                                              isReplyLoading = false;
+                                                            });
+
+                                                          }
                                                         },
                                                         icon: Icon(
                                                           Icons.send,
@@ -935,23 +942,28 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                                                 ),
                                                                                                 IconButton(
                                                                                                     onPressed: () async {
-                                                                                                      Navigator.pop(context);
-                                                                                                      FocusScope.of(context).unfocus();
-                                                                                                      _homeController.replyController.clear();
-                                                                                                      print("iooo");
-                                                                                                      await HomeService.replyComment(commentId: widget.commentsList[index].id!, taggedPerson: snapshot.data![index2].user!.id, comment: _homeController.reply.value);
-                                                                                                      _postController.postTextController.clear();
+                                                                                                      if(!isReplyLoading&&_homeController.replyController.text.isNotEmpty){
+                                                                                                        isReplyLoading = true;
+                                                                                                        Navigator.pop(context);
+                                                                                                        FocusScope.of(context).unfocus();
+                                                                                                        _homeController.replyController.clear();
+                                                                                                        print("iooo");
+                                                                                                        await HomeService.replyComment(commentId: widget.commentsList[index].id!, taggedPerson: snapshot.data![index2].user!.id, comment: _homeController.reply.value);
+                                                                                                        _postController.postTextController.clear();
 
-                                                                                                      _homeController.postComments.value = await HomeService.fetchComment(postId: _homeController.post.value.id!);
+                                                                                                        _homeController.postComments.value = await HomeService.fetchComment(postId: _homeController.post.value.id!);
 
-                                                                                                      if (_homeController.postComments.value.response!.data!.length != 0) {
-                                                                                                        _homeController.commentsList.value = _homeController.postComments.value.response!.data!;
+                                                                                                        if (_homeController.postComments.value.response!.data!.length != 0) {
+                                                                                                          _homeController.commentsList.value = _homeController.postComments.value.response!.data!;
+                                                                                                        }
+                                                                                                        _homeController.replyList.clear();
+
+                                                                                                        setState(() {
+                                                                                                          _homeController.future = _homeController.fetchReplyComment(commentId: widget.commentsList[index].id!, skip: 0, limit: 1);
+                                                                                                          isReplyLoading = false;
+                                                                                                        });
+
                                                                                                       }
-                                                                                                      _homeController.replyList.clear();
-
-                                                                                                      setState(() {
-                                                                                                        _homeController.future = _homeController.fetchReplyComment(commentId: widget.commentsList[index].id!, skip: 0, limit: 1);
-                                                                                                      });
                                                                                                     },
                                                                                                     icon: Icon(
                                                                                                       Icons.send,

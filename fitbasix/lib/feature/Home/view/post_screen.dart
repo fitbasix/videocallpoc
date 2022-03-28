@@ -27,6 +27,7 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   final HomeController _homeController = Get.find();
+  bool isCommentLoading = false;
 
   @override
   void initState() {
@@ -154,30 +155,34 @@ class _PostScreenState extends State<PostScreen> {
                               .LikedPostMap[_homeController.post.value.id]!,
                       comments: _homeController.post.value.comments.toString(),
                       addComment: () async {
-                        log("reply test");
-                        await HomeService.addComment(
-                            _homeController.post.value.id!,
-                            _homeController.comment.value);
-                        // _homeController.viewReplies!.clear();
-                        _homeController.commentController.clear();
+                       if(!isCommentLoading&&_homeController.commentController.text.isNotEmpty){
+                         print("got here");
+                         isCommentLoading = true;
+                         log("reply test");
+                         await HomeService.addComment(
+                             _homeController.post.value.id!,
+                             _homeController.comment.value);
+                         // _homeController.viewReplies!.clear();
+                         _homeController.commentController.clear();
+                         var postData = await HomeService.getPostById(
+                             _homeController.post.value.id!);
 
-                        var postData = await HomeService.getPostById(
-                            _homeController.post.value.id!);
-
-                        _homeController.post.value = postData.response!.data!;
-                        log("ccc" +
-                            _homeController.post.value.comments.toString());
-                        _homeController.postComments.value =
-                            await HomeService.fetchComment(
-                                postId: _homeController.post.value.id!);
-                        _homeController.viewReplies!.clear();
-                        if (_homeController
-                                .postComments.value.response!.data!.length !=
-                            0) {
-                          _homeController.commentsList.value = _homeController
-                              .postComments.value.response!.data!;
-                        }
-                        setState(() {});
+                         _homeController.post.value = postData.response!.data!;
+                         log("ccc" +
+                             _homeController.post.value.comments.toString());
+                         _homeController.postComments.value =
+                         await HomeService.fetchComment(
+                             postId: _homeController.post.value.id!);
+                         _homeController.viewReplies!.clear();
+                         if (_homeController
+                             .postComments.value.response!.data!.length !=
+                             0) {
+                           _homeController.commentsList.value = _homeController
+                               .postComments.value.response!.data!;
+                         }
+                         setState(() {});
+                         isCommentLoading = false;
+                       }
                       },
                       postId: _homeController.post.value.id!,
                       comment: null,
