@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
@@ -20,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/routes/app_routes.dart';
 
 class HomeController extends GetxController {
+  final RemoteConfig remoteConfig = RemoteConfig.instance;
   RxInt selectedIndex = 0.obs;
   RxInt userQuickBloxId = 0.obs;
   RxBool isLoading = RxBool(false);
