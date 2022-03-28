@@ -434,20 +434,25 @@ class _PostTileState extends State<PostTile> {
                   top: 16 * SizeConfig.heightMultiplier!),
               child: Row(
                 children: [
-                  InkWell(
+                  GestureDetector(
                     onTap: widget.hitLike,
                     child: widget.isLiked
-                        ? Icon(
-                            Icons.favorite,
-                            color: Color(0xFFF66868),
-                          )
-                        : Icon(
-                            Icons.favorite_outline,
-                            color: kGreyColor,
-                          ),
-                  ),
-                  SizedBox(
-                    width: 5 * SizeConfig.widthMultiplier!,
+                        ? Container(
+                          color: Colors.transparent,
+                          padding: EdgeInsets.only(right: 5 * SizeConfig.widthMultiplier!),
+                          child: const Icon(
+                              Icons.favorite,
+                              color: Color(0xFFF66868),
+                            ),
+                        )
+                        : Container(
+                      color: Colors.transparent,
+                      padding: EdgeInsets.only(right: 5 * SizeConfig.widthMultiplier!),
+                          child: const Icon(
+                              Icons.favorite_outline,
+                              color: kGreyColor,
+                            ),
+                        ),
                   ),
                   Text(
                     'likes'.trParams({'no_likes': widget.likes}),

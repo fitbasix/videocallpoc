@@ -38,6 +38,7 @@ import '../../Home/view/my_trainers_screen.dart';
 import '../../message/view/chat_ui.dart';
 
 class TrainerProfileScreen extends StatefulWidget {
+
   const TrainerProfileScreen({Key? key}) : super(key: key);
 
   @override
@@ -118,7 +119,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   onMessage: () async {
                     print("the button value is:" + isMessageLoading.toString());
                     ///remove ! after testing
-                   if( _trainerController
+                   if( !_trainerController
                        .atrainerDetail
                        .value
                        .isEnrolled!){

@@ -39,7 +39,7 @@ class TrainerServices {
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response =
         await dio!.post(ApiUrl.getTrainerById, data: {"trainerId": trainerId});
-    debugPrint(response.toString());
+    debugPrint(response.toString()+" oooooo");
     return trainerByIdModelFromJson(response.toString());
     //TrainerModel
     //return trainerModelFromJson(response.toString());
