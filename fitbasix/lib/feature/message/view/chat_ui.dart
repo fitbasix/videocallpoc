@@ -212,64 +212,60 @@ class _ChatScreenState extends State<ChatScreen> {
                     )
                   : Expanded(
                     child: Shimmer.fromColors(
-                      child: Expanded(
-                        child: Column(
-
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Spacer(),
-                            Container(
-                              margin: EdgeInsets.only(left: 48*SizeConfig.widthMultiplier!),
-                              height: 28*SizeConfig.heightMultiplier!,
-                              width: 176*SizeConfig.widthMultiplier!,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Spacer(),
+                          Container(
+                            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!),
+                            height: 28*SizeConfig.heightMultiplier!,
+                            width: 176*SizeConfig.widthMultiplier!,
+                            color: Color(0xFF3646464),
+                          ),
+                          SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                          Container(
+                            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!),
+                            height: 49*SizeConfig.heightMultiplier!,
+                            width: 215*SizeConfig.widthMultiplier!,
+                            color: Color(0xFF3646464),
+                          ),
+                          SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                          Container(
+                            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!),
+                            height: 28*SizeConfig.heightMultiplier!,
+                            width: 176*SizeConfig.widthMultiplier!,
+                            color: Color(0xFF3646464),
+                          ),
+                          SizedBox(height: 16*SizeConfig.heightMultiplier!),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              margin: EdgeInsets.only(right: 16*SizeConfig.widthMultiplier!),
+                              height: 42*SizeConfig.heightMultiplier!,
+                              width: 191*SizeConfig.widthMultiplier!,
                               color: Color(0xFF3646464),
                             ),
-                            SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-                            Container(
-                              margin: EdgeInsets.only(left: 48*SizeConfig.widthMultiplier!),
-                              height: 49*SizeConfig.heightMultiplier!,
-                              width: 215*SizeConfig.widthMultiplier!,
+                          ),
+                          SizedBox(height: 16*SizeConfig.heightMultiplier!),
+                          Container(
+                            margin: EdgeInsets.only(left: 16*SizeConfig.widthMultiplier!),
+                            height: 28*SizeConfig.heightMultiplier!,
+                            width: 176*SizeConfig.widthMultiplier!,
+                            color: Color(0xFF3646464),
+                          ),
+                          SizedBox(height: 16*SizeConfig.heightMultiplier!),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              margin: EdgeInsets.only(right: 16*SizeConfig.widthMultiplier!),
+                              height: 78*SizeConfig.heightMultiplier!,
+                              width: 232*SizeConfig.widthMultiplier!,
                               color: Color(0xFF3646464),
                             ),
-                            SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-                            Container(
-                              margin: EdgeInsets.only(left: 48*SizeConfig.widthMultiplier!),
-                              height: 28*SizeConfig.heightMultiplier!,
-                              width: 176*SizeConfig.widthMultiplier!,
-                              color: Color(0xFF3646464),
-                            ),
-                            SizedBox(height: 16*SizeConfig.heightMultiplier!),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                margin: EdgeInsets.only(right: 16*SizeConfig.widthMultiplier!),
-                                height: 42*SizeConfig.heightMultiplier!,
-                                width: 191*SizeConfig.widthMultiplier!,
-                                color: Color(0xFF3646464),
-                              ),
-                            ),
-                            SizedBox(height: 16*SizeConfig.heightMultiplier!),
-                            Container(
-                              margin: EdgeInsets.only(left: 48*SizeConfig.widthMultiplier!),
-                              height: 28*SizeConfig.heightMultiplier!,
-                              width: 176*SizeConfig.widthMultiplier!,
-                              color: Color(0xFF3646464),
-                            ),
-                            SizedBox(height: 16*SizeConfig.heightMultiplier!),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                margin: EdgeInsets.only(right: 16*SizeConfig.widthMultiplier!),
-                                height: 78*SizeConfig.heightMultiplier!,
-                                width: 232*SizeConfig.widthMultiplier!,
-                                color: Color(0xFF3646464),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      baseColor: Color.fromARGB(0, 255, 255, 255)
-                      .withOpacity(0),
+                      baseColor: Color.fromARGB(0, 255, 255, 255).withOpacity(0.1),
                       highlightColor:
                     Color.fromARGB(1, 255, 255, 255)
                       .withOpacity(0.46),),
