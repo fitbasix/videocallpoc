@@ -1136,13 +1136,13 @@ class _TrainerPageState extends State<TrainerPage> {
                                                     setState(() {});
                                                   },
                                                   addComment: () {
-                                                    HomeService.addComment(
-                                                        _trainerController
-                                                            .trainerPostList[
-                                                                index]
-                                                            .id!,
-                                                        _homeController
-                                                            .comment.value);
+                                                    // HomeService.addComment(
+                                                    //     _trainerController
+                                                    //         .trainerPostList[
+                                                    //             index]
+                                                    //         .id!,
+                                                    //     _homeController
+                                                    //         .comment.value);
 
                                                     setState(() {});
 

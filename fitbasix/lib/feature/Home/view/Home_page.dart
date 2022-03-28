@@ -190,6 +190,7 @@ class _HomePageState extends State<HomePage> {
                                   GestureDetector(
                                     onTap: () async{
                                       final ProfileController _profileController=Get.put(ProfileController());
+                                      _profileController.directFromHome.value=true;
                                       Navigator.pushNamed(context, RouteName.userprofileinfo);
                                       _profileController.initialPostData.value =
                                       await ProfileServices.getUserPosts();
@@ -1264,19 +1265,19 @@ class _HomePageState extends State<HomePage> {
                                                           setState(() {});
                                                         },
                                                         addComment: () {
-                                                          HomeService.addComment(
-                                                              _homeController
-                                                                  .trendingPostList[
-                                                                      index]
-                                                                  .id!,
-                                                              _homeController
-                                                                  .comment.value);
-
-                                                          setState(() {});
-
-                                                          _homeController
-                                                              .commentController
-                                                              .clear();
+                                                          // HomeService.addComment(
+                                                          //     _homeController
+                                                          //         .trendingPostList[
+                                                          //             index]
+                                                          //         .id!,
+                                                          //     _homeController
+                                                          //         .comment.value);
+                                                          //
+                                                          // setState(() {});
+                                                          //
+                                                          // _homeController
+                                                          //     .commentController
+                                                          //     .clear();
                                                         },
                                                         postId: _homeController
                                                             .trendingPostList[

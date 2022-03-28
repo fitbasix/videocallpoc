@@ -158,7 +158,7 @@ class _PostScreenState extends State<PostScreen> {
                         await HomeService.addComment(
                             _homeController.post.value.id!,
                             _homeController.comment.value);
-
+                        // _homeController.viewReplies!.clear();
                         _homeController.commentController.clear();
 
                         var postData = await HomeService.getPostById(
