@@ -38,7 +38,10 @@ import '../../Home/view/my_trainers_screen.dart';
 import '../../message/view/chat_ui.dart';
 
 class TrainerProfileScreen extends StatefulWidget {
-  const TrainerProfileScreen({Key? key}) : super(key: key);
+  String? trainerID;
+   TrainerProfileScreen({
+    this.trainerID,
+    Key? key}) : super(key: key);
 
   @override
   State<TrainerProfileScreen> createState() => _TrainerProfileScreenState();
@@ -68,6 +71,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   @override
   void initState() {
     getAllTrainerPlanData();
+    if(widget.trainerID!=null){
+      setTrainerDataForUniLink();
+    }
     super.initState();
   }
 
@@ -289,6 +295,15 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
         ),
       ),
     );
+  }
+
+  void setTrainerDataForUniLink() async {
+    _trainerController.isMyTrainerProfileLoading.value = true;
+    var response =  await TrainerServices.getATrainerDetail(widget.trainerID!);
+    _trainerController.atrainerDetail.value = response.response!.data!;
+    _trainerController.isMyTrainerProfileLoading.value = false;
+    _trainerController.setUp();
+    _homeController.setup();
   }
 }
 
