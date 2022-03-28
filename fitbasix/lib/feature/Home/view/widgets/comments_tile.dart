@@ -161,14 +161,15 @@ class _CommentsTileState extends State<CommentsTile> {
                     ),
                     InkWell(
                       onTap: widget.onLikeComment,
-                      child: Icon(
-                        Icons.favorite,
-                        color: Theme.of(context).textTheme.headline6?.color,
-                        size: 14*SizeConfig.heightMultiplier!,
+                      child: Container(
+                        color: Colors.transparent,
+                        padding: EdgeInsets.only(right: 5 * SizeConfig.widthMultiplier!),
+                        child: Icon(
+                          Icons.favorite,
+                          color: Theme.of(context).textTheme.headline6?.color,
+                          size: 14*SizeConfig.heightMultiplier!,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 5 * SizeConfig.widthMultiplier!,
                     ),
                     Text(
                         'likes'.trParams({'no_likes': widget.likes.toString()}),

@@ -101,6 +101,8 @@ class MyTrainer {
     this.name,
     this.profilePhoto,
     this.quickBlox,
+    this.time
+
   });
 
   String? id;
@@ -112,6 +114,7 @@ class MyTrainer {
   String? name;
   String? profilePhoto;
   int? quickBlox;
+  String? time;
 
   factory MyTrainer.fromJson(Map<String, dynamic> json) => MyTrainer(
     id: json["_id"] == null ? null : json["_id"],
@@ -123,6 +126,7 @@ class MyTrainer {
     name: json["name"] == null ? null : json["name"],
     profilePhoto: json["profilePhoto"] == null ? null : json["profilePhoto"],
     quickBlox: json["quickBlox"],
+    time: json["time"]
   );
 
   Map<String, dynamic> toJson() => {
