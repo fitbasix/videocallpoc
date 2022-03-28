@@ -1,7 +1,9 @@
+
+import 'dart:convert';
+
 import 'dart:ui';
 
 import 'dart:developer';
-
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,31 +46,39 @@ import '../../spg/view/set_goal_screen.dart';
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
-  final List<Widget> screens = [
-    HomePage(),
-    GetTrainedScreen(),
-    //MyTrainersScreen(),
-    CreatePostScreen(),
-    ToolsScreen()
-  ];
   @override
   Widget build(BuildContext context) {
+    var dependencyupdate =
+        homeController.remoteConfig.getString('UiDependency');
+    var jsonOb = json.decode(dependencyupdate);
+
+    final List<Widget> screens = [
+      if (jsonOb['home'] == 1) HomePage(),
+      if (jsonOb['get_trained'] == 1) GetTrainedScreen(),
+      if (jsonOb['post'] == 1) CreatePostScreen(),
+      if (jsonOb['tools'] == 1) ToolsScreen(),
+    ];
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       key: homeController.drawerKey,
       body: Obx(() => screens[homeController.selectedIndex.value]),
       // bottomNavigationBar: CustomizedBottomAppBar(),
 
-      bottomNavigationBar: CustomBottomNavigationBar(),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        length: screens.length,
+      ),
       endDrawer: Drawer(
         child: Obx(
           () => MenuScreen(
               imageCoverPic:
                   homeController.userProfileData.value.response == null
                       ? ""
-                      :homeController.coverPhoto.value==""? homeController.userProfileData.value.response!.data!
-                          .profile!.coverPhoto
-                          .toString():homeController.coverPhoto.value,
+                      : homeController.coverPhoto.value == ""
+                          ? homeController.userProfileData.value.response!.data!
+                              .profile!.coverPhoto
+                              .toString()
+                          : homeController.coverPhoto.value,
               name: homeController.userProfileData.value.response == null
                   ? ""
                   : homeController
@@ -93,7 +103,6 @@ class _HomePageState extends State<HomePage> {
   final HomeController _homeController = Get.find();
   final PostController postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
-
 
   @override
   void initState() {
@@ -180,6 +189,7 @@ class _HomePageState extends State<HomePage> {
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,
                                 right: 16 * SizeConfig.widthMultiplier!),
+
                             child: Container(
                               color: Colors.transparent,
                               padding: EdgeInsets.only(
@@ -315,79 +325,104 @@ class _HomePageState extends State<HomePage> {
                           //live stream
                           Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: 16*SizeConfig.widthMultiplier!,
-                              vertical: 8*SizeConfig.heightMultiplier!,
+                              horizontal: 16 * SizeConfig.widthMultiplier!,
+                              vertical: 8 * SizeConfig.heightMultiplier!,
                             ),
                             color: kBlack,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                               Column(
-                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                 mainAxisAlignment: MainAxisAlignment.start,
-                                 children: [
-                                 Text('Jonathan is streaming live now',
-                                   style: AppTextStyle.black600Text.copyWith(
-                                     color: Theme.of(context).textTheme.bodyText1?.color
-                                   ),
-                                 ),
-                                 SizedBox(height: 8*SizeConfig.heightMultiplier!),
-                                 Container(
-                                   padding: EdgeInsets.only(
-                                     top: 4*SizeConfig.heightMultiplier!,
-                                     bottom: 4*SizeConfig.heightMultiplier!,
-                                     right: 8*SizeConfig.widthMultiplier!,
-                                     left: 8.67*SizeConfig.widthMultiplier!
-                                   ),
-                                   height: 24*SizeConfig.heightMultiplier!,
-                                 //  width:98*SizeConfig.widthMultiplier!,
-                                   decoration: BoxDecoration(
-                                     color: Theme.of(context).textTheme.headline4?.color,
-                                     borderRadius:
-                                     BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-                                   ),
-                                   child: Row(
-                                     crossAxisAlignment: CrossAxisAlignment.center,
-                                     mainAxisAlignment: MainAxisAlignment.center,
-                                     children: [
-                                       Icon(
-                                         Icons.visibility,
-                                         color: Theme.of(context).primaryColor,
-                                         size: 20,
-                                       ),
-                                       SizedBox(
-                                         width: 4.67*SizeConfig.widthMultiplier!,
-                                       ),
-                                   Text('28 viewers',
-                                     style: AppTextStyle.black600Text.copyWith(
-                                         fontSize: (12) * SizeConfig.textMultiplier!,
-                                         color: Theme.of(context).textTheme.bodyText1?.color
-                                     )),
-                                     ],
-                                   ),
-                                 )
-                               ],
-                               ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Jonathan is streaming live now',
+                                      style: AppTextStyle.black600Text.copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.color),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            8 * SizeConfig.heightMultiplier!),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: 4 * SizeConfig.heightMultiplier!,
+                                          bottom:
+                                              4 * SizeConfig.heightMultiplier!,
+                                          right:
+                                              8 * SizeConfig.widthMultiplier!,
+                                          left: 8.67 *
+                                              SizeConfig.widthMultiplier!),
+                                      height: 24 * SizeConfig.heightMultiplier!,
+                                      //  width:98*SizeConfig.widthMultiplier!,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .headline4
+                                            ?.color,
+                                        borderRadius: BorderRadius.circular(
+                                            8 * SizeConfig.heightMultiplier!),
+                                      ),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.visibility,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 4.67 *
+                                                SizeConfig.widthMultiplier!,
+                                          ),
+                                          Text('28 viewers',
+                                              style: AppTextStyle.black600Text
+                                                  .copyWith(
+                                                      fontSize: (12) *
+                                                          SizeConfig
+                                                              .textMultiplier!,
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color)),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                                 Spacer(),
                                 //join button
                                 GestureDetector(
-                                  onTap: (){},
+                                  onTap: () {},
                                   child: Container(
-                                    height: 36*SizeConfig.heightMultiplier!,
-                                    width:96*SizeConfig.widthMultiplier!,
+                                    height: 36 * SizeConfig.heightMultiplier!,
+                                    width: 96 * SizeConfig.widthMultiplier!,
                                     decoration: BoxDecoration(
                                       color: Color(0xFFFF5A5A),
                                       borderRadius: BorderRadius.circular(
                                           8 * SizeConfig.heightMultiplier!),
                                     ),
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: 35*SizeConfig.widthMultiplier!,
-                                      vertical: 8*SizeConfig.heightMultiplier!
+                                        horizontal:
+                                            35 * SizeConfig.widthMultiplier!,
+                                        vertical:
+                                            8 * SizeConfig.heightMultiplier!),
+                                    child: Text(
+                                      'Join'.tr,
+                                      style: AppTextStyle.black600Text.copyWith(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.color),
                                     ),
-                                    child: Text('Join'.tr,style: AppTextStyle.black600Text.copyWith(
-                                      color: Theme.of(context).textTheme.bodyText1?.color
-                                    ),),
                                   ),
                                 )
                               ],
@@ -404,18 +439,20 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   'today'.tr,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      fontSize:
-                                          16 * SizeConfig.textMultiplier!,
-                                    color: Theme.of(context).textTheme.bodyText2?.color
-                                  ),
+                                      fontSize: 16 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          ?.color),
                                 ),
                                 Text(
                                   formatter,
                                   style: AppTextStyle.boldBlackText.copyWith(
-                                      fontSize:
-                                          14 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context).textTheme.bodyText2?.color
-                                  ),
+                                      fontSize: 14 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          ?.color),
                                 )
                               ],
                             ),
@@ -476,7 +513,11 @@ class _HomePageState extends State<HomePage> {
                                                           .totalWaterRequired!
                                                           .toDouble(),
                                                       () async {
-                                                        print("homeController.waterLevel.value"+_homeController.waterLevel.value.toString());
+                                                  print(
+                                                      "homeController.waterLevel.value" +
+                                                          _homeController
+                                                              .waterLevel.value
+                                                              .toString());
                                                   _homeController
                                                       .isConsumptionLoading
                                                       .value = true;
@@ -588,7 +629,7 @@ class _HomePageState extends State<HomePage> {
                                                       //homecontroller
                                                       _homeController,
                                                       //Passing context for theme
-                                                  context))),
+                                                      context))),
                                           SizedBox(
                                             width: 8.0 *
                                                 SizeConfig.widthMultiplier!,
@@ -609,10 +650,10 @@ class _HomePageState extends State<HomePage> {
                                                     builder: (_) =>
                                                         HealthApp());
                                               },
-                                              //is connected
-                                              true,
+                                                  //is connected
+                                                  true,
                                                   //Passing context for theme
-                                              context),
+                                                  context),
                                             ),
                                           )
                                         ],
@@ -704,9 +745,8 @@ class _HomePageState extends State<HomePage> {
                                                   .toInt()
                                                   .toString() +
                                               " kcal",
-                                      //passing context for theme
-                                      context
-                                      ),
+                                          //passing context for theme
+                                          context),
                                       SizedBox(
                                           height: 20 *
                                               SizeConfig.heightMultiplier!),
@@ -723,7 +763,11 @@ class _HomePageState extends State<HomePage> {
                                                     style: AppTextStyle
                                                         .normalBlackText
                                                         .copyWith(
-                                                      color: Theme.of(context).textTheme.bodyText1?.color,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1
+                                                                ?.color,
                                                             fontSize: 14 *
                                                                 SizeConfig
                                                                     .textMultiplier!)),
@@ -742,13 +786,15 @@ class _HomePageState extends State<HomePage> {
                                                         horizontal: 23 *
                                                             SizeConfig
                                                                 .widthMultiplier!),
-                                                    child: Text('update'.tr,
-                                                        style: AppTextStyle
-                                                            .normalWhiteText
-                                                            .copyWith(
-                                                                fontSize: 14 *
-                                                                    SizeConfig
-                                                                        .textMultiplier!),),
+                                                    child: Text(
+                                                      'update'.tr,
+                                                      style: AppTextStyle
+                                                          .normalWhiteText
+                                                          .copyWith(
+                                                              fontSize: 14 *
+                                                                  SizeConfig
+                                                                      .textMultiplier!),
+                                                    ),
                                                   ),
                                                 )
                                               ],
@@ -809,44 +855,53 @@ class _HomePageState extends State<HomePage> {
                                           children: [
                                             ClipRRect(
                                               borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(8),
-                                                topRight: Radius.circular(8)
-                                              ),
+                                                  topLeft: Radius.circular(8),
+                                                  topRight: Radius.circular(8)),
                                               child: Image.asset(
                                                 ImagePath.setgoalfeedImage,
-                                                height: 125 * SizeConfig.heightMultiplier!,
+                                                height: 125 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
                                                 width: Get.width,
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
                                             Container(
-                                              height: 125 * SizeConfig.heightMultiplier!,
+                                              height: 125 *
+                                                  SizeConfig.heightMultiplier!,
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.only(
                                                     topLeft: Radius.circular(8),
-                                                    topRight: Radius.circular(8)
-                                                ),
+                                                    topRight:
+                                                        Radius.circular(8)),
                                                 gradient: RadialGradient(
-                                                  colors: [
-                                                  Color(0xff000000).withOpacity(0),
-                                                  Color(0xff000000).withOpacity(0.22),
-                                                  Color(0xff000000).withOpacity(1.0),
-                                                ],
-                                                  focal: Alignment.center,
-                                                  radius: 8.0
-                                                ),
+                                                    colors: [
+                                                      Color(0xff000000)
+                                                          .withOpacity(0),
+                                                      Color(0xff000000)
+                                                          .withOpacity(0.22),
+                                                      Color(0xff000000)
+                                                          .withOpacity(1.0),
+                                                    ],
+                                                    focal: Alignment.center,
+                                                    radius: 8.0),
                                               ),
                                             ),
                                             Positioned(
                                                 top: 63,
                                                 left: 16,
                                                 right: 178,
-                                                child: Text('set_goal_heading'.tr,
-                                                style: AppTextStyle.boldBlackText.copyWith(
-                                                  fontSize: 14*SizeConfig.textMultiplier!,
-                                                  color: kPureWhite
-                                                ),
-                                                maxLines: 3,))
+                                                child: Text(
+                                                  'set_goal_heading'.tr,
+                                                  style: AppTextStyle
+                                                      .boldBlackText
+                                                      .copyWith(
+                                                          fontSize: 14 *
+                                                              SizeConfig
+                                                                  .textMultiplier!,
+                                                          color: kPureWhite),
+                                                  maxLines: 3,
+                                                ))
                                           ],
                                         ),
                                         SizedBox(
@@ -854,8 +909,8 @@ class _HomePageState extends State<HomePage> {
                                                 SizeConfig.widthMultiplier!),
                                         // above
                                         Container(
-                                          padding:
-                                          EdgeInsets.only(left: 16, bottom: 16),
+                                          padding: EdgeInsets.only(
+                                              left: 16, bottom: 16),
                                           child: Row(
                                             children: [
                                               Column(
@@ -886,7 +941,11 @@ class _HomePageState extends State<HomePage> {
                                                         style: AppTextStyle
                                                             .smallBlackText
                                                             .copyWith(
-                                                          color: Theme.of(context).textTheme.bodyText1?.color,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    ?.color,
                                                                 fontSize: 14 *
                                                                     SizeConfig
                                                                         .textMultiplier!),
@@ -922,7 +981,11 @@ class _HomePageState extends State<HomePage> {
                                                         style: AppTextStyle
                                                             .smallBlackText
                                                             .copyWith(
-                                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    ?.color,
                                                                 fontSize: 14 *
                                                                     SizeConfig
                                                                         .textMultiplier!),
@@ -975,7 +1038,7 @@ class _HomePageState extends State<HomePage> {
                               child: Row(
                                 children: [
                                   SvgPicture.asset(
-                                      ImagePath.searchFavoriteIcon,
+                                    ImagePath.searchFavoriteIcon,
                                   ),
                                   SizedBox(
                                     width: 16 * SizeConfig.widthMultiplier!,
@@ -986,7 +1049,10 @@ class _HomePageState extends State<HomePage> {
                                       'explore_fitbasix'.tr,
                                       style:
                                           AppTextStyle.boldBlackText.copyWith(
-                                            color: Theme.of(context).textTheme.bodyText1?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                         fontSize:
                                             14 * SizeConfig.textMultiplier!,
                                       ),
@@ -1032,7 +1098,10 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     'trending_posts'.tr,
                                     style: AppTextStyle.boldBlackText.copyWith(
-                                      color: Theme.of(context).textTheme.bodyText1?.color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                         fontSize:
                                             16 * SizeConfig.textMultiplier!),
                                   ),
@@ -1058,11 +1127,14 @@ class _HomePageState extends State<HomePage> {
                                                 NeverScrollableScrollPhysics(),
                                             itemBuilder: (_, index) {
                                               log("can not");
-                                              _homeController.alreadyRenderedPostId.add(_homeController
-                                                  .trendingPostList[
-                                              index]
-                                                  .id!);
-                                              _homeController.alreadyRenderedPostId.toSet();
+                                              _homeController
+                                                  .alreadyRenderedPostId
+                                                  .add(_homeController
+                                                      .trendingPostList[index]
+                                                      .id!);
+                                              _homeController
+                                                  .alreadyRenderedPostId
+                                                  .toSet();
                                               // if(_homeController.alreadyRenderedPostId.indexOf(_homeController
                                               //     .trendingPostList[
                                               // index]
@@ -1095,13 +1167,11 @@ class _HomePageState extends State<HomePage> {
                                               //       ));
                                               // }
 
-
 // log(_homeController
 //     .commentsMap[_homeController
 //     .trendingPostList[
 // index]
 //     .id!]!.comment.toString());
-
 
                                               if (_homeController
                                                       .trendingPostList.length <
@@ -1112,18 +1182,23 @@ class _HomePageState extends State<HomePage> {
                                               return Obx(() => Column(
                                                     children: [
                                                       PostTile(
-                                                        comment:_homeController
-                                                            .commentsMap[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]==null? _homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .commentgiven:_homeController
-                                                            .commentsMap[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!],
+                                                        comment: _homeController
+                                                                        .commentsMap[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                null
+                                                            ? _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .commentgiven
+                                                            : _homeController
+                                                                    .commentsMap[
+                                                                _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .id!],
                                                         name: _homeController
                                                             .trendingPostList[
                                                                 index]
@@ -1176,60 +1251,86 @@ class _HomePageState extends State<HomePage> {
                                                                     index]
                                                                 .caption ??
                                                             '',
-                                                        likes:_homeController
-                                                            .updateCount[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]==null? _homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .likes!.toString():_homeController
-                                                            .updateCount[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]!.likes!.toString(),
+                                                        likes: _homeController
+                                                                        .updateCount[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                null
+                                                            ? _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .likes!
+                                                                .toString()
+                                                            : _homeController
+                                                                .updateCount[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!]!
+                                                                .likes!
+                                                                .toString(),
                                                         comments: _homeController
-                                                            .updateCount[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]==null? _homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .comments!.toString():_homeController
-                                                            .updateCount[_homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]!.comments!.toString(),
+                                                                        .updateCount[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                null
+                                                            ? _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .comments!
+                                                                .toString()
+                                                            : _homeController
+                                                                .updateCount[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!]!
+                                                                .comments!
+                                                                .toString(),
                                                         hitLike: () async {
-                                                          _homeController.LikedPostMap[ _homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .id!]=_homeController.LikedPostMap[ _homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .id!]==null? !(_homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .isLiked!):!(_homeController.LikedPostMap[ _homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .id!]!);
-                                                          if ( _homeController.LikedPostMap[ _homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .id!]! ==false) {
+                                                          _homeController
+                                                                  .LikedPostMap[
+                                                              _homeController
+                                                                  .trendingPostList[
+                                                                      index]
+                                                                  .id!] = _homeController
+                                                                          .LikedPostMap[
+                                                                      _homeController
+                                                                          .trendingPostList[
+                                                                              index]
+                                                                          .id!] ==
+                                                                  null
+                                                              ? !(_homeController
+                                                                  .trendingPostList[
+                                                                      index]
+                                                                  .isLiked!)
+                                                              : !(_homeController
+                                                                      .LikedPostMap[
+                                                                  _homeController
+                                                                      .trendingPostList[
+                                                                          index]
+                                                                      .id!]!);
+                                                          if (_homeController
+                                                                      .LikedPostMap[
+                                                                  _homeController
+                                                                      .trendingPostList[
+                                                                          index]
+                                                                      .id!]! ==
+                                                              false) {
                                                             _homeController
                                                                 .trendingPostList[
                                                                     index]
                                                                 .isLiked = false;
 
-                                                           await HomeService.unlikePost(
+                                                            await HomeService.unlikePost(
                                                                 postId: _homeController
                                                                     .trendingPostList[
                                                                         index]
                                                                     .id!);
-
-
                                                           } else {
                                                             _homeController
                                                                 .trendingPostList[
@@ -1241,7 +1342,7 @@ class _HomePageState extends State<HomePage> {
                                                                 .toSet()
                                                                 .toList();
 
-                                                           await HomeService.likePost(
+                                                            await HomeService.likePost(
                                                                 postId: _homeController
                                                                     .trendingPostList[
                                                                         index]
@@ -1249,18 +1350,26 @@ class _HomePageState extends State<HomePage> {
                                                           }
 
                                                           log("hit Like");
-                                                          RecentCommentModel recentComment = RecentCommentModel();
-                                                          recentComment = await HomeService.recentComment(
-                                                              postId: _homeController
-                                                                  .trendingPostList[
-                                                              index]
-                                                                  .id!);
+                                                          RecentCommentModel
+                                                              recentComment =
+                                                              RecentCommentModel();
+                                                          recentComment = await HomeService
+                                                              .recentComment(
+                                                                  postId: _homeController
+                                                                      .trendingPostList[
+                                                                          index]
+                                                                      .id!);
                                                           // _homeController.commentsMap[_homeController.post.value.id.toString()] =
                                                           //     recentComment.response!.data!.comment;
-                                                          _homeController.updateCount[ _homeController
-                                                              .trendingPostList[
-                                                          index]
-                                                              .id!]= recentComment.response!.data!.data;
+                                                          _homeController
+                                                                  .updateCount[
+                                                              _homeController
+                                                                  .trendingPostList[
+                                                                      index]
+                                                                  .id!] = recentComment
+                                                              .response!
+                                                              .data!
+                                                              .data;
 
                                                           setState(() {});
                                                         },
@@ -1278,28 +1387,36 @@ class _HomePageState extends State<HomePage> {
                                                           // _homeController
                                                           //     .commentController
                                                           //     .clear();
+
                                                         },
                                                         postId: _homeController
                                                             .trendingPostList[
                                                                 index]
                                                             .id!,
-                                                        isLiked:_homeController.LikedPostMap[ _homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]==null
+                                                        isLiked: _homeController
+                                                                        .LikedPostMap[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                null
                                                             ? _homeController
                                                                 .trendingPostList[
                                                                     index]
                                                                 .isLiked!
-                                                            : _homeController.LikedPostMap[ _homeController
-                                                            .trendingPostList[
-                                                        index]
-                                                            .id!]!,
+                                                            : _homeController
+                                                                    .LikedPostMap[
+                                                                _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .id!]!,
                                                         onTap: () async {
                                                           _homeController
                                                               .commentsList
                                                               .clear();
-                                                          _homeController.viewReplies!.clear();
+                                                          _homeController
+                                                              .viewReplies!
+                                                              .clear();
                                                           // _homeController.replyList.clear();
                                                           Navigator.pushNamed(
                                                               context,
@@ -1369,7 +1486,9 @@ class _HomePageState extends State<HomePage> {
                                                         height: 16 *
                                                             SizeConfig
                                                                 .heightMultiplier!,
-                                                        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.1),
+                                                        color: Theme.of(context)
+                                                            .scaffoldBackgroundColor
+                                                            .withOpacity(0.1),
                                                       )
                                                     ],
                                                   ));
@@ -1405,49 +1524,78 @@ class _HomePageState extends State<HomePage> {
               child: AlertDialog(
                 insetPadding: EdgeInsets.zero,
                 titlePadding: EdgeInsets.zero,
-                contentPadding: EdgeInsets.symmetric(horizontal: 20*SizeConfig.widthMultiplier!),
+                contentPadding: EdgeInsets.symmetric(
+                    horizontal: 20 * SizeConfig.widthMultiplier!),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                ),
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                    SizedBox(
+                      height: 8 * SizeConfig.heightMultiplier!,
+                    ),
                     Align(
                       alignment: Alignment.topRight,
                       child: Transform.translate(
-                        offset: Offset(10*SizeConfig.widthMultiplier!,0),
+                        offset: Offset(10 * SizeConfig.widthMultiplier!, 0),
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Navigator.pop(context);
                           },
                           child: CircleAvatar(
                             backgroundColor: Theme.of(context).cardColor,
-                            radius: 20*SizeConfig.imageSizeMultiplier!,
-                            child: Icon(Icons.close,color: Theme.of(context).primaryColor,),
+                            radius: 20 * SizeConfig.imageSizeMultiplier!,
+                            child: Icon(
+                              Icons.close,
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: 150*SizeConfig.heightMultiplier!,
-                      width: 150*SizeConfig.widthMultiplier!,
-                      child: Image.asset(ImagePath.animatedLiveLimitErrorIcon,fit: BoxFit.cover,),),
-                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
-                    SizedBox(width: 250*SizeConfig.widthMultiplier!,),
-                    Text("Something went wrong!".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 16*SizeConfig.textMultiplier!,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
-                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
-                    Text("There is already 200 people in\nthis please join later.".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w400,fontSize: 14),textAlign: TextAlign.center,),
-                    SizedBox(height: 40*SizeConfig.heightMultiplier!,),
+                      height: 150 * SizeConfig.heightMultiplier!,
+                      width: 150 * SizeConfig.widthMultiplier!,
+                      child: Image.asset(
+                        ImagePath.animatedLiveLimitErrorIcon,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16 * SizeConfig.heightMultiplier!,
+                    ),
+                    SizedBox(
+                      width: 250 * SizeConfig.widthMultiplier!,
+                    ),
+                    Text(
+                      "Something went wrong!".tr,
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: 16 * SizeConfig.textMultiplier!,
+                          fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 16 * SizeConfig.heightMultiplier!,
+                    ),
+                    Text(
+                      "There is already 200 people in\nthis please join later."
+                          .tr,
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 40 * SizeConfig.heightMultiplier!,
+                    ),
                   ],
                 ),
-              )
-          ),
+              )),
         );
-
-
-
       },
     );
   }

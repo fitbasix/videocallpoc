@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
@@ -25,12 +27,16 @@ class HelpAndSupportScreen extends StatelessWidget {
   final HomeController _homeController = Get.find();
   @override
   Widget build(BuildContext context) {
+    final HomeController homeController = Get.put(HomeController());
+    var dependencyupdate =
+        homeController.remoteConfig.getString('UiDependency');
+    var jsonOb = json.decode(dependencyupdate);
     if (_helpAndSupportController.isLoading.value) {
       _helpAndSupportController.getAllHelpAndSupportContent();
     }
 
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context);
         Navigator.pop(context);
         return false;
@@ -63,75 +69,158 @@ class HelpAndSupportScreen extends StatelessWidget {
                               _helpAndSupportController.helpAndSupportDataModel!
                                   .response!.data!.description!,
                               style: AppTextStyle.black400Text.copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color
-                              ),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color),
                             ),
                             SizedBox(
                               height: 16 * SizeConfig.heightMultiplier!,
                             ),
-                            Row(
-                              children: [
-                                //whatsapp button
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () {
-                                      launch(
-                                          "https://Wa.me/${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.whatsAppNo}");
-                                    },
-                                    child: Container(
-                                      height: 48 * SizeConfig.heightMultiplier!,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              8 * SizeConfig.widthMultiplier!),
-                                          color: kgreen49),
-                                      child: Center(
-                                        child: SvgPicture.asset(
-                                          ImagePath.whatsAppIcon,
-                                          height: 24 *
-                                              SizeConfig.imageSizeMultiplier!,
+                            (jsonOb['help&support']['whatsapp'] == 1 &&
+                                    jsonOb['help&support']['call'] == 1)
+                                ? Row(
+                                    children: [
+                                      //whatsapp button
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () {
+                                            launch(
+                                                "https://Wa.me/${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.whatsAppNo}");
+                                          },
+                                          child: Container(
+                                            height: 48 *
+                                                SizeConfig.heightMultiplier!,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8 *
+                                                        SizeConfig
+                                                            .widthMultiplier!),
+                                                color: kgreen49),
+                                            child: Center(
+                                              child: SvgPicture.asset(
+                                                ImagePath.whatsAppIcon,
+                                                height: 24 *
+                                                    SizeConfig
+                                                        .imageSizeMultiplier!,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 16 * SizeConfig.widthMultiplier!,
-                                ),
-                                //call button
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () {
-                                      ///launch call with help no
-                                      launch(
-                                          "tel://${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.callingNo}");
-                                    },
-                                    child: Container(
-                                      height: 48 * SizeConfig.heightMultiplier!,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              8 * SizeConfig.widthMultiplier!),
-                                          color: kgreen49),
-                                      child: Center(
-                                        child: SvgPicture.asset(
-                                          ImagePath.phoneCallIcon,
-                                          height: 26 *
-                                              SizeConfig.imageSizeMultiplier!,
-                                          width: 26 *
-                                              SizeConfig.imageSizeMultiplier!,
+                                      SizedBox(
+                                        width: 16 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      //call button
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () {
+                                            ///launch call with help no
+                                            launch(
+                                                "tel://${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.callingNo}");
+                                          },
+                                          child: Container(
+                                            height: 48 *
+                                                SizeConfig.heightMultiplier!,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8 *
+                                                        SizeConfig
+                                                            .widthMultiplier!),
+                                                color: kgreen49),
+                                            child: Center(
+                                              child: SvgPicture.asset(
+                                                ImagePath.phoneCallIcon,
+                                                height: 26 *
+                                                    SizeConfig
+                                                        .imageSizeMultiplier!,
+                                                width: 26 *
+                                                    SizeConfig
+                                                        .imageSizeMultiplier!,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
+                                    ],
+                                  )
+                                : (jsonOb['help&support']['whatsapp'] == 1)
+                                    ? Row(
+                                        children: [
+                                          //whatsapp button
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {
+                                                launch(
+                                                    "https://Wa.me/${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.whatsAppNo}");
+                                              },
+                                              child: Container(
+                                                height: 48 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius
+                                                        .circular(8 *
+                                                            SizeConfig
+                                                                .widthMultiplier!),
+                                                    color: kgreen49),
+                                                child: Center(
+                                                  child: SvgPicture.asset(
+                                                    ImagePath.whatsAppIcon,
+                                                    height: 24 *
+                                                        SizeConfig
+                                                            .imageSizeMultiplier!,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {
+                                                ///launch call with help no
+                                                launch(
+                                                    "tel://${_helpAndSupportController.helpAndSupportDataModel!.response!.data!.callingNo}");
+                                              },
+                                              child: Container(
+                                                height: 48 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius
+                                                        .circular(8 *
+                                                            SizeConfig
+                                                                .widthMultiplier!),
+                                                    color: kgreen49),
+                                                child: Center(
+                                                  child: SvgPicture.asset(
+                                                    ImagePath.phoneCallIcon,
+                                                    height: 26 *
+                                                        SizeConfig
+                                                            .imageSizeMultiplier!,
+                                                    width: 26 *
+                                                        SizeConfig
+                                                            .imageSizeMultiplier!,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                           ],
                         ),
                       ),
                       Container(
                         width: double.infinity,
                         height: 16 * SizeConfig.heightMultiplier!,
-                        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.1),
+                        color: Theme.of(context)
+                            .scaffoldBackgroundColor
+                            .withOpacity(0.1),
                       ),
                       SizedBox(
                         height: 24 * SizeConfig.heightMultiplier!,
@@ -143,8 +232,10 @@ class HelpAndSupportScreen extends StatelessWidget {
                           child: Text(
                             "FAQs".tr,
                             style: AppTextStyle.boldBlackText.copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color
-                            ),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color),
                           )),
                       Column(
                           mainAxisSize: MainAxisSize.min,

@@ -106,6 +106,12 @@ class _ChatScreenState extends State<ChatScreen> {
   List<QBMessage?>? messages;
   DateTime? messageDate = DateTime(2015, 5, 5);
   var _typedMessage = "".obs;
+  var _userWantToSendMedia = false.obs;
+  var _mediaIsUploading = false.obs;
+  List<QBAttachment> attachmentsList = [];
+  QBAttachment attachment = QBAttachment();
+  var fileName = ''.obs;
+
   StreamSubscription? _connectionStreamSubscription;
 
   StreamSubscription? _callEndSubscription;
@@ -277,7 +283,104 @@ class _ChatScreenState extends State<ChatScreen> {
 */              ,
               ///todo remove this ! sign
 
-              widget.isCurrentlyEnrolled!?Align(
+              widget.isCurrentlyEnrolled!?Obx(()=>_userWantToSendMedia.value?
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding:EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!,vertical: 24*SizeConfig.heightMultiplier!),
+                            decoration: BoxDecoration(
+                              color: kBlack,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: kPureWhite.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 8*SizeConfig.widthMultiplier!,vertical: 16*SizeConfig.heightMultiplier!),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(child: Text(fileName.value,style: AppTextStyle.normalGreenText.copyWith(color: kPureWhite),overflow: TextOverflow.ellipsis,)),
+                                      SizedBox(width: 7*SizeConfig.widthMultiplier!,),
+                                      GestureDetector(
+                                        onTap:(){
+                                          _userWantToSendMedia.value = false;
+                                          _mediaIsUploading.value = false;
+                                          _userWantToSendMedia.value = false;
+                                          _mediaIsUploading.value = false;
+                                          List<QBAttachment>? attachmentsList = [];
+                                          QBAttachment attachment = QBAttachment();
+                                        },
+                                        child: CircleAvatar(
+                                          backgroundColor: kBlack,
+                                          radius: 12*SizeConfig.imageSizeMultiplier!,
+                                          child: Icon(Icons.close,size: 13*SizeConfig.imageSizeMultiplier!,color:kPureWhite),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                Obx(
+                                  ()=>_mediaIsUploading.value?SizedBox(height:21*SizeConfig.heightMultiplier!):Container()),
+                                  Obx(
+                                      ()=>_mediaIsUploading.value?LinearProgressIndicator(
+                                        backgroundColor: Color(0xff747474),
+                                        color: kBlack
+                                      ):Container()
+                                  )
+
+                                ],
+                              ),)),
+                      ),
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 23*SizeConfig.widthMultiplier!),
+                          child: GestureDetector(
+                              onTap: () {
+                                if(!_mediaIsUploading.value){
+                                  QB.chat
+                                      .sendMessage(widget.userDialogForChat!.id!,
+                                      attachments: attachmentsList,
+                                      body: "imageTest",
+                                      saveToHistory: true)
+                                      .then((value) {
+                                    print("demo msg send");
+                                  }).then((value){
+                                    _userWantToSendMedia.value = false;
+                                    _mediaIsUploading.value = false;
+                                    List<QBAttachment>? attachmentsList = [];
+                                    QBAttachment attachment = QBAttachment();
+                                  });
+                                }
+                                else{
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Media is uploading..."),));
+                                }
+
+
+                              },
+                              child: Icon(
+                                Icons.send,
+                                size: 21 * SizeConfig.heightMultiplier!,
+                                color: greenChatColor,
+                              )),
+                        )
+
+                    ],
+                  ),
+                ),
+              ):
+              Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
@@ -369,7 +472,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                 ),
-              ):Obx(()=>!isPlanLoading.value?Container(
+              )):Obx(()=>!isPlanLoading.value?Container(
                 margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
                 child: RichText(
                   textAlign: TextAlign.center,
@@ -632,15 +735,17 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendImageFromCamera() async {
     XFile? pickedFile = await pickFromCamera();
     if (pickedFile != null) {
+      _userWantToSendMedia.value = true;
+      _mediaIsUploading.value = true;
+      fileName.value = pickedFile.name;
       try {
         uploadFileToServerDB(pickedFile.path,pickedFile.path.split('.').last);
         QBFile? file = await QB.content.upload(pickedFile.path, public: false);
         if (file != null) {
+          _mediaIsUploading.value = false;
           int? id = file.id;
           print("image id " + file.uid!);
           String? contentType = file.contentType;
-
-          QBAttachment attachment = QBAttachment();
           attachment.id = id.toString();
           attachment.contentType = contentType;
           attachment.url = file.uid;
@@ -650,22 +755,10 @@ class _ChatScreenState extends State<ChatScreen> {
           attachment.data = pickedFile.path;
           //Required parameter
           //attachment.type = "PHOTO";
-
-          List<QBAttachment>? attachmentsList = [];
           attachmentsList.add(attachment);
-
           QBMessage message = QBMessage();
           message.attachments = attachmentsList;
           message.body = "test attachment";
-          QB.chat
-              .sendMessage(widget.userDialogForChat!.id!,
-                  attachments: attachmentsList,
-                  body: "imageTest",
-                  saveToHistory: true)
-              .then((value) {
-            print("demo msg send");
-          });
-          // Send a message logic
         }
       } on PlatformException catch (e) {
         // Some error occurred, look at the exception message for more details
@@ -713,16 +806,18 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendAttachmentsFromDevice() async {
     FilePickerResult? pickedFiles = await pickAttachments();
     if (pickedFiles != null) {
+      _userWantToSendMedia.value = true;
+      _mediaIsUploading.value = true;
+      fileName.value = pickedFiles.files[0].name;
       try {
-        List<QBAttachment>? attachmentsList = [];
         for (int i = 0; i < pickedFiles.files.length; i++) {
           uploadFileToServerDB(pickedFiles.files[i].path!,pickedFiles.files[i].path!.split('.').last);
           QBFile? file = await QB.content
               .upload(pickedFiles.files[i].path!, public: false);
           if (file != null) {
+            _mediaIsUploading.value = false;
             int? id = file.id;
             String? contentType = pickedFiles.files[i].path!.split('.').last;
-            QBAttachment attachment = QBAttachment();
             attachment.id = id.toString();
             attachment.contentType = contentType;
             print(contentType + " dddd");
@@ -738,14 +833,7 @@ class _ChatScreenState extends State<ChatScreen> {
             // Send a message logic
           }
         }
-        QB.chat
-            .sendMessage(widget.userDialogForChat!.id!,
-                attachments: attachmentsList,
-                body: "imageTest",
-                saveToHistory: true)
-            .then((value) {
-          print("demo msg send");
-        });
+
       } on PlatformException catch (e) {
         // Some error occurred, look at the exception message for more details
       }
@@ -927,7 +1015,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  void uploadFileToServerDB(String path, String fileType) async {
+  void uploadFileToServerDB(String path, String fileType)  async {
      var dio = DioUtil().getInstance();
      dio!.options.headers["language"] = "1";
      dio.options.headers['Authorization'] = await LogInService.getAccessToken();
@@ -935,8 +1023,8 @@ class _ChatScreenState extends State<ChatScreen> {
         'files':await MultipartFile.fromFile(path),
         'trainerId':widget.trainerId!,
      });
-     var response = await dio.post(ApiUrl.uploadChatFileToDb,data: data);
-     print(response.data.toString()+" iiiii");
+      dio.post(ApiUrl.uploadChatFileToDb,data: data);
+
   }
 
 }
@@ -985,7 +1073,6 @@ class MessageBubbleSender extends StatelessWidget {
     } else {
       fileExtension = message!.attachments![0]!.name!.split(".").last.toUpperCase();
       getFileSize();
-
       checkFileExistence(message!.attachments![0]!.name);
       return Padding(
         padding: EdgeInsets.only(
