@@ -54,18 +54,20 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   // var isPlanLoading = true.obs;
 
   getAllTrainerPlanData() async {
-    if (!_trainerController.isMyTrainerProfileLoading.value) {
-      _trainerController.planModel.value = PlanModel();
-      _trainerController.isPlanLoading.value = true;
-      _trainerController.planModel.value =
-          await TrainerServices.getPlanByTrainerId(
-                  _trainerController.atrainerDetail.value.user!.id!)
-              .then((value) {
-        _trainerController.isPlanLoading.value = false;
-        setState(() {});
-        return value;
-      });
-    }
+   if(widget.trainerID==null){
+     if (!_trainerController.isMyTrainerProfileLoading.value) {
+       _trainerController.planModel.value = PlanModel();
+       _trainerController.isPlanLoading.value = true;
+       _trainerController.planModel.value =
+       await TrainerServices.getPlanByTrainerId(
+           _trainerController.atrainerDetail.value.user!.id!)
+           .then((value) {
+         _trainerController.isPlanLoading.value = false;
+         setState(() {});
+         return value;
+       });
+     }
+   }
   }
 
   @override

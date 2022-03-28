@@ -20,7 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fitbasix/core/localization/translations.dart';
 import 'package:fitbasix/fitbasix_app.dart';
+import 'feature/Home/controller/Home_Controller.dart';
 import 'feature/Home/view/consumption_screen.dart';
+import 'feature/get_trained/controller/trainer_controller.dart';
 import 'feature/help_and_support/view/privacy_policy_and_term_of_use/legal_screen.dart';
 
 Future<void> setupApp() async {
@@ -45,7 +47,6 @@ Future<void> setupApp() async {
       final uri = await getInitialUri();
       _initialUri = uri;
     } on PlatformException {
-
       _initialUri = null;
     } on FormatException catch (err) {
       debugPrint(err.toString());
@@ -53,6 +54,10 @@ Future<void> setupApp() async {
     }
     print(_latestUri.toString()+ " latest zzzz");
     print(_initialUri.toString()+" init zzzz");
+    if(_initialUri!=null||_latestUri!=null){
+      HomeController controller = Get.put(HomeController());
+      TrainerController trainerController = Get.put(TrainerController());
+    }
     return value;
   });
 
