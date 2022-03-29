@@ -43,21 +43,28 @@ import '../../profile/services/profile_services.dart';
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
-  final List<Widget> screens = [
-    HomePage(),
-    GetTrainedScreen(),
-    CreatePostScreen(),
-    ToolsScreen()
-  ];
   @override
   Widget build(BuildContext context) {
+    var dependencyupdate =
+        homeController.remoteConfig.getString('UiDependency');
+    var jsonOb = json.decode(dependencyupdate);
+
+    final List<Widget> screens = [
+      if (jsonOb['home'] == 1) HomePage(),
+      if (jsonOb['get_trained'] == 1) GetTrainedScreen(),
+      if (jsonOb['post'] == 1) CreatePostScreen(),
+      if (jsonOb['tools'] == 1) ToolsScreen(),
+    ];
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       key: homeController.drawerKey,
       body: Obx(() => screens[homeController.selectedIndex.value]),
       // bottomNavigationBar: CustomizedBottomAppBar(),
 
-      bottomNavigationBar: CustomBottomNavigationBar(),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        length: screens.length,
+      ),
       endDrawer: Drawer(
         child: Obx(
           () => MenuScreen(
