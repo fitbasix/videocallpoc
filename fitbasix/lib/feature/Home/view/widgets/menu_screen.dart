@@ -130,6 +130,15 @@ class MenuScreen extends StatelessWidget {
                       Navigator.pushNamed(context, RouteName.editPersonalInfo);
                     })
                 : Container(),
+            jsonOb['document'] == 1
+                ? MenuItem(
+                    menuItemImage: ImagePath.chatdocumentIcon,
+                    menuItemText: 'View Documents'.tr,
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouteName.viewAllUserWithDoc);
+                    })
+                : Container(),
             jsonOb['setting'] == 1
                 ? MenuItem(
                     menuItemImage: ImagePath.settings,
@@ -182,7 +191,6 @@ class MenuScreen extends StatelessWidget {
                       await _controller.googleSignout();
                       Navigator.pushNamedAndRemoveUntil(
                           context, RouteName.loginScreen, (route) => false);
-
 
                       Get.deleteAll();
                     })
