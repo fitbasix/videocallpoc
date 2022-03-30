@@ -127,7 +127,9 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.account,
                     menuItemText: 'my_account'.tr,
                     onTap: () {
+                      Navigator.of(context).pop;
                       Navigator.pushNamed(context, RouteName.editPersonalInfo);
+
                     })
                 : Container(),
             jsonOb['document'] == 1
@@ -135,6 +137,7 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.chatdocumentIcon,
                     menuItemText: 'View Documents'.tr,
                     onTap: () {
+                      Navigator.pop(context);
                       Navigator.pushNamed(
                           context, RouteName.viewAllUserWithDoc);
                     })
@@ -144,6 +147,7 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.settings,
                     menuItemText: 'settings'.tr,
                     onTap: () {
+                      Navigator.of(context).pop;
                       Navigator.pushNamed(context, RouteName.userSetting);
                     })
                 : Container(),
@@ -152,6 +156,7 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.support,
                     menuItemText: 'help'.tr,
                     onTap: () {
+                      Navigator.of(context).pop;
                       Navigator.pushNamed(context, RouteName.helpAndSupport);
                     })
                 : Container(),
@@ -173,6 +178,7 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.legal,
                     menuItemText: 'legal'.tr,
                     onTap: () {
+                      Navigator.of(context).pop;
                       Navigator.pushNamed(context, RouteName.legal);
                     })
                 : Container(),
@@ -191,7 +197,6 @@ class MenuScreen extends StatelessWidget {
                       await _controller.googleSignout();
                       Navigator.pushNamedAndRemoveUntil(
                           context, RouteName.loginScreen, (route) => false);
-
                       Get.deleteAll();
                     })
                 : Container()
