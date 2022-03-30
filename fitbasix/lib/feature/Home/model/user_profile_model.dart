@@ -90,7 +90,8 @@ class Profile {
       this.following,
       this.selectedInterest,
       this.followers,
-      this.quickBloxId});
+      this.quickBloxId,
+      this.isPreviousEnrolled});
 
   final String? id;
   final String? name;
@@ -109,10 +110,12 @@ class Profile {
   final int? following;
   final int? followers;
   final int? quickBloxId;
+  final bool? isPreviousEnrolled;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
       id: json["_id"],
       name: json["name"],
+      isPreviousEnrolled: json["isPreviousEnrolled"],
       profilePhoto: json["profilePhoto"],
       coverPhoto: json["coverPhoto"],
       mobileNumber: json["phone"],
