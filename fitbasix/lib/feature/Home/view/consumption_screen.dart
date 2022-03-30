@@ -630,8 +630,11 @@ class ConsumptionScreen extends StatelessWidget {
                   minute: startTime.minute,
                   repeats: true,
                   allowWhileIdle: true,
-                  preciseAlarm: true
+                  preciseAlarm: true,
+                timeZone: AwesomeNotifications.localTimeZoneIdentifier
+
               )
+
           );
           print(startTime.toString()+" bbbbb");
 
