@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             title: 'next'.tr,
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
-                              if (_loginController.mobile.value.length == 10) {
+                              if (_loginController.mobile.value.length == 10&&RegExp(r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$").hasMatch(_loginController.mobile.value)) {
                                 _loginController.isLoading.value = true;
                                 await _loginController.getOTP();
                                 _loginController.isLoading.value = false;

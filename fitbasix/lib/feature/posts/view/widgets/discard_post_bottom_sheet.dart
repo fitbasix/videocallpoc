@@ -80,8 +80,8 @@ class DiscardPostBottomSheet extends StatelessWidget {
               CreatePostService.deletePost(_postController.postId.value);
               print("got here");
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(
-                  context, RouteName.homePage, (route) => false);
+              // Navigator.pushNamedAndRemoveUntil(
+              //     context, RouteName.homePage, (route) => false);
               _postController.postId.value = "";
               _postController.postTextController.clear();
               _postController.postText.value = '';

@@ -40,8 +40,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     super.initState();
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
+    print(_postController.isLoading.value.toString() +" jjjjj");
+    print(_postController.iscreateingPost.value.toString()+" llll");
     print(_postController.postId.value.toString() + "  postId");
     print(_postController.isUpdated.value.toString() + "  post Updated");
     return GestureDetector(
@@ -115,8 +120,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                             postId:
                                                 _postController.postId.value,
                                             isPublish: true,
-                                            caption:
-                                                _postController.postText.value);
+                                            caption: _postController.postText.value,
+
+                                        );
                                     _postController.isLoading.value = false;
                                     if (_postController.postData.value.code ==
                                         0) {
@@ -141,11 +147,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       _postController.users.clear();
                                       _postController.imageFile = null;
                                       _postController.selectedFiles.clear();
-                                      _homeController.selectedIndex.value = 0;
                                       _homeController.currentPage.value = 1;
+                                      _homeController.selectedIndex.value = 0;
 
                                       // Navigator.pop(context);
-                                      setState(() {});
+                                      // setState(() {});
                                       Get.showSnackbar(GetSnackBar(
                                         message: 'post_successfull'.tr,
                                         duration: Duration(seconds: 3),
@@ -499,13 +505,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                   onChanged: (value) async {
                                     print(_postController.postData.value
                                         .response!.data!.category);
-                                    _postController.selectedCategory.value =
-                                        value;
-
+                                    _postController.selectedCategory.value = value;
                                     _postController.postData.value =
                                         await CreatePostService.createPost(
-                                            postId:
-                                                _postController.postId.value,
+                                            postId: _postController.postId.value,
                                             category: _postController
                                                 .selectedCategory
                                                 .value

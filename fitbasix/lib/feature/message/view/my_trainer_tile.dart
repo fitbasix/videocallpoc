@@ -79,8 +79,9 @@ class MyTrainerTileScreen extends StatelessWidget {
             if(chatHistoryList != null&&chatHistoryList![0].lastMessage!=null){
               indexWhereChatPresent = chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers![index].quickBlox));
             }
+
             return TrainersTileUI(
-              taggedPersonList: List.generate(myTrainers![index].strengths!.length, (i) => myTrainers![index].strengths![i].name!),
+              taggedPersonList: myTrainers![index].strengths!.isNotEmpty?List.generate(myTrainers![index].strengths!.length, (i) => myTrainers![index].strengths![i].name!):[],
               trainerName: myTrainers![index].name,
               lastMessage: indexWhereChatPresent!=-1?chatHistoryList![indexWhereChatPresent].lastMessage!.capitalized():"",
               trainerProfilePicUrl: myTrainers![index].profilePhoto,
@@ -275,7 +276,7 @@ class TrainersTileUI extends StatelessWidget {
                     Text(trainerName!.isNotEmpty ? trainerName! : "Loading..",
                         style: AppTextStyle.hnormal600BlackText.copyWith(color: isCurrentlyEnrolled!?Theme.of(context).textTheme.bodyText1!.color:greyB7)),
                     //_taggedBar Widget
-                    _taggedBar(list: taggedPersonList,context: context)
+                    (taggedPersonList.isNotEmpty)?_taggedBar(list: taggedPersonList,context: context):Container()
                   ],
                 ),
                 Spacer(),
