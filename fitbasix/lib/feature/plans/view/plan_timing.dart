@@ -524,6 +524,8 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                   .atrainerDetail.value.id!);
                                           trainerController.setUp();
                                           showDialogForSessionBooked(context);
+
+                                          trainerController.atrainerDetail.value.isEnrolled=true;
                                           Future.delayed(Duration(seconds: 3),
                                               () {
                                             Navigator.pop(context);
