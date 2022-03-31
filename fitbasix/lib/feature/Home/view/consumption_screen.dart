@@ -385,10 +385,10 @@ class ConsumptionScreen extends StatelessWidget {
                                   height: 12 * SizeConfig.heightMultiplier!,
                                 ),
                                 GestureDetector(
-                                  onDoubleTap: (){
-                                    showDemoNotification();
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("showing demo notification")));
-                                  },
+                                  // onDoubleTap: (){
+                                  //   showDemoNotification();
+                                  //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("showing demo notification")));
+                                  // },
                                   onTap: () async {
                                     String s = "12:24";
                                     _homeController
