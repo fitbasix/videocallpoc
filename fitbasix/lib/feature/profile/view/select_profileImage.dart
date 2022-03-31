@@ -121,13 +121,18 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
                           homeController.profilePhoto.value =
                               profileController.profilePhoto.value;
                         } else {
+                          print("got in else");
                           // MediaUrl mediaUrl = await PostService.uploadMedia(
                           //     [File(selectedMediaFile!.path)]);
                           // profileController.coverPhoto.value =
                           //     mediaUrl.response!.data![0];
-                          homeController.coverPhoto.value =
+                          String response =
                               await ProfileServices.UpdateCoverPhoto(
                                   coverPhoto: [File(selectedMediaFile!.path)]);
+                          if(response.isNotEmpty){
+                            profileController.coverPhoto.value = response;
+                            homeController.coverPhoto.value = response;
+                          }
                           // homeController.coverPhoto.value =
                           //     mediaUrl.response!.data![0];
                         }
