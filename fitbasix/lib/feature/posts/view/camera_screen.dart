@@ -159,8 +159,10 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                   ),
                   SizedBox(width: 30 * SizeConfig.widthMultiplier!),
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
+                    child: Obx(()=>GestureDetector(
+                      onTap: _postController.isclicked.value==false
+                          ?() async {
+                        _postController.isclicked.value = true;
                         _postController.isLoading.value = true;
 
                         // final List<File> selectedImage = [];
@@ -180,7 +182,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                         //     _postController.selectedMediaFiles);
                         _postController.imageFile = null;
                         _postController.uploadedFiles.value =
-                            await PostService.uploadMedia(
+                        await PostService.uploadMedia(
                           _postController.selectedFiles,
                         );
 
@@ -194,8 +196,12 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                         }
                         Navigator.pop(context);
                         Navigator.pop(context);
+                        
+                        _postController.isclicked.value = false;
+
                         _postController.isLoading.value = false;
-                      },
+                      }
+                          :(){},
                       child: Container(
                         height: 48 * SizeConfig.heightMultiplier!,
                         decoration: BoxDecoration(
@@ -208,7 +214,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                                   color: kPureWhite)),
                         ),
                       ),
-                    ),
+                    ))
                   )
                 ],
               ),
