@@ -167,11 +167,11 @@ class _ChatScreenState extends State<ChatScreen> {
         onHangUpTapped: (value) {
           //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
           callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) => VideoCallScreen(
-            //           sessionIdForVideoCall: value!,
-            //         )));
-            showDialogForVideoCallNotPossible(context);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => VideoCallScreen(
+                      sessionIdForVideoCall: value!,
+                    )));
+            //showDialogForVideoCallNotPossible(context);
           });
         },
         onMenuTap: () {
