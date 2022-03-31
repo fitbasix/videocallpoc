@@ -898,6 +898,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
                         _trainerController
                             .isProfileLoading.value = true;
+                        _trainerController.isMyTrainerProfileLoading.value = true;
                         Navigator.pushNamed(context,
                             RouteName.trainerProfileScreen);
 
@@ -931,6 +932,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         }
                         _trainerController
                             .isProfileLoading.value = false;
+                        _trainerController.isMyTrainerProfileLoading.value = false;
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1238,7 +1240,10 @@ class MessageBubbleSender extends StatelessWidget {
         print("jjjjjjj");
         if(Platform.isAndroid){
           PermissionStatus status  = await Permission.storage.request();
-          PermissionStatus status1 = await Permission.manageExternalStorage.request();
+          if(!_chatController.storagePermissionCalled.value){
+            _chatController.storagePermissionCalled.value = false;
+            PermissionStatus status1 = await Permission.manageExternalStorage.request();
+          }
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
@@ -1303,7 +1308,10 @@ class MessageBubbleSender extends StatelessWidget {
 
     if(Platform.isAndroid){
       PermissionStatus status = await Permission.storage.request();
-      PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      if(!_chatController.storagePermissionCalled.value){
+        _chatController.storagePermissionCalled.value = false;
+        PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      }
       if (status == PermissionStatus.granted) {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');

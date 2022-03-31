@@ -67,8 +67,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   void dispose() {
-    _localVideoViewController!.release();
-    _remoteVideoViewController!.release();
+    // _localVideoViewController!.release();
+    // _remoteVideoViewController!.release();
     unsubscribeCallEnd();
     unsubscribeReject();
     unsubscribeAccept();
@@ -138,6 +138,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   @override
   void initState() {
     print("llll user id: " + _homeController.userQuickBloxId.value.toString());
+    print(widget.sessionIdForVideoCall);
     subscribeReject();
     subscribeAccept();
     subscribeHangUp();
@@ -146,6 +147,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     subscribePeerConnection();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
