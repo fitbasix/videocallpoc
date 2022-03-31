@@ -65,7 +65,6 @@ class HomeAndTrainerPage extends StatelessWidget {
       key: homeController.drawerKey,
       body: Obx(() => screens[homeController.selectedIndex.value]),
       // bottomNavigationBar: CustomizedBottomAppBar(),
-
       bottomNavigationBar: CustomBottomNavigationBar(
         length: screens.length,
       ),

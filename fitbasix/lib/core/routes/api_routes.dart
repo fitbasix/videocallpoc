@@ -1,7 +1,7 @@
 class ApiUrl {
 
   static String liveBaseURL = 'http://3.131.171.176';
-  //static String liveBaseURL = 'https://0a30-103-15-254-56.ngrok.io';
+  // static String liveBaseURL = 'https://0455-103-15-254-57.ngrok.io';
 
 
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator

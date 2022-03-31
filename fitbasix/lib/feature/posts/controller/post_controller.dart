@@ -56,7 +56,7 @@ class PostController extends GetxController {
   Rx<MediaUrl> uploadedFiles = MediaUrl().obs;
   RxList<String> uploadUrls = RxList<String>([]);
   Rx<PostData> postData = PostData().obs;
-  //RxBool isLoading = RxBool(false);
+  RxBool isLoading = RxBool(false);
   RxList<File> selectedFiles = RxList<File>([]);
   RxBool deletingFile = RxBool(false);
   RxBool iscreateingPost = RxBool(false);
@@ -196,7 +196,9 @@ class PostController extends GetxController {
     } else {
       // await getPostData();
     }
-    iscreateingPost.value = false;
+    Future.delayed(Duration(milliseconds: 50),(){
+      iscreateingPost.value = false;
+    });
   }
 
   @override

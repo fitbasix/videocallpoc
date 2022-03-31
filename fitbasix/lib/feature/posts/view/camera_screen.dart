@@ -186,17 +186,19 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
                           _postController.selectedFiles,
                         );
 
-                        _postController.isLoading.value = false;
+                        //_postController.isLoading.value = false;
 
                         if (_postController.uploadedFiles.value.code == 0) {
                           _postController.postData.value =
-                          await CreatePostService.createPost(
-                              postId: _postController.postId.value,
-                              files: _postController
-                                  .uploadedFiles.value.response!.data);
-                          Navigator.pushNamed(context, RouteName.createPost);
+                              await CreatePostService.createPost(
+                                  postId: _postController.postId.value,
+                                  files: _postController.uploadedFiles.value.response!.data);
                         }
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        
                         _postController.isclicked.value = false;
+
                         _postController.isLoading.value = false;
                       }
                           :(){},
