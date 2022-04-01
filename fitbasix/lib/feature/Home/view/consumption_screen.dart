@@ -435,7 +435,10 @@ class ConsumptionScreen extends StatelessWidget {
                                       width: Get.width -
                                           32 * SizeConfig.widthMultiplier!,
                                       height: 48 * SizeConfig.heightMultiplier!,
-                                      color: kGreenColor,
+                                      decoration: BoxDecoration(
+                                        color: kgreen49,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
                                       child: Center(
                                         child: _homeController
                                                 .iswaterNotificationDataUpdating

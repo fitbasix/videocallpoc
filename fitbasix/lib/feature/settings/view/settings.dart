@@ -8,6 +8,7 @@ import 'package:fitbasix/feature/settings/controller/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -174,12 +175,25 @@ class _SettingScreenState extends State<SettingScreen> {
                 ? Transform.scale(
                     scale: 0.7,
                     child: Obx(
-                      () => CupertinoSwitch(
+                      () => FlutterSwitch(
                         value: switchcontroller!.value,
-                        onChanged: onchange,
-                        activeColor: Color(0xff4FC24C).withOpacity(0.2),
-                        thumbColor: Color(0xff4FC24C),
-                      ),
+                        onToggle: onchange!,
+                        activeColor: kgreen49.withOpacity(0.2),
+                        inactiveColor: greyB7.withOpacity(0.2),
+                        inactiveToggleColor: hintGrey,
+                        activeToggleColor: kgreen49,
+                        padding: 1.0,
+                        height: 24 * SizeConfig.heightMultiplier!,
+                        width: 42 * SizeConfig.widthMultiplier!,
+                      )
+
+
+                      //     CupertinoSwitch(
+                      //   value: switchcontroller!.value,
+                      //   onChanged: onchange,
+                      //   activeColor: Color(0xff4FC24C).withOpacity(0.2),
+                      //   thumbColor: Color(0xff4FC24C),
+                      // ),
                     ),
                   )
                 : Container()
