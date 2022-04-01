@@ -31,11 +31,12 @@ class ApiUrl {
   static String bmrcalculation = liveBaseURL + '/api/nutritions/getbmr';
   static String getSortByData =
       liveBaseURL + '/api/optionData/sorting/getOptions';
-  static String getMytainers = liveBaseURL + '/api/trainer/myTrainers';
+
   static String getAllSlots =
       liveBaseURL + '/api/optionData/timeSlots/getSlots';
   static String thirdPartyLogin = liveBaseURL + '/api/auth/thirdPartyLogin';
   static String loginAndSignup = liveBaseURL + '/api/auth/login';
+  static String getMyTrainers = liveBaseURL + '/api/trainer/myTrainers';
   static String registerUser = liveBaseURL + '/api/auth/create';
   static String getCountries = liveBaseURL + '/api/country/get';
   static String updateToken = liveBaseURL + '/api/auth/generateToken';
