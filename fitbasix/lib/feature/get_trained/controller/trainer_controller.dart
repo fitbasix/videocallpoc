@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
@@ -7,6 +9,7 @@ import 'package:fitbasix/feature/get_trained/model/sortbymodel.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../plans/models/AvailableSlot.dart';
 import '../../plans/models/FullPlanDetailModel.dart';
@@ -62,6 +65,56 @@ class TrainerController extends GetxController {
   Rx<TimingModel> timingModel = TimingModel().obs;
   RxBool isTiming = false.obs;
   RxList<int> availability = <int>[].obs;
+  Map<String, int> daysInt = {
+    "Sun": 0,
+    "Mon": 1,
+    "Tue": 2,
+    "Wed": 3,
+    "Thu": 4,
+    "Fri": 5,
+    "Sat": 6,
+  };
+  Map<int, String> numberToDay = {
+    0: "Sun",
+    1: "Mon",
+    2: "Tue",
+    3: "Wed",
+    4: "Thu",
+    5: "Fri",
+    6: "Sat",
+  };
+
+  bool isVideoAvailable(String time) {
+    List<String> times = time.split("_");
+    // var inputFormat = DateFormat('dd/MM/yyyy');
+    TimeOfDay inputDate1 =
+        TimeOfDay.fromDateTime(DateTime.parse(times[0]).toLocal());
+    TimeOfDay inputDate2 =
+        TimeOfDay.fromDateTime(DateTime.parse(times[1]).toLocal());
+    TimeOfDay now = TimeOfDay.now();
+    int nowInMinutes = now.hour * 60 + now.minute;
+    int time1 = inputDate1.hour * 60 + inputDate1.minute;
+    int time2 = inputDate2.hour * 60 + inputDate2.minute;
+    log(nowInMinutes.toString() +
+        '  ' +
+        time1.toString() +
+        " " +
+        time2.toString());
+    if (time1 < nowInMinutes && time2 > nowInMinutes) {
+      return true;
+    }
+
+    return false;
+  }
+
+  String GetDays(List<int>? days) {
+    String day = "";
+    for (int i = 0; i < days!.length; i++) {
+      log(days[i].toString());
+      day = day + (day == "" ? "" : " , ") + numberToDay[days[i]]!.toString();
+    }
+    return day;
+  }
 
   List<bool> UpdatedInterestStatus(int index) {
     int length = interests.value.response!.response!.data!.length;
@@ -75,6 +128,18 @@ class TrainerController extends GetxController {
     }
     interestSelection.value = selecteOption;
     return interestSelection;
+  }
+
+  String getTime(String time) {
+    List<String> times = time.split("_");
+    // var inputFormat = DateFormat('dd/MM/yyyy');
+    String inputDate1 = DateFormat("hh:mm aaa")
+        .format(DateTime.parse(times[0]).toLocal())
+        .split(" ")[0];
+    String inputDate2 =
+        DateFormat("hh:mm aaa").format(DateTime.parse(times[1]).toLocal());
+    log(inputDate1 + "  " + inputDate2);
+    return inputDate1 + "-" + inputDate2;
   }
 
   Future<void> setUp() async {
