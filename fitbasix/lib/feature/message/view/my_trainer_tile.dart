@@ -22,13 +22,9 @@ import 'chat_ui.dart';
 
 class MyTrainerTileScreen extends StatelessWidget {
   bool isMessageLoading = false;
- final HomeController _homeController = Get.find();
-  MyTrainerTileScreen({
-    Key? key,
-    this.chatHistoryList,
-    this.myTrainers
-  }) : super(key: key);
-
+  final HomeController _homeController = Get.find();
+  MyTrainerTileScreen({Key? key, this.chatHistoryList, this.myTrainers})
+      : super(key: key);
 
   List<QBDialog>? chatHistoryList;
 
@@ -37,59 +33,69 @@ class MyTrainerTileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorDark,
-      appBar: AppBar(
-
-        automaticallyImplyLeading: false,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
-        leading: IconButton(
-            onPressed: (){
-              Navigator.pop(context);
-            },
-            icon: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset(
-                ImagePath.backIcon,
-                width: 7 * SizeConfig.widthMultiplier!,
-                height: 12 * SizeConfig.heightMultiplier!,
-                color: Theme.of(context).primaryColor,
-              ),
-            )),
-        title: Padding(
-            padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
-            child: Text('my_trainer'.tr, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color))),
-        actions: [
-          IconButton(
+        backgroundColor: Theme.of(context).primaryColorDark,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+          leading: IconButton(
               onPressed: () {
-
+                Navigator.pop(context);
               },
-              icon: Icon(
-                Icons.search,
-                color: Theme.of(context).primaryColor,
-                size: 25 * SizeConfig.heightMultiplier!,
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  ImagePath.backIcon,
+                  width: 7 * SizeConfig.widthMultiplier!,
+                  height: 12 * SizeConfig.heightMultiplier!,
+                  color: Theme.of(context).primaryColor,
+                ),
               )),
-        ],
-      ),
-      body: ListView.builder(
+          title: Padding(
+              padding: EdgeInsets.only(left: 5 * SizeConfig.widthMultiplier!),
+              child: Text('my_trainer'.tr,
+                  style: AppTextStyle.hblack600Text.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color))),
+          actions: [
+            IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).primaryColor,
+                  size: 25 * SizeConfig.heightMultiplier!,
+                )),
+          ],
+        ),
+        body: ListView.builder(
           itemCount: myTrainers!.length,
           physics: const BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             int indexWhereChatPresent = -1;
-            if(chatHistoryList != null&&chatHistoryList![0].lastMessage!=null){
-              indexWhereChatPresent = chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers![index].quickBlox));
+            if (chatHistoryList != null &&
+                chatHistoryList![0].lastMessage != null) {
+              indexWhereChatPresent = chatHistoryList!.indexWhere((element) =>
+                  element.occupantsIds!.contains(myTrainers![index].quickBlox));
             }
             return TrainersTileUI(
-              taggedPersonList: List.generate(myTrainers![index].strengths!.length, (i) => myTrainers![index].strengths![i].name!),
+              taggedPersonList: List.generate(
+                  myTrainers![index].strengths!.length,
+                  (i) => myTrainers![index].strengths![i].name!),
               trainerName: myTrainers![index].name,
-              lastMessage: indexWhereChatPresent!=-1?chatHistoryList![indexWhereChatPresent].lastMessage!.capitalized():"",
+              lastMessage: indexWhereChatPresent != -1
+                  ? chatHistoryList![indexWhereChatPresent]
+                      .lastMessage!
+                      .capitalized()
+                  : "",
               trainerProfilePicUrl: myTrainers![index].profilePhoto,
-              isCurrentlyEnrolled:myTrainers![index].isCurrentlyEnrolled,
-              userHasChatHistory:indexWhereChatPresent!=-1?true:false,
-              enrolledDate: myTrainers![index].isCurrentlyEnrolled!?myTrainers![index].startDate:myTrainers![index].endDate,
-              lastMessageTime: indexWhereChatPresent!=-1?chatHistoryList![indexWhereChatPresent].lastMessageDateSent:0,
-              onTrainerTapped: ()async{
-
+              isCurrentlyEnrolled: myTrainers![index].isCurrentlyEnrolled,
+              userHasChatHistory: indexWhereChatPresent != -1 ? true : false,
+              enrolledDate: myTrainers![index].isCurrentlyEnrolled!
+                  ? myTrainers![index].startDate
+                  : myTrainers![index].endDate,
+              lastMessageTime: indexWhereChatPresent != -1
+                  ? chatHistoryList![indexWhereChatPresent].lastMessageDateSent
+                  : 0,
+              onTrainerTapped: () async {
                 if (!isMessageLoading) {
                   isMessageLoading = true;
                   bool dialogCreatedPreviously = false;
@@ -97,12 +103,15 @@ class MyTrainerTileScreen extends StatelessWidget {
                   //133817477	user1
                   //133815819 trainer1
                   //133612091 trainer
-                  final sharedPreferences = await SharedPreferences.getInstance();
+                  final sharedPreferences =
+                      await SharedPreferences.getInstance();
                   _homeController.userQuickBloxId.value =
-                  sharedPreferences.getInt("userQuickBloxId")!;
-                  int UserQuickBloxId = myTrainers![index].quickBlox!;//133819788;
+                      sharedPreferences.getInt("userQuickBloxId")!;
+                  int UserQuickBloxId =
+                      myTrainers![index].quickBlox!; //133819788;
                   String trainerName = myTrainers![index].name!;
-                  bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
+                  bool isCurrentlyEnrolled =
+                      myTrainers![index].isCurrentlyEnrolled!;
 
                   print(UserQuickBloxId.toString() +
                       "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
@@ -117,7 +126,7 @@ class MyTrainerTileScreen extends StatelessWidget {
                         .then((value) async {
                       for (int i = 0; i < value.length; i++) {
                         if (value[i]!.occupantsIds!.contains(
-                            _homeController.userQuickBloxId.value) &&
+                                _homeController.userQuickBloxId.value) &&
                             value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
                           dialogCreatedPreviously = true;
                           print(value[i]!.id.toString() + "maxxxx");
@@ -127,13 +136,17 @@ class MyTrainerTileScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ChatScreen(
-                                      userDialogForChat: value[i],
-                                      opponentID: UserQuickBloxId,
-                                      trainerTitle:trainerName,
-                                      isCurrentlyEnrolled: isCurrentlyEnrolled,
-                                      profilePicURL: myTrainers![index].profilePhoto!,
-                                      trainerId: myTrainers![index].user,
-                                    )));
+                                          userDialogForChat: value[i],
+                                          opponentID: UserQuickBloxId,
+                                          trainerTitle: trainerName,
+                                          isCurrentlyEnrolled:
+                                              isCurrentlyEnrolled,
+                                          profilePicURL:
+                                              myTrainers![index].profilePhoto!,
+                                          trainerId: myTrainers![index].user,
+                                          time: myTrainers![index].time,
+                                          days: myTrainers![index].days!,
+                                        )));
                             ++openPage;
                           }
                           isMessageLoading = false;
@@ -166,13 +179,17 @@ class MyTrainerTileScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChatScreen(
-                                          userDialogForChat: value,
-                                          opponentID: UserQuickBloxId,
-                                          trainerTitle: trainerName,
-                                          isCurrentlyEnrolled: isCurrentlyEnrolled,
-                                        profilePicURL: myTrainers![index].profilePhoto!,
-                                        trainerId: myTrainers![index].user,
-                                      )));
+                                            userDialogForChat: value,
+                                            opponentID: UserQuickBloxId,
+                                            trainerTitle: trainerName,
+                                            isCurrentlyEnrolled:
+                                                isCurrentlyEnrolled,
+                                            profilePicURL: myTrainers![index]
+                                                .profilePhoto!,
+                                            trainerId: myTrainers![index].user,
+                                            time: myTrainers![index].time,
+                                            days: myTrainers![index].days!,
+                                          )));
                               ++openPage;
                             }
                           });
@@ -191,12 +208,10 @@ class MyTrainerTileScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Message is loading")));
                 }
-
               },
             );
           },
-      )
-    );
+        ));
   }
 }
 
@@ -230,15 +245,13 @@ class TrainersTileUI extends StatelessWidget {
   var lastMessageDateToShow = "".obs;
   GestureTapCallback? onTrainerTapped;
 
-
-
   @override
   Widget build(BuildContext context) {
     setLastMessageDate();
     return GestureDetector(
       onTap: onTrainerTapped,
       child: Container(
-        margin: EdgeInsets.only(bottom: 8*SizeConfig.heightMultiplier!),
+        margin: EdgeInsets.only(bottom: 8 * SizeConfig.heightMultiplier!),
         color: Theme.of(context).secondaryHeaderColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,9 +274,8 @@ class TrainersTileUI extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(
                           trainerProfilePicUrl!,
-
                         ),
-                        radius: 25*SizeConfig.imageSizeMultiplier!,
+                        radius: 25 * SizeConfig.imageSizeMultiplier!,
                       ),
                     )),
                 SizedBox(
@@ -273,18 +285,27 @@ class TrainersTileUI extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(trainerName!.isNotEmpty ? trainerName! : "Loading..",
-                        style: AppTextStyle.hnormal600BlackText.copyWith(color: isCurrentlyEnrolled!?Theme.of(context).textTheme.bodyText1!.color:greyB7)),
+                        style: AppTextStyle.hnormal600BlackText.copyWith(
+                            color: isCurrentlyEnrolled!
+                                ? Theme.of(context).textTheme.bodyText1!.color
+                                : greyB7)),
                     //_taggedBar Widget
-                    _taggedBar(list: taggedPersonList,context: context)
+                    _taggedBar(list: taggedPersonList, context: context)
                   ],
                 ),
                 Spacer(),
                 Obx(
-                    ()=> lastMessageDateToShow.value.isNotEmpty?Padding(
-                    padding:
-                        EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
-                    child: Text(userHasChatHistory!?lastMessageDateToShow.value:"", style: AppTextStyle.hsmallhintText),
-                  ):Container(),
+                  () => lastMessageDateToShow.value.isNotEmpty
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              right: 16 * SizeConfig.widthMultiplier!),
+                          child: Text(
+                              userHasChatHistory!
+                                  ? lastMessageDateToShow.value
+                                  : "",
+                              style: AppTextStyle.hsmallhintText),
+                        )
+                      : Container(),
                 )
               ],
             ),
@@ -295,8 +316,16 @@ class TrainersTileUI extends StatelessWidget {
                     right: 38 * SizeConfig.widthMultiplier!,
                     top: 16 * SizeConfig.heightMultiplier!,
                     bottom: 16 * SizeConfig.heightMultiplier!),
-                child: Text(lastMessage!.isNotEmpty ? lastMessage! : (userHasChatHistory!? "loading...":"lets_start_conversation".tr),
-                    style: AppTextStyle.hmedium13Text.copyWith(color: isCurrentlyEnrolled!?Theme.of(context).textTheme.bodyText1!.color:greyB7)),
+                child: Text(
+                    lastMessage!.isNotEmpty
+                        ? lastMessage!
+                        : (userHasChatHistory!
+                            ? "loading..."
+                            : "lets_start_conversation".tr),
+                    style: AppTextStyle.hmedium13Text.copyWith(
+                        color: isCurrentlyEnrolled!
+                            ? Theme.of(context).textTheme.bodyText1!.color
+                            : greyB7)),
               ),
             ),
             Container(
@@ -306,11 +335,19 @@ class TrainersTileUI extends StatelessWidget {
                     bottom: 24 * SizeConfig.heightMultiplier!),
                 child: Row(
                   children: [
-                    Text(isCurrentlyEnrolled!?'enrolled_on'.tr:"enrolled_end_on", style: AppTextStyle.hsmallhintText),
+                    Text(
+                        isCurrentlyEnrolled!
+                            ? 'enrolled_on'.tr
+                            : "enrolled_end_on",
+                        style: AppTextStyle.hsmallhintText),
                     SizedBox(
                       width: 4 * SizeConfig.widthMultiplier!,
                     ),
-                    Text(DateFormat("d MMM yyyy").format(enrolledDate!), style: isCurrentlyEnrolled!?AppTextStyle.hsmallGreenText:AppTextStyle.hsmallGreenText.copyWith(color: hintGrey))
+                    Text(DateFormat("d MMM yyyy").format(enrolledDate!),
+                        style: isCurrentlyEnrolled!
+                            ? AppTextStyle.hsmallGreenText
+                            : AppTextStyle.hsmallGreenText
+                                .copyWith(color: hintGrey))
                   ],
                 ),
               ),
@@ -330,84 +367,127 @@ class TrainersTileUI extends StatelessWidget {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: AlertDialog(
-                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 30 * SizeConfig.heightMultiplier!),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                ),
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(trainerName!,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
-                    SizedBox(height: 26*SizeConfig.heightMultiplier!,),
+                    Text(
+                      trainerName!,
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                    SizedBox(
+                      height: 26 * SizeConfig.heightMultiplier!,
+                    ),
                     GestureDetector(
-                      onTap: (){
-                      },
+                      onTap: () {},
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(ImagePath.penIcon,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
-                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
-                          Text('Open profile',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                          SvgPicture.asset(
+                            ImagePath.penIcon,
+                            color: Theme.of(context).primaryColor,
+                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10.5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'Open profile',
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 22*SizeConfig.heightMultiplier!,),
+                    SizedBox(
+                      height: 22 * SizeConfig.heightMultiplier!,
+                    ),
                     GestureDetector(
-                      onTap: (){
-                      },
+                      onTap: () {},
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(ImagePath.muteBell,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
-                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
-                          Text('Mute notifications',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                          SvgPicture.asset(
+                            ImagePath.muteBell,
+                            color: Theme.of(context).primaryColor,
+                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10.5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'Mute notifications',
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 22*SizeConfig.heightMultiplier!,),
+                    SizedBox(
+                      height: 22 * SizeConfig.heightMultiplier!,
+                    ),
                     GestureDetector(
-                      onTap: (){
-                      },
+                      onTap: () {},
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(ImagePath.penIcon,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
-                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
-                          Text('Mark as unread',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                          SvgPicture.asset(
+                            ImagePath.penIcon,
+                            color: Theme.of(context).primaryColor,
+                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10.5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'Mark as unread',
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
                         ],
                       ),
                     ),
-
                   ],
                 ),
-              )
-          ),
+              )),
         );
-
-
-
       },
     );
   }
-  setLastMessageDate(){
+
+  setLastMessageDate() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = DateTime(now.year, now.month, now.day - 1);
-    DateTime dateOfFile = DateTime.fromMicrosecondsSinceEpoch(lastMessageTime! * 1000);
-    final checkDate = DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
-    if(checkDate == today){
+    DateTime dateOfFile =
+        DateTime.fromMicrosecondsSinceEpoch(lastMessageTime! * 1000);
+    final checkDate =
+        DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
+    if (checkDate == today) {
       lastMessageDateToShow.value = "Today";
-    }
-    else if(checkDate == yesterday){
+    } else if (checkDate == yesterday) {
       lastMessageDateToShow.value = "Yesterday";
-    }
-    else{
+    } else {
       lastMessageDateToShow.value = DateFormat("dd MMM yy").format(checkDate);
     }
   }
 
-  Widget _taggedBar({List<String>? list,required BuildContext context}) {
+  Widget _taggedBar({List<String>? list, required BuildContext context}) {
     return Row(
       children: [
         Container(
@@ -422,7 +502,8 @@ class TrainersTileUI extends StatelessWidget {
             child: Center(
               child: Text(
                 list![0].tr,
-                style: AppTextStyle.lightMediumBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
+                style: AppTextStyle.lightMediumBlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color),
               ),
             ),
           ),
@@ -430,23 +511,26 @@ class TrainersTileUI extends StatelessWidget {
         SizedBox(
           width: 8 * SizeConfig.widthMultiplier!,
         ),
-        list.length>1?Container(
-          height: 28 * SizeConfig.heightMultiplier!,
-          decoration: BoxDecoration(
-              color: Color(0xff747474),
-              borderRadius:
-                  BorderRadius.circular(28 * SizeConfig.heightMultiplier!)),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 12 * SizeConfig.widthMultiplier!),
-            child: Center(
-              child: Text(
-                '+' + (list.length - 1).toString().tr,
-                style: AppTextStyle.lightMediumBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
-              ),
-            ),
-          ),
-        ):Container(),
+        list.length > 1
+            ? Container(
+                height: 28 * SizeConfig.heightMultiplier!,
+                decoration: BoxDecoration(
+                    color: Color(0xff747474),
+                    borderRadius: BorderRadius.circular(
+                        28 * SizeConfig.heightMultiplier!)),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 12 * SizeConfig.widthMultiplier!),
+                  child: Center(
+                    child: Text(
+                      '+' + (list.length - 1).toString().tr,
+                      style: AppTextStyle.lightMediumBlackText.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
       ],
     );
   }

@@ -284,14 +284,15 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                 .value = output.response!.data!;
                                             // isTimeSlotSelected
                                           },
-                                          time: trainerController
-                                              .getAllSlots[trainerController
-                                                  .availableSlots
-                                                  .value
-                                                  .response!
-                                                  .data![index]
-                                                  .time!]
-                                              .name,
+                                          time: trainerController.getTime(
+                                              trainerController
+                                                  .getAllSlots[trainerController
+                                                      .availableSlots
+                                                      .value
+                                                      .response!
+                                                      .data![index]
+                                                      .time!]
+                                                  .name!),
                                         ),
                                       ));
                             }),

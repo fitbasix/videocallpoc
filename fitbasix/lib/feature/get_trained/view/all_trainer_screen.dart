@@ -808,8 +808,10 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           Text(
                             "available_timings".tr,
                             style: AppTextStyle.black400Text.copyWith(
-                                color:
-                                    Theme.of(context).textTheme.bodyText1!.color),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
                           ),
                           Spacer(),
                           IconButton(
@@ -893,8 +895,9 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                         }
                                         setState(() {});
                                       },
-                                      time: _trainerController.timingModel.value
-                                          .response!.data![index].name,
+                                      time: _trainerController.getTime(
+                                          _trainerController.timingModel.value
+                                              .response!.data![index].name!),
                                     ),
                                   ),
                                 ),
@@ -916,7 +919,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                         availability:
                                             _trainerController.availability);
                                 _scrollController.jumpTo(0);
-                                _trainerController.filterIsLoading.value = false;
+                                _trainerController.filterIsLoading.value =
+                                    false;
                                 //todo add filter feature here
                               }),
                         ),
@@ -1346,13 +1350,17 @@ class TimeSLotSelect extends StatelessWidget {
         width: 104 * SizeConfig.widthMultiplier!,
         height: 46 * SizeConfig.heightMultiplier!,
         child: Center(
-          child: Text(
-            time.toString(),
-            style: istimeSlotSelected
-                ? AppTextStyle.hnormal600BlackText.copyWith(
-                    color: Theme.of(context).textTheme.bodyText1!.color)
-                : AppTextStyle.hblack400Text.copyWith(
-                    color: Theme.of(context).textTheme.bodyText1!.color),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 5.0 * SizeConfig.widthMultiplier!),
+            child: Text(
+              time.toString(),
+              style: istimeSlotSelected
+                  ? AppTextStyle.hnormal600BlackText.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color)
+                  : AppTextStyle.hblack400Text.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color),
+            ),
           ),
         ),
       ),
