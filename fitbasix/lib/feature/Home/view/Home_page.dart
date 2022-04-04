@@ -317,60 +317,70 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 16 * SizeConfig.heightMultiplier!,
-                          ),
+                          // SizedBox(
+                          //   height: 16 * SizeConfig.heightMultiplier!,
+                          // ),
 
                         Obx(()=>_homeController.userProfileData.value.response!.data!.profile!.isPreviousEnrolled==true
                             ?Container()
                             :Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16 * SizeConfig.widthMultiplier!,
-                            vertical: 11 * SizeConfig.heightMultiplier!,
-                          ),
-                          color: kBlack,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          child: Column(
                             children: [
+                              SizedBox(
+                                height: 24 * SizeConfig.heightMultiplier!,
+                              ),
                               Container(
-                                width: 216 * SizeConfig.widthMultiplier!,
-                                child: Text(
-                                  'You can get a lot more out of it Start with our demo plan'.tr,
-                                  style: AppTextStyle.black600Text.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          ?.color),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16 * SizeConfig.widthMultiplier!,
+                                  vertical: 11 * SizeConfig.heightMultiplier!,
+                                ),
+                                color: kBlack,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 216 * SizeConfig.widthMultiplier!,
+                                      child: Text(
+                                        //todo string for translation
+                                        'You can get a lot more out of it Start with our demo plan'.tr,
+                                        style: AppTextStyle.black600Text.copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color),
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    //join button
+                                    GestureDetector(
+                                      onTap: () {
+                                        _homeController.selectedIndex.value = 1;
+                                        //Navigator.pushNamed(context, RouteName.userSetting);
+                                      },
+                                      child: Container(
+                                        height: 36 * SizeConfig.heightMultiplier!,
+                                        width: 96 * SizeConfig.widthMultiplier!,
+                                        decoration: BoxDecoration(
+                                          color: kgreen49,
+                                          borderRadius: BorderRadius.circular(
+                                              8 * SizeConfig.heightMultiplier!),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Take Demo'.tr,
+                                            style: AppTextStyle.black600Text.copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
-                              Spacer(),
-                              //join button
-                              GestureDetector(
-                                onTap: () {
-                                  _homeController.selectedIndex.value = 1;
-                                  //Navigator.pushNamed(context, RouteName.userSetting);
-                                },
-                                child: Container(
-                                  height: 36 * SizeConfig.heightMultiplier!,
-                                  width: 96 * SizeConfig.widthMultiplier!,
-                                  decoration: BoxDecoration(
-                                    color: kgreen49,
-                                    borderRadius: BorderRadius.circular(
-                                        8 * SizeConfig.heightMultiplier!),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Take Demo'.tr,
-                                      style: AppTextStyle.black600Text.copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              ?.color),
-                                    ),
-                                  ),
-                                ),
-                              )
                             ],
                           ),
                         ),
@@ -482,7 +492,9 @@ class _HomePageState extends State<HomePage> {
                           //     ],
                           //   ),
                           // ),
-
+                          SizedBox(
+                            height: 16 * SizeConfig.heightMultiplier!,
+                          ),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/black_textfield.dart';
+import 'package:fitbasix/feature/log_in/view/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -94,18 +95,32 @@ class _LoginScreenState extends State<LoginScreen> {
                             maxLength: 10,
                             isTextFieldActive: true,
                             preFixWidget: Container(
-                              width: 80,
+                              width: 90*SizeConfig.widthMultiplier!,
                               child: Row(
                                 children: [
-                                  CountryDropDown(
-                                    hint: _loginController.selectedCountry.value,
+                                  SimpleAccountMenu(
                                     listofItems: _loginController.countryList,
-                                    onChanged: (value) {
+                                    onChange: (value) {
                                       _loginController.selectedCountry.value =
                                           value;
                                       print(_loginController
                                           .selectedCountry.value.code);
                                     },
+                                    hint: _loginController.selectedCountry.value,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  // CountryDropDown(
+                                  //   hint: _loginController.selectedCountry.value,
+                                  //   listofItems: _loginController.countryList,
+                                  //   onChanged: (value) {
+                                  //     _loginController.selectedCountry.value =
+                                  //         value;
+                                  //     print(_loginController
+                                  //         .selectedCountry.value.code);
+                                  //   },
+                                  // ),
+                                  SizedBox(
+                                    width: 16 * SizeConfig.widthMultiplier!,
                                   ),
                                   const Text(
                                     '|',
