@@ -1241,7 +1241,7 @@ class MessageBubbleSender extends StatelessWidget {
         if(Platform.isAndroid){
           PermissionStatus status  = await Permission.storage.request();
           if(!_chatController.storagePermissionCalled.value){
-            _chatController.storagePermissionCalled.value = false;
+            _chatController.storagePermissionCalled.value = true;
             PermissionStatus status1 = await Permission.manageExternalStorage.request();
           }
           String? path;
@@ -1309,7 +1309,7 @@ class MessageBubbleSender extends StatelessWidget {
     if(Platform.isAndroid){
       PermissionStatus status = await Permission.storage.request();
       if(!_chatController.storagePermissionCalled.value){
-        _chatController.storagePermissionCalled.value = false;
+        _chatController.storagePermissionCalled.value = true;
         PermissionStatus status1 = await Permission.manageExternalStorage.request();
       }
       if (status == PermissionStatus.granted) {
