@@ -95,6 +95,29 @@ class TrainerServices {
     return allTrainerFromJson(response.toString());
   }
 
+  static Future<List<MyTrainer>> getMyTrainers(
+      {int? currentPage,
+        String? name,
+        int? trainerType,
+        int? interests,
+        List<int>? availability,
+        int? sortBy}) async {
+    int sortMethod =
+    sortBy == null ? _trainerController.SelectedSortMethod.value : sortBy;
+
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response =
+    await dio!.post(ApiUrl.getMyTrainers + "?sortBy=$sortMethod", data: {
+      "skip": currentPage == null ? 0 : currentPage * 5,
+      "name": name == null ? _trainerController.searchedMyTrainerName.value : name,
+    });
+    print("jjjj " + response.toString());
+    GetAllMyTrainers mytrainer = getAllMyTrainersFromJson(response.toString());
+    return mytrainer.response!.data!;
+  }
+
   static Future<SortByModel> getSortByData() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();

@@ -91,125 +91,122 @@ class _PostScreenState extends State<PostScreen> {
           body: Obx(
             () => _homeController.postLoading.value
                 ? Center(child: CustomizedCircularProgress())
-                : SingleChildScrollView(
-                    reverse: true,
-                    child: FullPostTile(
-                      name: _homeController.post.value.userId!.name!,
-                      profilePhoto:
-                          _homeController.post.value.userId!.profilePhoto!,
-                      imageUrl: _homeController.post.value.files!,
-                      category:
-                          _homeController.post.value.postCategory![0].name!,
-                      date: DateFormat.d()
-                          .add_MMM()
-                          .format(_homeController.post.value.updatedAt!),
-                      place: _homeController
-                                  .post.value.location!.placeName!.length ==
-                              0
-                          ? ''
-                          : _homeController.post.value.location!.placeName![1]
-                              .toString(),
-                      caption: _homeController.post.value.caption ?? '',
-                      likes: _homeController.post.value.likes.toString(),
-                      hitLike: () {
-                        if (_homeController.post.value.isLiked!) {
-                          _homeController.post.value.isLiked = false;
-                          _homeController.post.value.likes =
-                              _homeController.post.value.likes! - 1;
+                : FullPostTile(
+                  name: _homeController.post.value.userId!.name!,
+                  profilePhoto:
+                      _homeController.post.value.userId!.profilePhoto!,
+                  imageUrl: _homeController.post.value.files!,
+                  category:
+                      _homeController.post.value.postCategory![0].name!,
+                  date: DateFormat.d()
+                      .add_MMM()
+                      .format(_homeController.post.value.updatedAt!),
+                  place: _homeController
+                              .post.value.location!.placeName!.length ==
+                          0
+                      ? ''
+                      : _homeController.post.value.location!.placeName![1]
+                          .toString(),
+                  caption: _homeController.post.value.caption ?? '',
+                  likes: _homeController.post.value.likes.toString(),
+                  hitLike: () {
+                    if (_homeController.post.value.isLiked!) {
+                      _homeController.post.value.isLiked = false;
+                      _homeController.post.value.likes =
+                          _homeController.post.value.likes! - 1;
 
-                          HomeService.unlikePost(
-                              postId: _homeController.post.value.id);
-                        } else {
-                          _homeController.post.value.isLiked = true;
-                          _homeController.post.value.likes =
-                              _homeController.post.value.likes! + 1;
+                      HomeService.unlikePost(
+                          postId: _homeController.post.value.id);
+                    } else {
+                      _homeController.post.value.isLiked = true;
+                      _homeController.post.value.likes =
+                          _homeController.post.value.likes! + 1;
 
-                          _homeController.likedPost.toSet().toList();
+                      _homeController.likedPost.toSet().toList();
 
-                          HomeService.likePost(
-                              postId: _homeController.post.value.id);
-                        }
-                        _homeController.LikedPostMap[_homeController
-                            .post.value.id!] = _homeController.LikedPostMap[
-                                    _homeController.post.value.id!] ==
-                                null
-                            ? (_homeController.post.value.isLiked!)
-                            : !(_homeController
-                                .LikedPostMap[_homeController.post.value.id!]!);
-                        _homeController.likedPost.toSet();
-                        _homeController.likedPost
-                                    .indexOf(_homeController.post.value.id!) ==
-                                -1
-                            ? _homeController.likedPost
-                                .add(_homeController.post.value.id!)
-                            : _homeController.likedPost
-                                .remove(_homeController.post.value.id!);
+                      HomeService.likePost(
+                          postId: _homeController.post.value.id);
+                    }
+                    _homeController.LikedPostMap[_homeController
+                        .post.value.id!] = _homeController.LikedPostMap[
+                                _homeController.post.value.id!] ==
+                            null
+                        ? (_homeController.post.value.isLiked!)
+                        : !(_homeController
+                            .LikedPostMap[_homeController.post.value.id!]!);
+                    _homeController.likedPost.toSet();
+                    _homeController.likedPost
+                                .indexOf(_homeController.post.value.id!) ==
+                            -1
+                        ? _homeController.likedPost
+                            .add(_homeController.post.value.id!)
+                        : _homeController.likedPost
+                            .remove(_homeController.post.value.id!);
 
-                        setState(() {});
-                      },
-                      isLiked: _homeController.LikedPostMap[
-                                  _homeController.post.value.id] ==
-                              null
-                          ? _homeController.post.value.isLiked!
-                          : _homeController
-                              .LikedPostMap[_homeController.post.value.id]!,
-                      comments: _homeController.post.value.comments.toString(),
-                      addComment: () async {
-                       if(!isCommentLoading&&_homeController.commentController.text.isNotEmpty){
-                         print("got here");
-                         isCommentLoading = true;
-                         log("reply test");
-                         await HomeService.addComment(
-                             _homeController.post.value.id!,
-                             _homeController.comment.value);
-                         // _homeController.viewReplies!.clear();
-                         _homeController.commentController.clear();
-                         var postData = await HomeService.getPostById(
-                             _homeController.post.value.id!);
+                    setState(() {});
+                  },
+                  isLiked: _homeController.LikedPostMap[
+                              _homeController.post.value.id] ==
+                          null
+                      ? _homeController.post.value.isLiked!
+                      : _homeController
+                          .LikedPostMap[_homeController.post.value.id]!,
+                  comments: _homeController.post.value.comments.toString(),
+                  addComment: () async {
+                   if(!isCommentLoading&&_homeController.commentController.text.isNotEmpty){
+                     print("got here");
+                     isCommentLoading = true;
+                     log("reply test");
+                     await HomeService.addComment(
+                         _homeController.post.value.id!,
+                         _homeController.comment.value);
+                     // _homeController.viewReplies!.clear();
+                     _homeController.commentController.clear();
+                     var postData = await HomeService.getPostById(
+                         _homeController.post.value.id!);
 
-                         _homeController.post.value = postData.response!.data!;
-                         log("ccc" +
-                             _homeController.post.value.comments.toString());
-                         _homeController.postComments.value =
-                         await HomeService.fetchComment(
-                             postId: _homeController.post.value.id!);
-                         _homeController.viewReplies!.clear();
-                         if (_homeController
-                             .postComments.value.response!.data!.length !=
-                             0) {
-                           _homeController.commentsList.value = _homeController
-                               .postComments.value.response!.data!;
-                         }
-                         setState(() {});
-                         isCommentLoading = false;
-                       }
-                      },
-                      postId: _homeController.post.value.id!,
-                      comment: null,
-                      people: _homeController.post.value.people!,
-                      commentsList: _homeController.commentsList,
-                      onReply: () {
-                        print("reply");
-                      },
-                      onTap: () {},
-                      onViewPreviousComments: () async {
-                        if (_homeController.post.value.comments! / 5 >
-                            _homeController.skipCommentCount.value) {
-                          _homeController.commentController.clear();
-                          var moreComments = await HomeService.fetchComment(
-                              postId: _homeController.post.value.id!,
-                              skip: _homeController.skipCommentCount.value);
-                          _homeController.commentsList
-                              .addAll(moreComments.response!.data!);
+                     _homeController.post.value = postData.response!.data!;
+                     log("ccc" +
+                         _homeController.post.value.comments.toString());
+                     _homeController.postComments.value =
+                     await HomeService.fetchComment(
+                         postId: _homeController.post.value.id!);
+                     _homeController.viewReplies!.clear();
+                     if (_homeController
+                         .postComments.value.response!.data!.length !=
+                         0) {
+                       _homeController.commentsList.value = _homeController
+                           .postComments.value.response!.data!;
+                     }
+                     setState(() {});
+                     isCommentLoading = false;
+                   }
+                  },
+                  postId: _homeController.post.value.id!,
+                  comment: null,
+                  people: _homeController.post.value.people!,
+                  commentsList: _homeController.commentsList,
+                  onReply: () {
+                    print("reply");
+                  },
+                  onTap: () {},
+                  onViewPreviousComments: () async {
+                    if (_homeController.post.value.comments! / 5 >
+                        _homeController.skipCommentCount.value) {
+                      _homeController.commentController.clear();
+                      var moreComments = await HomeService.fetchComment(
+                          postId: _homeController.post.value.id!,
+                          skip: _homeController.skipCommentCount.value);
+                      _homeController.commentsList
+                          .addAll(moreComments.response!.data!);
 
-                          _homeController.skipCommentCount.value++;
-                        } else {
-                          return;
-                        }
-                      },
-                      addReply: () {},
-                    ),
-                  ),
+                      _homeController.skipCommentCount.value++;
+                    } else {
+                      return;
+                    }
+                  },
+                  addReply: () {},
+                ),
           )),
     );
   }

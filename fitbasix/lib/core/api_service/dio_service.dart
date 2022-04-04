@@ -78,7 +78,7 @@ class DioUtil {
           if (e.response!.statusCode == 445) {
             final responseData = jsonDecode(e.response.toString());
             final SnackBar snackBar =
-            SnackBar(content: Text(responseData["response"]["message"]));
+            SnackBar(content: Text(responseData["response"]["message"],style: const TextStyle(color: Colors.white),));
             snackbarKey.currentState?.showSnackBar(snackBar);
             InitializeQuickBlox().logOutUserSession();
             final LoginController _controller = Get.put(LoginController());

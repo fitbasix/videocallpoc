@@ -189,12 +189,25 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             ),
                           ),
                           suffixIcon: GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               _trainerController.searchController.text.length ==
                                       0
                                   ? _trainerController.isSearchActive.value =
                                       false
                                   : _trainerController.searchController.clear();
+                              _trainerController.filterIsLoading.value = true;
+                              _trainerController.searchedName.value = "";
+                              _trainerController.allTrainer.value =
+                              await TrainerServices.getAllTrainer(
+                                name: "",
+                                interests: _trainerController
+                                    .SelectedInterestIndex.value,
+                                trainerType:
+                                _trainerController.trainerType.value,
+                              );
+                              _scrollController.jumpTo(0);
+                              _trainerController.filterIsLoading.value = false;
+
                             },
                             child: Icon(
                               Icons.clear,

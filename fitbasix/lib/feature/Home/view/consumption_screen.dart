@@ -607,6 +607,7 @@ class ConsumptionScreen extends StatelessWidget {
 
     void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
       int toHour, int toMinute, int reminderSerialNo) async {
+      AwesomeNotifications().cancelAllSchedules();
       AwesomeNotifications().cancelAll();
       if(reminderSerialNo >0){
         DateTime startTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute);
