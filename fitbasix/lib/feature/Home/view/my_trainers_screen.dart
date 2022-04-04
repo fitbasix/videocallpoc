@@ -30,7 +30,9 @@ class MyTrainersScreen extends StatelessWidget {
       body: Obx(()=>
          Center(
             child: userChatsHistory[0].id!=null||_trainerController.trainers.value.response!.data!.myTrainers!.length>0
-                ? MyTrainerTileScreen(chatHistoryList: userChatsHistory,myTrainers: _trainerController.trainers.value.response!.data!.myTrainers!,)
+                ? MyTrainerTileScreen(chatHistoryList: userChatsHistory,
+              // myTrainers: _trainerController.trainers.value.response!.data!.myTrainers!,
+            )
                 : NoTrainerScreen()),
       ),
 
