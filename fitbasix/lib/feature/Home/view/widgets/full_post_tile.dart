@@ -116,90 +116,104 @@ class _FullPostTileState extends State<FullPostTile> {
                                               .textTheme
                                               .bodyText1
                                               ?.color,
-                                          fontSize: 14 * SizeConfig.textMultiplier!),
-                                    )
-                                  : widget.people.length == 1
-                                      ? Container(
-                                          width: 276 * SizeConfig.widthMultiplier!,
-                                          child: Wrap(
-                                            crossAxisAlignment:
-                                                WrapCrossAlignment.center,
-                                            children: [
-                                              Text(
-                                                widget.name,
-                                                style: AppTextStyle.boldBlackText
-                                                    .copyWith(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1
-                                                            ?.color,
-                                                        fontSize: 14 *
-                                                            SizeConfig.textMultiplier!),
-                                              ),
-                                              SizedBox(
-                                                width: 4 * SizeConfig.widthMultiplier!,
-                                              ),
-                                              Container(
-                                                height: 1,
-                                                width: 15,
+
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        widget.people[0].name!,
+                                        style: AppTextStyle.boldBlackText
+                                            .copyWith(
+
                                                 color: Theme.of(context)
                                                     .textTheme
                                                     .bodyText1
                                                     ?.color,
-                                              ),
-                                              SizedBox(
-                                                width: 4 * SizeConfig.widthMultiplier!,
-                                              ),
-                                              Text(
-                                                'with'.tr,
-                                                style: AppTextStyle.normalGreenText
-                                                    .copyWith(
-                                                  color: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1
-                                                      ?.color,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 4 * SizeConfig.widthMultiplier!,
-                                              ),
-                                              Text(
-                                                widget.people[0].name!,
-                                                style: AppTextStyle.boldBlackText
-                                                    .copyWith(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1
-                                                            ?.color,
-                                                        fontSize: 14 *
-                                                            SizeConfig.textMultiplier!),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      : Container(
-                                          width: 276 * SizeConfig.widthMultiplier!,
-                                          child: Wrap(
-                                            crossAxisAlignment:
-                                                WrapCrossAlignment.center,
-                                            children: [
-                                              Text(
-                                                widget.name,
-                                                style: AppTextStyle.boldBlackText
-                                                    .copyWith(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1
-                                                            ?.color,
-                                                        fontSize: 14 *
-                                                            SizeConfig.textMultiplier!),
-                                              ),
-                                              SizedBox(
-                                                width: 4 * SizeConfig.widthMultiplier!,
-                                              ),
-                                              Container(
-                                                height: 1,
-                                                width: 15,
+
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  width: 276 * SizeConfig.widthMultiplier!,
+                                  child: Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Text(
+                                        widget.name,
+                                        style: AppTextStyle.boldBlackText
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        width: 15,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        'with'.tr,
+                                        style: AppTextStyle.normalBlackText
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      for(var i =0;i<widget.people.length-1; i++)
+                                        Text(
+                                          widget.people[i].name!+', ',
+                                          style: AppTextStyle.boldBlackText
+                                              .copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
+                                              fontSize: 14 *
+                                                  SizeConfig.textMultiplier!),
+                                        ),
+                                      // Text(
+                                      //   widget.people[0].name!,
+                                      //   style: AppTextStyle.boldBlackText
+                                      //       .copyWith(
+                                      //           color: Theme.of(context)
+                                      //               .textTheme
+                                      //               .bodyText1
+                                      //               ?.color,
+                                      //           fontSize: 14 *
+                                      //               SizeConfig.textMultiplier!),
+                                      // ),
+                                      SizedBox(
+                                        width: 4 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        'and '.tr,
+                                        style: AppTextStyle.normalBlackText
+                                            .copyWith(
+
                                                 color: Theme.of(context)
                                                     .textTheme
                                                     .bodyText1
@@ -373,69 +387,24 @@ class _FullPostTileState extends State<FullPostTile> {
                                           ),
                                         ),
                                       ),
-                                      _postController
-                                                  .getUrlType(widget.imageUrl[index]) ==
-                                              0
-                                          ? CachedNetworkImage(
-                                              imageUrl: widget.imageUrl[index],
-                                              placeholder: (context, url) =>
-                                                  ShimmerEffect(),
-                                              errorWidget: (context, url, error) =>
-                                                  ShimmerEffect(),
-                                              height: 360 * SizeConfig.widthMultiplier!,
-                                              width: 360 * SizeConfig.widthMultiplier!,
-                                              fit: BoxFit.contain,
-                                            )
-                                          : Container(
-                                              height: 360 * SizeConfig.widthMultiplier!,
-                                              width: 360 * SizeConfig.widthMultiplier!,
-                                              child: VideoPlayerContainer(
-                                                  videoUrl: widget.imageUrl[index]),
-                                            ),
-                                      // Positioned(
-                                      //   top: 0,
-                                      //   right: 0,
-                                      //   child: Container(
-                                      //     child: BackdropFilter(
-                                      //       filter: ImageFilter.blur(
-                                      //           sigmaX: 7.0, sigmaY: 7.0),
-                                      //       child: Container(
-                                      //         height: 360 * SizeConfig.widthMultiplier!,
-                                      //         width: 360 * SizeConfig.widthMultiplier!,
-                                      //         color: Colors.black.withOpacity(0.5),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                      widget.imageUrl.length != 1
-                                          ? Positioned(
-                                              right: 0,
-                                              child: Container(
-                                                margin: EdgeInsets.only(
-                                                    top: 16 *
-                                                        SizeConfig.heightMultiplier!,
-                                                    right: 16 *
-                                                        SizeConfig.widthMultiplier!),
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 2 *
-                                                        SizeConfig.heightMultiplier!,
-                                                    horizontal: 12 *
-                                                        SizeConfig.widthMultiplier!),
-                                                decoration: BoxDecoration(
-                                                    color: lightBlack.withOpacity(0.5),
-                                                    borderRadius:
-                                                        BorderRadius.circular(8)),
-                                                child: Text(
-                                                  '${index + 1}/${widget.imageUrl.length}',
-                                                  style: AppTextStyle.boldBlackText
-                                                      .copyWith(
-                                                          color: kPureWhite,
-                                                          fontSize: 14 *
-                                                              SizeConfig
-                                                                  .textMultiplier!),
-                                                ),
-                                              ))
-                                          : SizedBox()
+
+                                      Text(
+                                        widget.people.last.name!,
+                                        // 'others'.trParams({
+                                        //   "no_people":
+                                        //       (widget.people.length - 1)
+                                        //           .toString()
+                                        // }),
+                                        style: AppTextStyle.boldBlackText
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!),
+                                      )
+
                                     ],
                                   );
                                 }),

@@ -90,14 +90,14 @@ class SetGoalScreen extends StatelessWidget {
                                       ),
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        if (_spgController.selectedGoalIndex
-                                                .value.serialId ==
-                                            null) {
-                                          _spgController
-                                                  .selectedGoalIndex.value =
-                                              _spgController.spgData.value
-                                                  .response!.data!.goalType![0];
-                                        }
+                                        // if (_spgController.selectedGoalIndex
+                                        //         .value.serialId ==
+                                        //     null) {
+                                        //   _spgController
+                                        //           .selectedGoalIndex.value =
+                                        //       _spgController.spgData.value
+                                        //           .response!.data!.goalType![0];
+                                        // }
                                         return Obx(() => GoalCard(
                                               title: _spgController
                                                   .spgData
