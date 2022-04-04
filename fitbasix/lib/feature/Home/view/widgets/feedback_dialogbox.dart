@@ -18,7 +18,6 @@ class DialogboxForFeedback extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
-        Navigator.pop(context);
         return false;
       },
       child: Dialog(

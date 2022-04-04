@@ -385,10 +385,10 @@ class ConsumptionScreen extends StatelessWidget {
                                   height: 12 * SizeConfig.heightMultiplier!,
                                 ),
                                 GestureDetector(
-                                  onDoubleTap: (){
-                                    showDemoNotification();
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("showing demo notification")));
-                                  },
+                                  // onDoubleTap: (){
+                                  //   showDemoNotification();
+                                  //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("showing demo notification")));
+                                  // },
                                   onTap: () async {
                                     String s = "12:24";
                                     _homeController
@@ -435,7 +435,10 @@ class ConsumptionScreen extends StatelessWidget {
                                       width: Get.width -
                                           32 * SizeConfig.widthMultiplier!,
                                       height: 48 * SizeConfig.heightMultiplier!,
-                                      color: kGreenColor,
+                                      decoration: BoxDecoration(
+                                        color: kgreen49,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
                                       child: Center(
                                         child: _homeController
                                                 .iswaterNotificationDataUpdating
@@ -604,6 +607,7 @@ class ConsumptionScreen extends StatelessWidget {
 
     void setNotificationDetailsForConsumption(int fromHour, int fromMinute,
       int toHour, int toMinute, int reminderSerialNo) async {
+      AwesomeNotifications().cancelAllSchedules();
       AwesomeNotifications().cancelAll();
       if(reminderSerialNo >0){
         DateTime startTime = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,fromHour,fromMinute);
@@ -630,8 +634,11 @@ class ConsumptionScreen extends StatelessWidget {
                   minute: startTime.minute,
                   repeats: true,
                   allowWhileIdle: true,
-                  preciseAlarm: true
+                  preciseAlarm: true,
+                timeZone: AwesomeNotifications.localTimeZoneIdentifier
+
               )
+
           );
           print(startTime.toString()+" bbbbb");
 

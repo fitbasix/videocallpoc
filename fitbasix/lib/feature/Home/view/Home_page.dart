@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,6 @@ class HomeAndTrainerPage extends StatelessWidget {
       key: homeController.drawerKey,
       body: Obx(() => screens[homeController.selectedIndex.value]),
       // bottomNavigationBar: CustomizedBottomAppBar(),
-
       bottomNavigationBar: CustomBottomNavigationBar(
         length: screens.length,
       ),
@@ -103,7 +103,6 @@ class _HomePageState extends State<HomePage> {
   final HomeController _homeController = Get.find();
   final PostController postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
-
   @override
   void initState() {
     super.initState();
@@ -306,7 +305,6 @@ class _HomePageState extends State<HomePage> {
                                               )
                                             ],
                                           ),
-                                        
                                         ],
                                       ),
                                     ),
@@ -319,116 +317,184 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 16 * SizeConfig.heightMultiplier!,
-                          ),
-                          //live stream
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16 * SizeConfig.widthMultiplier!,
-                              vertical: 8 * SizeConfig.heightMultiplier!,
-                            ),
-                            color: kBlack,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          // SizedBox(
+                          //   height: 16 * SizeConfig.heightMultiplier!,
+                          // ),
+
+                        Obx(()=>_homeController.userProfileData.value.response!.data!.profile!.isPreviousEnrolled==true
+                            ?Container()
+                            :Container(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 24 * SizeConfig.heightMultiplier!,
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16 * SizeConfig.widthMultiplier!,
+                                  vertical: 11 * SizeConfig.heightMultiplier!,
+                                ),
+                                color: kBlack,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Jonathan is streaming live now',
-                                      style: AppTextStyle.black600Text.copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              ?.color),
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            8 * SizeConfig.heightMultiplier!),
                                     Container(
-                                      padding: EdgeInsets.only(
-                                          top: 4 * SizeConfig.heightMultiplier!,
-                                          bottom:
-                                              4 * SizeConfig.heightMultiplier!,
-                                          right:
-                                              8 * SizeConfig.widthMultiplier!,
-                                          left: 8.67 *
-                                              SizeConfig.widthMultiplier!),
-                                      height: 24 * SizeConfig.heightMultiplier!,
-                                      //  width:98*SizeConfig.widthMultiplier!,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .headline4
-                                            ?.color,
-                                        borderRadius: BorderRadius.circular(
-                                            8 * SizeConfig.heightMultiplier!),
+                                      width: 216 * SizeConfig.widthMultiplier!,
+                                      child: Text(
+                                        //todo string for translation
+                                        'You can get a lot more out of it Start with our demo plan'.tr,
+                                        style: AppTextStyle.black600Text.copyWith(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.color),
                                       ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.visibility,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            size: 20,
+                                    ),
+                                    Spacer(),
+                                    //join button
+                                    GestureDetector(
+                                      onTap: () {
+                                        _homeController.selectedIndex.value = 1;
+                                        //Navigator.pushNamed(context, RouteName.userSetting);
+                                      },
+                                      child: Container(
+                                        height: 36 * SizeConfig.heightMultiplier!,
+                                        width: 96 * SizeConfig.widthMultiplier!,
+                                        decoration: BoxDecoration(
+                                          color: kgreen49,
+                                          borderRadius: BorderRadius.circular(
+                                              8 * SizeConfig.heightMultiplier!),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Take Demo'.tr,
+                                            style: AppTextStyle.black600Text.copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color),
                                           ),
-                                          SizedBox(
-                                            width: 4.67 *
-                                                SizeConfig.widthMultiplier!,
-                                          ),
-                                          Text('28 viewers',
-                                              style: AppTextStyle.black600Text
-                                                  .copyWith(
-                                                      fontSize: (12) *
-                                                          SizeConfig
-                                                              .textMultiplier!,
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1
-                                                          ?.color)),
-                                        ],
+                                        ),
                                       ),
                                     )
                                   ],
                                 ),
-                                Spacer(),
-                                //join button
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    height: 36 * SizeConfig.heightMultiplier!,
-                                    width: 96 * SizeConfig.widthMultiplier!,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFFF5A5A),
-                                      borderRadius: BorderRadius.circular(
-                                          8 * SizeConfig.heightMultiplier!),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal:
-                                            35 * SizeConfig.widthMultiplier!,
-                                        vertical:
-                                            8 * SizeConfig.heightMultiplier!),
-                                    child: Text(
-                                      'Join'.tr,
-                                      style: AppTextStyle.black600Text.copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              ?.color),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
+                        ),
+                        ),
 
+                          //live stream
+                          // Container(
+                          //   padding: EdgeInsets.symmetric(
+                          //     horizontal: 16 * SizeConfig.widthMultiplier!,
+                          //     vertical: 8 * SizeConfig.heightMultiplier!,
+                          //   ),
+                          //   color: kBlack,
+                          //   child: Row(
+                          //     crossAxisAlignment: CrossAxisAlignment.center,
+                          //     mainAxisAlignment: MainAxisAlignment.start,
+                          //     children: [
+                          //       Column(
+                          //         crossAxisAlignment: CrossAxisAlignment.start,
+                          //         mainAxisAlignment: MainAxisAlignment.start,
+                          //         children: [
+                          //           Text(
+                          //             'Jonathan is streaming live now',
+                          //             style: AppTextStyle.black600Text.copyWith(
+                          //                 color: Theme.of(context)
+                          //                     .textTheme
+                          //                     .bodyText1
+                          //                     ?.color),
+                          //           ),
+                          //           SizedBox(
+                          //               height:
+                          //                   8 * SizeConfig.heightMultiplier!),
+                          //           Container(
+                          //             padding: EdgeInsets.only(
+                          //                 top: 4 * SizeConfig.heightMultiplier!,
+                          //                 bottom:
+                          //                     4 * SizeConfig.heightMultiplier!,
+                          //                 right:
+                          //                     8 * SizeConfig.widthMultiplier!,
+                          //                 left: 8.67 *
+                          //                     SizeConfig.widthMultiplier!),
+                          //             height: 24 * SizeConfig.heightMultiplier!,
+                          //             //  width:98*SizeConfig.widthMultiplier!,
+                          //             decoration: BoxDecoration(
+                          //               color: Theme.of(context)
+                          //                   .textTheme
+                          //                   .headline4
+                          //                   ?.color,
+                          //               borderRadius: BorderRadius.circular(
+                          //                   8 * SizeConfig.heightMultiplier!),
+                          //             ),
+                          //             child: Row(
+                          //               crossAxisAlignment:
+                          //                   CrossAxisAlignment.center,
+                          //               mainAxisAlignment:
+                          //                   MainAxisAlignment.center,
+                          //               children: [
+                          //                 Icon(
+                          //                   Icons.visibility,
+                          //                   color:
+                          //                       Theme.of(context).primaryColor,
+                          //                   size: 20,
+                          //                 ),
+                          //                 SizedBox(
+                          //                   width: 4.67 *
+                          //                       SizeConfig.widthMultiplier!,
+                          //                 ),
+                          //                 Text('28 viewers',
+                          //                     style: AppTextStyle.black600Text
+                          //                         .copyWith(
+                          //                             fontSize: (12) *
+                          //                                 SizeConfig
+                          //                                     .textMultiplier!,
+                          //                             color: Theme.of(context)
+                          //                                 .textTheme
+                          //                                 .bodyText1
+                          //                                 ?.color)),
+                          //               ],
+                          //             ),
+                          //           )
+                          //         ],
+                          //       ),
+                          //       Spacer(),
+                          //       //join button
+                          //       GestureDetector(
+                          //         onTap: () {},
+                          //         child: Container(
+                          //           height: 36 * SizeConfig.heightMultiplier!,
+                          //           width: 96 * SizeConfig.widthMultiplier!,
+                          //           decoration: BoxDecoration(
+                          //             color: Color(0xFFFF5A5A),
+                          //             borderRadius: BorderRadius.circular(
+                          //                 8 * SizeConfig.heightMultiplier!),
+                          //           ),
+                          //           padding: EdgeInsets.symmetric(
+                          //               horizontal:
+                          //                   35 * SizeConfig.widthMultiplier!,
+                          //               vertical:
+                          //                   8 * SizeConfig.heightMultiplier!),
+                          //           child: Text(
+                          //             'Join'.tr,
+                          //             style: AppTextStyle.black600Text.copyWith(
+                          //                 color: Theme.of(context)
+                          //                     .textTheme
+                          //                     .bodyText1
+                          //                     ?.color),
+                          //           ),
+                          //         ),
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
+                          SizedBox(
+                            height: 16 * SizeConfig.heightMultiplier!,
+                          ),
                           Padding(
                             padding: EdgeInsets.only(
                                 left: 16 * SizeConfig.widthMultiplier!,

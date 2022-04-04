@@ -12,6 +12,57 @@ GetTrainerModel getTrainerModelFromJson(String str) =>
 String getTrainerModelToJson(GetTrainerModel data) =>
     json.encode(data.toJson());
 
+
+GetAllMyTrainers getAllMyTrainersFromJson(String str) => GetAllMyTrainers.fromJson(json.decode(str));
+
+String getAllMyTrainersToJson(GetAllMyTrainers data) => json.encode(data.toJson());
+
+class GetAllMyTrainers {
+  GetAllMyTrainers({
+    this.code,
+    this.response,
+    this.resStr,
+  });
+
+  int? code;
+  ResponseMyTrainer? response;
+  String? resStr;
+
+  factory GetAllMyTrainers.fromJson(Map<String, dynamic> json) => GetAllMyTrainers(
+    code: json["code"] == null ? null : json["code"],
+    response: json["response"] == null ? null : ResponseMyTrainer.fromJson(json["response"]),
+    resStr: json["resStr"] == null ? null : json["resStr"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "code": code == null ? null : code,
+    "response": response == null ? null : response!.toJson(),
+    "resStr": resStr == null ? null : resStr,
+  };
+}
+
+class ResponseMyTrainer {
+  ResponseMyTrainer({
+    this.message,
+    this.data,
+  });
+
+  String? message;
+  List<MyTrainer>? data;
+
+  factory ResponseMyTrainer.fromJson(Map<String, dynamic> json) => ResponseMyTrainer(
+    message: json["message"] == null ? null : json["message"],
+    data: json["data"] == null ? null : List<MyTrainer>.from(json["data"].map((x) => MyTrainer.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "message": message == null ? null : message,
+    "data": data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
+}
+
+
+
 class GetTrainerModel {
   GetTrainerModel({
     this.code,

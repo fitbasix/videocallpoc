@@ -84,7 +84,7 @@ class _HealthAppState extends State<HealthApp> {
       }
 
       // filter out duplicates
-      _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
+      //_healthDataList = HealthFactory.removeDuplicates(_healthDataList);
       homeController.caloriesBurnt.value = 0.0;
       // print the results
       _healthDataList.forEach((x) {

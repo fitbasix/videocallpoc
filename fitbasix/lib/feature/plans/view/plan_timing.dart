@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/plans/view/plan_info.dart';
 import 'package:fitbasix/feature/plans/view/trainers_plan.dart';
@@ -524,12 +525,17 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                   .atrainerDetail.value.id!);
                                           trainerController.setUp();
                                           showDialogForSessionBooked(context);
+
+                                          trainerController.atrainerDetail.value.isEnrolled=true;
                                           Future.delayed(Duration(seconds: 3),
                                               () {
                                             Navigator.pop(context);
                                             Navigator.pop(context);
                                             Navigator.pop(context);
                                           });
+                                          final HomeController _homeController = Get.find();
+                                          _homeController.setup();
+                                          trainerController.setUp();
                                         }
 
                                         // Navigator.pop(context);

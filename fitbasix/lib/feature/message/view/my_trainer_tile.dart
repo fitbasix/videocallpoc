@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,200 +19,373 @@ import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../get_trained/model/get_trained_model.dart';
+import '../../get_trained/services/trainer_services.dart';
 import 'chat_ui.dart';
 
-class MyTrainerTileScreen extends StatelessWidget {
-  bool isMessageLoading = false;
-  final HomeController _homeController = Get.find();
-  MyTrainerTileScreen({Key? key, this.chatHistoryList, this.myTrainers})
-      : super(key: key);
+class MyTrainerTileScreen extends StatefulWidget {
+
+  MyTrainerTileScreen({
+    Key? key,
+    this.chatHistoryList,
+   
+  }) : super(key: key);
+
+
 
   List<QBDialog>? chatHistoryList;
 
-  List<MyTrainer>? myTrainers;
+  
+
+  @override
+  State<MyTrainerTileScreen> createState() => _MyTrainerTileScreenState();
+}
+
+class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
+  TrainerController _trainerController = Get.find();
+
+  ScrollController _scrollController = ScrollController();
+
+  bool isMessageLoading = false;
+
+ final HomeController _homeController = Get.find();
+ 
 
   @override
   Widget build(BuildContext context) {
+    RxList<MyTrainer>? myTrainers= _trainerController.trainers.value.response!.data!.myTrainers!.obs;
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColorDark,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          elevation: 0,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
+      backgroundColor: Theme.of(context).primaryColorDark,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                ImagePath.backIcon,
+                width: 7 * SizeConfig.widthMultiplier!,
+                height: 12 * SizeConfig.heightMultiplier!,
+                color: Theme.of(context).primaryColor,
+              ),
+            )),
+        title: Obx(() => _trainerController.isMyTrainerSearchActive.value
+            ? Transform(
+          transform: Matrix4.translationValues(
+              -20 * SizeConfig.widthMultiplier!, 0, 0),
+          child: Container(
+            height: 32 * SizeConfig.heightMultiplier!,
+            decoration: BoxDecoration(
+              color: kLightGrey,
+              borderRadius: BorderRadius.circular(
+                  8 * SizeConfig.widthMultiplier!),
+            ),
+            child: TextField(
+              controller: _trainerController.searchMyTrainerController,
+              style: AppTextStyle.smallGreyText.copyWith(
+                  fontSize: 14 * SizeConfig.textMultiplier!,
+                  color: kBlack),
+              onChanged: (value) async {
+                if (_trainerController.searchMyTrainer.value != value) {
+                  _trainerController.searchMyTrainer.value = value;
+                  if (value.length >= 3) {
+                    _trainerController.trainerFilterIsLoading.value = true;
+                    _trainerController.searchedMyTrainerName.value = value;
+                    myTrainers.value =
+                    await TrainerServices.getMyTrainers(
+                      name: value,
+                    );
+                    _scrollController.jumpTo(0);
+                    _trainerController.trainerFilterIsLoading.value = false;
+                    //setState(() {});
+                  }
+                  if (value.length == 0) {
+                    _trainerController.trainerFilterIsLoading.value = true;
+                    _trainerController.searchedMyTrainerName.value = value;
+                    myTrainers.value =
+                    await TrainerServices.getMyTrainers(
+                      name: value,
+                    );
+                    _scrollController.jumpTo(0);
+                    _trainerController.trainerFilterIsLoading.value = false;
+                    //setState(() {});
+                  }
+                }
               },
-              icon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  ImagePath.backIcon,
-                  width: 7 * SizeConfig.widthMultiplier!,
-                  height: 12 * SizeConfig.heightMultiplier!,
-                  color: Theme.of(context).primaryColor,
+              decoration: InputDecoration(
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(
+                      left: 10.5 * SizeConfig.widthMultiplier!,
+                      right: 5 * SizeConfig.widthMultiplier!),
+                  child: Icon(
+                    Icons.search,
+                    color: hintGrey,
+                    size: 22 * SizeConfig.heightMultiplier!,
+                  ),
                 ),
-              )),
-          title: Padding(
-              padding: EdgeInsets.only(left: 5 * SizeConfig.widthMultiplier!),
-              child: Text('my_trainer'.tr,
-                  style: AppTextStyle.hblack600Text.copyWith(
-                      color: Theme.of(context).textTheme.bodyText1!.color))),
-          actions: [
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.search,
-                  color: Theme.of(context).primaryColor,
-                  size: 25 * SizeConfig.heightMultiplier!,
-                )),
-          ],
-        ),
-        body: ListView.builder(
-          itemCount: myTrainers!.length,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) {
-            int indexWhereChatPresent = -1;
-            if (chatHistoryList != null &&
-                chatHistoryList![0].lastMessage != null) {
-              indexWhereChatPresent = chatHistoryList!.indexWhere((element) =>
-                  element.occupantsIds!.contains(myTrainers![index].quickBlox));
-            }
-            return TrainersTileUI(
-              taggedPersonList: List.generate(
-                  myTrainers![index].strengths!.length,
-                  (i) => myTrainers![index].strengths![i].name!),
-              trainerName: myTrainers![index].name,
-              lastMessage: indexWhereChatPresent != -1
-                  ? chatHistoryList![indexWhereChatPresent]
-                      .lastMessage!
-                      .capitalized()
-                  : "",
-              trainerProfilePicUrl: myTrainers![index].profilePhoto,
-              isCurrentlyEnrolled: myTrainers![index].isCurrentlyEnrolled,
-              userHasChatHistory: indexWhereChatPresent != -1 ? true : false,
-              enrolledDate: myTrainers![index].isCurrentlyEnrolled!
-                  ? myTrainers![index].startDate
-                  : myTrainers![index].endDate,
-              lastMessageTime: indexWhereChatPresent != -1
-                  ? chatHistoryList![indexWhereChatPresent].lastMessageDateSent
-                  : 0,
-              onTrainerTapped: () async {
-                if (!isMessageLoading) {
-                  isMessageLoading = true;
-                  bool dialogCreatedPreviously = false;
-                  int openPage = 0;
-                  //133817477	user1
-                  //133815819 trainer1
-                  //133612091 trainer
-                  final sharedPreferences =
-                      await SharedPreferences.getInstance();
-                  _homeController.userQuickBloxId.value =
-                      sharedPreferences.getInt("userQuickBloxId")!;
-                  int UserQuickBloxId =
-                      myTrainers![index].quickBlox!; //133819788;
-                  String trainerName = myTrainers![index].name!;
-                  bool isCurrentlyEnrolled =
-                      myTrainers![index].isCurrentlyEnrolled!;
+                suffixIcon: GestureDetector(
+                  onTap: () async {
+                    _trainerController.searchMyTrainerController.text.length ==
+                        0
+                        ? _trainerController.isMyTrainerSearchActive.value =
+                    false
+                        : _trainerController.searchMyTrainerController.clear();
+                    _trainerController.trainerFilterIsLoading.value = true;
+                    _trainerController.searchedMyTrainerName.value = "";
+                    myTrainers.value =
+                    await TrainerServices.getMyTrainers(
+                      name: "",
+                    );
+                    _scrollController.jumpTo(0);
+                    _trainerController.trainerFilterIsLoading.value = false;
+                    // setState(() {
+                    // });
 
-                  print(UserQuickBloxId.toString() +
-                      "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
-                  QBSort sort = QBSort();
-                  sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
-                  sort.ascending = true;
-                  try {
-                    List<QBDialog?> dialogs = await QB.chat
-                        .getDialogs(
-                      sort: sort,
-                    )
-                        .then((value) async {
-                      for (int i = 0; i < value.length; i++) {
-                        if (value[i]!.occupantsIds!.contains(
-                                _homeController.userQuickBloxId.value) &&
-                            value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
-                          dialogCreatedPreviously = true;
-                          print(value[i]!.id.toString() + "maxxxx");
-                          isMessageLoading = false;
-                          if (openPage < 1) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChatScreen(
-                                          userDialogForChat: value[i],
-                                          opponentID: UserQuickBloxId,
-                                          trainerTitle: trainerName,
-                                          isCurrentlyEnrolled:
-                                              isCurrentlyEnrolled,
-                                          profilePicURL:
-                                              myTrainers![index].profilePhoto!,
-                                          trainerId: myTrainers![index].user,
-                                          time: myTrainers![index].time,
-                                          days: myTrainers![index].days!,
-                                        )));
-                            ++openPage;
-                          }
-                          isMessageLoading = false;
-                          break;
-                        }
-                      }
-                      if (!dialogCreatedPreviously) {
-                        List<int> occupantsIds = [
-                          _homeController.userQuickBloxId.value,
-                          UserQuickBloxId
-                        ];
-                        String dialogName = UserQuickBloxId.toString() +
-                            _homeController.userQuickBloxId.value.toString() +
-                            DateTime.now().millisecond.toString();
-                        int dialogType = QBChatDialogTypes.CHAT;
-                        print("got here too");
-                        try {
-                          QBDialog? createdDialog = await QB.chat
-                              .createDialog(
-                            occupantsIds,
-                            dialogName,
-                            dialogType: QBChatDialogTypes.CHAT,
-                          )
-                              .then((value) {
-                            print("dialog id is:" + value!.id!);
+                  },
+                  child: Icon(
+                    Icons.clear,
+                    color: hintGrey,
+                    size: 18 * SizeConfig.heightMultiplier!,
+                  ),
+                ),
+                border: InputBorder.none,
+                hintText: 'searchHint'.tr,
+                hintStyle: AppTextStyle.smallGreyText.copyWith(
+                    fontSize: 14 * SizeConfig.textMultiplier!,
+                    color: hintGrey),
+                /*contentPadding: EdgeInsets.only(
+                              top: -2,
+                            )*/
+              ),
+            ),
+          ),
+        )
+            : Transform(
+          transform: Matrix4.translationValues(-20, 0, 0),
+          child: Text(
+            'my_trainer'.tr,
+            style: AppTextStyle.titleText.copyWith(
+                color: Theme.of(context)
+                    .appBarTheme
+                    .titleTextStyle
+                    ?.color,
+                fontSize: 16 * SizeConfig.textMultiplier!),
+          ),
+        )),
+        actions: [
+          Obx(() => _trainerController.isMyTrainerSearchActive.value
+              ? SizedBox()
+              : IconButton(
+              onPressed: () {
+                _trainerController.isMyTrainerSearchActive.value = true;
+              },
+              icon: Icon(
+                Icons.search,
+                color: Theme.of(context).primaryColor,
+                size: 25 * SizeConfig.heightMultiplier!,
+              )))
+        ],
+
+        // Padding(
+        //     padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
+        //     child: Text(, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color))),
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //
+        //       },
+        //       icon: Icon(
+        //         Icons.search,
+        //         color: Theme.of(context).primaryColor,
+        //         size: 25 * SizeConfig.heightMultiplier!,
+        //       )),
+        // ],
+      ),
+      body: Obx(
+        ()=> (myTrainers.isNotEmpty)?ListView.builder(
+            controller: _scrollController,
+            itemCount: myTrainers.value!.length,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              int indexWhereChatPresent = -1;
+              if(widget.chatHistoryList != null&&widget.chatHistoryList![0].lastMessage!=null){
+                indexWhereChatPresent = widget.chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers.value![index].quickBlox));
+              }
+              return TrainersTileUI(
+                taggedPersonList: myTrainers.value![index].strengths!.isNotEmpty?List.generate(myTrainers.value![index].strengths!.length, (i) => myTrainers.value![index].strengths![i].name!):[],
+                trainerName: myTrainers.value![index].name,
+                lastMessage: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessage!.capitalized():"",
+                trainerProfilePicUrl: myTrainers.value![index].profilePhoto,
+                isCurrentlyEnrolled:myTrainers.value![index].isCurrentlyEnrolled,
+                userHasChatHistory:indexWhereChatPresent!=-1?true:false,
+                enrolledDate: myTrainers.value![index].isCurrentlyEnrolled!?myTrainers.value![index].startDate:myTrainers.value![index].endDate,
+                lastMessageTime: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessageDateSent:0,
+                onTrainerTapped: ()async{
+
+                  if (!isMessageLoading) {
+                    isMessageLoading = true;
+                    bool dialogCreatedPreviously = false;
+                    int openPage = 0;
+                    //133817477	user1
+                    //133815819 trainer1
+                    //133612091 trainer
+                    final sharedPreferences = await SharedPreferences.getInstance();
+                    _homeController.userQuickBloxId.value =
+                    sharedPreferences.getInt("userQuickBloxId")!;
+                    int UserQuickBloxId = myTrainers.value![index].quickBlox!;//133819788;
+                    String trainerName = myTrainers.value![index].name!;
+                    bool isCurrentlyEnrolled = myTrainers.value![index].isCurrentlyEnrolled!;
+
+                    print(UserQuickBloxId.toString() +
+                        "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
+                    QBSort sort = QBSort();
+                    sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+                    sort.ascending = true;
+                    try {
+                      List<QBDialog?> dialogs = await QB.chat
+                          .getDialogs(
+                        sort: sort,
+                      )
+                          .then((value) async {
+                        for (int i = 0; i < value.length; i++) {
+                          if (value[i]!.occupantsIds!.contains(
+                              _homeController.userQuickBloxId.value) &&
+                              value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
+                            dialogCreatedPreviously = true;
+                            print(value[i]!.id.toString() + "maxxxx");
+
                             isMessageLoading = false;
                             if (openPage < 1) {
-                              isMessageLoading = false;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChatScreen(
+                                        userDialogForChat: value[i],
+                                        opponentID: UserQuickBloxId,
+                                        trainerTitle:trainerName,
+                                        isCurrentlyEnrolled: isCurrentlyEnrolled,
+                                        profilePicURL: myTrainers.value![index].profilePhoto!,
+                                        trainerId: myTrainers.value![index].user,
+                                      )));
+
+                              ++openPage;
+                            }
+                            isMessageLoading = false;
+                            break;
+                          }
+                        }
+                        if (!dialogCreatedPreviously) {
+                          List<int> occupantsIds = [
+                            _homeController.userQuickBloxId.value,
+                            UserQuickBloxId
+                          ];
+                          String dialogName = UserQuickBloxId.toString() +
+                              _homeController.userQuickBloxId.value.toString() +
+                              DateTime.now().millisecond.toString();
+                          int dialogType = QBChatDialogTypes.CHAT;
+                          print("got here too");
+                          try {
+                            QBDialog? createdDialog = await QB.chat
+                                .createDialog(
+                              occupantsIds,
+                              dialogName,
+                              dialogType: QBChatDialogTypes.CHAT,
+                            )
+                                .then((value) {
+                              print("dialog id is:" + value!.id!);
+                              isMessageLoading = false;
+                              if (openPage < 1) {
+                                isMessageLoading = false;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChatScreen(
                                             userDialogForChat: value,
                                             opponentID: UserQuickBloxId,
                                             trainerTitle: trainerName,
-                                            isCurrentlyEnrolled:
-                                                isCurrentlyEnrolled,
-                                            profilePicURL: myTrainers![index]
-                                                .profilePhoto!,
-                                            trainerId: myTrainers![index].user,
-                                            time: myTrainers![index].time,
-                                            days: myTrainers![index].days!,
-                                          )));
-                              ++openPage;
-                            }
-                          });
-                        } on PlatformException catch (e) {
-                          isMessageLoading = false;
-                          print(e.toString());
+                                            isCurrentlyEnrolled: isCurrentlyEnrolled,
+                                          profilePicURL: myTrainers.value![index].profilePhoto!,
+                                          trainerId: myTrainers.value![index].user,
+                                        )));
+                                ++openPage;
+                              }
+                            });
+                          } on PlatformException catch (e) {
+                            isMessageLoading = false;
+                            print(e.toString());
+                          }
                         }
-                      }
-                      return value;
-                    });
-                  } on PlatformException catch (e) {
-                    isMessageLoading = false;
-                    // some error occurred, look at the exception message for more details
+                        return value;
+                      });
+                    } on PlatformException catch (e) {
+                      isMessageLoading = false;
+                      // some error occurred, look at the exception message for more details
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Message is loading")));
                   }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Message is loading")));
-                }
-              },
-            );
-          },
-        ));
+
+                },
+              );
+            },
+        ):Container(
+          margin: EdgeInsets.only(top: 110*SizeConfig.heightMultiplier!),
+          child: Container(
+            padding: EdgeInsets.only(
+                top: 71 * SizeConfig.heightMultiplier!,
+                left: 56 * SizeConfig.widthMultiplier!,
+                right:
+                55 * SizeConfig.widthMultiplier!),
+            child: Column(
+              children: [
+                Image.asset(
+                  ImagePath.nomatchesfoundImage,
+                  height: 102 *
+                      SizeConfig.heightMultiplier!,
+                  width:
+                  100 * SizeConfig.widthMultiplier!,
+                ),
+                SizedBox(
+                  height: 8.78 *
+                      SizeConfig.heightMultiplier!,
+                ),
+                Text(
+                  'no_matches_description'.tr,
+                  style: AppTextStyle.black400Text
+                      .copyWith(
+                      fontSize:
+                      (24) *
+                          SizeConfig
+                              .textMultiplier!,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          ?.color),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height:
+                  8 * SizeConfig.heightMultiplier!,
+                ),
+                Text(
+                  'different_search'.tr,
+                  style: AppTextStyle.black400Text
+                      .copyWith(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          ?.color),
+                ),
+              ],
+            ),
+          ),
+        ),
+      )
+    );
   }
 }
 
@@ -290,7 +464,8 @@ class TrainersTileUI extends StatelessWidget {
                                 ? Theme.of(context).textTheme.bodyText1!.color
                                 : greyB7)),
                     //_taggedBar Widget
-                    _taggedBar(list: taggedPersonList, context: context)
+                    (taggedPersonList.isNotEmpty)?_taggedBar(list: taggedPersonList,context: context):Container()
+
                   ],
                 ),
                 Spacer(),

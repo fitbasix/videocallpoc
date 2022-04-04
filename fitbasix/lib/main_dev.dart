@@ -86,16 +86,14 @@ Future<void> main() async {
 
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     Map<String, dynamic> deviceData = <String, dynamic>{};
-    var response;
+    AndroidDeviceInfo? androidInfo;
+    IosDeviceInfo? iosInfo;
     if (Platform.isAndroid == true) {
-      response = await deviceInfoPlugin.androidInfo;
+      androidInfo = await deviceInfoPlugin.androidInfo;
     } else {
-      response = await deviceInfoPlugin.iosInfo;
+      iosInfo = await deviceInfoPlugin.iosInfo;
     }
-    String deviceId = response.androidId;
-    log(response.androidId + "   " + response.device);
-    deviceData = _readAndroidBuildData(response);
-    log('Running on ${deviceData['device']}');
+    String deviceId = Platform.isAndroid?androidInfo!.androidId:iosInfo!.identifierForVendor;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('AccessToken');
     FirebaseMessaging.instance.getToken().then((value) async {
@@ -187,15 +185,16 @@ Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
 void registerFcmToken() async {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> deviceData = <String, dynamic>{};
-  var response;
+  AndroidDeviceInfo? androidInfo;
+  IosDeviceInfo? iosInfo;
   if (Platform.isAndroid == true) {
-    response = await deviceInfoPlugin.androidInfo;
+    androidInfo = await deviceInfoPlugin.androidInfo;
   } else {
-    response = await deviceInfoPlugin.iosInfo;
+    iosInfo = await deviceInfoPlugin.iosInfo;
   }
-  String deviceId = response.androidId;
-  log(response.androidId + "   " + response.device);
-  deviceData = _readAndroidBuildData(response);
+  String deviceId = Platform.isAndroid?androidInfo!.androidId:iosInfo!.identifierForVendor;
+  // log(response.androidId + "   " + response.device);
+  //deviceData = _readAndroidBuildData(response);
   log('Running on ${deviceData['device']}');
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   var accessToken = prefs.getString('AccessToken');

@@ -35,15 +35,21 @@ class TrainerController extends GetxController {
   RxList<bool> interestSelection = <bool>[true].obs;
   RxString pageTitle = RxString('');
   RxBool isSearchActive = RxBool(false);
+  RxBool isMyTrainerSearchActive = RxBool(false);
+
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController searchMyTrainerController = TextEditingController();
   RxString search = RxString('');
+  RxString searchMyTrainer = RxString('');
   RxInt trainerType = RxInt(0);
   RxInt SelectedInterestIndex = RxInt(0);
   RxInt SelectedSortMethod = RxInt(-1);
   RxString searchedName = RxString('');
+  RxString searchedMyTrainerName = RxString('');
   RxInt currentPage = RxInt(1);
   RxBool getTrainedIsLoading = RxBool(false);
   RxBool filterIsLoading = RxBool(false);
+  RxBool trainerFilterIsLoading = RxBool(false);
   RxBool showLoader = RxBool(false);
   RxInt slotsLeftLimit = RxInt(5);
   RxBool isProfileLoading = RxBool(false);

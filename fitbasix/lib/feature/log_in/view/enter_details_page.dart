@@ -130,8 +130,8 @@ class EnterDetailsPage extends StatelessWidget {
                         : ProceedButtonWithArrow(
                             title: 'proceed'.tr,
                             onPressed: () async {
-                              if (_loginController.name.value != '' &&
-                                  _loginController.email.value != '') {
+                              if ((_loginController.name.value != '' &&
+                                  _loginController.email.value != '')&&(RegExp(r"^[a-zA-Z\s]*$").hasMatch(_loginController.name.value))) {
                                 _loginController.isLoading.value = true;
                                 var screenId = await LogInService.registerUser(
                                     _loginController.name.value,
@@ -157,6 +157,12 @@ class EnterDetailsPage extends StatelessWidget {
                                 } else
                                   return;
                               } else {
+                                if(_loginController.name.value.isNotEmpty){
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Please enter a valid name')));
+                                }
                                 if (_loginController.name.value == '' &&
                                     _loginController.email.value == '') {
                                   ScaffoldMessenger.of(context).showSnackBar(

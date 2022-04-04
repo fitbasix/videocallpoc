@@ -96,8 +96,10 @@ Widget datePicker(BuildContext context) => Container(
         },
         pickerTheme: DateTimePickerTheme(
           backgroundColor: Colors.transparent,
-          itemHeight: 75,
-          pickerHeight: 270 * SizeConfig.heightMultiplier!,
+          itemHeight: 60*SizeConfig.heightMultiplier!,
+          pickerHeight: 220 * SizeConfig.heightMultiplier!,
+          // itemHeight: 75,
+          // pickerHeight: 270 * SizeConfig.heightMultiplier!,
           itemTextStyle: TextStyle(
               color: Theme.of(context).textTheme.bodyText1!.color,
               fontSize: 28 * SizeConfig.heightMultiplier!),

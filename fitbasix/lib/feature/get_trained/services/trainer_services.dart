@@ -95,6 +95,26 @@ class TrainerServices {
     return allTrainerFromJson(response.toString());
   }
 
+  static Future<List<MyTrainer>> getMyTrainers(
+      {int? currentPage,
+        String? name,}) async {
+
+    print(name);
+    print(_trainerController.searchedMyTrainerName.value);
+
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response =
+    await dio!.post(ApiUrl.getMyTrainers, data: {
+      "skip": currentPage == null ? 0 : currentPage * 5,
+      "name": name == null ? _trainerController.searchedMyTrainerName.value : name,
+    });
+    print("jjjj " + response.toString());
+    GetAllMyTrainers mytrainer = getAllMyTrainersFromJson(response.toString());
+    return mytrainer.response!.data!;
+  }
+
   static Future<SortByModel> getSortByData() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();

@@ -190,13 +190,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
           DateFormat("EEE").format(DateTime.now());
           //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
-          // callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-          //   // Navigator.of(context).push(MaterialPageRoute(
-          //   //     builder: (context) => VideoCallScreen(
-          //   //           sessionIdForVideoCall: value!,
-          //   //         )));
-          //   showDialogForVideoCallNotPossible(context);
-          // });
+          callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => VideoCallScreen(
+                      sessionIdForVideoCall: value!,
+                    )));
+            //showDialogForVideoCallNotPossible(context);
+          });
+
         },
         onMenuTap: () {
           if (messages != null) {
@@ -1031,11 +1032,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () async {
                         _trainerController.atrainerDetail.value = Trainer();
 
-                        _trainerController.isProfileLoading.value = true;
-                        _trainerController.isMyTrainerProfileLoading.value =
-                            true;
-                        Navigator.pushNamed(
-                            context, RouteName.trainerProfileScreen);
+                        _trainerController
+                            .isProfileLoading.value = true;
+                        _trainerController.isMyTrainerProfileLoading.value = true;
+                        Navigator.pushNamed(context,
+                            RouteName.trainerProfileScreen);
+
 
                         var result = await TrainerServices.getATrainerDetail(
                             widget.trainerId!);
@@ -1061,7 +1063,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         } else {
                           _trainerController.trainerPostList.clear();
                         }
-                        _trainerController.isProfileLoading.value = false;
+                        _trainerController
+                            .isProfileLoading.value = false;
+                        _trainerController.isMyTrainerProfileLoading.value = false;
+
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1493,11 +1498,13 @@ class MessageBubbleSender extends StatelessWidget {
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        print("jjjjjjj");
-        if (Platform.isAndroid) {
-          PermissionStatus status = await Permission.storage.request();
-          PermissionStatus status1 =
-              await Permission.manageExternalStorage.request();
+        if(Platform.isAndroid){
+          PermissionStatus status  = await Permission.storage.request();
+          if(!_chatController.storagePermissionCalled.value){
+            _chatController.storagePermissionCalled.value = true;
+            PermissionStatus status1 = await Permission.manageExternalStorage.request();
+          }
+
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
@@ -1561,8 +1568,11 @@ class MessageBubbleSender extends StatelessWidget {
   void checkFileExistence(String? fileName) async {
     if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
-      PermissionStatus status1 =
-          await Permission.manageExternalStorage.request();
+      if(!_chatController.storagePermissionCalled.value){
+        _chatController.storagePermissionCalled.value = true;
+        PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      }
+
       if (status == PermissionStatus.granted) {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');

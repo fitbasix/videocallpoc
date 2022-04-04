@@ -21,7 +21,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
   // var bmrresult = '1346';
   bool isReadmore = false;
   // final BmrController bmrController = Get.find(BmrController());
-  final BmrController bmrcontroller = Get.put(BmrController());
+  final BmrController bmrcontroller = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +30,7 @@ class _BMRResultScreenState extends State<BMRResultScreen> {
         title: 'bmr_calc'.tr,
         parentContext: context,
         onRoute: () {
+          print(bmrcontroller.isclicked.value);
           Navigator.pop(context);
         },
       ),

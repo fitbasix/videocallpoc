@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/black_textfield.dart';
+import 'package:fitbasix/feature/log_in/view/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final LoginController _loginController = Get.put(LoginController());
+
 
   String title = RemoteConfigService.remoteConfig.getString('welcome');
 
@@ -45,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final LoginController _loginController = Get.put(LoginController());
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -90,22 +92,37 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFieldContainer(
                             onChanged: (value) {
                               _loginController.mobile.value = value;
+                              print(_loginController.mobile.value+" iii");
                             },
                             maxLength: 10,
                             isTextFieldActive: true,
                             preFixWidget: Container(
-                              width: 80,
+                              width: 90*SizeConfig.widthMultiplier!,
                               child: Row(
                                 children: [
-                                  CountryDropDown(
-                                    hint: _loginController.selectedCountry.value,
+                                  SimpleAccountMenu(
                                     listofItems: _loginController.countryList,
-                                    onChanged: (value) {
+                                    onChange: (value) {
                                       _loginController.selectedCountry.value =
                                           value;
                                       print(_loginController
                                           .selectedCountry.value.code);
                                     },
+                                    hint: _loginController.selectedCountry.value,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  // CountryDropDown(
+                                  //   hint: _loginController.selectedCountry.value,
+                                  //   listofItems: _loginController.countryList,
+                                  //   onChanged: (value) {
+                                  //     _loginController.selectedCountry.value =
+                                  //         value;
+                                  //     print(_loginController
+                                  //         .selectedCountry.value.code);
+                                  //   },
+                                  // ),
+                                  SizedBox(
+                                    width: 16 * SizeConfig.widthMultiplier!,
                                   ),
                                   const Text(
                                     '|',
@@ -115,8 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                             ),
-                            textEditingController:
-                                _loginController.mobileController,
+                            textEditingController: _loginController.mobileController,
                             isNumber: true,
                             hint: 'enter_number_hint'.tr),
                       ),
@@ -132,7 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             title: 'next'.tr,
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
-                              if (_loginController.mobile.value.length == 10) {
+                              if (_loginController.mobile.value.length == 10&&RegExp(r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$").hasMatch(_loginController.mobile.value)) {
+                                print(_loginController.mobile.value+" kkk");
                                 _loginController.isLoading.value = true;
                                 await _loginController.getOTP();
                                 _loginController.isLoading.value = false;
