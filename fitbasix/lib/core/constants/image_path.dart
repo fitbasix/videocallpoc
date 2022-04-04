@@ -9,6 +9,7 @@ class ImagePath {
   static const String fileIcon = "assets/Icons/file_icon.svg";
   static const String muteBell = "assets/Icons/mute_bell.svg";
   static const String filterIcon = "assets/mytrainers/filter_icon.svg";
+  static const String noPlan = "assets/plans/no_plan.png";
   static const String availableClockIcon =
       "assets/mytrainers/available_clock_icon.svg";
   static const String animatedErrorIcon = "assets/gif/error_animated.gif";
