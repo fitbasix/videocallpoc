@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
@@ -10,23 +12,65 @@ import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
 import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 import 'core/api_service/remote_config_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fitbasix/core/localization/translations.dart';
 import 'package:fitbasix/fitbasix_app.dart';
+import 'feature/Home/controller/Home_Controller.dart';
 import 'feature/Home/view/consumption_screen.dart';
+import 'feature/get_trained/controller/trainer_controller.dart';
+import 'feature/help_and_support/view/privacy_policy_and_term_of_use/legal_screen.dart';
 
 Future<void> setupApp() async {
+  Uri? _latestUri;
+
+  Uri? _initialUri;
+
+  late StreamSubscription _sub;
+
   Get.put(AppTranslations());
   await RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final SharedPreferences prefs = await SharedPreferences.getInstance().then((value) async {
+    _sub = uriLinkStream.listen(
+          (Uri? uri) {
+        _latestUri = uri;
+      },
+      onError: (Object err) {
+        _latestUri = null;
+      },
+    );
+    try {
+      final uri = await getInitialUri();
+      _initialUri = uri;
+    } on PlatformException {
+      _initialUri = null;
+    } on FormatException catch (err) {
+      debugPrint(err.toString());
+      _initialUri = null;
+    }
+    print(_latestUri.toString()+ " latest zzzz");
+    print(_initialUri.toString()+" init zzzz");
+    if(_initialUri!=null||_latestUri!=null){
+      HomeController controller = Get.put(HomeController());
+      TrainerController trainerController = Get.put(TrainerController());
+    }
+    return value;
+  });
+
   InitializeQuickBlox().init();
   var accessToken = prefs.getString('AccessToken');
   final translations = GetTranslations.loadTranslations();
-  runApp(FitBasixApp(
+
+
+
+  runApp(
+      FitBasixApp(
     translations: translations,
-    child: accessToken == null ?  LoginScreen():HomeAndTrainerPage(),
+    child: accessToken == null ?  LoginScreen(): (_initialUri!=null||_latestUri!=null)? TrainerProfileScreen(trainerID: "6226f41b28d9a579eeabb5ee",):HomeAndTrainerPage(),
+
   ));
 }

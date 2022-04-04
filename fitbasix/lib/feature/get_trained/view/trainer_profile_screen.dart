@@ -38,8 +38,11 @@ import '../../Home/view/my_trainers_screen.dart';
 import '../../message/view/chat_ui.dart';
 
 class TrainerProfileScreen extends StatefulWidget {
-  String? trainerId;
-  TrainerProfileScreen({Key? key, this.trainerId}) : super(key: key);
+  String? trainerID;
+   TrainerProfileScreen({
+    this.trainerID,
+    Key? key}) : super(key: key);
+
 
   @override
   State<TrainerProfileScreen> createState() => _TrainerProfileScreenState();
@@ -52,23 +55,28 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   // var isPlanLoading = true.obs;
 
   getAllTrainerPlanData() async {
-    if (!_trainerController.isMyTrainerProfileLoading.value) {
-      _trainerController.planModel.value = PlanModel();
-      _trainerController.isPlanLoading.value = true;
-      _trainerController.planModel.value =
-          await TrainerServices.getPlanByTrainerId(
-                  _trainerController.atrainerDetail.value.user!.id!)
-              .then((value) {
-        _trainerController.isPlanLoading.value = false;
-        setState(() {});
-        return value;
-      });
-    }
+   if(widget.trainerID==null){
+     if (!_trainerController.isMyTrainerProfileLoading.value) {
+       _trainerController.planModel.value = PlanModel();
+       _trainerController.isPlanLoading.value = true;
+       _trainerController.planModel.value =
+       await TrainerServices.getPlanByTrainerId(
+           _trainerController.atrainerDetail.value.user!.id!)
+           .then((value) {
+         _trainerController.isPlanLoading.value = false;
+         setState(() {});
+         return value;
+       });
+     }
+   }
   }
 
   @override
   void initState() {
     getAllTrainerPlanData();
+    if(widget.trainerID!=null){
+      setTrainerDataForUniLink();
+    }
     super.initState();
   }
 
@@ -117,7 +125,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                     setState(() {});
                   },
                   onMessage: () async {
-                    print("the button value is:" + isMessageLoading.toString());
+
 
                     ///remove ! after testing
                     if (_trainerController.atrainerDetail.value.isEnrolled!) {
@@ -314,6 +322,15 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
         ),
       ),
     );
+  }
+
+  void setTrainerDataForUniLink() async {
+    _trainerController.isMyTrainerProfileLoading.value = true;
+    var response =  await TrainerServices.getATrainerDetail(widget.trainerID!);
+    _trainerController.atrainerDetail.value = response.response!.data!;
+    _trainerController.isMyTrainerProfileLoading.value = false;
+    _trainerController.setUp();
+    _homeController.setup();
   }
 }
 

@@ -89,6 +89,8 @@ dependencies:
   lottie: ^1.2.2
   shared_preferences_ios: ^2.1.0
   shared_preferences_android: ^2.0.11
+  uni_links: ^0.5.1
+
 
 
 dev_dependencies:
