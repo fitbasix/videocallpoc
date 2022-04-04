@@ -48,11 +48,54 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   bool isMessageLoading = false;
 
  final HomeController _homeController = Get.find();
+  RxList<MyTrainer>? myTrainers;
+ 
+ @override
+  void initState() {
+   _trainerController.currentPage.value = 0;
+   myTrainers= _trainerController.trainers.value.response!.data!.myTrainers!.obs;
+   _trainerController.isMyTrainerNeedToLoadData.value = true;
+
+   _scrollController.addListener(() async {
+     print(_trainerController.isMyTrainerNeedToLoadData.value);
+     if (_trainerController.isMyTrainerNeedToLoadData.value == true) {
+       if (_scrollController.position.maxScrollExtent ==
+           _scrollController.position.pixels) {
+        _trainerController.showLoaderOnMyTrainer.value = true;
+         final postQuery =  await TrainerServices.getMyTrainers(
+           name: "",
+           currentPage: _trainerController.currentPage.value
+         );
+
+         if (postQuery.length < 5) {
+           _trainerController.isMyTrainerNeedToLoadData.value = false;
+           myTrainers!.addAll(postQuery);
+          _trainerController.showLoaderOnMyTrainer.value = false;
+           return;
+         } else {
+           if (myTrainers!.last.id ==
+               postQuery.last.id) {
+            _trainerController.showLoaderOnMyTrainer.value = false;
+             return;
+           }
+
+           myTrainers!.addAll(postQuery);
+          _trainerController.showLoaderOnMyTrainer.value = false;
+         }
+         _trainerController.currentMyTrainerPage.value++;
+        _trainerController.showLoaderOnMyTrainer.value = false;
+         //setState(() {});
+       }
+     }
+   });
+     
+    super.initState();
+  }
  
 
   @override
   Widget build(BuildContext context) {
-    RxList<MyTrainer>? myTrainers= _trainerController.trainers.value.response!.data!.myTrainers!.obs;
+   
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorDark,
       appBar: AppBar(
@@ -94,7 +137,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                   if (value.length >= 3) {
                     _trainerController.trainerFilterIsLoading.value = true;
                     _trainerController.searchedMyTrainerName.value = value;
-                    myTrainers.value =
+                    myTrainers!.value =
                     await TrainerServices.getMyTrainers(
                       name: value,
                     );
@@ -105,7 +148,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                   if (value.length == 0) {
                     _trainerController.trainerFilterIsLoading.value = true;
                     _trainerController.searchedMyTrainerName.value = value;
-                    myTrainers.value =
+                    myTrainers!.value =
                     await TrainerServices.getMyTrainers(
                       name: value,
                     );
@@ -135,7 +178,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                         : _trainerController.searchMyTrainerController.clear();
                     _trainerController.trainerFilterIsLoading.value = true;
                     _trainerController.searchedMyTrainerName.value = "";
-                    myTrainers.value =
+                    myTrainers!.value =
                     await TrainerServices.getMyTrainers(
                       name: "",
                     );
@@ -205,133 +248,59 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
         // ],
       ),
       body: Obx(
-        ()=> (myTrainers.isNotEmpty)?ListView.builder(
-            controller: _scrollController,
-            itemCount: myTrainers.value!.length,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              int indexWhereChatPresent = -1;
-              if(widget.chatHistoryList != null&&widget.chatHistoryList![0].lastMessage!=null){
-                indexWhereChatPresent = widget.chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers.value![index].quickBlox));
-              }
-              return TrainersTileUI(
-                taggedPersonList: myTrainers.value![index].strengths!.isNotEmpty?List.generate(myTrainers.value![index].strengths!.length, (i) => myTrainers.value![index].strengths![i].name!):[],
-                trainerName: myTrainers.value![index].name,
-                lastMessage: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessage!.capitalized():"",
-                trainerProfilePicUrl: myTrainers.value![index].profilePhoto,
-                isCurrentlyEnrolled:myTrainers.value![index].isCurrentlyEnrolled,
-                userHasChatHistory:indexWhereChatPresent!=-1?true:false,
-                enrolledDate: myTrainers.value![index].isCurrentlyEnrolled!?myTrainers.value![index].startDate:myTrainers.value![index].endDate,
-                lastMessageTime: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessageDateSent:0,
-                onTrainerTapped: ()async{
-
-                  if (!isMessageLoading) {
-                    isMessageLoading = true;
-                    bool dialogCreatedPreviously = false;
-                    int openPage = 0;
-                    //133817477	user1
-                    //133815819 trainer1
-                    //133612091 trainer
-                    final sharedPreferences = await SharedPreferences.getInstance();
-                    _homeController.userQuickBloxId.value =
-                    sharedPreferences.getInt("userQuickBloxId")!;
-                    int UserQuickBloxId = myTrainers.value![index].quickBlox!;//133819788;
-                    String trainerName = myTrainers.value![index].name!;
-                    bool isCurrentlyEnrolled = myTrainers.value![index].isCurrentlyEnrolled!;
-
-                    print(UserQuickBloxId.toString() +
-                        "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
-                    QBSort sort = QBSort();
-                    sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
-                    sort.ascending = true;
-                    try {
-                      List<QBDialog?> dialogs = await QB.chat
-                          .getDialogs(
-                        sort: sort,
-                      )
-                          .then((value) async {
-                        for (int i = 0; i < value.length; i++) {
-                          if (value[i]!.occupantsIds!.contains(
-                              _homeController.userQuickBloxId.value) &&
-                              value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
-                            dialogCreatedPreviously = true;
-                            print(value[i]!.id.toString() + "maxxxx");
-
-                            isMessageLoading = false;
-                            if (openPage < 1) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChatScreen(
-                                        userDialogForChat: value[i],
-                                        opponentID: UserQuickBloxId,
-                                        trainerTitle:trainerName,
-                                        isCurrentlyEnrolled: isCurrentlyEnrolled,
-                                        profilePicURL: myTrainers.value![index].profilePhoto!,
-                                        trainerId: myTrainers.value![index].user,
-                                      )));
-
-                              ++openPage;
-                            }
-                            isMessageLoading = false;
-                            break;
-                          }
-                        }
-                        if (!dialogCreatedPreviously) {
-                          List<int> occupantsIds = [
-                            _homeController.userQuickBloxId.value,
-                            UserQuickBloxId
-                          ];
-                          String dialogName = UserQuickBloxId.toString() +
-                              _homeController.userQuickBloxId.value.toString() +
-                              DateTime.now().millisecond.toString();
-                          int dialogType = QBChatDialogTypes.CHAT;
-                          print("got here too");
-                          try {
-                            QBDialog? createdDialog = await QB.chat
-                                .createDialog(
-                              occupantsIds,
-                              dialogName,
-                              dialogType: QBChatDialogTypes.CHAT,
-                            )
-                                .then((value) {
-                              print("dialog id is:" + value!.id!);
-                              isMessageLoading = false;
-                              if (openPage < 1) {
-                                isMessageLoading = false;
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ChatScreen(
-                                            userDialogForChat: value,
-                                            opponentID: UserQuickBloxId,
-                                            trainerTitle: trainerName,
-                                            isCurrentlyEnrolled: isCurrentlyEnrolled,
-                                          profilePicURL: myTrainers.value![index].profilePhoto!,
-                                          trainerId: myTrainers.value![index].user,
-                                        )));
-                                ++openPage;
-                              }
-                            });
-                          } on PlatformException catch (e) {
-                            isMessageLoading = false;
-                            print(e.toString());
-                          }
-                        }
-                        return value;
-                      });
-                    } on PlatformException catch (e) {
-                      isMessageLoading = false;
-                      // some error occurred, look at the exception message for more details
+        ()=> (myTrainers!.isNotEmpty)?Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: myTrainers!.length,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    int indexWhereChatPresent = -1;
+                    if(widget.chatHistoryList != null&&widget.chatHistoryList![0].lastMessage!=null){
+                      indexWhereChatPresent = widget.chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers![index].quickBlox));
                     }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Message is loading")));
-                  }
+                    return TrainersTileUI(
+                      taggedPersonList: myTrainers![index].strengths!.isNotEmpty?List.generate(myTrainers![index].strengths!.length, (i) => myTrainers![index].strengths![i].name!):[],
+                      trainerName: myTrainers![index].name,
+                      lastMessage: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessage!.capitalized():"",
+                      trainerProfilePicUrl: myTrainers![index].profilePhoto,
+                      isCurrentlyEnrolled:myTrainers![index].isCurrentlyEnrolled,
+                      userHasChatHistory:indexWhereChatPresent!=-1?true:false,
+                      enrolledDate: myTrainers![index].isCurrentlyEnrolled!?myTrainers![index].startDate:myTrainers![index].endDate,
+                      lastMessageTime: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessageDateSent:0,
+                      onTrainerTapped: ()async{
+                        isMessageLoading = true;
+                        bool dialogCreatedPreviously = false;
+                        int openPage = 0;
+                        //133817477	user1
+                        //133815819 trainer1
+                        //133612091 trainer
+                        final sharedPreferences = await SharedPreferences.getInstance();
+                        _homeController.userQuickBloxId.value =
+                        sharedPreferences.getInt("userQuickBloxId")!;
+                        int UserQuickBloxId = myTrainers![index].quickBlox!;//133819788;
+                        String trainerName = myTrainers![index].name!;
+                        bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
 
-                },
-              );
-            },
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                  opponentID: UserQuickBloxId,
+                                  trainerTitle: trainerName,
+                                  isCurrentlyEnrolled: isCurrentlyEnrolled,
+                                  profilePicURL: myTrainers![index].profilePhoto!,
+                                  trainerId: myTrainers![index].user,
+                                )));
+
+                      },
+                    );
+                  },
+              ),
+            ),
+            Obx(()=>_trainerController.showLoaderOnMyTrainer.value?Center(child: CustomizedCircularProgress()):Container())
+          ],
         ):Container(
           margin: EdgeInsets.only(top: 110*SizeConfig.heightMultiplier!),
           child: Container(

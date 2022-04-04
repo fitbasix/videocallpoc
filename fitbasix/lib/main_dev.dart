@@ -95,6 +95,8 @@ Future<void> main() async {
         LogInService.RegisterDeviceToken(value.toString(), deviceId);
       }
 
+      print("fcm token" + value.toString());
+    });
 
     FirebaseMessaging.instance
         .getInitialMessage()

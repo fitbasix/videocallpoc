@@ -46,6 +46,7 @@ import 'package:quickblox_sdk/models/qb_user.dart';
 import 'package:quickblox_sdk/notifications/constants.dart';
 import 'package:quickblox_sdk/push/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/api_service/dio_service.dart';
 import '../../../core/constants/app_text_style.dart';
@@ -72,6 +73,7 @@ import '../../get_trained/services/trainer_services.dart';
 import '../../log_in/services/login_services.dart';
 import '../../posts/services/createPost_Services.dart';
 import '../controller/chat_controller.dart';
+import 'chat_videocallscreen.dart';
 
 class ChatScreen extends StatefulWidget {
   int? opponentID;
@@ -104,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
   var isPlanLoading = false.obs;
   final TrainerController _trainerController = Get.find();
   HomeController _homeController = Get.find();
-  QBDialog? userDialogForChat;
+  //QBDialog? userDialogForChat;
   var _massageController = TextEditingController().obs;
   StreamSubscription? _massageStreamSubscription;
   String event = QBChatEvents.RECEIVED_NEW_MESSAGE;
@@ -145,12 +147,78 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    userDialogForChat = widget.userDialogForChat;
+    getDialogId();
+    //userDialogForChat = widget.userDialogForChat;
     initStreamManagement();
     initMassage();
     connectionEvent();
-    getMassageFromHistory();
     super.initState();
+  }
+  void getDialogId() async {
+    bool dialogCreatedPreviously = false;
+    int openPage = 0;
+    //133817477	user1
+    //133815819 trainer1
+    //133612091 trainer
+    final sharedPreferences = await SharedPreferences.getInstance();
+    _homeController.userQuickBloxId.value =
+    sharedPreferences.getInt("userQuickBloxId")!;
+    int UserQuickBloxId = widget.opponentID!;//133819788;
+    // String trainerName = myTrainers![index].name!;
+    // bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
+
+    print(UserQuickBloxId.toString() +
+        "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
+    QBSort sort = QBSort();
+    sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+    sort.ascending = true;
+    try {
+      List<QBDialog?> dialogs = await QB.chat
+          .getDialogs(
+        sort: sort,
+      )
+          .then((value) async {
+        for (int i = 0; i < value.length; i++) {
+          if (value[i]!.occupantsIds!.contains(
+              _homeController.userQuickBloxId.value) &&
+              value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
+            dialogCreatedPreviously = true;
+            print(value[i]!.id.toString() + "maxxxx");
+            widget.userDialogForChat = value[i]!;
+            getMassageFromHistory();
+            break;
+          }
+        }
+        if (!dialogCreatedPreviously) {
+          List<int> occupantsIds = [
+            _homeController.userQuickBloxId.value,
+            UserQuickBloxId
+          ];
+          String dialogName = UserQuickBloxId.toString() +
+              _homeController.userQuickBloxId.value.toString() +
+              DateTime.now().millisecond.toString();
+          int dialogType = QBChatDialogTypes.CHAT;
+          print("got here too");
+          try {
+            QBDialog? createdDialog = await QB.chat
+                .createDialog(
+              occupantsIds,
+              dialogName,
+              dialogType: QBChatDialogTypes.CHAT,
+            )
+                .then((value) {
+              widget.userDialogForChat = value;
+              getMassageFromHistory();
+            });
+          } on PlatformException catch (e) {
+            print(e.toString());
+          }
+        }
+        return value;
+      });
+    } on PlatformException catch (e) {
+      // some error occurred, look at the exception message for more details
+    }
   }
 
   checkUserOnlineStatus() async {
@@ -217,7 +285,7 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Container(
           child: Column(
             children: [
-              (messages != null)
+              (widget.userDialogForChat!=null)?(messages != null)
                   ? Expanded(
                       child: ListView.builder(
                           reverse: true,
@@ -306,15 +374,77 @@ class _ChatScreenState extends State<ChatScreen> {
                         highlightColor:
                             Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                       ),
-                    )
-
-              /*Expanded(
-                      child: Center(
-                      child: Text("no message yet"),
-
-                    ))
-*/
-              ,
+                    ): Expanded(
+                child: Shimmer.fromColors(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Spacer(),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 16 * SizeConfig.widthMultiplier!),
+                        height: 28 * SizeConfig.heightMultiplier!,
+                        width: 176 * SizeConfig.widthMultiplier!,
+                        color: Color(0xFF3646464),
+                      ),
+                      SizedBox(
+                        height: 8 * SizeConfig.heightMultiplier!,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 16 * SizeConfig.widthMultiplier!),
+                        height: 49 * SizeConfig.heightMultiplier!,
+                        width: 215 * SizeConfig.widthMultiplier!,
+                        color: Color(0xFF3646464),
+                      ),
+                      SizedBox(
+                        height: 8 * SizeConfig.heightMultiplier!,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 16 * SizeConfig.widthMultiplier!),
+                        height: 28 * SizeConfig.heightMultiplier!,
+                        width: 176 * SizeConfig.widthMultiplier!,
+                        color: Color(0xFF3646464),
+                      ),
+                      SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              right: 16 * SizeConfig.widthMultiplier!),
+                          height: 42 * SizeConfig.heightMultiplier!,
+                          width: 191 * SizeConfig.widthMultiplier!,
+                          color: Color(0xFF3646464),
+                        ),
+                      ),
+                      SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 16 * SizeConfig.widthMultiplier!),
+                        height: 28 * SizeConfig.heightMultiplier!,
+                        width: 176 * SizeConfig.widthMultiplier!,
+                        color: Color(0xFF3646464),
+                      ),
+                      SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              right: 16 * SizeConfig.widthMultiplier!),
+                          height: 78 * SizeConfig.heightMultiplier!,
+                          width: 232 * SizeConfig.widthMultiplier!,
+                          color: Color(0xFF3646464),
+                        ),
+                      ),
+                    ],
+                  ),
+                  baseColor:
+                  Color.fromARGB(0, 255, 255, 255).withOpacity(0.1),
+                  highlightColor:
+                  Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
+                ),
+              ),
 
               ///todo remove this ! sign
 
@@ -834,7 +964,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     try {
       List<QBMessage?>? messageslist =
-          await QB.chat.getDialogMessages(userDialogForChat!.id!, sort: sort);
+          await QB.chat.getDialogMessages(widget.userDialogForChat!.id!, sort: sort);
       setState(() {
         messages = messageslist;
       });
@@ -1200,6 +1330,8 @@ class _ChatScreenState extends State<ChatScreen> {
     });
     dio.post(ApiUrl.uploadChatFileToDb, data: data);
   }
+
+
 }
 
 class MessageBubbleSender extends StatelessWidget {
@@ -1641,6 +1773,7 @@ class MessageBubbleSender extends StatelessWidget {
 
 //  Message Bubble
 class MessageBubbleOpponent extends StatelessWidget {
+  ChatController _chatController = Get.find();
   MessageBubbleOpponent({
     Key? key,
     this.message,
@@ -1882,8 +2015,10 @@ class MessageBubbleOpponent extends StatelessWidget {
         print("jjjjjjj");
         if (Platform.isAndroid) {
           PermissionStatus status = await Permission.storage.request();
-          PermissionStatus status1 =
-              await Permission.manageExternalStorage.request();
+          if(!_chatController.storagePermissionCalled.value){
+            _chatController.storagePermissionCalled.value = true;
+            PermissionStatus status1 = await Permission.manageExternalStorage.request();
+          }
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
@@ -1924,7 +2059,7 @@ class MessageBubbleOpponent extends StatelessWidget {
           }
 
           Dio dio = Dio();
-          dio.download(url!, path + "/" + fileName,
+          dio.download(url, path + "/" + fileName,
               onReceiveProgress: (received, total) {
             downloadProgress.value = ((received / total));
             print(downloadProgress.value);
@@ -1933,7 +2068,7 @@ class MessageBubbleOpponent extends StatelessWidget {
             }
           });
         }
-      } catch (e) {
+      }} catch (e) {
         print(e.toString());
       }
 
@@ -1944,6 +2079,7 @@ class MessageBubbleOpponent extends StatelessWidget {
       // Some error occurred, look at the exception message for more details
     }
   }
+
 
   void checkFileExistence(String? fileName) async {
 
