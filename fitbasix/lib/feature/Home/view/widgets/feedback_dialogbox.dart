@@ -8,6 +8,7 @@ import '../../../../core/constants/app_text_style.dart';
 import '../../../../core/constants/color_palette.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/reponsive/SizeConfig.dart';
+import 'dart:io';
 
 class DialogboxForFeedback extends StatelessWidget {
   const DialogboxForFeedback({Key? key}) : super(key: key);
@@ -44,7 +45,7 @@ class DialogboxForFeedback extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      'Your opinion matters to us!'.tr,
+                      'feedback_title'.tr,
                       style: AppTextStyle.hblack600Text.copyWith(
                           color: Theme.of(context).textTheme.bodyText1?.color),
                     ),
@@ -52,24 +53,38 @@ class DialogboxForFeedback extends StatelessWidget {
                   SizedBox(
                     height: 16 * SizeConfig.heightMultiplier!,
                   ),
-                  Padding(
+                  Platform.isIOS
+                  ?Padding(
                     padding: EdgeInsets.only(
                       left: 31 * SizeConfig.widthMultiplier!,
                       right: 31 * SizeConfig.widthMultiplier!,
                     ),
                     child: Text(
-                        'Rate us on the App Store and send us your feedback ⭐'
+                        'feedback_desc'
                             .tr,
                         style: AppTextStyle.hnormal600BlackText.copyWith(
                             fontWeight: FontWeight.w400,
                             color:
                                 Theme.of(context).textTheme.bodyText1?.color),
                         textAlign: TextAlign.center),
+                  )
+                  :Padding(
+                    padding: EdgeInsets.only(
+                      left: 31 * SizeConfig.widthMultiplier!,
+                      right: 31 * SizeConfig.widthMultiplier!,
+                    ),
+                    child: Text(
+                        'feedback_androidsubtitle'
+                            .tr,
+                        style: AppTextStyle.hnormal600BlackText.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color:
+                            Theme.of(context).textTheme.bodyText1?.color),
+                        textAlign: TextAlign.center),
                   ),
-                  // SizedBox(
-                  //   height: 24*SizeConfig.heightMultiplier!,
-                  // ),
-                  Padding(
+
+                  Platform.isIOS
+                      ?Padding(
                     padding: EdgeInsets.fromLTRB(
                       58 * SizeConfig.widthMultiplier!,
                       24 * SizeConfig.heightMultiplier!,
@@ -92,10 +107,37 @@ class DialogboxForFeedback extends StatelessWidget {
                               //GoTo the AppStore
                             },
                             child: Text(
-                              "Go to App Store".tr,
+                              "go_app_store".tr,
                               style: AppTextStyle.hboldWhiteText,
                             ))),
-                  ),
+                  )
+                      :Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      58 * SizeConfig.widthMultiplier!,
+                      24 * SizeConfig.heightMultiplier!,
+                      58 * SizeConfig.widthMultiplier!,
+                      32 * SizeConfig.heightMultiplier!,
+                    ),
+                    child: Container(
+                        width: 180 * SizeConfig.widthMultiplier!,
+                        height: 48 * SizeConfig.heightMultiplier!,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                backgroundColor:
+                                MaterialStateProperty.all(kgreen49),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            8 * SizeConfig.widthMultiplier!)))),
+                            onPressed: () {
+                              //GoTo the AppStore
+                            },
+                            child: Text(
+                              "goto_play_store".tr,
+                              style: AppTextStyle.hboldWhiteText,
+                            ))),
+                  )
                 ],
               ),
               Align(

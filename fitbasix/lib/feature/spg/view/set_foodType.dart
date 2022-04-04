@@ -73,11 +73,11 @@ class SetFoodType extends StatelessWidget {
                       mainAxisSpacing: 16 * SizeConfig.widthMultiplier!,
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      if (_spgController.selectedFoodIndex.value.serialId ==
-                          null) {
-                        _spgController.selectedFoodIndex.value = _spgController
-                            .spgData.value.response!.data!.foodType![0];
-                      }
+                      // if (_spgController.selectedFoodIndex.value.serialId ==
+                      //     null) {
+                      //   _spgController.selectedFoodIndex.value = _spgController
+                      //       .spgData.value.response!.data!.foodType![0];
+                      // }
                       return Obx(() => GoalCard(
                             title: _spgController.spgData.value.response!.data!
                                 .foodType![index].name!,

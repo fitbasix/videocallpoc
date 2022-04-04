@@ -343,7 +343,7 @@ class _HomePageState extends State<HomePage> {
                                       width: 216 * SizeConfig.widthMultiplier!,
                                       child: Text(
                                         //todo string for translation
-                                        'You can get a lot more out of it Start with our demo plan'.tr,
+                                        'take_demo_subtitle'.tr,
                                         style: AppTextStyle.black600Text.copyWith(
                                             color: Theme.of(context)
                                                 .textTheme
@@ -368,7 +368,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            'Take Demo'.tr,
+                                            'take_demo'.tr,
                                             style: AppTextStyle.black600Text.copyWith(
                                                 color: Theme.of(context)
                                                     .textTheme

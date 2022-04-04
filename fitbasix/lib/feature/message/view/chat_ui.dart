@@ -990,19 +990,38 @@ class _ChatScreenState extends State<ChatScreen> {
                     borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
                 ),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
+                content: Stack(
                   children: [
-                    SizedBox(
-                        height: 100*SizeConfig.heightMultiplier!,
-                        width: 100*SizeConfig.widthMultiplier!,
-                        child: Image.asset(ImagePath.animatedErrorIcon),),
-                    SizedBox(height: 26*SizeConfig.heightMultiplier!,),
-                    Text("call_not_possible".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),textAlign: TextAlign.center,),
-                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
-                    Text("call_not_possible_time".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 100*SizeConfig.heightMultiplier!,
+                          width: 100*SizeConfig.widthMultiplier!,
+                          child: Image.asset(ImagePath.animatedErrorIcon),),
+                        SizedBox(height: 26*SizeConfig.heightMultiplier!,),
+                        Text("call_not_possible".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),textAlign: TextAlign.center,),
+                        SizedBox(height: 16*SizeConfig.heightMultiplier!,),
+                        Text("call_not_possible_time".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                      ],
+                    ),
+                    Positioned(
+                      top: -15*SizeConfig.heightMultiplier!,
+                      right: -15*SizeConfig.widthMultiplier!,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: SvgPicture.asset(
+                          ImagePath.closedialogIcon,
+                          color: Theme.of(context).primaryColor,
+                          width: 16 * SizeConfig.widthMultiplier!,
+                          height: 16 * SizeConfig.heightMultiplier!,
+                        ),
+                      ),
+                    ),
                   ],
-                ),
+                )
               )
           ),
         );

@@ -73,12 +73,12 @@ class SelectGenderScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       // physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (_, index) {
-                        if (_spgController.selectedGenderIndex.value.serialId ==
-                            null) {
-                          _spgController.selectedGenderIndex.value =
-                              _spgController.spgData.value.response!.data!
-                                  .genderType![index];
-                        }
+                        // if (_spgController.selectedGenderIndex.value.serialId ==
+                        //     null) {
+                        //   _spgController.selectedGenderIndex.value =
+                        //       _spgController.spgData.value.response!.data!
+                        //           .genderType![index];
+                        // }
                         return Obx(() => Padding(
                               padding: index == 0
                                   ? EdgeInsets.only(

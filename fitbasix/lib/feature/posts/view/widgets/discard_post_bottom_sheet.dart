@@ -57,12 +57,12 @@ class DiscardPostBottomSheet extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.create,color: Theme.of(context).primaryColor),
+            icon: const Icon(Icons.create,color: kgreen49),
             label: Text(
               'continue_editing'.tr,
               style: AppTextStyle.boldBlackText
                   .copyWith(
-                  color: Theme.of(context).textTheme.bodyText1?.color,
+                  color: kgreen49,
                   fontSize: 14 * SizeConfig.textMultiplier!),
             ),
             style: TextButton.styleFrom(

@@ -217,22 +217,34 @@ class _FullPostTileState extends State<FullPostTile> {
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
-                                      Text(
-                                        widget.people[0].name!,
-                                        style: AppTextStyle.boldBlackText
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1
-                                                    ?.color,
-                                                fontSize: 14 *
-                                                    SizeConfig.textMultiplier!),
-                                      ),
+                                      for(var i =0;i<widget.people.length-1; i++)
+                                        Text(
+                                          widget.people[i].name!+', ',
+                                          style: AppTextStyle.boldBlackText
+                                              .copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  ?.color,
+                                              fontSize: 14 *
+                                                  SizeConfig.textMultiplier!),
+                                        ),
+                                      // Text(
+                                      //   widget.people[0].name!,
+                                      //   style: AppTextStyle.boldBlackText
+                                      //       .copyWith(
+                                      //           color: Theme.of(context)
+                                      //               .textTheme
+                                      //               .bodyText1
+                                      //               ?.color,
+                                      //           fontSize: 14 *
+                                      //               SizeConfig.textMultiplier!),
+                                      // ),
                                       SizedBox(
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
                                       Text(
-                                        'and'.tr,
+                                        'and '.tr,
                                         style: AppTextStyle.normalBlackText
                                             .copyWith(
                                                 color: Theme.of(context)
@@ -243,11 +255,12 @@ class _FullPostTileState extends State<FullPostTile> {
                                                     SizeConfig.textMultiplier!),
                                       ),
                                       Text(
-                                        'others'.trParams({
-                                          "no_people":
-                                              (widget.people.length - 1)
-                                                  .toString()
-                                        }),
+                                        widget.people.last.name!,
+                                        // 'others'.trParams({
+                                        //   "no_people":
+                                        //       (widget.people.length - 1)
+                                        //           .toString()
+                                        // }),
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
                                                 color: Theme.of(context)

@@ -63,10 +63,10 @@ class SetBodyFat extends StatelessWidget {
                   crossAxisCount: 3,
                   mainAxisSpacing: 5 * SizeConfig.widthMultiplier!),
               itemBuilder: (_, index) {
-                if (_spgController.selectedBodyFat.value.serialId == null) {
-                  _spgController.selectedBodyFat.value =
-                      _spgController.bodyFatData![0];
-                }
+                // if (_spgController.selectedBodyFat.value.serialId == null) {
+                //   _spgController.selectedBodyFat.value =
+                //       _spgController.bodyFatData![0];
+                // }
                 return Obx(
                   () => BodyFatTile(
                     imageUrl: _spgController.bodyFatData![index].image,
