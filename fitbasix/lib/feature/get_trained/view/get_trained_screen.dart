@@ -12,12 +12,13 @@ import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/custom_app_bar.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/trainer_card.dart';
 
+import '../../Home/controller/Home_Controller.dart';
 import '../model/all_trainer_model.dart';
 
 class GetTrainedScreen extends StatelessWidget {
   GetTrainedScreen({Key? key}) : super(key: key);
   final TrainerController _trainerController = Get.put(TrainerController());
-
+  final HomeController _homeController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +27,18 @@ class GetTrainedScreen extends StatelessWidget {
           centerTitle: false,
           elevation: 0,
           automaticallyImplyLeading: false,
+          leading: IconButton(
+            onPressed: () {
+              _homeController.selectedIndex.value = 0;
+            },
+            icon: SvgPicture.asset(
+              ImagePath.backIcon,
+              color: Theme.of(context).primaryColor,
+              width: 7.41 * SizeConfig.widthMultiplier!,
+              height: 12 * SizeConfig.heightMultiplier!,
+              fit: BoxFit.contain,
+            ),
+          ),
           title: Text('getTrainedTitle'.tr,
               style: AppTextStyle.titleText.copyWith(
                   color: Theme.of(context).appBarTheme.titleTextStyle?.color,

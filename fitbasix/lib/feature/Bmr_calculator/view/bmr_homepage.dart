@@ -28,6 +28,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
   double height = 180;
   final BmrController bmrController = Get.put(BmrController());
   final HomeController _homeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +46,9 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
             Padding(
               padding: EdgeInsets.all(8.0 * SizeConfig.widthMultiplier!),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   //age & bodyweight section
                   Row(
@@ -52,9 +56,8 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                       // Age
                       Expanded(
                         child: Container(
-                          margin:
-                              EdgeInsets.all(8 * SizeConfig.widthMultiplier!),
-                          height: 180 * SizeConfig.heightMultiplier!,
+                          margin: EdgeInsets.all(8*SizeConfig.widthMultiplier!),
+                         // height: 132 * SizeConfig.heightMultiplier!,
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -78,7 +81,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                       left: 12 * SizeConfig.widthMultiplier!,
-                                      top: 12 * SizeConfig.heightMultiplier!,
+                                      top: 8 * SizeConfig.heightMultiplier!,
                                     ),
                                     child: Text(
                                       'age'.tr,
@@ -89,7 +92,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 37 * SizeConfig.heightMultiplier!,
+                                  height: 21 * SizeConfig.heightMultiplier!,
                                 ),
                                 Row(
                                   children: [
@@ -131,9 +134,9 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                     )
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 8 * SizeConfig.heightMultiplier!,
-                                ),
+                                // SizedBox(
+                                //   height: 8 * SizeConfig.heightMultiplier!,
+                                // ),
                                 Center(
                                   child: Text(
                                     'year'.tr,
@@ -142,16 +145,17 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                       color: Theme.of(context).textTheme.bodyText1?.color,
                                     ),
                                   ),
-                                )
+                                ),
+                                SizedBox(
+                                  height: 30 * SizeConfig.heightMultiplier!,
+                                ),
                               ]),
                         ),
                       ),
                       // body weight
                       Expanded(
                         child: Container(
-                          margin:
-                              EdgeInsets.all(8 * SizeConfig.widthMultiplier!),
-
+                          margin: EdgeInsets.all(8*SizeConfig.widthMultiplier!),
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -165,7 +169,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                             color: Theme.of(context).scaffoldBackgroundColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          height: 180 * SizeConfig.heightMultiplier!,
+                        //  height: 132 * SizeConfig.heightMultiplier!,
                           // width: 156 * SizeConfig.widthMultiplier!,
                           child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -176,7 +180,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                       left: 12 * SizeConfig.widthMultiplier!,
-                                      top: 12 * SizeConfig.heightMultiplier!,
+                                      top: 8 * SizeConfig.heightMultiplier!,
                                     ),
                                     child: Text(
                                       'body_weight'.tr,
@@ -188,7 +192,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 37 * SizeConfig.heightMultiplier!,
+                                  height: 21 * SizeConfig.heightMultiplier!,
                                 ),
                                 Row(
                                   children: [
@@ -230,9 +234,9 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                     )
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 8 * SizeConfig.heightMultiplier!,
-                                ),
+                                // SizedBox(
+                                //   height: 8 * SizeConfig.heightMultiplier!,
+                                // ),
                                 Center(
                                   child: Text(
                                     'kg'.tr,
@@ -241,7 +245,10 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                    color: Theme.of(context).textTheme.bodyText1?.color,
                                         ),
                                   ),
-                                )
+                                ),
+                                SizedBox(
+                                  height: 30 * SizeConfig.heightMultiplier!,
+                                ),
                               ]),
                         ),
                       ),
@@ -264,11 +271,15 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                       ],
                     ),
                     // height: 195 * SizeConfig.heightMultiplier!,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Row(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 12*SizeConfig.heightMultiplier!,
+                            left: 12*SizeConfig.widthMultiplier!,
+                            right: 12*SizeConfig.widthMultiplier!,
+                          ),
+                          child: Row(
                             children: [
                               Text(
                                 'height'.tr,
@@ -285,40 +296,43 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 25 * SizeConfig.heightMultiplier!,
-                          ),
-                          Text(
-                            (height * 0.0328084).toString().split(".")[0] +
-                                '.' +
-                                (int.parse((height * 0.0328084)
-                                            .toString()
-                                            .substring(2, 4)) *
-                                        0.12)
-                                    .toString()
-                                    .substring(0, 2)
-                                    .replaceAll(".", ""),
-                            style: AppTextStyle.hblackSemiBoldText.copyWith(
-                                color: Theme.of(context).textTheme.bodyText1?.color,
-                                fontSize: 32 * SizeConfig.textMultiplier!),
-                          ),
-                          SizedBox(
-                            height: 39 * SizeConfig.heightMultiplier!,
-                          ),
-                          Slider(
-                              activeColor: kgreen49,
-                              inactiveColor: klightgreenEB.withOpacity(0.5),
-                              thumbColor: kgreen49,
-                              value: height.toDouble(),
-                              min: 100,
-                              max: 300,
-                              onChanged: (double newValue) {
-                                setState(() {
-                                  height = newValue;
-                                });
-                              }),
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          height: 17 * SizeConfig.heightMultiplier!,
+                        ),
+                        Text(
+                          (height * 0.0328084).toString().split(".")[0] +
+                              '.' +
+                              (int.parse((height * 0.0328084)
+                                          .toString()
+                                          .substring(2, 4)) *
+                                      0.12)
+                                  .toString()
+                                  .substring(0, 2)
+                                  .replaceAll(".", ""),
+                          style: AppTextStyle.hblackSemiBoldText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: 32 * SizeConfig.textMultiplier!),
+                        ),
+                        SizedBox(
+                          height: 5 * SizeConfig.heightMultiplier!,
+                        ),
+                        Slider(
+                            activeColor: kgreen49,
+                            inactiveColor: klightgreenEB.withOpacity(0.5),
+                            thumbColor: kgreen49,
+                            value: height.toDouble(),
+                            min: 100,
+                            max: 300,
+                            onChanged: (double newValue) {
+                              setState(() {
+                                height = newValue;
+                              });
+                            }),
+                        // SizedBox(
+                        //   height: 15 * SizeConfig.heightMultiplier!,
+                        // ),
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -335,7 +349,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                           });
                         },
                         child: Container(
-                          height: 52 * SizeConfig.heightMultiplier!,
+                          height: 44 * SizeConfig.heightMultiplier!,
                           width: 164 * SizeConfig.widthMultiplier!,
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -377,7 +391,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                             });
                           },
                           child: Container(
-                            height: 52 * SizeConfig.heightMultiplier!,
+                            height: 44 * SizeConfig.heightMultiplier!,
                             width: 164 * SizeConfig.widthMultiplier!,
                             decoration: BoxDecoration(
                                 border: Border.all(
@@ -420,7 +434,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                 ),
-                child: Container(
+                child: Obx(()=>Container(
                   height: 48 * SizeConfig.heightMultiplier!,
                   width: 328 * SizeConfig.widthMultiplier!,
                   decoration: BoxDecoration(
@@ -434,22 +448,26 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 8 * SizeConfig.widthMultiplier!)))),
-                    onPressed: () async {
+                    onPressed: bmrController.isclicked.value ==false?()  async{
                       // API Call
+                      print('hillo');
+                      bmrController.isclicked.value = true;
                       bmrController.bmrresult.value =
-                          await BmrServices.getbmrCalculations(
-                              bodyweight,
-                              height,
-                              age,
-                              selectedgender == Gender.male ? 1 : 2);
+                      await BmrServices.getbmrCalculations(
+                          bodyweight,
+                          height,
+                          age,
+                          selectedgender == Gender.male ? 1 : 2);
+                      bmrController.isclicked.value = false;
                       Navigator.pushNamed(context, RouteName.bmrresultScreen);
-                    },
+                    }:(){},
+
                     child: Text(
                       "calcuale_bmr".tr,
                       style: AppTextStyle.hboldWhiteText,
                     ),
                   ),
-                ),
+                ),)
               ),
             )
           ],

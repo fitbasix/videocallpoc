@@ -113,19 +113,28 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
                       onTap: () async {
                         profileController.isLoading.value = true;
                         if (profileController.isCoverPhoto.value == false) {
-                          MediaUrl mediaUrl = await PostService.uploadMedia(
-                              [File(selectedMediaFile!.path)]);
                           profileController.profilePhoto.value =
-                              mediaUrl.response!.data![0];
+                              await ProfileServices.UpdateProfilePhoto(
+                                  profilePhoto: [
+                                File(selectedMediaFile!.path)
+                              ]);
+                          homeController.profilePhoto.value =
+                              profileController.profilePhoto.value;
                         } else {
-                          MediaUrl mediaUrl = await PostService.uploadMedia(
-                              [File(selectedMediaFile!.path)]);
-                          profileController.coverPhoto.value =
-                              mediaUrl.response!.data![0];
-                          await ProfileServices.UpdateCoverPhoto(
-                              coverPhoto: profileController.coverPhoto.value);
-                          homeController.coverPhoto.value =
-                              mediaUrl.response!.data![0];
+                          print("got in else");
+                          // MediaUrl mediaUrl = await PostService.uploadMedia(
+                          //     [File(selectedMediaFile!.path)]);
+                          // profileController.coverPhoto.value =
+                          //     mediaUrl.response!.data![0];
+                          String response =
+                              await ProfileServices.UpdateCoverPhoto(
+                                  coverPhoto: [File(selectedMediaFile!.path)]);
+                          if(response.isNotEmpty){
+                            profileController.coverPhoto.value = response;
+                            homeController.coverPhoto.value = response;
+                          }
+                          // homeController.coverPhoto.value =
+                          //     mediaUrl.response!.data![0];
                         }
                         profileController.isLoading.value = false;
                         Navigator.pop(context);

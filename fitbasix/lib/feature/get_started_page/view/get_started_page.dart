@@ -76,8 +76,6 @@ class _GetStartedPageState extends State<GetStartedPage> {
 
   splashClose() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-
     var accessToken = prefs.getString('AccessToken');
     Future.delayed(const Duration(milliseconds: 700), () async {
       await Navigator.push(

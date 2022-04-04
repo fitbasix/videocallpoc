@@ -9,6 +9,7 @@ class BmrController extends GetxController{
   RxDouble height = 180.0.obs;
   RxInt age = 1.obs;
   final gender = Gender.male.obs;
+  RxBool isclicked = RxBool(false);
 
 Rx<BmrCalculationModel> bmrresult = BmrCalculationModel().obs;
 

@@ -71,5 +71,6 @@ Future<void> setupApp() async {
       FitBasixApp(
     translations: translations,
     child: accessToken == null ?  LoginScreen(): (_initialUri!=null||_latestUri!=null)? TrainerProfileScreen(trainerID: "6226f41b28d9a579eeabb5ee",):HomeAndTrainerPage(),
+
   ));
 }

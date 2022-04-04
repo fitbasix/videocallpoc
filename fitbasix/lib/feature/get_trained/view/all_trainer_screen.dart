@@ -189,12 +189,25 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             ),
                           ),
                           suffixIcon: GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               _trainerController.searchController.text.length ==
                                       0
                                   ? _trainerController.isSearchActive.value =
                                       false
                                   : _trainerController.searchController.clear();
+                              _trainerController.filterIsLoading.value = true;
+                              _trainerController.searchedName.value = "";
+                              _trainerController.allTrainer.value =
+                              await TrainerServices.getAllTrainer(
+                                name: "",
+                                interests: _trainerController
+                                    .SelectedInterestIndex.value,
+                                trainerType:
+                                _trainerController.trainerType.value,
+                              );
+                              _scrollController.jumpTo(0);
+                              _trainerController.filterIsLoading.value = false;
+
                             },
                             child: Icon(
                               Icons.clear,
@@ -803,11 +816,30 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "available_timings".tr,
-                        style: AppTextStyle.black400Text.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1!.color),
+                      Row(
+                        children: [
+                          Text(
+                            "available_timings".tr,
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
+                          Spacer(),
+                          IconButton(
+                            onPressed: () {
+                              //_homeController.selectedIndex.value = 0;
+                              Navigator.pop(context);
+                            },
+                            icon: SvgPicture.asset(
+                              ImagePath.closedialogIcon,
+                              color: hintGrey,
+                              width: 15.55 * SizeConfig.widthMultiplier!,
+                              height: 15.55 * SizeConfig.heightMultiplier!,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 16 * SizeConfig.heightMultiplier!,
@@ -876,31 +908,35 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                         }
                                         setState(() {});
                                       },
-                                      time: _trainerController.timingModel.value
-                                          .response!.data![index].name,
+                                      time: _trainerController.getTime(
+                                          _trainerController.timingModel.value
+                                              .response!.data![index].name!),
                                     ),
                                   ),
                                 ),
                               ),
                       ),
-                      SizedBox(
-                        height: 26 * SizeConfig.heightMultiplier!,
-                      ),
-                      SizedBox(
-                        width: 280 * SizeConfig.widthMultiplier!,
-                        child: ProceedButton(
-                            title: "confirm".tr,
-                            onPressed: () async {
-                              _trainerController.filterIsLoading.value = true;
-                              Navigator.pop(context);
-                              _trainerController.allTrainer.value =
-                                  await TrainerServices.getAllTrainer(
-                                      availability:
-                                          _trainerController.availability);
-                              _scrollController.jumpTo(0);
-                              _trainerController.filterIsLoading.value = false;
-                              //todo add filter feature here
-                            }),
+                      // SizedBox(
+                      //   height: 26 * SizeConfig.heightMultiplier!,
+                      // ),
+                      Center(
+                        child: SizedBox(
+                          width: 280 * SizeConfig.widthMultiplier!,
+                          child: ProceedButton(
+                              title: "confirm".tr,
+                              onPressed: () async {
+                                _trainerController.filterIsLoading.value = true;
+                                Navigator.pop(context);
+                                _trainerController.allTrainer.value =
+                                    await TrainerServices.getAllTrainer(
+                                        availability:
+                                            _trainerController.availability);
+                                _scrollController.jumpTo(0);
+                                _trainerController.filterIsLoading.value =
+                                    false;
+                                //todo add filter feature here
+                              }),
+                        ),
                       )
                     ],
                   ),
@@ -1327,13 +1363,17 @@ class TimeSLotSelect extends StatelessWidget {
         width: 104 * SizeConfig.widthMultiplier!,
         height: 46 * SizeConfig.heightMultiplier!,
         child: Center(
-          child: Text(
-            time.toString(),
-            style: istimeSlotSelected
-                ? AppTextStyle.hnormal600BlackText.copyWith(
-                    color: Theme.of(context).textTheme.bodyText1!.color)
-                : AppTextStyle.hblack400Text.copyWith(
-                    color: Theme.of(context).textTheme.bodyText1!.color),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 5.0 * SizeConfig.widthMultiplier!),
+            child: Text(
+              time.toString(),
+              style: istimeSlotSelected
+                  ? AppTextStyle.hnormal600BlackText.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color)
+                  : AppTextStyle.hblack400Text.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color),
+            ),
           ),
         ),
       ),

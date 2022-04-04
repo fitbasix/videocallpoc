@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
-import 'dart:math';
 import 'dart:ui';
 import 'package:crypt/crypt.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
@@ -19,11 +20,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/message/model/reciever_message_model.dart';
-import 'package:fitbasix/feature/message/view/chat_videocallscreen.dart';
 import 'package:fitbasix/feature/message/view/documents_view_screen.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -48,6 +46,7 @@ import 'package:quickblox_sdk/models/qb_user.dart';
 import 'package:quickblox_sdk/notifications/constants.dart';
 import 'package:quickblox_sdk/push/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/api_service/dio_service.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
@@ -74,8 +73,6 @@ import '../../log_in/services/login_services.dart';
 import '../../posts/services/createPost_Services.dart';
 import '../controller/chat_controller.dart';
 
-
-
 class ChatScreen extends StatefulWidget {
   int? opponentID;
   QBDialog? userDialogForChat;
@@ -83,9 +80,19 @@ class ChatScreen extends StatefulWidget {
   String? trainerTitle;
   String? profilePicURL;
   String? trainerId;
+  String? time;
+  List<int>? days;
 
-
-  ChatScreen({Key? key, this.userDialogForChat, this.opponentID,this.trainerTitle,this.isCurrentlyEnrolled,this.profilePicURL,this.trainerId})
+  ChatScreen(
+      {Key? key,
+      this.userDialogForChat,
+      this.opponentID,
+      this.trainerTitle,
+      this.isCurrentlyEnrolled,
+      this.profilePicURL,
+      this.trainerId,
+      this.time,
+      this.days})
       : super(key: key);
 
   @override
@@ -93,7 +100,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
   ChatController _chatController = Get.put(ChatController());
   var isPlanLoading = false.obs;
   final TrainerController _trainerController = Get.find();
@@ -105,6 +111,12 @@ class _ChatScreenState extends State<ChatScreen> {
   List<QBMessage?>? messages;
   DateTime? messageDate = DateTime(2015, 5, 5);
   var _typedMessage = "".obs;
+  var _userWantToSendMedia = false.obs;
+  var _mediaIsUploading = false.obs;
+  List<QBAttachment> attachmentsList = [];
+  QBAttachment attachment = QBAttachment();
+  var fileName = ''.obs;
+
   StreamSubscription? _connectionStreamSubscription;
 
   StreamSubscription? _callEndSubscription;
@@ -139,8 +151,8 @@ class _ChatScreenState extends State<ChatScreen> {
     connectionEvent();
     getMassageFromHistory();
     super.initState();
-
   }
+
   checkUserOnlineStatus() async {
     try {
       print("called");
@@ -158,17 +170,38 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppbarforChat(
         trainerProfilePicUrl: widget.profilePicURL,
         onHangUpTapped: (value) {
+          log(widget.days!.toString());
+          log("pop" +
+              _trainerController
+                  .isVideoAvailable(widget.time.toString())
+                  .toString());
+          _trainerController.isVideoAvailable(widget.time.toString());
+
+          if (widget.days!.indexOf(_trainerController.daysInt[
+                      DateFormat("EEE").format(DateTime.now().toUtc())]!) !=
+                  -1 &&
+              _trainerController.isVideoAvailable(widget.time.toString()) ==
+                  true) {
+          } else {
+            showDialogForVideoCallNotPossible(
+                context,
+                _trainerController.getTime(widget.time.toString()),
+                _trainerController.GetDays(widget.days));
+          }
+
+          DateFormat("EEE").format(DateTime.now());
           //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
           callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) => VideoCallScreen(
-            //           sessionIdForVideoCall: value!,
-            //         )));
-            showDialogForVideoCallNotPossible(context);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => VideoCallScreen(
+                      sessionIdForVideoCall: value!,
+                    )));
+            //showDialogForVideoCallNotPossible(context);
           });
+
         },
         onMenuTap: () {
-          if(messages!=null){
+          if (messages != null) {
             //checkUserOnlineStatus();
 
             //QB.chat.disconnect();
@@ -178,7 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
         },
         parentContext: context,
         trainertitle: widget.trainerTitle,
-        trainerstatus: 'Online'.tr,
+        trainerstatus: ''.tr,
       ),
       body: SafeArea(
         child: Container(
@@ -204,130 +237,387 @@ class _ChatScreenState extends State<ChatScreen> {
                           }),
                     )
                   : Expanded(
+                      child: Shimmer.fromColors(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Spacer(),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: 16 * SizeConfig.widthMultiplier!),
+                              height: 28 * SizeConfig.heightMultiplier!,
+                              width: 176 * SizeConfig.widthMultiplier!,
+                              color: Color(0xFF3646464),
+                            ),
+                            SizedBox(
+                              height: 8 * SizeConfig.heightMultiplier!,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: 16 * SizeConfig.widthMultiplier!),
+                              height: 49 * SizeConfig.heightMultiplier!,
+                              width: 215 * SizeConfig.widthMultiplier!,
+                              color: Color(0xFF3646464),
+                            ),
+                            SizedBox(
+                              height: 8 * SizeConfig.heightMultiplier!,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: 16 * SizeConfig.widthMultiplier!),
+                              height: 28 * SizeConfig.heightMultiplier!,
+                              width: 176 * SizeConfig.widthMultiplier!,
+                              color: Color(0xFF3646464),
+                            ),
+                            SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    right: 16 * SizeConfig.widthMultiplier!),
+                                height: 42 * SizeConfig.heightMultiplier!,
+                                width: 191 * SizeConfig.widthMultiplier!,
+                                color: Color(0xFF3646464),
+                              ),
+                            ),
+                            SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  left: 16 * SizeConfig.widthMultiplier!),
+                              height: 28 * SizeConfig.heightMultiplier!,
+                              width: 176 * SizeConfig.widthMultiplier!,
+                              color: Color(0xFF3646464),
+                            ),
+                            SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    right: 16 * SizeConfig.widthMultiplier!),
+                                height: 78 * SizeConfig.heightMultiplier!,
+                                width: 232 * SizeConfig.widthMultiplier!,
+                                color: Color(0xFF3646464),
+                              ),
+                            ),
+                          ],
+                        ),
+                        baseColor:
+                            Color.fromARGB(0, 255, 255, 255).withOpacity(0.1),
+                        highlightColor:
+                            Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
+                      ),
+                    )
+
+              /*Expanded(
                       child: Center(
                       child: Text("no message yet"),
-                    )),
 
-              widget.isCurrentlyEnrolled!?Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Container(
+                    ))
+*/
+              ,
+
+              ///todo remove this ! sign
+
+              widget.isCurrentlyEnrolled!
+                  ? Obx(() => _userWantToSendMedia.value
+                      ? Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            padding: EdgeInsets.all(
+                                16 * SizeConfig.widthMultiplier!),
                             decoration: BoxDecoration(
-                              color: kBlack,
-                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.transparent,
                             ),
-                            child: TextField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              cursorColor: kPureWhite,
-                              style: AppTextStyle.black400Text.copyWith(color: kPureWhite,height: 1.3),
-                              controller: _massageController.value,
-                              onChanged: (value) {
-                                _typedMessage.value = value;
-                              },
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.only(
-                                      left: 16 * SizeConfig.widthMultiplier!,
-                                      top: 12 * SizeConfig.heightMultiplier!,bottom: 12 * SizeConfig.heightMultiplier!),
-                                  hintText: "message".tr,
-                                  hintStyle: AppTextStyle.hsmallhintText,
-                                  border: InputBorder.none,
-                                  suffixIcon: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                        width: 30 * SizeConfig.widthMultiplier!,
-                                        child: IconButton(
-                                            onPressed: () {
-                                              sendAttachmentsFromDevice();
-                                            },
-                                            icon: SvgPicture.asset(
-                                              ImagePath.attachdocumentIcon,
-                                              width: 9.17 *
-                                                  SizeConfig.widthMultiplier!,
-                                              height: 18.34 *
-                                                  SizeConfig.heightMultiplier!,
-                                            )),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              16 * SizeConfig.widthMultiplier!,
+                                          vertical: 24 *
+                                              SizeConfig.heightMultiplier!),
+                                      decoration: BoxDecoration(
+                                        color: kBlack,
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                      SizedBox(
-                                        width: 30 * SizeConfig.widthMultiplier!,
-                                        child: IconButton(
-                                            onPressed: () {
-                                              sendImageFromCamera();
-                                            },
-                                            icon: SvgPicture.asset(
-                                              ImagePath.openCameraIcon,
-                                              width: 15 *
-                                                  SizeConfig.widthMultiplier!,
-                                              height: 13.57 *
-                                                  SizeConfig.heightMultiplier!,
-                                            )),
-                                      ),
-                                      SizedBox(
-                                        width: 5 * SizeConfig.widthMultiplier!,
-                                      ),
-                                    ],
-                                  )),
-                              // maxLines: 3,
-                            )),
-                      ),
-                      Obx(
-                        () => (_typedMessage.value.isNotEmpty) ?
-                        Padding(
-                          padding: EdgeInsets.only(left: 23*SizeConfig.widthMultiplier!),
-                          child: GestureDetector(
-                                onTap: () {
-                                  sendMsg(_typedMessage.value);
-                                  _massageController.value.clear();
-                                  _typedMessage.value = "";
-                                },
-                                child: Icon(
-                                  Icons.send,
-                                  size: 21 * SizeConfig.heightMultiplier!,
-                                  color: greenChatColor,
-                                )),
-                        )
-                              : Container(),
-                      )
-                    ],
-                  ),
-                ),
-              ):Obx(()=>!isPlanLoading.value?Container(
-                margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                          text:"enroll_expired_chat".tr,
-                          style: AppTextStyle.hblack400Text.copyWith(color: hintGrey)
-                      ),
-                      TextSpan(
-                          text:" ",
-                          style: AppTextStyle.hblack400Text.copyWith(color: hintGrey)
-                      ),
-                      WidgetSpan(
-                          child: GestureDetector(
-                            onTap: (){
-                              getAllTrainerPlanData(widget.trainerId!);
-                            },
-                            child: Text("enroll_again".tr,style: AppTextStyle.hblack400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color, decoration: TextDecoration.underline ),),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: kPureWhite.withOpacity(0.1),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                8 * SizeConfig.widthMultiplier!,
+                                            vertical: 16 *
+                                                SizeConfig.heightMultiplier!),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                    child: Text(
+                                                  fileName.value,
+                                                  style: AppTextStyle
+                                                      .normalGreenText
+                                                      .copyWith(
+                                                          color: kPureWhite),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )),
+                                                SizedBox(
+                                                  width: 7 *
+                                                      SizeConfig
+                                                          .widthMultiplier!,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    _userWantToSendMedia.value =
+                                                        false;
+                                                    _mediaIsUploading.value =
+                                                        false;
+                                                    _userWantToSendMedia.value =
+                                                        false;
+                                                    _mediaIsUploading.value =
+                                                        false;
+                                                    List<QBAttachment>?
+                                                        attachmentsList = [];
+                                                    QBAttachment attachment =
+                                                        QBAttachment();
+                                                  },
+                                                  child: CircleAvatar(
+                                                    backgroundColor: kBlack,
+                                                    radius: 12 *
+                                                        SizeConfig
+                                                            .imageSizeMultiplier!,
+                                                    child: Icon(Icons.close,
+                                                        size: 13 *
+                                                            SizeConfig
+                                                                .imageSizeMultiplier!,
+                                                        color: kPureWhite),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Obx(() => _mediaIsUploading.value
+                                                ? SizedBox(
+                                                    height: 21 *
+                                                        SizeConfig
+                                                            .heightMultiplier!)
+                                                : Container()),
+                                            Obx(() => _mediaIsUploading.value
+                                                ? LinearProgressIndicator(
+                                                    backgroundColor:
+                                                        Color(0xff747474),
+                                                    color: kBlack)
+                                                : Container())
+                                          ],
+                                        ),
+                                      )),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 23 * SizeConfig.widthMultiplier!),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        if (!_mediaIsUploading.value) {
+                                          QB.chat
+                                              .sendMessage(
+                                                  widget.userDialogForChat!.id!,
+                                                  attachments: attachmentsList,
+                                                  body: "imageTest",
+                                                  saveToHistory: true)
+                                              .then((value) {
+                                            print("demo msg send");
+                                          }).then((value) {
+                                            _userWantToSendMedia.value = false;
+                                            _mediaIsUploading.value = false;
+                                            List<QBAttachment>?
+                                                attachmentsList = [];
+                                            QBAttachment attachment =
+                                                QBAttachment();
+                                          });
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content:
+                                                Text("Media is uploading..."),
+                                          ));
+                                        }
+                                      },
+                                      child: Icon(
+                                        Icons.send,
+                                        size: 21 * SizeConfig.heightMultiplier!,
+                                        color: greenChatColor,
+                                      )),
+                                )
+                              ],
+                            ),
                           ),
-                      ),
-                    ]
-                  ),
-                ),
-              ):Container(
-                  margin: EdgeInsets.only(top: 40*SizeConfig.heightMultiplier!,bottom: 20*SizeConfig.heightMultiplier!),
-                  child: CustomizedCircularProgress()))
+                        )
+                      : Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            padding: EdgeInsets.all(
+                                16 * SizeConfig.widthMultiplier!),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kBlack,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: TextField(
+                                        keyboardType: TextInputType.multiline,
+                                        maxLines: null,
+                                        cursorColor: kPureWhite,
+                                        style: AppTextStyle.black400Text
+                                            .copyWith(
+                                                color: kPureWhite, height: 1.3),
+                                        controller: _massageController.value,
+                                        onChanged: (value) {
+                                          _typedMessage.value = value;
+                                        },
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.only(
+                                                left: 16 *
+                                                    SizeConfig.widthMultiplier!,
+                                                top: 12 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
+                                                bottom: 12 *
+                                                    SizeConfig
+                                                        .heightMultiplier!),
+                                            hintText: "message".tr,
+                                            hintStyle:
+                                                AppTextStyle.hsmallhintText,
+                                            border: InputBorder.none,
+                                            suffixIcon: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                SizedBox(
+                                                  width: 30 *
+                                                      SizeConfig
+                                                          .widthMultiplier!,
+                                                  child: IconButton(
+                                                      onPressed: () {
+                                                        sendAttachmentsFromDevice();
+                                                      },
+                                                      icon: SvgPicture.asset(
+                                                        ImagePath
+                                                            .attachdocumentIcon,
+                                                        width: 9.17 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                        height: 18.34 *
+                                                            SizeConfig
+                                                                .heightMultiplier!,
+                                                      )),
+                                                ),
+                                                SizedBox(
+                                                  width: 30 *
+                                                      SizeConfig
+                                                          .widthMultiplier!,
+                                                  child: IconButton(
+                                                      onPressed: () {
+                                                        sendImageFromCamera();
+                                                      },
+                                                      icon: SvgPicture.asset(
+                                                        ImagePath
+                                                            .openCameraIcon,
+                                                        width: 15 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                        height: 13.57 *
+                                                            SizeConfig
+                                                                .heightMultiplier!,
+                                                      )),
+                                                ),
+                                                SizedBox(
+                                                  width: 5 *
+                                                      SizeConfig
+                                                          .widthMultiplier!,
+                                                ),
+                                              ],
+                                            )),
+                                        // maxLines: 3,
+                                      )),
+                                ),
+                                Obx(
+                                  () => (_typedMessage.value.isNotEmpty)
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 23 *
+                                                  SizeConfig.widthMultiplier!),
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                sendMsg(_typedMessage.value);
+                                                _massageController.value
+                                                    .clear();
+                                                _typedMessage.value = "";
+                                              },
+                                              child: Icon(
+                                                Icons.send,
+                                                size: 21 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
+                                                color: greenChatColor,
+                                              )),
+                                        )
+                                      : Container(),
+                                )
+                              ],
+                            ),
+                          ),
+                        ))
+                  : Obx(() => !isPlanLoading.value
+                      ? Container(
+                          margin: EdgeInsets.only(
+                              top: 40 * SizeConfig.heightMultiplier!,
+                              bottom: 20 * SizeConfig.heightMultiplier!),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: "enroll_expired_chat".tr,
+                                  style: AppTextStyle.hblack400Text
+                                      .copyWith(color: hintGrey)),
+                              TextSpan(
+                                  text: " ",
+                                  style: AppTextStyle.hblack400Text
+                                      .copyWith(color: hintGrey)),
+                              WidgetSpan(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    getAllTrainerPlanData(widget.trainerId!);
+                                  },
+                                  child: Text(
+                                    "enroll_again".tr,
+                                    style: AppTextStyle.hblack400Text.copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .color,
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ),
+                        )
+                      : Container(
+                          margin: EdgeInsets.only(
+                              top: 40 * SizeConfig.heightMultiplier!,
+                              bottom: 20 * SizeConfig.heightMultiplier!),
+                          child: CustomizedCircularProgress()))
             ],
           ),
         ),
@@ -335,14 +625,11 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-
   getAllTrainerPlanData(String trainerId) async {
     _trainerController.planModel.value = PlanModel();
     isPlanLoading.value = true;
     _trainerController.planModel.value =
-    await TrainerServices.getPlanByTrainerId(
-        trainerId)
-        .then((value) {
+        await TrainerServices.getPlanByTrainerId(trainerId).then((value) {
       Navigator.pushNamed(context, RouteName.trainerplanScreen);
       return value;
     });
@@ -429,13 +716,16 @@ class _ChatScreenState extends State<ChatScreen> {
       _massageStreamSubscription =
           await QB.chat.subscribeChatEvent(event, (data) {
         Map<String, dynamic> map = Map<String, dynamic>.from(data);
-        Map<String, dynamic> payload = Map<String, dynamic>.from(map["payload"]);
+        Map<String, dynamic> payload =
+            Map<String, dynamic>.from(map["payload"]);
         print("nnnnnn" + payload.toString());
         List<Attachment>? attachmentsFromJson;
         print(payload.toString());
         if (payload["attachments"] != null) {
-          attachmentsFromJson = (json.decode(json.encode(payload["attachments"])) as List)
-                  .map((data) => Attachment.fromJson(data)).toList();
+          attachmentsFromJson =
+              (json.decode(json.encode(payload["attachments"])) as List)
+                  .map((data) => Attachment.fromJson(data))
+                  .toList();
         }
         String? messageId = payload["id"];
         QBMessage newMessage = QBMessage();
@@ -494,24 +784,26 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void sendMsg(String messageBody) async {
     var chatStatus = await QB.chat.isConnected();
-    if(chatStatus!){
+    if (chatStatus!) {
       print("connected to chat mmmmmm");
       sendMessageAfterVarification(messageBody);
-    }
-    else{
+    } else {
       print("user chat is disconnected mmmmmm");
-      String logIn = _homeController.userProfileData.value.response!.data!.profile!.id!;
+      String logIn =
+          _homeController.userProfileData.value.response!.data!.profile!.id!;
       final password = Crypt.sha256(logIn, salt: '10');
-      CreatePostService.LogInUserToQuickBlox(logIn, password.hash, _homeController.userQuickBloxId.value).then((value) async {
-        var check =  await QB.chat.isConnected();
-         if(!check!){
-           print("not connected to chat mmmmmm");
-           CreatePostService.connectUserToChat(password.hash, _homeController.userQuickBloxId.value);
-           sendMsg(messageBody);
-         }
-         else{
-           sendMsg(messageBody);
-         }
+      CreatePostService.LogInUserToQuickBlox(
+              logIn, password.hash, _homeController.userQuickBloxId.value)
+          .then((value) async {
+        var check = await QB.chat.isConnected();
+        if (!check!) {
+          print("not connected to chat mmmmmm");
+          CreatePostService.connectUserToChat(
+              password.hash, _homeController.userQuickBloxId.value);
+          sendMsg(messageBody);
+        } else {
+          sendMsg(messageBody);
+        }
         return value;
       });
     }
@@ -525,7 +817,7 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       await QB.chat
           .sendMessage(dialogId,
-          body: messageBody, saveToHistory: saveToHistory)
+              body: messageBody, saveToHistory: saveToHistory)
           .then((value) {
         print("msg send");
       });
@@ -563,15 +855,17 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendImageFromCamera() async {
     XFile? pickedFile = await pickFromCamera();
     if (pickedFile != null) {
+      _userWantToSendMedia.value = true;
+      _mediaIsUploading.value = true;
+      fileName.value = pickedFile.name;
       try {
-        uploadFileToServerDB(pickedFile.path,pickedFile.path.split('.').last);
+        uploadFileToServerDB(pickedFile.path, pickedFile.path.split('.').last);
         QBFile? file = await QB.content.upload(pickedFile.path, public: false);
         if (file != null) {
+          _mediaIsUploading.value = false;
           int? id = file.id;
           print("image id " + file.uid!);
           String? contentType = file.contentType;
-
-          QBAttachment attachment = QBAttachment();
           attachment.id = id.toString();
           attachment.contentType = contentType;
           attachment.url = file.uid;
@@ -581,22 +875,10 @@ class _ChatScreenState extends State<ChatScreen> {
           attachment.data = pickedFile.path;
           //Required parameter
           //attachment.type = "PHOTO";
-
-          List<QBAttachment>? attachmentsList = [];
           attachmentsList.add(attachment);
-
           QBMessage message = QBMessage();
           message.attachments = attachmentsList;
           message.body = "test attachment";
-          QB.chat
-              .sendMessage(widget.userDialogForChat!.id!,
-                  attachments: attachmentsList,
-                  body: "imageTest",
-                  saveToHistory: true)
-              .then((value) {
-            print("demo msg send");
-          });
-          // Send a message logic
         }
       } on PlatformException catch (e) {
         // Some error occurred, look at the exception message for more details
@@ -620,7 +902,7 @@ class _ChatScreenState extends State<ChatScreen> {
         'pptx',
         'xls',
         'xlsx'
-        'png',
+            'png',
         'jpeg',
         'mp3',
         'mp4',
@@ -629,13 +911,11 @@ class _ChatScreenState extends State<ChatScreen> {
     );
 
     if (result != null) {
-      if((result.files[0].size/(1024*1024))<25){
+      if ((result.files[0].size / (1024 * 1024)) < 25) {
         return result;
-      }
-      else{
+      } else {
         createFileSizeIsLargeDialog(context);
       }
-
     } else {
       return null;
     }
@@ -645,16 +925,21 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendAttachmentsFromDevice() async {
     FilePickerResult? pickedFiles = await pickAttachments();
     if (pickedFiles != null) {
+      _userWantToSendMedia.value = true;
+      _mediaIsUploading.value = true;
+      fileName.value = pickedFiles.files[0].name;
       try {
-        List<QBAttachment>? attachmentsList = [];
         for (int i = 0; i < pickedFiles.files.length; i++) {
-          uploadFileToServerDB(pickedFiles.files[i].path!,pickedFiles.files[i].path!.split('.').last);
-          QBFile? file = await QB.content.upload(pickedFiles.files[i].path!, public: false);
+
+          uploadFileToServerDB(pickedFiles.files[i].path!,
+              pickedFiles.files[i].path!.split('.').last);
+          QBFile? file = await QB.content
+              .upload(pickedFiles.files[i].path!, public: false);
 
           if (file != null) {
+            _mediaIsUploading.value = false;
             int? id = file.id;
             String? contentType = pickedFiles.files[i].path!.split('.').last;
-            QBAttachment attachment = QBAttachment();
             attachment.id = id.toString();
             attachment.contentType = contentType;
             print(contentType + " dddd");
@@ -670,14 +955,6 @@ class _ChatScreenState extends State<ChatScreen> {
             // Send a message logic
           }
         }
-        QB.chat
-            .sendMessage(widget.userDialogForChat!.id!,
-                attachments: attachmentsList,
-                body: "imageTest",
-                saveToHistory: true)
-            .then((value) {
-          print("demo msg send");
-        });
       } on PlatformException catch (e) {
         // Some error occurred, look at the exception message for more details
       }
@@ -696,26 +973,35 @@ class _ChatScreenState extends State<ChatScreen> {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: AlertDialog(
-                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 30 * SizeConfig.heightMultiplier!),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                ),
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("File is too large",style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
-                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
-                    Text("Cannot upload files larger\n than 25MB.",style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: 12*SizeConfig.textMultiplier!,fontWeight: FontWeight.w400),textAlign: TextAlign.center,),
-
+                    Text(
+                      "File is too large",
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                    SizedBox(
+                      height: 16 * SizeConfig.heightMultiplier!,
+                    ),
+                    Text(
+                      "Cannot upload files larger\n than 25MB.",
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: 12 * SizeConfig.textMultiplier!,
+                          fontWeight: FontWeight.w400),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
-              )
-          ),
+              )),
         );
-
-
-
       },
     );
   }
@@ -729,100 +1015,130 @@ class _ChatScreenState extends State<ChatScreen> {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: AlertDialog(
-                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 30 * SizeConfig.heightMultiplier!),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                ),
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(widget.trainerTitle!,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
-                    SizedBox(height: 26*SizeConfig.heightMultiplier!,),
+                    Text(
+                      widget.trainerTitle!,
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                    SizedBox(
+                      height: 26 * SizeConfig.heightMultiplier!,
+                    ),
                     GestureDetector(
                       onTap: () async {
-
                         _trainerController.atrainerDetail.value = Trainer();
 
                         _trainerController
                             .isProfileLoading.value = true;
+                        _trainerController.isMyTrainerProfileLoading.value = true;
                         Navigator.pushNamed(context,
                             RouteName.trainerProfileScreen);
 
-                        var result = await TrainerServices.getATrainerDetail(widget.trainerId!);
-                        _trainerController.atrainerDetail.value = result.response!.data!;
+
+                        var result = await TrainerServices.getATrainerDetail(
+                            widget.trainerId!);
+                        _trainerController.atrainerDetail.value =
+                            result.response!.data!;
 
                         _trainerController.planModel.value =
-                            await TrainerServices
-                            .getPlanByTrainerId(
+                            await TrainerServices.getPlanByTrainerId(
                                 widget.trainerId!);
 
-
-                        _trainerController
-                            .initialPostData.value =
-                            await TrainerServices
-                            .getTrainerPosts(
-                                widget.trainerId!,
-                            0);
-                        _trainerController
-                            .loadingIndicator.value = false;
-                        if (_trainerController.initialPostData
-                            .value.response!.data!.length !=
+                        _trainerController.initialPostData.value =
+                            await TrainerServices.getTrainerPosts(
+                                widget.trainerId!, 0);
+                        _trainerController.isMyTrainerProfileLoading.value =
+                            false;
+                        _trainerController.loadingIndicator.value = false;
+                        if (_trainerController
+                                .initialPostData.value.response!.data!.length !=
                             0) {
-                          _trainerController
-                              .trainerPostList.value =
-                          _trainerController.initialPostData
-                              .value.response!.data!;
+                          _trainerController.trainerPostList.value =
+                              _trainerController
+                                  .initialPostData.value.response!.data!;
                         } else {
-                          _trainerController.trainerPostList
-                              .clear();
+                          _trainerController.trainerPostList.clear();
                         }
                         _trainerController
                             .isProfileLoading.value = false;
+                        _trainerController.isMyTrainerProfileLoading.value = false;
+
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(ImagePath.penIcon,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
-                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
-                          Text('Open profile',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                          SvgPicture.asset(
+                            ImagePath.penIcon,
+                            color: Theme.of(context).primaryColor,
+                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10.5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'Open profile',
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 22*SizeConfig.heightMultiplier!,),
+                    SizedBox(
+                      height: 22 * SizeConfig.heightMultiplier!,
+                    ),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DocumentsViewerScreen(
-                                  messages: messages,
-                                  opponentName: widget.trainerTitle,
-                                )));
+                                      messages: messages,
+                                      opponentName: widget.trainerTitle,
+                                    )));
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(ImagePath.fileIcon,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
-                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
-                          Text('View documents',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                          SvgPicture.asset(
+                            ImagePath.fileIcon,
+                            color: Theme.of(context).primaryColor,
+                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10.5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'View documents',
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
                         ],
                       ),
                     ),
-
                   ],
                 ),
-              )
-          ),
+              )),
         );
-
-
-
       },
     );
   }
 
-  void showDialogForVideoCallNotPossible(BuildContext context) {
+  void showDialogForVideoCallNotPossible(
+      BuildContext context, String time, String days) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -831,46 +1147,59 @@ class _ChatScreenState extends State<ChatScreen> {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: AlertDialog(
-                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!,horizontal: 30*SizeConfig.widthMultiplier!),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 30 * SizeConfig.heightMultiplier!,
+                    horizontal: 30 * SizeConfig.widthMultiplier!),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                ),
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                        height: 100*SizeConfig.heightMultiplier!,
-                        width: 100*SizeConfig.widthMultiplier!,
-                        child: Image.asset(ImagePath.animatedErrorIcon),),
-                    SizedBox(height: 26*SizeConfig.heightMultiplier!,),
-                    Text("call_not_possible".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),textAlign: TextAlign.center,),
-                    SizedBox(height: 16*SizeConfig.heightMultiplier!,),
-                    Text("call_not_possible_time".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
+                      height: 100 * SizeConfig.heightMultiplier!,
+                      width: 100 * SizeConfig.widthMultiplier!,
+                      child: Image.asset(ImagePath.animatedErrorIcon),
+                    ),
+                    SizedBox(
+                      height: 26 * SizeConfig.heightMultiplier!,
+                    ),
+                    Text(
+                      "call_not_possible".tr,
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 16 * SizeConfig.heightMultiplier!,
+                    ),
+                    Text(
+                      "call_not_possible_time"
+                          .trParams({'time': time, 'days': days}),
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
-              )
-          ),
+              )),
         );
-
-
-
       },
     );
   }
 
   void uploadFileToServerDB(String path, String fileType) async {
-     var dio = DioUtil().getInstance();
-     dio!.options.headers["language"] = "1";
-     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
-     FormData data = FormData.fromMap({
-        'files':await MultipartFile.fromFile(path),
-        'trainerId':widget.trainerId!,
-     });
-     var response = await dio.post(ApiUrl.uploadChatFileToDb,data: data);
-     print(response.data.toString()+" iiiii");
+    var dio = DioUtil().getInstance();
+    dio!.options.headers["language"] = "1";
+    dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+    FormData data = FormData.fromMap({
+      'files': await MultipartFile.fromFile(path),
+      'trainerId': widget.trainerId!,
+    });
+    dio.post(ApiUrl.uploadChatFileToDb, data: data);
   }
-
 }
 
 class MessageBubbleSender extends StatelessWidget {
@@ -915,9 +1244,9 @@ class MessageBubbleSender extends StatelessWidget {
         ),
       );
     } else {
-      fileExtension = message!.attachments![0]!.name!.split(".").last.toUpperCase();
+      fileExtension =
+          message!.attachments![0]!.name!.split(".").last.toUpperCase();
       getFileSize();
-
       checkFileExistence(message!.attachments![0]!.name);
       return Padding(
         padding: EdgeInsets.only(
@@ -936,53 +1265,96 @@ class MessageBubbleSender extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: greenChatColor,
-                  borderRadius:
-                      BorderRadius.circular(8 * SizeConfig.imageSizeMultiplier!),
+                  borderRadius: BorderRadius.circular(
+                      8 * SizeConfig.imageSizeMultiplier!),
                 ),
                 child: Obx(() => filePath.value.isEmpty
                     ? Container(
                         child: GestureDetector(
-                            onTap: () async {
-
-                            },
+                            onTap: () async {},
                             child: Container(
-                              width: 220*SizeConfig.widthMultiplier!,
+                              width: 220 * SizeConfig.widthMultiplier!,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.only(left: 8*SizeConfig.widthMultiplier!),
-                                    height: 50*SizeConfig.heightMultiplier!,
+                                    padding: EdgeInsets.only(
+                                        left: 8 * SizeConfig.widthMultiplier!),
+                                    height: 50 * SizeConfig.heightMultiplier!,
                                     decoration: BoxDecoration(
                                       color: kPureWhite.withOpacity(0.15),
-                                      borderRadius:
-                                      BorderRadius.circular(8 * SizeConfig.imageSizeMultiplier!),
-
+                                      borderRadius: BorderRadius.circular(
+                                          8 * SizeConfig.imageSizeMultiplier!),
                                     ),
                                     child: Row(
                                       children: [
-                                        Expanded(child: Text(message!.attachments![0]!.name!,overflow: TextOverflow.ellipsis,style: AppTextStyle.whiteTextWithWeight600,)),
-                                        SizedBox(width: 10*SizeConfig.widthMultiplier!,),
-                                        (!isDownloadingStarted.value)?GestureDetector(
-                                            onTap: () async {
-                                              isDownloadingStarted.value = true;
-                                              isDownloaded.value = await _getImageUrl(
-                                                  message!.attachments![0]!.url!,
-                                                  message!.attachments![0]!.name!);
-                                            },
-                                            child: Image.asset(ImagePath.downloadDocIcon,width: 16.79*SizeConfig.widthMultiplier!,height: 22.4*SizeConfig.heightMultiplier!,)):SizedBox(
-                                            height: 22*SizeConfig.heightMultiplier!,
-                                            width: 22*SizeConfig.heightMultiplier!,
-
-                                            child: CircularProgressIndicator(color: kPureWhite,value: downloadProgress.value,backgroundColor: Colors.grey.withOpacity(0.2),strokeWidth: 2.5*SizeConfig.imageSizeMultiplier!,)),
-                                        SizedBox(width: 12*SizeConfig.widthMultiplier!,),
+                                        Expanded(
+                                            child: Text(
+                                          message!.attachments![0]!.name!,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: AppTextStyle
+                                              .whiteTextWithWeight600,
+                                        )),
+                                        SizedBox(
+                                          width:
+                                              10 * SizeConfig.widthMultiplier!,
+                                        ),
+                                        (!isDownloadingStarted.value)
+                                            ? GestureDetector(
+                                                onTap: () async {
+                                                  isDownloadingStarted.value =
+                                                      true;
+                                                  isDownloaded.value =
+                                                      await _getImageUrl(
+                                                          message!
+                                                              .attachments![0]!
+                                                              .url!,
+                                                          message!
+                                                              .attachments![0]!
+                                                              .name!);
+                                                },
+                                                child: Image.asset(
+                                                  ImagePath.downloadDocIcon,
+                                                  width: 16.79 *
+                                                      SizeConfig
+                                                          .widthMultiplier!,
+                                                  height: 22.4 *
+                                                      SizeConfig
+                                                          .heightMultiplier!,
+                                                ))
+                                            : SizedBox(
+                                                height: 22 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
+                                                width: 22 *
+                                                    SizeConfig
+                                                        .heightMultiplier!,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: kPureWhite,
+                                                  value: downloadProgress.value,
+                                                  backgroundColor: Colors.grey
+                                                      .withOpacity(0.2),
+                                                  strokeWidth: 2.5 *
+                                                      SizeConfig
+                                                          .imageSizeMultiplier!,
+                                                )),
+                                        SizedBox(
+                                          width:
+                                              12 * SizeConfig.widthMultiplier!,
+                                        ),
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-                                  Text("${fileSize.value.isNotEmpty ?fileSize.value:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: kPureWhite,height: 1),)
-
+                                  SizedBox(
+                                    height: 8 * SizeConfig.heightMultiplier!,
+                                  ),
+                                  Text(
+                                    "${fileSize.value.isNotEmpty ? fileSize.value : 0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",
+                                    style: AppTextStyle.hmediumBlackText
+                                        .copyWith(color: kPureWhite, height: 1),
+                                  )
                                 ],
                               ),
                             )),
@@ -993,31 +1365,77 @@ class MessageBubbleSender extends StatelessWidget {
                               OpenFile.open(filePath.value);
                             },
                             child: Container(
-                                width: 220*SizeConfig.widthMultiplier!,
+                                width: 220 * SizeConfig.widthMultiplier!,
                                 child: Row(
                                   children: [
-                                    Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,height: 32*SizeConfig.imageSizeMultiplier!,),
-                                    SizedBox(width: 7*SizeConfig.widthMultiplier!,),
+                                    Image.asset(
+                                      (fileExtension == "JPEG" ||
+                                              fileExtension == "JPG")
+                                          ? ImagePath.jpgFileIcon
+                                          : (fileExtension == "PNG")
+                                              ? ImagePath.pngIcon
+                                              : (fileExtension!.contains("PPT"))
+                                                  ? ImagePath.pptIcon
+                                                  : (fileExtension!
+                                                          .contains("MP4"))
+                                                      ? ImagePath.mp4Icon
+                                                      : (fileExtension!
+                                                              .contains("XLX"))
+                                                          ? ImagePath.xlxIcon
+                                                          : (fileExtension ==
+                                                                  "PDF")
+                                                              ? ImagePath
+                                                                  .pdfFileIcon
+                                                              : ImagePath
+                                                                  .docFileIcon,
+                                      width:
+                                          32 * SizeConfig.imageSizeMultiplier!,
+                                      height:
+                                          32 * SizeConfig.imageSizeMultiplier!,
+                                    ),
+                                    SizedBox(
+                                      width: 7 * SizeConfig.widthMultiplier!,
+                                    ),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Container( padding: new EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),child: Text(message!.attachments![0]!.name!,overflow: TextOverflow.ellipsis,style: AppTextStyle.whiteTextWithWeight600,)),
-                                          SizedBox(height: 5*SizeConfig.imageSizeMultiplier!,),
+                                          Container(
+                                              padding: new EdgeInsets.only(
+                                                  right: 10 *
+                                                      SizeConfig
+                                                          .widthMultiplier!),
+                                              child: Text(
+                                                message!.attachments![0]!.name!,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: AppTextStyle
+                                                    .whiteTextWithWeight600,
+                                              )),
+                                          SizedBox(
+                                            height: 5 *
+                                                SizeConfig.imageSizeMultiplier!,
+                                          ),
                                           FutureBuilder(
                                               future: getFileSizeFromLocal(),
-                                              builder: (context,AsyncSnapshot<String> snapshot){
-
-                                                return Text("${snapshot.hasData?snapshot.data:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: kPureWhite,height: 1),);
+                                              builder: (context,
+                                                  AsyncSnapshot<String>
+                                                      snapshot) {
+                                                return Text(
+                                                  "${snapshot.hasData ? snapshot.data : 0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",
+                                                  style: AppTextStyle
+                                                      .hmediumBlackText
+                                                      .copyWith(
+                                                          color: kPureWhite,
+                                                          height: 1),
+                                                );
                                               })
-                                        ],),
+                                        ],
+                                      ),
                                     )
-
-
                                   ],
-                                )
-                            )),
+                                ))),
                       )))
           ],
         ),
@@ -1084,37 +1502,44 @@ class MessageBubbleSender extends StatelessWidget {
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        print("jjjjjjj");
         if(Platform.isAndroid){
           PermissionStatus status  = await Permission.storage.request();
-          PermissionStatus status1 = await Permission.manageExternalStorage.request();
+          if(!_chatController.storagePermissionCalled.value){
+            _chatController.storagePermissionCalled.value = true;
+            PermissionStatus status1 = await Permission.manageExternalStorage.request();
+          }
+
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
-          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+          final Directory _appDocDirFolder =
+              Directory('storage/emulated/0/fitBasix/media');
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
           } else {
             //if folder not exists create folder and then return its path
             final Directory _appDocDirNewFolder =
-            await _appDocDirFolder.create(recursive: true);
+                await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-                downloadProgress.value = ((received / total));
-                print(downloadProgress.value);
-                if (((received / total) * 100).floor() == 100) {
-                  checkFileExistence(fileName);
-                }
-              });
-        }
-        else{
+
+            downloadProgress.value = ((received / total));
+            print(downloadProgress.value);
+            if (((received / total) * 100).floor() == 100) {
+              checkFileExistence(fileName);
+            }
+          });
+        } else {
+          print("yyyyyy");
           String? path;
-          final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+          final Directory _appDocDir = Directory(
+              (await getTemporaryDirectory()).path + '/fitbasix/media');
+
           //App Document Directory + folder name
           if ((await _appDocDir.exists())) {
             path = _appDocDir.path;
@@ -1125,14 +1550,13 @@ class MessageBubbleSender extends StatelessWidget {
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-                downloadProgress.value = ((received / total));
-                print(downloadProgress.value);
-                if (((received / total) * 100).floor() == 100) {
-                  checkFileExistence(fileName);
-                }
-              });
+            downloadProgress.value = ((received / total));
+            print(downloadProgress.value);
+            if (((received / total) * 100).floor() == 100) {
+              checkFileExistence(fileName);
+            }
+          });
         }
-
       } catch (e) {
         print(e.toString());
       }
@@ -1146,22 +1570,26 @@ class MessageBubbleSender extends StatelessWidget {
   }
 
   void checkFileExistence(String? fileName) async {
-
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
-      PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      if(!_chatController.storagePermissionCalled.value){
+        _chatController.storagePermissionCalled.value = true;
+        PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      }
+
       if (status == PermissionStatus.granted) {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');
         final Directory _appDocDir = await getApplicationDocumentsDirectory();
-        final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+        final Directory _appDocDirFolder =
+            Directory('storage/emulated/0/fitBasix/media');
 
         if (await _appDocDirFolder.exists()) {
           path = _appDocDirFolder.path;
         } else {
           //if folder not exists create folder and then return its path
           final Directory _appDocDirNewFolder =
-          await _appDocDirFolder.create(recursive: true);
+              await _appDocDirFolder.create(recursive: true);
           path = _appDocDirNewFolder.path;
         }
         //if(File(message!.attachments![0]!.data!).existsSync())
@@ -1174,18 +1602,12 @@ class MessageBubbleSender extends StatelessWidget {
           print("file exists in " + downloadsPath.path + "/$fileName");
           filePath.value = downloadsPath.path + "/" + fileName;
         }
-
-    }
-
-
-
-
-
-    }
-    else{
+      }
+    } else {
       String? path;
-      final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
-      print(_appDocDir.path.toString()+" uuuuu");
+      final Directory _appDocDir =
+          Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+      print(_appDocDir.path.toString() + " uuuuu");
       //App Document Directory + folder name
       if ((await _appDocDir.exists())) {
         path = _appDocDir.path;
@@ -1197,23 +1619,23 @@ class MessageBubbleSender extends StatelessWidget {
         print("file exists in " + path + "/$fileName");
         filePath.value = path + "/$fileName";
       }
-
     }
   }
 
-  void getFileSize() async{
-    String? url = await QB.content.getPrivateURL(message!.attachments![0]!.url!);
+  void getFileSize() async {
+    String? url =
+        await QB.content.getPrivateURL(message!.attachments![0]!.url!);
     print(message!.attachments![0]!.url!);
     http.Response size = await http.get(Uri.parse(url!));
     double sizeInBytes = double.parse(size.headers["content-length"]!);
-    fileSize.value = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
+    fileSize.value = NumberFormat("0.00").format((sizeInBytes / (1024 * 1024)));
   }
+
   Future<String> getFileSizeFromLocal() async {
     File file = File(filePath.value);
     int sizeInBytes = (await file.length());
-    var size = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
+    var size = NumberFormat("0.00").format((sizeInBytes / (1024 * 1024)));
     return size;
-
   }
 }
 
@@ -1231,7 +1653,6 @@ class MessageBubbleOpponent extends StatelessWidget {
   var filePath = "".obs;
   var fileSize = "".obs;
   String? fileExtension;
-
 
   @override
   Widget build(BuildContext context) {
@@ -1263,7 +1684,8 @@ class MessageBubbleOpponent extends StatelessWidget {
       );
     } else {
       ///if chat has documents
-      fileExtension = message!.attachments![0]!.name!.split(".").last.toUpperCase();
+      fileExtension =
+          message!.attachments![0]!.name!.split(".").last.toUpperCase();
       getFileSize();
       checkFileExistence(message!.attachments![0]!.name);
       return Padding(
@@ -1289,41 +1711,78 @@ class MessageBubbleOpponent extends StatelessWidget {
                 child: Obx(() => filePath.value.isEmpty
                     ? Container(
                         child: Container(
-                          width: 220*SizeConfig.widthMultiplier!,
+                          width: 220 * SizeConfig.widthMultiplier!,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                padding: EdgeInsets.only(left: 8*SizeConfig.widthMultiplier!),
-                                height: 50*SizeConfig.heightMultiplier!,
+                                padding: EdgeInsets.only(
+                                    left: 8 * SizeConfig.widthMultiplier!),
+                                height: 50 * SizeConfig.heightMultiplier!,
                                 decoration: BoxDecoration(
                                   color: kPureWhite.withOpacity(0.15),
-                                  borderRadius:
-                                  BorderRadius.circular(8 * SizeConfig.imageSizeMultiplier!),
+                                  borderRadius: BorderRadius.circular(
+                                      8 * SizeConfig.imageSizeMultiplier!),
                                 ),
                                 child: Row(
                                   children: [
-                                    Expanded(child: Text(message!.attachments![0]!.name!,overflow: TextOverflow.ellipsis,style: AppTextStyle.whiteTextWithWeight600,)),
-                                    SizedBox(width: 10*SizeConfig.widthMultiplier!,),
-                                    (!isDownloadingStarted.value)?GestureDetector(
-                                        onTap: () async {
-                                          isDownloadingStarted.value = true;
-                                          isDownloaded.value = await _getImageUrl(
-                                              message!.attachments![0]!.url!,
-                                              message!.attachments![0]!.name!);
-                                        },
-                                        child: Image.asset(ImagePath.downloadDocIcon,width: 16.79*SizeConfig.widthMultiplier!,height: 22.4*SizeConfig.heightMultiplier!,)):SizedBox(
-                                        height: 22*SizeConfig.heightMultiplier!,
-                                        width: 22*SizeConfig.heightMultiplier!,
-                                        child: CircularProgressIndicator(color: kPureWhite,value: downloadProgress.value,backgroundColor: Colors.grey.withOpacity(0.2),strokeWidth: 2.5*SizeConfig.imageSizeMultiplier!,)),
-                                    SizedBox(width: 12*SizeConfig.widthMultiplier!,),
+                                    Expanded(
+                                        child: Text(
+                                      message!.attachments![0]!.name!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style:
+                                          AppTextStyle.whiteTextWithWeight600,
+                                    )),
+                                    SizedBox(
+                                      width: 10 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    (!isDownloadingStarted.value)
+                                        ? GestureDetector(
+                                            onTap: () async {
+                                              isDownloadingStarted.value = true;
+                                              isDownloaded.value =
+                                                  await _getImageUrl(
+                                                      message!.attachments![0]!
+                                                          .url!,
+                                                      message!.attachments![0]!
+                                                          .name!);
+                                            },
+                                            child: Image.asset(
+                                              ImagePath.downloadDocIcon,
+                                              width: 16.79 *
+                                                  SizeConfig.widthMultiplier!,
+                                              height: 22.4 *
+                                                  SizeConfig.heightMultiplier!,
+                                            ))
+                                        : SizedBox(
+                                            height: 22 *
+                                                SizeConfig.heightMultiplier!,
+                                            width: 22 *
+                                                SizeConfig.heightMultiplier!,
+                                            child: CircularProgressIndicator(
+                                              color: kPureWhite,
+                                              value: downloadProgress.value,
+                                              backgroundColor:
+                                                  Colors.grey.withOpacity(0.2),
+                                              strokeWidth: 2.5 *
+                                                  SizeConfig
+                                                      .imageSizeMultiplier!,
+                                            )),
+                                    SizedBox(
+                                      width: 12 * SizeConfig.widthMultiplier!,
+                                    ),
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-                              Text("${fileSize.value.isNotEmpty?fileSize.value:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: hintGrey,height: 1),)
-
+                              SizedBox(
+                                height: 8 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                "${fileSize.value.isNotEmpty ? fileSize.value : 0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",
+                                style: AppTextStyle.hmediumBlackText
+                                    .copyWith(color: hintGrey, height: 1),
+                              )
                             ],
                           ),
                         ),
@@ -1334,29 +1793,77 @@ class MessageBubbleOpponent extends StatelessWidget {
                               OpenFile.open(filePath.value);
                             },
                             child: Container(
-                              width: 220*SizeConfig.widthMultiplier!,
-                              child: Row(
-                                children: [
-                                  Image.asset((fileExtension == "JPEG"||fileExtension == "JPG")?ImagePath.jpgFileIcon:(fileExtension == "PNG")?ImagePath.pngIcon:(fileExtension!.contains("PPT"))?ImagePath.pptIcon:(fileExtension!.contains("MP4"))?ImagePath.mp4Icon:(fileExtension!.contains("XLX"))?ImagePath.xlxIcon:(fileExtension == "PDF")?ImagePath.pdfFileIcon:ImagePath.docFileIcon,width: 32*SizeConfig.imageSizeMultiplier!,height: 32*SizeConfig.imageSizeMultiplier!,),
-                                  SizedBox(width: 7*SizeConfig.widthMultiplier!,),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container( padding: new EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),child: Text(message!.attachments![0]!.name!,overflow: TextOverflow.ellipsis,style: AppTextStyle.whiteTextWithWeight600,)),
-                                        SizedBox(height: 5*SizeConfig.imageSizeMultiplier!,),
-                                        FutureBuilder(
-                                            future: getFileSizeFromLocal(),
-                                            builder: (context,AsyncSnapshot<String> snapshot){
-
-                                          return Text("${snapshot.hasData?snapshot.data:0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",style: AppTextStyle.hmediumBlackText.copyWith(color: kPureWhite,height: 1),);
-                                        })
-                                    ],),
-                                  )
-                                ],
-                              )
-                            )),
+                                width: 220 * SizeConfig.widthMultiplier!,
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      (fileExtension == "JPEG" ||
+                                              fileExtension == "JPG")
+                                          ? ImagePath.jpgFileIcon
+                                          : (fileExtension == "PNG")
+                                              ? ImagePath.pngIcon
+                                              : (fileExtension!.contains("PPT"))
+                                                  ? ImagePath.pptIcon
+                                                  : (fileExtension!
+                                                          .contains("MP4"))
+                                                      ? ImagePath.mp4Icon
+                                                      : (fileExtension!
+                                                              .contains("XLX"))
+                                                          ? ImagePath.xlxIcon
+                                                          : (fileExtension ==
+                                                                  "PDF")
+                                                              ? ImagePath
+                                                                  .pdfFileIcon
+                                                              : ImagePath
+                                                                  .docFileIcon,
+                                      width:
+                                          32 * SizeConfig.imageSizeMultiplier!,
+                                      height:
+                                          32 * SizeConfig.imageSizeMultiplier!,
+                                    ),
+                                    SizedBox(
+                                      width: 7 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                              padding: new EdgeInsets.only(
+                                                  right: 10 *
+                                                      SizeConfig
+                                                          .widthMultiplier!),
+                                              child: Text(
+                                                message!.attachments![0]!.name!,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: AppTextStyle
+                                                    .whiteTextWithWeight600,
+                                              )),
+                                          SizedBox(
+                                            height: 5 *
+                                                SizeConfig.imageSizeMultiplier!,
+                                          ),
+                                          FutureBuilder(
+                                              future: getFileSizeFromLocal(),
+                                              builder: (context,
+                                                  AsyncSnapshot<String>
+                                                      snapshot) {
+                                                return Text(
+                                                  "${snapshot.hasData ? snapshot.data : 0.0} MB • ${message!.attachments![0]!.name!.split(".").last.toUpperCase()}",
+                                                  style: AppTextStyle
+                                                      .hmediumBlackText
+                                                      .copyWith(
+                                                          color: kPureWhite,
+                                                          height: 1),
+                                                );
+                                              })
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ))),
                       ))),
           ],
         ),
@@ -1373,37 +1880,41 @@ class MessageBubbleOpponent extends StatelessWidget {
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
         print("jjjjjjj");
-        if(Platform.isAndroid){
-          PermissionStatus status  = await Permission.storage.request();
-          PermissionStatus status1 = await Permission.manageExternalStorage.request();
+        if (Platform.isAndroid) {
+          PermissionStatus status = await Permission.storage.request();
+          PermissionStatus status1 =
+              await Permission.manageExternalStorage.request();
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
           //App Document Directory + folder name
-          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+          final Directory _appDocDirFolder =
+              Directory('storage/emulated/0/fitBasix/media');
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
           } else {
             //if folder not exists create folder and then return its path
             final Directory _appDocDirNewFolder =
-            await _appDocDirFolder.create(recursive: true);
+                await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
           print(path + "pp dir");
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-                downloadProgress.value = ((received / total));
-                print(downloadProgress.value);
-                if (((received / total) * 100).floor() == 100) {
-                  checkFileExistence(fileName);
-                }
-              });
-        }
-        if(Platform.isIOS){
+            downloadProgress.value = ((received / total));
+            print(downloadProgress.value);
+            if (((received / total) * 100).floor() == 100) {
+              checkFileExistence(fileName);
+            }
+          });
 
+        if (Platform.isIOS) {
+          print("yyyyyy");
           String? path;
-          final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+          final Directory _appDocDir = Directory(
+              (await getTemporaryDirectory()).path + '/fitbasix/media');
+
           //App Document Directory + folder name
           if ((await _appDocDir.exists())) {
             path = _appDocDir.path;
@@ -1415,14 +1926,13 @@ class MessageBubbleOpponent extends StatelessWidget {
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-                downloadProgress.value = ((received / total));
-                print(downloadProgress.value);
-                if (((received / total) * 100).floor() == 100) {
-                  checkFileExistence(fileName);
-                }
-              });
+            downloadProgress.value = ((received / total));
+            print(downloadProgress.value);
+            if (((received / total) * 100).floor() == 100) {
+              checkFileExistence(fileName);
+            }
+          });
         }
-
       } catch (e) {
         print(e.toString());
       }
@@ -1436,21 +1946,24 @@ class MessageBubbleOpponent extends StatelessWidget {
   }
 
   void checkFileExistence(String? fileName) async {
-    if(Platform.isAndroid){
+
+    if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
-      PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      PermissionStatus status1 =
+          await Permission.manageExternalStorage.request();
       if (status == PermissionStatus.granted) {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');
         final Directory _appDocDir = await getApplicationDocumentsDirectory();
-        final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+        final Directory _appDocDirFolder =
+            Directory('storage/emulated/0/fitBasix/media');
 
         if (await _appDocDirFolder.exists()) {
           path = _appDocDirFolder.path;
         } else {
           //if folder not exists create folder and then return its path
           final Directory _appDocDirNewFolder =
-          await _appDocDirFolder.create(recursive: true);
+              await _appDocDirFolder.create(recursive: true);
           path = _appDocDirNewFolder.path;
         }
         //if(File(message!.attachments![0]!.data!).existsSync())
@@ -1463,13 +1976,13 @@ class MessageBubbleOpponent extends StatelessWidget {
           print("file exists in " + downloadsPath.path + "/$fileName");
           filePath.value = downloadsPath.path + "/" + fileName;
         }
-
       }
     }
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       String? path;
-      final Directory _appDocDir = Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
-      print(_appDocDir.path.toString()+" uuuuu");
+      final Directory _appDocDir =
+          Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
+      print(_appDocDir.path.toString() + " uuuuu");
       //App Document Directory + folder name
       if ((await _appDocDir.exists())) {
         path = _appDocDir.path;
@@ -1481,24 +1994,23 @@ class MessageBubbleOpponent extends StatelessWidget {
         print("file exists in " + path + "/$fileName");
         filePath.value = path + "/$fileName";
       }
-
     }
   }
 
-  void getFileSize() async{
-    String? url = await QB.content.getPrivateURL(message!.attachments![0]!.url!);
+  void getFileSize() async {
+    String? url =
+        await QB.content.getPrivateURL(message!.attachments![0]!.url!);
     print(message!.attachments![0]!.url!);
     http.Response size = await http.get(Uri.parse(url!));
     double sizeInBytes = double.parse(size.headers["content-length"]!);
-    fileSize.value = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
+    fileSize.value = NumberFormat("0.00").format((sizeInBytes / (1024 * 1024)));
   }
 
   Future<String> getFileSizeFromLocal() async {
     File file = File(filePath.value);
     int sizeInBytes = (await file.length());
-    var size = NumberFormat("0.00").format((sizeInBytes / (1024*1024)));
+    var size = NumberFormat("0.00").format((sizeInBytes / (1024 * 1024)));
     return size;
-
   }
 }
 
@@ -1513,7 +2025,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
 
   AppbarforChat(
       {Key? key,
-        this.trainerProfilePicUrl,
+      this.trainerProfilePicUrl,
       this.trainertitle,
       this.parentContext,
       this.trainerstatus,
@@ -1529,37 +2041,41 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       title: Row(
         children: [
-          SizedBox(
-            width: 7 * SizeConfig.widthMultiplier!,
-          ),
           GestureDetector(
               onTap: () {
                 Navigator.pop(parentContext!);
               },
-              child: SvgPicture.asset(
-                ImagePath.backIcon,
-                width: 7.41 * SizeConfig.widthMultiplier!,
-                height: 12 * SizeConfig.heightMultiplier!,
-                fit: BoxFit.contain,
-                color: Theme.of(context).primaryColor,
+              child: Container(
+                width: 20 * SizeConfig.widthMultiplier!,
+                color: Colors.transparent,
+                child: Center(
+                  child: SvgPicture.asset(
+                    ImagePath.backIcon,
+                    width: 7.41 * SizeConfig.widthMultiplier!,
+                    height: 12 * SizeConfig.heightMultiplier!,
+                    fit: BoxFit.contain,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
               )),
           SizedBox(
             width: 16.59 * SizeConfig.widthMultiplier!,
           ),
           CircleAvatar(
-            radius: 20*SizeConfig.imageSizeMultiplier!,
-            backgroundImage:  NetworkImage(
+            radius: 20 * SizeConfig.imageSizeMultiplier!,
+            backgroundImage: NetworkImage(
               trainerProfilePicUrl!,
             ),
           ),
-
           SizedBox(
             width: 12 * SizeConfig.widthMultiplier!,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(trainertitle ?? "", style: AppTextStyle.hnormal600BlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color)),
+              Text(trainertitle ?? "",
+                  style: AppTextStyle.hnormal600BlackText.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color)),
               Text(trainerstatus ?? "", style: AppTextStyle.hsmallGreenText),
             ],
           ),
@@ -1601,7 +2117,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
         ),
         // popupmenu icon
         IconButton(
-            onPressed:onMenuTap,
+            onPressed: onMenuTap,
             icon: SvgPicture.asset(
               ImagePath.chatpopupmenuIcon,
               width: 4 * SizeConfig.widthMultiplier!,

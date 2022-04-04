@@ -27,6 +27,8 @@ class ProfileController extends GetxController {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   RxString selectedDate = DateTime.now().toString().obs;
+  RxBool directFromHome=true.obs;
+
   RxString otp = "".obs;
   RxInt lastPage = RxInt(0);
 // height controller for dialog box

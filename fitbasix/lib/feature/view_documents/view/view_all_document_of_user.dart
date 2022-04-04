@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import '../../../core/reponsive/SizeConfig.dart';
 import '../../message/view/documents_view_screen.dart';
 import '../../profile/view/appbar_for_account.dart';
 import '../controller/documents_controller.dart';
+import '../services/documents_services.dart';
 
 class ViewAllDocumentsOfUser extends StatefulWidget {
   ViewAllDocumentsOfUser({Key? key,}) : super(key: key);
@@ -18,7 +21,55 @@ class ViewAllDocumentsOfUser extends StatefulWidget {
 
 class _ViewAllDocumentsOfUserState extends State<ViewAllDocumentsOfUser> {
   final DocumentsController _documentsController = Get.find();
+  final ScrollController _scrollController = ScrollController();
   String ShowDay = "demo";
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  void initState() {
+    _documentsController.docCurrentPage.value = 1;
+    _documentsController.isDocumentNeedToLoadData.value = true;
+
+    _scrollController.addListener(() async {
+      print(_documentsController.isDocumentNeedToLoadData.value);
+      if (_documentsController.isDocumentNeedToLoadData.value == true) {
+        if (_scrollController.position.maxScrollExtent ==
+            _scrollController.position.pixels) {
+          _documentsController.showLoaderOnDocs.value = true;
+          final postQuery = await DocumentServices.getAllDocumentsOfUser(
+              trainerId: _documentsController.trainerID.value,
+              skip: _documentsController.docCurrentPage.value);
+
+          if (postQuery.response!.data!.length < 10) {
+            _documentsController.isDocumentNeedToLoadData.value = false;
+            _documentsController.listOfDocuments.addAll(postQuery.response!.data!);
+            print(_documentsController.listOfDocuments.length.toString() +" wwww");
+            _documentsController.showLoaderOnDocs.value = false;
+            return;
+          } else {
+            log(_documentsController.listOfDocuments.toString());
+            if (_documentsController.listOfDocuments.last.id ==
+                postQuery.response!.data!.last.id) {
+              _documentsController.showLoaderOnDocs.value = false;
+              return;
+            }
+
+            _documentsController.listOfDocuments.addAll(postQuery.response!.data!);
+            _documentsController.showLoaderOnDocs.value = false;
+          }
+          _documentsController.docCurrentPage.value++;
+          _documentsController.showLoaderOnDocs.value = false;
+          //setState(() {});
+        }
+      }
+    });
+    super.initState();
+  }
 
 
   @override
@@ -31,35 +82,47 @@ class _ViewAllDocumentsOfUserState extends State<ViewAllDocumentsOfUser> {
       body: Obx(
               ()=>_documentsController.isAllDocumentsLoading.value?Center(
             child: CustomizedCircularProgress(),
-          ):ListView(
-      physics: BouncingScrollPhysics(),
+          ):Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            margin: EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!,vertical: 14*SizeConfig.heightMultiplier!),
-            child: Text("Documents",style: AppTextStyle.hblack600Text.copyWith(color: Colors.white,height: 1),)),
+              margin: EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!,vertical: 14*SizeConfig.heightMultiplier!),
+              child: Text("Documents",style: AppTextStyle.hblack600Text.copyWith(color: Colors.white,height: 1),)),
         SizedBox(height: 12*SizeConfig.heightMultiplier!,),
-        ListView.builder(
-            physics: const ClampingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: _documentsController.allDocuments.value.response!.data!.length,
-            itemBuilder: (context, index){
-              _documentsController.listOfDocuments[index].showDate = _getGroupByDateString(_documentsController.listOfDocuments[index].createdAt!);
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _getGroupByDate(_documentsController.listOfDocuments[index].showDate!),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 16*SizeConfig.heightMultiplier!,left: 29*SizeConfig.widthMultiplier!),
-                    child: DocumentTiles(documentName: _documentsController.listOfDocuments[index].fileName!,date: _documentsController.listOfDocuments[index].createdAt!.millisecondsSinceEpoch,fileSizeFromDb: _documentsController.listOfDocuments[index].sizeInMb!,wantDownloadFeature: true,fileURL: _documentsController.listOfDocuments[index].url,),
-                  ),
-                ],
-              );
-            }),
+        Expanded(
+          child: Obx(
+                ()=>ListView.builder(
+                  controller: _scrollController,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: _documentsController.listOfDocuments.length,
+                  itemBuilder: (context, index){
+                    _documentsController.listOfDocuments[index].showDate = _getGroupByDateString(_documentsController.listOfDocuments[index].createdAt!);
+                    if(_documentsController.listOfDocuments.length<10){
+                      print("ppp");
+                      _documentsController.isDocumentNeedToLoadData.value = false;
+                      print(_documentsController.isDocumentNeedToLoadData.value);
+                    }
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _getGroupByDate(_documentsController.listOfDocuments[index].showDate!),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 16*SizeConfig.heightMultiplier!,left: 29*SizeConfig.widthMultiplier!),
+                          child: DocumentTiles(documentName: _documentsController.listOfDocuments[index].fileName!,date: _documentsController.listOfDocuments[index].createdAt!.millisecondsSinceEpoch,fileSizeFromDb: _documentsController.listOfDocuments[index].sizeInMb!,wantDownloadFeature: true,fileURL: _documentsController.listOfDocuments[index].url,),
+                        ),
+                      ],
+                    );
+                  }),
+          ),
+        ),
+        Obx(()=>_documentsController.showLoaderOnDocs.value?Center(child: CustomizedCircularProgress()):Container())
 
       ],
 
-    )
+    ),
+
 
       )
     );

@@ -75,7 +75,7 @@ Widget TextFieldContainer(
           // ),
           prefixIcon: Padding(
             padding: EdgeInsets.only(
-                left: 18.0 * SizeConfig.widthMultiplier!,
+                left: 0.0 * SizeConfig.widthMultiplier!,
                 right: 15.2 * SizeConfig.widthMultiplier!),
             child: preFixWidget,
           ),

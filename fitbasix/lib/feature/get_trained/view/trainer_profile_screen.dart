@@ -43,6 +43,7 @@ class TrainerProfileScreen extends StatefulWidget {
     this.trainerID,
     Key? key}) : super(key: key);
 
+
   @override
   State<TrainerProfileScreen> createState() => _TrainerProfileScreenState();
 }
@@ -124,142 +125,166 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                     setState(() {});
                   },
                   onMessage: () async {
-                    print("the button value is:" + isMessageLoading.toString());
-                    if (!isMessageLoading) {
-                      isMessageLoading = true;
-                      bool dialogCreatedPreviously = false;
-                      int openPage = 0;
-                      //133817477	user1
-                      //133815819 trainer1
-                      //133612091 trainer
-                      final sharedPreferences =
-                          await SharedPreferences.getInstance();
-                      _homeController.userQuickBloxId.value =
-                          sharedPreferences.getInt("userQuickBloxId")!;
-                      int UserQuickBloxId = _trainerController.atrainerDetail.value.quickBlox!;
 
-                      // _homeController.userQuickBloxId.value == 133815819
-                      //     ? 133819788
-                      //    : 133815819;
 
-                      print(UserQuickBloxId.toString() + "qqqqq");
+                    ///remove ! after testing
+                    if (_trainerController.atrainerDetail.value.isEnrolled!) {
+                      if (!isMessageLoading) {
+                        isMessageLoading = true;
+                        bool dialogCreatedPreviously = false;
+                        int openPage = 0;
+                        //133817477	user1
+                        //133815819 trainer1
+                        //133612091 trainer
+                        final sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        _homeController.userQuickBloxId.value =
+                            sharedPreferences.getInt("userQuickBloxId")!;
+                        int UserQuickBloxId =
+                            _trainerController.atrainerDetail.value.quickBlox!;
 
-                      print(UserQuickBloxId.toString() +
-                          "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
-                      QBSort sort = QBSort();
-                      sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
-                      sort.ascending = true;
-                      try {
-                        List<QBDialog?> dialogs = await QB.chat
-                            .getDialogs(
-                          sort: sort,
-                        )
-                            .then((value) async {
-                          for (int i = 0; i < value.length; i++) {
-                            if (value[i]!.occupantsIds!.contains(
-                                    _homeController.userQuickBloxId.value) &&
-                                value[i]!
-                                    .occupantsIds!
-                                    .contains(UserQuickBloxId)) {
-                              dialogCreatedPreviously = true;
-                              print(value[i]!.id.toString() + "maxxxx");
-                              isMessageLoading = false;
-                              if (openPage < 1) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ChatScreen(
-                                            userDialogForChat: value[i],
-                                            opponentID: UserQuickBloxId,
-                                            profilePicURL: _trainerController
-                                                .atrainerDetail
-                                                .value
-                                                .user!
-                                                .profilePhoto,
-                                            trainerId: _trainerController
-                                                .atrainerDetail.value.user!.id,
-                                            isCurrentlyEnrolled:
-                                                _trainerController
-                                                    .atrainerDetail
-                                                    .value
-                                                    .isEnrolled,
-                                            trainerTitle: trainerController
-                                                .atrainerDetail
-                                                .value
-                                                .user!
-                                                .name!)));
-                                ++openPage;
-                              }
-                              isMessageLoading = false;
-                              break;
-                            }
-                          }
-                          if (!dialogCreatedPreviously) {
-                            List<int> occupantsIds = [
-                              _homeController.userQuickBloxId.value,
-                              UserQuickBloxId
-                            ];
-                            String dialogName = UserQuickBloxId.toString() +
-                                _homeController.userQuickBloxId.value
-                                    .toString() +
-                                DateTime.now().millisecond.toString();
-                            int dialogType = QBChatDialogTypes.CHAT;
-                            print("got here too");
-                            try {
-                              QBDialog? createdDialog = await QB.chat
-                                  .createDialog(
-                                occupantsIds,
-                                dialogName,
-                                dialogType: QBChatDialogTypes.CHAT,
-                              )
-                                  .then((value) {
-                                print("dialog id is:" + value!.id!);
+                        // _homeController.userQuickBloxId.value == 133815819
+                        //     ? 133819788
+                        //    : 133815819;
+
+                        QBSort sort = QBSort();
+                        sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+                        sort.ascending = true;
+                        try {
+                          List<QBDialog?> dialogs = await QB.chat
+                              .getDialogs(
+                            sort: sort,
+                          )
+                              .then((value) async {
+                            for (int i = 0; i < value.length; i++) {
+                              if (value[i]!.occupantsIds!.contains(
+                                      _homeController.userQuickBloxId.value) &&
+                                  value[i]!
+                                      .occupantsIds!
+                                      .contains(UserQuickBloxId)) {
+                                dialogCreatedPreviously = true;
+                                print(value[i]!.id.toString() + "maxxxx");
                                 isMessageLoading = false;
                                 if (openPage < 1) {
-                                  isMessageLoading = false;
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ChatScreen(
-                                              userDialogForChat: value,
-                                              opponentID: UserQuickBloxId,
-                                              profilePicURL: _trainerController
-                                                  .atrainerDetail
-                                                  .value
-                                                  .user!
-                                                  .profilePhoto,
-                                              trainerId: _trainerController
-                                                  .atrainerDetail
-                                                  .value
-                                                  .user!
-                                                  .id,
-                                              isCurrentlyEnrolled:
-                                                  _trainerController
-                                                      .atrainerDetail
-                                                      .value
-                                                      .isEnrolled,
-                                              trainerTitle: trainerController
-                                                  .atrainerDetail
-                                                  .value
-                                                  .user!
-                                                  .name!)));
+                                                userDialogForChat: value[i],
+                                                opponentID: UserQuickBloxId,
+                                                profilePicURL:
+                                                    _trainerController
+                                                        .atrainerDetail
+                                                        .value
+                                                        .user!
+                                                        .profilePhoto,
+                                                trainerId: _trainerController
+                                                    .atrainerDetail
+                                                    .value
+                                                    .user!
+                                                    .id,
+                                                isCurrentlyEnrolled:
+                                                    _trainerController
+                                                        .atrainerDetail
+                                                        .value
+                                                        .isEnrolled,
+                                                trainerTitle: trainerController
+                                                    .atrainerDetail
+                                                    .value
+                                                    .user!
+                                                    .name!,
+                                                time: trainerController
+                                                    .atrainerDetail.value.time,
+                                                days: trainerController
+                                                    .atrainerDetail.value.days,
+                                              )));
                                   ++openPage;
                                 }
-                              });
-                            } on PlatformException catch (e) {
-                              isMessageLoading = false;
-                              print(e.toString());
+                                isMessageLoading = false;
+                                break;
+                              }
                             }
-                          }
-                          return value;
-                        });
-                      } on PlatformException catch (e) {
-                        isMessageLoading = false;
-                        // some error occurred, look at the exception message for more details
+                            if (!dialogCreatedPreviously) {
+                              List<int> occupantsIds = [
+                                _homeController.userQuickBloxId.value,
+                                UserQuickBloxId
+                              ];
+                              String dialogName = UserQuickBloxId.toString() +
+                                  _homeController.userQuickBloxId.value
+                                      .toString() +
+                                  DateTime.now().millisecond.toString();
+                              int dialogType = QBChatDialogTypes.CHAT;
+                              try {
+                                QBDialog? createdDialog = await QB.chat
+                                    .createDialog(
+                                  occupantsIds,
+                                  dialogName,
+                                  dialogType: QBChatDialogTypes.CHAT,
+                                )
+                                    .then((value) {
+                                  isMessageLoading = false;
+                                  if (openPage < 1) {
+                                    isMessageLoading = false;
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ChatScreen(
+                                                  userDialogForChat: value,
+                                                  opponentID: UserQuickBloxId,
+                                                  profilePicURL:
+                                                      _trainerController
+                                                          .atrainerDetail
+                                                          .value
+                                                          .user!
+                                                          .profilePhoto,
+                                                  trainerId: _trainerController
+                                                      .atrainerDetail
+                                                      .value
+                                                      .user!
+                                                      .id,
+                                                  isCurrentlyEnrolled:
+                                                      _trainerController
+                                                          .atrainerDetail
+                                                          .value
+                                                          .isEnrolled,
+                                                  trainerTitle:
+                                                      trainerController
+                                                          .atrainerDetail
+                                                          .value
+                                                          .user!
+                                                          .name!,
+                                                  time: trainerController
+                                                      .atrainerDetail
+                                                      .value
+                                                      .time,
+                                                  days: trainerController
+                                                      .atrainerDetail
+                                                      .value
+                                                      .days,
+                                                )));
+                                    ++openPage;
+                                  }
+                                });
+                              } on PlatformException catch (e) {
+                                isMessageLoading = false;
+                                print(e.toString());
+                              }
+                            }
+                            return value;
+                          });
+                        } on PlatformException catch (e) {
+                          isMessageLoading = false;
+                          // some error occurred, look at the exception message for more details
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Message is loading")));
                       }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Message is loading")));
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              EnrollTrainerDialog());
                     }
                   },
                   onEnroll: () {
@@ -1143,13 +1168,13 @@ class _TrainerPageState extends State<TrainerPage> {
                                                     setState(() {});
                                                   },
                                                   addComment: () {
-                                                    HomeService.addComment(
-                                                        _trainerController
-                                                            .trainerPostList[
-                                                                index]
-                                                            .id!,
-                                                        _homeController
-                                                            .comment.value);
+                                                    // HomeService.addComment(
+                                                    //     _trainerController
+                                                    //         .trainerPostList[
+                                                    //             index]
+                                                    //         .id!,
+                                                    //     _homeController
+                                                    //         .comment.value);
 
                                                     setState(() {});
 

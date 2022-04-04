@@ -29,8 +29,10 @@ class MyTrainersScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(()=>
          Center(
-            child: userChatsHistory[0].id!=null||_myTrainers.length>0
-                ? MyTrainerTileScreen(chatHistoryList: userChatsHistory,myTrainers: _myTrainers,)
+            child: userChatsHistory[0].id!=null||_trainerController.trainers.value.response!.data!.myTrainers!.length>0
+                ? MyTrainerTileScreen(chatHistoryList: userChatsHistory,
+              // myTrainers: _trainerController.trainers.value.response!.data!.myTrainers!,
+            )
                 : NoTrainerScreen()),
       ),
 
@@ -198,7 +200,10 @@ class EnrollTrainerDialog extends StatelessWidget {
                         width: 156 * SizeConfig.widthMultiplier!,
                         height: 48 * SizeConfig.heightMultiplier!,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, RouteName.trainerplanScreen);
+                          },
                           child: Text('enroll_now'.tr,
                               style: AppTextStyle.hboldWhiteText),
                         ),
