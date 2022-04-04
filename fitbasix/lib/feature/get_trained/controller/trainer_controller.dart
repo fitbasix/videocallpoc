@@ -17,6 +17,16 @@ import '../../plans/models/allTimeSlot.dart';
 import '../model/timing_model.dart';
 
 class TrainerController extends GetxController {
+
+
+
+
+
+  RxBool isMyTrainerNeedToLoadData = true.obs;
+  RxBool showLoaderOnMyTrainer = false.obs;
+
+  var currentMyTrainerPage = 0.obs;
+
   var fromTimeForFilter = DateTime.now().obs;
   var toTimeForFilter = DateTime.now().obs;
   RxBool isSelected = RxBool(false);
