@@ -57,13 +57,12 @@ class TrainerPlansScreen extends StatelessWidget {
 
       ///remove ||plans.length==0 after testing
       body: Obx(() => trainerController.isProfileLoading.value == false
-          ? Padding(
+          ? (trainerController.planModel.value.response!.data!.isNotEmpty)?Padding(
               padding: EdgeInsets.only(top: 32 * SizeConfig.heightMultiplier!),
               child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   child: Row(
-
                       ///remove plans.length+2 after testing
                       children: List.generate(
                     trainerController.planModel.value.response!.data!.length,
@@ -138,6 +137,20 @@ class TrainerPlansScreen extends StatelessWidget {
                         planFeaturesList: trainerController
                             .planModel.value.response!.data![index].keyPoints),
                   ))),
+            ):Container(
+        margin: EdgeInsets.only(top: 187*SizeConfig.heightMultiplier!),
+              child:  Column(
+        children: [
+          Image.asset(ImagePath.noPlan,height: 102*SizeConfig.heightMultiplier!,),
+          SizedBox(height: 17*SizeConfig.heightMultiplier!,),
+          SizedBox(
+              width: double.infinity,
+              child: Center(child: Text("no_plan_found".tr,style: AppTextStyle.white400Text.copyWith(fontSize: 24*SizeConfig.textMultiplier!,height: 1.1),textAlign: TextAlign.center,),)),
+          SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+          Text("explore_other".tr,style: AppTextStyle.white400Text.copyWith(fontSize: 14*SizeConfig.textMultiplier!,height: 1),)
+        ],
+      ),
+
             )
           : Center(child: CustomizedCircularProgress())),
     );
