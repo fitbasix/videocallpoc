@@ -187,6 +187,8 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.logOut,
                     menuItemText: 'logOut'.tr,
                     onTap: () async {
+                      AwesomeNotifications().cancelAllSchedules();
+                      AwesomeNotifications().cancelAll();
                       InitializeQuickBlox().logOutUserSession();
                       final LoginController _controller =
                           Get.put(LoginController());

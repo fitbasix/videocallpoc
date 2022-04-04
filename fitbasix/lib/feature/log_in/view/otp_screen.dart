@@ -16,9 +16,10 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 class OtpScreen extends StatelessWidget {
   OtpScreen({Key? key}) : super(key: key);
 //  final LoginController _loginController = Get.find();
- final LoginController _loginController= Get.put(LoginController());
+ final LoginController _loginController= Get.find();
   @override
   Widget build(BuildContext context) {
+    print(_loginController.mobile.value+" jjj");
     return Scaffold(
       resizeToAvoidBottomInset: true,
      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -169,6 +170,7 @@ class OtpScreen extends StatelessWidget {
                           : ProceedButton(
                           title: 'verify'.tr,
                           onPressed: () async {
+                            _loginController.mobileController.clear();
                             _loginController.isLoading.value = true;
                             final redScreen = await LogInService.loginAndSignup(
                                 _loginController.mobile.value,
@@ -191,6 +193,7 @@ class OtpScreen extends StatelessWidget {
                               _loginController.isLoading.value = false;
                               Navigator.pushNamedAndRemoveUntil(
                                   context, RouteName.homePage, (route) => false);
+                              _loginController.mobileController.clear();
                             }
                           })),
                       SizedBox(

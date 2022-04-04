@@ -29,7 +29,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final LoginController _loginController = Get.put(LoginController());
+
 
   String title = RemoteConfigService.remoteConfig.getString('welcome');
 
@@ -46,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final LoginController _loginController = Get.put(LoginController());
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -91,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFieldContainer(
                             onChanged: (value) {
                               _loginController.mobile.value = value;
+                              print(_loginController.mobile.value+" iii");
                             },
                             maxLength: 10,
                             isTextFieldActive: true,
@@ -130,8 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                             ),
-                            textEditingController:
-                                _loginController.mobileController,
+                            textEditingController: _loginController.mobileController,
                             isNumber: true,
                             hint: 'enter_number_hint'.tr),
                       ),
@@ -148,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
                               if (_loginController.mobile.value.length == 10&&RegExp(r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$").hasMatch(_loginController.mobile.value)) {
+                                print(_loginController.mobile.value+" kkk");
                                 _loginController.isLoading.value = true;
                                 await _loginController.getOTP();
                                 _loginController.isLoading.value = false;

@@ -48,34 +48,28 @@ void selectNotification(String? payload) async {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // AndroidNotificationChannel channel = AndroidNotificationChannel(
-  //     "channel_id", "some_title",
-  //     description: "some_description", importance: Importance.high);
-  // AndroidNotificationDetails details = AndroidNotificationDetails(
-  //     channel.id,
-  //     channel.name,
-  //     channelDescription: channel.description,
-  //     icon: "launch_background");
-  //
-  //
-  //
-  // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  //     FlutterLocalNotificationsPlugin();
-  // final IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings();
-  // final InitializationSettings initializationSettings = InitializationSettings(
-  //     iOS: initializationSettingsIOS
+  // await AwesomeNotifications().createNotification(
+  //     content: NotificationContent(
+  //       displayOnForeground: true,
+  //       displayOnBackground: true,
+  //       id: 1999,
+  //       channelKey: 'basic_channel',
+  //       title: 'Water Reminder',
+  //       body: 'drink Water $notificationId',
+  //       wakeUpScreen: true,
+  //       category: NotificationCategory.Reminder,
+  //       payload: {'uuid': 'uuid-test'},
+  //       autoDismissible: false,
+  //     ),
+  //     schedule:NotificationCalendar(
+  //         second: startTime.second,
+  //         year: startTime.year,
+  //         minute: startTime.minute,
+  //         repeats: true,
+  //         allowWhileIdle: true,
+  //         preciseAlarm: true
+  //     )
   // );
-  // await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: selectNotification);
-  // await flutterLocalNotificationsPlugin
-  //     .resolvePlatformSpecificImplementation<
-  //         AndroidFlutterLocalNotificationsPlugin>()
-  //     ?.createNotificationChannel(channel);
-  // var messageData = jsonDecode(message.data["message"]);
-  // int id = message.hashCode;
-  // String title = messageData["message"]["notification"]["name"].toString();
-  // String body = messageData["message"]["notification"]["body"].toString();
-  // flutterLocalNotificationsPlugin.show(
-  //     id, title, body, NotificationDetails(android: details));
 }
 
 Future<void> main() async {
