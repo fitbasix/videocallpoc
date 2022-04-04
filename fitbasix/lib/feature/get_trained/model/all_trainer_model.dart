@@ -73,30 +73,31 @@ class Data {
 }
 
 class Trainer {
-  Trainer({
-    this.followers,
-    this.following,
-    this.trainees,
-    this.slotsFeft,
-    this.totalRating,
-    this.rating,
-    this.id,
-    this.about,
-    this.trainerType,
-    this.strength,
-    this.user,
-    this.numOfCertificates,
-    this.tags,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
-    this.isFitnessConsultant,
-    this.isNutritionConsultant,
-    this.certificates,
-    this.isFollowing,
-    this.isEnrolled,
-    this.quickBlox
-  });
+  Trainer(
+      {this.followers,
+      this.following,
+      this.trainees,
+      this.slotsFeft,
+      this.totalRating,
+      this.rating,
+      this.id,
+      this.about,
+      this.trainerType,
+      this.strength,
+      this.user,
+      this.numOfCertificates,
+      this.tags,
+      this.createdAt,
+      this.updatedAt,
+      this.v,
+      this.isFitnessConsultant,
+      this.isNutritionConsultant,
+      this.certificates,
+      this.isFollowing,
+      this.isEnrolled,
+      this.time,
+      this.days,
+      this.quickBlox});
 
   String? followers;
   final String? following;
@@ -120,40 +121,48 @@ class Trainer {
   bool? isFollowing;
   bool? isEnrolled;
   int? quickBlox;
+  String? time;
+  List<int>? days;
 
   factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
-      followers: json["followers"].toString(),
-      following: json["following"].toString(),
-      trainees: json["trainees"],
-      slotsFeft: json["slotsLeft"],
-      totalRating: json["totalRating"],
-      rating: json["rating"],
-      id: json["_id"],
-      about: json["about"],
-      trainerType: List<dynamic>.from(
-          json["trainerType"] == null ? [] : json["trainerType"].map((x) => x)),
-      strength: List<StrengthElement>.from(
-          json["strengths"].map((x) => StrengthElement.fromJson(x))),
-      user: json["users"] == null ? null : User.fromJson(json["users"]),
-      numOfCertificates: json["numOfCertificates"],
-      // tags:
-      //     List<Strength>.from(json["strength"].map((x) => Strength.fromJson(x))),
-      createdAt:
-          json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-      updatedAt:
-          json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-      v: json["__v"],
-      isFitnessConsultant: json["isFitnessConsultant"],
-      isNutritionConsultant: json["isNutritionConsultant"],
-      certificates: json["certificate"] == null
-          ? []
-          : List<Certificate>.from(json["certificate"]["certificates"]
-              .map((x) => Certificate.fromJson(x))),
-      isFollowing: json["isFollowing"],
-      isEnrolled: json["isEnrolled"],
-      quickBlox: json["quickBlox"],
-
-  );
+        followers: json["followers"].toString(),
+        following: json["following"].toString(),
+        trainees: json["trainees"],
+        slotsFeft: json["slotsLeft"],
+        totalRating: json["totalRating"],
+        rating: json["rating"],
+        id: json["_id"],
+        about: json["about"],
+        trainerType: List<dynamic>.from(json["trainerType"] == null
+            ? []
+            : json["trainerType"].map((x) => x)),
+        strength: List<StrengthElement>.from(
+            json["strengths"].map((x) => StrengthElement.fromJson(x))),
+        user: json["users"] == null ? null : User.fromJson(json["users"]),
+        numOfCertificates: json["numOfCertificates"],
+        // tags:
+        //     List<Strength>.from(json["strength"].map((x) => Strength.fromJson(x))),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updatedAt"]),
+        v: json["__v"],
+        isFitnessConsultant: json["isFitnessConsultant"],
+        isNutritionConsultant: json["isNutritionConsultant"],
+        certificates: json["certificate"] == null
+            ? []
+            : List<Certificate>.from(json["certificate"]["certificates"]
+                .map((x) => Certificate.fromJson(x))),
+        time: json["time"],
+        days: json["days"] == null
+            ? []
+            : List<int>.from(json["days"].map((x) => x)),
+        isFollowing: json["isFollowing"],
+        isEnrolled: json["isEnrolled"],
+        quickBlox: json["quickBlox"],
+      );
 
   Map<String, dynamic> toJson() => {
         "followers": followers,
@@ -186,7 +195,9 @@ class Strength {
 
   final List<String>? strength;
 
-  factory Strength.fromJson(Map<String, dynamic> json) => Strength(strength: List<String>.from(json["strength"].map((x) => x)),);
+  factory Strength.fromJson(Map<String, dynamic> json) => Strength(
+        strength: List<String>.from(json["strength"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
         "strength": List<dynamic>.from(strength!.map((x) => x)),

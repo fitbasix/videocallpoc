@@ -31,6 +31,7 @@ class MyTrainerTileScreen extends StatefulWidget {
   }) : super(key: key);
 
 
+
   List<QBDialog>? chatHistoryList;
 
   
@@ -255,6 +256,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                               value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
                             dialogCreatedPreviously = true;
                             print(value[i]!.id.toString() + "maxxxx");
+
                             isMessageLoading = false;
                             if (openPage < 1) {
                               Navigator.push(
@@ -268,6 +270,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                         profilePicURL: myTrainers.value![index].profilePhoto!,
                                         trainerId: myTrainers.value![index].user,
                                       )));
+
                               ++openPage;
                             }
                             isMessageLoading = false;
@@ -416,15 +419,13 @@ class TrainersTileUI extends StatelessWidget {
   var lastMessageDateToShow = "".obs;
   GestureTapCallback? onTrainerTapped;
 
-
-
   @override
   Widget build(BuildContext context) {
     setLastMessageDate();
     return GestureDetector(
       onTap: onTrainerTapped,
       child: Container(
-        margin: EdgeInsets.only(bottom: 8*SizeConfig.heightMultiplier!),
+        margin: EdgeInsets.only(bottom: 8 * SizeConfig.heightMultiplier!),
         color: Theme.of(context).secondaryHeaderColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,9 +448,8 @@ class TrainersTileUI extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(
                           trainerProfilePicUrl!,
-
                         ),
-                        radius: 25*SizeConfig.imageSizeMultiplier!,
+                        radius: 25 * SizeConfig.imageSizeMultiplier!,
                       ),
                     )),
                 SizedBox(
@@ -459,18 +459,28 @@ class TrainersTileUI extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(trainerName!.isNotEmpty ? trainerName! : "Loading..",
-                        style: AppTextStyle.hnormal600BlackText.copyWith(color: isCurrentlyEnrolled!?Theme.of(context).textTheme.bodyText1!.color:greyB7)),
+                        style: AppTextStyle.hnormal600BlackText.copyWith(
+                            color: isCurrentlyEnrolled!
+                                ? Theme.of(context).textTheme.bodyText1!.color
+                                : greyB7)),
                     //_taggedBar Widget
                     (taggedPersonList.isNotEmpty)?_taggedBar(list: taggedPersonList,context: context):Container()
+
                   ],
                 ),
                 Spacer(),
                 Obx(
-                    ()=> lastMessageDateToShow.value.isNotEmpty?Padding(
-                    padding:
-                        EdgeInsets.only(right: 16 * SizeConfig.widthMultiplier!),
-                    child: Text(userHasChatHistory!?lastMessageDateToShow.value:"", style: AppTextStyle.hsmallhintText),
-                  ):Container(),
+                  () => lastMessageDateToShow.value.isNotEmpty
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              right: 16 * SizeConfig.widthMultiplier!),
+                          child: Text(
+                              userHasChatHistory!
+                                  ? lastMessageDateToShow.value
+                                  : "",
+                              style: AppTextStyle.hsmallhintText),
+                        )
+                      : Container(),
                 )
               ],
             ),
@@ -481,8 +491,16 @@ class TrainersTileUI extends StatelessWidget {
                     right: 38 * SizeConfig.widthMultiplier!,
                     top: 16 * SizeConfig.heightMultiplier!,
                     bottom: 16 * SizeConfig.heightMultiplier!),
-                child: Text(lastMessage!.isNotEmpty ? lastMessage! : (userHasChatHistory!? "loading...":"lets_start_conversation".tr),
-                    style: AppTextStyle.hmedium13Text.copyWith(color: isCurrentlyEnrolled!?Theme.of(context).textTheme.bodyText1!.color:greyB7)),
+                child: Text(
+                    lastMessage!.isNotEmpty
+                        ? lastMessage!
+                        : (userHasChatHistory!
+                            ? "loading..."
+                            : "lets_start_conversation".tr),
+                    style: AppTextStyle.hmedium13Text.copyWith(
+                        color: isCurrentlyEnrolled!
+                            ? Theme.of(context).textTheme.bodyText1!.color
+                            : greyB7)),
               ),
             ),
             Container(
@@ -492,11 +510,19 @@ class TrainersTileUI extends StatelessWidget {
                     bottom: 24 * SizeConfig.heightMultiplier!),
                 child: Row(
                   children: [
-                    Text(isCurrentlyEnrolled!?'enrolled_on'.tr:"enrolled_end_on", style: AppTextStyle.hsmallhintText),
+                    Text(
+                        isCurrentlyEnrolled!
+                            ? 'enrolled_on'.tr
+                            : "enrolled_end_on",
+                        style: AppTextStyle.hsmallhintText),
                     SizedBox(
                       width: 4 * SizeConfig.widthMultiplier!,
                     ),
-                    Text(DateFormat("d MMM yyyy").format(enrolledDate!), style: isCurrentlyEnrolled!?AppTextStyle.hsmallGreenText:AppTextStyle.hsmallGreenText.copyWith(color: hintGrey))
+                    Text(DateFormat("d MMM yyyy").format(enrolledDate!),
+                        style: isCurrentlyEnrolled!
+                            ? AppTextStyle.hsmallGreenText
+                            : AppTextStyle.hsmallGreenText
+                                .copyWith(color: hintGrey))
                   ],
                 ),
               ),
@@ -516,84 +542,127 @@ class TrainersTileUI extends StatelessWidget {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: AlertDialog(
-                contentPadding: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 30 * SizeConfig.heightMultiplier!),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8*SizeConfig.imageSizeMultiplier!)
-                ),
+                    borderRadius: BorderRadius.circular(
+                        8 * SizeConfig.imageSizeMultiplier!)),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(trainerName!,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
-                    SizedBox(height: 26*SizeConfig.heightMultiplier!,),
+                    Text(
+                      trainerName!,
+                      style: AppTextStyle.black400Text.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                    SizedBox(
+                      height: 26 * SizeConfig.heightMultiplier!,
+                    ),
                     GestureDetector(
-                      onTap: (){
-                      },
+                      onTap: () {},
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(ImagePath.penIcon,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
-                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
-                          Text('Open profile',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                          SvgPicture.asset(
+                            ImagePath.penIcon,
+                            color: Theme.of(context).primaryColor,
+                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10.5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'Open profile',
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 22*SizeConfig.heightMultiplier!,),
+                    SizedBox(
+                      height: 22 * SizeConfig.heightMultiplier!,
+                    ),
                     GestureDetector(
-                      onTap: (){
-                      },
+                      onTap: () {},
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(ImagePath.muteBell,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
-                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
-                          Text('Mute notifications',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                          SvgPicture.asset(
+                            ImagePath.muteBell,
+                            color: Theme.of(context).primaryColor,
+                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10.5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'Mute notifications',
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 22*SizeConfig.heightMultiplier!,),
+                    SizedBox(
+                      height: 22 * SizeConfig.heightMultiplier!,
+                    ),
                     GestureDetector(
-                      onTap: (){
-                      },
+                      onTap: () {},
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(ImagePath.penIcon,color: Theme.of(context).primaryColor,height: 15*SizeConfig.imageSizeMultiplier!,),
-                          SizedBox(width: 10.5*SizeConfig.widthMultiplier!,),
-                          Text('Mark as unread',style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),),
+                          SvgPicture.asset(
+                            ImagePath.penIcon,
+                            color: Theme.of(context).primaryColor,
+                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10.5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'Mark as unread',
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                          ),
                         ],
                       ),
                     ),
-
                   ],
                 ),
-              )
-          ),
+              )),
         );
-
-
-
       },
     );
   }
-  setLastMessageDate(){
+
+  setLastMessageDate() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = DateTime(now.year, now.month, now.day - 1);
-    DateTime dateOfFile = DateTime.fromMicrosecondsSinceEpoch(lastMessageTime! * 1000);
-    final checkDate = DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
-    if(checkDate == today){
+    DateTime dateOfFile =
+        DateTime.fromMicrosecondsSinceEpoch(lastMessageTime! * 1000);
+    final checkDate =
+        DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
+    if (checkDate == today) {
       lastMessageDateToShow.value = "Today";
-    }
-    else if(checkDate == yesterday){
+    } else if (checkDate == yesterday) {
       lastMessageDateToShow.value = "Yesterday";
-    }
-    else{
+    } else {
       lastMessageDateToShow.value = DateFormat("dd MMM yy").format(checkDate);
     }
   }
 
-  Widget _taggedBar({List<String>? list,required BuildContext context}) {
+  Widget _taggedBar({List<String>? list, required BuildContext context}) {
     return Row(
       children: [
         Container(
@@ -608,7 +677,8 @@ class TrainersTileUI extends StatelessWidget {
             child: Center(
               child: Text(
                 list![0].tr,
-                style: AppTextStyle.lightMediumBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
+                style: AppTextStyle.lightMediumBlackText.copyWith(
+                    color: Theme.of(context).textTheme.bodyText1!.color),
               ),
             ),
           ),
@@ -616,23 +686,26 @@ class TrainersTileUI extends StatelessWidget {
         SizedBox(
           width: 8 * SizeConfig.widthMultiplier!,
         ),
-        list.length>1?Container(
-          height: 28 * SizeConfig.heightMultiplier!,
-          decoration: BoxDecoration(
-              color: Color(0xff747474),
-              borderRadius:
-                  BorderRadius.circular(28 * SizeConfig.heightMultiplier!)),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 12 * SizeConfig.widthMultiplier!),
-            child: Center(
-              child: Text(
-                '+' + (list.length - 1).toString().tr,
-                style: AppTextStyle.lightMediumBlackText.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),
-              ),
-            ),
-          ),
-        ):Container(),
+        list.length > 1
+            ? Container(
+                height: 28 * SizeConfig.heightMultiplier!,
+                decoration: BoxDecoration(
+                    color: Color(0xff747474),
+                    borderRadius: BorderRadius.circular(
+                        28 * SizeConfig.heightMultiplier!)),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 12 * SizeConfig.widthMultiplier!),
+                  child: Center(
+                    child: Text(
+                      '+' + (list.length - 1).toString().tr,
+                      style: AppTextStyle.lightMediumBlackText.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
       ],
     );
   }
