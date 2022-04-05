@@ -162,25 +162,21 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                 child: Text(
                                     DateFormat("dd MMM").format(
                                             trainerController
-                                                .availableSlots
+                                                .availableTime
                                                 .value
                                                 .response!
                                                 .data![0]
-                                                .date!) +
+                                                .startDate!
+                                                .toLocal()) +
                                         " to " +
                                         DateFormat("dd MMM").format(
                                             trainerController
-                                                .availableSlots
+                                                .availableTime
                                                 .value
                                                 .response!
-                                                .data![trainerController
-                                                        .availableSlots
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .length -
-                                                    1]
-                                                .date!),
+                                                .data![0]
+                                                .endDate!
+                                                .toLocal()),
                                     style:
                                         AppTextStyle.normalBlackText.copyWith(
                                       color: Theme.of(context)
@@ -208,26 +204,21 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                             ),
                             //grid view of time slot
                             Obx(() {
-                              print(trainerController
-                                      .availableSlots.value.response!.data!
-                                      .where((element) =>
-                                          element.date ==
-                                          trainerController.availableSlots.value
-                                              .response!.data![0].date)
-                                      .length
-                                      .toString() +
-                                  " nnnnn");
+                              // print(trainerController
+                              //         .availableSlots.value.response!.data!
+                              //         .where((element) =>
+                              //             element.date ==
+                              //             trainerController.availableSlots.value
+                              //                 .response!.data![0].date)
+                              //         .length
+                              //         .toString() +
+                              //     " nnnnn");
                               return GridView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
-                                  itemCount: trainerController
-                                      .availableSlots.value.response!.data!
-                                      .where((element) =>
-                                          element.date ==
-                                          trainerController.availableSlots.value
-                                              .response!.data![0].date)
-                                      .length,
+                                  itemCount: trainerController.availableTime
+                                      .value.response!.data![0].time!.length,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 3,
@@ -244,11 +235,11 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                   trainerController
                                                       .getAllSlots[
                                                           trainerController
-                                                              .availableSlots
+                                                              .availableTime
                                                               .value
                                                               .response!
-                                                              .data![index]
-                                                              .time!]
+                                                              .data![0]
+                                                              .time![index]]
                                                       .serialId
                                               ? true
                                               : false,
@@ -261,11 +252,11 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                 trainerController
                                                     .getAllSlots[
                                                         trainerController
-                                                            .availableSlots
+                                                            .availableTime
                                                             .value
                                                             .response!
-                                                            .data![index]
-                                                            .time!]
+                                                            .data![0]
+                                                            .time![index]]
                                                     .serialId!;
                                             trainerController
                                                 .weekAvailableSlots.value = [];
@@ -288,11 +279,11 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                           time: trainerController.getTime(
                                               trainerController
                                                   .getAllSlots[trainerController
-                                                      .availableSlots
+                                                      .availableTime
                                                       .value
                                                       .response!
-                                                      .data![index]
-                                                      .time!]
+                                                      .data![0]
+                                                      .time![index]]
                                                   .name!),
                                         ),
                                       ));
@@ -325,137 +316,151 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                   ? Container()
                                   : Container(
                                       height: 46 * SizeConfig.heightMultiplier!,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: List.generate(
-                                            trainerController.weekAvailableSlots
-                                                .length, (index) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              if (trainerController
-                                                          .weekAvailableSlots[
-                                                              index]
-                                                          .isAvailable !=
-                                                      0 &&
-                                                  trainerController
-                                                          .weekAvailableSlots[
-                                                              index]
-                                                          .isAvailable !=
-                                                      3) {
-                                                ///if selected days is less then 3 or user is de selecting a day
-                                                if (trainerController
-                                                            .selectedDays
-                                                            .length <
-                                                        3 ||
-                                                    trainerController
-                                                            .selectedDays
-                                                            .indexOf(
-                                                                trainerController
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: List.generate(
+                                              trainerController
+                                                  .weekAvailableSlots
+                                                  .length, (index) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 12 *
+                                                      SizeConfig
+                                                          .widthMultiplier!),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (trainerController
+                                                              .weekAvailableSlots[
+                                                                  index]
+                                                              .isAvailable !=
+                                                          0 &&
+                                                      trainerController
+                                                              .weekAvailableSlots[
+                                                                  index]
+                                                              .isAvailable !=
+                                                          3) {
+                                                    ///if selected days is less then 3 or user is de selecting a day
+                                                    if (trainerController
+                                                                .selectedDays
+                                                                .length <
+                                                            3 ||
+                                                        trainerController
+                                                                .selectedDays
+                                                                .indexOf(trainerController
                                                                     .weekAvailableSlots[
                                                                         index]
                                                                     .id!) !=
-                                                        -1) {
-                                                  if (trainerController
-                                                          .selectedDays
-                                                          .indexOf(trainerController
-                                                              .weekAvailableSlots[
-                                                                  index]
-                                                              .id!) !=
-                                                      -1) {
-                                                    trainerController
-                                                        .selectedDays
-                                                        .remove(trainerController
-                                                            .weekAvailableSlots[
-                                                                index]
-                                                            .id!);
-                                                  } else {
-                                                    trainerController
-                                                        .selectedDays
-                                                        .add(trainerController
-                                                            .weekAvailableSlots[
-                                                                index]
-                                                            .id!);
-                                                  }
-                                                } else {
-                                                  ///show dialog that limit exceeded
-                                                  selectDaysLimitExceedDialog(
-                                                      context);
-                                                }
-
-                                                setState(() {});
-                                              }
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: (trainerController.weekAvailableSlots[index].isAvailable != 0 &&
-                                                        trainerController
-                                                                .weekAvailableSlots[
-                                                                    index]
-                                                                .isAvailable !=
-                                                            3)
-                                                    ? Border.all(
-                                                        color:
-                                                            trainerController.selectedDays.indexOf(trainerController.weekAvailableSlots[index].id!) != -1
-                                                                ? kgreen49
-                                                                : kLightGrey,
-                                                        width: trainerController
-                                                                    .selectedDays
-                                                                    .indexOf(trainerController
-                                                                        .weekAvailableSlots[index]
-                                                                        .id!) !=
-                                                                -1
-                                                            ? 1.5 * SizeConfig.widthMultiplier!
-                                                            : 1 * SizeConfig.widthMultiplier!)
-                                                    : Border.all(color: Colors.transparent),
-                                                color: (trainerController
-                                                                .weekAvailableSlots[
-                                                                    index]
-                                                                .isAvailable !=
-                                                            0 &&
-                                                        trainerController
-                                                                .weekAvailableSlots[
-                                                                    index]
-                                                                .isAvailable !=
-                                                            3)
-                                                    ? Colors.transparent
-                                                    : kBlack,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              width: 40 *
-                                                  SizeConfig.widthMultiplier!,
-                                              height: 46 *
-                                                  SizeConfig.heightMultiplier!,
-                                              child: Center(
-                                                child: Text(
-                                                  DateFormat("EEE")
-                                                      .format(trainerController
-                                                          .weekAvailableSlots[
-                                                              index]
-                                                          .date!)
-                                                      .toString(),
-                                                  style: trainerController
+                                                            -1) {
+                                                      if (trainerController
                                                               .selectedDays
                                                               .indexOf(
                                                                   trainerController
                                                                       .weekAvailableSlots[
                                                                           index]
                                                                       .id!) !=
-                                                          -1
-                                                      ? AppTextStyle
-                                                          .hblackSemiBoldText
-                                                          .copyWith(
-                                                              color: kgreen49)
-                                                      : AppTextStyle
-                                                          .hblack400Text
-                                                          .copyWith(
-                                                              color: greyB7),
+                                                          -1) {
+                                                        trainerController
+                                                            .selectedDays
+                                                            .remove(trainerController
+                                                                .weekAvailableSlots[
+                                                                    index]
+                                                                .id!);
+                                                      } else {
+                                                        trainerController
+                                                            .selectedDays
+                                                            .add(trainerController
+                                                                .weekAvailableSlots[
+                                                                    index]
+                                                                .id!);
+                                                      }
+                                                    } else {
+                                                      ///show dialog that limit exceeded
+                                                      selectDaysLimitExceedDialog(
+                                                          context);
+                                                    }
+
+                                                    setState(() {});
+                                                  }
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: (trainerController
+                                                                    .weekAvailableSlots[
+                                                                        index]
+                                                                    .isAvailable !=
+                                                                0 &&
+                                                            trainerController
+                                                                    .weekAvailableSlots[
+                                                                        index]
+                                                                    .isAvailable !=
+                                                                3)
+                                                        ? Border.all(
+                                                            color:
+                                                                trainerController.selectedDays.indexOf(trainerController.weekAvailableSlots[index].id!) != -1
+                                                                    ? kgreen49
+                                                                    : kLightGrey,
+                                                            width: trainerController.selectedDays.indexOf(trainerController.weekAvailableSlots[index].id!) != -1
+                                                                ? 1.5 *
+                                                                    SizeConfig.widthMultiplier!
+                                                                : 1 * SizeConfig.widthMultiplier!)
+                                                        : Border.all(color: Colors.transparent),
+                                                    color: (trainerController
+                                                                    .weekAvailableSlots[
+                                                                        index]
+                                                                    .isAvailable !=
+                                                                0 &&
+                                                            trainerController
+                                                                    .weekAvailableSlots[
+                                                                        index]
+                                                                    .isAvailable !=
+                                                                3)
+                                                        ? Colors.transparent
+                                                        : kBlack,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                  ),
+                                                  width: 40 *
+                                                      SizeConfig
+                                                          .widthMultiplier!,
+                                                  height: 46 *
+                                                      SizeConfig
+                                                          .heightMultiplier!,
+                                                  child: Center(
+                                                    child: Text(
+                                                      DateFormat("EEE")
+                                                          .format(trainerController
+                                                              .weekAvailableSlots[
+                                                                  index]
+                                                              .date!)
+                                                          .toString(),
+                                                      style: trainerController
+                                                                  .selectedDays
+                                                                  .indexOf(trainerController
+                                                                      .weekAvailableSlots[
+                                                                          index]
+                                                                      .id!) !=
+                                                              -1
+                                                          ? AppTextStyle
+                                                              .hblackSemiBoldText
+                                                              .copyWith(
+                                                                  color:
+                                                                      kgreen49)
+                                                          : AppTextStyle
+                                                              .hblack400Text
+                                                              .copyWith(
+                                                                  color:
+                                                                      greyB7),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                        }),
+                                            );
+                                          }),
+                                        ),
                                       )),
                             ),
 
@@ -511,12 +516,7 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                 trainerController
                                                     .selectedPlan.value.id!,
                                                 trainerController
-                                                    .availableSlots
-                                                    .value
-                                                    .response!
-                                                    .data![trainerController
-                                                        .selectedTimeSlot.value]
-                                                    .time!,
+                                                    .selectedTimeSlot.value,
                                                 selectedDays,
                                                 context);
                                         if (booked == true) {
@@ -526,14 +526,16 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                           trainerController.setUp();
                                           showDialogForSessionBooked(context);
 
-                                          trainerController.atrainerDetail.value.isEnrolled=true;
+                                          trainerController.atrainerDetail.value
+                                              .isEnrolled = true;
                                           Future.delayed(Duration(seconds: 3),
                                               () {
                                             Navigator.pop(context);
                                             Navigator.pop(context);
                                             Navigator.pop(context);
                                           });
-                                          final HomeController _homeController = Get.find();
+                                          final HomeController _homeController =
+                                              Get.find();
                                           _homeController.setup();
                                           trainerController.setUp();
                                         }

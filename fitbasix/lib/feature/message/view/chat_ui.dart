@@ -154,6 +154,7 @@ class _ChatScreenState extends State<ChatScreen> {
     connectionEvent();
     super.initState();
   }
+
   void getDialogId() async {
     bool dialogCreatedPreviously = false;
     int openPage = 0;
@@ -162,8 +163,8 @@ class _ChatScreenState extends State<ChatScreen> {
     //133612091 trainer
     final sharedPreferences = await SharedPreferences.getInstance();
     _homeController.userQuickBloxId.value =
-    sharedPreferences.getInt("userQuickBloxId")!;
-    int UserQuickBloxId = widget.opponentID!;//133819788;
+        sharedPreferences.getInt("userQuickBloxId")!;
+    int UserQuickBloxId = widget.opponentID!; //133819788;
     // String trainerName = myTrainers![index].name!;
     // bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
 
@@ -179,8 +180,9 @@ class _ChatScreenState extends State<ChatScreen> {
       )
           .then((value) async {
         for (int i = 0; i < value.length; i++) {
-          if (value[i]!.occupantsIds!.contains(
-              _homeController.userQuickBloxId.value) &&
+          if (value[i]!
+                  .occupantsIds!
+                  .contains(_homeController.userQuickBloxId.value) &&
               value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
             dialogCreatedPreviously = true;
             print(value[i]!.id.toString() + "maxxxx");
@@ -238,7 +240,8 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppbarforChat(
         trainerProfilePicUrl: widget.profilePicURL,
         onHangUpTapped: (value) {
-          log(widget.days!.toString());
+          log("lll");
+          log(widget.days.toString());
           log("pop" +
               _trainerController
                   .isVideoAvailable(widget.time.toString())
@@ -250,23 +253,22 @@ class _ChatScreenState extends State<ChatScreen> {
                   -1 &&
               _trainerController.isVideoAvailable(widget.time.toString()) ==
                   true) {
+            DateFormat("EEE").format(DateTime.now());
+            //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
+            callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => VideoCallScreen(
+                        sessionIdForVideoCall: value!,
+                      )));
+              //showDialogForVideoCallNotPossible(context);
+            });
           } else {
+            log("oopp" + _trainerController.getTime(widget.time.toString()));
             showDialogForVideoCallNotPossible(
                 context,
                 _trainerController.getTime(widget.time.toString()),
                 _trainerController.GetDays(widget.days));
           }
-
-          DateFormat("EEE").format(DateTime.now());
-          //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
-          callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => VideoCallScreen(
-                      sessionIdForVideoCall: value!,
-                    )));
-            //showDialogForVideoCallNotPossible(context);
-          });
-
         },
         onMenuTap: () {
           if (messages != null) {
@@ -285,25 +287,102 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Container(
           child: Column(
             children: [
-              (widget.userDialogForChat!=null)?(messages != null)
-                  ? Expanded(
-                      child: ListView.builder(
-                          reverse: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: messages!.length,
-                          itemBuilder: (context, index) {
-                            if (messages![index]!.senderId ==
-                                _homeController.userQuickBloxId.value) {
-                              return MessageBubbleSender(
-                                message: messages![index],
-                              );
-                            } else {
-                              return MessageBubbleOpponent(
-                                message: messages![index],
-                              );
-                            }
-                          }),
-                    )
+              (widget.userDialogForChat != null)
+                  ? (messages != null)
+                      ? Expanded(
+                          child: ListView.builder(
+                              reverse: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: messages!.length,
+                              itemBuilder: (context, index) {
+                                if (messages![index]!.senderId ==
+                                    _homeController.userQuickBloxId.value) {
+                                  return MessageBubbleSender(
+                                    message: messages![index],
+                                  );
+                                } else {
+                                  return MessageBubbleOpponent(
+                                    message: messages![index],
+                                  );
+                                }
+                              }),
+                        )
+                      : Expanded(
+                          child: Shimmer.fromColors(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Spacer(),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: 16 * SizeConfig.widthMultiplier!),
+                                  height: 28 * SizeConfig.heightMultiplier!,
+                                  width: 176 * SizeConfig.widthMultiplier!,
+                                  color: Color(0xFF3646464),
+                                ),
+                                SizedBox(
+                                  height: 8 * SizeConfig.heightMultiplier!,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: 16 * SizeConfig.widthMultiplier!),
+                                  height: 49 * SizeConfig.heightMultiplier!,
+                                  width: 215 * SizeConfig.widthMultiplier!,
+                                  color: Color(0xFF3646464),
+                                ),
+                                SizedBox(
+                                  height: 8 * SizeConfig.heightMultiplier!,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: 16 * SizeConfig.widthMultiplier!),
+                                  height: 28 * SizeConfig.heightMultiplier!,
+                                  width: 176 * SizeConfig.widthMultiplier!,
+                                  color: Color(0xFF3646464),
+                                ),
+                                SizedBox(
+                                    height: 16 * SizeConfig.heightMultiplier!),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        right:
+                                            16 * SizeConfig.widthMultiplier!),
+                                    height: 42 * SizeConfig.heightMultiplier!,
+                                    width: 191 * SizeConfig.widthMultiplier!,
+                                    color: Color(0xFF3646464),
+                                  ),
+                                ),
+                                SizedBox(
+                                    height: 16 * SizeConfig.heightMultiplier!),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: 16 * SizeConfig.widthMultiplier!),
+                                  height: 28 * SizeConfig.heightMultiplier!,
+                                  width: 176 * SizeConfig.widthMultiplier!,
+                                  color: Color(0xFF3646464),
+                                ),
+                                SizedBox(
+                                    height: 16 * SizeConfig.heightMultiplier!),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        right:
+                                            16 * SizeConfig.widthMultiplier!),
+                                    height: 78 * SizeConfig.heightMultiplier!,
+                                    width: 232 * SizeConfig.widthMultiplier!,
+                                    color: Color(0xFF3646464),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            baseColor: Color.fromARGB(0, 255, 255, 255)
+                                .withOpacity(0.1),
+                            highlightColor: Color.fromARGB(1, 255, 255, 255)
+                                .withOpacity(0.46),
+                          ),
+                        )
                   : Expanded(
                       child: Shimmer.fromColors(
                         child: Column(
@@ -374,77 +453,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         highlightColor:
                             Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                       ),
-                    ): Expanded(
-                child: Shimmer.fromColors(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Spacer(),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 16 * SizeConfig.widthMultiplier!),
-                        height: 28 * SizeConfig.heightMultiplier!,
-                        width: 176 * SizeConfig.widthMultiplier!,
-                        color: Color(0xFF3646464),
-                      ),
-                      SizedBox(
-                        height: 8 * SizeConfig.heightMultiplier!,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 16 * SizeConfig.widthMultiplier!),
-                        height: 49 * SizeConfig.heightMultiplier!,
-                        width: 215 * SizeConfig.widthMultiplier!,
-                        color: Color(0xFF3646464),
-                      ),
-                      SizedBox(
-                        height: 8 * SizeConfig.heightMultiplier!,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 16 * SizeConfig.widthMultiplier!),
-                        height: 28 * SizeConfig.heightMultiplier!,
-                        width: 176 * SizeConfig.widthMultiplier!,
-                        color: Color(0xFF3646464),
-                      ),
-                      SizedBox(height: 16 * SizeConfig.heightMultiplier!),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              right: 16 * SizeConfig.widthMultiplier!),
-                          height: 42 * SizeConfig.heightMultiplier!,
-                          width: 191 * SizeConfig.widthMultiplier!,
-                          color: Color(0xFF3646464),
-                        ),
-                      ),
-                      SizedBox(height: 16 * SizeConfig.heightMultiplier!),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 16 * SizeConfig.widthMultiplier!),
-                        height: 28 * SizeConfig.heightMultiplier!,
-                        width: 176 * SizeConfig.widthMultiplier!,
-                        color: Color(0xFF3646464),
-                      ),
-                      SizedBox(height: 16 * SizeConfig.heightMultiplier!),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              right: 16 * SizeConfig.widthMultiplier!),
-                          height: 78 * SizeConfig.heightMultiplier!,
-                          width: 232 * SizeConfig.widthMultiplier!,
-                          color: Color(0xFF3646464),
-                        ),
-                      ),
-                    ],
-                  ),
-                  baseColor:
-                  Color.fromARGB(0, 255, 255, 255).withOpacity(0.1),
-                  highlightColor:
-                  Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
-                ),
-              ),
+                    ),
 
               ///todo remove this ! sign
 
@@ -963,8 +972,8 @@ class _ChatScreenState extends State<ChatScreen> {
     sort.ascending = false;
 
     try {
-      List<QBMessage?>? messageslist =
-          await QB.chat.getDialogMessages(widget.userDialogForChat!.id!, sort: sort);
+      List<QBMessage?>? messageslist = await QB.chat
+          .getDialogMessages(widget.userDialogForChat!.id!, sort: sort);
       setState(() {
         messages = messageslist;
       });
@@ -1051,7 +1060,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-
   void sendAttachmentsFromDevice() async {
     FilePickerResult? pickedFiles = await pickAttachments();
     if (pickedFiles != null) {
@@ -1060,7 +1068,6 @@ class _ChatScreenState extends State<ChatScreen> {
       fileName.value = pickedFiles.files[0].name;
       try {
         for (int i = 0; i < pickedFiles.files.length; i++) {
-
           uploadFileToServerDB(pickedFiles.files[i].path!,
               pickedFiles.files[i].path!.split('.').last);
           QBFile? file = await QB.content
@@ -1166,12 +1173,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () async {
                         _trainerController.atrainerDetail.value = Trainer();
 
-                        _trainerController
-                            .isProfileLoading.value = true;
-                        _trainerController.isMyTrainerProfileLoading.value = true;
-                        Navigator.pushNamed(context,
-                            RouteName.trainerProfileScreen);
-
+                        _trainerController.isProfileLoading.value = true;
+                        _trainerController.isMyTrainerProfileLoading.value =
+                            true;
+                        Navigator.pushNamed(
+                            context, RouteName.trainerProfileScreen);
 
                         var result = await TrainerServices.getATrainerDetail(
                             widget.trainerId!);
@@ -1197,10 +1203,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         } else {
                           _trainerController.trainerPostList.clear();
                         }
-                        _trainerController
-                            .isProfileLoading.value = false;
-                        _trainerController.isMyTrainerProfileLoading.value = false;
-
+                        _trainerController.isProfileLoading.value = false;
+                        _trainerController.isMyTrainerProfileLoading.value =
+                            false;
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1277,48 +1282,68 @@ class _ChatScreenState extends State<ChatScreen> {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: AlertDialog(
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 30 * SizeConfig.heightMultiplier!,
-                    horizontal: 30 * SizeConfig.widthMultiplier!),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        8 * SizeConfig.imageSizeMultiplier!)),
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                content: Stack(
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          height: 100*SizeConfig.heightMultiplier!,
-                          width: 100*SizeConfig.widthMultiplier!,
-                          child: Image.asset(ImagePath.animatedErrorIcon),),
-                        SizedBox(height: 26*SizeConfig.heightMultiplier!,),
-                        Text("call_not_possible".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color),textAlign: TextAlign.center,),
-                        SizedBox(height: 16*SizeConfig.heightMultiplier!,),
-                        Text("call_not_possible_time".tr,style: AppTextStyle.black400Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color,fontWeight: FontWeight.w700),textAlign: TextAlign.center,),
-                      ],
-                    ),
-                    Positioned(
-                      top: -15*SizeConfig.heightMultiplier!,
-                      right: -15*SizeConfig.widthMultiplier!,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: SvgPicture.asset(
-                          ImagePath.closedialogIcon,
-                          color: Theme.of(context).primaryColor,
-                          width: 16 * SizeConfig.widthMultiplier!,
-                          height: 16 * SizeConfig.heightMultiplier!,
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 30 * SizeConfig.heightMultiplier!,
+                      horizontal: 30 * SizeConfig.widthMultiplier!),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          8 * SizeConfig.imageSizeMultiplier!)),
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  content: Stack(
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: 100 * SizeConfig.heightMultiplier!,
+                            width: 100 * SizeConfig.widthMultiplier!,
+                            child: Image.asset(ImagePath.animatedErrorIcon),
+                          ),
+                          SizedBox(
+                            height: 26 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            "call_not_possible".tr,
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            height: 16 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            "call_not_possible_time"
+                                .trParams({'time': time, 'days': days}),
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w700),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        top: -15 * SizeConfig.heightMultiplier!,
+                        right: -15 * SizeConfig.widthMultiplier!,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: SvgPicture.asset(
+                            ImagePath.closedialogIcon,
+                            color: Theme.of(context).primaryColor,
+                            width: 16 * SizeConfig.widthMultiplier!,
+                            height: 16 * SizeConfig.heightMultiplier!,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              )
-          ),
-
+                    ],
+                  ))),
         );
       },
     );
@@ -1334,8 +1359,6 @@ class _ChatScreenState extends State<ChatScreen> {
     });
     dio.post(ApiUrl.uploadChatFileToDb, data: data);
   }
-
-
 }
 
 class MessageBubbleSender extends StatelessWidget {
@@ -1638,11 +1661,12 @@ class MessageBubbleSender extends StatelessWidget {
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        if(Platform.isAndroid){
-          PermissionStatus status  = await Permission.storage.request();
-          if(!_chatController.storagePermissionCalled.value){
+        if (Platform.isAndroid) {
+          PermissionStatus status = await Permission.storage.request();
+          if (!_chatController.storagePermissionCalled.value) {
             _chatController.storagePermissionCalled.value = true;
-            PermissionStatus status1 = await Permission.manageExternalStorage.request();
+            PermissionStatus status1 =
+                await Permission.manageExternalStorage.request();
           }
 
           String? path;
@@ -1663,7 +1687,6 @@ class MessageBubbleSender extends StatelessWidget {
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
-
             downloadProgress.value = ((received / total));
             print(downloadProgress.value);
             if (((received / total) * 100).floor() == 100) {
@@ -1708,9 +1731,10 @@ class MessageBubbleSender extends StatelessWidget {
   void checkFileExistence(String? fileName) async {
     if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
-      if(!_chatController.storagePermissionCalled.value){
+      if (!_chatController.storagePermissionCalled.value) {
         _chatController.storagePermissionCalled.value = true;
-        PermissionStatus status1 = await Permission.manageExternalStorage.request();
+        PermissionStatus status1 =
+            await Permission.manageExternalStorage.request();
       }
 
       if (status == PermissionStatus.granted) {
@@ -2019,9 +2043,10 @@ class MessageBubbleOpponent extends StatelessWidget {
         print("jjjjjjj");
         if (Platform.isAndroid) {
           PermissionStatus status = await Permission.storage.request();
-          if(!_chatController.storagePermissionCalled.value){
+          if (!_chatController.storagePermissionCalled.value) {
             _chatController.storagePermissionCalled.value = true;
-            PermissionStatus status1 = await Permission.manageExternalStorage.request();
+            PermissionStatus status1 =
+                await Permission.manageExternalStorage.request();
           }
           String? path;
           final Directory _appDocDir = await getApplicationDocumentsDirectory();
@@ -2048,31 +2073,32 @@ class MessageBubbleOpponent extends StatelessWidget {
             }
           });
 
-        if (Platform.isIOS) {
-          print("yyyyyy");
-          String? path;
-          final Directory _appDocDir = Directory(
-              (await getTemporaryDirectory()).path + '/fitbasix/media');
+          if (Platform.isIOS) {
+            print("yyyyyy");
+            String? path;
+            final Directory _appDocDir = Directory(
+                (await getTemporaryDirectory()).path + '/fitbasix/media');
 
-          //App Document Directory + folder name
-          if ((await _appDocDir.exists())) {
-            path = _appDocDir.path;
-          } else {
-            _appDocDir.create();
-            path = _appDocDir.path;
-          }
-
-          Dio dio = Dio();
-          dio.download(url, path + "/" + fileName,
-              onReceiveProgress: (received, total) {
-            downloadProgress.value = ((received / total));
-            print(downloadProgress.value);
-            if (((received / total) * 100).floor() == 100) {
-              checkFileExistence(fileName);
+            //App Document Directory + folder name
+            if ((await _appDocDir.exists())) {
+              path = _appDocDir.path;
+            } else {
+              _appDocDir.create();
+              path = _appDocDir.path;
             }
-          });
+
+            Dio dio = Dio();
+            dio.download(url, path + "/" + fileName,
+                onReceiveProgress: (received, total) {
+              downloadProgress.value = ((received / total));
+              print(downloadProgress.value);
+              if (((received / total) * 100).floor() == 100) {
+                checkFileExistence(fileName);
+              }
+            });
+          }
         }
-      }} catch (e) {
+      } catch (e) {
         print(e.toString());
       }
 
@@ -2084,9 +2110,7 @@ class MessageBubbleOpponent extends StatelessWidget {
     }
   }
 
-
   void checkFileExistence(String? fileName) async {
-
     if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
       if(!_chatController.storagePermissionCalled.value){
