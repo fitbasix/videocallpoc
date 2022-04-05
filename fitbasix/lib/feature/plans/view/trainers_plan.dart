@@ -57,101 +57,128 @@ class TrainerPlansScreen extends StatelessWidget {
 
       ///remove ||plans.length==0 after testing
       body: Obx(() => trainerController.isProfileLoading.value == false
-          ? (trainerController.planModel.value.response!.data!.isNotEmpty)?Padding(
-              padding: EdgeInsets.only(top: 32 * SizeConfig.heightMultiplier!),
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: BouncingScrollPhysics(),
-                  child: Row(
-                      ///remove plans.length+2 after testing
-                      children: List.generate(
-                    trainerController.planModel.value.response!.data!.length,
-                    (index) => BuildPlancard(
-                        // planImage: plans[index].planIcon.toString(),
-                        // planName: plans[index].planName.toString(),
-                        // planPrize: 'AED ' + plans[index].prize.toString(),
-                        // onPlanSelect: () async {
-                        //   trainerController.selectedPlanId.value =
-                        //       plans[index].id!;
-                        //   Navigator.pushNamed(
-                        //       context, RouteName.planInformationScreen);
-                        // },
-                        // peopleEnrolled: plans[index].trainees.toString() +
-                        //     " " +
-                        //     'people_enrolled'.tr,
-                        // planDuration: plans[index].planDuration.toString() +
-                        //     " " +
-                        //     'week_plan'.tr,
-                        // ratingCounts: plans[index].plansRating.toString(),
-                        ///give the backend values here
-                        context: context,
-                        planImage:
-                            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9ydHJhaXR8ZW58MHx8MHx8&w=1000&q=80",
-                        planName: trainerController
-                            .planModel.value.response!.data![index].planName!,
-                        planTitle: trainerController
-                            .planModel.value.response!.data![index].planType!,
-                        planDescription: trainerController.planModel.value
-                            .response!.data![index].description!,
-                        sessionCount: trainerController
-                            .planModel.value.response!.data![index].session!,
-                        planDuration: trainerController.planModel.value
-                            .response!.data![index].planDuration!,
-                        ////remove index==0 after testing
-                        isDemoExpired: index == 0 &&
-                            !trainerController.planModel.value.response!
-                                .data![index].isDemoAvailable!,
-                        planPrice: trainerController
-                            .planModel.value.response!.data![index].price!,
-                        onPlanEnrollTapped: () async {
-                          trainerController.weekAvailableSlots.value = [];
-                          Navigator.pushNamed(
-                              context, RouteName.planTimingScreen);
-                          trainerController.selectedPlan.value =
+          ? (trainerController.planModel.value.response!.data!.isNotEmpty)
+              ? Padding(
+                  padding:
+                      EdgeInsets.only(top: 32 * SizeConfig.heightMultiplier!),
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: BouncingScrollPhysics(),
+                      child: Row(
+
+                          ///remove plans.length+2 after testing
+                          children: List.generate(
+                        trainerController
+                            .planModel.value.response!.data!.length,
+                        (index) => BuildPlancard(
+                            // planImage: plans[index].planIcon.toString(),
+                            // planName: plans[index].planName.toString(),
+                            // planPrize: 'AED ' + plans[index].prize.toString(),
+                            // onPlanSelect: () async {
+                            //   trainerController.selectedPlanId.value =
+                            //       plans[index].id!;
+                            //   Navigator.pushNamed(
+                            //       context, RouteName.planInformationScreen);
+                            // },
+                            // peopleEnrolled: plans[index].trainees.toString() +
+                            //     " " +
+                            //     'people_enrolled'.tr,
+                            // planDuration: plans[index].planDuration.toString() +
+                            //     " " +
+                            //     'week_plan'.tr,
+                            // ratingCounts: plans[index].plansRating.toString(),
+                            ///give the backend values here
+                            context: context,
+                            planImage:
+                                "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9ydHJhaXR8ZW58MHx8MHx8&w=1000&q=80",
+                            planName: trainerController.planModel.value
+                                .response!.data![index].planName!,
+                            planTitle: trainerController.planModel.value
+                                .response!.data![index].planType!,
+                            planDescription: trainerController.planModel.value
+                                .response!.data![index].description!,
+                            sessionCount: trainerController.planModel.value
+                                .response!.data![index].session!,
+                            planDuration: trainerController.planModel.value
+                                .response!.data![index].planDuration!,
+                            ////remove index==0 after testing
+                            isDemoExpired: index == 0 &&
+                                !trainerController.planModel.value.response!
+                                    .data![index].isDemoAvailable!,
+                            planPrice: trainerController
+                                .planModel.value.response!.data![index].price!,
+                            onPlanEnrollTapped: () async {
+                              trainerController.weekAvailableSlots.value = [];
+                              trainerController.selectedTimeSlot.value = 0;
+                              Navigator.pushNamed(
+                                  context, RouteName.planTimingScreen);
+                              trainerController.selectedPlan.value =
+                                  trainerController
+                                      .planModel.value.response!.data![index];
+
+                              // trainerController.fullPlanDetails.value.response!.data!
+                              //             .isEnrolled ==
+                              //         false
+                              //     ? Navigator.pushNamed(
+                              //         context, RouteName.planTimingScreen)
+                              //     : "";
                               trainerController
-                                  .planModel.value.response!.data![index];
+                                  .isAvailableSlotDataLoading.value = true;
+                              var output =
+                                  await TrainerServices.getAllTimeSlot();
+                              trainerController.getAllSlots.value =
+                                  output.response!.data!;
+                              trainerController.fullPlanDetails.value =
+                                  await TrainerServices.getPlanById(
+                                      trainerController.planModel.value
+                                          .response!.data![index].id!);
 
-                          // trainerController.fullPlanDetails.value.response!.data!
-                          //             .isEnrolled ==
-                          //         false
-                          //     ? Navigator.pushNamed(
-                          //         context, RouteName.planTimingScreen)
-                          //     : "";
-                          trainerController.isAvailableSlotDataLoading.value =
-                              true;
-                          var output = await TrainerServices.getAllTimeSlot();
-                          trainerController.getAllSlots.value =
-                              output.response!.data!;
-                          trainerController.fullPlanDetails.value =
-                              await TrainerServices.getPlanById(
-                                  trainerController.planModel.value.response!
-                                      .data![index].id!);
-
-                          trainerController.availableSlots.value =
-                              await TrainerServices.getEnrolledPlanDetails(
-                                  trainerController.planModel.value.response!
-                                      .data![index].trainer!);
-                          trainerController.isAvailableSlotDataLoading.value =
-                              false;
-                        },
-                        planFeaturesList: trainerController
-                            .planModel.value.response!.data![index].keyPoints),
-                  ))),
-            ):Container(
-        margin: EdgeInsets.only(top: 187*SizeConfig.heightMultiplier!),
-              child:  Column(
-        children: [
-          Image.asset(ImagePath.noPlan,height: 102*SizeConfig.heightMultiplier!,),
-          SizedBox(height: 17*SizeConfig.heightMultiplier!,),
-          SizedBox(
-              width: double.infinity,
-              child: Center(child: Text("no_plan_found".tr,style: AppTextStyle.white400Text.copyWith(fontSize: 24*SizeConfig.textMultiplier!,height: 1.1),textAlign: TextAlign.center,),)),
-          SizedBox(height: 8*SizeConfig.heightMultiplier!,),
-          Text("explore_other".tr,style: AppTextStyle.white400Text.copyWith(fontSize: 14*SizeConfig.textMultiplier!,height: 1),)
-        ],
-      ),
-
-            )
+                              trainerController.availableTime.value =
+                                  await TrainerServices.getEnrolledPlanDetails(
+                                      trainerController.planModel.value
+                                          .response!.data![index].trainer!);
+                              trainerController
+                                  .isAvailableSlotDataLoading.value = false;
+                            },
+                            planFeaturesList: trainerController.planModel.value
+                                .response!.data![index].keyPoints),
+                      ))),
+                )
+              : Container(
+                  margin:
+                      EdgeInsets.only(top: 187 * SizeConfig.heightMultiplier!),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        ImagePath.noPlan,
+                        height: 102 * SizeConfig.heightMultiplier!,
+                      ),
+                      SizedBox(
+                        height: 17 * SizeConfig.heightMultiplier!,
+                      ),
+                      SizedBox(
+                          width: double.infinity,
+                          child: Center(
+                            child: Text(
+                              "no_plan_found".tr,
+                              style: AppTextStyle.white400Text.copyWith(
+                                  fontSize: 24 * SizeConfig.textMultiplier!,
+                                  height: 1.1),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                      SizedBox(
+                        height: 8 * SizeConfig.heightMultiplier!,
+                      ),
+                      Text(
+                        "explore_other".tr,
+                        style: AppTextStyle.white400Text.copyWith(
+                            fontSize: 14 * SizeConfig.textMultiplier!,
+                            height: 1),
+                      )
+                    ],
+                  ),
+                )
           : Center(child: CustomizedCircularProgress())),
     );
   }
