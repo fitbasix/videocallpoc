@@ -75,6 +75,7 @@ class _FullPostTileState extends State<FullPostTile> {
   final HomeController _homeController = Get.find();
   final PostController _postController = Get.find();
   bool isReplyLoading = false;
+  bool isOtherTaggedPresses = false;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +84,7 @@ class _FullPostTileState extends State<FullPostTile> {
       onTap: widget.onTap,
       child: Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: EdgeInsets.only(
@@ -91,6 +92,8 @@ class _FullPostTileState extends State<FullPostTile> {
                   bottom: 16 * SizeConfig.heightMultiplier!,
                   top: 16 * SizeConfig.heightMultiplier!),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     radius: 20 * SizeConfig.widthMultiplier!,
@@ -217,33 +220,22 @@ class _FullPostTileState extends State<FullPostTile> {
                             SizedBox(
                               width: 4 * SizeConfig.widthMultiplier!,
                             ),
-                            for(var i =0;i<widget.people.length-1; i++)
-                              Text(
-                                widget.people[i].name!+', ',
-                                style: AppTextStyle.boldBlackText
-                                    .copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.color,
-                                    fontSize: 14 *
-                                        SizeConfig.textMultiplier!),
-                              ),
-                            // Text(
-                            //   widget.people[0].name!,
-                            //   style: AppTextStyle.boldBlackText
-                            //       .copyWith(
-                            //           color: Theme.of(context)
-                            //               .textTheme
-                            //               .bodyText1
-                            //               ?.color,
-                            //           fontSize: 14 *
-                            //               SizeConfig.textMultiplier!),
-                            // ),
+
+                            Text(
+                              widget.people[0].name!,
+                              style: AppTextStyle.boldBlackText
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color,
+                                      fontSize: 14 *
+                                          SizeConfig.textMultiplier!),
+                            ),
                             SizedBox(
                               width: 4 * SizeConfig.widthMultiplier!,
                             ),
-                            Text(
+                            (!isOtherTaggedPresses)?Text(
                               'and '.tr,
                               style: AppTextStyle.normalBlackText
                                   .copyWith(
@@ -253,14 +245,55 @@ class _FullPostTileState extends State<FullPostTile> {
                                       ?.color,
                                   fontSize: 14 *
                                       SizeConfig.textMultiplier!),
+                            ):Container(),
+                            (!isOtherTaggedPresses)?GestureDetector(
+                              onTap: (){
+                                setState(() {
+                                  isOtherTaggedPresses = true;
+                                });
+                              },
+                              child: Text(
+                               // widget.people.last.name!,
+                                'others'.trParams({
+                                  "no_people":
+                                      (widget.people.length - 1)
+                                          .toString()
+                                }),
+                                style: AppTextStyle.boldBlackText
+                                    .copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
+                                    fontSize: 14 *
+                                        SizeConfig.textMultiplier!),
+                              ),
+                            ):Container(),
+                            if(isOtherTaggedPresses)for(var i =1;i<widget.people.length-1; i++)
+                              Text(
+                                widget.people[i].name!+'${(i<widget.people.length-2)?", ":""}',
+                                style: AppTextStyle.boldBlackText
+                                    .copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
+                                    fontSize: 14 *
+                                        SizeConfig.textMultiplier!),
+                              ),
+                            if(isOtherTaggedPresses)Text(
+                            ' and '.tr,
+                            style: AppTextStyle.normalBlackText
+                                .copyWith(
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                ?.color,
+                            fontSize: 14 *
+                            SizeConfig.textMultiplier!),
                             ),
-                            Text(
-                              widget.people.last.name!,
-                              // 'others'.trParams({
-                              //   "no_people":
-                              //       (widget.people.length - 1)
-                              //           .toString()
-                              // }),
+                            if(isOtherTaggedPresses)Text(
+                              widget.people[widget.people.length-1].name!,
                               style: AppTextStyle.boldBlackText
                                   .copyWith(
                                   color: Theme.of(context)
@@ -269,7 +302,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                       ?.color,
                                   fontSize: 14 *
                                       SizeConfig.textMultiplier!),
-                            )
+                            ),
+
+
+
                           ],
                         ),
                       ),

@@ -52,19 +52,19 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
  
  @override
   void initState() {
-   _trainerController.currentPage.value = 0;
+   _trainerController.currentMyTrainerPage.value = 0;
    myTrainers= _trainerController.trainers.value.response!.data!.myTrainers!.obs;
    _trainerController.isMyTrainerNeedToLoadData.value = true;
 
    _scrollController.addListener(() async {
      print(_trainerController.isMyTrainerNeedToLoadData.value);
-     if (_trainerController.isMyTrainerNeedToLoadData.value == true) {
+     if (_trainerController.isMyTrainerNeedToLoadData.value == true&&!_trainerController.showLoaderOnMyTrainer.value) {
        if (_scrollController.position.maxScrollExtent ==
            _scrollController.position.pixels) {
         _trainerController.showLoaderOnMyTrainer.value = true;
          final postQuery =  await TrainerServices.getMyTrainers(
            name: "",
-           currentPage: _trainerController.currentPage.value
+           currentPage: _trainerController.currentMyTrainerPage.value
          );
 
          if (postQuery.length < 5) {
@@ -254,7 +254,6 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
               child: ListView.builder(
                   controller: _scrollController,
                   itemCount: myTrainers!.length,
-                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     int indexWhereChatPresent = -1;
                     if(widget.chatHistoryList != null&&widget.chatHistoryList![0].lastMessage!=null){
