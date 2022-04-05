@@ -17,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import '../../plans/models/AvailableTimeModel.dart';
 import '../../plans/models/FullPlanDetailModel.dart';
 import '../../plans/models/allTimeSlot.dart';
 import '../model/timing_model.dart';
@@ -95,20 +96,20 @@ class TrainerServices {
     return allTrainerFromJson(response.toString());
   }
 
-  static Future<List<MyTrainer>> getMyTrainers(
-      {int? currentPage,
-        String? name,}) async {
-
+  static Future<List<MyTrainer>> getMyTrainers({
+    int? currentPage,
+    String? name,
+  }) async {
     print(name);
     print(_trainerController.searchedMyTrainerName.value);
 
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
 
-    var response =
-    await dio!.post(ApiUrl.getMyTrainers, data: {
+    var response = await dio!.post(ApiUrl.getMyTrainers, data: {
       "skip": currentPage == null ? 0 : currentPage * 5,
-      "name": name == null ? _trainerController.searchedMyTrainerName.value : name,
+      "name":
+          name == null ? _trainerController.searchedMyTrainerName.value : name,
     });
     print("jjjj " + response.toString());
     GetAllMyTrainers mytrainer = getAllMyTrainersFromJson(response.toString());
@@ -132,14 +133,14 @@ class TrainerServices {
     return getTrainerModelFromJson(response.toString());
   }
 
-  static Future<AvailableSlot> getEnrolledPlanDetails(String trainerId) async {
+  static Future<TimeModel> getEnrolledPlanDetails(String trainerId) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response =
         await dio!.post(ApiUrl.getSchedules, data: {"trainerId": trainerId});
     print(response.data);
 
-    return availableSlotFromJson(response.toString());
+    return timeModelFromJson(response.toString());
   }
 
   static Future<AvailableSlot> getAllWeekDays(
