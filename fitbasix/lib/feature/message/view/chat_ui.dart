@@ -2113,8 +2113,10 @@ class MessageBubbleOpponent extends StatelessWidget {
   void checkFileExistence(String? fileName) async {
     if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
-      PermissionStatus status1 =
-          await Permission.manageExternalStorage.request();
+      if(!_chatController.storagePermissionCalled.value){
+        _chatController.storagePermissionCalled.value = true;
+        PermissionStatus status1 = await Permission.manageExternalStorage.request();
+      }
       if (status == PermissionStatus.granted) {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');

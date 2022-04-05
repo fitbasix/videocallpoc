@@ -102,6 +102,7 @@ class TrainerServices {
   }) async {
     print(name);
     print(_trainerController.searchedMyTrainerName.value);
+    print(currentPage);
 
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();

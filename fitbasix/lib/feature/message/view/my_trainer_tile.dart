@@ -46,19 +46,21 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
 
   @override
   void initState() {
-    _trainerController.currentPage.value = 0;
-    myTrainers =
-        _trainerController.trainers.value.response!.data!.myTrainers!.obs;
-    _trainerController.isMyTrainerNeedToLoadData.value = true;
+   _trainerController.currentMyTrainerPage.value = 0;
+   myTrainers= _trainerController.trainers.value.response!.data!.myTrainers!.obs;
+   _trainerController.isMyTrainerNeedToLoadData.value = true;
 
-    _scrollController.addListener(() async {
-      print(_trainerController.isMyTrainerNeedToLoadData.value);
-      if (_trainerController.isMyTrainerNeedToLoadData.value == true) {
-        if (_scrollController.position.maxScrollExtent ==
-            _scrollController.position.pixels) {
-          _trainerController.showLoaderOnMyTrainer.value = true;
-          final postQuery = await TrainerServices.getMyTrainers(
-              name: "", currentPage: _trainerController.currentPage.value);
+   _scrollController.addListener(() async {
+     print(_trainerController.isMyTrainerNeedToLoadData.value);
+     if (_trainerController.isMyTrainerNeedToLoadData.value == true&&!_trainerController.showLoaderOnMyTrainer.value) {
+       if (_scrollController.position.maxScrollExtent ==
+           _scrollController.position.pixels) {
+        _trainerController.showLoaderOnMyTrainer.value = true;
+         final postQuery =  await TrainerServices.getMyTrainers(
+           name: "",
+           currentPage: _trainerController.currentMyTrainerPage.value
+         );
+
 
           if (postQuery.length < 5) {
             _trainerController.isMyTrainerNeedToLoadData.value = false;
@@ -201,33 +203,86 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                         /*contentPadding: EdgeInsets.only(
                               top: -2,
                             )*/
-                      ),
-                    ),
-                  ),
-                )
-              : Transform(
-                  transform: Matrix4.translationValues(-20, 0, 0),
-                  child: Text(
-                    'my_trainer'.tr,
-                    style: AppTextStyle.titleText.copyWith(
-                        color:
-                            Theme.of(context).appBarTheme.titleTextStyle?.color,
-                        fontSize: 16 * SizeConfig.textMultiplier!),
-                  ),
-                )),
-          actions: [
-            Obx(() => _trainerController.isMyTrainerSearchActive.value
-                ? SizedBox()
-                : IconButton(
-                    onPressed: () {
-                      _trainerController.isMyTrainerSearchActive.value = true;
-                    },
-                    icon: Icon(
-                      Icons.search,
-                      color: Theme.of(context).primaryColor,
-                      size: 25 * SizeConfig.heightMultiplier!,
-                    )))
-          ],
+              ),
+            ),
+          ),
+        )
+            : Transform(
+          transform: Matrix4.translationValues(-20, 0, 0),
+          child: Text(
+            'my_trainer'.tr,
+            style: AppTextStyle.titleText.copyWith(
+                color: Theme.of(context)
+                    .appBarTheme
+                    .titleTextStyle
+                    ?.color,
+                fontSize: 16 * SizeConfig.textMultiplier!),
+          ),
+        )),
+        actions: [
+          Obx(() => _trainerController.isMyTrainerSearchActive.value
+              ? SizedBox()
+              : IconButton(
+              onPressed: () {
+                _trainerController.isMyTrainerSearchActive.value = true;
+              },
+              icon: Icon(
+                Icons.search,
+                color: Theme.of(context).primaryColor,
+                size: 25 * SizeConfig.heightMultiplier!,
+              )))
+        ],
+
+        // Padding(
+        //     padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
+        //     child: Text(, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color))),
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //
+        //       },
+        //       icon: Icon(
+        //         Icons.search,
+        //         color: Theme.of(context).primaryColor,
+        //         size: 25 * SizeConfig.heightMultiplier!,
+        //       )),
+        // ],
+      ),
+      body: Obx(
+        ()=> (myTrainers!.isNotEmpty)?Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: myTrainers!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    int indexWhereChatPresent = -1;
+                    if(widget.chatHistoryList != null&&widget.chatHistoryList![0].lastMessage!=null){
+                      indexWhereChatPresent = widget.chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers![index].quickBlox));
+                    }
+                    return TrainersTileUI(
+                      taggedPersonList: myTrainers![index].strengths!.isNotEmpty?List.generate(myTrainers![index].strengths!.length, (i) => myTrainers![index].strengths![i].name!):[],
+                      trainerName: myTrainers![index].name,
+                      lastMessage: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessage!.capitalized():"",
+                      trainerProfilePicUrl: myTrainers![index].profilePhoto,
+                      isCurrentlyEnrolled:myTrainers![index].isCurrentlyEnrolled,
+                      userHasChatHistory:indexWhereChatPresent!=-1?true:false,
+                      enrolledDate: myTrainers![index].isCurrentlyEnrolled!?myTrainers![index].startDate:myTrainers![index].endDate,
+                      lastMessageTime: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessageDateSent:0,
+                      onTrainerTapped: ()async{
+                        isMessageLoading = true;
+                        bool dialogCreatedPreviously = false;
+                        int openPage = 0;
+                        //133817477	user1
+                        //133815819 trainer1
+                        //133612091 trainer
+                        final sharedPreferences = await SharedPreferences.getInstance();
+                        _homeController.userQuickBloxId.value =
+                        sharedPreferences.getInt("userQuickBloxId")!;
+                        int UserQuickBloxId = myTrainers![index].quickBlox!;//133819788;
+                        String trainerName = myTrainers![index].name!;
+                        bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
+
 
           // Padding(
           //     padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),

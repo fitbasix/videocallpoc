@@ -126,7 +126,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   },
                   onMessage: () async {
                     ///remove ! after testing
-                    if (!_trainerController.atrainerDetail.value.isEnrolled!) {
+                    if (_trainerController.atrainerDetail.value.isEnrolled!) {
                       int UserQuickBloxId =
                       _trainerController.atrainerDetail.value.quickBlox!;
                       Navigator.push(
