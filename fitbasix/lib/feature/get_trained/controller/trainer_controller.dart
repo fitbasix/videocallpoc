@@ -12,16 +12,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../plans/models/AvailableSlot.dart';
+import '../../plans/models/AvailableTimeModel.dart';
 import '../../plans/models/FullPlanDetailModel.dart';
 import '../../plans/models/allTimeSlot.dart';
 import '../model/timing_model.dart';
 
 class TrainerController extends GetxController {
-
-
-
-
-
   RxBool isMyTrainerNeedToLoadData = true.obs;
   RxBool showLoaderOnMyTrainer = false.obs;
 
@@ -48,7 +44,8 @@ class TrainerController extends GetxController {
   RxBool isMyTrainerSearchActive = RxBool(false);
 
   final TextEditingController searchController = TextEditingController();
-  final TextEditingController searchMyTrainerController = TextEditingController();
+  final TextEditingController searchMyTrainerController =
+      TextEditingController();
   RxString search = RxString('');
   RxString searchMyTrainer = RxString('');
   RxInt trainerType = RxInt(0);
@@ -71,6 +68,7 @@ class TrainerController extends GetxController {
   RxBool fullPlanInfoLoading = true.obs;
   RxString selectedPlanId = "".obs;
   Rx<AvailableSlot> availableSlots = AvailableSlot().obs;
+  Rx<TimeModel> availableTime = TimeModel().obs;
   RxList<TimeSlot> getAllSlots = <TimeSlot>[].obs;
   RxBool isAvailableSlotDataLoading = false.obs;
   RxInt TimeSlotSelected = RxInt(-1);

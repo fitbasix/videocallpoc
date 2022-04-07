@@ -95,126 +95,126 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
               )),
           title: Obx(() => _trainerController.isMyTrainerSearchActive.value
               ? Transform(
-            transform: Matrix4.translationValues(
-                -20 * SizeConfig.widthMultiplier!, 0, 0),
-            child: Container(
-              height: 32 * SizeConfig.heightMultiplier!,
-              decoration: BoxDecoration(
-                color: kLightGrey,
-                borderRadius: BorderRadius.circular(
-                    8 * SizeConfig.widthMultiplier!),
-              ),
-              child: TextField(
-                controller: _trainerController.searchMyTrainerController,
-                style: AppTextStyle.smallGreyText.copyWith(
-                    fontSize: 14 * SizeConfig.textMultiplier!,
-                    color: kBlack),
-                onChanged: (value) async {
-                  if (_trainerController.searchMyTrainer.value != value) {
-                    _trainerController.searchMyTrainer.value = value;
-                    if (value.length >= 3) {
-                      _trainerController.trainerFilterIsLoading.value =
-                      true;
-                      _trainerController.searchedMyTrainerName.value =
-                          value;
-                      myTrainers!.value =
-                      await TrainerServices.getMyTrainers(
-                        name: value,
-                      );
-                      _scrollController.jumpTo(0);
-                      _trainerController.trainerFilterIsLoading.value =
-                      false;
-                      //setState(() {});
-                    }
-                    if (value.length == 0) {
-                      _trainerController.trainerFilterIsLoading.value =
-                      true;
-                      _trainerController.searchedMyTrainerName.value =
-                          value;
-                      myTrainers!.value =
-                      await TrainerServices.getMyTrainers(
-                        name: value,
-                      );
-                      _scrollController.jumpTo(0);
-                      _trainerController.trainerFilterIsLoading.value =
-                      false;
-                      //setState(() {});
-                    }
-                  }
-                },
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.only(
-                        left: 10.5 * SizeConfig.widthMultiplier!,
-                        right: 5 * SizeConfig.widthMultiplier!),
-                    child: Icon(
-                      Icons.search,
-                      color: hintGrey,
-                      size: 22 * SizeConfig.heightMultiplier!,
+                  transform: Matrix4.translationValues(
+                      -20 * SizeConfig.widthMultiplier!, 0, 0),
+                  child: Container(
+                    height: 32 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                      color: kLightGrey,
+                      borderRadius: BorderRadius.circular(
+                          8 * SizeConfig.widthMultiplier!),
                     ),
-                  ),
-                  suffixIcon: GestureDetector(
-                    onTap: () async {
-                      _trainerController.searchMyTrainerController.text
-                          .length ==
-                          0
-                          ? _trainerController
-                          .isMyTrainerSearchActive.value = false
-                          : _trainerController.searchMyTrainerController
-                          .clear();
-                      _trainerController.trainerFilterIsLoading.value =
-                      true;
-                      _trainerController.searchedMyTrainerName.value = "";
-                      myTrainers!.value =
-                      await TrainerServices.getMyTrainers(
-                        name: "",
-                      );
-                      _scrollController.jumpTo(0);
-                      _trainerController.trainerFilterIsLoading.value =
-                      false;
-                      // setState(() {
-                      // });
-                    },
-                    child: Icon(
-                      Icons.clear,
-                      color: hintGrey,
-                      size: 18 * SizeConfig.heightMultiplier!,
-                    ),
-                  ),
-                  border: InputBorder.none,
-                  hintText: 'searchHint'.tr,
-                  hintStyle: AppTextStyle.smallGreyText.copyWith(
-                      fontSize: 14 * SizeConfig.textMultiplier!,
-                      color: hintGrey),
-                  /*contentPadding: EdgeInsets.only(
+                    child: TextField(
+                      controller: _trainerController.searchMyTrainerController,
+                      style: AppTextStyle.smallGreyText.copyWith(
+                          fontSize: 14 * SizeConfig.textMultiplier!,
+                          color: kBlack),
+                      onChanged: (value) async {
+                        if (_trainerController.searchMyTrainer.value != value) {
+                          _trainerController.searchMyTrainer.value = value;
+                          if (value.length >= 3) {
+                            _trainerController.trainerFilterIsLoading.value =
+                                true;
+                            _trainerController.searchedMyTrainerName.value =
+                                value;
+                            myTrainers!.value =
+                                await TrainerServices.getMyTrainers(
+                              name: value,
+                            );
+                            _scrollController.jumpTo(0);
+                            _trainerController.trainerFilterIsLoading.value =
+                                false;
+                            //setState(() {});
+                          }
+                          if (value.length == 0) {
+                            _trainerController.trainerFilterIsLoading.value =
+                                true;
+                            _trainerController.searchedMyTrainerName.value =
+                                value;
+                            myTrainers!.value =
+                                await TrainerServices.getMyTrainers(
+                              name: value,
+                            );
+                            _scrollController.jumpTo(0);
+                            _trainerController.trainerFilterIsLoading.value =
+                                false;
+                            //setState(() {});
+                          }
+                        }
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.only(
+                              left: 10.5 * SizeConfig.widthMultiplier!,
+                              right: 5 * SizeConfig.widthMultiplier!),
+                          child: Icon(
+                            Icons.search,
+                            color: hintGrey,
+                            size: 22 * SizeConfig.heightMultiplier!,
+                          ),
+                        ),
+                        suffixIcon: GestureDetector(
+                          onTap: () async {
+                            _trainerController.searchMyTrainerController.text
+                                        .length ==
+                                    0
+                                ? _trainerController
+                                    .isMyTrainerSearchActive.value = false
+                                : _trainerController.searchMyTrainerController
+                                    .clear();
+                            _trainerController.trainerFilterIsLoading.value =
+                                true;
+                            _trainerController.searchedMyTrainerName.value = "";
+                            myTrainers!.value =
+                                await TrainerServices.getMyTrainers(
+                              name: "",
+                            );
+                            _scrollController.jumpTo(0);
+                            _trainerController.trainerFilterIsLoading.value =
+                                false;
+                            // setState(() {
+                            // });
+                          },
+                          child: Icon(
+                            Icons.clear,
+                            color: hintGrey,
+                            size: 18 * SizeConfig.heightMultiplier!,
+                          ),
+                        ),
+                        border: InputBorder.none,
+                        hintText: 'searchHint'.tr,
+                        hintStyle: AppTextStyle.smallGreyText.copyWith(
+                            fontSize: 14 * SizeConfig.textMultiplier!,
+                            color: hintGrey),
+                        /*contentPadding: EdgeInsets.only(
                               top: -2,
                             )*/
-                ),
-              ),
-            ),
-          )
+                      ),
+                    ),
+                  ),
+                )
               : Transform(
-            transform: Matrix4.translationValues(-20, 0, 0),
-            child: Text(
-              'my_trainer'.tr,
-              style: AppTextStyle.titleText.copyWith(
-                  color:
-                  Theme.of(context).appBarTheme.titleTextStyle?.color,
-                  fontSize: 16 * SizeConfig.textMultiplier!),
-            ),
-          )),
+                  transform: Matrix4.translationValues(-20, 0, 0),
+                  child: Text(
+                    'my_trainer'.tr,
+                    style: AppTextStyle.titleText.copyWith(
+                        color:
+                            Theme.of(context).appBarTheme.titleTextStyle?.color,
+                        fontSize: 16 * SizeConfig.textMultiplier!),
+                  ),
+                )),
           actions: [
             Obx(() => _trainerController.isMyTrainerSearchActive.value
                 ? SizedBox()
                 : IconButton(
-                onPressed: () {
-                  _trainerController.isMyTrainerSearchActive.value = true;
-                },
-                icon: Icon(
-                  Icons.search,
-                  color: Theme.of(context).primaryColor,
-                  size: 25 * SizeConfig.heightMultiplier!,
-                )))
+                    onPressed: () {
+                      _trainerController.isMyTrainerSearchActive.value = true;
+                    },
+                    icon: Icon(
+                      Icons.search,
+                      color: Theme.of(context).primaryColor,
+                      size: 25 * SizeConfig.heightMultiplier!,
+                    )))
           ],
           // Padding(
           //     padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
@@ -232,129 +232,129 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
           // ],
         ),
         body: Obx(
-              () => (myTrainers!.isNotEmpty)
+          () => (myTrainers!.isNotEmpty)
               ? Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: myTrainers!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    int indexWhereChatPresent = -1;
-                    if (widget.chatHistoryList != null &&
-                        widget.chatHistoryList![0].lastMessage != null) {
-                      indexWhereChatPresent = widget.chatHistoryList!
-                          .indexWhere((element) => element.occupantsIds!
-                          .contains(myTrainers![index].quickBlox));
-                    }
-                    return TrainersTileUI(
-                      taggedPersonList: myTrainers![index]
-                          .strengths!
-                          .isNotEmpty
-                          ? List.generate(
-                          myTrainers![index].strengths!.length,
-                              (i) =>
-                          myTrainers![index].strengths![i].name!)
-                          : [],
-                      trainerName: myTrainers![index].name,
-                      lastMessage: indexWhereChatPresent != -1
-                          ? widget.chatHistoryList![indexWhereChatPresent]
-                          .lastMessage!
-                          .capitalized()
-                          : "",
-                      trainerProfilePicUrl:
-                      myTrainers![index].profilePhoto,
-                      isCurrentlyEnrolled:
-                      myTrainers![index].isCurrentlyEnrolled,
-                      userHasChatHistory:
-                      indexWhereChatPresent != -1 ? true : false,
-                      enrolledDate:
-                      myTrainers![index].isCurrentlyEnrolled!
-                          ? myTrainers![index].startDate
-                          : myTrainers![index].endDate,
-                      lastMessageTime: indexWhereChatPresent != -1
-                          ? widget.chatHistoryList![indexWhereChatPresent]
-                          .lastMessageDateSent
-                          : 0,
-                      onTrainerTapped: () async {
-                        isMessageLoading = true;
-                        bool dialogCreatedPreviously = false;
-                        int openPage = 0;
-                        //133817477 user1
-                        //133815819 trainer1
-                        //133612091 trainer
-                        final sharedPreferences =
-                        await SharedPreferences.getInstance();
-                        _homeController.userQuickBloxId.value =
-                        sharedPreferences.getInt("userQuickBloxId")!;
-                        int UserQuickBloxId =
-                        myTrainers![index].quickBlox!; //133819788;
-                        String trainerName = myTrainers![index].name!;
-                        bool isCurrentlyEnrolled =
-                        myTrainers![index].isCurrentlyEnrolled!;
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChatScreen(
-                                  opponentID: UserQuickBloxId,
-                                  trainerTitle: trainerName,
-                                  isCurrentlyEnrolled:
-                                  isCurrentlyEnrolled,
-                                  profilePicURL: myTrainers![index]
-                                      .profilePhoto!,
-                                  trainerId: myTrainers![index].user,
-                                  time: myTrainers![index].time,
-                                  days: myTrainers![index].days,
-                                )));
-                      },
-                    );
-                  },
-                ),
-              ),
-              Obx(() => _trainerController.showLoaderOnMyTrainer.value
-                  ? Center(child: CustomizedCircularProgress())
-                  : Container())
-            ],
-          )
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        itemCount: myTrainers!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          int indexWhereChatPresent = -1;
+                          if (widget.chatHistoryList != null &&
+                              widget.chatHistoryList![0].lastMessage != null) {
+                            indexWhereChatPresent = widget.chatHistoryList!
+                                .indexWhere((element) => element.occupantsIds!
+                                    .contains(myTrainers![index].quickBlox));
+                          }
+                          return TrainersTileUI(
+                            taggedPersonList: myTrainers![index]
+                                    .strengths!
+                                    .isNotEmpty
+                                ? List.generate(
+                                    myTrainers![index].strengths!.length,
+                                    (i) =>
+                                        myTrainers![index].strengths![i].name!)
+                                : [],
+                            trainerName: myTrainers![index].name,
+                            lastMessage: indexWhereChatPresent != -1
+                                ? widget.chatHistoryList![indexWhereChatPresent]
+                                    .lastMessage!
+                                    .capitalized()
+                                : "",
+                            trainerProfilePicUrl:
+                                myTrainers![index].profilePhoto,
+                            isCurrentlyEnrolled:
+                                myTrainers![index].isCurrentlyEnrolled,
+                            userHasChatHistory:
+                                indexWhereChatPresent != -1 ? true : false,
+                            enrolledDate:
+                                myTrainers![index].isCurrentlyEnrolled!
+                                    ? myTrainers![index].startDate
+                                    : myTrainers![index].endDate,
+                            lastMessageTime: indexWhereChatPresent != -1
+                                ? widget.chatHistoryList![indexWhereChatPresent]
+                                    .lastMessageDateSent
+                                : 0,
+                            onTrainerTapped: () async {
+                              isMessageLoading = true;
+                              bool dialogCreatedPreviously = false;
+                              int openPage = 0;
+                              //133817477 user1
+                              //133815819 trainer1
+                              //133612091 trainer
+                              final sharedPreferences =
+                                  await SharedPreferences.getInstance();
+                              _homeController.userQuickBloxId.value =
+                                  sharedPreferences.getInt("userQuickBloxId")!;
+                              int UserQuickBloxId =
+                                  myTrainers![index].quickBlox!; //133819788;
+                              String trainerName = myTrainers![index].name!;
+                              bool isCurrentlyEnrolled =
+                                  myTrainers![index].isCurrentlyEnrolled!;
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                            opponentID: UserQuickBloxId,
+                                            trainerTitle: trainerName,
+                                            isCurrentlyEnrolled:
+                                                isCurrentlyEnrolled,
+                                            profilePicURL: myTrainers![index]
+                                                .profilePhoto!,
+                                            trainerId: myTrainers![index].user,
+                                            time: myTrainers![index].time,
+                                            days: myTrainers![index].days,
+                                          )));
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    Obx(() => _trainerController.showLoaderOnMyTrainer.value
+                        ? Center(child: CustomizedCircularProgress())
+                        : Container())
+                  ],
+                )
               : Container(
-            margin:
-            EdgeInsets.only(top: 110 * SizeConfig.heightMultiplier!),
-            child: Container(
-              padding: EdgeInsets.only(
-                  top: 71 * SizeConfig.heightMultiplier!,
-                  left: 56 * SizeConfig.widthMultiplier!,
-                  right: 55 * SizeConfig.widthMultiplier!),
-              child: Column(
-                children: [
-                  Image.asset(
-                    ImagePath.nomatchesfoundImage,
-                    height: 102 * SizeConfig.heightMultiplier!,
-                    width: 100 * SizeConfig.widthMultiplier!,
+                  margin:
+                      EdgeInsets.only(top: 110 * SizeConfig.heightMultiplier!),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        top: 71 * SizeConfig.heightMultiplier!,
+                        left: 56 * SizeConfig.widthMultiplier!,
+                        right: 55 * SizeConfig.widthMultiplier!),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          ImagePath.nomatchesfoundImage,
+                          height: 102 * SizeConfig.heightMultiplier!,
+                          width: 100 * SizeConfig.widthMultiplier!,
+                        ),
+                        SizedBox(
+                          height: 8.78 * SizeConfig.heightMultiplier!,
+                        ),
+                        Text(
+                          'no_matches_description'.tr,
+                          style: AppTextStyle.black400Text.copyWith(
+                              fontSize: (24) * SizeConfig.textMultiplier!,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 8 * SizeConfig.heightMultiplier!,
+                        ),
+                        Text(
+                          'different_search'.tr,
+                          style: AppTextStyle.black400Text.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 8.78 * SizeConfig.heightMultiplier!,
-                  ),
-                  Text(
-                    'no_matches_description'.tr,
-                    style: AppTextStyle.black400Text.copyWith(
-                        fontSize: (24) * SizeConfig.textMultiplier!,
-                        color:
-                        Theme.of(context).textTheme.bodyText1?.color),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 8 * SizeConfig.heightMultiplier!,
-                  ),
-                  Text(
-                    'different_search'.tr,
-                    style: AppTextStyle.black400Text.copyWith(
-                        color:
-                        Theme.of(context).textTheme.bodyText1?.color),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
         ));
   }
 }
@@ -366,15 +366,15 @@ extension StringExtension on String {
 class TrainersTileUI extends StatelessWidget {
   TrainersTileUI(
       {Key? key,
-        required this.taggedPersonList,
-        this.trainerName,
-        this.trainerProfilePicUrl,
-        this.lastMessage,
-        this.isCurrentlyEnrolled,
-        this.userHasChatHistory,
-        this.enrolledDate,
-        this.lastMessageTime,
-        this.onTrainerTapped})
+      required this.taggedPersonList,
+      this.trainerName,
+      this.trainerProfilePicUrl,
+      this.lastMessage,
+      this.isCurrentlyEnrolled,
+      this.userHasChatHistory,
+      this.enrolledDate,
+      this.lastMessageTime,
+      this.onTrainerTapped})
       : super(key: key);
   List<String> taggedPersonList;
   String? trainerName;
@@ -438,16 +438,16 @@ class TrainersTileUI extends StatelessWidget {
                 ),
                 Spacer(),
                 Obx(
-                      () => lastMessageDateToShow.value.isNotEmpty
+                  () => lastMessageDateToShow.value.isNotEmpty
                       ? Padding(
-                    padding: EdgeInsets.only(
-                        right: 16 * SizeConfig.widthMultiplier!),
-                    child: Text(
-                        userHasChatHistory!
-                            ? lastMessageDateToShow.value
-                            : "",
-                        style: AppTextStyle.hsmallhintText),
-                  )
+                          padding: EdgeInsets.only(
+                              right: 16 * SizeConfig.widthMultiplier!),
+                          child: Text(
+                              userHasChatHistory!
+                                  ? lastMessageDateToShow.value
+                                  : "",
+                              style: AppTextStyle.hsmallhintText),
+                        )
                       : Container(),
                 )
               ],
@@ -463,8 +463,8 @@ class TrainersTileUI extends StatelessWidget {
                     lastMessage!.isNotEmpty
                         ? lastMessage!
                         : (userHasChatHistory!
-                        ? "loading..."
-                        : "lets_start_conversation".tr),
+                            ? "loading..."
+                            : "lets_start_conversation".tr),
                     style: AppTextStyle.hmedium13Text.copyWith(
                         color: isCurrentlyEnrolled!
                             ? Theme.of(context).textTheme.bodyText1!.color
@@ -490,7 +490,7 @@ class TrainersTileUI extends StatelessWidget {
                         style: isCurrentlyEnrolled!
                             ? AppTextStyle.hsmallGreenText
                             : AppTextStyle.hsmallGreenText
-                            .copyWith(color: hintGrey))
+                                .copyWith(color: hintGrey))
                   ],
                 ),
               ),
@@ -616,9 +616,9 @@ class TrainersTileUI extends StatelessWidget {
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = DateTime(now.year, now.month, now.day - 1);
     DateTime dateOfFile =
-    DateTime.fromMicrosecondsSinceEpoch(lastMessageTime! * 1000);
+        DateTime.fromMicrosecondsSinceEpoch(lastMessageTime! * 1000);
     final checkDate =
-    DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
+        DateTime(dateOfFile.year, dateOfFile.month, dateOfFile.day);
     if (checkDate == today) {
       lastMessageDateToShow.value = "Today";
     } else if (checkDate == yesterday) {
@@ -635,7 +635,7 @@ class TrainersTileUI extends StatelessWidget {
           decoration: BoxDecoration(
               color: Color(0xff747474),
               borderRadius:
-              BorderRadius.circular(28 * SizeConfig.heightMultiplier!)),
+                  BorderRadius.circular(28 * SizeConfig.heightMultiplier!)),
           child: Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 12 * SizeConfig.widthMultiplier!),
@@ -653,23 +653,23 @@ class TrainersTileUI extends StatelessWidget {
         ),
         list.length > 1
             ? Container(
-          height: 28 * SizeConfig.heightMultiplier!,
-          decoration: BoxDecoration(
-              color: Color(0xff747474),
-              borderRadius: BorderRadius.circular(
-                  28 * SizeConfig.heightMultiplier!)),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 12 * SizeConfig.widthMultiplier!),
-            child: Center(
-              child: Text(
-                '+' + (list.length - 1).toString().tr,
-                style: AppTextStyle.lightMediumBlackText.copyWith(
-                    color: Theme.of(context).textTheme.bodyText1!.color),
-              ),
-            ),
-          ),
-        )
+                height: 28 * SizeConfig.heightMultiplier!,
+                decoration: BoxDecoration(
+                    color: Color(0xff747474),
+                    borderRadius: BorderRadius.circular(
+                        28 * SizeConfig.heightMultiplier!)),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 12 * SizeConfig.widthMultiplier!),
+                  child: Center(
+                    child: Text(
+                      '+' + (list.length - 1).toString().tr,
+                      style: AppTextStyle.lightMediumBlackText.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                  ),
+                ),
+              )
             : Container(),
       ],
     );
