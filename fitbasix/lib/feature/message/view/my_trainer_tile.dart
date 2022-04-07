@@ -1,5 +1,5 @@
+import 'dart:developer';
 import 'dart:ui';
-
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
@@ -27,41 +27,33 @@ class MyTrainerTileScreen extends StatefulWidget {
     Key? key,
     this.chatHistoryList,
   }) : super(key: key);
-
   List<QBDialog>? chatHistoryList;
-
   @override
   State<MyTrainerTileScreen> createState() => _MyTrainerTileScreenState();
 }
 
 class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   TrainerController _trainerController = Get.find();
-
   ScrollController _scrollController = ScrollController();
-
   bool isMessageLoading = false;
-
   final HomeController _homeController = Get.find();
   RxList<MyTrainer>? myTrainers;
-
   @override
   void initState() {
-   _trainerController.currentMyTrainerPage.value = 0;
-   myTrainers= _trainerController.trainers.value.response!.data!.myTrainers!.obs;
-   _trainerController.isMyTrainerNeedToLoadData.value = true;
-
-   _scrollController.addListener(() async {
-     print(_trainerController.isMyTrainerNeedToLoadData.value);
-     if (_trainerController.isMyTrainerNeedToLoadData.value == true&&!_trainerController.showLoaderOnMyTrainer.value) {
-       if (_scrollController.position.maxScrollExtent ==
-           _scrollController.position.pixels) {
-        _trainerController.showLoaderOnMyTrainer.value = true;
-         final postQuery =  await TrainerServices.getMyTrainers(
-           name: "",
-           currentPage: _trainerController.currentMyTrainerPage.value
-         );
-
-
+    _trainerController.currentMyTrainerPage.value = 1;
+    myTrainers =
+        _trainerController.trainers.value.response!.data!.myTrainers!.obs;
+    _trainerController.isMyTrainerNeedToLoadData.value = true;
+    _scrollController.addListener(() async {
+      print(_trainerController.isMyTrainerNeedToLoadData.value);
+      if (_trainerController.isMyTrainerNeedToLoadData.value == true &&
+          !_trainerController.showLoaderOnMyTrainer.value) {
+        if (_scrollController.position.maxScrollExtent ==
+            _scrollController.position.pixels) {
+          _trainerController.showLoaderOnMyTrainer.value = true;
+          final postQuery = await TrainerServices.getMyTrainers(
+              name: "",
+              currentPage: _trainerController.currentMyTrainerPage.value);
           if (postQuery.length < 5) {
             _trainerController.isMyTrainerNeedToLoadData.value = false;
             myTrainers!.addAll(postQuery);
@@ -72,7 +64,6 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
               _trainerController.showLoaderOnMyTrainer.value = false;
               return;
             }
-
             myTrainers!.addAll(postQuery);
             _trainerController.showLoaderOnMyTrainer.value = false;
           }
@@ -82,7 +73,6 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
         }
       }
     });
-
     super.initState();
   }
 
@@ -203,87 +193,33 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                         /*contentPadding: EdgeInsets.only(
                               top: -2,
                             )*/
-              ),
-            ),
-          ),
-        )
-            : Transform(
-          transform: Matrix4.translationValues(-20, 0, 0),
-          child: Text(
-            'my_trainer'.tr,
-            style: AppTextStyle.titleText.copyWith(
-                color: Theme.of(context)
-                    .appBarTheme
-                    .titleTextStyle
-                    ?.color,
-                fontSize: 16 * SizeConfig.textMultiplier!),
-          ),
-        )),
-        actions: [
-          Obx(() => _trainerController.isMyTrainerSearchActive.value
-              ? SizedBox()
-              : IconButton(
-              onPressed: () {
-                _trainerController.isMyTrainerSearchActive.value = true;
-              },
-              icon: Icon(
-                Icons.search,
-                color: Theme.of(context).primaryColor,
-                size: 25 * SizeConfig.heightMultiplier!,
-              )))
-        ],
-
-        // Padding(
-        //     padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
-        //     child: Text(, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color))),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //
-        //       },
-        //       icon: Icon(
-        //         Icons.search,
-        //         color: Theme.of(context).primaryColor,
-        //         size: 25 * SizeConfig.heightMultiplier!,
-        //       )),
-        // ],
-      ),
-      body: Obx(
-        ()=> (myTrainers!.isNotEmpty)?Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: myTrainers!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    int indexWhereChatPresent = -1;
-                    if(widget.chatHistoryList != null&&widget.chatHistoryList![0].lastMessage!=null){
-                      indexWhereChatPresent = widget.chatHistoryList!.indexWhere((element) => element.occupantsIds!.contains(myTrainers![index].quickBlox));
-                    }
-                    return TrainersTileUI(
-                      taggedPersonList: myTrainers![index].strengths!.isNotEmpty?List.generate(myTrainers![index].strengths!.length, (i) => myTrainers![index].strengths![i].name!):[],
-                      trainerName: myTrainers![index].name,
-                      lastMessage: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessage!.capitalized():"",
-                      trainerProfilePicUrl: myTrainers![index].profilePhoto,
-                      isCurrentlyEnrolled:myTrainers![index].isCurrentlyEnrolled,
-                      userHasChatHistory:indexWhereChatPresent!=-1?true:false,
-                      enrolledDate: myTrainers![index].isCurrentlyEnrolled!?myTrainers![index].startDate:myTrainers![index].endDate,
-                      lastMessageTime: indexWhereChatPresent!=-1?widget.chatHistoryList![indexWhereChatPresent].lastMessageDateSent:0,
-                      onTrainerTapped: ()async{
-                        isMessageLoading = true;
-                        bool dialogCreatedPreviously = false;
-                        int openPage = 0;
-                        //133817477	user1
-                        //133815819 trainer1
-                        //133612091 trainer
-                        final sharedPreferences = await SharedPreferences.getInstance();
-                        _homeController.userQuickBloxId.value =
-                        sharedPreferences.getInt("userQuickBloxId")!;
-                        int UserQuickBloxId = myTrainers![index].quickBlox!;//133819788;
-                        String trainerName = myTrainers![index].name!;
-                        bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
-
-
+                      ),
+                    ),
+                  ),
+                )
+              : Transform(
+                  transform: Matrix4.translationValues(-20, 0, 0),
+                  child: Text(
+                    'my_trainer'.tr,
+                    style: AppTextStyle.titleText.copyWith(
+                        color:
+                            Theme.of(context).appBarTheme.titleTextStyle?.color,
+                        fontSize: 16 * SizeConfig.textMultiplier!),
+                  ),
+                )),
+          actions: [
+            Obx(() => _trainerController.isMyTrainerSearchActive.value
+                ? SizedBox()
+                : IconButton(
+                    onPressed: () {
+                      _trainerController.isMyTrainerSearchActive.value = true;
+                    },
+                    icon: Icon(
+                      Icons.search,
+                      color: Theme.of(context).primaryColor,
+                      size: 25 * SizeConfig.heightMultiplier!,
+                    )))
+          ],
           // Padding(
           //     padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
           //     child: Text(, style: AppTextStyle.hblack600Text.copyWith(color: Theme.of(context).textTheme.bodyText1!.color))),
@@ -307,7 +243,6 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                       child: ListView.builder(
                         controller: _scrollController,
                         itemCount: myTrainers!.length,
-                        physics: const BouncingScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           int indexWhereChatPresent = -1;
                           if (widget.chatHistoryList != null &&
@@ -349,7 +284,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                               isMessageLoading = true;
                               bool dialogCreatedPreviously = false;
                               int openPage = 0;
-                              //133817477	user1
+                              //133817477 user1
                               //133815819 trainer1
                               //133612091 trainer
                               final sharedPreferences =
@@ -361,7 +296,6 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                               String trainerName = myTrainers![index].name!;
                               bool isCurrentlyEnrolled =
                                   myTrainers![index].isCurrentlyEnrolled!;
-
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -373,8 +307,8 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                             profilePicURL: myTrainers![index]
                                                 .profilePhoto!,
                                             trainerId: myTrainers![index].user,
-                                            days: myTrainers![index].days,
                                             time: myTrainers![index].time,
+                                            days: myTrainers![index].days,
                                           )));
                             },
                           );
@@ -458,7 +392,6 @@ class TrainersTileUI extends StatelessWidget {
   int? lastMessageTime;
   var lastMessageDateToShow = "".obs;
   GestureTapCallback? onTrainerTapped;
-
   @override
   Widget build(BuildContext context) {
     setLastMessageDate();
@@ -757,9 +690,7 @@ class BottomSheetField extends StatelessWidget {
   final String? BottomFieldImage;
   final String? BottomFieldText;
   final VoidCallback? onTap;
-
   BottomSheetField({this.BottomFieldImage, this.BottomFieldText, this.onTap});
-
   @override
   Widget build(BuildContext context) {
     return Container(
