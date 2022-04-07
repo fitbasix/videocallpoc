@@ -21,7 +21,6 @@ import '../../../core/routes/app_routes.dart';
 import '../../get_trained/model/get_trained_model.dart';
 import '../../get_trained/services/trainer_services.dart';
 import 'chat_ui.dart';
-
 class MyTrainerTileScreen extends StatefulWidget {
   MyTrainerTileScreen({
     Key? key,
@@ -31,7 +30,6 @@ class MyTrainerTileScreen extends StatefulWidget {
   @override
   State<MyTrainerTileScreen> createState() => _MyTrainerTileScreenState();
 }
-
 class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   TrainerController _trainerController = Get.find();
   ScrollController _scrollController = ScrollController();
@@ -41,6 +39,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   @override
   void initState() {
     _trainerController.currentMyTrainerPage.value = 1;
+
     myTrainers =
         _trainerController.trainers.value.response!.data!.myTrainers!.obs;
     _trainerController.isMyTrainerNeedToLoadData.value = true;
@@ -75,7 +74,6 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
     });
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -362,13 +360,11 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
         ));
   }
 }
-
 extension StringExtension on String {
   String capitalized() {
     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
 }
-
 class TrainersTileUI extends StatelessWidget {
   TrainersTileUI(
       {Key? key,
@@ -506,7 +502,6 @@ class TrainersTileUI extends StatelessWidget {
       ),
     );
   }
-
   void createMenuDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -618,7 +613,6 @@ class TrainersTileUI extends StatelessWidget {
       },
     );
   }
-
   setLastMessageDate() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -635,7 +629,6 @@ class TrainersTileUI extends StatelessWidget {
       lastMessageDateToShow.value = DateFormat("dd MMM yy").format(checkDate);
     }
   }
-
   Widget _taggedBar({List<String>? list, required BuildContext context}) {
     return Row(
       children: [
@@ -684,7 +677,6 @@ class TrainersTileUI extends StatelessWidget {
     );
   }
 }
-
 // Bottom sheet class
 class BottomSheetField extends StatelessWidget {
   final String? BottomFieldImage;

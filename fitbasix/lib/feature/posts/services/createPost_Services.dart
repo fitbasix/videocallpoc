@@ -212,7 +212,7 @@ class CreatePostService {
     var chatConnect = await QB.chat.isConnected();
     if (chatConnect!) {
       //todo remove comment for initWebRTC to enable video call
-      // InitializeQuickBlox().initWebRTC();
+      //InitializeQuickBlox().initWebRTC();
 
       //InitializeQuickBlox().subscribeCall();
     }
@@ -223,7 +223,7 @@ class CreatePostService {
         var chatConnect = await QB.chat.isConnected();
         if (chatConnect!) {
           //todo remove comment for initWebRTC to enable video call
-          // InitializeQuickBlox().initWebRTC();
+          //InitializeQuickBlox().initWebRTC();
 
           //InitializeQuickBlox().subscribeCall();
         }
