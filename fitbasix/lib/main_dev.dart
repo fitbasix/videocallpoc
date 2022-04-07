@@ -77,6 +77,9 @@ Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await initializeNotification();
     await Firebase.initializeApp();
+    if(Platform.isIOS){
+      FirebaseMessaging.instance.requestPermission();
+    }
 
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     Map<String, dynamic> deviceData = <String, dynamic>{};
@@ -100,6 +103,9 @@ Future<void> main() async {
 
       print("fcm token" + value.toString());
     });
+    FirebaseMessaging.instance.getAPNSToken().then((value) {
+      print(value.toString() +" APN Token");
+    });
 
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -112,6 +118,7 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((message) async {
+
       AwesomeNotifications().createNotification(
           content: NotificationContent(
               id: 10,
