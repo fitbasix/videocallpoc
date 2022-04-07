@@ -9,12 +9,14 @@ import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
 import 'package:fitbasix/feature/Home/model/water_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
 import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
 import 'package:fitbasix/feature/spg/model/PersonalGoalModel.dart';
 import 'package:fitbasix/feature/spg/services/spg_service.dart';
 import 'package:get/get.dart';
+import 'package:health/health.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -303,9 +305,69 @@ class HomeController extends GetxController {
   @override
   Future<void> onInit() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    AppState _state = AppState.DATA_NOT_FETCHED;
     var calories = prefs.getString('caloriesBurnt');
+
     if (calories != null) {
-      caloriesBurnt.value = double.parse(calories.toString());
+      Future fetchData() async {
+        _state = AppState.FETCHING_DATA;
+        HealthFactory health = HealthFactory();
+        List<HealthDataPoint> _healthDataList = [];
+        // define the types to get
+        final types = [
+          HealthDataType.ACTIVE_ENERGY_BURNED,
+          // Uncomment this line on iOS - only available on iOS
+          // HealthDataType.DISTANCE_WALKING_RUNNING,
+        ];
+
+        // with coresponsing permissions
+        final permissions = [HealthDataAccess.READ];
+
+        // get data within the last 24 hours
+        final now = DateTime.now();
+        final yesterday = now
+            .subtract(Duration(hours: int.parse(DateFormat('kk').format(now))));
+
+        // requesting access to the data types before reading them
+        // note that strictly speaking, the [permissions] are not
+        // needed, since we only want READ access.
+        bool requested =
+            await health.requestAuthorization(types, permissions: permissions);
+
+        if (requested) {
+          try {
+            // fetch health data
+            String time = DateFormat('kk').format(DateTime.now());
+            print(int.parse(time));
+            List<HealthDataPoint> healthData =
+                await health.getHealthDataFromTypes(yesterday, now, types);
+
+            // save all the new data points (only the first 100)
+            _healthDataList.addAll((healthData.length < 100)
+                ? healthData
+                : healthData.sublist(0, 100));
+          } catch (error) {
+            print("Exception in getHealthDataFromTypes: $error");
+          }
+
+          // filter out duplicates
+          //_healthDataList = HealthFactory.removeDuplicates(_healthDataList);
+          caloriesBurnt.value = 0.0;
+          // print the results
+          _healthDataList.forEach((x) {
+            caloriesBurnt.value = x.value.toDouble() + caloriesBurnt.value;
+          });
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('caloriesBurnt', caloriesBurnt.value.toString());
+          // update the UI to display the results
+          _state =
+              _healthDataList.isEmpty ? AppState.NO_DATA : AppState.DATA_READY;
+        } else {
+          _state = AppState.DATA_NOT_FETCHED;
+        }
+      }
+
+      fetchData();
     }
 
     setup();

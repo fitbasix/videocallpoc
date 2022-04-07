@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
@@ -37,7 +38,8 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   RxList<MyTrainer>? myTrainers;
   @override
   void initState() {
-    _trainerController.currentMyTrainerPage.value = 0;
+    _trainerController.currentMyTrainerPage.value = 1;
+
     myTrainers =
         _trainerController.trainers.value.response!.data!.myTrainers!.obs;
     _trainerController.isMyTrainerNeedToLoadData.value = true;

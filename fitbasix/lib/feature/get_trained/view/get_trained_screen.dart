@@ -95,6 +95,12 @@ class GetTrainedScreen extends StatelessWidget {
                                         : SeeAllButton(
                                             title: "see_all_trainer".tr,
                                             onTap: () async {
+                                              _trainerController
+                                                  .searchMyTrainerController
+                                                  .clear();
+                                              _trainerController
+                                                  .currentMyTrainerPage
+                                                  .value = 1;
                                               Navigator.pushNamed(context,
                                                   RouteName.myTrainersScreen);
                                             },

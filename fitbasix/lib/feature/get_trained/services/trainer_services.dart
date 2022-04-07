@@ -76,7 +76,10 @@ class TrainerServices {
 
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-
+    log("ooo" +
+        (name == null
+            ? _trainerController.searchedName.value.toString()
+            : name.toString()));
     var response =
         await dio!.post(ApiUrl.getAllTrainer + "?sortBy=$sortMethod", data: {
       "skip": currentPage == null ? 0 : currentPage * 5,
@@ -100,10 +103,6 @@ class TrainerServices {
     int? currentPage,
     String? name,
   }) async {
-    print(name);
-    print(_trainerController.searchedMyTrainerName.value);
-    print(currentPage);
-
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
 
