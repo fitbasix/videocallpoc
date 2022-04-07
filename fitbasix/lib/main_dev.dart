@@ -75,7 +75,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    initializeNotification();
+    await initializeNotification();
     await Firebase.initializeApp();
 
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -84,11 +84,13 @@ Future<void> main() async {
     IosDeviceInfo? iosInfo;
     if (Platform.isAndroid == true) {
       androidInfo = await deviceInfoPlugin.androidInfo;
-      print(Platform.operatingSystemVersion +" os version");
+      print(Platform.operatingSystemVersion + " os version");
     } else {
       iosInfo = await deviceInfoPlugin.iosInfo;
     }
-    String deviceId = Platform.isAndroid?androidInfo!.androidId:iosInfo!.identifierForVendor;
+    String deviceId = Platform.isAndroid
+        ? androidInfo!.androidId
+        : iosInfo!.identifierForVendor;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('AccessToken');
     FirebaseMessaging.instance.getToken().then((value) async {
@@ -110,6 +112,12 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((message) async {
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              id: 10,
+              channelKey: 'basic_channel',
+              title: message.notification!.title.toString(),
+              body: message.notification!.body.toString()));
       // print(message.data["message"]);
       // AndroidNotificationChannel channel = AndroidNotificationChannel(
       //     "channel_id", "some_title",
@@ -187,7 +195,9 @@ void registerFcmToken() async {
   } else {
     iosInfo = await deviceInfoPlugin.iosInfo;
   }
-  String deviceId = Platform.isAndroid?androidInfo!.androidId:iosInfo!.identifierForVendor;
+  String deviceId = Platform.isAndroid
+      ? androidInfo!.androidId
+      : iosInfo!.identifierForVendor;
   // log(response.androidId + "   " + response.device);
   //deviceData = _readAndroidBuildData(response);
   log('Running on ${deviceData['device']}');
