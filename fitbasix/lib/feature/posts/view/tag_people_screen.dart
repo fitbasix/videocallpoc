@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/right_tick.dart';
@@ -114,14 +116,11 @@ class TagPeopleScreen extends StatelessWidget {
                             print(value);
                             var users = await CreatePostService.getUsers(value);
                             _postController.users.value = users.response!.data!;
-                            print(_postController.users.value);
                           },
                           style: AppTextStyle.normalGreenText.copyWith(
                               color:
                                   Theme.of(context).textTheme.bodyText1?.color),
-                          onSubmitted: (value) {
-                            print(value);
-                          },
+                          onSubmitted: (value) {},
                           decoration: InputDecoration(
                             prefixIcon: Transform(
                               transform: Matrix4.translationValues(0, 2, 0),
@@ -155,6 +154,11 @@ class TagPeopleScreen extends StatelessWidget {
                                 itemCount:
                                     _postController.selectedUserData.length,
                                 itemBuilder: (context, index) {
+                                  log(_postController.selectedUserData
+                                      .toSet()
+                                      .toList()
+                                      .length
+                                      .toString());
                                   return Padding(
                                     padding: EdgeInsets.only(
                                         right:
@@ -197,7 +201,7 @@ class TagPeopleScreen extends StatelessWidget {
                                               Text(
                                                 _postController
                                                     .selectedUserData[index]
-                                                    .name!,
+                                                    .id!,
                                                 style: AppTextStyle
                                                     .boldBlackText
                                                     .copyWith(
@@ -283,12 +287,14 @@ class TagPeopleScreen extends StatelessWidget {
                                                 .add(_postController
                                                     .users[index]);
                                           } else {
+                                            _postController.selectedUserData
+                                                .removeAt(_postController
+                                                    .selectedPeopleIndex
+                                                    .indexOf(_postController
+                                                        .users[index].id!));
                                             _postController.selectedPeopleIndex
                                                 .remove(_postController
                                                     .users[index].id!);
-                                            _postController.selectedUserData
-                                                .remove(_postController
-                                                    .users[index]);
                                           }
                                         }
                                       },
