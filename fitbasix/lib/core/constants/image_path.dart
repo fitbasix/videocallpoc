@@ -136,6 +136,7 @@ class ImagePath {
   static const String videomicOFF = "assets/message/videomicOFF.svg";
   static const String videospeakerOFF = "assets/message/videospeakerOFF.svg";
   static const String videocameraOFF = "assets/message/videocameraOFF.svg";
+  static const String reportabuseicon = "assets/message/report_abuse_icon.svg";
 
   ///BMR chat
   static const String circlequestionmarkIcon =
