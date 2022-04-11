@@ -12,10 +12,12 @@ import 'dart:async';
 import 'package:fitbasix/setup-my-app.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:device_info/device_info.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
+import 'app_config.dart';
 import 'feature/log_in/services/login_services.dart';
 
 initializeNotification() {
@@ -76,10 +78,20 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await dotenv.load(fileName: ".env");
     await initializeNotification();
     await Firebase.initializeApp();
     if(Platform.isIOS){
       FirebaseMessaging.instance.requestPermission();
+    }
+    final env = dotenv.env['ENV'];
+    if (env != null) {
+      if (env == 'prod')
+        AppConfig.buildFlavour = Flavor.PRODUCTION;
+      else if (env == 'stag')
+        AppConfig.buildFlavour = Flavor.STAGING;
+      else
+        AppConfig.buildFlavour = Flavor.DEVELOPMENT;
     }
 
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();

@@ -181,8 +181,7 @@ class ProfileController extends GetxController {
     loginController!.selectedCountry.value = loginController!.countryList
         .singleWhere((element) =>
             element.code ==
-            homeController
-                .userProfileData.value.response!.data!.profile!.countryCode);
+            homeController.userProfileData.value.response!.data!.profile!.countryCode);
     assets.value = await fetchAssets(presentPage: currentPage.value);
   }
 

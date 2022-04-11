@@ -15,6 +15,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -513,7 +514,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                           .widthMultiplier!,
                                                 ),
                                                 GestureDetector(
-                                                  onTap: () {
+                                                  onTap: () async {
                                                     _userWantToSendMedia.value =
                                                         false;
                                                     _mediaIsUploading.value =
@@ -647,7 +648,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       SizeConfig
                                                           .widthMultiplier!,
                                                   child: IconButton(
-                                                      onPressed: () {
+                                                      onPressed: () async {
+                                                        await Permission.storage.request();
                                                         sendAttachmentsFromDevice();
                                                       },
                                                       icon: SvgPicture.asset(

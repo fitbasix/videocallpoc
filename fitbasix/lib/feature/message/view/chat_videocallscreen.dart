@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../../core/constants/image_path.dart';
@@ -137,6 +138,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   void initState() {
+    getCameraAndOtherPermissions();
     print("llll user id: " + _homeController.userQuickBloxId.value.toString());
     print(widget.sessionIdForVideoCall);
     subscribeReject();
@@ -146,6 +148,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     subscribeNotAnswer();
     subscribePeerConnection();
     super.initState();
+  }
+
+  void getCameraAndOtherPermissions() async {
+    if (await Permission.bluetooth.request().isGranted) {}
+    if (await Permission.camera.request().isGranted) {}
+    if (await Permission.microphone.request().isGranted) {}
   }
 
 

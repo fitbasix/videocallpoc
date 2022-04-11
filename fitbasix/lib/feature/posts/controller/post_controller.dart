@@ -203,7 +203,7 @@ class PostController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    assets.value = await fetchAssets(presentPage: currentPage.value);
+    //assets.value = await fetchAssets(presentPage: currentPage.value);
 
     super.onInit();
   }

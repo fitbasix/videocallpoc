@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -141,6 +142,7 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
 
   @override
   void initState() {
+    getCameraAndOtherPermissions();
     print("llll user id: " + widget.userQuickBloxId.toString());
     subscribeReject();
     subscribeAccept();
@@ -149,6 +151,12 @@ class _AcceptedVideoCallScreenState extends State<AcceptedVideoCallScreen> {
     subscribeNotAnswer();
     subscribePeerConnection();
     super.initState();
+  }
+
+  void getCameraAndOtherPermissions() async {
+    if (await Permission.bluetooth.request().isGranted) {}
+    if (await Permission.camera.request().isGranted) {}
+    if (await Permission.microphone.request().isGranted) {}
   }
 
   @override
