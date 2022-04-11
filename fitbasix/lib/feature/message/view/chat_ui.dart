@@ -169,8 +169,6 @@ class _ChatScreenState extends State<ChatScreen> {
     // String trainerName = myTrainers![index].name!;
     // bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
 
-    print(UserQuickBloxId.toString() +
-        "this is opponent id\n${_homeController.userQuickBloxId.value} this is sender id");
     QBSort sort = QBSort();
     sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
     sort.ascending = true;
@@ -186,7 +184,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   .contains(_homeController.userQuickBloxId.value) &&
               value[i]!.occupantsIds!.contains(UserQuickBloxId)) {
             dialogCreatedPreviously = true;
-            print(value[i]!.id.toString() + "maxxxx");
             widget.userDialogForChat = value[i]!;
             getMassageFromHistory();
             break;

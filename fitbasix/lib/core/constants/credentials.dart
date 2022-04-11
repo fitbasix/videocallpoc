@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/message/view/accepted_video_call_screen.dart';
@@ -13,6 +14,7 @@ import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'package:quickblox_sdk/webrtc/constants.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_info/device_info.dart';
 
 
 const String APP_ID = "95666";
@@ -50,14 +52,34 @@ class InitializeQuickBlox{
     print("called web RTC");
     ///init web RTC
     //todo remove when testing on emulator is finished
-    try {
-      await QB.webrtc.init().then((value) {
-        subscribeCall();
-      });
 
-      print("webINIT");
-    } on PlatformException catch (e) {
-      print(e.toString() +"init error");
+
+    if(Platform.isAndroid){
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
+      double osVersion = double.parse(androidInfo.version.release);
+      ///init [WebRTC] only if os version is less then 12
+      if(osVersion<12){
+        try {
+          await QB.webrtc.init().then((value) {
+            subscribeCall();
+          });
+
+          print("webINIT");
+        } on PlatformException catch (e) {
+          print(e.toString() +"init error");
+        }
+      }
+    }
+    else if (Platform.isIOS){
+      try {
+        await QB.webrtc.init().then((value) {
+          subscribeCall();
+        });
+
+        print("webINIT");
+      } on PlatformException catch (e) {
+        print(e.toString() +"init error");
+      }
     }
 
   }
