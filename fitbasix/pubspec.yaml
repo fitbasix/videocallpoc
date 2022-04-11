@@ -73,6 +73,7 @@ dependencies:
   file_picker: ^4.4.0
   mime_type: ^1.0.0
   permission_handler:
+  flutter_dotenv: ^5.0.2
   url_launcher: ^6.0.20
   flutter_native_splash: ^2.1.1
   sliding_up_panel: ^2.0.0+1
@@ -141,6 +142,7 @@ flutter:
     - assets/plans/
     - assets/log_in/
     - assets/gif/
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
