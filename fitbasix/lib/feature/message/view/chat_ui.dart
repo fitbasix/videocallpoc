@@ -74,6 +74,7 @@ import '../../get_trained/model/all_trainer_model.dart';
 import '../../get_trained/services/trainer_services.dart';
 import '../../log_in/services/login_services.dart';
 import '../../posts/services/createPost_Services.dart';
+import '../../report_abuse/report_abuse_controller.dart';
 import '../controller/chat_controller.dart';
 import 'chat_videocallscreen.dart';
 
@@ -136,6 +137,7 @@ class _ChatScreenState extends State<ChatScreen> {
   StreamSubscription? _notAnswerSubscription;
 
   StreamSubscription? _peerConnectionSubscription;
+  final ReportAbuseController _reportAbuseController = Get.find();
 
   @override
   void dispose() {
@@ -1144,6 +1146,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void reportAbuseDialog(BuildContext context){
+    if(_reportAbuseController.reportAbuseList.value.response == null){
+      _reportAbuseController.getReportAbuseData();
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1163,7 +1169,15 @@ class _ChatScreenState extends State<ChatScreen> {
              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
              shape: RoundedRectangleBorder(
                  borderRadius: BorderRadius.all(Radius.circular(16.0))),
-             content:  Stack(
+             content:  Obx(()=>(_reportAbuseController.isReportAbuseLoading.value)?Container(
+               height: 50*SizeConfig.widthMultiplier!,
+               width: 50*SizeConfig.widthMultiplier!,
+               child: SizedBox(
+                   height: 50*SizeConfig.widthMultiplier!,
+                   width: 50*SizeConfig.widthMultiplier!,
+                 child: CustomizedCircularProgress())
+
+             ):Stack(
                  children: [
                    Column(
                      mainAxisSize: MainAxisSize.min,
@@ -1201,12 +1215,22 @@ class _ChatScreenState extends State<ChatScreen> {
                        SizedBox(
                          height: 20 * SizeConfig.heightMultiplier!,
                        ),
-                       Text(
-                         "It’s spam",
-                         style: AppTextStyle.black400Text.copyWith(
-                           color: Theme.of(context).textTheme.bodyText1?.color,
-                           fontSize: (12) * SizeConfig.textMultiplier!,
-                         ),),
+                       Column(
+                           mainAxisSize:MainAxisSize.min,
+                           children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
+                             mainAxisSize:MainAxisSize.min,
+                             children: [
+                               Text(
+                                 _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
+                                 style: AppTextStyle.black400Text.copyWith(
+                                     color: Theme.of(context).textTheme.bodyText1?.color,
+                                     fontSize: (12) * SizeConfig.textMultiplier!,
+                                     height: 1.3
+                                 ),),
+                               SizedBox(height: 10*SizeConfig.heightMultiplier!,)
+                             ],
+                           ))
+                       ),
                        // SizedBox(
                        //   height: 32 * SizeConfig.heightMultiplier!,
                        // ),
@@ -1231,8 +1255,18 @@ class _ChatScreenState extends State<ChatScreen> {
                                            RoundedRectangleBorder(
                                                borderRadius: BorderRadius.circular(
                                                    8 * SizeConfig.widthMultiplier!)))),
-                                   onPressed: () {
-
+                                   onPressed: () async {
+                                     if(!_reportAbuseController.isReportSendAbuseLoading.value){
+                                       print("clicked");
+                                       var response = await _reportAbuseController
+                                           .sendRepostAbuseData(
+                                           userId: widget.trainerId);
+                                       if(response.isNotEmpty){
+                                         Navigator.pop(context);
+                                         Navigator.pop(context);
+                                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                       }
+                                     }
                                    },
                                    child: Text(
                                      "Submit".tr,
@@ -1258,7 +1292,7 @@ class _ChatScreenState extends State<ChatScreen> {
                      ),
                    ),
                  ],
-             )
+             ))
 
            ),
          ),
@@ -1407,7 +1441,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: (){
-                                    Navigator.pop(context);
                                     reportAbuseDialog(context);
                                   },
                                   child: Row(

@@ -12,6 +12,7 @@ import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
+import 'package:fitbasix/feature/report_abuse/report_abuse_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -100,6 +101,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ReportAbuseController _reportAbuseController = Get.put(ReportAbuseController());
   final HomeController _homeController = Get.find();
   final PostController postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
