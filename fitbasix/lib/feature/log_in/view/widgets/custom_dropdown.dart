@@ -23,11 +23,12 @@ class SimpleAccountMenu extends StatefulWidget {
     required this.onChange,
   }) : super(key: key);
   @override
-  _SimpleAccountMenuState createState() => _SimpleAccountMenuState();
+  SimpleAccountMenuState createState() => SimpleAccountMenuState();
 }
 
-class _SimpleAccountMenuState extends State<SimpleAccountMenu>
+class SimpleAccountMenuState extends State<SimpleAccountMenu>
     with SingleTickerProviderStateMixin {
+  GlobalKey<SimpleAccountMenuState> globalKey = GlobalKey();
   GlobalKey? _key;
   bool isMenuOpen = false;
   Offset? buttonPosition;
@@ -75,6 +76,7 @@ class _SimpleAccountMenuState extends State<SimpleAccountMenu>
 
   @override
   Widget build(BuildContext context) {
+    print(widget.borderRadius);
     return Container(
         key: _key,
         decoration: BoxDecoration(

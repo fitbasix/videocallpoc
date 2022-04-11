@@ -48,6 +48,7 @@ void selectNotification(String? payload) async {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("background notification llllll");
   // await AwesomeNotifications().createNotification(
   //     content: NotificationContent(
   //       displayOnForeground: true,
@@ -119,12 +120,22 @@ Future<void> main() async {
 
     FirebaseMessaging.onMessage.listen((message) async {
 
-      AwesomeNotifications().createNotification(
-          content: NotificationContent(
-              id: 10,
-              channelKey: 'basic_channel',
-              title: message.notification!.title.toString(),
-              body: message.notification!.body.toString()));
+      print(message.data.toString() +" ooooo");
+      // AwesomeNotifications().createNotification(
+      //     content: NotificationContent(
+      //         displayOnForeground: true,
+      //         displayOnBackground: true,
+      //         channelKey: 'basic_channel',
+      //         id: 9999999,
+      //         title: message.notification!.title,
+      //         wakeUpScreen: true,
+      //         category: NotificationCategory.Reminder,
+      //         autoDismissible: false,
+      //         payload: {'uuid': 'uuid-test'},
+      //         body: message.notification!.body));
+
+
+
       // print(message.data["message"]);
       // AndroidNotificationChannel channel = AndroidNotificationChannel(
       //     "channel_id", "some_title",

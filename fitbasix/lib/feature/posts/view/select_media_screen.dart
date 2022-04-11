@@ -212,8 +212,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                 padding: EdgeInsets.symmetric(
                     vertical: 16 * SizeConfig.heightMultiplier!,
                     horizontal: 16 * SizeConfig.widthMultiplier!),
-                child: Obx(
-                  () => Stack(
+                child: Stack(
                     children: [
                       Obx(
                         () => _postController.assets.length == 0
@@ -265,19 +264,14 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                     }),
                               ),
                       ),
-                      customDropDownBtn(
-                        options: _postController.foldersAvailable,
-                        controller: _postController,
-                        context: context,
-                        isExpanded: _postController.isDropDownExpanded.value,
-                        label: 'gallery'.tr,
-                        onPressed: () {
-                            _postController.toggleDropDownExpansion();
-                          }
-                      ),
+                      Text('gallery'.tr,style: AppTextStyle.black600Text.copyWith(
+                        color: kPureWhite,
+                        fontSize: 16*SizeConfig.textMultiplier!
+
+                      ),)
                     ],
                   ),
-                ),
+
               ),
             ),
           ),
