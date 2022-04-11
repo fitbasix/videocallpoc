@@ -7,6 +7,7 @@ import 'dart:ui';
 import 'package:crypt/crypt.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:get/get_rx/get_rx.dart';
@@ -1145,6 +1146,130 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  void reportAbuseDialog(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+       return Container(
+         color: kBlack.withOpacity(0.6),
+         child: BackdropFilter(
+           filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+           child: AlertDialog(
+             insetPadding: EdgeInsets.only(
+               left: 16 * SizeConfig.widthMultiplier!,
+               right: 16 * SizeConfig.widthMultiplier!,
+             ),
+             contentPadding: EdgeInsets.symmetric(
+               horizontal: 36 * SizeConfig.widthMultiplier!,
+                 vertical: 32 * SizeConfig.heightMultiplier!
+             ),
+             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+             shape: RoundedRectangleBorder(
+                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
+             content:  Stack(
+                 children: [
+                   Column(
+                     mainAxisSize: MainAxisSize.min,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     mainAxisAlignment: MainAxisAlignment.start,
+                     children: [
+                       Align(
+                         alignment: Alignment.center,
+                         child: Text(
+                           "Report Abuse".tr,
+                           style: AppTextStyle.black600Text.copyWith(
+                             color: Theme.of(context).textTheme.bodyText1?.color,
+                             fontSize: (16) * SizeConfig.textMultiplier!,
+                           ),
+                         ),
+                       ),
+                       SizedBox(
+                         height: 17 * SizeConfig.heightMultiplier!,
+                       ),
+                       Text("Why are you reporting?".tr,
+                         style: AppTextStyle.black600Text.copyWith(
+                           color: Theme.of(context).textTheme.bodyText1?.color,
+                           fontSize: (12) * SizeConfig.textMultiplier!,
+                         ),
+                       ),
+                       SizedBox(
+                         height: 8.02 * SizeConfig.heightMultiplier!,
+                       ),
+                       Text("Your report is Anonymous, except faucibus sed ultricies nec consequat vulputate. Sed viverra facilisi venenatis, aliquet.".tr,
+                         style: AppTextStyle.black400Text.copyWith(
+                           color: Theme.of(context).textTheme.bodyText1?.color,
+                           fontSize: (11) * SizeConfig.textMultiplier!,
+                         ),
+                       ),
+                       SizedBox(
+                         height: 20 * SizeConfig.heightMultiplier!,
+                       ),
+                       Text(
+                         "It’s spam",
+                         style: AppTextStyle.black400Text.copyWith(
+                           color: Theme.of(context).textTheme.bodyText1?.color,
+                           fontSize: (12) * SizeConfig.textMultiplier!,
+                         ),),
+                       // SizedBox(
+                       //   height: 32 * SizeConfig.heightMultiplier!,
+                       // ),
+                       Align(
+                         alignment: Alignment.bottomCenter,
+                         child: Padding(
+                           padding: EdgeInsets.fromLTRB(
+                             0 * SizeConfig.widthMultiplier!,
+                             32 * SizeConfig.heightMultiplier!,
+                             0 * SizeConfig.widthMultiplier!,
+                             48 * SizeConfig.heightMultiplier!,
+                           ),
+                           child: Container(
+                               width: 256 * SizeConfig.widthMultiplier!,
+                               height: 48 * SizeConfig.heightMultiplier!,
+                               child: ElevatedButton(
+                                   style: ButtonStyle(
+                                       elevation: MaterialStateProperty.all(0),
+                                       backgroundColor:
+                                       MaterialStateProperty.all(kgreen49),
+                                       shape: MaterialStateProperty.all(
+                                           RoundedRectangleBorder(
+                                               borderRadius: BorderRadius.circular(
+                                                   8 * SizeConfig.widthMultiplier!)))),
+                                   onPressed: () {
+
+                                   },
+                                   child: Text(
+                                     "Submit".tr,
+                                     style: AppTextStyle.hboldWhiteText,
+                                   ))),
+                         ),
+                       ),
+                     ],
+                   ),
+                   Positioned(
+                     top: -15 * SizeConfig.heightMultiplier!,
+                     right: -15 * SizeConfig.widthMultiplier!,
+                     child: IconButton(
+                       onPressed: () {
+                         Navigator.pop(context);
+                       },
+                       icon: SvgPicture.asset(
+                         ImagePath.closedialogIcon,
+                         color: Theme.of(context).primaryColor,
+                         width: 16 * SizeConfig.widthMultiplier!,
+                         height: 16 * SizeConfig.heightMultiplier!,
+                       ),
+                     ),
+                   ),
+                 ],
+             )
+
+           ),
+         ),
+       );
+    },
+    );
+  }
+
   void createMenuDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -1154,120 +1279,186 @@ class _ChatScreenState extends State<ChatScreen> {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: AlertDialog(
+                  insetPadding: EdgeInsets.only(
+                    top: 175 * SizeConfig.heightMultiplier!,
+                    bottom: 175 * SizeConfig.heightMultiplier!,
+                  ),
                 contentPadding: EdgeInsets.symmetric(
+                  horizontal: 30*SizeConfig.widthMultiplier!,
                     vertical: 30 * SizeConfig.heightMultiplier!),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                         8 * SizeConfig.imageSizeMultiplier!)),
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      widget.trainerTitle!,
-                      style: AppTextStyle.black400Text.copyWith(
-                          color: Theme.of(context).textTheme.bodyText1!.color),
-                    ),
-                    SizedBox(
-                      height: 26 * SizeConfig.heightMultiplier!,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        _trainerController.atrainerDetail.value = Trainer();
-
-                        _trainerController.isProfileLoading.value = true;
-                        _trainerController.isMyTrainerProfileLoading.value =
-                            true;
-                        Navigator.pushNamed(
-                            context, RouteName.trainerProfileScreen);
-
-                        var result = await TrainerServices.getATrainerDetail(
-                            widget.trainerId!);
-                        _trainerController.atrainerDetail.value =
-                            result.response!.data!;
-
-                        _trainerController.planModel.value =
-                            await TrainerServices.getPlanByTrainerId(
-                                widget.trainerId!);
-
-                        _trainerController.initialPostData.value =
-                            await TrainerServices.getTrainerPosts(
-                                widget.trainerId!, 0);
-                        _trainerController.isMyTrainerProfileLoading.value =
-                            false;
-                        _trainerController.loadingIndicator.value = false;
-                        if (_trainerController
-                                .initialPostData.value.response!.data!.length !=
-                            0) {
-                          _trainerController.trainerPostList.value =
-                              _trainerController
-                                  .initialPostData.value.response!.data!;
-                        } else {
-                          _trainerController.trainerPostList.clear();
-                        }
-                        _trainerController.isProfileLoading.value = false;
-                        _trainerController.isMyTrainerProfileLoading.value =
-                            false;
-                      },
-                      child: Row(
+                content: Stack(
+                    children: [
+                      Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SvgPicture.asset(
-                            ImagePath.penIcon,
-                            color: Theme.of(context).primaryColor,
-                            height: 15 * SizeConfig.imageSizeMultiplier!,
-                          ),
-                          SizedBox(
-                            width: 10.5 * SizeConfig.widthMultiplier!,
-                          ),
-                          Text(
-                            'Open profile',
-                            style: AppTextStyle.black400Text.copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  widget.trainerTitle!,
+                                  style: AppTextStyle.black400Text.copyWith(
+                                      color: Theme.of(context).textTheme.bodyText1!.color),
+                                ),
+                                SizedBox(
+                                  height: 26 * SizeConfig.heightMultiplier!,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    _trainerController.atrainerDetail.value = Trainer();
+
+                                    _trainerController.isProfileLoading.value = true;
+                                    _trainerController.isMyTrainerProfileLoading.value =
+                                    true;
+                                    Navigator.pushNamed(
+                                        context, RouteName.trainerProfileScreen);
+
+                                    var result = await TrainerServices.getATrainerDetail(
+                                        widget.trainerId!);
+                                    _trainerController.atrainerDetail.value =
+                                    result.response!.data!;
+
+                                    _trainerController.planModel.value =
+                                    await TrainerServices.getPlanByTrainerId(
+                                        widget.trainerId!);
+
+                                    _trainerController.initialPostData.value =
+                                    await TrainerServices.getTrainerPosts(
+                                        widget.trainerId!, 0);
+                                    _trainerController.isMyTrainerProfileLoading.value =
+                                    false;
+                                    _trainerController.loadingIndicator.value = false;
+                                    if (_trainerController
+                                        .initialPostData.value.response!.data!.length !=
+                                        0) {
+                                      _trainerController.trainerPostList.value =
+                                      _trainerController
+                                          .initialPostData.value.response!.data!;
+                                    } else {
+                                      _trainerController.trainerPostList.clear();
+                                    }
+                                    _trainerController.isProfileLoading.value = false;
+                                    _trainerController.isMyTrainerProfileLoading.value =
+                                    false;
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.penIcon,
+                                        color: Theme.of(context).primaryColor,
+                                        height: 15 * SizeConfig.imageSizeMultiplier!,
+                                      ),
+                                      SizedBox(
+                                        width: 10.5 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        'Open profile',
+                                        style: AppTextStyle.black400Text.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 22 * SizeConfig.heightMultiplier!,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => DocumentsViewerScreen(
+                                              messages: messages,
+                                              opponentName: widget.trainerTitle,
+                                            )));
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.fileIcon,
+                                        color: Theme.of(context).primaryColor,
+                                        height: 15 * SizeConfig.imageSizeMultiplier!,
+                                      ),
+                                      SizedBox(
+                                        width: 10.5 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        'View documents',
+                                        style: AppTextStyle.black400Text.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 22 * SizeConfig.heightMultiplier!,
+                                ),
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                    reportAbuseDialog(context);
+                                  },
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        ImagePath.reportabuseicon,
+                                        color: Theme.of(context).primaryColor,
+                                        height: 20 * SizeConfig.heightMultiplier!,
+                                        width: 20*SizeConfig.widthMultiplier!,
+                                      ),
+                                      SizedBox(
+                                        width: 10.5 * SizeConfig.widthMultiplier!,
+                                      ),
+                                      Text(
+                                        'Report abuse',
+                                        style: AppTextStyle.black400Text.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!
+                                                .color),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 22 * SizeConfig.heightMultiplier!,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DocumentsViewerScreen(
-                                      messages: messages,
-                                      opponentName: widget.trainerTitle,
-                                    )));
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SvgPicture.asset(
-                            ImagePath.fileIcon,
+                      Positioned(
+                        top: -15 * SizeConfig.heightMultiplier!,
+                        right: -15 * SizeConfig.widthMultiplier!,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: SvgPicture.asset(
+                            ImagePath.closedialogIcon,
                             color: Theme.of(context).primaryColor,
-                            height: 15 * SizeConfig.imageSizeMultiplier!,
+                            width: 16 * SizeConfig.widthMultiplier!,
+                            height: 16 * SizeConfig.heightMultiplier!,
                           ),
-                          SizedBox(
-                            width: 10.5 * SizeConfig.widthMultiplier!,
-                          ),
-                          Text(
-                            'View documents',
-                            style: AppTextStyle.black400Text.copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ])
+
               )),
         );
       },
@@ -1729,6 +1920,8 @@ class MessageBubbleSender extends StatelessWidget {
       // Some error occurred, look at the exception message for more details
     }
   }
+
+
 
   void checkFileExistence(String? fileName) async {
     if (Platform.isAndroid) {

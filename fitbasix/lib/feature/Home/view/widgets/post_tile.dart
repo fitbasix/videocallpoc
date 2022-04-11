@@ -8,6 +8,7 @@ import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/video_player.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -18,6 +19,7 @@ import 'package:fitbasix/feature/Home/view/widgets/comments_tile.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../core/constants/image_path.dart';
 import '../../../spg/view/set_goal_screen.dart';
 
 class PostTile extends StatefulWidget {
@@ -78,9 +80,12 @@ class _PostTileState extends State<PostTile> {
             Padding(
               padding: EdgeInsets.only(
                   left: 16 * SizeConfig.widthMultiplier!,
+                  right: 16*SizeConfig.widthMultiplier!,
                   bottom: 16 * SizeConfig.heightMultiplier!,
                   top: 16 * SizeConfig.heightMultiplier!),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     radius: 20 * SizeConfig.widthMultiplier!,
@@ -105,7 +110,7 @@ class _PostTileState extends State<PostTile> {
                             )
                           : widget.people.length == 1
                               ? Container(
-                                  width: 276 * SizeConfig.widthMultiplier!,
+                                  width: 245 * SizeConfig.widthMultiplier!,
                                   child: Wrap(
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
@@ -163,7 +168,7 @@ class _PostTileState extends State<PostTile> {
                                   ),
                                 )
                               : Container(
-                                  width: 276 * SizeConfig.widthMultiplier!,
+                                  width: 245 * SizeConfig.widthMultiplier!,
                                   child: Wrap(
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
@@ -250,57 +255,70 @@ class _PostTileState extends State<PostTile> {
                                     ],
                                   ),
                                 ),
-                      Row(
-                        children: [
-                          Text(widget.category,
-                              style: AppTextStyle.normalBlackText.copyWith(
-                                  fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .headline3
-                                      ?.color)),
-                          SizedBox(
-                            width: 13 * SizeConfig.widthMultiplier!,
-                          ),
-                          Icon(Icons.access_time,
-                              size: 16 * SizeConfig.widthMultiplier!,
-                              color:
-                                  Theme.of(context).textTheme.headline3?.color),
-                          SizedBox(
-                            width: 5 * SizeConfig.widthMultiplier!,
-                          ),
-                          Text(widget.date,
-                              style: AppTextStyle.normalBlackText.copyWith(
-                                  fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .headline3
-                                      ?.color)),
-                          SizedBox(
-                            width: 14 * SizeConfig.widthMultiplier!,
-                          ),
-                          widget.place == ''
-                              ? SizedBox()
-                              : Icon(Icons.place,
-                                  size: 16 * SizeConfig.widthMultiplier!,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .headline3
-                                      ?.color),
-                          SizedBox(
-                            width: 6.5 * SizeConfig.widthMultiplier!,
-                          ),
-                          Text(widget.place,
-                              style: AppTextStyle.normalBlackText.copyWith(
-                                  fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .headline3
-                                      ?.color))
-                        ],
+                      Container(
+                        child: Row(
+                          children: [
+                            Text(widget.category,
+                                style: AppTextStyle.normalBlackText.copyWith(
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline3
+                                        ?.color)),
+                            SizedBox(
+                              width: 13 * SizeConfig.widthMultiplier!,
+                            ),
+                            Icon(Icons.access_time,
+                                size: 16 * SizeConfig.widthMultiplier!,
+                                color:
+                                    Theme.of(context).textTheme.headline3?.color),
+                            SizedBox(
+                              width: 5 * SizeConfig.widthMultiplier!,
+                            ),
+                            Text(widget.date,
+                                style: AppTextStyle.normalBlackText.copyWith(
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline3
+                                        ?.color)),
+                            SizedBox(
+                              width: 14 * SizeConfig.widthMultiplier!,
+                            ),
+                            widget.place == ''
+                                ? SizedBox()
+                                : Icon(Icons.place,
+                                    size: 16 * SizeConfig.widthMultiplier!,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline3
+                                        ?.color),
+                            SizedBox(
+                              width: 6.5 * SizeConfig.widthMultiplier!,
+                            ),
+                            Text(widget.place,
+                                style: AppTextStyle.normalBlackText.copyWith(
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline3
+                                        ?.color))
+                          ],
+                        ),
                       )
                     ],
-                  )
+                  ),
+                  Spacer(),
+                  InkWell(
+                      onTap: (){
+                      },
+                      child: SvgPicture.asset(
+                        ImagePath.chatpopupmenuIcon,
+                        width: 4 * SizeConfig.widthMultiplier!,
+                        height: 20 * SizeConfig.heightMultiplier!,
+                        color: Theme.of(context).primaryColor,
+                      )
+                  ),
                 ],
               ),
             ),
