@@ -742,7 +742,7 @@ class _PostTileState extends State<PostTile> {
                                         print("clicked");
                                         var response = await _reportAbuseController
                                             .sendRepostAbuseData(
-                                            userId: widget.postId);
+                                            postId: widget.postId);
                                         if(response.isNotEmpty){
                                           Navigator.pop(context);
                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
