@@ -9,6 +9,7 @@ import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/message/controller/web_rtc_controller.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -74,6 +75,7 @@ import '../../get_trained/model/all_trainer_model.dart';
 import '../../get_trained/services/trainer_services.dart';
 import '../../log_in/services/login_services.dart';
 import '../../posts/services/createPost_Services.dart';
+import '../../report_abuse/report_abuse_controller.dart';
 import '../controller/chat_controller.dart';
 import 'chat_videocallscreen.dart';
 
@@ -136,6 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
   StreamSubscription? _notAnswerSubscription;
 
   StreamSubscription? _peerConnectionSubscription;
+  final ReportAbuseController _reportAbuseController = Get.find();
 
   @override
   void dispose() {
@@ -258,10 +261,13 @@ class _ChatScreenState extends State<ChatScreen> {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => VideoCallScreen(
                         sessionIdForVideoCall: value!,
-                      )));
+                        name: widget.trainerTitle,
+                        imageURL: widget.profilePicURL,
+                  )));
               //showDialogForVideoCallNotPossible(context);
             });
           } else {
+
             log("oopp" + _trainerController.getTime(widget.time.toString()));
             showDialogForVideoCallNotPossible(
                 context,
@@ -1144,126 +1150,190 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void reportAbuseDialog(BuildContext context){
+    RxInt selectedProblemIndex = (-1).obs;
+    if(_reportAbuseController.reportAbuseList.value.response == null){
+      _reportAbuseController.getReportAbuseData();
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-       return Container(
-         color: kBlack.withOpacity(0.6),
-         child: BackdropFilter(
-           filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-           child: AlertDialog(
-             insetPadding: EdgeInsets.only(
-               left: 16 * SizeConfig.widthMultiplier!,
-               right: 16 * SizeConfig.widthMultiplier!,
-             ),
-             contentPadding: EdgeInsets.symmetric(
-               horizontal: 36 * SizeConfig.widthMultiplier!,
-                 vertical: 32 * SizeConfig.heightMultiplier!
-             ),
-             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-             shape: RoundedRectangleBorder(
-                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
-             content:  Stack(
-                 children: [
-                   Column(
-                     mainAxisSize: MainAxisSize.min,
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     mainAxisAlignment: MainAxisAlignment.start,
-                     children: [
-                       Align(
-                         alignment: Alignment.center,
-                         child: Text(
-                           "Report Abuse".tr,
-                           style: AppTextStyle.black600Text.copyWith(
-                             color: Theme.of(context).textTheme.bodyText1?.color,
-                             fontSize: (16) * SizeConfig.textMultiplier!,
-                           ),
-                         ),
-                       ),
-                       SizedBox(
-                         height: 17 * SizeConfig.heightMultiplier!,
-                       ),
-                       Text("Why are you reporting?".tr,
-                         style: AppTextStyle.black600Text.copyWith(
-                           color: Theme.of(context).textTheme.bodyText1?.color,
-                           fontSize: (12) * SizeConfig.textMultiplier!,
-                         ),
-                       ),
-                       SizedBox(
-                         height: 8.02 * SizeConfig.heightMultiplier!,
-                       ),
-                       Text("Your report is Anonymous, except faucibus sed ultricies nec consequat vulputate. Sed viverra facilisi venenatis, aliquet.".tr,
-                         style: AppTextStyle.black400Text.copyWith(
-                           color: Theme.of(context).textTheme.bodyText1?.color,
-                           fontSize: (11) * SizeConfig.textMultiplier!,
-                         ),
-                       ),
-                       SizedBox(
-                         height: 20 * SizeConfig.heightMultiplier!,
-                       ),
-                       Text(
-                         "It’s spam",
-                         style: AppTextStyle.black400Text.copyWith(
-                           color: Theme.of(context).textTheme.bodyText1?.color,
-                           fontSize: (12) * SizeConfig.textMultiplier!,
-                         ),),
-                       // SizedBox(
-                       //   height: 32 * SizeConfig.heightMultiplier!,
-                       // ),
-                       Align(
-                         alignment: Alignment.bottomCenter,
-                         child: Padding(
-                           padding: EdgeInsets.fromLTRB(
-                             0 * SizeConfig.widthMultiplier!,
-                             32 * SizeConfig.heightMultiplier!,
-                             0 * SizeConfig.widthMultiplier!,
-                             48 * SizeConfig.heightMultiplier!,
-                           ),
-                           child: Container(
-                               width: 256 * SizeConfig.widthMultiplier!,
-                               height: 48 * SizeConfig.heightMultiplier!,
-                               child: ElevatedButton(
-                                   style: ButtonStyle(
-                                       elevation: MaterialStateProperty.all(0),
-                                       backgroundColor:
-                                       MaterialStateProperty.all(kgreen49),
-                                       shape: MaterialStateProperty.all(
-                                           RoundedRectangleBorder(
-                                               borderRadius: BorderRadius.circular(
-                                                   8 * SizeConfig.widthMultiplier!)))),
-                                   onPressed: () {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: AlertDialog(
+                insetPadding: EdgeInsets.only(
+                  left: 16 * SizeConfig.widthMultiplier!,
+                  right: 16 * SizeConfig.widthMultiplier!,
+                ),
+                contentPadding: EdgeInsets.zero,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                content:  Obx(()=>(_reportAbuseController.isReportAbuseLoading.value)?Container(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                      child: SizedBox(
+                          height: 30*SizeConfig.widthMultiplier!,
+                          width: 30*SizeConfig.widthMultiplier!,
+                          child: CustomizedCircularProgress()),
+                    )
 
-                                   },
-                                   child: Text(
-                                     "Submit".tr,
-                                     style: AppTextStyle.hboldWhiteText,
-                                   ))),
-                         ),
-                       ),
-                     ],
-                   ),
-                   Positioned(
-                     top: -15 * SizeConfig.heightMultiplier!,
-                     right: -15 * SizeConfig.widthMultiplier!,
-                     child: IconButton(
-                       onPressed: () {
-                         Navigator.pop(context);
-                       },
-                       icon: SvgPicture.asset(
-                         ImagePath.closedialogIcon,
-                         color: Theme.of(context).primaryColor,
-                         width: 16 * SizeConfig.widthMultiplier!,
-                         height: 16 * SizeConfig.heightMultiplier!,
-                       ),
-                     ),
-                   ),
-                 ],
-             )
+                ):Stack(
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 32*SizeConfig.heightMultiplier!,),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Report Abuse".tr,
+                            style: AppTextStyle.black600Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: (16) * SizeConfig.textMultiplier!,
+                            ),
+                          ),
+                        ),
 
-           ),
-         ),
-       );
-    },
+                        SizedBox(
+                          height: 32 * SizeConfig.heightMultiplier!,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
+                          child: Text("Why are you reporting?".tr,
+                            style: AppTextStyle.black600Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: (12) * SizeConfig.textMultiplier!,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.02 * SizeConfig.heightMultiplier!,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
+                          child: Text("report_abuse_description".tr,
+                            style: AppTextStyle.black400Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: (11) * SizeConfig.textMultiplier!,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20 * SizeConfig.heightMultiplier!,
+                        ),
+                        Obx(
+                              ()=> Column(
+                              mainAxisSize:MainAxisSize.min,
+                              children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
+                                mainAxisSize:MainAxisSize.min,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      selectedProblemIndex.value = index;
+                                    },
+                                    child: Container(
+                                      width: 328*SizeConfig.widthMultiplier!,
+                                      color: selectedProblemIndex.value==index?Colors.white.withOpacity(0.1):Colors.transparent,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!,vertical: 10*SizeConfig.heightMultiplier!),
+                                        child: Text(
+                                          _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
+                                          style: AppTextStyle.black400Text.copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                              fontSize: (12) * SizeConfig.textMultiplier!,
+                                              fontWeight: selectedProblemIndex.value==index?FontWeight.w600:FontWeight.w500,
+                                              height: 1.3
+                                          ),),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                          ),
+                        ),
+                        // SizedBox(
+                        //   height: 32 * SizeConfig.heightMultiplier!,
+                        // ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              0 * SizeConfig.widthMultiplier!,
+                              32 * SizeConfig.heightMultiplier!,
+                              0 * SizeConfig.widthMultiplier!,
+                              48 * SizeConfig.heightMultiplier!,
+                            ),
+                            child: Container(
+                                width: 256 * SizeConfig.widthMultiplier!,
+                                height: 48 * SizeConfig.heightMultiplier!,
+                                child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        elevation: MaterialStateProperty.all(0),
+                                        backgroundColor:
+                                        MaterialStateProperty.all(kgreen49),
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    8 * SizeConfig.widthMultiplier!)))),
+                                    onPressed: () async {
+                                      if(selectedProblemIndex.value>=0){
+                                        if(!_reportAbuseController.isReportSendAbuseLoading.value){
+                                          var response = await _reportAbuseController
+                                              .sendRepostAbuseData(
+                                              userId: widget.trainerId,
+                                              reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
+                                          );
+                                          if(response.isNotEmpty){
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                          }
+                                        }
+                                      }
+                                      else{
+                                        _reportAbuseController.isReportSendAbuseLoading.value = true;
+                                        selectedProblemIndex.value=0;
+                                        Future.delayed(Duration(milliseconds: 400),(){
+                                          selectedProblemIndex.value = -1;
+                                          _reportAbuseController.isReportSendAbuseLoading.value = false;
+                                        });
+                                      }
+                                    },
+                                    child: Text(
+                                      "Submit".tr,
+                                      style: AppTextStyle.hboldWhiteText,
+                                    ))),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Positioned(
+                      top: 7 * SizeConfig.heightMultiplier!,
+                      right: 7 * SizeConfig.widthMultiplier!,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: SvgPicture.asset(
+                          ImagePath.closedialogIcon,
+                          color: Theme.of(context).primaryColor,
+                          width: 16 * SizeConfig.widthMultiplier!,
+                          height: 16 * SizeConfig.heightMultiplier!,
+                        ),
+                      ),
+                    ),
+                  ],
+                ))
+
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -1407,7 +1477,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: (){
-                                    Navigator.pop(context);
                                     reportAbuseDialog(context);
                                   },
                                   child: Row(
@@ -2380,6 +2449,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   BuildContext? parentContext;
   GestureTapCallback? onMenuTap;
   ValueChanged<bool>? onHangUpTapped;
+  final WebRTCController _webRtcController = Get.find();
 
   AppbarforChat(
       {Key? key,
@@ -2441,7 +2511,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
       ),
       actions: [
         //call icon
-        Container(
+        if(_webRtcController.currentOSVersion.value<12)Container(
           child: FlutterSwitch(
             onToggle: onHangUpTapped!,
             value: false,

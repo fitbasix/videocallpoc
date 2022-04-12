@@ -78,6 +78,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    print("pppppp");
     await dotenv.load(fileName: ".env");
     await initializeNotification();
     await Firebase.initializeApp();

@@ -20,6 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../../core/constants/image_path.dart';
+import '../../../../core/universal_widgets/customized_circular_indicator.dart';
+import '../../../report_abuse/report_abuse_controller.dart';
 import '../../../spg/view/set_goal_screen.dart';
 
 class PostTile extends StatefulWidget {
@@ -66,6 +68,7 @@ class PostTile extends StatefulWidget {
 class _PostTileState extends State<PostTile> {
   final HomeController _homeController = Get.find();
   final PostController _postController = Get.find();
+  final ReportAbuseController _reportAbuseController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -309,14 +312,18 @@ class _PostTileState extends State<PostTile> {
                     ],
                   ),
                   Spacer(),
-                  InkWell(
+                  GestureDetector(
                       onTap: (){
+                        reportAbuseDialog(context);
                       },
-                      child: SvgPicture.asset(
-                        ImagePath.chatpopupmenuIcon,
-                        width: 4 * SizeConfig.widthMultiplier!,
-                        height: 20 * SizeConfig.heightMultiplier!,
-                        color: Theme.of(context).primaryColor,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 7*SizeConfig.widthMultiplier!),
+                        child: SvgPicture.asset(
+                          ImagePath.chatpopupmenuIcon,
+                          width: 4 * SizeConfig.widthMultiplier!,
+                          height: 20 * SizeConfig.heightMultiplier!,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       )
                   ),
                 ],
@@ -620,6 +627,193 @@ class _PostTileState extends State<PostTile> {
           ],
         ),
       ),
+    );
+  }
+
+  void reportAbuseDialog(BuildContext context){
+    RxInt selectedProblemIndex = (-1).obs;
+    if(_reportAbuseController.reportAbuseList.value.response == null){
+      _reportAbuseController.getReportAbuseData();
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: AlertDialog(
+                insetPadding: EdgeInsets.only(
+                  left: 16 * SizeConfig.widthMultiplier!,
+                  right: 16 * SizeConfig.widthMultiplier!,
+                ),
+                contentPadding: EdgeInsets.zero,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                content:  Obx(()=>(_reportAbuseController.isReportAbuseLoading.value)?Container(
+                    child:  Container(
+                      margin: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                      child: SizedBox(
+                          height: 30*SizeConfig.widthMultiplier!,
+                          width: 30*SizeConfig.widthMultiplier!,
+                          child: CustomizedCircularProgress()),
+                    )
+
+                ):Stack(
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 32*SizeConfig.heightMultiplier!,),
+                        Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Report Abuse".tr,
+                              style: AppTextStyle.black600Text.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                fontSize: (16) * SizeConfig.textMultiplier!,
+                              ),
+                            ),
+                          ),
+
+                        SizedBox(
+                          height: 32 * SizeConfig.heightMultiplier!,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
+                          child: Text("Why are you reporting?".tr,
+                            style: AppTextStyle.black600Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: (12) * SizeConfig.textMultiplier!,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.02 * SizeConfig.heightMultiplier!,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
+                          child: Text("report_abuse_description".tr,
+                            style: AppTextStyle.black400Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: (11) * SizeConfig.textMultiplier!,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20 * SizeConfig.heightMultiplier!,
+                        ),
+                        Obx(
+                            ()=> Column(
+                              mainAxisSize:MainAxisSize.min,
+                              children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
+                                mainAxisSize:MainAxisSize.min,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      selectedProblemIndex.value = index;
+                                    },
+                                    child: Container(
+                                      width: 328*SizeConfig.widthMultiplier!,
+                                      color: selectedProblemIndex.value==index?Colors.white.withOpacity(0.1):Colors.transparent,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!,vertical: 10*SizeConfig.heightMultiplier!),
+                                        child: Text(
+                                          _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
+                                          style: AppTextStyle.black400Text.copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                              fontSize: (12) * SizeConfig.textMultiplier!,
+                                              fontWeight: selectedProblemIndex.value==index?FontWeight.w600:FontWeight.w500,
+                                              height: 1.3
+                                          ),),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                          ),
+                        ),
+                        // SizedBox(
+                        //   height: 32 * SizeConfig.heightMultiplier!,
+                        // ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              0 * SizeConfig.widthMultiplier!,
+                              32 * SizeConfig.heightMultiplier!,
+                              0 * SizeConfig.widthMultiplier!,
+                              48 * SizeConfig.heightMultiplier!,
+                            ),
+                            child: Container(
+                                width: 256 * SizeConfig.widthMultiplier!,
+                                height: 48 * SizeConfig.heightMultiplier!,
+                                child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        elevation: MaterialStateProperty.all(0),
+                                        backgroundColor:
+                                        MaterialStateProperty.all(kgreen49),
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    8 * SizeConfig.widthMultiplier!)))),
+                                    onPressed: () async {
+                                      if(selectedProblemIndex.value>=0){
+                                        if(!_reportAbuseController.isReportSendAbuseLoading.value){
+                                          var response = await _reportAbuseController
+                                              .sendRepostAbuseData(
+                                              postId: widget.postId,
+                                              reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
+                                          );
+                                          if(response.isNotEmpty){
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                          }
+                                        }
+                                      }
+                                      else{
+                                        _reportAbuseController.isReportSendAbuseLoading.value = true;
+                                        selectedProblemIndex.value=0;
+                                        Future.delayed(Duration(milliseconds: 400),(){
+                                          selectedProblemIndex.value = -1;
+                                          _reportAbuseController.isReportSendAbuseLoading.value = false;
+                                        });
+                                      }
+                                    },
+                                    child: Text(
+                                      "Submit".tr,
+                                      style: AppTextStyle.hboldWhiteText,
+                                    ))),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Positioned(
+                      top: 7 * SizeConfig.heightMultiplier!,
+                      right: 7 * SizeConfig.widthMultiplier!,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: SvgPicture.asset(
+                          ImagePath.closedialogIcon,
+                          color: Theme.of(context).primaryColor,
+                          width: 16 * SizeConfig.widthMultiplier!,
+                          height: 16 * SizeConfig.heightMultiplier!,
+                        ),
+                      ),
+                    ),
+                  ],
+                ))
+
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/message/controller/web_rtc_controller.dart';
 import 'package:fitbasix/feature/message/view/accepted_video_call_screen.dart';
 import 'package:fitbasix/feature/message/view/chat_videocallscreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +27,8 @@ const String CHAT_ENDPOINT = "";
 
 
 class InitializeQuickBlox{
+
+  final WebRTCController _webRtcController = Get.put(WebRTCController());
 
   StreamSubscription? _callSubscription;
 
@@ -57,6 +60,7 @@ class InitializeQuickBlox{
     if(Platform.isAndroid){
       var androidInfo = await DeviceInfoPlugin().androidInfo;
       double osVersion = double.parse(androidInfo.version.release);
+      _webRtcController.currentOSVersion.value = osVersion;
       ///init [WebRTC] only if os version is less then 12
       if(osVersion<12){
         try {
