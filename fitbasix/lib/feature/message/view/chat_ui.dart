@@ -261,10 +261,13 @@ class _ChatScreenState extends State<ChatScreen> {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => VideoCallScreen(
                         sessionIdForVideoCall: value!,
-                      )));
+                        name: widget.trainerTitle,
+                        imageURL: widget.profilePicURL,
+                  )));
               //showDialogForVideoCallNotPossible(context);
             });
           } else {
+
             log("oopp" + _trainerController.getTime(widget.time.toString()));
             showDialogForVideoCallNotPossible(
                 context,

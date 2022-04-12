@@ -25,8 +25,10 @@ import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
 class VideoCallScreen extends StatefulWidget {
   String? sessionIdForVideoCall;
+  String? name;
+  String? imageURL;
 
-  VideoCallScreen({Key? key, this.sessionIdForVideoCall}) : super(key: key);
+  VideoCallScreen({Key? key, this.sessionIdForVideoCall,this.name,this.imageURL}) : super(key: key);
 
   @override
   _VideoCallScreenState createState() => _VideoCallScreenState();
@@ -115,7 +117,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   void unsubscribeReject() {
     if (_rejectSubscription != null) {
       _rejectSubscription!.cancel();
-
       _rejectSubscription = null;
     }
   }
@@ -219,7 +220,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       CircleAvatar(
                         radius: 50,
                         backgroundImage: NetworkImage(
-                          avatarImage,
+                          widget.imageURL!,
                         ),
                       ),
                       SizedBox(
@@ -236,7 +237,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                   left: 70 * SizeConfig.widthMultiplier!,
                   right: 70 * SizeConfig.widthMultiplier!,
                   child: Text(
-                    'Waiting for Jonathan Swift '
+                    'Waiting for'.tr+" "+widget.name!+" "+
                     'to join...',
                     style: AppTextStyle.hboldWhiteText,
                     textAlign: TextAlign.center,
