@@ -9,6 +9,7 @@ import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/message/controller/web_rtc_controller.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_screen.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -2445,6 +2446,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   BuildContext? parentContext;
   GestureTapCallback? onMenuTap;
   ValueChanged<bool>? onHangUpTapped;
+  final WebRTCController _webRtcController = Get.find();
 
   AppbarforChat(
       {Key? key,
@@ -2506,7 +2508,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
       ),
       actions: [
         //call icon
-        Container(
+        if(_webRtcController.currentOSVersion.value<12)Container(
           child: FlutterSwitch(
             onToggle: onHangUpTapped!,
             value: false,
