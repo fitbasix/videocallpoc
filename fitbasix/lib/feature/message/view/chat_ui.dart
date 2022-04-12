@@ -1286,6 +1286,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                           );
                                           if(response.isNotEmpty){
                                             Navigator.pop(context);
+                                            Navigator.pop(context);
                                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
                                           }
                                         }
