@@ -1212,7 +1212,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
-                          child: Text("Your report is Anonymous, except faucibus sed ultricies nec consequat vulputate. Sed viverra facilisi venenatis, aliquet.".tr,
+                          child: Text("report_abuse_description".tr,
                             style: AppTextStyle.black400Text.copyWith(
                               color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: (11) * SizeConfig.textMultiplier!,

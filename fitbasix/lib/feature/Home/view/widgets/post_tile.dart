@@ -312,15 +312,18 @@ class _PostTileState extends State<PostTile> {
                     ],
                   ),
                   Spacer(),
-                  InkWell(
+                  GestureDetector(
                       onTap: (){
                         reportAbuseDialog(context);
                       },
-                      child: SvgPicture.asset(
-                        ImagePath.chatpopupmenuIcon,
-                        width: 4 * SizeConfig.widthMultiplier!,
-                        height: 20 * SizeConfig.heightMultiplier!,
-                        color: Theme.of(context).primaryColor,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 7*SizeConfig.widthMultiplier!),
+                        child: SvgPicture.asset(
+                          ImagePath.chatpopupmenuIcon,
+                          width: 4 * SizeConfig.widthMultiplier!,
+                          height: 20 * SizeConfig.heightMultiplier!,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       )
                   ),
                 ],
@@ -694,7 +697,7 @@ class _PostTileState extends State<PostTile> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
-                          child: Text("Your report is Anonymous, except faucibus sed ultricies nec consequat vulputate. Sed viverra facilisi venenatis, aliquet.".tr,
+                          child: Text("report_abuse_description".tr,
                             style: AppTextStyle.black400Text.copyWith(
                               color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: (11) * SizeConfig.textMultiplier!,
