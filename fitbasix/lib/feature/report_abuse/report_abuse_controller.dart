@@ -27,7 +27,7 @@ class ReportAbuseController extends GetxController{
     isReportAbuseLoading.value = false;
   }
 
-  Future<String> sendRepostAbuseData({String? postId,String? userId}) async {
+  Future<String> sendRepostAbuseData({String? postId,String? userId,int? reason}) async {
     isReportSendAbuseLoading.value = true;
     dio!.options.headers["language"] = "1";
     String token = await LogInService.getAccessToken();
@@ -35,7 +35,8 @@ class ReportAbuseController extends GetxController{
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     final response = await dio!.post(ApiUrl.sendAbuseData, data: {
       "postId":postId,
-      "userId":userId
+      "userId":userId,
+      "reason":reason
     });
     print(response.toString());
     isReportSendAbuseLoading.value = false;

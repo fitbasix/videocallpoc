@@ -628,6 +628,7 @@ class _PostTileState extends State<PostTile> {
   }
 
   void reportAbuseDialog(BuildContext context){
+    RxInt selectedProblemIndex = (-1).obs;
     if(_reportAbuseController.reportAbuseList.value.response == null){
       _reportAbuseController.getReportAbuseData();
     }
@@ -644,20 +645,18 @@ class _PostTileState extends State<PostTile> {
                   left: 16 * SizeConfig.widthMultiplier!,
                   right: 16 * SizeConfig.widthMultiplier!,
                 ),
-                contentPadding: EdgeInsets.symmetric(
-                    horizontal: 36 * SizeConfig.widthMultiplier!,
-                    vertical: 32 * SizeConfig.heightMultiplier!
-                ),
+                contentPadding: EdgeInsets.zero,
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
                 content:  Obx(()=>(_reportAbuseController.isReportAbuseLoading.value)?Container(
-                    height: 50*SizeConfig.widthMultiplier!,
-                    width: 50*SizeConfig.widthMultiplier!,
-                    child: SizedBox(
-                        height: 50*SizeConfig.widthMultiplier!,
-                        width: 50*SizeConfig.widthMultiplier!,
-                        child: CustomizedCircularProgress())
+                    child:  Container(
+                      margin: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                      child: SizedBox(
+                          height: 30*SizeConfig.widthMultiplier!,
+                          width: 30*SizeConfig.widthMultiplier!,
+                          child: CustomizedCircularProgress()),
+                    )
 
                 ):Stack(
                   children: [
@@ -666,52 +665,74 @@ class _PostTileState extends State<PostTile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        SizedBox(height: 32*SizeConfig.heightMultiplier!,),
                         Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Report Abuse".tr,
-                            style: AppTextStyle.black600Text.copyWith(
-                              color: Theme.of(context).textTheme.bodyText1?.color,
-                              fontSize: (16) * SizeConfig.textMultiplier!,
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Report Abuse".tr,
+                              style: AppTextStyle.black600Text.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                fontSize: (16) * SizeConfig.textMultiplier!,
+                              ),
                             ),
                           ),
-                        ),
+
                         SizedBox(
-                          height: 17 * SizeConfig.heightMultiplier!,
+                          height: 32 * SizeConfig.heightMultiplier!,
                         ),
-                        Text("Why are you reporting?".tr,
-                          style: AppTextStyle.black600Text.copyWith(
-                            color: Theme.of(context).textTheme.bodyText1?.color,
-                            fontSize: (12) * SizeConfig.textMultiplier!,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
+                          child: Text("Why are you reporting?".tr,
+                            style: AppTextStyle.black600Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: (12) * SizeConfig.textMultiplier!,
+                            ),
                           ),
                         ),
                         SizedBox(
                           height: 8.02 * SizeConfig.heightMultiplier!,
                         ),
-                        Text("Your report is Anonymous, except faucibus sed ultricies nec consequat vulputate. Sed viverra facilisi venenatis, aliquet.".tr,
-                          style: AppTextStyle.black400Text.copyWith(
-                            color: Theme.of(context).textTheme.bodyText1?.color,
-                            fontSize: (11) * SizeConfig.textMultiplier!,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
+                          child: Text("Your report is Anonymous, except faucibus sed ultricies nec consequat vulputate. Sed viverra facilisi venenatis, aliquet.".tr,
+                            style: AppTextStyle.black400Text.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: (11) * SizeConfig.textMultiplier!,
+                            ),
                           ),
                         ),
                         SizedBox(
                           height: 20 * SizeConfig.heightMultiplier!,
                         ),
-                        Column(
-                            mainAxisSize:MainAxisSize.min,
-                            children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
+                        Obx(
+                            ()=> Column(
                               mainAxisSize:MainAxisSize.min,
-                              children: [
-                                Text(
-                                  _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
-                                  style: AppTextStyle.black400Text.copyWith(
-                                      color: Theme.of(context).textTheme.bodyText1?.color,
-                                      fontSize: (12) * SizeConfig.textMultiplier!,
-                                      height: 1.3
-                                  ),),
-                                SizedBox(height: 10*SizeConfig.heightMultiplier!,)
-                              ],
-                            ))
+                              children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
+                                mainAxisSize:MainAxisSize.min,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      selectedProblemIndex.value = index;
+                                    },
+                                    child: Container(
+                                      width: 328*SizeConfig.widthMultiplier!,
+                                      color: selectedProblemIndex.value==index?Colors.white.withOpacity(0.1):Colors.transparent,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!,vertical: 10*SizeConfig.heightMultiplier!),
+                                        child: Text(
+                                          _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
+                                          style: AppTextStyle.black400Text.copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                              fontSize: (12) * SizeConfig.textMultiplier!,
+                                              fontWeight: selectedProblemIndex.value==index?FontWeight.w600:FontWeight.w500,
+                                              height: 1.3
+                                          ),),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                          ),
                         ),
                         // SizedBox(
                         //   height: 32 * SizeConfig.heightMultiplier!,
@@ -738,15 +759,26 @@ class _PostTileState extends State<PostTile> {
                                                 borderRadius: BorderRadius.circular(
                                                     8 * SizeConfig.widthMultiplier!)))),
                                     onPressed: () async {
-                                      if(!_reportAbuseController.isReportSendAbuseLoading.value){
-                                        print("clicked");
-                                        var response = await _reportAbuseController
-                                            .sendRepostAbuseData(
-                                            postId: widget.postId);
-                                        if(response.isNotEmpty){
-                                          Navigator.pop(context);
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                      if(selectedProblemIndex.value>=0){
+                                        if(!_reportAbuseController.isReportSendAbuseLoading.value){
+                                          var response = await _reportAbuseController
+                                              .sendRepostAbuseData(
+                                              postId: widget.postId,
+                                              reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
+                                          );
+                                          if(response.isNotEmpty){
+                                            Navigator.pop(context);
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                          }
                                         }
+                                      }
+                                      else{
+                                        _reportAbuseController.isReportSendAbuseLoading.value = true;
+                                        selectedProblemIndex.value=0;
+                                        Future.delayed(Duration(milliseconds: 400),(){
+                                          selectedProblemIndex.value = -1;
+                                          _reportAbuseController.isReportSendAbuseLoading.value = false;
+                                        });
                                       }
                                     },
                                     child: Text(
@@ -758,8 +790,8 @@ class _PostTileState extends State<PostTile> {
                       ],
                     ),
                     Positioned(
-                      top: -15 * SizeConfig.heightMultiplier!,
-                      right: -15 * SizeConfig.widthMultiplier!,
+                      top: 7 * SizeConfig.heightMultiplier!,
+                      right: 7 * SizeConfig.widthMultiplier!,
                       child: IconButton(
                         onPressed: () {
                           Navigator.pop(context);
