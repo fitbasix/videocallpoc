@@ -1,4 +1,4 @@
-package com.example.fitbasix
+package com.fitbasixco.fitbasix
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
