@@ -7,53 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:608132731672:android:2fd941ae5e773ea5ad046d",
-        "android_client_info": {
-          "package_name": "com.antino.fitbasix"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "608132731672-74krpir3l33ifvari2fqptvhp9d297r4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.antino.fitbasix",
-            "certificate_hash": "e6a3d16999a06d34590fb5e9da61d40166714d3c"
-          }
-        },
-        {
-          "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
-        },
-        {
-          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.antino.fitbasix.dev"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:608132731672:android:832586384733ddeaad046d",
         "android_client_info": {
           "package_name": "com.antino.fitbasix.dev"
@@ -83,10 +36,10 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
+          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
         },
         {
-          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
+          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
         }
       ],
       "services": {
@@ -122,10 +75,10 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
+          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
         },
         {
-          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
+          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
         }
       ],
       "services": {
@@ -161,10 +114,10 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
+          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
         },
         {
-          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
+          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
         }
       ],
       "services": {
@@ -194,7 +147,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "608132731672-lq8s2ap7eomivfkemrqq03v200cehk2i.apps.googleusercontent.com",
+          "client_id": "608132731672-dj0ke7creasgfi75kinjpipgv38liil1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fitbasixco.fitbasix",
@@ -208,10 +161,10 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
+          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
         },
         {
-          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
+          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
         }
       ],
       "services": {

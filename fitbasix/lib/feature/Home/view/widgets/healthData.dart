@@ -44,6 +44,7 @@ class _HealthAppState extends State<HealthApp> {
 
   /// Fetch data points from the health plugin and show them in the app.
   Future fetchData() async {
+
     setState(() => _state = AppState.FETCHING_DATA);
 
     // define the types to get
@@ -264,15 +265,15 @@ class _HealthAppState extends State<HealthApp> {
                 ),
               ),
               SizedBox(
-                height: 30 * SizeConfig.heightMultiplier!,
+                height: 20 * SizeConfig.heightMultiplier!,
               ),
-              HealthTrackOptionTile(
-                imagePath: ImagePath.fitBit,
-                applicationName: 'fitbit'.tr,
-              ),
-              SizedBox(
-                height: 15 * SizeConfig.heightMultiplier!,
-              ),
+              // HealthTrackOptionTile(
+              //   imagePath: ImagePath.fitBit,
+              //   applicationName: 'fitbit'.tr,
+              // ),
+              // SizedBox(
+              //   height: 15 * SizeConfig.heightMultiplier!,
+              // ),
             ],
 
             /*AppBar(
