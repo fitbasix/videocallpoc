@@ -30,6 +30,7 @@ class HelpAndSupportServices{
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getPrivacyPolicyContents,);
+    print(response.toString());
     return termOfUseModelFromJson(response.toString());
   }
 }
