@@ -202,7 +202,6 @@ class _ChatScreenState extends State<ChatScreen> {
               _homeController.userQuickBloxId.value.toString() +
               DateTime.now().millisecond.toString();
           int dialogType = QBChatDialogTypes.CHAT;
-          print("got here too");
           try {
             QBDialog? createdDialog = await QB.chat
                 .createDialog(
@@ -215,7 +214,6 @@ class _ChatScreenState extends State<ChatScreen> {
               getMassageFromHistory();
             });
           } on PlatformException catch (e) {
-            print(e.toString());
           }
         }
         return value;
@@ -227,9 +225,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   checkUserOnlineStatus() async {
     try {
-      print("called");
       var status = await QB.chat.getOnlineUsers(widget.userDialogForChat!.id!);
-      print(status.toString());
     } on PlatformException catch (e) {
       // Some error occurred, look at the exception message for more details
     }
@@ -280,7 +276,6 @@ class _ChatScreenState extends State<ChatScreen> {
             //checkUserOnlineStatus();
 
             //QB.chat.disconnect();
-            // print("chat disconnected");
             createMenuDialog(context);
           }
         },
@@ -575,7 +570,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                                   body: "imageTest",
                                                   saveToHistory: true)
                                               .then((value) {
-                                            print("demo msg send");
                                           }).then((value) {
                                             _userWantToSendMedia.value = false;
                                             _mediaIsUploading.value = false;
@@ -804,7 +798,6 @@ class _ChatScreenState extends State<ChatScreen> {
             await QB.subscriptions.create(token!, QBPushChannelNames.GCM);
       });
     } catch (e) {
-      print("notification error" + e.toString());
     }
     String eventType = QBNotificationEventTypes.ONE_SHOT;
     String notificationEventType = QBNotificationTypes.PUSH;
@@ -833,7 +826,6 @@ class _ChatScreenState extends State<ChatScreen> {
     };
 
     try {
-      print(widget.opponentID.toString() + " kkkkk");
       List<QBEvent?> events = await QB.events.create(
           eventType, notificationEventType, senderId, payload,
           pushType: pushType, recipientsIds: [widget.opponentID.toString()]);
@@ -843,7 +835,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<String?> callWebRTC(int sessionType) async {
-    print("call webRTC lllllll");
     try {
       QBRTCSession? session = await QB.webrtc.call(
           [widget.opponentID!, _homeController.userQuickBloxId.value],
@@ -863,9 +854,7 @@ class _ChatScreenState extends State<ChatScreen> {
         Map<String, dynamic> map = Map<String, dynamic>.from(data);
         Map<String, dynamic> payload =
             Map<String, dynamic>.from(map["payload"]);
-        print("nnnnnn" + payload.toString());
         List<Attachment>? attachmentsFromJson;
-        print(payload.toString());
         if (payload["attachments"] != null) {
           attachmentsFromJson =
               (json.decode(json.encode(payload["attachments"])) as List)
@@ -892,7 +881,6 @@ class _ChatScreenState extends State<ChatScreen> {
           return null;
         }
 
-        // print(payload["attachments"]);
         newMessage.id = payload["id"];
         newMessage.dialogId = payload["dialogId"];
         newMessage.attachments = getAttachments();
@@ -930,10 +918,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendMsg(String messageBody) async {
     var chatStatus = await QB.chat.isConnected();
     if (chatStatus!) {
-      print("connected to chat mmmmmm");
       sendMessageAfterVarification(messageBody);
     } else {
-      print("user chat is disconnected mmmmmm");
       String logIn =
           _homeController.userProfileData.value.response!.data!.profile!.id!;
       final password = Crypt.sha256(logIn, salt: '10');
@@ -942,7 +928,6 @@ class _ChatScreenState extends State<ChatScreen> {
           .then((value) async {
         var check = await QB.chat.isConnected();
         if (!check!) {
-          print("not connected to chat mmmmmm");
           CreatePostService.connectUserToChat(
               password.hash, _homeController.userQuickBloxId.value);
           sendMsg(messageBody);
@@ -955,19 +940,15 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void sendMessageAfterVarification(String messageBody) async {
-    print("nnnnnn created dialog id" + widget.userDialogForChat!.id.toString());
     String dialogId = widget.userDialogForChat!.id!;
-    print("massage dialog id is: " + widget.userDialogForChat!.id!);
     bool saveToHistory = true;
     try {
       await QB.chat
           .sendMessage(dialogId,
               body: messageBody, saveToHistory: saveToHistory)
           .then((value) {
-        print("msg send");
       });
     } on PlatformException catch (e) {
-      print(e);
     }
     sendNotification(messageBody);
   }
@@ -1009,7 +990,6 @@ class _ChatScreenState extends State<ChatScreen> {
         if (file != null) {
           _mediaIsUploading.value = false;
           int? id = file.id;
-          print("image id " + file.uid!);
           String? contentType = file.contentType;
           attachment.id = id.toString();
           attachment.contentType = contentType;
@@ -1085,7 +1065,6 @@ class _ChatScreenState extends State<ChatScreen> {
             String? contentType = pickedFiles.files[i].path!.split('.').last;
             attachment.id = id.toString();
             attachment.contentType = contentType;
-            print(contentType + " dddd");
             attachment.url = file.uid;
             attachment.name = pickedFiles.files[i].name;
             attachment.data = pickedFiles.files[i].path!;
@@ -1357,7 +1336,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 30*SizeConfig.widthMultiplier!,
-                    vertical: 30 * SizeConfig.heightMultiplier!),
+                    vertical: 15 * SizeConfig.heightMultiplier!),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
                         8 * SizeConfig.imageSizeMultiplier!)),
@@ -1372,6 +1351,21 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                Align(
+                            alignment: Alignment.topRight,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: SvgPicture.asset(
+                                      ImagePath.closedialogIcon,
+                                      color: Theme.of(context).primaryColor,
+                                      width: 16 * SizeConfig.imageSizeMultiplier!,
+                                      height: 16 * SizeConfig.imageSizeMultiplier!,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 10*SizeConfig.heightMultiplier!,),
                                 Text(
                                   widget.trainerTitle!,
                                   style: AppTextStyle.black400Text.copyWith(
@@ -1507,27 +1501,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                       ),
                                     ],
                                   ),
-                                )
+                                ),
+                                SizedBox(height: 20*SizeConfig.heightMultiplier!,),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      Positioned(
-                        top: -15 * SizeConfig.heightMultiplier!,
-                        right: -15 * SizeConfig.widthMultiplier!,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: SvgPicture.asset(
-                            ImagePath.closedialogIcon,
-                            color: Theme.of(context).primaryColor,
-                            width: 16 * SizeConfig.widthMultiplier!,
-                            height: 16 * SizeConfig.heightMultiplier!,
-                          ),
-                        ),
-                      ),
+
                     ])
 
               )),
@@ -1866,7 +1847,6 @@ class MessageBubbleSender extends StatelessWidget {
   }
 
   // Future<bool> _getImageUrl(String id, String fileName) async {
-  //   print(fileName + "this is the file name");
   //   try {
   //     String? url = await QB.content.getPrivateURL(id);
   //     bool flag = false;
@@ -1876,7 +1856,6 @@ class MessageBubbleSender extends StatelessWidget {
   //       PermissionStatus status = await Permission.storage.request();
   //       PermissionStatus status1 =
   //           await Permission.manageExternalStorage.request();
-  //       print(status1.toString() + "hhhhh");
   //       if (status == PermissionStatus.granted) {
   //         String? path;
   //         final Directory _appDocDir = await getApplicationDocumentsDirectory();
@@ -1893,31 +1872,26 @@ class MessageBubbleSender extends StatelessWidget {
   //               await _appDocDirFolder.create(recursive: true);
   //           path = _appDocDirNewFolder.path;
   //         }
-  //         print(path + "pp dir");
   //         Dio dio = Dio();
   //         dio.download(url!, path + "/" + fileName,
   //             onReceiveProgress: (received, total) {
   //           downloadProgress.value = ((received / total));
-  //           print(downloadProgress.value);
   //           if (((received / total) * 100).floor() == 100) {
   //             checkFileExistence(fileName);
   //           }
   //         });
   //       }
   //     } catch (e) {
-  //       print(e.toString());
   //     }
   //
   //     return false;
   //   } on PlatformException catch (e) {
-  //     print(e);
   //     return false;
   //     // Some error occurred, look at the exception message for more details
   //   }
   // }
 
   Future<bool> _getImageUrl(String id, String fileName) async {
-    print(fileName + "this is the file name");
     try {
       String? url = await QB.content.getPrivateURL(id);
       bool flag = false;
@@ -1946,18 +1920,15 @@ class MessageBubbleSender extends StatelessWidget {
                 await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
-          print(path + "pp dir");
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
             downloadProgress.value = ((received / total));
-            print(downloadProgress.value);
             if (((received / total) * 100).floor() == 100) {
               checkFileExistence(fileName);
             }
           });
         } else {
-          print("yyyyyy");
           String? path;
           final Directory _appDocDir = Directory(
               (await getTemporaryDirectory()).path + '/fitbasix/media');
@@ -1973,19 +1944,16 @@ class MessageBubbleSender extends StatelessWidget {
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
             downloadProgress.value = ((received / total));
-            print(downloadProgress.value);
             if (((received / total) * 100).floor() == 100) {
               checkFileExistence(fileName);
             }
           });
         }
       } catch (e) {
-        print(e.toString());
       }
 
       return false;
     } on PlatformException catch (e) {
-      print(e);
       return false;
       // Some error occurred, look at the exception message for more details
     }
@@ -2019,12 +1987,10 @@ class MessageBubbleSender extends StatelessWidget {
         }
         //if(File(message!.attachments![0]!.data!).existsSync())
         if (File(path + "/" + fileName!).existsSync()) {
-          print("file exists in " + path + "/$fileName");
           filePath.value = path + "/$fileName";
         }
 
         if (File(downloadsPath.path + "/" + fileName).existsSync()) {
-          print("file exists in " + downloadsPath.path + "/$fileName");
           filePath.value = downloadsPath.path + "/" + fileName;
         }
       }
@@ -2032,7 +1998,6 @@ class MessageBubbleSender extends StatelessWidget {
       String? path;
       final Directory _appDocDir =
           Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
-      print(_appDocDir.path.toString() + " uuuuu");
       //App Document Directory + folder name
       if ((await _appDocDir.exists())) {
         path = _appDocDir.path;
@@ -2041,7 +2006,6 @@ class MessageBubbleSender extends StatelessWidget {
         path = _appDocDir.path;
       }
       if (File(path + "/" + fileName!).existsSync()) {
-        print("file exists in " + path + "/$fileName");
         filePath.value = path + "/$fileName";
       }
     }
@@ -2050,7 +2014,6 @@ class MessageBubbleSender extends StatelessWidget {
   void getFileSize() async {
     String? url =
         await QB.content.getPrivateURL(message!.attachments![0]!.url!);
-    print(message!.attachments![0]!.url!);
     http.Response size = await http.get(Uri.parse(url!));
     double sizeInBytes = double.parse(size.headers["content-length"]!);
     fileSize.value = NumberFormat("0.00").format((sizeInBytes / (1024 * 1024)));
@@ -2298,14 +2261,12 @@ class MessageBubbleOpponent extends StatelessWidget {
   }
 
   Future<bool> _getImageUrl(String id, String fileName) async {
-    print(fileName + "this is the file name");
     try {
       String? url = await QB.content.getPrivateURL(id);
       bool flag = false;
 
       //FlutterDownloader.registerCallback(downloadCallback);
       try {
-        print("jjjjjjj");
         if (Platform.isAndroid) {
           PermissionStatus status = await Permission.storage.request();
           if (!_chatController.storagePermissionCalled.value) {
@@ -2327,19 +2288,16 @@ class MessageBubbleOpponent extends StatelessWidget {
                 await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
-          print(path + "pp dir");
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
             downloadProgress.value = ((received / total));
-            print(downloadProgress.value);
             if (((received / total) * 100).floor() == 100) {
               checkFileExistence(fileName);
             }
           });
 
           if (Platform.isIOS) {
-            print("yyyyyy");
             String? path;
             final Directory _appDocDir = Directory(
                 (await getTemporaryDirectory()).path + '/fitbasix/media');
@@ -2356,7 +2314,6 @@ class MessageBubbleOpponent extends StatelessWidget {
             dio.download(url, path + "/" + fileName,
                 onReceiveProgress: (received, total) {
               downloadProgress.value = ((received / total));
-              print(downloadProgress.value);
               if (((received / total) * 100).floor() == 100) {
                 checkFileExistence(fileName);
               }
@@ -2364,12 +2321,10 @@ class MessageBubbleOpponent extends StatelessWidget {
           }
         }
       } catch (e) {
-        print(e.toString());
       }
 
       return false;
     } on PlatformException catch (e) {
-      print(e);
       return false;
       // Some error occurred, look at the exception message for more details
     }
@@ -2399,12 +2354,10 @@ class MessageBubbleOpponent extends StatelessWidget {
         }
         //if(File(message!.attachments![0]!.data!).existsSync())
         if (File(path + "/" + fileName!).existsSync()) {
-          print("file exists in " + path + "/$fileName");
           filePath.value = path + "/$fileName";
         }
 
         if (File(downloadsPath.path + "/" + fileName).existsSync()) {
-          print("file exists in " + downloadsPath.path + "/$fileName");
           filePath.value = downloadsPath.path + "/" + fileName;
         }
       }
@@ -2413,7 +2366,6 @@ class MessageBubbleOpponent extends StatelessWidget {
       String? path;
       final Directory _appDocDir =
           Directory((await getTemporaryDirectory()).path + '/fitbasix/media');
-      print(_appDocDir.path.toString() + " uuuuu");
       //App Document Directory + folder name
       if ((await _appDocDir.exists())) {
         path = _appDocDir.path;
@@ -2422,7 +2374,6 @@ class MessageBubbleOpponent extends StatelessWidget {
         path = _appDocDir.path;
       }
       if (File(path + "/" + fileName!).existsSync()) {
-        print("file exists in " + path + "/$fileName");
         filePath.value = path + "/$fileName";
       }
     }
