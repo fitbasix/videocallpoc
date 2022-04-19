@@ -153,7 +153,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     getDialogId();
-    //userDialogForChat = widget.userDialogForChat;
     initStreamManagement();
     initMassage();
     connectionEvent();
@@ -163,15 +162,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void getDialogId() async {
     bool dialogCreatedPreviously = false;
     int openPage = 0;
-    //133817477	user1
-    //133815819 trainer1
-    //133612091 trainer
     final sharedPreferences = await SharedPreferences.getInstance();
     _homeController.userQuickBloxId.value =
         sharedPreferences.getInt("userQuickBloxId")!;
     int UserQuickBloxId = widget.opponentID!; //133819788;
-    // String trainerName = myTrainers![index].name!;
-    // bool isCurrentlyEnrolled = myTrainers![index].isCurrentlyEnrolled!;
 
     QBSort sort = QBSort();
     sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
@@ -219,7 +213,6 @@ class _ChatScreenState extends State<ChatScreen> {
         return value;
       });
     } on PlatformException catch (e) {
-      // some error occurred, look at the exception message for more details
     }
   }
 
@@ -227,7 +220,6 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       var status = await QB.chat.getOnlineUsers(widget.userDialogForChat!.id!);
     } on PlatformException catch (e) {
-      // Some error occurred, look at the exception message for more details
     }
   }
 
@@ -252,7 +244,6 @@ class _ChatScreenState extends State<ChatScreen> {
               _trainerController.isVideoAvailable(widget.time.toString()) ==
                   true) {
             DateFormat("EEE").format(DateTime.now());
-            //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>VideoCallScreen(sessionIdForVideoCall: "12123123",)));
             callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => VideoCallScreen(
