@@ -56,25 +56,32 @@ class _PostScreenState extends State<PostScreen> {
             centerTitle: false,
             elevation: 0,
             automaticallyImplyLeading: false,
-            leading: IconButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  log("comment id" + _homeController.post.value.id.toString());
-                  RecentCommentModel recentComment = RecentCommentModel();
-                  recentComment = await HomeService.recentComment(
-                      postId: _homeController.post.value.id);
-                  _homeController.commentsMap[_homeController.post.value.id
-                      .toString()] = recentComment.response!.data!.comment;
-                  _homeController.updateCount[_homeController.post.value.id
-                      .toString()] = recentComment.response!.data!.data;
-                  _homeController.replyList.clear();
-                },
-                icon: SvgPicture.asset(
-                  ImagePath.backIcon,
-                  width: 7 * SizeConfig.widthMultiplier!,
-                  height: 12 * SizeConfig.heightMultiplier!,
-                  color: Theme.of(context).primaryColor,
-                )),
+            leadingWidth: 40*SizeConfig.widthMultiplier!,
+            leading: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),
+                child: IconButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      log("comment id" + _homeController.post.value.id.toString());
+                      RecentCommentModel recentComment = RecentCommentModel();
+                      recentComment = await HomeService.recentComment(
+                          postId: _homeController.post.value.id);
+                      _homeController.commentsMap[_homeController.post.value.id
+                          .toString()] = recentComment.response!.data!.comment;
+                      _homeController.updateCount[_homeController.post.value.id
+                          .toString()] = recentComment.response!.data!.data;
+                      _homeController.replyList.clear();
+                    },
+                    icon: SvgPicture.asset(
+                      ImagePath.backIcon,
+                      width: 7 * SizeConfig.widthMultiplier!,
+                      height: 12 * SizeConfig.heightMultiplier!,
+                      color: Theme.of(context).primaryColor,
+                    )),
+              ),
+            ),
             title: Transform(
               transform: Matrix4.translationValues(
                   -20 * SizeConfig.widthMultiplier!, 0, 0),
