@@ -27,78 +27,87 @@ class SetBodyFat extends StatelessWidget {
               },
               onSkip: () {}),
           preferredSize: const Size(double.infinity, kToolbarHeight)),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: [
-          Stack(children: [
-            Container(
-              color: kPureWhite,
-              height: 2 * SizeConfig.heightMultiplier!,
-              width: Get.width * (8 / 8),
-            ),
-            Container(
-              color: kGreenColor,
-              height: 2 * SizeConfig.heightMultiplier!,
-              width: Get.width * 0.75,
-            ),
-          ]),
-          SizedBox(
-            height: 40 * SizeConfig.heightMultiplier!,
-          ),
-          Center(
-            child: Text(
-              'set_body_fat'.tr,
-              style: AppTextStyle.boldBlackText.copyWith(
-                  color: Theme.of(context).textTheme.bodyText1!.color),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          SizedBox(
-            height: 30 * SizeConfig.heightMultiplier!,
-          ),
-          GridView.builder(
-              itemCount: _spgController.bodyFatData!.length,
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 5 * SizeConfig.widthMultiplier!),
-              itemBuilder: (_, index) {
-                // if (_spgController.selectedBodyFat.value.serialId == null) {
-                //   _spgController.selectedBodyFat.value =
-                //       _spgController.bodyFatData![0];
-                // }
-                return Obx(
-                  () => BodyFatTile(
-                    imageUrl: _spgController.bodyFatData![index].image,
-                    StartRange:
-                        _spgController.bodyFatData![index].start.toString(),
-                    EndRange: (_spgController.bodyFatData![index].start! > 39)
-                        ? "+"
-                        : _spgController.bodyFatData![index].end.toString(),
-                    onTap: () {
-                      _spgController.selectedBodyFat.value =
-                          _spgController.bodyFatData![index];
-                    },
-                    isSelected: _spgController.selectedBodyFat.value.serialId ==
-                            _spgController.bodyFatData![index].serialId
-                        ? true
-                        : false,
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(children: [
+                  Container(
+                    color: kPureWhite,
+                    height: 2 * SizeConfig.heightMultiplier!,
+                    width: Get.width * (8 / 8),
                   ),
-                );
-              }),
-          Spacer(),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 16 * SizeConfig.widthMultiplier!),
-            child: ProceedButton(
-                title: 'proceed'.tr,
-                onPressed: () {
-                  print(_spgController.selectedBodyFat.value.serialId);
-                  Navigator.pushNamed(context, RouteName.setFoodType);
-                }),
+                  Container(
+                    color: kGreenColor,
+                    height: 2 * SizeConfig.heightMultiplier!,
+                    width: Get.width * 0.75,
+                  ),
+                ]),
+                SizedBox(
+                  height: 40 * SizeConfig.heightMultiplier!,
+                ),
+                Center(
+                  child: Text(
+                    'set_body_fat'.tr,
+                    style: AppTextStyle.boldBlackText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: 30 * SizeConfig.heightMultiplier!,
+                ),
+                GridView.builder(
+                    itemCount: _spgController.bodyFatData!.length,
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 5 * SizeConfig.widthMultiplier!),
+                    itemBuilder: (_, index) {
+                      // if (_spgController.selectedBodyFat.value.serialId == null) {
+                      //   _spgController.selectedBodyFat.value =
+                      //       _spgController.bodyFatData![0];
+                      // }
+                      return Obx(
+                        () => BodyFatTile(
+                          imageUrl: _spgController.bodyFatData![index].image,
+                          StartRange:
+                              _spgController.bodyFatData![index].start.toString(),
+                          EndRange: (_spgController.bodyFatData![index].start! > 39)
+                              ? "+"
+                              : _spgController.bodyFatData![index].end.toString(),
+                          onTap: () {
+                            _spgController.selectedBodyFat.value =
+                                _spgController.bodyFatData![index];
+                          },
+                          isSelected: _spgController.selectedBodyFat.value.serialId ==
+                                  _spgController.bodyFatData![index].serialId
+                              ? true
+                              : false,
+                        ),
+                      );
+                    }),
+
+                SizedBox(
+                  height: 46 * SizeConfig.heightMultiplier!,
+                ),
+              ],
+            ),
           ),
-          SizedBox(
-            height: 16 * SizeConfig.heightMultiplier!,
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: 16 * SizeConfig.heightMultiplier!,horizontal: 16*SizeConfig.widthMultiplier!),
+              child: ProceedButton(
+                  title: 'proceed'.tr,
+                  onPressed: () {
+                    print(_spgController.selectedBodyFat.value.serialId);
+                    Navigator.pushNamed(context, RouteName.setFoodType);
+                  }),
+            ),
           ),
         ],
       ),

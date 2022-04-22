@@ -69,26 +69,29 @@ class HomeAndTrainerPage extends StatelessWidget {
       bottomNavigationBar: CustomBottomNavigationBar(
         length: screens.length,
       ),
-      endDrawer: Drawer(
-        child: Obx(
-          () => MenuScreen(
-              imageCoverPic:
-                  homeController.userProfileData.value.response == null
-                      ? ""
-                      : homeController.coverPhoto.value == ""
-                          ? homeController.userProfileData.value.response!.data!
-                              .profile!.coverPhoto
-                              .toString()
-                          : homeController.coverPhoto.value,
-              name: homeController.userProfileData.value.response == null
-                  ? ""
-                  : homeController
-                      .userProfileData.value.response!.data!.profile!.name.toString(),
-              imageUrl: homeController.userProfileData.value.response == null
-                  ? ""
-                  : homeController.profilePhoto.value==""?homeController.userProfileData.value.response!.data!
-                      .profile!.profilePhoto
-                      .toString():homeController.profilePhoto.value),
+      endDrawer: Container(
+          width: 300*SizeConfig.widthMultiplier!,
+        child: Drawer(
+          child: Obx(
+            () => MenuScreen(
+                imageCoverPic:
+                    homeController.userProfileData.value.response == null
+                        ? ""
+                        : homeController.coverPhoto.value == ""
+                            ? homeController.userProfileData.value.response!.data!
+                                .profile!.coverPhoto
+                                .toString()
+                            : homeController.coverPhoto.value,
+                name: homeController.userProfileData.value.response == null
+                    ? ""
+                    : homeController
+                        .userProfileData.value.response!.data!.profile!.name.toString(),
+                imageUrl: homeController.userProfileData.value.response == null
+                    ? ""
+                    : homeController.profilePhoto.value==""?homeController.userProfileData.value.response!.data!
+                        .profile!.profilePhoto
+                        .toString():homeController.profilePhoto.value),
+          ),
         ),
       ),
     );
