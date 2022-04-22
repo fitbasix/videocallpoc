@@ -54,7 +54,6 @@ class _ViewAllUsersWithDocumentsState extends State<ViewAllUsersWithDocuments> {
 
              return;
            } else {
-             log(usersWithDocs.value.response!.data.toString());
              if (usersWithDocs.value.response!.data!.last.id ==
                  postQuery.response!.data!.last.id) {
                _documentsController.showLoader.value = false;

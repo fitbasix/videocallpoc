@@ -37,7 +37,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
-    log("profilePhoto" + profileController.profilePhoto.value);
     return Scaffold(
       body: Obx(
         () => UserPageInfo(

@@ -41,7 +41,6 @@ class _ExploreFeedState extends State<ExploreFeed> {
       if (_scrollController.position.maxScrollExtent ==
           _scrollController.position.pixels) {
         homeController.nextDataLoad.value = true;
-        log(homeController.explorePageCount.value.toString() + "KKKK");
         final postQuery = await HomeService.getExplorePosts(
             skip: homeController.explorePageCount.value * 5);
 
@@ -67,7 +66,6 @@ class _ExploreFeedState extends State<ExploreFeed> {
           homeController.explorePostList.addAll(postQuery.response!.data!);
         }
         homeController.explorePageCount.value++;
-        log("explore_page" + homeController.explorePageCount.value.toString());
         homeController.nextDataLoad.value = false;
         setState(() {});
       }

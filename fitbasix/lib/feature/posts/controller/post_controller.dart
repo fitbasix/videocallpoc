@@ -157,7 +157,6 @@ class PostController extends GetxController {
 
       imageFile = imageTemporary;
     } on PlatformException catch (e) {
-      log('failed to pick a image');
     }
   }
 
@@ -170,7 +169,6 @@ class PostController extends GetxController {
 
       videoFile.value = imageTemporary;
     } on PlatformException catch (e) {
-      log('failed to pick a video');
     }
   }
 

@@ -154,11 +154,7 @@ class TagPeopleScreen extends StatelessWidget {
                                 itemCount:
                                     _postController.selectedUserData.length,
                                 itemBuilder: (context, index) {
-                                  log(_postController.selectedUserData
-                                      .toSet()
-                                      .toList()
-                                      .length
-                                      .toString());
+
                                   return Padding(
                                     padding: EdgeInsets.only(
                                         right:

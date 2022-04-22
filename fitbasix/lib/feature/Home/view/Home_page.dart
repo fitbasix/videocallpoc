@@ -130,7 +130,6 @@ class _HomePageState extends State<HomePage> {
 
             return;
           } else {
-            log(_homeController.trendingPostList.toString());
             if (_homeController.trendingPostList.last.id ==
                 postQuery.response!.data!.last.id) {
               _homeController.showLoader.value = false;
@@ -1197,7 +1196,6 @@ class _HomePageState extends State<HomePage> {
                                             physics:
                                                 NeverScrollableScrollPhysics(),
                                             itemBuilder: (_, index) {
-                                              log("can not");
                                               _homeController
                                                   .alreadyRenderedPostId
                                                   .add(_homeController
@@ -1210,7 +1208,6 @@ class _HomePageState extends State<HomePage> {
                                               //     .trendingPostList[
                                               // index]
                                               //     .id!)==-1){
-                                              //   log("add");
                                               //   _homeController.commentsMap.addIf(false==false,
                                               //       _homeController
                                               //           .trendingPostList[
@@ -1238,11 +1235,7 @@ class _HomePageState extends State<HomePage> {
                                               //       ));
                                               // }
 
-// log(_homeController
-//     .commentsMap[_homeController
-//     .trendingPostList[
-// index]
-//     .id!]!.comment.toString());
+
 
                                               if (_homeController
                                                       .trendingPostList.length <
@@ -1420,7 +1413,6 @@ class _HomePageState extends State<HomePage> {
                                                                     .id!);
                                                           }
 
-                                                          log("hit Like");
                                                           RecentCommentModel
                                                               recentComment =
                                                               RecentCommentModel();

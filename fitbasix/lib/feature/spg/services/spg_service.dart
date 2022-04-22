@@ -14,7 +14,6 @@ class SPGService {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getSPGData, data: {});
-    log(response.toString());
     return spgModelFromJson(response.toString());
   }
 

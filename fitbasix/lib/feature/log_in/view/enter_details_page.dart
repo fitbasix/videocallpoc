@@ -2,6 +2,7 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/back_button.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
@@ -150,7 +151,7 @@ class EnterDetailsPage extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12 * SizeConfig.textMultiplier!,
                                     color: lightGrey),
-                                recognizer: new TapGestureRecognizer()..onTap = () => launch('https://fitbasix.net/terms'),
+                                recognizer: new TapGestureRecognizer()..onTap = () => launch(ApiUrl.liveBaseURL+'/terms'),
                               ),
                               TextSpan(
                                 text: 'and ',
@@ -164,7 +165,7 @@ class EnterDetailsPage extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12 * SizeConfig.textMultiplier!,
                                     color: lightGrey),
-                                recognizer: new TapGestureRecognizer()..onTap = () => launch('https://fitbasix.net/privacy_fitbasix'),
+                                recognizer: new TapGestureRecognizer()..onTap = () => launch(ApiUrl.liveBaseURL+'/privacy_fitbasix'),
                               ),
                             ]
                         ),

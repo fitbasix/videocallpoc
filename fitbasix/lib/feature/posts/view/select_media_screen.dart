@@ -135,9 +135,7 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                       .uploadedFiles.value.response!.data);
                           Navigator.pop(context);
                         }
-                        log(_postController
-                            .postData.value.response!.data!.files!.length
-                            .toString());
+
 
                         _postController.selectedMediaFiles.clear();
                         _postController.selectedMediaAsset.clear();
