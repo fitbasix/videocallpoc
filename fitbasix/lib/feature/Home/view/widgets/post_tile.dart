@@ -707,34 +707,39 @@ class _PostTileState extends State<PostTile> {
                         SizedBox(
                           height: 20 * SizeConfig.heightMultiplier!,
                         ),
-                        Obx(
-                            ()=> Column(
-                              mainAxisSize:MainAxisSize.min,
-                              children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
-                                mainAxisSize:MainAxisSize.min,
-                                children: [
-                                  InkWell(
-                                    onTap: (){
-                                      selectedProblemIndex.value = index;
-                                    },
-                                    child: Container(
-                                      width: 328*SizeConfig.widthMultiplier!,
-                                      color: selectedProblemIndex.value==index?Colors.white.withOpacity(0.1):Colors.transparent,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!,vertical: 10*SizeConfig.heightMultiplier!),
-                                        child: Text(
-                                          _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
-                                          style: AppTextStyle.black400Text.copyWith(
-                                              color: Theme.of(context).textTheme.bodyText1?.color,
-                                              fontSize: (12) * SizeConfig.textMultiplier!,
-                                              fontWeight: selectedProblemIndex.value==index?FontWeight.w600:FontWeight.w500,
-                                              height: 1.3
-                                          ),),
+                        Container(
+                          height: 300*SizeConfig.heightMultiplier!,
+                          child: Obx(
+                              ()=> SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize:MainAxisSize.min,
+                                  children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
+                                    mainAxisSize:MainAxisSize.min,
+                                    children: [
+                                      InkWell(
+                                        onTap: (){
+                                          selectedProblemIndex.value = index;
+                                        },
+                                        child: Container(
+                                          width: 328*SizeConfig.widthMultiplier!,
+                                          color: selectedProblemIndex.value==index?Colors.white.withOpacity(0.1):Colors.transparent,
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!,vertical: 10*SizeConfig.heightMultiplier!),
+                                            child: Text(
+                                              _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
+                                              style: AppTextStyle.black400Text.copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                                  fontSize: (12) * SizeConfig.textMultiplier!,
+                                                  fontWeight: selectedProblemIndex.value==index?FontWeight.w600:FontWeight.w500,
+                                                  height: 1.3
+                                              ),),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ))
+                                    ],
+                                  ))
+                            ),
+                              ),
                           ),
                         ),
                         // SizedBox(

@@ -9,12 +9,15 @@ import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EnterDetailsPage extends StatelessWidget {
   final LoginController _loginController = Get.put(LoginController());
+  RxBool _isTermAndConditionAgreed = false.obs;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,9 +122,55 @@ class EnterDetailsPage extends StatelessWidget {
                         ),
                         hint: 'enterEmailHint'.tr),
                   ),
-                  SizedBox(
-                    height: 16 * SizeConfig.heightMultiplier!,
-                  ),
+                  // SizedBox(
+                  //   height: 16 * SizeConfig.heightMultiplier!,
+                  // ),
+                  Obx(()=>Row(
+                    children: [
+                      Checkbox(
+                        side: BorderSide(color: _isTermAndConditionAgreed.value?kgreen4F:kPureWhite),
+                          activeColor:kgreen4F,
+                          value: _isTermAndConditionAgreed.value, onChanged: (value){
+                        _isTermAndConditionAgreed.value = value!;
+                      }),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Accept ',
+                                style: AppTextStyle.NormalText.copyWith(
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: lightGrey),
+
+                              ),
+                              TextSpan(
+                                text: 'terms & conditions ',
+                                style: AppTextStyle.NormalText.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: lightGrey),
+                                recognizer: new TapGestureRecognizer()..onTap = () => launch('https://fitbasix.net/terms'),
+                              ),
+                              TextSpan(
+                                text: 'and ',
+                                style: AppTextStyle.NormalText.copyWith(
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: lightGrey),
+                              ),
+                              TextSpan(
+                                text: 'privacy policy',
+                                style: AppTextStyle.NormalText.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: lightGrey),
+                                recognizer: new TapGestureRecognizer()..onTap = () => launch('https://fitbasix.net/privacy_fitbasix'),
+                              ),
+                            ]
+                        ),
+                      ),
+                    ],
+                  )),
                   Obx(
                     () => _loginController.isLoading.value
                         ? Center(
@@ -130,58 +179,67 @@ class EnterDetailsPage extends StatelessWidget {
                         : ProceedButtonWithArrow(
                             title: 'proceed'.tr,
                             onPressed: () async {
-                              if ((_loginController.name.value != '' &&
-                                  _loginController.email.value != '')&&(RegExp(r"^[a-zA-Z\s]*$").hasMatch(_loginController.name.value))) {
-                                _loginController.isLoading.value = true;
-                                var screenId = await LogInService.registerUser(
-                                    _loginController.name.value,
-                                    _loginController.email.value);
 
-                                if (!_loginController.email.value
-                                    .contains('@')) {
-                                  _loginController.isLoading.value = false;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Please enter an valid email')));
-                                } else if (screenId == 1) {
-                                  _loginController.isLoading.value = false;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text('Email already exists')));
-                                } else if (screenId == 16) {
-                                  _loginController.isLoading.value = false;
-                                  Navigator.pushNamedAndRemoveUntil(context,
-                                      RouteName.homePage, (route) => false);
-                                } else
-                                  return;
-                              } else {
-                                if(_loginController.name.value.isNotEmpty){
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Please enter a valid name')));
-                                }
-                                if (_loginController.name.value == '' &&
-                                    _loginController.email.value == '') {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Please enter a name and an email')));
-                                } else if (_loginController.name.value == '') {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text('Please enter a name')));
-                                } else if (_loginController.email.value == '') {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text('Please enter an email')));
+                              if(_isTermAndConditionAgreed.value){
+                                if ((_loginController.name.value != '' &&
+                                    _loginController.email.value != '')&&(RegExp(r"^[a-zA-Z\s]*$").hasMatch(_loginController.name.value))) {
+                                  _loginController.isLoading.value = true;
+                                  var screenId = await LogInService.registerUser(
+                                      _loginController.name.value,
+                                      _loginController.email.value);
+
+                                  if (!_loginController.email.value
+                                      .contains('@')) {
+                                    _loginController.isLoading.value = false;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Please enter an valid email')));
+                                  } else if (screenId == 1) {
+                                    _loginController.isLoading.value = false;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content:
+                                            Text('Email already exists')));
+                                  } else if (screenId == 16) {
+                                    _loginController.isLoading.value = false;
+                                    Navigator.pushNamedAndRemoveUntil(context,
+                                        RouteName.homePage, (route) => false);
+                                  } else
+                                    return;
+                                } else {
+                                  if(_loginController.name.value.isNotEmpty){
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Please enter a valid name')));
+                                  }
+                                  if (_loginController.name.value == '' &&
+                                      _loginController.email.value == '') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Please enter a name and an email')));
+                                  } else if (_loginController.name.value == '') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content:
+                                            Text('Please enter a name')));
+                                  } else if (_loginController.email.value == '') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content:
+                                            Text('Please enter an email')));
+                                  }
                                 }
                               }
-                            },
+                              else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Please Accept terms and conditions and privacy policy')));
+                              }
+                             },
                           ),
                   ),
                   SizedBox(

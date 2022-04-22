@@ -1226,34 +1226,39 @@ class _ChatScreenState extends State<ChatScreen> {
                         SizedBox(
                           height: 20 * SizeConfig.heightMultiplier!,
                         ),
-                        Obx(
-                              ()=> Column(
-                              mainAxisSize:MainAxisSize.min,
-                              children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
-                                mainAxisSize:MainAxisSize.min,
-                                children: [
-                                  InkWell(
-                                    onTap: (){
-                                      selectedProblemIndex.value = index;
-                                    },
-                                    child: Container(
-                                      width: 328*SizeConfig.widthMultiplier!,
-                                      color: selectedProblemIndex.value==index?Colors.white.withOpacity(0.1):Colors.transparent,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!,vertical: 10*SizeConfig.heightMultiplier!),
-                                        child: Text(
-                                          _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
-                                          style: AppTextStyle.black400Text.copyWith(
-                                              color: Theme.of(context).textTheme.bodyText1?.color,
-                                              fontSize: (12) * SizeConfig.textMultiplier!,
-                                              fontWeight: selectedProblemIndex.value==index?FontWeight.w600:FontWeight.w500,
-                                              height: 1.3
-                                          ),),
+                        Container(
+                          height: 300*SizeConfig.heightMultiplier!,
+                          child: Obx(
+                                ()=> SingleChildScrollView(
+                                  child: Column(
+                                  mainAxisSize:MainAxisSize.min,
+                                  children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
+                                    mainAxisSize:MainAxisSize.min,
+                                    children: [
+                                      InkWell(
+                                        onTap: (){
+                                          selectedProblemIndex.value = index;
+                                        },
+                                        child: Container(
+                                          width: 328*SizeConfig.widthMultiplier!,
+                                          color: selectedProblemIndex.value==index?Colors.white.withOpacity(0.1):Colors.transparent,
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!,vertical: 10*SizeConfig.heightMultiplier!),
+                                            child: Text(
+                                              _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
+                                              style: AppTextStyle.black400Text.copyWith(
+                                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                                  fontSize: (12) * SizeConfig.textMultiplier!,
+                                                  fontWeight: selectedProblemIndex.value==index?FontWeight.w600:FontWeight.w500,
+                                                  height: 1.3
+                                              ),),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ))
+                                    ],
+                                  ))
+                            ),
+                                ),
                           ),
                         ),
                         // SizedBox(
@@ -1553,6 +1558,20 @@ class _ChatScreenState extends State<ChatScreen> {
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: SvgPicture.asset(
+                                ImagePath.closedialogIcon,
+                                color: Theme.of(context).primaryColor,
+                                width: 16 * SizeConfig.imageSizeMultiplier!,
+                                height: 16 * SizeConfig.imageSizeMultiplier!,
+                              ),
+                            ),
+                          ),
                           SizedBox(
                             height: 100 * SizeConfig.heightMultiplier!,
                             width: 100 * SizeConfig.widthMultiplier!,
@@ -1585,21 +1604,6 @@ class _ChatScreenState extends State<ChatScreen> {
                             textAlign: TextAlign.center,
                           ),
                         ],
-                      ),
-                      Positioned(
-                        top: -15 * SizeConfig.heightMultiplier!,
-                        right: -15 * SizeConfig.widthMultiplier!,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: SvgPicture.asset(
-                            ImagePath.closedialogIcon,
-                            color: Theme.of(context).primaryColor,
-                            width: 16 * SizeConfig.widthMultiplier!,
-                            height: 16 * SizeConfig.heightMultiplier!,
-                          ),
-                        ),
                       ),
                     ],
                   ))),

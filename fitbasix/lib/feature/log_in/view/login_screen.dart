@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/black_textfield.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/custom_dropdown.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,6 +20,7 @@ import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/api_service/remote_config_service.dart';
 import '../model/countries_model.dart';
@@ -342,12 +344,41 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       SizedBox(
                         height: 8 * SizeConfig.heightMultiplier!,
                       ),
-                      Text(
-                        'By signing up you agree our terms and conditions and privacy policy',
+                      RichText(
                         textAlign: TextAlign.center,
-                        style: AppTextStyle.NormalText.copyWith(
-                            fontSize: 12 * SizeConfig.textMultiplier!,
-                            color: lightGrey),
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'By signing up you agree our ',
+                                style: AppTextStyle.NormalText.copyWith(
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: lightGrey),
+
+                              ),
+                              TextSpan(
+                                text: 'terms & conditions ',
+                                style: AppTextStyle.NormalText.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: lightGrey),
+                                recognizer: new TapGestureRecognizer()..onTap = () => launch('https://fitbasix.net/terms'),
+                              ),
+                              TextSpan(
+                                text: 'and ',
+                                style: AppTextStyle.NormalText.copyWith(
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: lightGrey),
+                              ),
+                              TextSpan(
+                                text: 'privacy policy',
+                                style: AppTextStyle.NormalText.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: lightGrey),
+                                recognizer: new TapGestureRecognizer()..onTap = () => launch('https://fitbasix.net/privacy_fitbasix'),
+                              ),
+                            ]
+                        ),
                       ),
                       SizedBox(
                         height: 32 * SizeConfig.heightMultiplier!,
