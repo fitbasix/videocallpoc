@@ -8,6 +8,8 @@ import 'package:fitbasix/feature/message/view/chat_videocallscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:quickblox_sdk/models/qb_ice_server.dart';
 import 'package:quickblox_sdk/models/qb_rtc_session.dart';
 import 'package:quickblox_sdk/models/qb_session.dart';
 import 'package:quickblox_sdk/models/qb_settings.dart';
@@ -57,6 +59,9 @@ class InitializeQuickBlox{
     //todo remove when testing on emulator is finished
 
 
+
+
+
     if(Platform.isAndroid){
       var androidInfo = await DeviceInfoPlugin().androidInfo;
       double osVersion = double.parse(androidInfo.version.release);
@@ -79,14 +84,62 @@ class InitializeQuickBlox{
         await QB.webrtc.init().then((value) {
           subscribeCall();
         });
-
         print("webINIT");
       } on PlatformException catch (e) {
         print(e.toString() +"init error");
       }
     }
 
+    // _setIceServers();
+    // _getIceServers();
+    // initVideoConference();
   }
+
+  void _getIceServers() async {
+    print("get ice servers");
+    try {
+      List<QBIceServer> servers = await QB.rtcConfig.getIceServers();
+      // if(servers.isNotEmpty){
+      //   await QB.rtcConfig.setIceServers(servers);
+      // }
+      servers.forEach((element) {
+        print(element.url);
+      });
+    } on PlatformException catch (e) {
+      //some logic for handle exception 6
+    }
+  }
+
+  initVideoConference() async {
+    PermissionStatus status = await Permission.bluetoothConnect.request();
+    if(status.isGranted){
+      try {
+        String conferenceServer = "turnfitbasix.quickblox.com";
+        await QB.conference.init(conferenceServer);
+      } on PlatformException catch (e) {
+        print(e);
+        // Some error occurred, look at the exception message for more details
+      }
+    }
+  }
+
+  void _setIceServers() async {
+    QBIceServer iceServerPrimary = QBIceServer();
+    iceServerPrimary.url = "turnfitbasix.quickblox.com"; //required
+    // iceServerPrimary.userName = "your primary user name"; //optional 5
+    //iceServerPrimary.password = "your primary password"; //optional 6 7
+    //QBIceServer iceServerSecondary = QBIceServer();
+    //iceServerSecondary.url = "turnfitbasix.quickblox.com"; //required 9
+    //iceServerSecondary.userName = "your secondary user name"; //optional 10
+    //iceServerSecondary.password = "your secondary password"; //optional 11 12
+    try {
+      await QB.rtcConfig.setIceServers(
+          [iceServerPrimary]);
+    } on PlatformException catch (e) { //some logic for handle exception 16 } 17
+      print(e.toString() +" ppppp");
+    }
+  }
+
   Future<void> enableAutoReconnect() async {
     // await QB.settings.enableAutoReconnect(true);
     // await QB.settings.enableCarbons();
