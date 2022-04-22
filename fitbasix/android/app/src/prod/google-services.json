@@ -1,0 +1,190 @@
+{
+  "project_info": {
+    "project_number": "608132731672",
+    "project_id": "fitbitsix-d1493",
+    "storage_bucket": "fitbitsix-d1493.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608132731672:android:832586384733ddeaad046d",
+        "android_client_info": {
+          "package_name": "com.antino.fitbasix.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608132731672-c03lmq3db3i313m5vhjqldvloc4g1ocs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.antino.fitbasix.dev",
+            "certificate_hash": "764a7f09349f8e8ccbd3e0f3c6caf0a02af45345"
+          }
+        },
+        {
+          "client_id": "608132731672-vi5gj820odu7hirtsu4oetm7g9tsfb55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.antino.fitbasix.dev",
+            "certificate_hash": "e6a3d16999a06d34590fb5e9da61d40166714d3c"
+          }
+        },
+        {
+          "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
+        },
+        {
+          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.antino.fitbasix.dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608132731672:android:0b08e4a65a062365ad046d",
+        "android_client_info": {
+          "package_name": "com.antino.fitbasix.stage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
+        },
+        {
+          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.antino.fitbasix.dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608132731672:android:506d2fc1900c44d7ad046d",
+        "android_client_info": {
+          "package_name": "com.antino.fitbasix_trainer_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
+        },
+        {
+          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.antino.fitbasix.dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608132731672:android:fd7ce8479c62a193ad046d",
+        "android_client_info": {
+          "package_name": "com.fitbasixco.fitbasix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608132731672-dj0ke7creasgfi75kinjpipgv38liil1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fitbasixco.fitbasix",
+            "certificate_hash": "e6a3d16999a06d34590fb5e9da61d40166714d3c"
+          }
+        },
+        {
+          "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3qml-pxxjm3lUBPyP-0R2ASrR1nZ1ePY"
+        },
+        {
+          "current_key": "AIzaSyAaKzm8T_a7KNzkiei-ovWJLW35SRKMDWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608132731672-chh8ab5jipg3revkmq9umvb7g0qa2cj4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.antino.fitbasix.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
