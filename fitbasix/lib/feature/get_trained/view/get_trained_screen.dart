@@ -132,14 +132,16 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .response!
                                                 .data!
                                                 .myTrainers![index]
-                                                .name!,
+                                                .name
+                                                .toString(),
                                             imageUrl: _trainerController
                                                 .trainers
                                                 .value
                                                 .response!
                                                 .data!
                                                 .myTrainers![index]
-                                                .profilePhoto!,
+                                                .profilePhoto
+                                                .toString(),
                                             isCurrentlyEnrolled:
                                                 _trainerController
                                                     .trainers
