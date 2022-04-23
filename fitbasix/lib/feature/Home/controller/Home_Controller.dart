@@ -215,9 +215,7 @@ class HomeController extends GetxController {
     print("test");
     userProfileData.value = await CreatePostService.getUserProfile();
 
-    log(userProfileData.value.response!.data!.profile!.nutrition == Nutrition()
-        ? "1"
-        : "2");
+
 
     ///todo after
     if (userProfileData.value.response!.data!.profile!.email == null) {
@@ -248,7 +246,6 @@ class HomeController extends GetxController {
 
     if (initialPostData.value.response!.data!.length != 0) {
       trendingPostList.value = initialPostData.value.response!.data!;
-      log("wwww" + trendingPostList.toString());
     }
     print(trendingPostList.value.length.toString() + "length");
     if (trendingPostList.value.length < 5) {

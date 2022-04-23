@@ -62,7 +62,6 @@ class HomeService {
     var response = await dio!
         .post(ApiUrl.likePost, data: postId != null ? likePost : likeComment);
 
-    log(response.toString());
     print(response.data['code']);
     if (response.data['code'] == 0) return true;
     return false;
@@ -77,7 +76,6 @@ class HomeService {
     var response = await dio!.delete(ApiUrl.unlike,
         data: postId != null ? unlikePost : unlikeComment);
 
-    log(response.toString());
     print(response.data['code']);
     if (response.data['code'] == 0) return true;
     return false;
@@ -121,7 +119,6 @@ class HomeService {
     var response = await dio!
         .post(ApiUrl.addComment, data: {"postId": postId, "comment": comment});
 
-    log(response.toString());
     print(response.data['code']);
   }
 
@@ -137,7 +134,6 @@ class HomeService {
       "comment": comment
     });
 
-    log("reply of comment");
     print(response.data['code']);
   }
 
@@ -172,7 +168,6 @@ class HomeService {
     var response = await dio!.post(ApiUrl.getComment,
         data: postId == null ? getCommentReply : getPostComment);
 
-    log("nnnnn");
 
     return commentModelFromJson(response.toString());
   }
@@ -192,7 +187,6 @@ class HomeService {
     var response =
         await dio!.post(ApiUrl.getPostById, data: {"postId": postId});
 
-    log(response.toString());
 
     return postModelFromJson(response.toString());
   }
@@ -210,8 +204,6 @@ class HomeService {
     dio!.options.headers["language"] = "1";
     String token = await LogInService.getAccessToken();
     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
-    log(token);
     var response = await dio.post(ApiUrl.deleteAccount);
-    log("oooo");
   }
 }

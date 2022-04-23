@@ -76,7 +76,6 @@ class CreatePostService {
               : category != null
               ? updateCategory
               : getPostData).timeout(Duration(seconds: 3));
-      log(response.data.toString());
       //todo handle null to stop timer of create post
       return postDataFromJson(response.toString());
     }
@@ -112,7 +111,6 @@ class CreatePostService {
     print(dio.options.headers["Authorization"].toString() + "tokenDemo");
     var response = await dio.get(ApiUrl.getUserProfile);
 
-    log(response.data.toString());
     UserProfileModel _userProfileModel =
         userProfileModelFromJson(response.toString());
     update(_userProfileModel);
@@ -162,7 +160,6 @@ class CreatePostService {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.get(ApiUrl.getAllCategory);
-    log(response.data.toString());
     return categoryModelFromJson(response.toString());
   }
 
@@ -254,7 +251,6 @@ class CreatePostService {
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.updateUserQuickBloxId,
         data: {"quickBloxId": userQuickBloxId});
-    log(response.toString());
     print(response.statusCode.toString() + "QBID");
 
     return response.statusCode!;

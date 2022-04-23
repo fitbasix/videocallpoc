@@ -48,7 +48,6 @@ class ProfileServices {
                       "otp": otp!,
                       "DOB": dob
                     }));
-      log("kjj" + response.body.toString());
       final responseData = jsonDecode(response.body);
       if (response.statusCode == 409) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -78,7 +77,6 @@ class ProfileServices {
           body: jsonEncode(
               <String, String>{"phone": mobile, "countryCode": countryCode}));
       final responseData = jsonDecode(response.body);
-      log(response.body.toString());
       if (response.statusCode == 409) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(responseData["response"]["message"])));
@@ -160,7 +158,6 @@ class ProfileServices {
     var response = await dio!
         .post(ApiUrl.getTrainerPosts, data: {"skip": skip == null ? 0 : skip});
 
-    log(response.toString());
 
     return postsModelFromJson(response.toString());
   }

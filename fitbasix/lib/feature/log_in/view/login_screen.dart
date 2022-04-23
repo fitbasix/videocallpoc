@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/black_textfield.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/custom_dropdown.dart';
 import 'package:flutter/gestures.dart';
@@ -361,7 +362,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12 * SizeConfig.textMultiplier!,
                                     color: lightGrey),
-                                recognizer: new TapGestureRecognizer()..onTap = () => launch('https://fitbasix.net/terms'),
+                                recognizer: new TapGestureRecognizer()..onTap = () => launch(ApiUrl.liveBaseURL+'/terms'),
                               ),
                               TextSpan(
                                 text: 'and ',
@@ -375,7 +376,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12 * SizeConfig.textMultiplier!,
                                     color: lightGrey),
-                                recognizer: new TapGestureRecognizer()..onTap = () => launch('https://fitbasix.net/privacy_fitbasix'),
+                                recognizer: new TapGestureRecognizer()..onTap = () => launch(ApiUrl.liveBaseURL+'/privacy_fitbasix'),
                               ),
                             ]
                         ),
@@ -394,7 +395,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     final user = FirebaseAuth.instance.currentUser;
                                     if (user != null) {
                                       user.getIdToken().then((value) {
-                                        log(value.toString());
                                         _loginController.idToken.value = value;
                                       });
 
@@ -555,7 +555,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 final user = FirebaseAuth.instance.currentUser;
                                 if (user != null) {
                                   user.getIdToken().then((value) {
-                                    log(value.toString());
                                     _loginController.idToken.value = value;
                                   });
 
@@ -563,8 +562,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                       await LogInService.thirdPartyLogin(
                                           'Google', _loginController.idToken.value);
 
-                                  // log(_loginController.thirdPartyLogin.value.code
-                                  //     .toString());
+
 
                                   if (_loginController.thirdPartyLogin.value
                                           .response!.user!.token !=

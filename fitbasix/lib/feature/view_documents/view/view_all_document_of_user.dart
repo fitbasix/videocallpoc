@@ -52,7 +52,6 @@ class _ViewAllDocumentsOfUserState extends State<ViewAllDocumentsOfUser> {
             _documentsController.showLoaderOnDocs.value = false;
             return;
           } else {
-            log(_documentsController.listOfDocuments.toString());
             if (_documentsController.listOfDocuments.last.id ==
                 postQuery.response!.data!.last.id) {
               _documentsController.showLoaderOnDocs.value = false;

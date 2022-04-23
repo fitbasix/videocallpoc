@@ -26,7 +26,6 @@ class LogInService {
     dio!.options.headers["language"] = "1";
     var response = await dio!.post(ApiUrl.getOTP,
         data: {"phone": mobile, "countryCode": countryCode});
-    log(response.toString());
 
     return response.data['response']['message'];
   }
@@ -69,9 +68,6 @@ class LogInService {
       "provider": provider,
       "token": token,
     });
-    log(response.data['response']['screenId'].toString());
-    log(response.data.toString());
-    print(response.data);
 
     return thirdPartyLoginFromJson(response.toString());
   }
@@ -109,7 +105,6 @@ class LogInService {
       );
 
       final responseData = jsonDecode(putResponse.body);
-      log(responseData.toString());
       if (putResponse.statusCode == 405) {
         Get.deleteAll();
         Navigator.pop(context);
@@ -138,7 +133,6 @@ class LogInService {
       }
       return responseData['response']['screenId'];
     } on Exception catch (e) {
-      log(e.toString());
       return null;
     }
   }
@@ -184,7 +178,6 @@ class LogInService {
         );
 
         final responseData = jsonDecode(putResponse.body);
-        log(responseData.toString());
         if (responseData['code'] == 0) {
           return responseData['response']['screenId'];
         } else

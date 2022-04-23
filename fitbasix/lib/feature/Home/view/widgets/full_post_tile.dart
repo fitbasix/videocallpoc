@@ -707,7 +707,6 @@ class _FullPostTileState extends State<FullPostTile> {
                                                         if(!isReplyLoading&&_homeController
                                                             .replyController.text.isNotEmpty){
                                                           isReplyLoading = true;
-                                                          log("Icon");
                                                           Navigator.pop(
                                                               context);
                                                           FocusScope.of(context)
@@ -731,10 +730,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                           _homeController
                                                               .commentController
                                                               .clear();
-                                                          log(_homeController
-                                                              .commentController
-                                                              .value
-                                                              .text);
+
 
                                                           _homeController
                                                               .postComments
@@ -749,10 +745,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                   .post
                                                                   .value
                                                                   .id!);
-                                                          log(_homeController
-                                                              .postComments
-                                                              .value
-                                                              .toString());
+
                                                           // _homeController
                                                           //     .viewReplies!
                                                           //     .clear();
@@ -1137,7 +1130,6 @@ class _FullPostTileState extends State<FullPostTile> {
                       child: TextField(
                         controller: _homeController.commentController,
                         onChanged: (value) {
-                          log("pop1");
                           _homeController.comment.value = value;
                         },
                         maxLines: null,

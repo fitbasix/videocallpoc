@@ -31,8 +31,6 @@ class PostService {
       ApiUrl.uploadMedia,
       data: formData,
     );
-    log(response.data.toString());
-    print(response.data.toString());
     return mediaUrlFromJson(response.toString());
   }
 }

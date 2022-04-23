@@ -69,26 +69,29 @@ class HomeAndTrainerPage extends StatelessWidget {
       bottomNavigationBar: CustomBottomNavigationBar(
         length: screens.length,
       ),
-      endDrawer: Drawer(
-        child: Obx(
-          () => MenuScreen(
-              imageCoverPic:
-                  homeController.userProfileData.value.response == null
-                      ? ""
-                      : homeController.coverPhoto.value == ""
-                          ? homeController.userProfileData.value.response!.data!
-                              .profile!.coverPhoto
-                              .toString()
-                          : homeController.coverPhoto.value,
-              name: homeController.userProfileData.value.response == null
-                  ? ""
-                  : homeController
-                      .userProfileData.value.response!.data!.profile!.name.toString(),
-              imageUrl: homeController.userProfileData.value.response == null
-                  ? ""
-                  : homeController.profilePhoto.value==""?homeController.userProfileData.value.response!.data!
-                      .profile!.profilePhoto
-                      .toString():homeController.profilePhoto.value),
+      endDrawer: Container(
+          width: 300*SizeConfig.widthMultiplier!,
+        child: Drawer(
+          child: Obx(
+            () => MenuScreen(
+                imageCoverPic:
+                    homeController.userProfileData.value.response == null
+                        ? ""
+                        : homeController.coverPhoto.value == ""
+                            ? homeController.userProfileData.value.response!.data!
+                                .profile!.coverPhoto
+                                .toString()
+                            : homeController.coverPhoto.value,
+                name: homeController.userProfileData.value.response == null
+                    ? ""
+                    : homeController
+                        .userProfileData.value.response!.data!.profile!.name.toString(),
+                imageUrl: homeController.userProfileData.value.response == null
+                    ? ""
+                    : homeController.profilePhoto.value==""?homeController.userProfileData.value.response!.data!
+                        .profile!.profilePhoto
+                        .toString():homeController.profilePhoto.value),
+          ),
         ),
       ),
     );
@@ -127,7 +130,6 @@ class _HomePageState extends State<HomePage> {
 
             return;
           } else {
-            log(_homeController.trendingPostList.toString());
             if (_homeController.trendingPostList.last.id ==
                 postQuery.response!.data!.last.id) {
               _homeController.showLoader.value = false;
@@ -1194,7 +1196,6 @@ class _HomePageState extends State<HomePage> {
                                             physics:
                                                 NeverScrollableScrollPhysics(),
                                             itemBuilder: (_, index) {
-                                              log("can not");
                                               _homeController
                                                   .alreadyRenderedPostId
                                                   .add(_homeController
@@ -1207,7 +1208,6 @@ class _HomePageState extends State<HomePage> {
                                               //     .trendingPostList[
                                               // index]
                                               //     .id!)==-1){
-                                              //   log("add");
                                               //   _homeController.commentsMap.addIf(false==false,
                                               //       _homeController
                                               //           .trendingPostList[
@@ -1235,11 +1235,7 @@ class _HomePageState extends State<HomePage> {
                                               //       ));
                                               // }
 
-// log(_homeController
-//     .commentsMap[_homeController
-//     .trendingPostList[
-// index]
-//     .id!]!.comment.toString());
+
 
                                               if (_homeController
                                                       .trendingPostList.length <
@@ -1417,7 +1413,6 @@ class _HomePageState extends State<HomePage> {
                                                                     .id!);
                                                           }
 
-                                                          log("hit Like");
                                                           RecentCommentModel
                                                               recentComment =
                                                               RecentCommentModel();

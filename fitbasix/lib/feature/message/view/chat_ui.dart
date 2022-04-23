@@ -230,12 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppbarforChat(
         trainerProfilePicUrl: widget.profilePicURL,
         onHangUpTapped: (value) {
-          log("lll");
-          log(widget.days.toString());
-          log("pop" +
-              _trainerController
-                  .isVideoAvailable(widget.time.toString())
-                  .toString());
+
           _trainerController.isVideoAvailable(widget.time.toString());
 
           if (widget.days!.indexOf(_trainerController.daysInt[
@@ -255,7 +250,7 @@ class _ChatScreenState extends State<ChatScreen> {
             });
           } else {
 
-            log("oopp" + _trainerController.getTime(widget.time.toString()));
+
             showDialogForVideoCallNotPossible(
                 context,
                 _trainerController.getTime(widget.time.toString()),
