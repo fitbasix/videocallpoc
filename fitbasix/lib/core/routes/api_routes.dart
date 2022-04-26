@@ -2,8 +2,8 @@ import '../../app_config.dart';
 
 class ApiUrl {
 
-  static String liveBaseURL = AppConfig.api_url;
-  //static String liveBaseURL = 'http://3.131.171.176';
+  //static String liveBaseURL = AppConfig.api_url;
+  static String liveBaseURL = 'http://3.131.171.176';
   // static String liveBaseURL = 'https://0455-103-15-254-57.ngrok.io';
 
 

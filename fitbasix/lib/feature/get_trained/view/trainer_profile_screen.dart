@@ -401,12 +401,12 @@ class _TrainerPageState extends State<TrainerPage> {
         if (postQuery.response!.data!.length < 5) {
           _trainerController.trainerPostList.addAll(postQuery.response!.data!);
           _trainerController.loadingIndicator.value = false;
-          return;
+          //return;
         } else {
           if (_trainerController.trainerPostList.last.id ==
               postQuery.response!.data!.last.id) {
             _trainerController.loadingIndicator.value = false;
-            return;
+            //return;
           }
           _trainerController.trainerPostList.addAll(postQuery.response!.data!);
         }
@@ -981,6 +981,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   color: kBackgroundColor,
                                                 ),
                                                 PostTile(
+                                                  userID: _homeController.trendingPostList[index].userId!.id,
+                                                  isTrainerProfile: true,
                                                   comment: _homeController
                                                                   .commentsMap[
                                                               _trainerController

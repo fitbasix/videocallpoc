@@ -246,12 +246,12 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.0.0)
-  - QuickBlox (2.17.10)
+  - QuickBlox (2.17.11)
   - Quickblox-WebRTC (2.7.6):
     - QuickBlox (>= 2.7)
   - quickblox_sdk (0.0.1-alpha):
     - Flutter
-    - QuickBlox (~> 2.17.10)
+    - QuickBlox (~> 2.17.11)
     - Quickblox-WebRTC (~> 2.7.6)
   - SDWebImage (5.12.4):
     - SDWebImage/Core (= 5.12.4)
@@ -301,7 +301,7 @@ DEPENDENCIES:
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
-  - QuickBlox (~> 2.17.10)
+  - QuickBlox (~> 2.17.11)
   - Quickblox-WebRTC (~> 2.7.6)
   - quickblox_sdk (from `.symlinks/plugins/quickblox_sdk/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
@@ -451,9 +451,9 @@ SPEC CHECKSUMS:
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   photo_manager: 84fa94fbeb82e607333ea9a13c43b58e0903a463
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
-  QuickBlox: 49d85c6e1782993fb2383001301b788a8d7dcad3
+  QuickBlox: 37d2eb7d791782469ba14fa40122633185944c01
   Quickblox-WebRTC: 162d2421d91cfb3d4f7e01f87e095633ca52bb1d
-  quickblox_sdk: 9ce8b6d99695835a8a3333dc7ac9acd49a44fb13
+  quickblox_sdk: 183b78fa64f4d1ba46b3ca4e5bc65dc9f572e5b9
   SDWebImage: 631cf572cc93dfdfe54162e556410a61f1141928
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
@@ -465,6 +465,6 @@ SPEC CHECKSUMS:
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   ZLPhotoBrowser: 602d505d4f2cf7f309ce973c4353d33e85216d58
 
-PODFILE CHECKSUM: c9d17125c1714615c64ba8100217ac2066a2f443
+PODFILE CHECKSUM: eb6a851b73cef9c3a62eba25e8ec6c5ca872f6b5
 
 COCOAPODS: 1.11.2

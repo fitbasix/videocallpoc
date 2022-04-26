@@ -1115,6 +1115,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void reportAbuseDialog(BuildContext context){
+    RxBool blockUser = false.obs;
     RxInt selectedProblemIndex = (-1).obs;
     if(_reportAbuseController.reportAbuseList.value.response == null){
       _reportAbuseController.getReportAbuseData();
@@ -1169,7 +1170,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
-                          child: Text("Why are you reporting?".tr,
+                          child: Text("Why_reporting?".tr,
                             style: AppTextStyle.black600Text.copyWith(
                               color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: (12) * SizeConfig.textMultiplier!,
@@ -1229,6 +1230,43 @@ class _ChatScreenState extends State<ChatScreen> {
                         // SizedBox(
                         //   height: 32 * SizeConfig.heightMultiplier!,
                         // ),
+                        SizedBox(
+                          height: 24 * SizeConfig.heightMultiplier!,
+                        ),
+                        Obx(()=>Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 35*SizeConfig.widthMultiplier!),
+                          child: Row(
+                            children: [
+
+                              Container(
+                                color: Colors.transparent,
+                                child: GestureDetector(
+                                    onTap: (){
+                                      blockUser.value = !blockUser.value;
+                                    },
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5*SizeConfig.widthMultiplier!),
+                                        child: SvgPicture.asset(blockUser.value?ImagePath.selectedBox:ImagePath.unselectedBox,height: 18*SizeConfig.heightMultiplier!,width: SizeConfig.widthMultiplier!,))),
+                              ),
+                              SizedBox(width: 8*SizeConfig.widthMultiplier!,),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Block_person'.tr,
+                                        style: AppTextStyle.NormalText.copyWith(
+                                            fontSize: 14 * SizeConfig.textMultiplier!,
+                                            fontWeight: FontWeight.w600,
+                                            color: kPink),
+
+                                      ),
+                                    ]
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(

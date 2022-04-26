@@ -336,6 +336,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                               return Obx(() => Column(
                                     children: [
                                       ExplorePostTile(
+                                        userID: homeController.explorePostList[index].userId!.id,
                                         name: homeController
                                             .explorePostList[index]
                                             .userId!
