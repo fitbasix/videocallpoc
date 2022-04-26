@@ -18,6 +18,7 @@ class HomeService {
   static HomeController homeController = Get.find();
 
   static Future<PostsModel> getPosts({int? skip}) async {
+    print(skip.toString()+" skips");
     // var response = http.post(
     //   Uri.parse(ApiUrl.getPosts),
     //   headers: {

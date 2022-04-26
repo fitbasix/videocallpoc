@@ -19,6 +19,8 @@ class ImagePath {
   static const String animatedLiveLimitErrorIcon =
       "assets/gif/animated_error_for_live.gif";
   static const String commentIcon = "assets/Icons/comment_icon.svg";
+  static const String selectedBox = "assets/home/selected_checkbox.svg";
+  static const String unselectedBox = "assets/home/unselected_box.svg";
   static const String downloadDocIcon = "assets/Icons/download_icon.png";
   static const String docFileIcon = "assets/Icons/doc_file_icon.png";
   static const String pdfFileIcon = "assets/Icons/pdf_file_icon.png";

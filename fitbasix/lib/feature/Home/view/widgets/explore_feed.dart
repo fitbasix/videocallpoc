@@ -41,6 +41,7 @@ class ExplorePostTile extends StatefulWidget {
       required this.postId,
       required this.onTap,
       required this.people,
+        this.userID,
       required this.isFollowing})
       : super(key: key);
   final String name;
@@ -59,6 +60,7 @@ class ExplorePostTile extends StatefulWidget {
   final VoidCallback onTap;
   final List<Person> people;
   final bool isFollowing;
+  final String? userID;
 
   @override
   State<ExplorePostTile> createState() => _ExplorePostTileState();
@@ -82,7 +84,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
               padding: EdgeInsets.only(
                   left: 16 * SizeConfig.widthMultiplier!,
                   bottom: 16 * SizeConfig.heightMultiplier!,
-                  right: 16 * SizeConfig.heightMultiplier!,
+                  // right: 16 * SizeConfig.heightMultiplier!,
                   top: 16 * SizeConfig.heightMultiplier!),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -337,13 +339,16 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                       onTap: (){
                         reportAbuseDialog(context);
                       },
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 7*SizeConfig.widthMultiplier!),
-                        child: SvgPicture.asset(
-                          ImagePath.chatpopupmenuIcon,
-                          width: 4 * SizeConfig.widthMultiplier!,
-                          height: 20 * SizeConfig.heightMultiplier!,
-                          color: Theme.of(context).primaryColor,
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 9*SizeConfig.widthMultiplier!,right: 16*SizeConfig.widthMultiplier!),
+                          child: SvgPicture.asset(
+                            ImagePath.chatpopupmenuIcon,
+                            width: 4 * SizeConfig.widthMultiplier!,
+                            height: 20 * SizeConfig.heightMultiplier!,
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
                       )
                   ),
@@ -577,6 +582,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
     );
   }
   void reportAbuseDialog(BuildContext context){
+    RxBool blockUser = false.obs;
     RxInt selectedProblemIndex = (-1).obs;
     if(_reportAbuseController.reportAbuseList.value.response == null){
       _reportAbuseController.getReportAbuseData();
@@ -631,7 +637,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
-                          child: Text("Why are you reporting?".tr,
+                          child: Text("Why_reporting?".tr,
                             style: AppTextStyle.black600Text.copyWith(
                               color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: (12) * SizeConfig.textMultiplier!,
@@ -691,6 +697,43 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                         // SizedBox(
                         //   height: 32 * SizeConfig.heightMultiplier!,
                         // ),
+                        SizedBox(
+                          height: 24 * SizeConfig.heightMultiplier!,
+                        ),
+                        Obx(()=>Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 35*SizeConfig.widthMultiplier!),
+                          child: Row(
+                            children: [
+
+                              Container(
+                                color: Colors.transparent,
+                                child: GestureDetector(
+                                    onTap: (){
+                                      blockUser.value = !blockUser.value;
+                                    },
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5*SizeConfig.widthMultiplier!),
+                                        child: SvgPicture.asset(blockUser.value?ImagePath.selectedBox:ImagePath.unselectedBox,height: 18*SizeConfig.heightMultiplier!,width: SizeConfig.widthMultiplier!,))),
+                              ),
+                              SizedBox(width: 8*SizeConfig.widthMultiplier!,),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Block_person'.tr,
+                                        style: AppTextStyle.NormalText.copyWith(
+                                            fontSize: 14 * SizeConfig.textMultiplier!,
+                                            fontWeight: FontWeight.w600,
+                                            color: kPink),
+
+                                      ),
+                                    ]
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -717,13 +760,20 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                         if(!_reportAbuseController.isReportSendAbuseLoading.value){
                                           var response = await _reportAbuseController
                                               .sendRepostAbuseData(
+                                              userId: blockUser.value?widget.userID:null,
                                               postId: widget.postId,
                                               reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
                                           );
                                           if(response.isNotEmpty){
                                             Navigator.pop(context);
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                            _homeController.explorePostList.removeAt(_homeController.explorePostList.indexWhere((element) => element.id == widget.postId));
+                                            final postQuery = await HomeService.getExplorePosts(
+                                                skip: _homeController.explorePageCount.value * 5);
+
+                                            _homeController.explorePostList.addAll(postQuery.response!.data!);
+                                            _homeController.explorePageCount.value = _homeController.explorePageCount.value+1;
                                           }
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
                                         }
                                       }
                                       else{
@@ -734,6 +784,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                                           _reportAbuseController.isReportSendAbuseLoading.value = false;
                                         });
                                       }
+
                                     },
                                     child: Text(
                                       "Submit".tr,

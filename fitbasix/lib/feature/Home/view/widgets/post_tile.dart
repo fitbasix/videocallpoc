@@ -6,6 +6,7 @@ import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/video_player.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,6 +22,7 @@ import 'package:readmore/readmore.dart';
 
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/universal_widgets/customized_circular_indicator.dart';
+import '../../../get_trained/services/trainer_services.dart';
 import '../../../report_abuse/report_abuse_controller.dart';
 import '../../../spg/view/set_goal_screen.dart';
 
@@ -42,8 +44,11 @@ class PostTile extends StatefulWidget {
       required this.postId,
       required this.onTap,
       required this.comment,
+        this.isTrainerProfile,
+        this.userID,
       required this.people})
       : super(key: key);
+  final bool? isTrainerProfile;
   final String name;
   final String profilePhoto;
   final List<String> imageUrl;
@@ -60,6 +65,7 @@ class PostTile extends StatefulWidget {
   final VoidCallback onTap;
   final Comment? comment;
   final List<Person> people;
+  final String? userID;
 
   @override
   State<PostTile> createState() => _PostTileState();
@@ -83,7 +89,6 @@ class _PostTileState extends State<PostTile> {
             Padding(
               padding: EdgeInsets.only(
                   left: 16 * SizeConfig.widthMultiplier!,
-                  right: 16*SizeConfig.widthMultiplier!,
                   bottom: 16 * SizeConfig.heightMultiplier!,
                   top: 16 * SizeConfig.heightMultiplier!),
               child: Row(
@@ -299,13 +304,16 @@ class _PostTileState extends State<PostTile> {
                             SizedBox(
                               width: 6.5 * SizeConfig.widthMultiplier!,
                             ),
-                            Text(widget.place,
-                                style: AppTextStyle.normalBlackText.copyWith(
-                                    fontSize: 12 * SizeConfig.textMultiplier!,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .headline3
-                                        ?.color))
+                            Container(
+                              width: 60*SizeConfig.widthMultiplier!,
+                              child: Text(widget.place,
+                                  style: AppTextStyle.normalBlackText.copyWith(
+                                      fontSize: 12 * SizeConfig.textMultiplier!,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .headline3
+                                          ?.color),overflow: TextOverflow.ellipsis,),
+                            )
                           ],
                         ),
                       )
@@ -316,13 +324,16 @@ class _PostTileState extends State<PostTile> {
                       onTap: (){
                         reportAbuseDialog(context);
                       },
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 7*SizeConfig.widthMultiplier!),
-                        child: SvgPicture.asset(
-                          ImagePath.chatpopupmenuIcon,
-                          width: 4 * SizeConfig.widthMultiplier!,
-                          height: 20 * SizeConfig.heightMultiplier!,
-                          color: Theme.of(context).primaryColor,
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10*SizeConfig.widthMultiplier!,right: 16*SizeConfig.widthMultiplier!),
+                          child: SvgPicture.asset(
+                            ImagePath.chatpopupmenuIcon,
+                            width: 4 * SizeConfig.widthMultiplier!,
+                            height: 20 * SizeConfig.heightMultiplier!,
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
                       )
                   ),
@@ -631,6 +642,7 @@ class _PostTileState extends State<PostTile> {
   }
 
   void reportAbuseDialog(BuildContext context){
+    RxBool blockUser = false.obs;
     RxInt selectedProblemIndex = (-1).obs;
     if(_reportAbuseController.reportAbuseList.value.response == null){
       _reportAbuseController.getReportAbuseData();
@@ -685,7 +697,7 @@ class _PostTileState extends State<PostTile> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
-                          child: Text("Why are you reporting?".tr,
+                          child: Text("Why_reporting?".tr,
                             style: AppTextStyle.black600Text.copyWith(
                               color: Theme.of(context).textTheme.bodyText1?.color,
                               fontSize: (12) * SizeConfig.textMultiplier!,
@@ -742,9 +754,44 @@ class _PostTileState extends State<PostTile> {
                               ),
                           ),
                         ),
-                        // SizedBox(
-                        //   height: 32 * SizeConfig.heightMultiplier!,
-                        // ),
+                        SizedBox(
+                          height: 24 * SizeConfig.heightMultiplier!,
+                        ),
+                        Obx(()=>Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 35*SizeConfig.widthMultiplier!),
+                          child: Row(
+                            children: [
+
+                              Container(
+                                color: Colors.transparent,
+                                child: GestureDetector(
+                                    onTap: (){
+                                      blockUser.value = !blockUser.value;
+                                    },
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5*SizeConfig.widthMultiplier!),
+                                        child: SvgPicture.asset(blockUser.value?ImagePath.selectedBox:ImagePath.unselectedBox,height: 18*SizeConfig.heightMultiplier!,width: SizeConfig.widthMultiplier!,))),
+                              ),
+                              SizedBox(width: 8*SizeConfig.widthMultiplier!,),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Block_person'.tr,
+                                        style: AppTextStyle.NormalText.copyWith(
+                                            fontSize: 14 * SizeConfig.textMultiplier!,
+                                            fontWeight: FontWeight.w600,
+                                            color: kPink),
+
+                                      ),
+                                    ]
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -771,12 +818,34 @@ class _PostTileState extends State<PostTile> {
                                         if(!_reportAbuseController.isReportSendAbuseLoading.value){
                                           var response = await _reportAbuseController
                                               .sendRepostAbuseData(
+                                              userId: blockUser.value?widget.userID:null,
                                               postId: widget.postId,
                                               reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
                                           );
                                           if(response.isNotEmpty){
                                             Navigator.pop(context);
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                            if(widget.isTrainerProfile == null){
+                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                              _homeController.trendingPostList.removeAt(_homeController.trendingPostList.indexWhere((element) => element.id == widget.postId));
+                                              //_homeController.currentPage.value=_homeController.currentPage.value+1;
+                                              print(_homeController.currentPage.value.toString() +" oooooo");
+                                              final postQuery = await HomeService.getPosts(
+                                                  skip: _homeController.currentPage.value);
+                                                _homeController.trendingPostList.addAll(postQuery.response!.data!);
+                                              _homeController.isNeedToLoadData.value = true;
+                                              _homeController.currentPage.value=_homeController.currentPage.value+1;
+                                              print(_homeController.currentPage.value.toString() +" llllll");
+                                            }
+                                            else{
+                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                              TrainerController _trainerController = Get.find();
+                                              _trainerController.trainerPostList.removeAt(_trainerController.trainerPostList.indexWhere((element) => element.id == widget.postId));
+                                              final postQuery = await TrainerServices.getTrainerPosts(
+                                                  _trainerController.atrainerDetail.value.user!.id!,
+                                                  _trainerController.currentPostPage.value * 5);
+                                              _trainerController.trainerPostList.addAll(postQuery.response!.data!);
+                                              _trainerController.currentPostPage.value = _trainerController.currentPostPage.value + 1;
+                                            }
                                           }
                                         }
                                       }

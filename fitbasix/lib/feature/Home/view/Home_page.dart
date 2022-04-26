@@ -113,8 +113,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _homeController.currentPage.value = 1;
-
     _scrollController.addListener(() async {
+      print(_homeController.currentPage.value.toString() +" ppppp");
       print(_homeController.isNeedToLoadData.value);
       if (_homeController.isNeedToLoadData.value == true) {
         if (_scrollController.position.maxScrollExtent ==
@@ -128,13 +128,15 @@ class _HomePageState extends State<HomePage> {
             _homeController.trendingPostList.addAll(postQuery.response!.data!);
             _homeController.showLoader.value = false;
 
-            return;
+            //return;
           } else {
             if (_homeController.trendingPostList.last.id ==
                 postQuery.response!.data!.last.id) {
               _homeController.showLoader.value = false;
-              return;
+              //return;
             }
+            print("got here");
+
 
             _homeController.trendingPostList.addAll(postQuery.response!.data!);
             _homeController.showLoader.value = false;
@@ -314,9 +316,9 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Spacer(),
-                                  SvgPicture.asset(ImagePath.bellIcon,
-                                    color: Theme.of(context).primaryIconTheme.color,
-                                  ),
+                                  // SvgPicture.asset(ImagePath.bellIcon,
+                                  //   color: Theme.of(context).primaryIconTheme.color,
+                                  // ),
                                 ],
                               ),
                             ),
@@ -1246,6 +1248,7 @@ class _HomePageState extends State<HomePage> {
                                               return Obx(() => Column(
                                                     children: [
                                                       PostTile(
+                                                        userID: _homeController.trendingPostList[index].userId!.id,
                                                         comment: _homeController
                                                                         .commentsMap[
                                                                     _homeController
