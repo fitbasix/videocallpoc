@@ -8,6 +8,8 @@ import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/video_player.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
+import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/view/widgets/comments_tile.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
@@ -44,6 +47,8 @@ class PostTile extends StatefulWidget {
       required this.postId,
       required this.onTap,
       required this.comment,
+        this.isUsersProfileScreen,
+        required this.isMe,
         this.isTrainerProfile,
         this.userID,
       required this.people})
@@ -66,6 +71,8 @@ class PostTile extends StatefulWidget {
   final Comment? comment;
   final List<Person> people;
   final String? userID;
+  final bool isMe;
+  final bool? isUsersProfileScreen;
 
   @override
   State<PostTile> createState() => _PostTileState();
@@ -320,7 +327,7 @@ class _PostTileState extends State<PostTile> {
                     ],
                   ),
                   Spacer(),
-                  GestureDetector(
+                  !widget.isMe?GestureDetector(
                       onTap: (){
                         reportAbuseDialog(context);
                       },
@@ -336,7 +343,25 @@ class _PostTileState extends State<PostTile> {
                           ),
                         ),
                       )
-                  ),
+                  ):Container(),
+                  widget.isUsersProfileScreen!=null?GestureDetector(
+                      onTap: (){
+                        deletePost(context);
+
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10*SizeConfig.widthMultiplier!,right: 16*SizeConfig.widthMultiplier!),
+                          child: SvgPicture.asset(
+                            ImagePath.chatpopupmenuIcon,
+                            width: 4 * SizeConfig.widthMultiplier!,
+                            height: 20 * SizeConfig.heightMultiplier!,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      )
+                  ):Container()
                 ],
               ),
             ),
@@ -792,76 +817,75 @@ class _PostTileState extends State<PostTile> {
                           ),
                         )),
 
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              0 * SizeConfig.widthMultiplier!,
-                              32 * SizeConfig.heightMultiplier!,
-                              0 * SizeConfig.widthMultiplier!,
-                              48 * SizeConfig.heightMultiplier!,
-                            ),
-                            child: Container(
-                                width: 256 * SizeConfig.widthMultiplier!,
-                                height: 48 * SizeConfig.heightMultiplier!,
-                                child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        elevation: MaterialStateProperty.all(0),
-                                        backgroundColor:
-                                        MaterialStateProperty.all(kgreen49),
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    8 * SizeConfig.widthMultiplier!)))),
-                                    onPressed: () async {
-                                      if(selectedProblemIndex.value>=0){
-                                        if(!_reportAbuseController.isReportSendAbuseLoading.value){
-                                          var response = await _reportAbuseController
-                                              .sendRepostAbuseData(
-                                              userId: blockUser.value?widget.userID:null,
-                                              postId: widget.postId,
-                                              reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
-                                          );
-                                          if(response.isNotEmpty){
-                                            Navigator.pop(context);
-                                            if(widget.isTrainerProfile == null){
-                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
-                                              _homeController.trendingPostList.removeAt(_homeController.trendingPostList.indexWhere((element) => element.id == widget.postId));
-                                              //_homeController.currentPage.value=_homeController.currentPage.value+1;
-                                              print(_homeController.currentPage.value.toString() +" oooooo");
-                                              final postQuery = await HomeService.getPosts(
-                                                  skip: _homeController.currentPage.value);
-                                                _homeController.trendingPostList.addAll(postQuery.response!.data!);
-                                              _homeController.isNeedToLoadData.value = true;
-                                              _homeController.currentPage.value=_homeController.currentPage.value+1;
-                                              print(_homeController.currentPage.value.toString() +" llllll");
-                                            }
-                                            else{
-                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
-                                              TrainerController _trainerController = Get.find();
-                                              _trainerController.trainerPostList.removeAt(_trainerController.trainerPostList.indexWhere((element) => element.id == widget.postId));
-                                              final postQuery = await TrainerServices.getTrainerPosts(
-                                                  _trainerController.atrainerDetail.value.user!.id!,
-                                                  _trainerController.currentPostPage.value * 5);
-                                              _trainerController.trainerPostList.addAll(postQuery.response!.data!);
-                                              _trainerController.currentPostPage.value = _trainerController.currentPostPage.value + 1;
+                        Obx(
+                          ()=> Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                0 * SizeConfig.widthMultiplier!,
+                                32 * SizeConfig.heightMultiplier!,
+                                0 * SizeConfig.widthMultiplier!,
+                                48 * SizeConfig.heightMultiplier!,
+                              ),
+                              child: Container(
+                                  width: 256 * SizeConfig.widthMultiplier!,
+                                  height: 48 * SizeConfig.heightMultiplier!,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          elevation: MaterialStateProperty.all(0),
+                                          backgroundColor: selectedProblemIndex.value>=0?MaterialStateProperty.all(kgreen49):MaterialStateProperty.all(hintGrey),
+                                          shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!)))),
+                                      onPressed: () async {
+                                        if(selectedProblemIndex.value>=0){
+                                          if(!_reportAbuseController.isReportSendAbuseLoading.value){
+                                            var response = await _reportAbuseController
+                                                .sendRepostAbuseData(
+                                                userId: blockUser.value?widget.userID:null,
+                                                postId: widget.postId,
+                                                reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
+                                            );
+                                            if(response.isNotEmpty){
+                                              Navigator.pop(context);
+                                              if(widget.isTrainerProfile == null){
+                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                                _homeController.trendingPostList.removeAt(_homeController.trendingPostList.indexWhere((element) => element.id == widget.postId));
+                                                //_homeController.currentPage.value=_homeController.currentPage.value+1;
+                                                print(_homeController.currentPage.value.toString() +" oooooo");
+                                                final postQuery = await HomeService.getPosts(
+                                                    skip: _homeController.currentPage.value);
+                                                  _homeController.trendingPostList.addAll(postQuery.response!.data!);
+                                                _homeController.isNeedToLoadData.value = true;
+                                                _homeController.currentPage.value=_homeController.currentPage.value+1;
+                                                print(_homeController.currentPage.value.toString() +" llllll");
+                                              }
+                                              else{
+                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                                TrainerController _trainerController = Get.find();
+                                                _trainerController.trainerPostList.removeAt(_trainerController.trainerPostList.indexWhere((element) => element.id == widget.postId));
+                                                final postQuery = await TrainerServices.getTrainerPosts(
+                                                    _trainerController.atrainerDetail.value.user!.id!,
+                                                    _trainerController.currentPostPage.value * 5);
+                                                _trainerController.trainerPostList.addAll(postQuery.response!.data!);
+                                                _trainerController.currentPostPage.value = _trainerController.currentPostPage.value + 1;
+                                              }
                                             }
                                           }
                                         }
-                                      }
-                                      else{
-                                        _reportAbuseController.isReportSendAbuseLoading.value = true;
-                                        selectedProblemIndex.value=0;
-                                        Future.delayed(Duration(milliseconds: 400),(){
-                                          selectedProblemIndex.value = -1;
-                                          _reportAbuseController.isReportSendAbuseLoading.value = false;
-                                        });
-                                      }
-                                    },
-                                    child: Text(
-                                      "Submit".tr,
-                                      style: AppTextStyle.hboldWhiteText,
-                                    ))),
+                                        else{
+                                          _reportAbuseController.isReportSendAbuseLoading.value = true;
+                                          selectedProblemIndex.value=0;
+                                          Future.delayed(Duration(milliseconds: 400),(){
+                                            selectedProblemIndex.value = -1;
+                                            _reportAbuseController.isReportSendAbuseLoading.value = false;
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        "Submit".tr,
+                                        style: AppTextStyle.hboldWhiteText.copyWith(color: selectedProblemIndex.value>=0?kPureWhite:greyBorder),
+                                      ))),
+                            ),
                           ),
                         ),
                       ],
@@ -883,6 +907,125 @@ class _PostTileState extends State<PostTile> {
                     ),
                   ],
                 ))
+
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void deletePost(BuildContext context){
+    bool isClicked = false;
+
+    if(_reportAbuseController.reportAbuseList.value.response == null){
+      _reportAbuseController.getReportAbuseData();
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: AlertDialog(
+                insetPadding: EdgeInsets.only(
+                  left: 16 * SizeConfig.widthMultiplier!,
+                  right: 16 * SizeConfig.widthMultiplier!,
+                ),
+                contentPadding: EdgeInsets.zero,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                content: Padding(
+                  padding: EdgeInsets.all(16*SizeConfig.widthMultiplier!),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("delete_post".tr,
+                          style: AppTextStyle.black600Text.copyWith(
+                            color: kPink,
+                            fontSize: (18) * SizeConfig.textMultiplier!,
+
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 26*SizeConfig.heightMultiplier!,),
+
+                      Text("delete_disc".tr,
+                        style: AppTextStyle.black600Text.copyWith(
+                          color: kPureWhite,
+                          fontSize: (14) * SizeConfig.textMultiplier!,
+                          fontWeight: FontWeight.w700
+                        ),
+                      ),
+                      SizedBox(height: 8*SizeConfig.heightMultiplier!,),
+                      Text("delete_sub".tr,
+                        style: GoogleFonts.openSans(
+                            color: kPureWhite,
+                            fontSize: (14) * SizeConfig.textMultiplier!,
+                            fontWeight: FontWeight.w400
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 30*SizeConfig.heightMultiplier!,),
+                     Align(
+                       alignment: Alignment.centerRight,
+                       child: Row(
+                         mainAxisSize: MainAxisSize.min,
+                         children: [
+                           InkWell(
+                             onTap: (){
+                               Navigator.pop(context);
+                             },
+                             child: Container(
+                               width: 111 * SizeConfig.widthMultiplier!,
+                               height: 40 * SizeConfig.heightMultiplier!,
+                               decoration: BoxDecoration(
+                                   borderRadius: BorderRadius.circular(8*SizeConfig.widthMultiplier!),
+
+                                   border: Border.all(width: 1.0,color: greyB7)
+                               ),
+                               child: Center(child: Text('cancel_keep'.tr,style: AppTextStyle.hboldWhiteText.copyWith(color: greyB7,fontSize: 14*SizeConfig.textMultiplier!),)),
+                             ),
+                           ),
+                           SizedBox(width: 16*SizeConfig.heightMultiplier!,),
+                           Container(
+                               width:
+                               92 * SizeConfig.widthMultiplier!,
+                               height: 40 * SizeConfig.heightMultiplier!,
+                               child: ElevatedButton(
+                                   style: ButtonStyle(
+                                       elevation: MaterialStateProperty.all(0),
+                                       backgroundColor:MaterialStateProperty.all(kPink),
+                                       shape: MaterialStateProperty.all(
+                                           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!)))),
+                                   onPressed: () async {
+                                    if(!isClicked){
+                                      isClicked = true;
+                                      String response = await CreatePostService.deleteUserPost(widget.postId);
+                                      if(response!=null){
+                                        ProfileController _profileController = Get.find();
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                        _profileController.userPostList.removeAt(_profileController.userPostList.indexWhere((element) => element.id == widget.postId));
+                                        Navigator.pop(context);
+                                        isClicked = false;
+                                      }
+                                    }
+                                   },
+                                   child: Text(
+                                     "delete".tr,
+                                     style: AppTextStyle.hboldWhiteText.copyWith(color: kPureWhite,fontSize: 14*SizeConfig.textMultiplier!),
+                                   )))
+                         ],
+                       ),
+                     )
+                    ],
+                  ),
+                )
 
             ),
           ),

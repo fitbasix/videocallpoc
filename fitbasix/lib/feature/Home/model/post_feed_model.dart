@@ -70,6 +70,7 @@ class Post {
       this.likes,
       this.comments,
       this.isFollowing,
+        this.isMe,
       this.commentgiven});
 
   final String? id;
@@ -86,6 +87,7 @@ class Post {
   final int? comments;
   Comment? commentgiven;
   final bool? isFollowing;
+  final bool? isMe;
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
       id: json["_id"],
@@ -93,8 +95,9 @@ class Post {
       files: List<String>.from(json["files"].map((x) => x)),
       location: Location.fromJson(json["location"]),
       people: List<Person>.from(json["people"].map((x) => Person.fromJson(x))),
-      updatedAt: DateTime.parse(json["updatedAt"]),
+      updatedAt: DateTime.parse(json["updatedAt"]).toLocal(),
       userId: Person.fromJson(json["userId"]),
+      isMe: json['isMe'],
       category: json["category"] == null ? null : json["category"],
       isLiked: json["isLiked"],
       postCategory: List<PostCategory>.from(

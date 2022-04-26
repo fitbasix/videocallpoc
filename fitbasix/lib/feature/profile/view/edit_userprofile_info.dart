@@ -207,6 +207,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       //TextFormField for user bio update
                       TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
                         onChanged: (value) {
                           //implement controller for storing user bio
                         },

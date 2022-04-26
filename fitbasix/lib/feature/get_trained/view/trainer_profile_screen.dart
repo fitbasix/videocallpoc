@@ -981,7 +981,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   color: kBackgroundColor,
                                                 ),
                                                 PostTile(
-                                                  userID: _homeController.trendingPostList[index].userId!.id,
+                                                  isMe:  _trainerController.trainerPostList[index].isMe!,
+                                                  userID: _trainerController.trainerPostList[index].userId!.id,
                                                   isTrainerProfile: true,
                                                   comment: _homeController
                                                                   .commentsMap[

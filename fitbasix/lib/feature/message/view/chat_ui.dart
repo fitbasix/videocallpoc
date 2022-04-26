@@ -1267,55 +1267,56 @@ class _ChatScreenState extends State<ChatScreen> {
                             ],
                           ),
                         )),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              0 * SizeConfig.widthMultiplier!,
-                              32 * SizeConfig.heightMultiplier!,
-                              0 * SizeConfig.widthMultiplier!,
-                              48 * SizeConfig.heightMultiplier!,
-                            ),
-                            child: Container(
-                                width: 256 * SizeConfig.widthMultiplier!,
-                                height: 48 * SizeConfig.heightMultiplier!,
-                                child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        elevation: MaterialStateProperty.all(0),
-                                        backgroundColor:
-                                        MaterialStateProperty.all(kgreen49),
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    8 * SizeConfig.widthMultiplier!)))),
-                                    onPressed: () async {
-                                      if(selectedProblemIndex.value>=0){
-                                        if(!_reportAbuseController.isReportSendAbuseLoading.value){
-                                          var response = await _reportAbuseController
-                                              .sendRepostAbuseData(
-                                              userId: widget.trainerId,
-                                              reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
-                                          );
-                                          if(response.isNotEmpty){
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                        Obx(
+                          ()=> Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                0 * SizeConfig.widthMultiplier!,
+                                32 * SizeConfig.heightMultiplier!,
+                                0 * SizeConfig.widthMultiplier!,
+                                48 * SizeConfig.heightMultiplier!,
+                              ),
+                              child: Container(
+                                  width: 256 * SizeConfig.widthMultiplier!,
+                                  height: 48 * SizeConfig.heightMultiplier!,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          elevation: MaterialStateProperty.all(0),
+                                          backgroundColor: selectedProblemIndex.value>=0?MaterialStateProperty.all(kgreen49):MaterialStateProperty.all(hintGrey),
+                                          shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(
+                                                      8 * SizeConfig.widthMultiplier!)))),
+                                      onPressed: () async {
+                                        if(selectedProblemIndex.value>=0){
+                                          if(!_reportAbuseController.isReportSendAbuseLoading.value){
+                                            var response = await _reportAbuseController
+                                                .sendRepostAbuseData(
+                                                userId: widget.trainerId,
+                                                reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
+                                            );
+                                            if(response.isNotEmpty){
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
+                                            }
                                           }
                                         }
-                                      }
-                                      else{
-                                        _reportAbuseController.isReportSendAbuseLoading.value = true;
-                                        selectedProblemIndex.value=0;
-                                        Future.delayed(Duration(milliseconds: 400),(){
-                                          selectedProblemIndex.value = -1;
-                                          _reportAbuseController.isReportSendAbuseLoading.value = false;
-                                        });
-                                      }
-                                    },
-                                    child: Text(
-                                      "Submit".tr,
-                                      style: AppTextStyle.hboldWhiteText,
-                                    ))),
+                                        else{
+                                          _reportAbuseController.isReportSendAbuseLoading.value = true;
+                                          selectedProblemIndex.value=0;
+                                          Future.delayed(Duration(milliseconds: 400),(){
+                                            selectedProblemIndex.value = -1;
+                                            _reportAbuseController.isReportSendAbuseLoading.value = false;
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        "Submit".tr,
+                                        style: AppTextStyle.hboldWhiteText.copyWith(color: selectedProblemIndex.value>=0?kPureWhite:greyBorder),
+                                      ))),
+                            ),
                           ),
                         ),
                       ],

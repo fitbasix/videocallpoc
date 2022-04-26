@@ -90,9 +90,16 @@ class CreatePostService {
     dio!.options.headers["language"] = "1";
     print("lll");
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response =
-        await dio!.delete(ApiUrl.deletePost, data: {"postId": postId});
+    var response = await dio!.delete(ApiUrl.deletePost, data: {"postId": postId});
     print(response.data.toString());
+  }
+  static Future<String> deleteUserPost(String? postId) async {
+    dio!.options.headers["language"] = "1";
+    print("lll");
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.delete(ApiUrl.deletePost, data: {"postId": postId});
+    print(response.data.toString());
+    return response.data['response']['message'];
   }
 
   // static Fut

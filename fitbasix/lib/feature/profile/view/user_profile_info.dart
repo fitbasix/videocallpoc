@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -116,29 +117,31 @@ class _UserPageInfoState extends State<UserPageInfo> {
     super.initState();
 
     _scrollController.addListener(() async {
-      if (_scrollController.position.maxScrollExtent ==
-          _scrollController.position.pixels) {
-        _profileController.showLoading.value = true;
-        final postQuery = await ProfileServices.getUserPosts(
-            skip: _profileController.currentPage.value * 5);
+      if (_scrollController.position.maxScrollExtent == _scrollController.position.pixels) {
+        if(_profileController.dataNeedToLoad.value){
+          _profileController.showLoading.value = true;
+          final postQuery = await ProfileServices.getUserPosts(
+              skip: _profileController.currentPage.value * 5);
 
-        if (postQuery.response!.data!.length < 5) {
-          _profileController.userPostList.addAll(postQuery.response!.data!);
-          _profileController.showLoading.value = false;
-
-          return;
-        } else {
-          if (_profileController.userPostList.last.id ==
-              postQuery.response!.data!.last.id) {
+          if (postQuery.response!.data!.length < 5) {
+            _profileController.dataNeedToLoad.value = false;
+            _profileController.userPostList.addAll(postQuery.response!.data!);
             _profileController.showLoading.value = false;
+
             return;
+          } else {
+            if (_profileController.userPostList.last.id ==
+                postQuery.response!.data!.last.id) {
+              _profileController.showLoading.value = false;
+              return;
+            }
+            _profileController.userPostList.addAll(postQuery.response!.data!);
+            _profileController.showLoading.value = false;
           }
-          _profileController.userPostList.addAll(postQuery.response!.data!);
+          _profileController.currentPage.value++;
           _profileController.showLoading.value = false;
+          setState(() {});
         }
-        _profileController.currentPage.value++;
-        _profileController.showLoading.value = false;
-        setState(() {});
       }
     });
   }
@@ -313,33 +316,33 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'about'.tr,
-                                      style: AppTextStyle.hblackSemiBoldText
-                                          .copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.color,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 12 * SizeConfig.heightMultiplier!,
-                                    ),
-                                    Text(
-                                      widget.aboutuser!,
-                                      style: AppTextStyle.hblackSemiBoldText
-                                          .copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.color,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 24 * SizeConfig.heightMultiplier!,
-                                    ),
+                                    // Text(
+                                    //   'about'.tr,
+                                    //   style: AppTextStyle.hblackSemiBoldText
+                                    //       .copyWith(
+                                    //     color: Theme.of(context)
+                                    //         .textTheme
+                                    //         .bodyText1
+                                    //         ?.color,
+                                    //   ),
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 12 * SizeConfig.heightMultiplier!,
+                                    // ),
+                                    // Text(
+                                    //   widget.aboutuser!,
+                                    //   style: AppTextStyle.hblackSemiBoldText
+                                    //       .copyWith(
+                                    //     color: Theme.of(context)
+                                    //         .textTheme
+                                    //         .bodyText1
+                                    //         ?.color,
+                                    //     fontWeight: FontWeight.w400,
+                                    //   ),
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 24 * SizeConfig.heightMultiplier!,
+                                    // ),
                                     Text(
                                       'interested_in'.tr,
                                       style: AppTextStyle.hblackSemiBoldText
@@ -382,6 +385,10 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                     color: kBackgroundColor,
                                                   ),
                                                   PostTile(
+                                                    isUsersProfileScreen: true,
+                                                    isMe:  _profileController
+                                                        .userPostList[index]
+                                                        .isMe!,
                                                     comment: _homeController
                                                                     .commentsMap[
                                                                 _profileController
@@ -680,33 +687,90 @@ class _UserPageInfoState extends State<UserPageInfo> {
                               ),
                             ],
                           ),
-                          Container(
-                            width: double.infinity,
-                            height: 177 * SizeConfig.heightMultiplier!,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.userCoverImage!,
-                              placeholder: (context, url) => ShimmerEffect(),
-                              errorWidget: (context, url, error) =>
-                                  ShimmerEffect(),
-                              fit: BoxFit.cover,
-                            ),
+                          Stack(
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 177 * SizeConfig.heightMultiplier!,
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.userCoverImage!,
+                                  placeholder: (context, url) => ShimmerEffect(),
+                                  errorWidget: (context, url, error) =>
+                                      ShimmerEffect(),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 177 * SizeConfig.heightMultiplier!,
+                                child: ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                        sigmaX: 7.0, sigmaY: 7.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl: widget.userCoverImage!,
+                                      placeholder: (context, url) => ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           Positioned(
                             top: 127 * SizeConfig.heightMultiplier!,
                             left: 16 * SizeConfig.widthMultiplier!,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 4 * SizeConfig.widthMultiplier!,
-                                      color: kPureWhite),
-                                  shape: BoxShape.circle),
-                              height: 120 * SizeConfig.widthMultiplier!,
-                              width: 120 * SizeConfig.widthMultiplier!,
-                              child: CircleAvatar(
-                                //  radius: 60 * SizeConfig.heightMultiplier!,
-                                backgroundImage:
-                                    NetworkImage(widget.userImage!),
-                              ),
+                            child: Stack(
+                              children: [
+
+                                Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 4 * SizeConfig.widthMultiplier!,
+                                          color: kPureWhite),
+                                      shape: BoxShape.circle),
+                                  height: 120 * SizeConfig.widthMultiplier!,
+                                  width: 120 * SizeConfig.widthMultiplier!,
+                                  child: CircleAvatar(
+                                    //  radius: 60 * SizeConfig.heightMultiplier!,
+                                    backgroundImage:
+                                        NetworkImage(widget.userImage!),
+                                  ),
+                                ),
+                                Positioned(
+                                    top: 8 * SizeConfig.heightMultiplier!,
+                                    left: 90 * SizeConfig.widthMultiplier!,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        print("pppp");
+                                        Navigator.pushNamed(
+                                            context, RouteName.selectProfilePhoto);
+                                        // final pickedFile = await ImagesPicker.pick(
+                                        //     count: 1, pickType: PickType.image);
+                                        // if (pickedFile != null) {
+                                        //   await PostService.uploadMedia(
+                                        //       [File(pickedFile[0].path)]);
+                                        //   }
+
+                                        // open user profilepic for change
+                                      },
+                                      child: Container(
+                                        height: 28 * SizeConfig.heightMultiplier!,
+                                        width: 28 * SizeConfig.heightMultiplier!,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle, color: greyB7),
+                                        child: SvgPicture.asset(
+                                          ImagePath.selectImageIcon,
+                                          color: kPureBlack,
+                                          height: 18,
+                                          width: 18,
+                                          fit: BoxFit.scaleDown,
+                                        ),
+                                      ),
+                                    )),
+                              ],
                             ),
                           ),
                           Positioned(

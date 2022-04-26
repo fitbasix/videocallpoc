@@ -41,6 +41,7 @@ class ExplorePostTile extends StatefulWidget {
       required this.postId,
       required this.onTap,
       required this.people,
+        required this.isMe,
         this.userID,
       required this.isFollowing})
       : super(key: key);
@@ -61,6 +62,7 @@ class ExplorePostTile extends StatefulWidget {
   final List<Person> people;
   final bool isFollowing;
   final String? userID;
+  final bool isMe;
 
   @override
   State<ExplorePostTile> createState() => _ExplorePostTileState();
@@ -335,7 +337,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                     ],
                   ),
                   Spacer(),
-                  GestureDetector(
+                  !widget.isMe?GestureDetector(
                       onTap: (){
                         reportAbuseDialog(context);
                       },
@@ -351,7 +353,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                           ),
                         ),
                       )
-                  ),
+                  ):Container(),
                 ],
               ),
             ),
@@ -734,62 +736,63 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                             ],
                           ),
                         )),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              0 * SizeConfig.widthMultiplier!,
-                              32 * SizeConfig.heightMultiplier!,
-                              0 * SizeConfig.widthMultiplier!,
-                              48 * SizeConfig.heightMultiplier!,
-                            ),
-                            child: Container(
-                                width: 256 * SizeConfig.widthMultiplier!,
-                                height: 48 * SizeConfig.heightMultiplier!,
-                                child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        elevation: MaterialStateProperty.all(0),
-                                        backgroundColor:
-                                        MaterialStateProperty.all(kgreen49),
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    8 * SizeConfig.widthMultiplier!)))),
-                                    onPressed: () async {
-                                      if(selectedProblemIndex.value>=0){
-                                        if(!_reportAbuseController.isReportSendAbuseLoading.value){
-                                          var response = await _reportAbuseController
-                                              .sendRepostAbuseData(
-                                              userId: blockUser.value?widget.userID:null,
-                                              postId: widget.postId,
-                                              reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
-                                          );
-                                          if(response.isNotEmpty){
-                                            Navigator.pop(context);
-                                            _homeController.explorePostList.removeAt(_homeController.explorePostList.indexWhere((element) => element.id == widget.postId));
-                                            final postQuery = await HomeService.getExplorePosts(
-                                                skip: _homeController.explorePageCount.value * 5);
+                        Obx(
+                              ()=> Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                0 * SizeConfig.widthMultiplier!,
+                                32 * SizeConfig.heightMultiplier!,
+                                0 * SizeConfig.widthMultiplier!,
+                                48 * SizeConfig.heightMultiplier!,
+                              ),
+                              child: Container(
+                                  width: 256 * SizeConfig.widthMultiplier!,
+                                  height: 48 * SizeConfig.heightMultiplier!,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          elevation: MaterialStateProperty.all(0),
+                                          backgroundColor: selectedProblemIndex.value>=0?MaterialStateProperty.all(kgreen49):MaterialStateProperty.all(hintGrey),
+                                          shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(
+                                                      8 * SizeConfig.widthMultiplier!)))),
+                                      onPressed: () async {
+                                        if(selectedProblemIndex.value>=0){
+                                          if(!_reportAbuseController.isReportSendAbuseLoading.value){
+                                            var response = await _reportAbuseController
+                                                .sendRepostAbuseData(
+                                                userId: blockUser.value?widget.userID:null,
+                                                postId: widget.postId,
+                                                reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
+                                            );
+                                            if(response.isNotEmpty){
+                                              Navigator.pop(context);
+                                              _homeController.explorePostList.removeAt(_homeController.explorePostList.indexWhere((element) => element.id == widget.postId));
+                                              final postQuery = await HomeService.getExplorePosts(
+                                                  skip: _homeController.explorePageCount.value * 5);
 
-                                            _homeController.explorePostList.addAll(postQuery.response!.data!);
-                                            _homeController.explorePageCount.value = _homeController.explorePageCount.value+1;
+                                              _homeController.explorePostList.addAll(postQuery.response!.data!);
+                                              _homeController.explorePageCount.value = _homeController.explorePageCount.value+1;
+                                            }
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
                                           }
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
                                         }
-                                      }
-                                      else{
-                                        _reportAbuseController.isReportSendAbuseLoading.value = true;
-                                        selectedProblemIndex.value=0;
-                                        Future.delayed(Duration(milliseconds: 400),(){
-                                          selectedProblemIndex.value = -1;
-                                          _reportAbuseController.isReportSendAbuseLoading.value = false;
-                                        });
-                                      }
+                                        else{
+                                          _reportAbuseController.isReportSendAbuseLoading.value = true;
+                                          selectedProblemIndex.value=0;
+                                          Future.delayed(Duration(milliseconds: 400),(){
+                                            selectedProblemIndex.value = -1;
+                                            _reportAbuseController.isReportSendAbuseLoading.value = false;
+                                          });
+                                        }
 
-                                    },
-                                    child: Text(
-                                      "Submit".tr,
-                                      style: AppTextStyle.hboldWhiteText,
-                                    ))),
+                                      },
+                                      child: Text(
+                                        "Submit".tr,
+                                        style: AppTextStyle.hboldWhiteText.copyWith(color: selectedProblemIndex.value>=0?kPureWhite:greyBorder),
+                                      ))),
+                            ),
                           ),
                         ),
                       ],

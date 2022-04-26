@@ -118,8 +118,7 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
                                   profilePhoto: [
                                 File(selectedMediaFile!.path)
                               ]);
-                          homeController.profilePhoto.value =
-                              profileController.profilePhoto.value;
+                          homeController.profilePhoto.value = profileController.profilePhoto.value;
                         } else {
                           print("got in else");
                           // MediaUrl mediaUrl = await PostService.uploadMedia(
