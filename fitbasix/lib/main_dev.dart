@@ -74,6 +74,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //     )
   // );
 }
+// Future<void> main() async {
+//   await SentryFlutter.init(
+//           (options) {
+//         options.dsn = 'https://75565b8907e24a44b497620700c41d09@o1222554.ingest.sentry.io/6366529';
+//         // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+//         // We recommend adjusting this value in production.
+//         options.tracesSampleRate = 1.0;
+//       },
+//       appRunner: () => runApp(MyApp()),
 
 Future<void> main() async {
   await runZonedGuarded(() async {
@@ -82,7 +91,7 @@ Future<void> main() async {
     await dotenv.load(fileName: ".env");
     await initializeNotification();
     await Firebase.initializeApp();
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       FirebaseMessaging.instance.requestPermission();
     }
     final env = dotenv.env['ENV'];
@@ -120,7 +129,7 @@ Future<void> main() async {
       print("fcm token" + value.toString());
     });
     FirebaseMessaging.instance.getAPNSToken().then((value) {
-      print(value.toString() +" APN Token");
+      print(value.toString() + " APN Token");
     });
 
     FirebaseMessaging.instance
@@ -134,8 +143,7 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessage.listen((message) async {
-
-      print(message.data.toString() +" ooooo");
+      print(message.data.toString() + " ooooo");
       // AwesomeNotifications().createNotification(
       //     content: NotificationContent(
       //         displayOnForeground: true,
@@ -148,8 +156,6 @@ Future<void> main() async {
       //         autoDismissible: false,
       //         payload: {'uuid': 'uuid-test'},
       //         body: message.notification!.body));
-
-
 
       // print(message.data["message"]);
       // AndroidNotificationChannel channel = AndroidNotificationChannel(

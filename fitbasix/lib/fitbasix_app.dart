@@ -10,6 +10,7 @@ import 'package:fitbasix/core/analytics/analytics_service.dart';
 import 'package:fitbasix/core/localization/translations.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'core/constants/image_path.dart';
 
@@ -82,7 +83,7 @@ class FitBasixApp extends StatelessWidget {
                   locale: const Locale('en', 'US'),
                   fallbackLocale: const Locale('es', 'ES'),
                   onGenerateRoute: GenerateRoute.generateRoute,
-                  navigatorObservers: [AnalyticsService.getAnalyticsObserver()],
+                  navigatorObservers: [SentryNavigatorObserver()],
                   home: child);
             });
           });
