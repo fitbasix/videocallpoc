@@ -8,25 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/.run/Flavor_ dev.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/.run/Flavor_ dev.run.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/explore.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/explore.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/post_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/post_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/explore_feed.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/explore_feed.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/menu_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/menu_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/full_post_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/full_post_tile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/post_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/post_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/video_player.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/video_player.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/plans/view/trainers_plan.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/plans/view/trainers_plan.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/edit_userprofile_info.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/edit_userprofile_info.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/user_profile_info.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/user_profile_info.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/select_gender.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/select_gender.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_bodyFat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_bodyFat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_foodType.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_foodType.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_goal_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_goal_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +37,31 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="dev" />
+                    <option name="lastUsedInstant" value="1651075274" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/vm/delete_post_and_fug_fix" />
+                    <option name="lastUsedInstant" value="1651075273" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
   </component>
   <component name="ProjectId" id="24mPLy4VzjnlI5BzCMuVI6q2iAf" />
   <component name="ProjectViewState">
@@ -107,7 +119,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="feature/vm/block_user_userApp" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
