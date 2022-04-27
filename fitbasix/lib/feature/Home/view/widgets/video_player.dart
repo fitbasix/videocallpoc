@@ -40,6 +40,7 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   @override
   void dispose() {
     _controller.dispose();
+    _controllerThumb.dispose();
     super.dispose();
   }
 

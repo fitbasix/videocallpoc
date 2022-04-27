@@ -1235,36 +1235,40 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         Obx(()=>Padding(
                           padding: EdgeInsets.symmetric(horizontal: 35*SizeConfig.widthMultiplier!),
-                          child: Row(
-                            children: [
+                          child: GestureDetector(
+                            onTap: (){
+                              blockUser.value = !blockUser.value;
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Row(
+                                children: [
 
-                              Container(
-                                color: Colors.transparent,
-                                child: GestureDetector(
-                                    onTap: (){
-                                      blockUser.value = !blockUser.value;
-                                    },
+                                  Container(
+                                    color: Colors.transparent,
                                     child: Padding(
                                         padding: EdgeInsets.all(5*SizeConfig.widthMultiplier!),
-                                        child: SvgPicture.asset(blockUser.value?ImagePath.selectedBox:ImagePath.unselectedBox,height: 18*SizeConfig.heightMultiplier!,width: SizeConfig.widthMultiplier!,))),
-                              ),
-                              SizedBox(width: 8*SizeConfig.widthMultiplier!,),
-                              RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'Block_person'.tr,
-                                        style: AppTextStyle.NormalText.copyWith(
-                                            fontSize: 14 * SizeConfig.textMultiplier!,
-                                            fontWeight: FontWeight.w600,
-                                            color: kPink),
+                                        child: SvgPicture.asset(blockUser.value?ImagePath.selectedBox:ImagePath.unselectedBox,height: 18*SizeConfig.heightMultiplier!,width: SizeConfig.widthMultiplier!,)),
+                                  ),
+                                  SizedBox(width: 8*SizeConfig.widthMultiplier!,),
+                                  RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Block_person'.tr,
+                                            style: AppTextStyle.NormalText.copyWith(
+                                                fontSize: 14 * SizeConfig.textMultiplier!,
+                                                fontWeight: FontWeight.w600,
+                                                color: kPink),
 
-                                      ),
-                                    ]
-                                ),
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         )),
                         Obx(
@@ -1288,34 +1292,105 @@ class _ChatScreenState extends State<ChatScreen> {
                                               RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(
                                                       8 * SizeConfig.widthMultiplier!)))),
-                                      onPressed: () async {
-                                        if(selectedProblemIndex.value>=0){
+                                      onPressed: selectedProblemIndex.value>=0?() async {
                                           if(!_reportAbuseController.isReportSendAbuseLoading.value){
+                                            _reportAbuseController.isReportSendAbuseLoading.value = true;
                                             var response = await _reportAbuseController
                                                 .sendRepostAbuseData(
                                                 userId: widget.trainerId,
                                                 reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
                                             );
+                                            _reportAbuseController.isReportSendAbuseLoading.value = false;
                                             if(response.isNotEmpty){
                                               Navigator.pop(context);
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
                                             }
                                           }
-                                        }
-                                        else{
-                                          _reportAbuseController.isReportSendAbuseLoading.value = true;
-                                          selectedProblemIndex.value=0;
-                                          Future.delayed(Duration(milliseconds: 400),(){
-                                            selectedProblemIndex.value = -1;
-                                            _reportAbuseController.isReportSendAbuseLoading.value = false;
-                                          });
-                                        }
+                                      }:(){
+                                        pleaseSelectAnOptionDialog(context);
                                       },
                                       child: Text(
                                         "Submit".tr,
                                         style: AppTextStyle.hboldWhiteText.copyWith(color: selectedProblemIndex.value>=0?kPureWhite:greyBorder),
                                       ))),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Positioned(
+                      top: 7 * SizeConfig.heightMultiplier!,
+                      right: 7 * SizeConfig.widthMultiplier!,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: SvgPicture.asset(
+                          ImagePath.closedialogIcon,
+                          color: Theme.of(context).primaryColor,
+                          width: 16 * SizeConfig.widthMultiplier!,
+                          height: 16 * SizeConfig.heightMultiplier!,
+                        ),
+                      ),
+                    ),
+                  ],
+                ))
+
+            ),
+          ),
+        );
+      },
+    );
+  }
+  void pleaseSelectAnOptionDialog(BuildContext context){
+
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: kBlack.withOpacity(0.6),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: AlertDialog(
+                insetPadding: EdgeInsets.only(
+                  left: 16 * SizeConfig.widthMultiplier!,
+                  right: 16 * SizeConfig.widthMultiplier!,
+                ),
+                contentPadding: EdgeInsets.zero,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                content:  Obx(()=>(_reportAbuseController.isReportAbuseLoading.value)?Container(
+                    child:  Container(
+                      margin: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
+                      child: SizedBox(
+                          height: 30*SizeConfig.widthMultiplier!,
+                          width: 30*SizeConfig.widthMultiplier!,
+                          child: CustomizedCircularProgress()),
+                    )
+
+                ):Stack(
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 32*SizeConfig.heightMultiplier!,),
+                        Padding(
+                          padding: EdgeInsets.all(16*SizeConfig.widthMultiplier!),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Please select a valid reason\n for reporting.".tr,
+                              style: AppTextStyle.black600Text.copyWith(
+                                  color: Theme.of(context).textTheme.bodyText1?.color,
+                                  fontSize: (14) * SizeConfig.textMultiplier!,
+                                  fontWeight: FontWeight.w400
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ),

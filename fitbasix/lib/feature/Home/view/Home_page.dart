@@ -1137,6 +1137,8 @@ class _HomePageState extends State<HomePage> {
                                           0;
                                       Navigator.pushNamed(
                                           context, RouteName.exploreSearch);
+                                      _homeController.searchController.clear();
+                                      _homeController.exploreSearchText.value = "";
                                       postController.getCategory();
                                       _homeController
                                           .isExploreDataLoading.value = true;

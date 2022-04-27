@@ -93,6 +93,7 @@ class MenuScreen extends StatelessWidget {
                       left: 18 * SizeConfig.widthMultiplier!,
                       bottom: 16 * SizeConfig.heightMultiplier!,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(

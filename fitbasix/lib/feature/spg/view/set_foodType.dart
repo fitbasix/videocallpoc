@@ -39,11 +39,12 @@ class SetFoodType extends StatelessWidget {
               height: 2 * SizeConfig.heightMultiplier!,
               width: Get.width,
             ),
-          Container(
-            color: kGreenColor,
-            height: 2 * SizeConfig.heightMultiplier!,
-            width: Get.width * (7 / 8),
-          ),]),
+            Container(
+              color: kGreenColor,
+              height: 2 * SizeConfig.heightMultiplier!,
+              width: Get.width * (7 / 8),
+            ),
+          ]),
           Padding(
             padding: EdgeInsets.only(
                 left: 16 * SizeConfig.widthMultiplier!,
@@ -101,12 +102,43 @@ class SetFoodType extends StatelessWidget {
           Spacer(),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ProceedButton(
-                title: 'proceed'.tr,
-                onPressed: () {
+            child: Obx(
+              () => GestureDetector(
+                onTap: _spgController.selectedFoodIndex.value.id != null
+                    ? () {
                   Navigator.pushNamed(context, RouteName.setActivity);
-                }),
+                      }
+                    : null,
+                child: Container(
+                  width: Get.width,
+                  height: 48 * SizeConfig.heightMultiplier!,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                    color: _spgController.selectedFoodIndex.value.id != null
+                        ? kgreen49
+                        : hintGrey,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'proceed'.tr,
+                      style: AppTextStyle.normalWhiteText.copyWith(
+                          color: _spgController.selectedFoodIndex.value.id != null
+                              ? kPureWhite
+                              : greyBorder),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           )
+
+          //   ProceedButton(
+          //       title: 'proceed'.tr,
+          //       onPressed: () {
+          //         Navigator.pushNamed(context, RouteName.setActivity);
+          //       }),
+          // )
         ],
       )),
     );

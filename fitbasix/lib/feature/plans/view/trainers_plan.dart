@@ -196,6 +196,7 @@ class TrainerPlansScreen extends StatelessWidget {
           bool? isDemoExpired,
           List<String>? planFeaturesList}) =>
       Container(
+        height: 555*SizeConfig.heightMultiplier!,
         width: MediaQuery.of(context).size.width -
             40 * SizeConfig.widthMultiplier!,
         padding: EdgeInsets.only(left: 16 * SizeConfig.widthMultiplier!),
@@ -255,7 +256,7 @@ class TrainerPlansScreen extends StatelessWidget {
                     height: 1),
               ),
               Text(
-                "session_description".tr + " $planDuration " + "week".tr,
+                "session_description".tr + " $planDuration " + (planDuration! >1?"weeks":"week").tr,
                 style: AppTextStyle.hblackSemiBoldText.copyWith(
                   fontSize: 12 * SizeConfig.textMultiplier!,
                   fontWeight: FontWeight.w400,

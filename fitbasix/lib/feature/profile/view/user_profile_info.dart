@@ -760,7 +760,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                         height: 28 * SizeConfig.heightMultiplier!,
                                         width: 28 * SizeConfig.heightMultiplier!,
                                         decoration: BoxDecoration(
-                                            shape: BoxShape.circle, color: greyB7),
+                                            shape: BoxShape.circle, color: kPureWhite),
                                         child: SvgPicture.asset(
                                           ImagePath.selectImageIcon,
                                           color: kPureBlack,

@@ -79,6 +79,7 @@ class SetBodyFat extends StatelessWidget {
                               ? "+"
                               : _spgController.bodyFatData![index].end.toString(),
                           onTap: () {
+
                             _spgController.selectedBodyFat.value =
                                 _spgController.bodyFatData![index];
                           },
@@ -101,12 +102,36 @@ class SetBodyFat extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(
                   vertical: 16 * SizeConfig.heightMultiplier!,horizontal: 16*SizeConfig.widthMultiplier!),
-              child: ProceedButton(
-                  title: 'proceed'.tr,
-                  onPressed: () {
-                    print(_spgController.selectedBodyFat.value.serialId);
+              child: Obx(
+                    ()=> GestureDetector(
+                  onTap:_spgController.selectedBodyFat.value.id!=null?() {
                     Navigator.pushNamed(context, RouteName.setFoodType);
-                  }),
+                  }:null,
+                  child: Container(
+                    width: Get.width,
+                    height: 48 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                      color: _spgController.selectedBodyFat.value.id!=null?kgreen49:hintGrey,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'proceed'.tr,
+                        style: AppTextStyle.normalWhiteText.copyWith(
+                            color: _spgController.selectedBodyFat.value.id!=null?kPureWhite:greyBorder
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+
+              // ProceedButton(
+              //     title: 'proceed'.tr,
+              //     onPressed: () {
+              //       print(_spgController.selectedBodyFat.value.serialId);
+              //       Navigator.pushNamed(context, RouteName.setFoodType);
+              //     }),
             ),
           ),
         ],
