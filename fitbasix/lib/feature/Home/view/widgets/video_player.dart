@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -16,12 +18,14 @@ class VideoPlayerContainer extends StatefulWidget {
 
 class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   late VideoPlayerController _controller;
+  late VideoPlayerController _controllerThumb;
   bool state = false;
   bool buffer = false;
   @override
   void initState() {
     super.initState();
     _controller = VideoPlayerController.network(widget.videoUrl);
+    _controllerThumb = VideoPlayerController.network(widget.videoUrl);
 
     _controller.addListener(() {
       setState(() {
@@ -30,11 +34,13 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
       });
     });
     _controller.initialize();
+    _controllerThumb.initialize();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _controllerThumb.dispose();
     super.dispose();
   }
 
@@ -42,7 +48,21 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
+        Positioned.fill(child: AspectRatio(
+          aspectRatio: _controllerThumb.value.aspectRatio,
+          child: VideoPlayer(_controllerThumb),
+        )),
+        ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+                sigmaX: 10.0, sigmaY: 10.0),
+            child: Container(
+              width: 360*SizeConfig.widthMultiplier!,
+              height: 360*SizeConfig.heightMultiplier!,
+            ),
+          ),
+        ),
+        Center(
           child: Container(
             child: AspectRatio(
               aspectRatio: _controller.value.aspectRatio,

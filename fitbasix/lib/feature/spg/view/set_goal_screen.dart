@@ -155,15 +155,47 @@ class SetGoalScreen extends StatelessWidget {
                 vertical: 16 * SizeConfig.heightMultiplier!),
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: ProceedButton(
-                  title: 'proceed'.tr,
-                  onPressed: () {
-                    print(_spgController.selectedGoalIndex.value.serialId);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => SelectGenderScreen()));
-                  }),
+              child: Obx(
+    ()=> GestureDetector(
+                  onTap: _spgController.selectedGoalIndex
+            .value.id!=null?() {
+          Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => SelectGenderScreen()));
+        }:null,
+                  child: Container(
+                    width: Get.width,
+                    height: 48 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                      color: _spgController.selectedGoalIndex
+                          .value.id!=null?kgreen49:hintGrey,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'proceed'.tr,
+                        style: AppTextStyle.normalWhiteText.copyWith(
+                          color: _spgController.selectedGoalIndex
+                              .value.id!=null?kPureWhite:greyBorder
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+
+
+              // ProceedButton(
+              //     title: 'proceed'.tr,
+              //     onPressed: _spgController.selectedGoalIndex
+              //         .value.id!=null?() {
+              //       print(_spgController.selectedGoalIndex.value.serialId);
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (_) => SelectGenderScreen()));
+              //     }:(){}),
             ),
           ),
         ],

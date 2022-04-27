@@ -30,6 +30,7 @@ class ProfileController extends GetxController {
   RxBool directFromHome=true.obs;
 
   RxString otp = "".obs;
+  RxBool dataNeedToLoad = true.obs;
   RxInt lastPage = RxInt(0);
 // height controller for dialog box
   RxString heightType = "inch".obs;

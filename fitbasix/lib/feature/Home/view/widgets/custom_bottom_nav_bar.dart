@@ -47,6 +47,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           ],
         ),
         child: BottomNavigationBar(
+          selectedFontSize: 12*SizeConfig.textMultiplier!,
+          unselectedFontSize: 12*SizeConfig.textMultiplier!,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: kgreen49,

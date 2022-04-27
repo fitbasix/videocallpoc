@@ -6,6 +6,7 @@ import 'package:fitbasix/feature/profile/view/appbar_for_account.dart';
 import 'package:fitbasix/feature/profile/view/set_userheight_dialog.dart';
 import 'package:fitbasix/feature/profile/view/set_userweight_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 // import 'package:images_picker/images_picker.dart';
@@ -207,6 +208,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       //TextFormField for user bio update
                       TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 4,
+                        minLines: 2,
+                        maxLength: 100,
                         onChanged: (value) {
                           //implement controller for storing user bio
                         },
@@ -215,6 +223,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             color:
                                 Theme.of(context).textTheme.bodyText1?.color),
                         decoration: InputDecoration(
+                          counterText:"",
                           contentPadding: EdgeInsets.fromLTRB(
                               12 * SizeConfig.widthMultiplier!,
                               14 * SizeConfig.heightMultiplier!,

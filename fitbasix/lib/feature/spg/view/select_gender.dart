@@ -115,12 +115,36 @@ class SelectGenderScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 16 * SizeConfig.widthMultiplier!),
-            child: ProceedButton(
-                title: 'proceed'.tr,
-                onPressed: () {
-                  print(_spgController.selectedGenderIndex.value.serialId);
+            child: Obx(
+                  ()=> GestureDetector(
+                onTap:_spgController.selectedGenderIndex.value.id!=null?() {
                   Navigator.pushNamed(context, RouteName.setDob);
-                }),
+                }:null,
+                child: Container(
+                  width: Get.width,
+                  height: 48 * SizeConfig.heightMultiplier!,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                    color: _spgController.selectedGenderIndex.value.id!=null?kgreen49:hintGrey,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'proceed'.tr,
+                      style: AppTextStyle.normalWhiteText.copyWith(
+                          color: _spgController.selectedGenderIndex.value.id!=null?kPureWhite:greyBorder
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+
+            // ProceedButton(
+            //     title: 'proceed'.tr,
+            //     onPressed: () {
+            //       print(_spgController.selectedGenderIndex.value.serialId);
+            //       Navigator.pushNamed(context, RouteName.setDob);
+            //     }),
           ),
           SizedBox(
             height: 16 * SizeConfig.heightMultiplier!,

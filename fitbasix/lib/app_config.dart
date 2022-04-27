@@ -14,13 +14,13 @@ class AppConfig {
   static String get api_url {
     switch (buildFlavour) {
       case Flavor.PRODUCTION:
-        return 'https://www.fitbasix.com';
+        return 'https://fitbasix.com';
       case Flavor.DEVELOPMENT:
-        return 'https://www.fitbasix.com';
+        return 'https://fitbasix.com';
       case Flavor.STAGING:
-        return 'https://www.fitbasix.com';
+        return 'https://fitbasix.com';
       default:
-        return 'https://www.fitbasix.com';
+        return 'https://fitbasix.com';
     }
   }
 

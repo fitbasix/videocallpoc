@@ -72,6 +72,8 @@ class _ExploreFeedState extends State<ExploreFeed> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -333,9 +335,18 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                 // _homeController.isNeedToLoadData
                                 //     .value = false;
                               }
-                              return Obx(() => Column(
+                              return Obx(() {
+                                print(homeController
+                                    .explorePostList[index]
+                                    .isMe.toString()+ homeController
+                                    .explorePostList[index].id!);
+                                return Column(
                                     children: [
+
                                       ExplorePostTile(
+                                        isMe:homeController
+                                            .explorePostList[index]
+                                            .isMe!,
                                         userID: homeController.explorePostList[index].userId!.id,
                                         name: homeController
                                             .explorePostList[index]
@@ -547,7 +558,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                         color: kBackgroundColor,
                                       )
                                     ],
-                                  ));
+                                  );});
                             }),
                   )
                 ],
