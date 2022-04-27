@@ -200,27 +200,23 @@ class _ChatScreenState extends State<ChatScreen> {
             QBDialog? createdDialog = await QB.chat
                 .createDialog(
               occupantsIds,
-              dialogName,
               dialogType: QBChatDialogTypes.CHAT,
             )
                 .then((value) {
               widget.userDialogForChat = value;
               getMassageFromHistory();
             });
-          } on PlatformException catch (e) {
-          }
+          } on PlatformException catch (e) {}
         }
         return value;
       });
-    } on PlatformException catch (e) {
-    }
+    } on PlatformException catch (e) {}
   }
 
   checkUserOnlineStatus() async {
     try {
       var status = await QB.chat.getOnlineUsers(widget.userDialogForChat!.id!);
-    } on PlatformException catch (e) {
-    }
+    } on PlatformException catch (e) {}
   }
 
   @override
@@ -230,7 +226,6 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppbarforChat(
         trainerProfilePicUrl: widget.profilePicURL,
         onHangUpTapped: (value) {
-
           _trainerController.isVideoAvailable(widget.time.toString());
 
           if (widget.days!.indexOf(_trainerController.daysInt[
@@ -245,12 +240,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         sessionIdForVideoCall: value!,
                         name: widget.trainerTitle,
                         imageURL: widget.profilePicURL,
-                  )));
+                      )));
               //showDialogForVideoCallNotPossible(context);
             });
           } else {
-
-
             showDialogForVideoCallNotPossible(
                 context,
                 _trainerController.getTime(widget.time.toString()),
@@ -555,8 +548,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                   attachments: attachmentsList,
                                                   body: "imageTest",
                                                   saveToHistory: true)
+                                              .then((value) {})
                                               .then((value) {
-                                          }).then((value) {
                                             _userWantToSendMedia.value = false;
                                             _mediaIsUploading.value = false;
                                             List<QBAttachment>?
@@ -633,7 +626,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                           .widthMultiplier!,
                                                   child: IconButton(
                                                       onPressed: () async {
-                                                        await Permission.storage.request();
+                                                        await Permission.storage
+                                                            .request();
                                                         sendAttachmentsFromDevice();
                                                       },
                                                       icon: SvgPicture.asset(
@@ -783,8 +777,7 @@ class _ChatScreenState extends State<ChatScreen> {
         List<QBSubscription?> subscriptions =
             await QB.subscriptions.create(token!, QBPushChannelNames.GCM);
       });
-    } catch (e) {
-    }
+    } catch (e) {}
     String eventType = QBNotificationEventTypes.ONE_SHOT;
     String notificationEventType = QBNotificationTypes.PUSH;
     int pushType = QBNotificationPushTypes.GCM;
@@ -932,10 +925,8 @@ class _ChatScreenState extends State<ChatScreen> {
       await QB.chat
           .sendMessage(dialogId,
               body: messageBody, saveToHistory: saveToHistory)
-          .then((value) {
-      });
-    } on PlatformException catch (e) {
-    }
+          .then((value) {});
+    } on PlatformException catch (e) {}
     sendNotification(messageBody);
   }
 
@@ -1114,10 +1105,10 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  void reportAbuseDialog(BuildContext context){
+  void reportAbuseDialog(BuildContext context) {
     RxBool blockUser = false.obs;
     RxInt selectedProblemIndex = (-1).obs;
-    if(_reportAbuseController.reportAbuseList.value.response == null){
+    if (_reportAbuseController.reportAbuseList.value.response == null) {
       _reportAbuseController.getReportAbuseData();
     }
 
@@ -1137,215 +1128,329 @@ class _ChatScreenState extends State<ChatScreen> {
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                content:  Obx(()=>(_reportAbuseController.isReportAbuseLoading.value)?Container(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
-                      child: SizedBox(
-                          height: 30*SizeConfig.widthMultiplier!,
-                          width: 30*SizeConfig.widthMultiplier!,
-                          child: CustomizedCircularProgress()),
-                    )
+                content: Obx(() => (_reportAbuseController
+                        .isReportAbuseLoading.value)
+                    ? Container(
+                        child: Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 30 * SizeConfig.heightMultiplier!),
+                        child: SizedBox(
+                            height: 30 * SizeConfig.widthMultiplier!,
+                            width: 30 * SizeConfig.widthMultiplier!,
+                            child: CustomizedCircularProgress()),
+                      ))
+                    : Stack(
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 32 * SizeConfig.heightMultiplier!,
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Report Abuse".tr,
+                                  style: AppTextStyle.black600Text.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
+                                    fontSize: (16) * SizeConfig.textMultiplier!,
+                                  ),
+                                ),
+                              ),
 
-                ):Stack(
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 32*SizeConfig.heightMultiplier!,),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Report Abuse".tr,
-                            style: AppTextStyle.black600Text.copyWith(
-                              color: Theme.of(context).textTheme.bodyText1?.color,
-                              fontSize: (16) * SizeConfig.textMultiplier!,
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(
-                          height: 32 * SizeConfig.heightMultiplier!,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
-                          child: Text("Why_reporting?".tr,
-                            style: AppTextStyle.black600Text.copyWith(
-                              color: Theme.of(context).textTheme.bodyText1?.color,
-                              fontSize: (12) * SizeConfig.textMultiplier!,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8.02 * SizeConfig.heightMultiplier!,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!),
-                          child: Text("report_abuse_description".tr,
-                            style: AppTextStyle.black400Text.copyWith(
-                              color: Theme.of(context).textTheme.bodyText1?.color,
-                              fontSize: (11) * SizeConfig.textMultiplier!,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20 * SizeConfig.heightMultiplier!,
-                        ),
-                        Container(
-                          height: 300*SizeConfig.heightMultiplier!,
-                          child: Obx(
-                                ()=> SingleChildScrollView(
-                                  child: Column(
-                                  mainAxisSize:MainAxisSize.min,
-                                  children: List.generate(_reportAbuseController.reportAbuseList.value.response!.data!.length, (index) => Column(
-                                    mainAxisSize:MainAxisSize.min,
-                                    children: [
-                                      InkWell(
-                                        onTap: (){
-                                          selectedProblemIndex.value = index;
-                                        },
-                                        child: Container(
-                                          width: 328*SizeConfig.widthMultiplier!,
-                                          color: selectedProblemIndex.value==index?Colors.white.withOpacity(0.1):Colors.transparent,
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 36*SizeConfig.widthMultiplier!,vertical: 10*SizeConfig.heightMultiplier!),
-                                            child: Text(
-                                              _reportAbuseController.reportAbuseList.value.response!.data![index].reason!.replaceAll("-EN", ""),
-                                              style: AppTextStyle.black400Text.copyWith(
-                                                  color: Theme.of(context).textTheme.bodyText1?.color,
-                                                  fontSize: (12) * SizeConfig.textMultiplier!,
-                                                  fontWeight: selectedProblemIndex.value==index?FontWeight.w600:FontWeight.w500,
-                                                  height: 1.3
-                                              ),),
-                                          ),
+                              SizedBox(
+                                height: 32 * SizeConfig.heightMultiplier!,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        36 * SizeConfig.widthMultiplier!),
+                                child: Text(
+                                  "Why_reporting?".tr,
+                                  style: AppTextStyle.black600Text.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
+                                    fontSize: (12) * SizeConfig.textMultiplier!,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8.02 * SizeConfig.heightMultiplier!,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        36 * SizeConfig.widthMultiplier!),
+                                child: Text(
+                                  "report_abuse_description".tr,
+                                  style: AppTextStyle.black400Text.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
+                                    fontSize: (11) * SizeConfig.textMultiplier!,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20 * SizeConfig.heightMultiplier!,
+                              ),
+                              Container(
+                                height: 300 * SizeConfig.heightMultiplier!,
+                                child: Obx(
+                                  () => SingleChildScrollView(
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: List.generate(
+                                            _reportAbuseController
+                                                .reportAbuseList
+                                                .value
+                                                .response!
+                                                .data!
+                                                .length,
+                                            (index) => Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        selectedProblemIndex
+                                                            .value = index;
+                                                      },
+                                                      child: Container(
+                                                        width: 328 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                        color: selectedProblemIndex
+                                                                    .value ==
+                                                                index
+                                                            ? Colors.white
+                                                                .withOpacity(
+                                                                    0.1)
+                                                            : Colors
+                                                                .transparent,
+                                                        child: Padding(
+                                                          padding: EdgeInsets.symmetric(
+                                                              horizontal: 36 *
+                                                                  SizeConfig
+                                                                      .widthMultiplier!,
+                                                              vertical: 10 *
+                                                                  SizeConfig
+                                                                      .heightMultiplier!),
+                                                          child: Text(
+                                                            _reportAbuseController
+                                                                .reportAbuseList
+                                                                .value
+                                                                .response!
+                                                                .data![index]
+                                                                .reason!
+                                                                .replaceAll(
+                                                                    "-EN", ""),
+                                                            style: AppTextStyle.black400Text.copyWith(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    ?.color,
+                                                                fontSize: (12) *
+                                                                    SizeConfig
+                                                                        .textMultiplier!,
+                                                                fontWeight: selectedProblemIndex
+                                                                            .value ==
+                                                                        index
+                                                                    ? FontWeight
+                                                                        .w600
+                                                                    : FontWeight
+                                                                        .w500,
+                                                                height: 1.3),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ))),
+                                  ),
+                                ),
+                              ),
+                              // SizedBox(
+                              //   height: 32 * SizeConfig.heightMultiplier!,
+                              // ),
+                              SizedBox(
+                                height: 24 * SizeConfig.heightMultiplier!,
+                              ),
+                              Obx(() => Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            35 * SizeConfig.widthMultiplier!),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        blockUser.value = !blockUser.value;
+                                      },
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              color: Colors.transparent,
+                                              child: Padding(
+                                                  padding: EdgeInsets.all(5 *
+                                                      SizeConfig
+                                                          .widthMultiplier!),
+                                                  child: SvgPicture.asset(
+                                                    blockUser.value
+                                                        ? ImagePath.selectedBox
+                                                        : ImagePath
+                                                            .unselectedBox,
+                                                    height: 18 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    width: SizeConfig
+                                                        .widthMultiplier!,
+                                                  )),
+                                            ),
+                                            SizedBox(
+                                              width: 8 *
+                                                  SizeConfig.widthMultiplier!,
+                                            ),
+                                            RichText(
+                                              textAlign: TextAlign.center,
+                                              text: TextSpan(children: [
+                                                TextSpan(
+                                                  text: 'Block_person'.tr,
+                                                  style: AppTextStyle.NormalText
+                                                      .copyWith(
+                                                          fontSize: 14 *
+                                                              SizeConfig
+                                                                  .textMultiplier!,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: kPink),
+                                                ),
+                                              ]),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ))
-                            ),
-                                ),
-                          ),
-                        ),
-                        // SizedBox(
-                        //   height: 32 * SizeConfig.heightMultiplier!,
-                        // ),
-                        SizedBox(
-                          height: 24 * SizeConfig.heightMultiplier!,
-                        ),
-                        Obx(()=>Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 35*SizeConfig.widthMultiplier!),
-                          child: GestureDetector(
-                            onTap: (){
-                              blockUser.value = !blockUser.value;
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Row(
-                                children: [
-
-                                  Container(
-                                    color: Colors.transparent,
-                                    child: Padding(
-                                        padding: EdgeInsets.all(5*SizeConfig.widthMultiplier!),
-                                        child: SvgPicture.asset(blockUser.value?ImagePath.selectedBox:ImagePath.unselectedBox,height: 18*SizeConfig.heightMultiplier!,width: SizeConfig.widthMultiplier!,)),
-                                  ),
-                                  SizedBox(width: 8*SizeConfig.widthMultiplier!,),
-                                  RichText(
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: 'Block_person'.tr,
-                                            style: AppTextStyle.NormalText.copyWith(
-                                                fontSize: 14 * SizeConfig.textMultiplier!,
-                                                fontWeight: FontWeight.w600,
-                                                color: kPink),
-
-                                          ),
-                                        ]
                                     ),
+                                  )),
+                              Obx(
+                                () => Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                      0 * SizeConfig.widthMultiplier!,
+                                      32 * SizeConfig.heightMultiplier!,
+                                      0 * SizeConfig.widthMultiplier!,
+                                      48 * SizeConfig.heightMultiplier!,
+                                    ),
+                                    child: Container(
+                                        width:
+                                            256 * SizeConfig.widthMultiplier!,
+                                        height:
+                                            48 * SizeConfig.heightMultiplier!,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                                elevation:
+                                                    MaterialStateProperty.all(
+                                                        0),
+                                                backgroundColor: selectedProblemIndex
+                                                            .value >=
+                                                        0
+                                                    ? MaterialStateProperty.all(
+                                                        kgreen49)
+                                                    : MaterialStateProperty.all(
+                                                        hintGrey),
+                                                shape: MaterialStateProperty.all(
+                                                    RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(8 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!)))),
+                                            onPressed: selectedProblemIndex.value >= 0
+                                                ? () async {
+                                                    if (!_reportAbuseController
+                                                        .isReportSendAbuseLoading
+                                                        .value) {
+                                                      _reportAbuseController
+                                                          .isReportSendAbuseLoading
+                                                          .value = true;
+                                                      var response = await _reportAbuseController
+                                                          .sendRepostAbuseData(
+                                                              userId: widget
+                                                                  .trainerId,
+                                                              reason: _reportAbuseController
+                                                                  .reportAbuseList
+                                                                  .value
+                                                                  .response!
+                                                                  .data![
+                                                                      selectedProblemIndex
+                                                                          .value]
+                                                                  .serialId);
+                                                      _reportAbuseController
+                                                          .isReportSendAbuseLoading
+                                                          .value = false;
+                                                      if (response.isNotEmpty) {
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(SnackBar(
+                                                                content: Text(
+                                                                    response)));
+                                                      }
+                                                    }
+                                                  }
+                                                : () {
+                                                    pleaseSelectAnOptionDialog(
+                                                        context);
+                                                  },
+                                            child: Text(
+                                              "Submit".tr,
+                                              style: AppTextStyle.hboldWhiteText
+                                                  .copyWith(
+                                                      color:
+                                                          selectedProblemIndex
+                                                                      .value >=
+                                                                  0
+                                                              ? kPureWhite
+                                                              : greyBorder),
+                                            ))),
                                   ),
-                                ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Positioned(
+                            top: 7 * SizeConfig.heightMultiplier!,
+                            right: 7 * SizeConfig.widthMultiplier!,
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: SvgPicture.asset(
+                                ImagePath.closedialogIcon,
+                                color: Theme.of(context).primaryColor,
+                                width: 16 * SizeConfig.widthMultiplier!,
+                                height: 16 * SizeConfig.heightMultiplier!,
                               ),
                             ),
                           ),
-                        )),
-                        Obx(
-                          ()=> Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                0 * SizeConfig.widthMultiplier!,
-                                32 * SizeConfig.heightMultiplier!,
-                                0 * SizeConfig.widthMultiplier!,
-                                48 * SizeConfig.heightMultiplier!,
-                              ),
-                              child: Container(
-                                  width: 256 * SizeConfig.widthMultiplier!,
-                                  height: 48 * SizeConfig.heightMultiplier!,
-                                  child: ElevatedButton(
-                                      style: ButtonStyle(
-                                          elevation: MaterialStateProperty.all(0),
-                                          backgroundColor: selectedProblemIndex.value>=0?MaterialStateProperty.all(kgreen49):MaterialStateProperty.all(hintGrey),
-                                          shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(
-                                                      8 * SizeConfig.widthMultiplier!)))),
-                                      onPressed: selectedProblemIndex.value>=0?() async {
-                                          if(!_reportAbuseController.isReportSendAbuseLoading.value){
-                                            _reportAbuseController.isReportSendAbuseLoading.value = true;
-                                            var response = await _reportAbuseController
-                                                .sendRepostAbuseData(
-                                                userId: widget.trainerId,
-                                                reason: _reportAbuseController.reportAbuseList.value.response!.data![selectedProblemIndex.value].serialId
-                                            );
-                                            _reportAbuseController.isReportSendAbuseLoading.value = false;
-                                            if(response.isNotEmpty){
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(response)));
-                                            }
-                                          }
-                                      }:(){
-                                        pleaseSelectAnOptionDialog(context);
-                                      },
-                                      child: Text(
-                                        "Submit".tr,
-                                        style: AppTextStyle.hboldWhiteText.copyWith(color: selectedProblemIndex.value>=0?kPureWhite:greyBorder),
-                                      ))),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                      top: 7 * SizeConfig.heightMultiplier!,
-                      right: 7 * SizeConfig.widthMultiplier!,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: SvgPicture.asset(
-                          ImagePath.closedialogIcon,
-                          color: Theme.of(context).primaryColor,
-                          width: 16 * SizeConfig.widthMultiplier!,
-                          height: 16 * SizeConfig.heightMultiplier!,
-                        ),
-                      ),
-                    ),
-                  ],
-                ))
-
-            ),
+                        ],
+                      ))),
           ),
         );
       },
     );
   }
-  void pleaseSelectAnOptionDialog(BuildContext context){
 
-
+  void pleaseSelectAnOptionDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1362,59 +1467,67 @@ class _ChatScreenState extends State<ChatScreen> {
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                content:  Obx(()=>(_reportAbuseController.isReportAbuseLoading.value)?Container(
-                    child:  Container(
-                      margin: EdgeInsets.symmetric(vertical: 30*SizeConfig.heightMultiplier!),
-                      child: SizedBox(
-                          height: 30*SizeConfig.widthMultiplier!,
-                          width: 30*SizeConfig.widthMultiplier!,
-                          child: CustomizedCircularProgress()),
-                    )
-
-                ):Stack(
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 32*SizeConfig.heightMultiplier!,),
-                        Padding(
-                          padding: EdgeInsets.all(16*SizeConfig.widthMultiplier!),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Please select a valid reason\n for reporting.".tr,
-                              style: AppTextStyle.black600Text.copyWith(
-                                  color: Theme.of(context).textTheme.bodyText1?.color,
-                                  fontSize: (14) * SizeConfig.textMultiplier!,
-                                  fontWeight: FontWeight.w400
+                content: Obx(
+                    () => (_reportAbuseController.isReportAbuseLoading.value)
+                        ? Container(
+                            child: Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 30 * SizeConfig.heightMultiplier!),
+                            child: SizedBox(
+                                height: 30 * SizeConfig.widthMultiplier!,
+                                width: 30 * SizeConfig.widthMultiplier!,
+                                child: CustomizedCircularProgress()),
+                          ))
+                        : Stack(
+                            children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 32 * SizeConfig.heightMultiplier!,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(
+                                        16 * SizeConfig.widthMultiplier!),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Please select a valid reason\n for reporting."
+                                            .tr,
+                                        style: AppTextStyle.black600Text
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: (14) *
+                                                    SizeConfig.textMultiplier!,
+                                                fontWeight: FontWeight.w400),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Positioned(
-                      top: 7 * SizeConfig.heightMultiplier!,
-                      right: 7 * SizeConfig.widthMultiplier!,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: SvgPicture.asset(
-                          ImagePath.closedialogIcon,
-                          color: Theme.of(context).primaryColor,
-                          width: 16 * SizeConfig.widthMultiplier!,
-                          height: 16 * SizeConfig.heightMultiplier!,
-                        ),
-                      ),
-                    ),
-                  ],
-                ))
-
-            ),
+                              Positioned(
+                                top: 7 * SizeConfig.heightMultiplier!,
+                                right: 7 * SizeConfig.widthMultiplier!,
+                                child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: SvgPicture.asset(
+                                    ImagePath.closedialogIcon,
+                                    color: Theme.of(context).primaryColor,
+                                    width: 16 * SizeConfig.widthMultiplier!,
+                                    height: 16 * SizeConfig.heightMultiplier!,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ))),
           ),
         );
       },
@@ -1434,184 +1547,197 @@ class _ChatScreenState extends State<ChatScreen> {
                     top: 175 * SizeConfig.heightMultiplier!,
                     bottom: 175 * SizeConfig.heightMultiplier!,
                   ),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 30*SizeConfig.widthMultiplier!,
-                    vertical: 15 * SizeConfig.heightMultiplier!),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        8 * SizeConfig.imageSizeMultiplier!)),
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                content: Stack(
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Align(
-                            alignment: Alignment.topRight,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: SvgPicture.asset(
-                                      ImagePath.closedialogIcon,
-                                      color: Theme.of(context).primaryColor,
-                                      width: 16 * SizeConfig.imageSizeMultiplier!,
-                                      height: 16 * SizeConfig.imageSizeMultiplier!,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 10*SizeConfig.heightMultiplier!,),
-                                Text(
-                                  widget.trainerTitle!,
-                                  style: AppTextStyle.black400Text.copyWith(
-                                      color: Theme.of(context).textTheme.bodyText1!.color),
-                                ),
-                                SizedBox(
-                                  height: 26 * SizeConfig.heightMultiplier!,
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    _trainerController.atrainerDetail.value = Trainer();
-
-                                    _trainerController.isProfileLoading.value = true;
-                                    _trainerController.isMyTrainerProfileLoading.value =
-                                    true;
-                                    Navigator.pushNamed(
-                                        context, RouteName.trainerProfileScreen);
-
-                                    var result = await TrainerServices.getATrainerDetail(
-                                        widget.trainerId!);
-                                    _trainerController.atrainerDetail.value =
-                                    result.response!.data!;
-
-                                    _trainerController.planModel.value =
-                                    await TrainerServices.getPlanByTrainerId(
-                                        widget.trainerId!);
-
-                                    _trainerController.initialPostData.value =
-                                    await TrainerServices.getTrainerPosts(
-                                        widget.trainerId!, 0);
-                                    _trainerController.isMyTrainerProfileLoading.value =
-                                    false;
-                                    _trainerController.loadingIndicator.value = false;
-                                    if (_trainerController
-                                        .initialPostData.value.response!.data!.length !=
-                                        0) {
-                                      _trainerController.trainerPostList.value =
-                                      _trainerController
-                                          .initialPostData.value.response!.data!;
-                                    } else {
-                                      _trainerController.trainerPostList.clear();
-                                    }
-                                    _trainerController.isProfileLoading.value = false;
-                                    _trainerController.isMyTrainerProfileLoading.value =
-                                    false;
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        ImagePath.penIcon,
-                                        color: Theme.of(context).primaryColor,
-                                        height: 15 * SizeConfig.imageSizeMultiplier!,
-                                      ),
-                                      SizedBox(
-                                        width: 10.5 * SizeConfig.widthMultiplier!,
-                                      ),
-                                      Text(
-                                        'Open profile',
-                                        style: AppTextStyle.black400Text.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 22 * SizeConfig.heightMultiplier!,
-                                ),
-                                GestureDetector(
+                  contentPadding: EdgeInsets.symmetric(
+                      horizontal: 30 * SizeConfig.widthMultiplier!,
+                      vertical: 15 * SizeConfig.heightMultiplier!),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          8 * SizeConfig.imageSizeMultiplier!)),
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  content: Stack(children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => DocumentsViewerScreen(
-                                              messages: messages,
-                                              opponentName: widget.trainerTitle,
-                                            )));
+                                    Navigator.pop(context);
                                   },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        ImagePath.fileIcon,
-                                        color: Theme.of(context).primaryColor,
-                                        height: 15 * SizeConfig.imageSizeMultiplier!,
-                                      ),
-                                      SizedBox(
-                                        width: 10.5 * SizeConfig.widthMultiplier!,
-                                      ),
-                                      Text(
-                                        'View documents',
-                                        style: AppTextStyle.black400Text.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color),
-                                      ),
-                                    ],
+                                  child: SvgPicture.asset(
+                                    ImagePath.closedialogIcon,
+                                    color: Theme.of(context).primaryColor,
+                                    width: 16 * SizeConfig.imageSizeMultiplier!,
+                                    height:
+                                        16 * SizeConfig.imageSizeMultiplier!,
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 22 * SizeConfig.heightMultiplier!,
+                              ),
+                              SizedBox(
+                                height: 10 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                widget.trainerTitle!,
+                                style: AppTextStyle.black400Text.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color),
+                              ),
+                              SizedBox(
+                                height: 26 * SizeConfig.heightMultiplier!,
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  _trainerController.atrainerDetail.value =
+                                      Trainer();
+
+                                  _trainerController.isProfileLoading.value =
+                                      true;
+                                  _trainerController
+                                      .isMyTrainerProfileLoading.value = true;
+                                  Navigator.pushNamed(
+                                      context, RouteName.trainerProfileScreen);
+
+                                  var result =
+                                      await TrainerServices.getATrainerDetail(
+                                          widget.trainerId!);
+                                  _trainerController.atrainerDetail.value =
+                                      result.response!.data!;
+
+                                  _trainerController.planModel.value =
+                                      await TrainerServices.getPlanByTrainerId(
+                                          widget.trainerId!);
+
+                                  _trainerController.initialPostData.value =
+                                      await TrainerServices.getTrainerPosts(
+                                          widget.trainerId!, 0);
+                                  _trainerController
+                                      .isMyTrainerProfileLoading.value = false;
+                                  _trainerController.loadingIndicator.value =
+                                      false;
+                                  if (_trainerController.initialPostData.value
+                                          .response!.data!.length !=
+                                      0) {
+                                    _trainerController.trainerPostList.value =
+                                        _trainerController.initialPostData.value
+                                            .response!.data!;
+                                  } else {
+                                    _trainerController.trainerPostList.clear();
+                                  }
+                                  _trainerController.isProfileLoading.value =
+                                      false;
+                                  _trainerController
+                                      .isMyTrainerProfileLoading.value = false;
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImagePath.penIcon,
+                                      color: Theme.of(context).primaryColor,
+                                      height:
+                                          15 * SizeConfig.imageSizeMultiplier!,
+                                    ),
+                                    SizedBox(
+                                      width: 10.5 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    Text(
+                                      'Open profile',
+                                      style: AppTextStyle.black400Text.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .color),
+                                    ),
+                                  ],
                                 ),
-                                GestureDetector(
-                                  onTap: (){
-                                    reportAbuseDialog(context);
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        ImagePath.reportabuseicon,
-                                        color: Theme.of(context).primaryColor,
-                                        height: 20 * SizeConfig.heightMultiplier!,
-                                        width: 20*SizeConfig.widthMultiplier!,
-                                      ),
-                                      SizedBox(
-                                        width: 10.5 * SizeConfig.widthMultiplier!,
-                                      ),
-                                      Text(
-                                        'Report abuse',
-                                        style: AppTextStyle.black400Text.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color),
-                                      ),
-                                    ],
-                                  ),
+                              ),
+                              SizedBox(
+                                height: 22 * SizeConfig.heightMultiplier!,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DocumentsViewerScreen(
+                                                messages: messages,
+                                                opponentName:
+                                                    widget.trainerTitle,
+                                              )));
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImagePath.fileIcon,
+                                      color: Theme.of(context).primaryColor,
+                                      height:
+                                          15 * SizeConfig.imageSizeMultiplier!,
+                                    ),
+                                    SizedBox(
+                                      width: 10.5 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    Text(
+                                      'View documents',
+                                      style: AppTextStyle.black400Text.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .color),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 20*SizeConfig.heightMultiplier!,),
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 22 * SizeConfig.heightMultiplier!,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  reportAbuseDialog(context);
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture.asset(
+                                      ImagePath.reportabuseicon,
+                                      color: Theme.of(context).primaryColor,
+                                      height: 20 * SizeConfig.heightMultiplier!,
+                                      width: 20 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    SizedBox(
+                                      width: 10.5 * SizeConfig.widthMultiplier!,
+                                    ),
+                                    Text(
+                                      'Report abuse',
+                                      style: AppTextStyle.black400Text.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .color),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20 * SizeConfig.heightMultiplier!,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-
-                    ])
-
-              )),
+                        ),
+                      ],
+                    ),
+                  ]))),
         );
       },
     );
@@ -2049,8 +2175,7 @@ class MessageBubbleSender extends StatelessWidget {
             }
           });
         }
-      } catch (e) {
-      }
+      } catch (e) {}
 
       return false;
     } on PlatformException catch (e) {
@@ -2058,8 +2183,6 @@ class MessageBubbleSender extends StatelessWidget {
       // Some error occurred, look at the exception message for more details
     }
   }
-
-
 
   void checkFileExistence(String? fileName) async {
     if (Platform.isAndroid) {
@@ -2420,8 +2543,7 @@ class MessageBubbleOpponent extends StatelessWidget {
             });
           }
         }
-      } catch (e) {
-      }
+      } catch (e) {}
 
       return false;
     } on PlatformException catch (e) {
@@ -2433,9 +2555,10 @@ class MessageBubbleOpponent extends StatelessWidget {
   void checkFileExistence(String? fileName) async {
     if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
-      if(!_chatController.storagePermissionCalled.value){
+      if (!_chatController.storagePermissionCalled.value) {
         _chatController.storagePermissionCalled.value = true;
-        PermissionStatus status1 = await Permission.manageExternalStorage.request();
+        PermissionStatus status1 =
+            await Permission.manageExternalStorage.request();
       }
       if (status == PermissionStatus.granted) {
         String? path;
@@ -2566,38 +2689,39 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
       ),
       actions: [
         //call icon
-        if(_webRtcController.currentOSVersion.value<12)Container(
-          child: FlutterSwitch(
-            onToggle: onHangUpTapped!,
-            value: false,
-            height: 24 * SizeConfig.heightMultiplier!,
-            width: 48 * SizeConfig.widthMultiplier!,
-            borderRadius: 30.0,
-            padding: 1.0,
-            activeToggleColor: kPureWhite,
-            inactiveToggleColor: Color(0xffB7B7B7),
-            // toggleSize: 28,
-            activeColor: Color(0xff49AE50),
-            inactiveColor: Colors.transparent,
-            activeIcon: Icon(
-              Icons.videocam,
-              color: Color(0xff49AE50),
-            ),
-            inactiveIcon: Icon(
-              Icons.videocam,
-              color: kPureWhite,
-            ),
+        if (_webRtcController.currentOSVersion.value < 12)
+          Container(
+            child: FlutterSwitch(
+              onToggle: onHangUpTapped!,
+              value: false,
+              height: 24 * SizeConfig.heightMultiplier!,
+              width: 48 * SizeConfig.widthMultiplier!,
+              borderRadius: 30.0,
+              padding: 1.0,
+              activeToggleColor: kPureWhite,
+              inactiveToggleColor: Color(0xffB7B7B7),
+              // toggleSize: 28,
+              activeColor: Color(0xff49AE50),
+              inactiveColor: Colors.transparent,
+              activeIcon: Icon(
+                Icons.videocam,
+                color: Color(0xff49AE50),
+              ),
+              inactiveIcon: Icon(
+                Icons.videocam,
+                color: kPureWhite,
+              ),
 
-            inactiveSwitchBorder: Border.all(
-              color: Color(0xffB7B7B7),
-              width: 1.0,
-            ),
-            activeToggleBorder: Border.all(
-              color: Color(0xff49AE50),
-              width: 1.0,
+              inactiveSwitchBorder: Border.all(
+                color: Color(0xffB7B7B7),
+                width: 1.0,
+              ),
+              activeToggleBorder: Border.all(
+                color: Color(0xff49AE50),
+                width: 1.0,
+              ),
             ),
           ),
-        ),
         // popupmenu icon
         IconButton(
             onPressed: onMenuTap,

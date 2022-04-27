@@ -12,11 +12,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/.run/Flavor_ dev.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/.run/Flavor_ dev.run.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/fitbasix_app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/fitbasix_app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/main_dev.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/main_dev.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/setup-my-app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/setup-my-app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,6 +59,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\manga\Documents\GitHub\fitbasix\fitbasix\android" />
+      <recent name="C:\Users\manga\Documents\GitHub\fitbasix\fitbasix\android\app" />
       <recent name="C:\Users\himan\OneDrive\Documents\GitHub\fitbasix-flutter-app\fitbasix\assets\message" />
       <recent name="C:\Users\himan\OneDrive\Documents\GitHub\fitbasix-flutter-app\fitbasix\assets\settings" />
     </key>
@@ -111,22 +109,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1651078647919" />
-    <state width="1476" height="440" key="GridCell.Tab.0.bottom" timestamp="1651084137684">
+    <state width="1476" height="455" key="GridCell.Tab.0.bottom" timestamp="1651087597495">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1476" height="440" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1651084137684" />
-    <state width="1476" height="440" key="GridCell.Tab.0.center" timestamp="1651084137684">
+    <state width="1476" height="455" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1651087597495" />
+    <state width="1476" height="455" key="GridCell.Tab.0.center" timestamp="1651087597495">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1476" height="440" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1651084137684" />
-    <state width="1476" height="440" key="GridCell.Tab.0.left" timestamp="1651084137674">
+    <state width="1476" height="455" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1651087597495" />
+    <state width="1476" height="455" key="GridCell.Tab.0.left" timestamp="1651087597495">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1476" height="440" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1651084137674" />
-    <state width="1476" height="440" key="GridCell.Tab.0.right" timestamp="1651084137684">
+    <state width="1476" height="455" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1651087597495" />
+    <state width="1476" height="455" key="GridCell.Tab.0.right" timestamp="1651087597495">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1476" height="440" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1651084137684" />
+    <state width="1476" height="455" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1651087597495" />
     <state x="475" y="145" width="586" height="558" key="find.popup" timestamp="1651082412943">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
