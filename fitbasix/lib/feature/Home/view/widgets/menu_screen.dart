@@ -34,6 +34,8 @@ class MenuScreen extends StatelessWidget {
       required this.name});
 
   final ProfileController _profileController = Get.put(ProfileController());
+
+  bool userClickedOnLogOut = false;
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.find();
@@ -49,6 +51,7 @@ class MenuScreen extends StatelessWidget {
             GestureDetector(
               onTap: () async {
                 Navigator.pushNamed(context, RouteName.userprofileinfo);
+                _profileController.setAssetDataForGallery();
                 _profileController.directFromHome.value = false;
                 _profileController.initialPostData.value =
                     await ProfileServices.getUserPosts();
@@ -188,19 +191,22 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.logOut,
                     menuItemText: 'logOut'.tr,
                     onTap: () async {
-                      AwesomeNotifications().cancelAllSchedules();
-                      AwesomeNotifications().cancelAll();
-                      InitializeQuickBlox().logOutUserSession();
-                      final LoginController _controller =
-                          Get.put(LoginController());
-                      await LogInService.logOut();
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.clear();
-                      await _controller.googleSignout();
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, RouteName.loginScreen, (route) => false);
-                      Get.deleteAll();
+                      if(!userClickedOnLogOut){
+                        userClickedOnLogOut = true;
+                        AwesomeNotifications().cancelAllSchedules();
+                        AwesomeNotifications().cancelAll();
+                        InitializeQuickBlox().logOutUserSession();
+                        final LoginController _controller =
+                        Get.put(LoginController());
+                        await LogInService.logOut();
+                        userClickedOnLogOut = false;
+                        final SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.clear();
+                        await _controller.googleSignout();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, RouteName.loginScreen, (route) => false);
+                        Get.deleteAll();
+                      }
                     })
                 : Container()
           ],

@@ -441,6 +441,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         Map<dynamic, dynamic> payloadMap =
             Map<dynamic, dynamic>.from(data["payload"]);
         int opponentId = payloadMap["userId"];
+        print(opponentId.toString() + " oppp\n"+_homeController.userQuickBloxId.value.toString()+" usssss");
         print(_homeController.userQuickBloxId.value.toString() + " mmmm");
         if (opponentId == _homeController.userQuickBloxId.value) {
           print("local rendring started");

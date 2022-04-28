@@ -197,14 +197,27 @@ class HelpAndSupportScreen extends StatelessWidget {
                                                                 .widthMultiplier!),
                                                     color: kgreen49),
                                                 child: Center(
-                                                  child: SvgPicture.asset(
-                                                    ImagePath.phoneCallIcon,
-                                                    height: 26 *
-                                                        SizeConfig
-                                                            .imageSizeMultiplier!,
-                                                    width: 26 *
-                                                        SizeConfig
-                                                            .imageSizeMultiplier!,
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        ImagePath.phoneCallIcon,
+                                                        height: 26 *
+                                                            SizeConfig
+                                                                .imageSizeMultiplier!,
+                                                        width: 26 *
+                                                            SizeConfig
+                                                                .imageSizeMultiplier!,
+                                                      ),
+                                                      SizedBox(width: 8*SizeConfig.widthMultiplier!,),
+
+                                                      Text(
+                                                        _helpAndSupportController.helpAndSupportDataModel!.response!.data!.callingNo.toString(),
+                                                        style: AppTextStyle.normalWhiteText.copyWith(
+                                                            color: kPureWhite
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ),

@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'dart:math' as math;
 
 class SetHeight extends StatelessWidget {
+  var userStartedEditing = false.obs;
   @override
   Widget build(BuildContext context) {
     final SPGController _spgController = Get.find();
@@ -219,6 +220,7 @@ class SetHeight extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                               borderRadius: BorderRadius.circular(5))),
                       onValueChange: (value) {
+                        userStartedEditing.value = true;
                         _spgController.currentHeight.value = value;
                       },
                       onBuildRulerScalueText: (index, scaleValue) {
@@ -266,6 +268,7 @@ class SetHeight extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                               borderRadius: BorderRadius.circular(5))),
                       onValueChange: (value) {
+                        userStartedEditing.value = true;
                         _spgController.currentHeight.value = value;
                       },
                       onBuildRulerScalueText: (index, scaleValue) {
@@ -283,12 +286,36 @@ class SetHeight extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 16 * SizeConfig.widthMultiplier!),
-            child: ProceedButton(
-                title: 'proceed'.tr,
-                onPressed: () {
-                  print(_spgController.currentHeight.value);
+            child: Obx(
+                  ()=> GestureDetector(
+                onTap:userStartedEditing.value?() {
                   Navigator.pushNamed(context, RouteName.setWeight);
-                }),
+                }:null,
+                child: Container(
+                  width: Get.width,
+                  height: 48 * SizeConfig.heightMultiplier!,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                    color: userStartedEditing.value?kgreen49:hintGrey,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'proceed'.tr,
+                      style: AppTextStyle.normalWhiteText.copyWith(
+                          color: userStartedEditing.value?kPureWhite:greyBorder
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+
+            // ProceedButton(
+            //     title: 'proceed'.tr,
+            //     onPressed: () {
+            //       print(_spgController.currentHeight.value);
+            //       Navigator.pushNamed(context, RouteName.setWeight);
+            //     }),
           ),
           SizedBox(
             height: 16 * SizeConfig.heightMultiplier!,

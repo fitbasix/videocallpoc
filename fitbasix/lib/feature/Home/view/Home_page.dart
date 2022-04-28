@@ -209,6 +209,7 @@ class _HomePageState extends State<HomePage> {
                                     GestureDetector(
                                       onTap: () async{
                                         final ProfileController _profileController=Get.put(ProfileController());
+                                        _profileController.setAssetDataForGallery();
                                         _profileController.directFromHome.value=true;
                                         Navigator.pushNamed(context, RouteName.userprofileinfo);
                                         _profileController.initialPostData.value =
