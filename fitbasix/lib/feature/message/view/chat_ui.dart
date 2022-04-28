@@ -440,7 +440,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
 
               ///todo remove this ! sign
-
               widget.isCurrentlyEnrolled!
                   ? Obx(() => _userWantToSendMedia.value
                       ? Align(

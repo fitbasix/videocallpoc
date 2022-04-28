@@ -24,6 +24,7 @@ import 'feature/Home/controller/Home_Controller.dart';
 import 'feature/Home/view/consumption_screen.dart';
 import 'feature/get_trained/controller/trainer_controller.dart';
 import 'feature/help_and_support/view/privacy_policy_and_term_of_use/legal_screen.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> setupApp() async {
   Uri? _latestUri;
@@ -34,9 +35,10 @@ Future<void> setupApp() async {
 
   Get.put(AppTranslations());
   await RemoteConfigService.onForceFetched(RemoteConfigService.remoteConfig);
-  final SharedPreferences prefs = await SharedPreferences.getInstance().then((value) async {
+  final SharedPreferences prefs =
+      await SharedPreferences.getInstance().then((value) async {
     _sub = uriLinkStream.listen(
-          (Uri? uri) {
+      (Uri? uri) {
         _latestUri = uri;
       },
       onError: (Object err) {
@@ -52,9 +54,7 @@ Future<void> setupApp() async {
       debugPrint(err.toString());
       _initialUri = null;
     }
-    print(_latestUri.toString()+ " latest zzzz");
-    print(_initialUri.toString()+" init zzzz");
-    if(_initialUri!=null||_latestUri!=null){
+    if (_initialUri != null || _latestUri != null) {
       HomeController controller = Get.put(HomeController());
       TrainerController trainerController = Get.put(TrainerController());
     }
@@ -65,12 +65,25 @@ Future<void> setupApp() async {
   var accessToken = prefs.getString('AccessToken');
   final translations = GetTranslations.loadTranslations();
 
+  runZonedGuarded(() async {
+    await SentryFlutter.init(
+      (options) {
+        options.dsn =
+            'https://75565b8907e24a44b497620700c41d09@o1222554.ingest.sentry.io/6366529';
+      },
+    );
 
-
-  runApp(
-      FitBasixApp(
-    translations: translations,
-    child: accessToken == null ?  LoginScreen(): (_initialUri!=null||_latestUri!=null)? TrainerProfileScreen(trainerID: "6226f41b28d9a579eeabb5ee",):HomeAndTrainerPage(),
-
-  ));
+    runApp(FitBasixApp(
+      translations: translations,
+      child: accessToken == null
+          ? LoginScreen()
+          : (_initialUri != null || _latestUri != null)
+              ? TrainerProfileScreen(
+                  trainerID: "6226f41b28d9a579eeabb5ee",
+                )
+              : HomeAndTrainerPage(),
+    ));
+  }, (exception, stackTrace) async {
+    await Sentry.captureException(exception, stackTrace: stackTrace);
+  });
 }

@@ -8,22 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/fitbasix-flutter-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fitbasix-flutter-app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/consumption_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/consumption_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/menu_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/menu_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/video_player.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/video_player.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/help_and_support/view/help_and_support_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/help_and_support/view/help_and_support_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_videocallscreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_videocallscreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/profile/controller/profile_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/profile/controller/profile_controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/edit_userprofile_info.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/edit_userprofile_info.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_activity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_activity.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_dob.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_dob.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_height.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_height.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_weight.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_weight.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.lock" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,6 +21,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[9637547346000CB]" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -94,6 +85,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\manga\Documents\GitHub\fitbasix\fitbasix\android" />
+      <recent name="C:\Users\manga\Documents\GitHub\fitbasix\fitbasix\android\app" />
       <recent name="C:\Users\himan\OneDrive\Documents\GitHub\fitbasix-flutter-app\fitbasix\assets\message" />
       <recent name="C:\Users\himan\OneDrive\Documents\GitHub\fitbasix-flutter-app\fitbasix\assets\settings" />
     </key>
@@ -111,7 +104,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -148,5 +141,31 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1651078647919">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1651078647919" />
+    <state width="1476" height="455" key="GridCell.Tab.0.bottom" timestamp="1651087597495">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1476" height="455" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1651087597495" />
+    <state width="1476" height="455" key="GridCell.Tab.0.center" timestamp="1651087597495">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1476" height="455" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1651087597495" />
+    <state width="1476" height="455" key="GridCell.Tab.0.left" timestamp="1651087597495">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1476" height="455" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1651087597495" />
+    <state width="1476" height="455" key="GridCell.Tab.0.right" timestamp="1651087597495">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1476" height="455" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1651087597495" />
+    <state x="475" y="145" width="586" height="558" key="find.popup" timestamp="1651082412943">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="475" y="145" width="586" height="558" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1651082412943" />
   </component>
 </project>
