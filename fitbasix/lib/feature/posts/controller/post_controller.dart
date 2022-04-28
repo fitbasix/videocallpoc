@@ -78,8 +78,10 @@ class PostController extends GetxController {
 //             (element) => element.name.toLowerCase().contains("all photos")));
 //     }
     var assetList = <AssetEntity>[];
-    assetList =
-        await foldersAvailable[0].getAssetListPaged(currentPage.value, 100);
+    assetList = await foldersAvailable[0].getAssetListPaged(
+      page: currentPage.value,
+      size: 100,
+    );
 
     currentPage++;
 
@@ -119,7 +121,7 @@ class PostController extends GetxController {
     currentPage.value = 0;
     print(selectedFolder.value);
     assets.value = await foldersAvailable.value[selectedFolder.value]
-        .getAssetListPaged(currentPage.value, 100);
+        .getAssetListPaged(page: currentPage.value, size: 100);
     imageCache!.clear();
     imageCache!.clearLiveImages();
     print("lll" + assets.value.toString());
@@ -156,8 +158,7 @@ class PostController extends GetxController {
       final imageTemporary = File(image.path);
 
       imageFile = imageTemporary;
-    } on PlatformException catch (e) {
-    }
+    } on PlatformException catch (e) {}
   }
 
   Future pickVideo() async {
@@ -168,8 +169,7 @@ class PostController extends GetxController {
       final imageTemporary = File(video.path);
 
       videoFile.value = imageTemporary;
-    } on PlatformException catch (e) {
-    }
+    } on PlatformException catch (e) {}
   }
 
   int? getUrlType(String url) {
@@ -194,7 +194,7 @@ class PostController extends GetxController {
     } else {
       // await getPostData();
     }
-    Future.delayed(Duration(milliseconds: 50),(){
+    Future.delayed(Duration(milliseconds: 50), () {
       iscreateingPost.value = false;
     });
   }

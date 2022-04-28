@@ -133,10 +133,14 @@ class _PlanInformationUIState extends State<PlanInformationUI> {
                       .fullPlanDetails.value.response!.data!.keyPoints!,
                   // planequipment: trainerController
                   //     .fullPlanDetails.value.response!.data!.equipments!,
-                  planprizing: 'AED ' +
-                      trainerController
-                          .fullPlanDetails.value.response!.data!.price
-                          .toString(),
+                  planprizing: trainerController
+                              .fullPlanDetails.value.response!.data!.price ==
+                          0
+                      ? 'FREE'
+                      : 'AED ' +
+                          trainerController
+                              .fullPlanDetails.value.response!.data!.price
+                              .toString(),
                   // traineravatarUrl: trainerController.fullPlanDetails.value
                   //     .response!.data!.trainer!.profilePhoto,
                   // followerscount: NumberFormatter.textFormatter(
@@ -271,12 +275,12 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                     decoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         boxShadow: [
-                      BoxShadow(
-                          color: Color(0xFF000000).withOpacity(0.1),
-                          blurRadius: 4.0, // soften the shadow
-                          spreadRadius: 4.0,
-                          offset: Offset(0, -2.0))
-                    ]),
+                          BoxShadow(
+                              color: Color(0xFF000000).withOpacity(0.1),
+                              blurRadius: 4.0, // soften the shadow
+                              spreadRadius: 4.0,
+                              offset: Offset(0, -2.0))
+                        ]),
                     padding: EdgeInsets.only(
                         top: 8 * SizeConfig.heightMultiplier!,
                         bottom: 16 * SizeConfig.heightMultiplier!,
@@ -328,12 +332,13 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                       height: 40 * SizeConfig.heightMultiplier!,
                       width: 40 * SizeConfig.heightMultiplier!,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Theme.of(context).secondaryHeaderColor),
+                          shape: BoxShape.circle,
+                          color: Theme.of(context).secondaryHeaderColor),
                       child: SvgPicture.asset(
                         ImagePath.backIcon,
                         color: Theme.of(context).primaryColor,
-                        height: 11*SizeConfig.heightMultiplier!,
-                        width: 7.41*SizeConfig.widthMultiplier!,
+                        height: 11 * SizeConfig.heightMultiplier!,
+                        width: 7.41 * SizeConfig.widthMultiplier!,
                         fit: BoxFit.scaleDown,
                       ),
                     ),
@@ -386,8 +391,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
           children: [
             Text(
               'loose_fat_buildmuscle'.tr,
-              style: AppTextStyle.boldBlackText
-                  .copyWith(
+              style: AppTextStyle.boldBlackText.copyWith(
                   color: Theme.of(context).textTheme.bodyText1?.color,
                   letterSpacing: -0.08),
             ),
@@ -401,8 +405,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             //instructor
             Text('instructed_by'.tr + " " + widget.trainerName!.tr,
                 style: AppTextStyle.hblackSemiBoldText.copyWith(
-                  color: Theme.of(context).textTheme.bodyText1?.color
-                )),
+                    color: Theme.of(context).textTheme.bodyText1?.color)),
             SizedBox(
               height: 12 * SizeConfig.heightMultiplier!,
             ),
@@ -429,8 +432,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             ),
             //Description
             Text('description'.tr,
-                style: AppTextStyle.hblackSemiBoldText
-                    .copyWith(
+                style: AppTextStyle.hblackSemiBoldText.copyWith(
                     color: Theme.of(context).textTheme.bodyText1?.color,
                     letterSpacing: -0.08)),
             SizedBox(
@@ -439,14 +441,14 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             Text(widget.plandescription!.tr,
                 style: AppTextStyle.hblackSemiBoldText.copyWith(
                     color: Theme.of(context).textTheme.bodyText1?.color,
-                    fontWeight: FontWeight.w400, fontStyle: FontStyle.normal)),
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal)),
             SizedBox(
               height: 24 * SizeConfig.heightMultiplier!,
             ),
             //Key points
             Text('key_points'.tr,
-                style: AppTextStyle.hblackSemiBoldText
-                    .copyWith(
+                style: AppTextStyle.hblackSemiBoldText.copyWith(
                     color: Theme.of(context).textTheme.bodyText1?.color,
                     letterSpacing: -0.08)),
             SizedBox(
@@ -471,8 +473,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             ),
             //Equipment
             Text('equipment'.tr,
-                style: AppTextStyle.hblackSemiBoldText
-                    .copyWith(
+                style: AppTextStyle.hblackSemiBoldText.copyWith(
                     color: Theme.of(context).textTheme.bodyText1?.color,
                     letterSpacing: -0.08)),
             SizedBox(
@@ -496,8 +497,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
             ),
             //Plan Prizing
             Text('plan_pricing'.tr,
-                style: AppTextStyle.hblackSemiBoldText
-                    .copyWith(
+                style: AppTextStyle.hblackSemiBoldText.copyWith(
                     color: Theme.of(context).textTheme.bodyText1?.color,
                     letterSpacing: -0.08)),
             SizedBox(
@@ -682,7 +682,6 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
   //       ),
   //     );
 
-
   //Widget review of plan
   Widget _BuildReviewofPlan() => Container(
         padding: EdgeInsets.only(
@@ -694,8 +693,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
           children: [
             Text(
               'review_for_plan'.tr,
-              style: AppTextStyle.hblack600Text
-                  .copyWith(
+              style: AppTextStyle.hblack600Text.copyWith(
                   color: Theme.of(context).textTheme.bodyText1?.color,
                   letterSpacing: -0.08),
             ),
@@ -717,8 +715,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                 ),
                 Text(
                   'plan_rating'.tr,
-                  style: AppTextStyle.hblack400Text
-                      .copyWith(
+                  style: AppTextStyle.hblack400Text.copyWith(
                       color: Theme.of(context).textTheme.bodyText1?.color,
                       letterSpacing: -0.08),
                 ),
@@ -774,8 +771,7 @@ class _TrainerPlanScreenState extends State<TrainerPlanScreen> {
                   children: [
                     Text(
                       widget.reviewPersonName!.tr,
-                      style: AppTextStyle.hnormal600BlackText
-                          .copyWith(
+                      style: AppTextStyle.hnormal600BlackText.copyWith(
                         color: Theme.of(context).textTheme.bodyText1?.color,
                       ),
                     ),

@@ -138,8 +138,8 @@ class GenerateRoute {
     if (route == RouteName.myTrainersScreen) {
       return MaterialPageRoute(
         builder: (
-            BuildContext context,
-            ) =>
+          BuildContext context,
+        ) =>
             MyTrainersScreen(),
       );
     }

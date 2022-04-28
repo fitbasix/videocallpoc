@@ -96,12 +96,8 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
           transform: Matrix4.translationValues(-20, 0, 0),
           child: Text(
             'create_post'.tr,
-            style: AppTextStyle.titleText
-                .copyWith(
-                color: Theme.of(context)
-                    .appBarTheme
-                    .titleTextStyle
-                    ?.color,
+            style: AppTextStyle.titleText.copyWith(
+                color: Theme.of(context).appBarTheme.titleTextStyle?.color,
                 fontSize: 16 * SizeConfig.textMultiplier!),
           ),
         ),
@@ -135,7 +131,6 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                                       .uploadedFiles.value.response!.data);
                           Navigator.pop(context);
                         }
-
 
                         _postController.selectedMediaFiles.clear();
                         _postController.selectedMediaAsset.clear();
@@ -211,65 +206,64 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                     vertical: 16 * SizeConfig.heightMultiplier!,
                     horizontal: 16 * SizeConfig.widthMultiplier!),
                 child: Stack(
-                    children: [
-                      Obx(
-                        () => _postController.assets.length == 0
-                            ? Container()
-                            : Padding(
-                                padding: EdgeInsets.only(top: 58.0*SizeConfig.heightMultiplier!),
-                                child: GridView.builder(
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            crossAxisSpacing: 6,
-                                            mainAxisSpacing: 6),
-                                    physics: BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: _postController.assets.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      // _postController.getSelectedMedia(
-                                      //     _postController.assets[0]);
-                                      return Obx(() => AssetThumbnail(
-                                            asset:
-                                                _postController.assets[index],
-                                            tag: _postController.assets[index]
-                                                .modifiedDateSecond!,
-                                            onTap: () async {
-                                              _postController
-                                                      .lastSelectedMediaIndex
-                                                      .value =
-                                                  _postController
-                                                      .assets[index].id;
-                                              _postController.getSelectedMedia(
-                                                  _postController
-                                                      .assets[index]);
-                                            },
-                                            isSelected: _postController
-                                                        .selectedMediaAsset
-                                                        .indexOf(_postController
-                                                            .assets[index]) ==
-                                                    -1
-                                                ? false
-                                                : true,
-                                            selectionNumber: (_postController
-                                                        .selectedMediaAsset
-                                                        .indexOf(_postController
-                                                            .assets[index]) +
-                                                    1)
-                                                .toString(),
-                                          ));
-                                    }),
-                              ),
-                      ),
-                      Text('gallery'.tr,style: AppTextStyle.black600Text.copyWith(
-                        color: kPureWhite,
-                        fontSize: 16*SizeConfig.textMultiplier!
-
-                      ),)
-                    ],
-                  ),
-
+                  children: [
+                    Obx(
+                      () => _postController.assets.length == 0
+                          ? Container()
+                          : Padding(
+                              padding: EdgeInsets.only(
+                                  top: 58.0 * SizeConfig.heightMultiplier!),
+                              child: GridView.builder(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          crossAxisSpacing: 6,
+                                          mainAxisSpacing: 6),
+                                  physics: BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: _postController.assets.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    // _postController.getSelectedMedia(
+                                    //     _postController.assets[0]);
+                                    return Obx(() => AssetThumbnail(
+                                          asset: _postController.assets[index],
+                                          tag: _postController.assets[index]
+                                              .modifiedDateSecond!,
+                                          onTap: () async {
+                                            _postController
+                                                    .lastSelectedMediaIndex
+                                                    .value =
+                                                _postController
+                                                    .assets[index].id;
+                                            _postController.getSelectedMedia(
+                                                _postController.assets[index]);
+                                          },
+                                          isSelected: _postController
+                                                      .selectedMediaAsset
+                                                      .indexOf(_postController
+                                                          .assets[index]) ==
+                                                  -1
+                                              ? false
+                                              : true,
+                                          selectionNumber: (_postController
+                                                      .selectedMediaAsset
+                                                      .indexOf(_postController
+                                                          .assets[index]) +
+                                                  1)
+                                              .toString(),
+                                        ));
+                                  }),
+                            ),
+                    ),
+                    Text(
+                      'gallery'.tr,
+                      style: AppTextStyle.black600Text.copyWith(
+                          color: kPureWhite,
+                          fontSize: 16 * SizeConfig.textMultiplier!),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -311,9 +305,10 @@ class AssetThumbnail extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(
-                color: isSelected ? kGreenColor : Colors.transparent, width: 2)),
+                color: isSelected ? kGreenColor : Colors.transparent,
+                width: 2)),
         child: FutureBuilder<Uint8List?>(
-          future: asset.thumbData,
+          future: asset.thumbnailData,
           builder: (_, snapshot) {
             // print("lll" + tag.toString());
             final image = snapshot.data;

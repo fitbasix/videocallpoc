@@ -118,7 +118,8 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
                                   profilePhoto: [
                                 File(selectedMediaFile!.path)
                               ]);
-                          homeController.profilePhoto.value = profileController.profilePhoto.value;
+                          homeController.profilePhoto.value =
+                              profileController.profilePhoto.value;
                         } else {
                           print("got in else");
                           // MediaUrl mediaUrl = await PostService.uploadMedia(
@@ -128,7 +129,7 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
                           String response =
                               await ProfileServices.UpdateCoverPhoto(
                                   coverPhoto: [File(selectedMediaFile!.path)]);
-                          if(response.isNotEmpty){
+                          if (response.isNotEmpty) {
                             profileController.coverPhoto.value = response;
                             homeController.coverPhoto.value = response;
                           }
@@ -315,7 +316,7 @@ class AssetThumbnail extends StatelessWidget {
                 color: isSelected ? kGreenColor : Colors.transparent,
                 width: 2)),
         child: FutureBuilder<Uint8List?>(
-          future: asset.thumbData,
+          future: asset.thumbnailData,
           builder: (_, snapshot) {
             // print("lll" + tag.toString());
             final image = snapshot.data;
