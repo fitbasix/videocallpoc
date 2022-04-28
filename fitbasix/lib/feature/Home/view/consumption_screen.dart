@@ -430,6 +430,7 @@ class ConsumptionScreen extends StatelessWidget {
                                             .waterTimingTo.value.minute,
                                         _homeController
                                             .waterReminder.value.serialId!);
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("water_reminder_set".tr),));
                                   },
                                   child: Container(
                                       width: Get.width -

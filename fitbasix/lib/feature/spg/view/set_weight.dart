@@ -12,6 +12,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 
 class SetWeight extends StatelessWidget {
+  var userStartedEditing = false.obs;
   final SPGController _spgController = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -179,6 +180,7 @@ class SetWeight extends StatelessWidget {
                         return (scaleValue * 2).toInt().toString() + "lbs";
                       },
                       onValueChange: (value) {
+                        userStartedEditing.value = true;
                         _spgController.currentWeight.value = value * 2;
                       },
                       width: MediaQuery.of(context).size.width -
@@ -212,6 +214,7 @@ class SetWeight extends StatelessWidget {
                         return (scaleValue).toInt().toString() + "kg";
                       },
                       onValueChange: (value) {
+                        userStartedEditing.value = true;
                         _spgController.currentWeight.value = value;
                       },
                       width: MediaQuery.of(context).size.width -
@@ -280,6 +283,7 @@ class SetWeight extends StatelessWidget {
                         return (scaleValue * 2).toInt().toString() + "lbs";
                       },
                       onValueChange: (value) {
+                        userStartedEditing.value = true;
                         _spgController.targetWeight.value = value * 2;
                       },
                     marker: Container(
@@ -319,6 +323,7 @@ class SetWeight extends StatelessWidget {
                             color: kGreenColor, width: 1, height: 15, scale: -1)
                       ],
                       onValueChange: (value) {
+                        userStartedEditing.value = true;
                         _spgController.targetWeight.value = value;
                       },
                       width: MediaQuery.of(context).size.width -
@@ -334,25 +339,65 @@ class SetWeight extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 16 * SizeConfig.widthMultiplier!),
-            child: ProceedButton(
-                title: 'proceed'.tr,
-                onPressed: () {
-                  if (_spgController.weightType.value == "kg") {
-                    print(_spgController.targetWeight.value);
-                    print(_spgController.currentWeight.value);
-                  } else {
-                    print((_spgController.targetWeight.value / 2.205).toInt());
-                    print((_spgController.currentWeight.value / 2.205).toInt());
-                  }
-                  if (_spgController.selectedGenderIndex.value.serialId == 1) {
-                    _spgController.bodyFatData!.value = _spgController
-                        .spgData.value.response!.data!.bodyTypeMale!;
-                  } else {
-                    _spgController.bodyFatData!.value = _spgController
-                        .spgData.value.response!.data!.bodyTypeFemale!;
-                  }
-                  Navigator.pushNamed(context, RouteName.setBodyFat);
-                }),
+            child:  Obx(
+                  ()=> GestureDetector(
+                onTap:userStartedEditing.value?() {
+                        if (_spgController.weightType.value == "kg") {
+                          print(_spgController.targetWeight.value);
+                          print(_spgController.currentWeight.value);
+                        } else {
+                          print((_spgController.targetWeight.value / 2.205).toInt());
+                          print((_spgController.currentWeight.value / 2.205).toInt());
+                        }
+                        if (_spgController.selectedGenderIndex.value.serialId == 1) {
+                          _spgController.bodyFatData!.value = _spgController
+                              .spgData.value.response!.data!.bodyTypeMale!;
+                        } else {
+                          _spgController.bodyFatData!.value = _spgController
+                              .spgData.value.response!.data!.bodyTypeFemale!;
+                        }
+                        Navigator.pushNamed(context, RouteName.setBodyFat);
+
+                }:null,
+                child: Container(
+                  width: Get.width,
+                  height: 48 * SizeConfig.heightMultiplier!,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                    color: userStartedEditing.value?kgreen49:hintGrey,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'proceed'.tr,
+                      style: AppTextStyle.normalWhiteText.copyWith(
+                          color: userStartedEditing.value?kPureWhite:greyBorder
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+
+
+            // ProceedButton(
+            //     title: 'proceed'.tr,
+            //     onPressed: () {
+            //       if (_spgController.weightType.value == "kg") {
+            //         print(_spgController.targetWeight.value);
+            //         print(_spgController.currentWeight.value);
+            //       } else {
+            //         print((_spgController.targetWeight.value / 2.205).toInt());
+            //         print((_spgController.currentWeight.value / 2.205).toInt());
+            //       }
+            //       if (_spgController.selectedGenderIndex.value.serialId == 1) {
+            //         _spgController.bodyFatData!.value = _spgController
+            //             .spgData.value.response!.data!.bodyTypeMale!;
+            //       } else {
+            //         _spgController.bodyFatData!.value = _spgController
+            //             .spgData.value.response!.data!.bodyTypeFemale!;
+            //       }
+            //       Navigator.pushNamed(context, RouteName.setBodyFat);
+            //     }),
           ),
           SizedBox(
             height: 16 * SizeConfig.heightMultiplier!,

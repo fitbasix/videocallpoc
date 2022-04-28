@@ -163,10 +163,10 @@ class _ChatScreenState extends State<ChatScreen> {
     bool dialogCreatedPreviously = false;
     int openPage = 0;
     final sharedPreferences = await SharedPreferences.getInstance();
-    _homeController.userQuickBloxId.value =
-        sharedPreferences.getInt("userQuickBloxId")!;
-    int UserQuickBloxId = widget.opponentID!; //133819788;
 
+    _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
+    print(_homeController.userQuickBloxId.value.toString()+" demo id");
+    int UserQuickBloxId = widget.opponentID!; //133819788;
     QBSort sort = QBSort();
     sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
     sort.ascending = true;
@@ -197,16 +197,16 @@ class _ChatScreenState extends State<ChatScreen> {
               DateTime.now().millisecond.toString();
           int dialogType = QBChatDialogTypes.CHAT;
           try {
-            QBDialog? createdDialog = await QB.chat
-                .createDialog(
+            QBDialog? createdDialog = await QB.chat.createDialog(
               occupantsIds,
               dialogType: QBChatDialogTypes.CHAT,
-            )
-                .then((value) {
+            ).then((value) {
               widget.userDialogForChat = value;
               getMassageFromHistory();
             });
-          } on PlatformException catch (e) {}
+          } on PlatformException catch (e) {
+
+          }
         }
         return value;
       });
@@ -225,8 +225,11 @@ class _ChatScreenState extends State<ChatScreen> {
       backgroundColor: kPureBlack,
       appBar: AppbarforChat(
         trainerProfilePicUrl: widget.profilePicURL,
-        onHangUpTapped: (value) {
+        onHangUpTapped: (value) async {
           _trainerController.isVideoAvailable(widget.time.toString());
+
+
+            //showDialogForVideoCallNotPossible(context);
 
           if (widget.days!.indexOf(_trainerController.daysInt[
                       DateFormat("EEE").format(DateTime.now().toUtc())]!) !=
@@ -234,15 +237,17 @@ class _ChatScreenState extends State<ChatScreen> {
               _trainerController.isVideoAvailable(widget.time.toString()) ==
                   true) {
             DateFormat("EEE").format(DateTime.now());
-            callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => VideoCallScreen(
-                        sessionIdForVideoCall: value!,
-                        name: widget.trainerTitle,
-                        imageURL: widget.profilePicURL,
-                      )));
-              //showDialogForVideoCallNotPossible(context);
-            });
+                if(await Permission.camera.request().isGranted&&await Permission.microphone.request().isGranted){
+              callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => VideoCallScreen(
+                          sessionIdForVideoCall: value!,
+                          name: widget.trainerTitle,
+                          imageURL: widget.profilePicURL,
+                        )));
+                //showDialogForVideoCallNotPossible(context);
+              });
+            }
           } else {
             showDialogForVideoCallNotPossible(
                 context,
@@ -435,7 +440,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
 
               ///todo remove this ! sign
-
               widget.isCurrentlyEnrolled!
                   ? Obx(() => _userWantToSendMedia.value
                       ? Align(

@@ -71,606 +71,611 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Navigator.pop(context);
                 },
               ),
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16 * SizeConfig.widthMultiplier!,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 14 * SizeConfig.heightMultiplier!,
-                      ),
-                      Text(
-                        "profile_picture".tr,
-                        style: AppTextStyle.hblackSemiBoldText.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1?.color),
-                      ),
-                      SizedBox(
-                        height: 8 * SizeConfig.heightMultiplier!,
-                      ),
-                      //user circle avatar
-                      Align(
-                        alignment: Alignment.center,
-                        child: Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(shape: BoxShape.circle),
-                              height: 120 * SizeConfig.widthMultiplier!,
-                              width: 120 * SizeConfig.widthMultiplier!,
-                              child: CircleAvatar(
-                                //  radius: 60 * SizeConfig.heightMultiplier!,
-                                backgroundImage: NetworkImage(
-                                    profileController.profilePhoto.value),
-                              ),
-                            ),
-                            Positioned(
-                                top: 8 * SizeConfig.heightMultiplier!,
-                                left: 90 * SizeConfig.widthMultiplier!,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    print("pppp");
-                                    Navigator.pushNamed(
-                                        context, RouteName.selectProfilePhoto);
-                                    // final pickedFile = await ImagesPicker.pick(
-                                    //     count: 1, pickType: PickType.image);
-                                    // if (pickedFile != null) {
-                                    //   await PostService.uploadMedia(
-                                    //       [File(pickedFile[0].path)]);
-                                    //   }
-
-                                    // open user profilepic for change
-                                  },
-                                  child: Container(
-                                    height: 28 * SizeConfig.heightMultiplier!,
-                                    width: 28 * SizeConfig.heightMultiplier!,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle, color: greyB7),
-                                    child: SvgPicture.asset(
-                                      ImagePath.selectImageIcon,
-                                      color: kPureBlack,
-                                      height: 18,
-                                      width: 18,
-                                      fit: BoxFit.scaleDown,
-                                    ),
-                                  ),
-                                )),
-                          ],
+              body: GestureDetector(
+                onTap: (){
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16 * SizeConfig.widthMultiplier!,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 14 * SizeConfig.heightMultiplier!,
                         ),
-                      ),
-                      SizedBox(
-                        height: 28 * SizeConfig.heightMultiplier!,
-                      ),
-                      //user full name
-                      Text(
-                        "full_name".tr,
-                        style: AppTextStyle.hblackSemiBoldText.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1?.color),
-                      ),
-                      SizedBox(
-                        height: 12 * SizeConfig.heightMultiplier!,
-                      ),
-                      //TextFormField for user fullname
-                      TextFormField(
-                        onChanged: (value) {
-                          //implement controller for storing user full name
-                        },
-                        controller: profileController.nameController,
-                        style: AppTextStyle.normalBlackText.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1?.color),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(
-                              12 * SizeConfig.widthMultiplier!,
-                              14 * SizeConfig.heightMultiplier!,
-                              12 * SizeConfig.widthMultiplier!,
-                              14 * SizeConfig.heightMultiplier!),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                8 * SizeConfig.widthMultiplier!),
-                            borderSide:
-                                BorderSide(color: greyBorder, width: 1.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                8 * SizeConfig.widthMultiplier!),
-                            borderSide:
-                                BorderSide(color: greyBorder, width: 1.5),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                8 * SizeConfig.widthMultiplier!),
-                            borderSide: BorderSide(
-                                color: Colors.red.withOpacity(0.4), width: 1.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                8 * SizeConfig.widthMultiplier!),
-                            borderSide:
-                                BorderSide(color: greyBorder, width: 1.0),
-                          ),
+                        Text(
+                          "profile_picture".tr,
+                          style: AppTextStyle.hblackSemiBoldText.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
                         ),
-                      ),
-                      SizedBox(
-                        height: 12 * SizeConfig.heightMultiplier!,
-                      ),
-                      Text(
-                        "bio".tr,
-                        style: AppTextStyle.hblackSemiBoldText.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1?.color),
-                      ),
-                      SizedBox(
-                        height: 12 * SizeConfig.heightMultiplier!,
-                      ),
-                      //TextFormField for user bio update
-                      TextFormField(
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(100),
-                        ],
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 4,
-                        minLines: 2,
-                        maxLength: 100,
-                        onChanged: (value) {
-                          //implement controller for storing user bio
-                        },
-                        controller: profileController.bioController,
-                        style: AppTextStyle.normalBlackText.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1?.color),
-                        decoration: InputDecoration(
-                          counterText:"",
-                          contentPadding: EdgeInsets.fromLTRB(
-                              12 * SizeConfig.widthMultiplier!,
-                              14 * SizeConfig.heightMultiplier!,
-                              12 * SizeConfig.widthMultiplier!,
-                              14 * SizeConfig.heightMultiplier!),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                8 * SizeConfig.widthMultiplier!),
-                            borderSide:
-                                BorderSide(color: greyBorder, width: 1.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                8 * SizeConfig.widthMultiplier!),
-                            borderSide:
-                                BorderSide(color: greyBorder, width: 1.5),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                8 * SizeConfig.widthMultiplier!),
-                            borderSide: BorderSide(
-                                color: Colors.red.withOpacity(0.4), width: 1.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                8 * SizeConfig.widthMultiplier!),
-                            borderSide:
-                                BorderSide(color: greyBorder, width: 1.0),
-                          ),
+                        SizedBox(
+                          height: 8 * SizeConfig.heightMultiplier!,
                         ),
-                      ),
-                      SizedBox(
-                        height: 28 * SizeConfig.heightMultiplier!,
-                      ),
-                      // Gender
-                      Text(
-                        "gender".tr,
-                        style: AppTextStyle.hblackSemiBoldText.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1?.color),
-                      ),
-                      SizedBox(
-                        height: 12 * SizeConfig.heightMultiplier!,
-                      ),
-                      //radio button
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          // male radio button
-                          Theme(
-                            data: ThemeData(
-                              //here change to your color
-                              unselectedWidgetColor:
-                                  Theme.of(context).primaryColor,
-                            ),
-                            child: Radio(
-                                value: 1,
-                                groupValue: selectedRadio,
-                                activeColor: kgreen49,
-                                onChanged: (val) {
-                                  setSelectedRadio(val);
-                                }),
-                          ),
-                          //SizedBox(width: 14 * SizeConfig.widthMultiplier!,),
-                          Text(
-                            'm'.tr,
-                            style: AppTextStyle.boldBlackText.copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    ?.color),
-                          ),
-                          SizedBox(
-                            width: 20 * SizeConfig.widthMultiplier!,
-                          ),
-                          //female radio button
-                          Theme(
-                            data: ThemeData(
-                              //here change to your color
-                              unselectedWidgetColor:
-                                  Theme.of(context).primaryColor,
-                            ),
-                            child: Radio(
-                                value: 2,
-                                groupValue: selectedRadio,
-                                activeColor: kgreen49,
-                                onChanged: (val) {
-                                  setSelectedRadio(val);
-                                }),
-                          ),
-                          Text(
-                            'f'.tr,
-                            style: AppTextStyle.boldBlackText.copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    ?.color),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16 * SizeConfig.heightMultiplier!,
-                      ),
-                      // Weight and Height
-                      Row(
-                        children: [
-                          //height
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        //user circle avatar
+                        Align(
+                          alignment: Alignment.center,
+                          child: Stack(
                             children: [
-                              Text(
-                                "height".tr,
-                                style: AppTextStyle.hblackSemiBoldText.copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.color),
-                              ),
-                              SizedBox(
-                                height: 12 * SizeConfig.heightMultiplier!,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  // implement a dialog box
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          UserHeightDialog());
-                                },
-                                child: Container(
-                                  height: 48 * SizeConfig.heightMultiplier!,
-                                  width: 136 * SizeConfig.widthMultiplier!,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          width:
-                                              1 * SizeConfig.widthMultiplier!,
-                                          color: greyBorder)),
-                                  child: Center(
-                                    child: Obx(
-                                      () => profileController
-                                                  .heightType.value !=
-                                              "inch"
-                                          ? Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  profileController
-                                                      .currentHeight.value
-                                                      .toString(),
-                                                  style: AppTextStyle
-                                                      .normalBlackText
-                                                      .copyWith(
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1
-                                                        ?.color,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                    width: 4 *
-                                                        SizeConfig
-                                                            .widthMultiplier!),
-                                                Text("cm",
-                                                    textAlign: TextAlign.start,
-                                                    style: AppTextStyle
-                                                        .normalBlackText
-                                                        .copyWith(
-                                                      color: greyB7,
-                                                    ))
-                                              ],
-                                            )
-                                          : Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  (profileController
-                                                              .currentHeight
-                                                              .value *
-                                                          0.0328084)
-                                                      .toString()
-                                                      .split(".")[0],
-                                                  style: AppTextStyle
-                                                      .normalBlackText
-                                                      .copyWith(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyText1
-                                                                  ?.color),
-                                                ),
-                                                SizedBox(
-                                                    width: 4 *
-                                                        SizeConfig
-                                                            .widthMultiplier!),
-                                                Text("ft",
-                                                    textAlign: TextAlign.start,
-                                                    style: AppTextStyle
-                                                        .normalBlackText
-                                                        .copyWith(
-                                                            color: greyB7)),
-                                                SizedBox(
-                                                    width: 7 *
-                                                        SizeConfig
-                                                            .widthMultiplier!),
-                                                Text(
-                                                  (int.parse((profileController
-                                                                      .currentHeight
-                                                                      .value *
-                                                                  0.0328084)
-                                                              .toString()
-                                                              .substring(
-                                                                  2, 4)) *
-                                                          0.12)
-                                                      .toString()
-                                                      .substring(0, 2)
-                                                      .replaceAll(".", ""),
-                                                  style: AppTextStyle
-                                                      .normalBlackText
-                                                      .copyWith(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyText1
-                                                                  ?.color),
-                                                ),
-                                                SizedBox(
-                                                    width: 4 *
-                                                        SizeConfig
-                                                            .widthMultiplier!),
-                                                Text("in",
-                                                    textAlign: TextAlign.start,
-                                                    style: AppTextStyle
-                                                        .normalBlackText
-                                                        .copyWith(
-                                                            color: greyB7))
-                                              ],
-                                            ),
-                                    ),
-                                  ),
+                              Container(
+                                decoration: BoxDecoration(shape: BoxShape.circle),
+                                height: 120 * SizeConfig.widthMultiplier!,
+                                width: 120 * SizeConfig.widthMultiplier!,
+                                child: CircleAvatar(
+                                  //  radius: 60 * SizeConfig.heightMultiplier!,
+                                  backgroundImage: NetworkImage(
+                                      profileController.profilePhoto.value),
                                 ),
                               ),
+                              Positioned(
+                                  top: 8 * SizeConfig.heightMultiplier!,
+                                  left: 90 * SizeConfig.widthMultiplier!,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      print("pppp");
+                                      Navigator.pushNamed(
+                                          context, RouteName.selectProfilePhoto);
+                                      // final pickedFile = await ImagesPicker.pick(
+                                      //     count: 1, pickType: PickType.image);
+                                      // if (pickedFile != null) {
+                                      //   await PostService.uploadMedia(
+                                      //       [File(pickedFile[0].path)]);
+                                      //   }
+
+                                      // open user profilepic for change
+                                    },
+                                    child: Container(
+                                      height: 28 * SizeConfig.heightMultiplier!,
+                                      width: 28 * SizeConfig.heightMultiplier!,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle, color: greyB7),
+                                      child: SvgPicture.asset(
+                                        ImagePath.selectImageIcon,
+                                        color: kPureBlack,
+                                        height: 18,
+                                        width: 18,
+                                        fit: BoxFit.scaleDown,
+                                      ),
+                                    ),
+                                  )),
                             ],
                           ),
-                          SizedBox(
-                            width: 32 * SizeConfig.widthMultiplier!,
+                        ),
+                        SizedBox(
+                          height: 28 * SizeConfig.heightMultiplier!,
+                        ),
+                        //user full name
+                        Text(
+                          "full_name".tr,
+                          style: AppTextStyle.hblackSemiBoldText.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
+                        ),
+                        SizedBox(
+                          height: 12 * SizeConfig.heightMultiplier!,
+                        ),
+                        //TextFormField for user fullname
+                        TextFormField(
+                          onChanged: (value) {
+                            //implement controller for storing user full name
+                          },
+                          controller: profileController.nameController,
+                          style: AppTextStyle.normalBlackText.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.fromLTRB(
+                                12 * SizeConfig.widthMultiplier!,
+                                14 * SizeConfig.heightMultiplier!,
+                                12 * SizeConfig.widthMultiplier!,
+                                14 * SizeConfig.heightMultiplier!),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.widthMultiplier!),
+                              borderSide:
+                                  BorderSide(color: greyBorder, width: 1.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.widthMultiplier!),
+                              borderSide:
+                                  BorderSide(color: greyBorder, width: 1.5),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.widthMultiplier!),
+                              borderSide: BorderSide(
+                                  color: Colors.red.withOpacity(0.4), width: 1.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.widthMultiplier!),
+                              borderSide:
+                                  BorderSide(color: greyBorder, width: 1.0),
+                            ),
                           ),
-                          // weight
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "weight".tr,
-                                style: AppTextStyle.hblackSemiBoldText.copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.color),
+                        ),
+                        SizedBox(
+                          height: 12 * SizeConfig.heightMultiplier!,
+                        ),
+                        Text(
+                          "bio".tr,
+                          style: AppTextStyle.hblackSemiBoldText.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
+                        ),
+                        SizedBox(
+                          height: 12 * SizeConfig.heightMultiplier!,
+                        ),
+                        //TextFormField for user bio update
+                        TextFormField(
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(100),
+                          ],
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 4,
+                          minLines: 2,
+                          maxLength: 100,
+                          onChanged: (value) {
+                            //implement controller for storing user bio
+                          },
+                          controller: profileController.bioController,
+                          style: AppTextStyle.normalBlackText.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
+                          decoration: InputDecoration(
+                            counterText:"",
+                            contentPadding: EdgeInsets.fromLTRB(
+                                12 * SizeConfig.widthMultiplier!,
+                                14 * SizeConfig.heightMultiplier!,
+                                12 * SizeConfig.widthMultiplier!,
+                                14 * SizeConfig.heightMultiplier!),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.widthMultiplier!),
+                              borderSide:
+                                  BorderSide(color: greyBorder, width: 1.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.widthMultiplier!),
+                              borderSide:
+                                  BorderSide(color: greyBorder, width: 1.5),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.widthMultiplier!),
+                              borderSide: BorderSide(
+                                  color: Colors.red.withOpacity(0.4), width: 1.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8 * SizeConfig.widthMultiplier!),
+                              borderSide:
+                                  BorderSide(color: greyBorder, width: 1.0),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 28 * SizeConfig.heightMultiplier!,
+                        ),
+                        // Gender
+                        Text(
+                          "gender".tr,
+                          style: AppTextStyle.hblackSemiBoldText.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
+                        ),
+                        SizedBox(
+                          height: 12 * SizeConfig.heightMultiplier!,
+                        ),
+                        //radio button
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // male radio button
+                            Theme(
+                              data: ThemeData(
+                                //here change to your color
+                                unselectedWidgetColor:
+                                    Theme.of(context).primaryColor,
                               ),
-                              SizedBox(
-                                height: 12 * SizeConfig.heightMultiplier!,
+                              child: Radio(
+                                  value: 1,
+                                  groupValue: selectedRadio,
+                                  activeColor: kgreen49,
+                                  onChanged: (val) {
+                                    setSelectedRadio(val);
+                                  }),
+                            ),
+                            //SizedBox(width: 14 * SizeConfig.widthMultiplier!,),
+                            Text(
+                              'm'.tr,
+                              style: AppTextStyle.boldBlackText.copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color),
+                            ),
+                            SizedBox(
+                              width: 20 * SizeConfig.widthMultiplier!,
+                            ),
+                            //female radio button
+                            Theme(
+                              data: ThemeData(
+                                //here change to your color
+                                unselectedWidgetColor:
+                                    Theme.of(context).primaryColor,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  // implement a dialog box
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          UserWeightDialog());
-                                },
-                                child: Container(
-                                  height: 48 * SizeConfig.heightMultiplier!,
-                                  width: 115 * SizeConfig.widthMultiplier!,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          width:
-                                              1 * SizeConfig.widthMultiplier!,
-                                          color: greyBorder)),
-                                  child: Center(
-                                    child: Obx(
-                                      () => Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            profileController
-                                                .currentWeight.value
-                                                .toString(),
-                                            style: AppTextStyle.normalBlackText
-                                                .copyWith(
-                                                    color: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1
-                                                        ?.color)
-                                                .copyWith(
-                                                  fontSize: 16 *
-                                                      SizeConfig
-                                                          .textMultiplier!,
-                                                ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          SizedBox(
-                                              width: 3 *
-                                                  SizeConfig.widthMultiplier!),
-                                          Text(
-                                              profileController
-                                                          .weightType.value ==
-                                                      "kg"
-                                                  ? 'kg'.tr
-                                                  : 'lb'.tr,
-                                              textAlign: TextAlign.start,
-                                              style: AppTextStyle
-                                                  .normalBlackText
-                                                  .copyWith(color: greyB7))
-                                        ],
+                              child: Radio(
+                                  value: 2,
+                                  groupValue: selectedRadio,
+                                  activeColor: kgreen49,
+                                  onChanged: (val) {
+                                    setSelectedRadio(val);
+                                  }),
+                            ),
+                            Text(
+                              'f'.tr,
+                              style: AppTextStyle.boldBlackText.copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 16 * SizeConfig.heightMultiplier!,
+                        ),
+                        // Weight and Height
+                        Row(
+                          children: [
+                            //height
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "height".tr,
+                                  style: AppTextStyle.hblackSemiBoldText.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color),
+                                ),
+                                SizedBox(
+                                  height: 12 * SizeConfig.heightMultiplier!,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    // implement a dialog box
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            UserHeightDialog());
+                                  },
+                                  child: Container(
+                                    height: 48 * SizeConfig.heightMultiplier!,
+                                    width: 136 * SizeConfig.widthMultiplier!,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                            width:
+                                                1 * SizeConfig.widthMultiplier!,
+                                            color: greyBorder)),
+                                    child: Center(
+                                      child: Obx(
+                                        () => profileController
+                                                    .heightType.value !=
+                                                "inch"
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    profileController
+                                                        .currentHeight.value
+                                                        .toString(),
+                                                    style: AppTextStyle
+                                                        .normalBlackText
+                                                        .copyWith(
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      width: 4 *
+                                                          SizeConfig
+                                                              .widthMultiplier!),
+                                                  Text("cm",
+                                                      textAlign: TextAlign.start,
+                                                      style: AppTextStyle
+                                                          .normalBlackText
+                                                          .copyWith(
+                                                        color: greyB7,
+                                                      ))
+                                                ],
+                                              )
+                                            : Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    (profileController
+                                                                .currentHeight
+                                                                .value *
+                                                            0.0328084)
+                                                        .toString()
+                                                        .split(".")[0],
+                                                    style: AppTextStyle
+                                                        .normalBlackText
+                                                        .copyWith(
+                                                            color:
+                                                                Theme.of(context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    ?.color),
+                                                  ),
+                                                  SizedBox(
+                                                      width: 4 *
+                                                          SizeConfig
+                                                              .widthMultiplier!),
+                                                  Text("ft",
+                                                      textAlign: TextAlign.start,
+                                                      style: AppTextStyle
+                                                          .normalBlackText
+                                                          .copyWith(
+                                                              color: greyB7)),
+                                                  SizedBox(
+                                                      width: 7 *
+                                                          SizeConfig
+                                                              .widthMultiplier!),
+                                                  Text(
+                                                    (int.parse((profileController
+                                                                        .currentHeight
+                                                                        .value *
+                                                                    0.0328084)
+                                                                .toString()
+                                                                .substring(
+                                                                    2, 4)) *
+                                                            0.12)
+                                                        .toString()
+                                                        .substring(0, 2)
+                                                        .replaceAll(".", ""),
+                                                    style: AppTextStyle
+                                                        .normalBlackText
+                                                        .copyWith(
+                                                            color:
+                                                                Theme.of(context)
+                                                                    .textTheme
+                                                                    .bodyText1
+                                                                    ?.color),
+                                                  ),
+                                                  SizedBox(
+                                                      width: 4 *
+                                                          SizeConfig
+                                                              .widthMultiplier!),
+                                                  Text("in",
+                                                      textAlign: TextAlign.start,
+                                                      style: AppTextStyle
+                                                          .normalBlackText
+                                                          .copyWith(
+                                                              color: greyB7))
+                                                ],
+                                              ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 16 * SizeConfig.heightMultiplier!,
-                      ),
-                      //Interests
-                      Text(
-                        "interests".tr,
-                        style: AppTextStyle.hblackSemiBoldText.copyWith(
-                            color:
-                                Theme.of(context).textTheme.bodyText1?.color),
-                      ),
-                      SizedBox(
-                        height: 12 * SizeConfig.heightMultiplier!,
-                      ),
-                      ListView.builder(
-                          itemCount: profileController.interests.value.response!
-                                  .response!.data!.length -
-                              1,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return buildCheckbox(
-                                checkbox: profileController.interests.value
-                                    .response!.response!.data![index + 1],
-                                selectedIndex: profileController.interestList
-                                            .indexOf(profileController
+                              ],
+                            ),
+                            SizedBox(
+                              width: 32 * SizeConfig.widthMultiplier!,
+                            ),
+                            // weight
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "weight".tr,
+                                  style: AppTextStyle.hblackSemiBoldText.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.color),
+                                ),
+                                SizedBox(
+                                  height: 12 * SizeConfig.heightMultiplier!,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    // implement a dialog box
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            UserWeightDialog());
+                                  },
+                                  child: Container(
+                                    height: 48 * SizeConfig.heightMultiplier!,
+                                    width: 115 * SizeConfig.widthMultiplier!,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                            width:
+                                                1 * SizeConfig.widthMultiplier!,
+                                            color: greyBorder)),
+                                    child: Center(
+                                      child: Obx(
+                                        () => Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              profileController
+                                                  .currentWeight.value
+                                                  .toString(),
+                                              style: AppTextStyle.normalBlackText
+                                                  .copyWith(
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          ?.color)
+                                                  .copyWith(
+                                                    fontSize: 16 *
+                                                        SizeConfig
+                                                            .textMultiplier!,
+                                                  ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            SizedBox(
+                                                width: 3 *
+                                                    SizeConfig.widthMultiplier!),
+                                            Text(
+                                                profileController
+                                                            .weightType.value ==
+                                                        "kg"
+                                                    ? 'kg'.tr
+                                                    : 'lb'.tr,
+                                                textAlign: TextAlign.start,
+                                                style: AppTextStyle
+                                                    .normalBlackText
+                                                    .copyWith(color: greyB7))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 16 * SizeConfig.heightMultiplier!,
+                        ),
+                        //Interests
+                        Text(
+                          "interests".tr,
+                          style: AppTextStyle.hblackSemiBoldText.copyWith(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1?.color),
+                        ),
+                        SizedBox(
+                          height: 12 * SizeConfig.heightMultiplier!,
+                        ),
+                        ListView.builder(
+                            itemCount: profileController.interests.value.response!
+                                    .response!.data!.length -
+                                1,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return buildCheckbox(
+                                  checkbox: profileController.interests.value
+                                      .response!.response!.data![index + 1],
+                                  selectedIndex: profileController.interestList
+                                              .indexOf(profileController
+                                                  .interests
+                                                  .value
+                                                  .response!
+                                                  .response!
+                                                  .data![index]
+                                                  .serialId!) ==
+                                          -1
+                                      ? false
+                                      : true,
+                                  onChanged: () {
+                                    if (profileController.interestList.indexOf(
+                                            profileController
                                                 .interests
                                                 .value
                                                 .response!
                                                 .response!
                                                 .data![index]
                                                 .serialId!) ==
-                                        -1
-                                    ? false
-                                    : true,
-                                onChanged: () {
-                                  if (profileController.interestList.indexOf(
+                                        -1) {
+                                      profileController.interestList.add(
                                           profileController
                                               .interests
                                               .value
                                               .response!
                                               .response!
                                               .data![index]
-                                              .serialId!) ==
-                                      -1) {
-                                    profileController.interestList.add(
-                                        profileController
-                                            .interests
-                                            .value
-                                            .response!
-                                            .response!
-                                            .data![index]
-                                            .serialId!);
-                                  } else {
-                                    profileController.interestList.remove(
-                                        profileController
-                                            .interests
-                                            .value
-                                            .response!
-                                            .response!
-                                            .data![index]
-                                            .serialId!);
-                                  }
-                                  setState(() {});
-                                });
-                          }),
-                      // save button
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          16 * SizeConfig.widthMultiplier!,
-                          16 * SizeConfig.heightMultiplier!,
-                          16 * SizeConfig.widthMultiplier!,
-                          32 * SizeConfig.heightMultiplier!,
+                                              .serialId!);
+                                    } else {
+                                      profileController.interestList.remove(
+                                          profileController
+                                              .interests
+                                              .value
+                                              .response!
+                                              .response!
+                                              .data![index]
+                                              .serialId!);
+                                    }
+                                    setState(() {});
+                                  });
+                            }),
+                        // save button
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            16 * SizeConfig.widthMultiplier!,
+                            16 * SizeConfig.heightMultiplier!,
+                            16 * SizeConfig.widthMultiplier!,
+                            32 * SizeConfig.heightMultiplier!,
+                          ),
+                          child: Container(
+                              // margin: EdgeInsets.only(top: 16 * SizeConfig.heightMultiplier!),
+                              width: double.infinity,
+                              height: 48 * SizeConfig.heightMultiplier!,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      elevation: MaterialStateProperty.all(0),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(kgreen4F),
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                  8 *
+                                                      SizeConfig
+                                                          .widthMultiplier!)))),
+                                  onPressed: () async {
+                                    profileController.isLoading.value = true;
+                                    await ProfileServices.UpdateProfileData(
+                                        name:
+                                            profileController.nameController.text,
+                                        bio: profileController.bioController.text,
+                                        height:
+                                            profileController.currentHeight.value,
+                                        weight:
+                                            profileController.currentWeight.value,
+                                        gender: selectedRadio,
+                                        interests:
+                                            profileController.interestList);
+                                    profileController.homeController
+                                            .userProfileData.value =
+                                        await CreatePostService.getUserProfile();
+                                    // profileController.homeController.
+                                    Navigator.pop(context);
+                                    profileController.isLoading.value = false;
+                                    //change user personal data on cloud
+                                  },
+                                  child: Text(
+                                    "save".tr,
+                                    style: AppTextStyle.hboldWhiteText,
+                                  ))),
                         ),
-                        child: Container(
-                            // margin: EdgeInsets.only(top: 16 * SizeConfig.heightMultiplier!),
-                            width: double.infinity,
-                            height: 48 * SizeConfig.heightMultiplier!,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                    elevation: MaterialStateProperty.all(0),
-                                    backgroundColor:
-                                        MaterialStateProperty.all(kgreen4F),
-                                    shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                8 *
-                                                    SizeConfig
-                                                        .widthMultiplier!)))),
-                                onPressed: () async {
-                                  profileController.isLoading.value = true;
-                                  await ProfileServices.UpdateProfileData(
-                                      name:
-                                          profileController.nameController.text,
-                                      bio: profileController.bioController.text,
-                                      height:
-                                          profileController.currentHeight.value,
-                                      weight:
-                                          profileController.currentWeight.value,
-                                      gender: selectedRadio,
-                                      interests:
-                                          profileController.interestList);
-                                  profileController.homeController
-                                          .userProfileData.value =
-                                      await CreatePostService.getUserProfile();
-                                  // profileController.homeController.
-                                  Navigator.pop(context);
-                                  profileController.isLoading.value = false;
-                                  //change user personal data on cloud
-                                },
-                                child: Text(
-                                  "save".tr,
-                                  style: AppTextStyle.hboldWhiteText,
-                                ))),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               )),

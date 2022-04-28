@@ -20,7 +20,7 @@ class SetActivity extends StatelessWidget {
   SetActivity({Key? key}) : super(key: key);
   final SPGController _spgController = Get.find();
   final HomeController homeController = Get.find();
-
+  var userStartedEditing = false.obs;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,9 +51,9 @@ class SetActivity extends StatelessWidget {
                   ? Center(
                 child: CustomizedCircularProgress(),
               )
-                  : ProceedButton(
-                  title: 'proceed'.tr,
-                  onPressed: () async {
+                  : Obx(
+                    ()=> GestureDetector(
+                  onTap:userStartedEditing.value?() async {
                     _spgController.isLoading.value = true;
                     await SPGService.updateSPGData(
                         _spgController.selectedGoalIndex.value.serialId,
@@ -74,7 +74,7 @@ class SetActivity extends StatelessWidget {
                         _spgController
                             .selectedFoodIndex.value.serialId);
                     homeController.userProfileData.value =
-                    await CreatePostService.getUserProfile();
+                        await CreatePostService.getUserProfile();
                     homeController.spgStatus.value = true;
                     _spgController.isLoading.value = false;
                     Navigator.pushAndRemoveUntil(
@@ -82,7 +82,60 @@ class SetActivity extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (_) => HomeAndTrainerPage()),
                             (route) => false);
-                  })),
+                  }:null,
+                  child: Container(
+                    width: Get.width,
+                    height: 48 * SizeConfig.heightMultiplier!,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                      color: userStartedEditing.value?kgreen49:hintGrey,
+                    ),
+                    child: Center(
+                      child: Text(
+                        'proceed'.tr,
+                        style: AppTextStyle.normalWhiteText.copyWith(
+                            color: userStartedEditing.value?kPureWhite:greyBorder
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // ProceedButton(
+              //     title: 'proceed'.tr,
+              //     onPressed: () async {
+              //       _spgController.isLoading.value = true;
+              //       await SPGService.updateSPGData(
+              //           _spgController.selectedGoalIndex.value.serialId,
+              //           _spgController
+              //               .selectedGenderIndex.value.serialId,
+              //           _spgController.selectedDate.value,
+              //           _spgController.currentHeight.value,
+              //           _spgController.weightType == "kg"
+              //               ? _spgController.targetWeight.value
+              //               : _spgController.targetWeight.value ~/
+              //               2.205,
+              //           _spgController.weightType == "kg"
+              //               ? _spgController.currentWeight.value
+              //               : _spgController.currentHeight.value ~/
+              //               2.205,
+              //           _spgController.activityNumber.value.toInt(),
+              //           _spgController.selectedBodyFat.value.serialId,
+              //           _spgController
+              //               .selectedFoodIndex.value.serialId);
+              //       homeController.userProfileData.value =
+              //       await CreatePostService.getUserProfile();
+              //       homeController.spgStatus.value = true;
+              //       _spgController.isLoading.value = false;
+              //       Navigator.pushAndRemoveUntil(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (_) => HomeAndTrainerPage()),
+              //               (route) => false);
+              //     })
+
+              ),
             ),
           ),
           Container(
@@ -209,6 +262,7 @@ class SetActivity extends StatelessWidget {
                           max: 4.0,
                           value: _spgController.activityNumber.value,
                           onChanged: (value) {
+                            userStartedEditing.value = true;
                             _spgController.activityNumber.value = value;
                           },
                           divisions: 4,
