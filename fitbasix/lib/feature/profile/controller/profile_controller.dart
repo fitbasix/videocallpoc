@@ -183,6 +183,9 @@ class ProfileController extends GetxController {
         .singleWhere((element) =>
             element.code ==
             homeController.userProfileData.value.response!.data!.profile!.countryCode);
+
+  }
+  setAssetDataForGallery() async {
     assets.value = await fetchAssets(presentPage: currentPage.value);
   }
 

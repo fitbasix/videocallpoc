@@ -491,26 +491,36 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                   top: 16 * SizeConfig.heightMultiplier!),
               child: Row(
                 children: [
-                  InkWell(
+                  GestureDetector(
                     onTap: widget.hitLike,
-                    child: widget.isLiked
-                        ? Icon(
-                            Icons.favorite,
-                            color: Color(0xFFF66868),
-                          )
-                        : Icon(
-                            Icons.favorite_outline,
-                            color: kGreyColor,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: widget.hitLike,
+                            child: widget.isLiked
+                                ? Icon(
+                                    Icons.favorite,
+                                    color: Color(0xFFF66868),
+                                  )
+                                : Icon(
+                                    Icons.favorite_outline,
+                                    color: kGreyColor,
+                                  ),
                           ),
-                  ),
-                  SizedBox(
-                    width: 5 * SizeConfig.widthMultiplier!,
-                  ),
-                  Text(
-                    'likes'.trParams({'no_likes': widget.likes}),
-                    style: AppTextStyle.boldBlackText.copyWith(
-                        color: Theme.of(context).textTheme.bodyText1?.color,
-                        fontSize: 12 * SizeConfig.textMultiplier!),
+                          SizedBox(
+                            width: 5 * SizeConfig.widthMultiplier!,
+                          ),
+                          Text(
+                            'likes'.trParams({'no_likes': widget.likes}),
+                            style: AppTextStyle.boldBlackText.copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                fontSize: 12 * SizeConfig.textMultiplier!),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   SizedBox(
                     width: 18 * SizeConfig.widthMultiplier!,

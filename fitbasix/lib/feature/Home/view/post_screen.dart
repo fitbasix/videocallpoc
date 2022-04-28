@@ -160,6 +160,7 @@ class _PostScreenState extends State<PostScreen> {
                           .LikedPostMap[_homeController.post.value.id]!,
                   comments: _homeController.post.value.comments.toString(),
                   addComment: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
                    if(!isCommentLoading&&_homeController.commentController.text.isNotEmpty){
                      print("got here");
                      isCommentLoading = true;

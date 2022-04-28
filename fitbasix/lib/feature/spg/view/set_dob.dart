@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class SetDob extends StatelessWidget {
+  var userStartedEditing = false.obs;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,12 +62,36 @@ class SetDob extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 16 * SizeConfig.widthMultiplier!),
-            child: ProceedButton(
-                title: 'proceed'.tr,
-                onPressed: () async {
-                  print(_spgController.selectedDate.value);
+            child: Obx(
+                  ()=> GestureDetector(
+                onTap:userStartedEditing.value?() {
                   Navigator.pushNamed(context, RouteName.setHeight);
-                }),
+                }:null,
+                child: Container(
+                  width: Get.width,
+                  height: 48 * SizeConfig.heightMultiplier!,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                    color: userStartedEditing.value?kgreen49:hintGrey,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'proceed'.tr,
+                      style: AppTextStyle.normalWhiteText.copyWith(
+                          color: userStartedEditing.value?kPureWhite:greyBorder
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+
+            // ProceedButton(
+            //     title: 'proceed'.tr,
+            //     onPressed: () async {
+            //       print(_spgController.selectedDate.value);
+            //       Navigator.pushNamed(context, RouteName.setHeight);
+            //     }),
           ),
           SizedBox(
             height: 16 * SizeConfig.heightMultiplier!,
@@ -75,35 +100,38 @@ class SetDob extends StatelessWidget {
       ),
     );
   }
+
+  Widget datePicker(BuildContext context) => Container(
+    child: DatePickerWidget(
+      looping: true,
+      initialDate: DateTime.parse(_spgController.selectedDate.value),
+      firstDate: DateTime(1900), //DateTime(1960),
+      lastDate: DateTime.now(),
+      dateFormat: "dd-MMMM-yyyy",
+      //   "dd-MMMM-yyyy",
+      //locale: DatePicker.localeFromString('he'),
+      onChange: (DateTime newDate, _) {
+        userStartedEditing.value = true;
+        DateTime _selectedDate = newDate;
+        _spgController.selectedDate.value = _selectedDate.toString();
+        // (DateFormat('LL-dd-yyyy').format(_selectedDate));
+        // ignore: avoid_print
+      },
+      pickerTheme: DateTimePickerTheme(
+        backgroundColor: Colors.transparent,
+        itemHeight: 60*SizeConfig.heightMultiplier!,
+        pickerHeight: 220 * SizeConfig.heightMultiplier!,
+        // itemHeight: 75,
+        // pickerHeight: 270 * SizeConfig.heightMultiplier!,
+        itemTextStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1!.color,
+            fontSize: 28 * SizeConfig.heightMultiplier!),
+        dividerColor: Colors.transparent,
+      ),
+    ),
+  );
 }
 
 final SPGController _spgController = Get.find();
 
-Widget datePicker(BuildContext context) => Container(
-      child: DatePickerWidget(
-        looping: true,
-        initialDate: DateTime.parse(_spgController.selectedDate.value),
-        firstDate: DateTime(1900), //DateTime(1960),
-        lastDate: DateTime.now(),
-        dateFormat: "dd-MMMM-yyyy",
-        //   "dd-MMMM-yyyy",
-        //locale: DatePicker.localeFromString('he'),
-        onChange: (DateTime newDate, _) {
-          DateTime _selectedDate = newDate;
-          _spgController.selectedDate.value = _selectedDate.toString();
-          // (DateFormat('LL-dd-yyyy').format(_selectedDate));
-          // ignore: avoid_print
-        },
-        pickerTheme: DateTimePickerTheme(
-          backgroundColor: Colors.transparent,
-          itemHeight: 60*SizeConfig.heightMultiplier!,
-          pickerHeight: 220 * SizeConfig.heightMultiplier!,
-          // itemHeight: 75,
-          // pickerHeight: 270 * SizeConfig.heightMultiplier!,
-          itemTextStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
-              fontSize: 28 * SizeConfig.heightMultiplier!),
-          dividerColor: Colors.transparent,
-        ),
-      ),
-    );
+
