@@ -196,7 +196,7 @@ class TrainerPlansScreen extends StatelessWidget {
           bool? isDemoExpired,
           List<String>? planFeaturesList}) =>
       Container(
-        height: 555*SizeConfig.heightMultiplier!,
+        height: 555 * SizeConfig.heightMultiplier!,
         width: MediaQuery.of(context).size.width -
             40 * SizeConfig.widthMultiplier!,
         padding: EdgeInsets.only(left: 16 * SizeConfig.widthMultiplier!),
@@ -256,7 +256,9 @@ class TrainerPlansScreen extends StatelessWidget {
                     height: 1),
               ),
               Text(
-                "session_description".tr + " $planDuration " + (planDuration! >1?"weeks":"week").tr,
+                "session_description".tr +
+                    " $planDuration " +
+                    (planDuration! > 1 ? "weeks" : "week").tr,
                 style: AppTextStyle.hblackSemiBoldText.copyWith(
                   fontSize: 12 * SizeConfig.textMultiplier!,
                   fontWeight: FontWeight.w400,
@@ -267,7 +269,7 @@ class TrainerPlansScreen extends StatelessWidget {
                 height: 24 * SizeConfig.heightMultiplier!,
               ),
               Text(
-                "AED " + planPrice.toString(),
+                planPrice == 0 ? 'FREE' : "AED " + planPrice.toString(),
                 style: AppTextStyle.hblackSemiBoldText.copyWith(
                   fontSize: 36 * SizeConfig.textMultiplier!,
                   fontWeight: FontWeight.w600,

@@ -27,7 +27,7 @@ class ProfileController extends GetxController {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   RxString selectedDate = DateTime.now().toString().obs;
-  RxBool directFromHome=true.obs;
+  RxBool directFromHome = true.obs;
 
   RxString otp = "".obs;
   RxBool dataNeedToLoad = true.obs;
@@ -107,8 +107,8 @@ class ProfileController extends GetxController {
 //     }
     var assetList = <AssetEntity>[];
     assetList = await foldersAvailable[0].getAssetListPaged(
-      currentPage.value,
-      100,
+      page: currentPage.value,
+      size: 100,
     );
 
     print("AssetList " + currentPage.value.toString());
@@ -182,9 +182,10 @@ class ProfileController extends GetxController {
     loginController!.selectedCountry.value = loginController!.countryList
         .singleWhere((element) =>
             element.code ==
-            homeController.userProfileData.value.response!.data!.profile!.countryCode);
-
+            homeController
+                .userProfileData.value.response!.data!.profile!.countryCode);
   }
+
   setAssetDataForGallery() async {
     assets.value = await fetchAssets(presentPage: currentPage.value);
   }

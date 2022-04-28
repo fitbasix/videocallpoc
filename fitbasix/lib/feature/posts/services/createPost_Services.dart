@@ -42,11 +42,12 @@ class CreatePostService {
     int? category,
     bool? isPublish,
   }) async {
-    try{
+    try {
       var access = await LogInService.getAccessToken();
       print(access);
       dio!.options.headers["language"] = "1";
-      dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+      dio!.options.headers['Authorization'] =
+          await LogInService.getAccessToken();
 
       Map updateCaption = {"postId": postId, "caption": caption};
       Map updateFiles = {"postId": postId, "files": files};
@@ -62,24 +63,25 @@ class CreatePostService {
         "caption": caption
       };
       Map getPostData = {"postId": postId};
-      var response = await dio!.post(ApiUrl.createPost,
-          data: isPublish != null && caption != null
-              ? publishPost
-              : caption != null
-              ? updateCaption
-              : files != null
-              ? updateFiles
-              : placeId != null
-              ? updateLocation
-              : taggedPeople != null
-              ? updatePeople
-              : category != null
-              ? updateCategory
-              : getPostData).timeout(Duration(seconds: 3));
+      var response = await dio!
+          .post(ApiUrl.createPost,
+              data: isPublish != null && caption != null
+                  ? publishPost
+                  : caption != null
+                      ? updateCaption
+                      : files != null
+                          ? updateFiles
+                          : placeId != null
+                              ? updateLocation
+                              : taggedPeople != null
+                                  ? updatePeople
+                                  : category != null
+                                      ? updateCategory
+                                      : getPostData)
+          .timeout(Duration(seconds: 3));
       //todo handle null to stop timer of create post
       return postDataFromJson(response.toString());
-    }
-    catch(e){
+    } catch (e) {
       print(e);
       return PostData();
     }
@@ -90,14 +92,17 @@ class CreatePostService {
     dio!.options.headers["language"] = "1";
     print("lll");
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.delete(ApiUrl.deletePost, data: {"postId": postId});
+    var response =
+        await dio!.delete(ApiUrl.deletePost, data: {"postId": postId});
     print(response.data.toString());
   }
+
   static Future<String> deleteUserPost(String? postId) async {
     dio!.options.headers["language"] = "1";
     print("lll");
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.delete(ApiUrl.deletePost, data: {"postId": postId});
+    var response =
+        await dio!.delete(ApiUrl.deletePost, data: {"postId": postId});
     print(response.data.toString());
     return response.data['response']['message'];
   }
@@ -126,6 +131,8 @@ class CreatePostService {
   }
 
   static Future<void> update(UserProfileModel userProfileModel) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setInt("userQuickBloxId", 0);
     if (userProfileModel.response!.data!.profile!.quickBloxId != null) {
       try {
         String userId = userProfileModel.response!.data!.profile!.id!;
@@ -134,7 +141,9 @@ class CreatePostService {
             salt: '10');
         bool loggedIn = await LogInUserToQuickBlox(userId, password.hash,
             userProfileModel.response!.data!.profile!.quickBloxId!);
-      } catch (e) {}
+      } catch (e) {
+        throw e;
+      }
 
       //await InitializeQuickBlox().initWebRTC();
       // InitializeQuickBlox().subscribeCall();
@@ -157,6 +166,7 @@ class CreatePostService {
         // await InitializeQuickBlox().subscribeCall();
 
       } catch (e) {
+        throw e;
         //todo handle if QBlox has some backend error
 
       }
@@ -176,6 +186,7 @@ class CreatePostService {
         QBSession? session2 = await QB.auth.setSession(value!);
       });
     } on PlatformException catch (e) {
+      throw e;
       // Some error occurred, look at the exception message for more details
       print(e.toString());
     }
@@ -183,7 +194,6 @@ class CreatePostService {
 
   static Future<bool> LogInUserToQuickBlox(
       String logIn, String password, int userQuickBloxId) async {
-
     print("called login");
 
     var connected = await QB.chat.isConnected();
@@ -230,6 +240,7 @@ class CreatePostService {
         }
       });
     } on PlatformException catch (e) {
+      throw e;
       print(e.toString());
       // Some error occurred, look at the exception message for more details
     }

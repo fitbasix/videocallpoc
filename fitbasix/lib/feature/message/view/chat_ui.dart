@@ -70,6 +70,7 @@ import 'package:quickblox_sdk/webrtc/constants.dart';
 
 import 'package:quickblox_sdk/webrtc/rtc_video_view.dart';
 
+import '../../Home/view/widgets/healthData.dart';
 import '../../get_trained/model/PlanModel.dart';
 import '../../get_trained/model/all_trainer_model.dart';
 import '../../get_trained/services/trainer_services.dart';
@@ -77,6 +78,7 @@ import '../../log_in/services/login_services.dart';
 import '../../posts/services/createPost_Services.dart';
 import '../../report_abuse/report_abuse_controller.dart';
 import '../controller/chat_controller.dart';
+import 'chat_error.dart';
 import 'chat_videocallscreen.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -164,8 +166,17 @@ class _ChatScreenState extends State<ChatScreen> {
     int openPage = 0;
     final sharedPreferences = await SharedPreferences.getInstance();
 
-    _homeController.userQuickBloxId.value = sharedPreferences.getInt("userQuickBloxId")!;
-    print(_homeController.userQuickBloxId.value.toString()+" demo id");
+    _homeController.userQuickBloxId.value =
+        sharedPreferences.getInt("userQuickBloxId")!;
+    if (_homeController.userQuickBloxId.value == 0) {
+      deActiveAccount(context);
+      // showDialog(
+      //     context: context,
+      //     builder: (_) =>
+      //         HealthApp());
+    }
+
+    print(_homeController.userQuickBloxId.value.toString() + " demo id");
     int UserQuickBloxId = widget.opponentID!; //133819788;
     QBSort sort = QBSort();
     sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
@@ -197,16 +208,16 @@ class _ChatScreenState extends State<ChatScreen> {
               DateTime.now().millisecond.toString();
           int dialogType = QBChatDialogTypes.CHAT;
           try {
-            QBDialog? createdDialog = await QB.chat.createDialog(
+            QBDialog? createdDialog = await QB.chat
+                .createDialog(
               occupantsIds,
               dialogType: QBChatDialogTypes.CHAT,
-            ).then((value) {
+            )
+                .then((value) {
               widget.userDialogForChat = value;
               getMassageFromHistory();
             });
-          } on PlatformException catch (e) {
-
-          }
+          } on PlatformException catch (e) {}
         }
         return value;
       });
@@ -228,8 +239,7 @@ class _ChatScreenState extends State<ChatScreen> {
         onHangUpTapped: (value) async {
           _trainerController.isVideoAvailable(widget.time.toString());
 
-
-            //showDialogForVideoCallNotPossible(context);
+          //showDialogForVideoCallNotPossible(context);
 
           if (widget.days!.indexOf(_trainerController.daysInt[
                       DateFormat("EEE").format(DateTime.now().toUtc())]!) !=
@@ -237,7 +247,8 @@ class _ChatScreenState extends State<ChatScreen> {
               _trainerController.isVideoAvailable(widget.time.toString()) ==
                   true) {
             DateFormat("EEE").format(DateTime.now());
-                if(await Permission.camera.request().isGranted&&await Permission.microphone.request().isGranted){
+            if (await Permission.camera.request().isGranted &&
+                await Permission.microphone.request().isGranted) {
               callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => VideoCallScreen(
@@ -1547,6 +1558,8 @@ class _ChatScreenState extends State<ChatScreen> {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
               child: AlertDialog(
+                  titlePadding: EdgeInsets.zero,
+                  actionsPadding: EdgeInsets.zero,
                   insetPadding: EdgeInsets.only(
                     top: 175 * SizeConfig.heightMultiplier!,
                     bottom: 175 * SizeConfig.heightMultiplier!,
@@ -1567,21 +1580,16 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: GestureDetector(
-                                  onTap: () {
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
                                     Navigator.pop(context);
                                   },
-                                  child: SvgPicture.asset(
-                                    ImagePath.closedialogIcon,
-                                    color: Theme.of(context).primaryColor,
-                                    width: 16 * SizeConfig.imageSizeMultiplier!,
-                                    height:
-                                        16 * SizeConfig.imageSizeMultiplier!,
-                                  ),
-                                ),
-                              ),
+                                  icon: Icon(
+                                    Icons.close,
+                                    size: 26 * SizeConfig.heightMultiplier!,
+                                    color: Colors.white,
+                                  )),
                               SizedBox(
                                 height: 10 * SizeConfig.heightMultiplier!,
                               ),
@@ -2631,7 +2639,7 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
   BuildContext? parentContext;
   GestureTapCallback? onMenuTap;
   ValueChanged<bool>? onHangUpTapped;
-  final WebRTCController _webRtcController = Get.find();
+  final WebRTCController _webRtcController = Get.put(WebRTCController());
 
   AppbarforChat(
       {Key? key,

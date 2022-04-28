@@ -291,7 +291,12 @@ class _HomePageState extends State<HomePage> {
                                                   ],
                                                 ),
                                                 Obx(
-                                                  ()=> Container(
+                                                  ()=> _homeController
+                                                      .userProfileData
+                                                      .value
+                                                      .response==null?
+                                                      Container()
+                                                      :Container(
                                                    width:  Get.width-130*SizeConfig.widthMultiplier!,
                                                     child: Text(
                                                       _homeController
