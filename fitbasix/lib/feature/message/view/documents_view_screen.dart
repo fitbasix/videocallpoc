@@ -239,11 +239,10 @@ class DocumentTiles extends StatelessWidget {
         print("jjjjjjj");
         if(Platform.isAndroid){
           PermissionStatus status  = await Permission.storage.request();
-          PermissionStatus status1 = await Permission.manageExternalStorage.request();
           String? path;
-          final Directory _appDocDir = await getApplicationDocumentsDirectory();
-          //App Document Directory + folder name
-          final Directory _appDocDirFolder = Directory('storage/emulated/0/fitBasix/media');
+          final Directory appDir = await getApplicationDocumentsDirectory();
+          print(appDir.path.toString()+ " lll");
+          final _appDocDirFolder = Directory(appDir.path);
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
@@ -307,9 +306,9 @@ class DocumentTiles extends StatelessWidget {
       if (status == PermissionStatus.granted) {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');
-        final Directory _appDocDir = await getApplicationDocumentsDirectory();
-        final Directory _appDocDirFolder =
-        Directory('storage/emulated/0/fitBasix/media');
+        final Directory appDir = await getApplicationDocumentsDirectory();
+        print(appDir.path.toString()+ " lll");
+        final _appDocDirFolder = Directory(appDir.path);
 
         if (await _appDocDirFolder.exists()) {
           path = _appDocDirFolder.path;
