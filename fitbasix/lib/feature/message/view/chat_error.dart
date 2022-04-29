@@ -53,24 +53,24 @@ void deActiveAccount(BuildContext context) {
                                 )),
                           ],
                         ),
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(
+                        //       horizontal: 15 * SizeConfig.widthMultiplier!),
+                        //   child: Text(
+                        //     "deactive_account_heading".tr,
+                        //     style: AppTextStyle.black600Text.copyWith(
+                        //         color: kRed,
+                        //         fontSize: 18 * SizeConfig.textMultiplier!),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 24 * SizeConfig.heightMultiplier!,
+                        // ),
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 15 * SizeConfig.widthMultiplier!),
                           child: Text(
-                            "deactive_account_heading".tr,
-                            style: AppTextStyle.black600Text.copyWith(
-                                color: kRed,
-                                fontSize: 18 * SizeConfig.textMultiplier!),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 24 * SizeConfig.heightMultiplier!,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15 * SizeConfig.widthMultiplier!),
-                          child: Text(
-                            "deactive_account_subheading".tr,
+                            "someThingWrong".tr,
                             style: AppTextStyle.black400Text.copyWith(
                                 color: Theme.of(context)
                                     .textTheme
