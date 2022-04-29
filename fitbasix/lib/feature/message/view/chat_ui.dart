@@ -240,6 +240,15 @@ class _ChatScreenState extends State<ChatScreen> {
           _trainerController.isVideoAvailable(widget.time.toString());
 
           //showDialogForVideoCallNotPossible(context);
+          callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => VideoCallScreen(
+                  sessionIdForVideoCall: value!,
+                  name: widget.trainerTitle,
+                  imageURL: widget.profilePicURL,
+                )));
+            //showDialogForVideoCallNotPossible(context);
+          });
 
           if (widget.days!.indexOf(_trainerController.daysInt[
                       DateFormat("EEE").format(DateTime.now().toUtc())]!) !=

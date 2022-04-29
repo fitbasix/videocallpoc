@@ -117,6 +117,7 @@ class _PostScreenState extends State<PostScreen> {
                   caption: _homeController.post.value.caption ?? '',
                   likes: _homeController.post.value.likes.toString(),
                   hitLike: () {
+
                     if (_homeController.post.value.isLiked!) {
                       _homeController.post.value.isLiked = false;
                       _homeController.post.value.likes =

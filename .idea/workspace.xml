@@ -13,11 +13,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/ios/Podfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/ios/Runner/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +51,10 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
+                    <option name="branchName" value="feature/vm/External_storage_issue_android" />
+                    <option name="lastUsedInstant" value="1651213039" />
+                  </RecentBranch>
+                  <RecentBranch>
                     <option name="branchName" value="dev" />
                     <option name="lastUsedInstant" value="1651075274" />
                   </RecentBranch>
@@ -66,6 +70,13 @@
         </option>
       </RecentBranches>
     </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/fitbasix/android/app/src/main/AndroidManifest.xml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/message/view/accepted_video_call_screen.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/fitbasix/ios/Podfile" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="24mPLy4VzjnlI5BzCMuVI6q2iAf" />
   <component name="ProjectViewState">
@@ -106,7 +117,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
