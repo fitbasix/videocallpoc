@@ -41,12 +41,174 @@ class SetActivity extends StatelessWidget {
             height: 2 * SizeConfig.heightMultiplier!,
             width: Get.width * (8 / 8),
           ),
+          SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.only(
+                  top: 42 * SizeConfig.heightMultiplier!,
+                  bottom: 16 * SizeConfig.heightMultiplier!),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 16 * SizeConfig.widthMultiplier!,
+                        right: 16 * SizeConfig.widthMultiplier!),
+                    child: Text(
+                      'how_active_are_you'.tr,
+                      style: AppTextStyle.boldBlackText.copyWith(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 48 * SizeConfig.heightMultiplier!,
+                  ),
+                  Obx(
+                    () => Container(
+                      height: 346 * SizeConfig.heightMultiplier!,
+                      width: Get.width,
+                      child: Stack(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: _spgController
+                                .spgData
+                                .value
+                                .response!
+                                .data!
+                                .activenessType![
+                                    _spgController.activityNumber.value.toInt()]
+                                .image!,
+                            placeholder: (context, url) => ShimmerEffect(),
+                            errorWidget: (context, url, error) => ShimmerEffect(),
+                            height: 346 * SizeConfig.heightMultiplier!,
+                            width: Get.width,
+                            fit: BoxFit.cover,
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              color: Theme.of(context)
+                                  .primaryColorDark
+                                  .withOpacity(0.7),
+                              width: Get.width,
+                              height: 75 * SizeConfig.heightMultiplier!,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Obx(() => Text(
+                                      _spgController
+                                          .spgData
+                                          .value
+                                          .response!
+                                          .data!
+                                          .activenessType![_spgController
+                                              .activityNumber.value
+                                              .toInt()]
+                                          .title
+                                          .toString(),
+                                      style: AppTextStyle.normalWhiteText
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1!
+                                                  .color))),
+                                  SizedBox(
+                                    height: 8 * SizeConfig.heightMultiplier!,
+                                  ),
+                                  Obx(
+                                    () => Text(
+                                        _spgController
+                                            .spgData
+                                            .value
+                                            .response!
+                                            .data!
+                                            .activenessType![_spgController
+                                                .activityNumber.value
+                                                .toInt()]
+                                            .subTitle
+                                            .toString(),
+                                        style: AppTextStyle.normalBlackText
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .color,
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20 * SizeConfig.heightMultiplier!,
+                  ),
+                  SizedBox(
+                    height: 20 * SizeConfig.heightMultiplier!,
+                  ),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                        thumbColor: kGreenColor,
+                        activeTrackColor: kGreenColor,
+                        trackHeight: 12 * SizeConfig.heightMultiplier!,
+                        inactiveTickMarkColor: kGreenColor,
+                        thumbShape:
+                            RoundSliderThumbShape(enabledThumbRadius: 12)),
+                    child: Obx(() => Padding(
+                          padding: EdgeInsets.only(
+                              left: 46 * SizeConfig.widthMultiplier!,
+                              right: 46 * SizeConfig.widthMultiplier!),
+                          child: Slider(
+                            min: 0.0,
+                            max: 4.0,
+                            value: _spgController.activityNumber.value,
+                            onChanged: (value) {
+                              userStartedEditing.value = true;
+                              _spgController.activityNumber.value = value;
+                            },
+                            divisions: 4,
+                            inactiveColor: sliderColor,
+                          ),
+                        )),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 60 * SizeConfig.widthMultiplier!,
+                        right: 60 * SizeConfig.widthMultiplier!),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'low'.tr,
+                          style: AppTextStyle.normalBlackText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color),
+                        ),
+                        Text(
+                          'high'.tr,
+                          style: AppTextStyle.normalBlackText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: EdgeInsets.only(
                   left: 16 * SizeConfig.widthMultiplier!,
-                  right: 16 * SizeConfig.widthMultiplier!),
+                  right: 16 * SizeConfig.widthMultiplier!,bottom: 16*SizeConfig.heightMultiplier!),
+
               child: Obx(() => _spgController.isLoading.value
                   ? Center(
                 child: CustomizedCircularProgress(),
@@ -74,7 +236,7 @@ class SetActivity extends StatelessWidget {
                         _spgController
                             .selectedFoodIndex.value.serialId);
                     homeController.userProfileData.value =
-                        await CreatePostService.getUserProfile();
+                    await CreatePostService.getUserProfile();
                     homeController.spgStatus.value = true;
                     _spgController.isLoading.value = false;
                     Navigator.pushAndRemoveUntil(
@@ -102,199 +264,40 @@ class SetActivity extends StatelessWidget {
                 ),
               ),
 
-              // ProceedButton(
-              //     title: 'proceed'.tr,
-              //     onPressed: () async {
-              //       _spgController.isLoading.value = true;
-              //       await SPGService.updateSPGData(
-              //           _spgController.selectedGoalIndex.value.serialId,
-              //           _spgController
-              //               .selectedGenderIndex.value.serialId,
-              //           _spgController.selectedDate.value,
-              //           _spgController.currentHeight.value,
-              //           _spgController.weightType == "kg"
-              //               ? _spgController.targetWeight.value
-              //               : _spgController.targetWeight.value ~/
-              //               2.205,
-              //           _spgController.weightType == "kg"
-              //               ? _spgController.currentWeight.value
-              //               : _spgController.currentHeight.value ~/
-              //               2.205,
-              //           _spgController.activityNumber.value.toInt(),
-              //           _spgController.selectedBodyFat.value.serialId,
-              //           _spgController
-              //               .selectedFoodIndex.value.serialId);
-              //       homeController.userProfileData.value =
-              //       await CreatePostService.getUserProfile();
-              //       homeController.spgStatus.value = true;
-              //       _spgController.isLoading.value = false;
-              //       Navigator.pushAndRemoveUntil(
-              //           context,
-              //           MaterialPageRoute(
-              //               builder: (_) => HomeAndTrainerPage()),
-              //               (route) => false);
-              //     })
+                // ProceedButton(
+                //     title: 'proceed'.tr,
+                //     onPressed: () async {
+                //       _spgController.isLoading.value = true;
+                //       await SPGService.updateSPGData(
+                //           _spgController.selectedGoalIndex.value.serialId,
+                //           _spgController
+                //               .selectedGenderIndex.value.serialId,
+                //           _spgController.selectedDate.value,
+                //           _spgController.currentHeight.value,
+                //           _spgController.weightType == "kg"
+                //               ? _spgController.targetWeight.value
+                //               : _spgController.targetWeight.value ~/
+                //               2.205,
+                //           _spgController.weightType == "kg"
+                //               ? _spgController.currentWeight.value
+                //               : _spgController.currentHeight.value ~/
+                //               2.205,
+                //           _spgController.activityNumber.value.toInt(),
+                //           _spgController.selectedBodyFat.value.serialId,
+                //           _spgController
+                //               .selectedFoodIndex.value.serialId);
+                //       homeController.userProfileData.value =
+                //       await CreatePostService.getUserProfile();
+                //       homeController.spgStatus.value = true;
+                //       _spgController.isLoading.value = false;
+                //       Navigator.pushAndRemoveUntil(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (_) => HomeAndTrainerPage()),
+                //               (route) => false);
+                //     })
 
               ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(
-                top: 42 * SizeConfig.heightMultiplier!,
-                bottom: 16 * SizeConfig.heightMultiplier!),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 16 * SizeConfig.widthMultiplier!,
-                      right: 16 * SizeConfig.widthMultiplier!),
-                  child: Text(
-                    'how_active_are_you'.tr,
-                    style: AppTextStyle.boldBlackText.copyWith(
-                        color: Theme.of(context).textTheme.bodyText1!.color),
-                  ),
-                ),
-                SizedBox(
-                  height: 48 * SizeConfig.heightMultiplier!,
-                ),
-                Obx(
-                  () => Container(
-                    height: 346 * SizeConfig.heightMultiplier!,
-                    width: Get.width,
-                    child: Stack(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: _spgController
-                              .spgData
-                              .value
-                              .response!
-                              .data!
-                              .activenessType![
-                                  _spgController.activityNumber.value.toInt()]
-                              .image!,
-                          placeholder: (context, url) => ShimmerEffect(),
-                          errorWidget: (context, url, error) => ShimmerEffect(),
-                          height: 346 * SizeConfig.heightMultiplier!,
-                          width: Get.width,
-                          fit: BoxFit.cover,
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            color: Theme.of(context)
-                                .primaryColorDark
-                                .withOpacity(0.7),
-                            width: Get.width,
-                            height: 75 * SizeConfig.heightMultiplier!,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Obx(() => Text(
-                                    _spgController
-                                        .spgData
-                                        .value
-                                        .response!
-                                        .data!
-                                        .activenessType![_spgController
-                                            .activityNumber.value
-                                            .toInt()]
-                                        .title
-                                        .toString(),
-                                    style: AppTextStyle.normalWhiteText
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color))),
-                                SizedBox(
-                                  height: 8 * SizeConfig.heightMultiplier!,
-                                ),
-                                Obx(
-                                  () => Text(
-                                      _spgController
-                                          .spgData
-                                          .value
-                                          .response!
-                                          .data!
-                                          .activenessType![_spgController
-                                              .activityNumber.value
-                                              .toInt()]
-                                          .subTitle
-                                          .toString(),
-                                      style: AppTextStyle.normalBlackText
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!
-                                                  .color,
-                                              fontSize: 14 *
-                                                  SizeConfig.textMultiplier!)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20 * SizeConfig.heightMultiplier!,
-                ),
-                SizedBox(
-                  height: 20 * SizeConfig.heightMultiplier!,
-                ),
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                      thumbColor: kGreenColor,
-                      activeTrackColor: kGreenColor,
-                      trackHeight: 12 * SizeConfig.heightMultiplier!,
-                      inactiveTickMarkColor: kGreenColor,
-                      thumbShape:
-                          RoundSliderThumbShape(enabledThumbRadius: 12)),
-                  child: Obx(() => Padding(
-                        padding: EdgeInsets.only(
-                            left: 46 * SizeConfig.widthMultiplier!,
-                            right: 46 * SizeConfig.widthMultiplier!),
-                        child: Slider(
-                          min: 0.0,
-                          max: 4.0,
-                          value: _spgController.activityNumber.value,
-                          onChanged: (value) {
-                            userStartedEditing.value = true;
-                            _spgController.activityNumber.value = value;
-                          },
-                          divisions: 4,
-                          inactiveColor: sliderColor,
-                        ),
-                      )),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 60 * SizeConfig.widthMultiplier!,
-                      right: 60 * SizeConfig.widthMultiplier!),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'low'.tr,
-                        style: AppTextStyle.normalBlackText.copyWith(
-                            fontSize: 14 * SizeConfig.textMultiplier!,
-                            color:
-                                Theme.of(context).textTheme.bodyText1!.color),
-                      ),
-                      Text(
-                        'high'.tr,
-                        style: AppTextStyle.normalBlackText.copyWith(
-                            fontSize: 14 * SizeConfig.textMultiplier!,
-                            color:
-                                Theme.of(context).textTheme.bodyText1!.color),
-                      )
-                    ],
-                  ),
-                ),
-              ],
             ),
           ),
         ],

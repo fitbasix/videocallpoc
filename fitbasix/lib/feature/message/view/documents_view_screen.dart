@@ -307,7 +307,6 @@ class DocumentTiles extends StatelessWidget {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');
         final Directory appDir = await getApplicationDocumentsDirectory();
-        print(appDir.path.toString()+ " lll");
         final _appDocDirFolder = Directory(appDir.path);
 
         if (await _appDocDirFolder.exists()) {

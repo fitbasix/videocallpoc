@@ -13,11 +13,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/fitbasix-flutter-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fitbasix-flutter-app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_activity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_activity.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
