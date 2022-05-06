@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:store_redirect/store_redirect.dart';
 
 import '../../../../core/constants/app_text_style.dart';
 import '../../../../core/constants/color_palette.dart';
@@ -105,6 +106,10 @@ class DialogboxForFeedback extends StatelessWidget {
                                             8 * SizeConfig.widthMultiplier!)))),
                             onPressed: () {
                               //GoTo the AppStore
+                              StoreRedirect.redirect(
+                                //todo add appstore id
+                                iOSAppId: "0000000",
+                              );
                             },
                             child: Text(
                               "go_app_store".tr,
@@ -132,6 +137,9 @@ class DialogboxForFeedback extends StatelessWidget {
                                             8 * SizeConfig.widthMultiplier!)))),
                             onPressed: () {
                               //GoTo the AppStore
+                              StoreRedirect.redirect(
+                                androidAppId: "com.fitbasixco.fitbasix",
+                              );
                             },
                             child: Text(
                               "goto_play_store".tr,

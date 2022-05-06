@@ -744,7 +744,6 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     left: 90 * SizeConfig.widthMultiplier!,
                                     child: GestureDetector(
                                       onTap: () async {
-                                        print("pppp");
                                         Navigator.pushNamed(
                                             context, RouteName.selectProfilePhoto);
                                         // final pickedFile = await ImagesPicker.pick(

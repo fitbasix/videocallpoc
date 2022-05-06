@@ -107,7 +107,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                        // color: kPureWhite,
                                         child: Icon(
                                           Icons.remove_circle,
-                                          color: hintGrey,
+                                          color: kPureWhite,
                                         )
                                     ),
                                     Spacer(),
@@ -207,7 +207,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                      //   color: kPureWhite,
                                         child: Icon(
                                           Icons.remove_circle,
-                                          color: hintGrey,
+                                          color: kPureWhite,
                                         )
                                     ),
                                     Spacer(),

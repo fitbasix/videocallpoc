@@ -8,6 +8,7 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
@@ -51,6 +52,7 @@ class MenuScreen extends StatelessWidget {
             GestureDetector(
               onTap: () async {
                 Navigator.pushNamed(context, RouteName.userprofileinfo);
+                refreshProfileData();
                 _profileController.setAssetDataForGallery();
                 _profileController.directFromHome.value = false;
                 _profileController.initialPostData.value =

@@ -240,6 +240,15 @@ class _ChatScreenState extends State<ChatScreen> {
           _trainerController.isVideoAvailable(widget.time.toString());
 
           //showDialogForVideoCallNotPossible(context);
+          callWebRTC(QBRTCSessionTypes.VIDEO).then((value) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => VideoCallScreen(
+                  sessionIdForVideoCall: value!,
+                  name: widget.trainerTitle,
+                  imageURL: widget.profilePicURL,
+                )));
+            //showDialogForVideoCallNotPossible(context);
+          });
 
           if (widget.days!.indexOf(_trainerController.daysInt[
                       DateFormat("EEE").format(DateTime.now().toUtc())]!) !=
@@ -2138,17 +2147,20 @@ class MessageBubbleSender extends StatelessWidget {
       try {
         if (Platform.isAndroid) {
           PermissionStatus status = await Permission.storage.request();
-          if (!_chatController.storagePermissionCalled.value) {
-            _chatController.storagePermissionCalled.value = true;
-            PermissionStatus status1 =
-                await Permission.manageExternalStorage.request();
-          }
+          // if (!_chatController.storagePermissionCalled.value) {
+          //   _chatController.storagePermissionCalled.value = true;
+          //   PermissionStatus status1 =
+          //       await Permission.manageExternalStorage.request();
+          // }
 
           String? path;
-          final Directory _appDocDir = await getApplicationDocumentsDirectory();
+          final Directory appDir = await getApplicationDocumentsDirectory();
+          print(appDir.path.toString()+ " lll");
+          final _appDocDirFolder = Directory(appDir.path);
+
           //App Document Directory + folder name
-          final Directory _appDocDirFolder =
-              Directory('storage/emulated/0/fitBasix/media');
+          // final Directory _appDocDirFolder =
+          //     Directory('storage/emulated/0/fitBasix/media');
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
@@ -2158,6 +2170,7 @@ class MessageBubbleSender extends StatelessWidget {
                 await _appDocDirFolder.create(recursive: true);
             path = _appDocDirNewFolder.path;
           }
+          print(_appDocDirFolder.path+" new dir");
           Dio dio = Dio();
           dio.download(url!, path + "/" + fileName,
               onReceiveProgress: (received, total) {
@@ -2199,18 +2212,11 @@ class MessageBubbleSender extends StatelessWidget {
   void checkFileExistence(String? fileName) async {
     if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
-      if (!_chatController.storagePermissionCalled.value) {
-        _chatController.storagePermissionCalled.value = true;
-        PermissionStatus status1 =
-            await Permission.manageExternalStorage.request();
-      }
-
       if (status == PermissionStatus.granted) {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');
-        final Directory _appDocDir = await getApplicationDocumentsDirectory();
-        final Directory _appDocDirFolder =
-            Directory('storage/emulated/0/fitBasix/media');
+        final Directory appDir = await getApplicationDocumentsDirectory();
+        final _appDocDirFolder = Directory(appDir.path);
 
         if (await _appDocDirFolder.exists()) {
           path = _appDocDirFolder.path;
@@ -2504,16 +2510,15 @@ class MessageBubbleOpponent extends StatelessWidget {
       try {
         if (Platform.isAndroid) {
           PermissionStatus status = await Permission.storage.request();
-          if (!_chatController.storagePermissionCalled.value) {
-            _chatController.storagePermissionCalled.value = true;
-            PermissionStatus status1 =
-                await Permission.manageExternalStorage.request();
-          }
+          // if (!_chatController.storagePermissionCalled.value) {
+          //   _chatController.storagePermissionCalled.value = true;
+          //   PermissionStatus status1 =
+          //       await Permission.manageExternalStorage.request();
+          // }
           String? path;
-          final Directory _appDocDir = await getApplicationDocumentsDirectory();
-          //App Document Directory + folder name
-          final Directory _appDocDirFolder =
-              Directory('storage/emulated/0/fitBasix/media');
+          final Directory appDir = await getApplicationDocumentsDirectory();
+          print(appDir.path.toString()+ " lll");
+          final _appDocDirFolder = Directory(appDir.path);
           if (await _appDocDirFolder.exists()) {
             //if folder already exists return path
             path = _appDocDirFolder.path;
@@ -2567,17 +2572,17 @@ class MessageBubbleOpponent extends StatelessWidget {
   void checkFileExistence(String? fileName) async {
     if (Platform.isAndroid) {
       PermissionStatus status = await Permission.storage.request();
-      if (!_chatController.storagePermissionCalled.value) {
-        _chatController.storagePermissionCalled.value = true;
-        PermissionStatus status1 =
-            await Permission.manageExternalStorage.request();
-      }
+      // if (!_chatController.storagePermissionCalled.value) {
+      //   _chatController.storagePermissionCalled.value = true;
+      //   PermissionStatus status1 =
+      //       await Permission.manageExternalStorage.request();
+      // }
       if (status == PermissionStatus.granted) {
         String? path;
         final downloadsPath = Directory('/storage/emulated/0/Download');
-        final Directory _appDocDir = await getApplicationDocumentsDirectory();
-        final Directory _appDocDirFolder =
-            Directory('storage/emulated/0/fitBasix/media');
+        final Directory appDir = await getApplicationDocumentsDirectory();
+        print(appDir.path.toString()+ " lll");
+        final _appDocDirFolder = Directory(appDir.path);
 
         if (await _appDocDirFolder.exists()) {
           path = _appDocDirFolder.path;

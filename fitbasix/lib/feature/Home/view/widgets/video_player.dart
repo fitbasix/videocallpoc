@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -9,6 +10,8 @@ import '../../../../core/constants/color_palette.dart';
 import '../../../../core/reponsive/SizeConfig.dart';
 import '../../../../core/universal_widgets/customized_circular_indicator.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+
+import '../../controller/Home_Controller.dart';
 
 class VideoPlayerContainer extends StatefulWidget {
   const VideoPlayerContainer({Key? key, required this.videoUrl})
@@ -20,26 +23,37 @@ class VideoPlayerContainer extends StatefulWidget {
 }
 
 class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
+  final HomeController _homeController = Get.find();
   late VideoPlayerController _controller;
   late VideoPlayerController _controllerThumb;
+  bool videoIsMute = false;
+
   bool state = false;
   bool buffer = false;
   Uint8List? thumbnail;
   GlobalKey _key = GlobalKey();
+  Rx<double> videoProgress = 0.05.obs;
+  Rx<int> videoLength = 1.obs;
+  
   @override
   void initState() {
+    
     getThumbnail();
     super.initState();
     _controller = VideoPlayerController.network(widget.videoUrl);
     _controllerThumb = VideoPlayerController.network(widget.videoUrl);
 
     _controller.addListener(() {
+      videoProgress.value = ((_controller.value.isPlaying?_controller.value.position.inSeconds:0.0)/videoLength.value);
+      print(videoProgress.value.toString()+" yyyyy");
       setState(() {
         state = _controller.value.isPlaying;
         buffer = _controller.value.isBuffering;
       });
     });
-    _controller.initialize();
+    _controller.initialize().then((value) {
+      videoLength.value = _controller.value.duration.inSeconds;
+    });
     _controllerThumb.initialize();
   }
 
@@ -82,10 +96,13 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
         ),
         VisibilityDetector(
           onVisibilityChanged: (VisibilityInfo info) {
-            if (info.visibleFraction == 0 && this.mounted) {
+            if ((info.visibleFraction == 0||info.visibleFraction < 0.8) && this.mounted) {
+              _controller.setVolume(_homeController.videoPlayerVolume.value);
               _controller.pause();
+
             }
-            else{
+            if(info.visibleFraction == 1||info.visibleFraction > 0.8){
+              _controller.setVolume(_homeController.videoPlayerVolume.value);
               _controller.play();
             }
           },
@@ -117,7 +134,52 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
                     size: 56 * SizeConfig.heightMultiplier!,
                   ):Container(),
           ),
-        )
+        ),
+        GestureDetector(
+          onTap: () {
+            if(_homeController.videoPlayerVolume.value == 0.0){
+              _homeController.videoPlayerVolume.value = 1.0;
+            }
+            else{
+              _homeController.videoPlayerVolume.value = 0.0;
+            }
+            _controller.setVolume(_homeController.videoPlayerVolume.value);
+            },
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child:Container(
+              color: Colors.transparent,
+              child: Padding(
+                padding:  EdgeInsets.all(8.0*SizeConfig.widthMultiplier!),
+                child: Obx(
+                    ()=> CircleAvatar(
+                      radius: 9.5*SizeConfig.heightMultiplier!,
+                      backgroundColor: Colors.black.withOpacity(0.5),
+                      child: Icon(
+                      //state ? Icons.pause :
+                      _homeController.videoPlayerVolume.value == 0.0?Icons.volume_off:Icons.volume_up,
+                      color: kPureWhite,
+                      size: 13 * SizeConfig.heightMultiplier!,
+                  ),
+                    ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Obx(
+          ()=> Align(
+            alignment: Alignment.bottomCenter,
+            child: LinearProgressIndicator(
+              value: videoProgress.value,
+              minHeight: 5*SizeConfig.heightMultiplier!,
+              color: kBlack.withOpacity(0.7),
+              backgroundColor: Colors.transparent,
+            ),
+          ),
+        ),
+
+
       ],
     );
   }

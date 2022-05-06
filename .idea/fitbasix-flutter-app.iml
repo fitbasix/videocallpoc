@@ -187,6 +187,18 @@
       <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/google_sign_in/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/google_sign_in/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/google_sign_in/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/package_info_plus/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/package_info_plus/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/package_info_plus/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/package_info_plus/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/package_info_plus/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/package_info_plus/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/example/build" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

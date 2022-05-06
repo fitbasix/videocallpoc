@@ -111,6 +111,7 @@ class InitializeQuickBlox {
     //iceServerSecondary.userName = "your secondary user name"; //optional 10
     //iceServerSecondary.password = "your secondary password"; //optional 11 12
     try {
+//<<<<<<< fix/quickBlox
       await QB.rtcConfig.setIceServers([iceServerPrimary]);
     } on PlatformException catch (e) {
       //some logic for handle exception 16 } 17
@@ -128,6 +129,11 @@ class InitializeQuickBlox {
         print(e);
         // Some error occurred, look at the exception message for more details
       }
+//=======
+      await QB.rtcConfig.setIceServers(
+          [iceServerPrimary]);
+    } on PlatformException catch (e) { //some logic for handle exception 16 } 17
+//>>>>>>> dev
     }
   }
 

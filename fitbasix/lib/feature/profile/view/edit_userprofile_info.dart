@@ -115,7 +115,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   left: 90 * SizeConfig.widthMultiplier!,
                                   child: GestureDetector(
                                     onTap: () async {
-                                      print("pppp");
                                       Navigator.pushNamed(
                                           context, RouteName.selectProfilePhoto);
                                       // final pickedFile = await ImagesPicker.pick(
@@ -162,6 +161,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           onChanged: (value) {
                             //implement controller for storing user full name
                           },
+                          textCapitalization: TextCapitalization.sentences,
                           controller: profileController.nameController,
                           style: AppTextStyle.normalBlackText.copyWith(
                               color:
@@ -212,6 +212,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                         //TextFormField for user bio update
                         TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(100),
                           ],
