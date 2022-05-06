@@ -2,14 +2,12 @@ import 'dart:developer';
 
 import 'package:crypt/crypt.dart';
 import 'package:fitbasix/core/api_service/dio_service.dart';
-import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -141,18 +139,8 @@ class CreatePostService {
         final password = Crypt.sha256(
             userProfileModel.response!.data!.profile!.id!,
             salt: '10');
-
-        Future<bool> loggedIn = LogInUserToQuickBlox(
-                userId,
-                password.hash.substring(0, 39),
-                userProfileModel.response!.data!.profile!.quickBloxId!)
-            .then((value) {
-          final SnackBar snackBar = SnackBar(
-              content: Text("logged IN Successfully " + value.toString()));
-          snackbarKey.currentState?.showSnackBar(snackBar);
-          return value;
-        });
-        log(loggedIn.toString());
+        bool loggedIn = await LogInUserToQuickBlox(userId, password.hash,
+            userProfileModel.response!.data!.profile!.quickBloxId!);
       } catch (e) {
         throw e;
       }
@@ -168,9 +156,7 @@ class CreatePostService {
             salt: '10');
         String userName = userProfileModel.response!.data!.profile!.name!;
         int? userQuickBloxId = await createUserOnQuickBlox(
-            name: userName,
-            loginId: userId,
-            password: password.hash.substring(0, 39));
+            name: userName, loginId: userId, password: password.hash);
 
         int response = await updateUserQuickBloxId(userQuickBloxId!);
         bool loggedIn =
@@ -217,23 +203,20 @@ class CreatePostService {
       InitializeQuickBlox().initWebRTC();
       //InitializeQuickBlox().subscribeCall();
     }
-    bool resultValue = true;
     var result = await QB.auth.login(logIn, password).then((value) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setInt("userQuickBloxId", value.qbUser!.id!);
       connectUserToChat(password, userQuickBloxId);
       if (value.qbUser != null) {
-        resultValue = true;
         return true;
       } else {
-        resultValue = false;
         return false;
       }
     });
 
     ///connect user to chat
 
-    return resultValue;
+    return false;
   }
 
   static connectUserToChat(String password, int userQuickBloxId) async {
