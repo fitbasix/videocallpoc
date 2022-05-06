@@ -236,7 +236,10 @@ class _HomePageState extends State<HomePage> {
                                             ClipRRect(
                                               borderRadius: BorderRadius.circular(
                                                   30 * SizeConfig.widthMultiplier!),
-                                              child: Obx(() => CachedNetworkImage(
+                                              child: Obx(() =>_homeController
+                                                  .userProfileData
+                                                  .value
+                                                  .response==null?Container(): CachedNetworkImage(
                                                   imageUrl:_homeController.profilePhoto.value==""? _homeController
                                                       .userProfileData
                                                       .value
