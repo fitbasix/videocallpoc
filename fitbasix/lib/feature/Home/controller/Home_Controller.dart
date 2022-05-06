@@ -28,6 +28,7 @@ class HomeController extends GetxController {
   RxInt userQuickBloxId = 0.obs;
   RxBool isLoading = RxBool(false);
   RxBool spgStatus = RxBool(false);
+  Rx<double> videoPlayerVolume = 1.0.obs;
   Rx<UserProfileModel> userProfileData = Rx(UserProfileModel());
   Rx<PersonalGoal> personalGoalData = Rx(PersonalGoal());
   Rx<PostsModel> posts = Rx(PostsModel());

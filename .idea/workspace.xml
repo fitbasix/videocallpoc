@@ -13,10 +13,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/fitbasix-flutter-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fitbasix-flutter-app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_activity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_activity.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/constants/credentials.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/constants/credentials.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/universal_widgets/text_Field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/universal_widgets/text_Field.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Bmr_calculator/view/bmr_homepage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Bmr_calculator/view/bmr_homepage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/controller/Home_Controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/controller/Home_Controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/feedback_dialogbox.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/feedback_dialogbox.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/menu_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/menu_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/video_player.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/video_player.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/log_in/services/login_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/log_in/services/login_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/my_trainer_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/message/view/my_trainer_tile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/posts/view/create_post.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/posts/view/create_post.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/posts/view/widgets/discard_post_bottom_sheet.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/posts/view/widgets/discard_post_bottom_sheet.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/edit_userprofile_info.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/edit_userprofile_info.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/user_profile_info.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/profile/view/user_profile_info.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_weight.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/spg/view/set_weight.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/main_dev.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/main_dev.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,6 +65,10 @@
             <RecentBranchesForRepo>
               <option name="branches">
                 <list>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/vm/new_features_implementation" />
+                    <option name="lastUsedInstant" value="1651814588" />
+                  </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="feature/vm/External_storage_issue_android" />
                     <option name="lastUsedInstant" value="1651213039" />
@@ -154,5 +173,16 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart</url>
+          <line>1612</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -122,8 +122,6 @@ class LogInService {
         loginController.otpErrorMessage.value =
             responseData['response']['message'];
       }
-      print("login Response " + putResponse.body.toString());
-      print("pppp "+ putResponse.statusCode.toString());
       if(putResponse.statusCode == 445){
         Get.deleteAll();
         final SnackBar snackBar =

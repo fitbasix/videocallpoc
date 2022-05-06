@@ -42,6 +42,7 @@ Widget TextFieldContainer(
     Widget? suffixWidget}) {
   return Container(
     child: TextField(
+      textCapitalization: TextCapitalization.sentences,
       inputFormatters: inputFormatters != null ? inputFormatters : null,
       controller: textEditingController,
       onChanged: (value) {

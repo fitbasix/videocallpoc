@@ -136,7 +136,6 @@ class InitializeQuickBlox{
       await QB.rtcConfig.setIceServers(
           [iceServerPrimary]);
     } on PlatformException catch (e) { //some logic for handle exception 16 } 17
-      print(e.toString() +" ppppp");
     }
   }
 

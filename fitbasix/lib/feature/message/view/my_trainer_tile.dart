@@ -74,6 +74,8 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
     });
     super.initState();
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

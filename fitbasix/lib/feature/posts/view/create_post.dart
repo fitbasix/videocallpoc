@@ -34,6 +34,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   final HomeController _homeController = Get.find();
 
+  bool userClickedOnPhotoVideoButton = false;
+
   @override
   void initState() {
     _postController.setUp();
@@ -1106,13 +1108,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  _postController.currentPage.value = 0;
-                                  _postController.assets.value =
-                                      await _postController.fetchAssets(
-                                          presentPage: _postController
-                                              .currentPage.value);
-                                  Navigator.pushNamed(
-                                      context, RouteName.customGallery);
+                                  if(!userClickedOnPhotoVideoButton){
+                                    userClickedOnPhotoVideoButton = true;
+                                    _postController.currentPage.value = 0;
+                                    _postController.assets.value =
+                                    await _postController.fetchAssets(
+                                        presentPage: _postController
+                                            .currentPage.value);
+                                    userClickedOnPhotoVideoButton = false;
+                                    Navigator.pushNamed(
+                                        context, RouteName.customGallery);
+
+                                  }
                                 },
                                 child: Container(
                                   width: double.infinity,
