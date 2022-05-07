@@ -139,7 +139,9 @@ class CreatePostService {
         final password = Crypt.sha256(
             userProfileModel.response!.data!.profile!.id!,
             salt: '10');
-        bool loggedIn = await LogInUserToQuickBlox(userId, password.hash,
+        bool loggedIn = await LogInUserToQuickBlox(
+            userId,
+            password.hash.substring(0, 39),
             userProfileModel.response!.data!.profile!.quickBloxId!);
       } catch (e) {
         throw e;
@@ -156,7 +158,9 @@ class CreatePostService {
             salt: '10');
         String userName = userProfileModel.response!.data!.profile!.name!;
         int? userQuickBloxId = await createUserOnQuickBlox(
-            name: userName, loginId: userId, password: password.hash);
+            name: userName,
+            loginId: userId,
+            password: password.hash.substring(0, 39));
 
         int response = await updateUserQuickBloxId(userQuickBloxId!);
         bool loggedIn =
