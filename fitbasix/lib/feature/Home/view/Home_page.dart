@@ -41,6 +41,7 @@ import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../get_trained/view/get_trained_screen.dart';
@@ -49,6 +50,7 @@ import '../../spg/view/set_goal_screen.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,10 +110,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   final ReportAbuseController _reportAbuseController = Get.put(ReportAbuseController());
   final HomeController _homeController = Get.find();
   final PostController postController = Get.put(PostController());
   final ScrollController _scrollController = ScrollController();
+  RxDouble _caloriesData = 0.0.obs;
+
+  fetchCaloriesDataFromStorage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(_homeController.caloriesBurnt.value.toString() + ' ttttt');
+    _caloriesData.value = double.tryParse(prefs.getString('caloriesBurnt')??'0.0')??0.0;
+    print(prefs.getString('caloriesBurnt'));
+    print(_caloriesData.value);
+  }
   DateTime? currentBackPressTime;
   @override
   void initState() {
@@ -173,6 +185,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    fetchCaloriesDataFromStorage();
     final user = FirebaseAuth.instance.currentUser;
     final now = DateTime.now();
     String formatter = DateFormat('MMMd').format(now);
@@ -741,20 +754,19 @@ class _HomePageState extends State<HomePage> {
                                                       left: 0.0 *
                                                           SizeConfig
                                                               .widthMultiplier!),
-                                                  child: CaloriesBurnt(
-                                                      _homeController
-                                                          .caloriesBurnt.value
-                                                          .toInt()
-                                                          .toDouble(), () {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (_) =>
-                                                            HealthApp());
-                                                  },
-                                                      //is connected
-                                                      true,
-                                                      //Passing context for theme
-                                                      context),
+                                                  child: Obx(
+                                                    ()=> CaloriesBurnt(
+                                                        _caloriesData.value>0?double.parse(NumberFormat("0.###").format(_caloriesData.value)):0.0, () {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (_) =>
+                                                              HealthApp());
+                                                    },
+                                                        //is connected
+                                                        true,
+                                                        //Passing context for theme
+                                                        context),
+                                                  ),
                                                 ),
                                               )
                                             ],

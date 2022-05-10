@@ -1,4 +1,5 @@
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/view/widgets/caloriesDetails.dart';
 import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
 import 'package:fitbasix/feature/profile/view/appbar_for_account.dart';
@@ -25,6 +26,23 @@ class CaloriesBurnetScreen extends StatefulWidget {
 
 class _CaloriesBurnetScreenState extends State<CaloriesBurnetScreen> {
   HomeController _homeController = Get.find();
+  RxInt _currentWeekCount = 0.obs;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
+  void filterHealthData(){
+    _homeController.monthlyHealthDataAfterFilter.value = List.from(List.from(_homeController.monthlyHealthData.getRange(_currentWeekCount.value, _currentWeekCount.value+7)).reversed);
+    print(_currentWeekCount.value);
+    _homeController.monthlyHealthDataAfterFilter.forEach((element) {
+      print(DateFormat('dd').format(element.caloriesBurntDate!));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,174 +79,237 @@ class _CaloriesBurnetScreenState extends State<CaloriesBurnetScreen> {
         //       )),
         // ],
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 45 * SizeConfig.heightMultiplier!,
-          ),
-          Center(
-            child: Container(
-              width:
-              165*SizeConfig.widthMultiplier!,
-              child: CaloriesBurnt(
-                  _homeController
-                      .caloriesBurnt.value
-                      .toInt()
-                      .toDouble(), () {
-
-                // showDialog(
-                //     context: context,
-                //     builder: (_) =>
-                //         HealthApp());
-              },
-                  //is connected
-                  true,
-                  //Passing context for theme
-                  context),
-            ),
-          ),
-          SizedBox(
-            height: 45 * SizeConfig.heightMultiplier!,
-          ),
-          Spacer(),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 16 * SizeConfig.widthMultiplier!),
-            child: Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: Obx(
+            (){
+          if(_homeController.monthlyHealthData[0].caloriesBurntDate!=null){
+            filterHealthData();
+            return Column(
               children: [
-                Text('calories_burnt_text'.tr,
-                    style: AppTextStyle.boldWhiteText
-                        .copyWith(
-                        fontSize: 14 *
-                            SizeConfig.textMultiplier!)),
-                Container(
-
-                  child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.end,
+                SizedBox(
+                  height: 45 * SizeConfig.heightMultiplier!,
+                ),
+                Center(
+                  child: Container(
+                    width: 165 * SizeConfig.widthMultiplier!,
+                    child: CaloriesBurnt(
+                        _homeController.caloriesBurnt.value.toInt().toDouble(),
+                        () {
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (_) =>
+                      //         HealthApp());
+                    },
+                        //is connected
+                        true,
+                        //Passing context for theme
+                        context),
+                  ),
+                ),
+                SizedBox(
+                  height: 45 * SizeConfig.heightMultiplier!,
+                ),
+                Spacer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 16 * SizeConfig.widthMultiplier!),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ///buttons for changing dates
+                      Text('calories_burnt_text'.tr,
+                          style: AppTextStyle.boldWhiteText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!)),
                       Container(
-                        padding: EdgeInsets.only(top: 2*SizeConfig.heightMultiplier!),
-                        width: 140*SizeConfig.widthMultiplier!,
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            ClipOval(
-                              child: Material(
-                                color: kBlack, // Button color
-                                child: InkWell(
-                                  splashColor: Colors.white.withOpacity(0.2), // Splash color
-                                  onTap: () {},
-                                  child: SizedBox(width: 16*SizeConfig.widthMultiplier!, height: 16*SizeConfig.heightMultiplier!, child: Icon(Icons.chevron_left_outlined,color: kPureWhite,size: 10*SizeConfig.heightMultiplier!,)),
-                                ),
+                            ///buttons for changing dates
+                            Container(
+                              padding: EdgeInsets.only(
+                                  top: 2 * SizeConfig.heightMultiplier!),
+                              width: 150 * SizeConfig.widthMultiplier!,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    splashColor: Colors.white.withOpacity(0.2),
+                                    // Spla
+                                    onTap: () {
+                                      if (_homeController
+                                                  .monthlyHealthData.length -
+                                              1 >
+                                          _currentWeekCount.value * 7) {
+                                        ++_currentWeekCount.value;
+                                      }
+                                      filterHealthData();
+                                    },
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      child: ClipOval(
+                                        child: Material(
+                                          color: kBlack, // Button color
+                                          child: InkWell(
+                                            child: SizedBox(
+                                                width: 17 *
+                                                    SizeConfig.widthMultiplier!,
+                                                height: 17 *
+                                                    SizeConfig.widthMultiplier!,
+                                                child: Icon(
+                                                  Icons.chevron_left_outlined,
+                                                  color: kPureWhite,
+                                                  size: 10 *
+                                                      SizeConfig
+                                                          .heightMultiplier!,
+                                                )),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: 7 * SizeConfig.widthMultiplier!),
+                                  Obx(
+                                    () => Text(
+                                      DateFormat('dd MMM').format(
+                                              _homeController
+                                                  .monthlyHealthDataAfterFilter[
+                                                      0]
+                                                  .caloriesBurntDate!) +
+                                          ' - ' +
+                                          DateFormat('dd MMM').format(
+                                              _homeController
+                                                  .monthlyHealthDataAfterFilter[
+                                                      6]
+                                                  .caloriesBurntDate!),
+                                      style: AppTextStyle.boldWhiteText
+                                          .copyWith(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12 *
+                                                  SizeConfig.textMultiplier!),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: 7 * SizeConfig.widthMultiplier!),
+                                  InkWell(
+                                    splashColor:
+                                        Colors.white.withOpacity(0.2), //
+                                    onTap: () {
+                                      if (_currentWeekCount.value > 0) {
+                                        --_currentWeekCount.value;
+                                      }
+
+                                      filterHealthData();
+                                    },
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      child: ClipOval(
+                                        child: Material(
+                                          color: kBlack, // Button color
+                                          child: InkWell(
+                                            child: SizedBox(
+                                                width: 17 *
+                                                    SizeConfig.widthMultiplier!,
+                                                height: 17 *
+                                                    SizeConfig.widthMultiplier!,
+                                                child: Icon(
+                                                  Icons.chevron_right_outlined,
+                                                  color: kPureWhite,
+                                                  size: 10 *
+                                                      SizeConfig
+                                                          .heightMultiplier!,
+                                                )),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            Spacer(),
-                            Text('10 Feb - 16 Feb'),
-                            Spacer(),
-                            ClipOval(
-                              child: Material(
-                                color: kBlack, // Button color
-                                child: InkWell(
-                                  splashColor: Colors.white.withOpacity(0.2), // Splash color
-                                  onTap: () {},
-                                  child: SizedBox(width: 16*SizeConfig.widthMultiplier!, height: 16*SizeConfig.heightMultiplier!, child: Icon(Icons.chevron_right_outlined,color: kPureWhite,size: 10*SizeConfig.heightMultiplier!,)),
+                            SizedBox(
+                              height: 12 * SizeConfig.heightMultiplier!,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 8 * SizeConfig.widthMultiplier!,
+                                  width: 8 * SizeConfig.widthMultiplier!,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          width:
+                                              2 * SizeConfig.widthMultiplier!,
+                                          color: kGreyColor),
+                                      color: kPureWhite),
                                 ),
-                              ),
-                            )
+                                SizedBox(
+                                    width: 5 * SizeConfig.widthMultiplier!),
+                                Text(
+                                  'Goal'.tr,
+                                  style: AppTextStyle.normalWhiteText.copyWith(
+                                      fontSize:
+                                          10 * SizeConfig.textMultiplier!),
+                                ),
+                                SizedBox(
+                                  width: 9 * SizeConfig.heightMultiplier!,
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 8 * SizeConfig.widthMultiplier!,
+                                      width: 8 * SizeConfig.widthMultiplier!,
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle, color: kPink),
+                                    ),
+                                    SizedBox(
+                                        width: 5 * SizeConfig.widthMultiplier!),
+                                    Text(
+                                      'Burned'.tr,
+                                      style: AppTextStyle.normalWhiteText
+                                          .copyWith(
+                                              fontSize: 10 *
+                                                  SizeConfig.textMultiplier!),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
                           ],
                         ),
-                      ),
-                      SizedBox(height: 12*SizeConfig.heightMultiplier!,),
-                      Row(
-                        children: [
-                          Container(
-                            height: 8 *
-                                SizeConfig.widthMultiplier!,
-                            width: 8 *
-                                SizeConfig.widthMultiplier!,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    width: 2 *
-                                        SizeConfig
-                                            .widthMultiplier!,
-                                    color: kGreyColor),
-                                color: kPureWhite),
-                          ),
-                          SizedBox(
-                              width: 5 *
-                                  SizeConfig
-                                      .widthMultiplier!),
-                          Text(
-                            'Goal'.tr,
-                            style: AppTextStyle
-                                .normalWhiteText
-                                .copyWith(
-                                fontSize: 10 *
-                                    SizeConfig
-                                        .textMultiplier!),
-                          ),
-                          SizedBox(
-                            width:
-                            9 * SizeConfig.heightMultiplier!,
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                height: 8 *
-                                    SizeConfig.widthMultiplier!,
-                                width: 8 *
-                                    SizeConfig.widthMultiplier!,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: kPink),
-                              ),
-                              SizedBox(
-                                  width: 5 *
-                                      SizeConfig
-                                          .widthMultiplier!),
-                              Text(
-                                'Burned'.tr,
-                                style: AppTextStyle
-                                    .normalWhiteText
-                                    .copyWith(
-                                    fontSize: 10 *
-                                        SizeConfig
-                                            .textMultiplier!),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                      )
                     ],
                   ),
-                )
+                ),
+                SizedBox(
+                  height: 5 * SizeConfig.heightMultiplier!,
+                ),
+                Container(
+                    height: 190 * SizeConfig.heightMultiplier!,
+                    child: Obx(
+                      () => _homeController.monthlyHealthDataAfterFilter.isEmpty
+                          ? ChartAppCalories(
+                              healthDataList:
+                                  _homeController.monthlyHealthDataAfterFilter,
+                            )
+                          : ChartAppCalories(
+                              healthDataList:
+                                  _homeController.monthlyHealthDataAfterFilter,
+                            ),
+                    )),
+                SizedBox(
+                  height: 10 * SizeConfig.heightMultiplier!,
+                ),
               ],
-            ),
-          ),
-          SizedBox(
-            height: 5 * SizeConfig.heightMultiplier!,
-          ),
-          Container(
-              height: 190 * SizeConfig.heightMultiplier!,
-              child: Obx(
-                      () => _homeController.monthlyHealthData.isEmpty
-                      ? ChartApp(
-                    waterDetails: [],
-                  )
-                      : Obx(
-                        ()=> ChartAppCalories(
-                          healthDataList: _homeController.monthlyHealthData.value,
-                  ),
-                      ))),
-          SizedBox(
-            height: 10 * SizeConfig.heightMultiplier!,
-          ),
-        ],
+            );
+          }
+          else{
+            return Center(
+              child: CustomizedCircularProgress(),
+            );
+          }
+
+        },
       ),
     );
 
@@ -302,10 +383,12 @@ class __ChartAppCaloriesState extends State<ChartAppCalories> {
               dataSource: widget.healthDataList,
               opacity: 0.5,
               // gradient color
-              gradient: const LinearGradient(colors: [
-                kGreenColor,
+              gradient:  LinearGradient(
+                  colors: [
+                kRed,
                 Colors.black,
-              ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+              ],
+                  begin: Alignment.topCenter, end: Alignment.bottomCenter),
               //  color: Colors.green.shade200,
               xValueMapper: (MonthlyHealthData sales, _) =>
               DateFormat('EEEE')
@@ -321,8 +404,8 @@ class __ChartAppCaloriesState extends State<ChartAppCalories> {
               markerSettings: const MarkerSettings(
                 isVisible: true,
                 // marker color
-                color: kGreenColor,
-                borderColor: kGreenColor,
+                color: kPink,
+                borderColor: kPink,
               ),
               // Enable data label
               dataLabelSettings: const DataLabelSettings(isVisible: false)),

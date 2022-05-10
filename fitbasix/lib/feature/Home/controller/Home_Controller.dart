@@ -43,6 +43,7 @@ class HomeController extends GetxController {
   RxBool showLoader = RxBool(false);
   RxDouble caloriesBurnt = 0.0.obs;
   RxList<MonthlyHealthData> monthlyHealthData = [MonthlyHealthData()].obs;
+  RxList<MonthlyHealthData> monthlyHealthDataAfterFilter = [MonthlyHealthData()].obs;
   RxBool waterConsumedDataLoading = false.obs;
   RxBool isConsumptionLoading = false.obs;
   RxBool isNeedToLoadData = true.obs;

@@ -13,24 +13,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
-
-      <change afterPath="$PROJECT_DIR$/fitbasix/assets/network_error_image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fitbasix/lib/GetXNetworkManager.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fitbasix/lib/NetworkManager.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/network_error/network_error_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/constants/image_path.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/constants/image_path.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/routes/app_routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/routes/app_routes.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/controller/Home_Controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/controller/Home_Controller.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/consumption_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/consumption_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/explore_feed.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/explore_feed.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/post_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/post_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/water_capsule.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/water_capsule.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/fitbasix_app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/fitbasix_app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/main_dev.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/main_dev.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/calories_burnt_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/calories_burnt_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/healthData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/healthData.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,20 +51,24 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
+                    <option name="branchName" value="dev" />
+                    <option name="lastUsedInstant" value="1652195761" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/vm/add_network_check_feature" />
+                    <option name="lastUsedInstant" value="1652191233" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/vm/burned_calories_feature" />
+                    <option name="lastUsedInstant" value="1652191066" />
+                  </RecentBranch>
+                  <RecentBranch>
                     <option name="branchName" value="feature/vm/new_features_implementation" />
                     <option name="lastUsedInstant" value="1651814588" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="feature/vm/External_storage_issue_android" />
                     <option name="lastUsedInstant" value="1651213039" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="dev" />
-                    <option name="lastUsedInstant" value="1651075274" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="feature/vm/delete_post_and_fug_fix" />
-                    <option name="lastUsedInstant" value="1651075273" />
                   </RecentBranch>
                 </list>
               </option>
@@ -180,7 +171,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart</url>
-          <line>1612</line>
+          <line>1624</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

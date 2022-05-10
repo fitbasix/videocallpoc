@@ -84,7 +84,6 @@ class _HealthAppState extends State<HealthApp> {
            todayHealthData  = x.value.toDouble()+todayHealthData;
 
           });
-          print(todayHealthData.toString() +" "+ now.toString());
           monthlyHealthData.add(MonthlyHealthData(caloriesBurntDate: now, caloriesBurnt: todayHealthData, caloriesHealthDataPoints: _healthDataList));
           _healthDataList = [];
           now = now.subtract(Duration(hours: 24));
@@ -116,7 +115,9 @@ class _HealthAppState extends State<HealthApp> {
         homeController.caloriesBurnt.value = element.caloriesBurnt!+homeController.caloriesBurnt.value;
       });
       final SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(homeController.caloriesBurnt.value.toString() + ' ttttt');
       prefs.setString('caloriesBurnt', homeController.caloriesBurnt.value.toString());
+      print(prefs.getString('caloriesBurnt'));
       // update the UI to display the results
       setState(() {
         _state =
