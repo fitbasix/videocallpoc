@@ -218,10 +218,12 @@ class ConsumptionScreen extends StatelessWidget {
                                             height: 26 *
                                                 SizeConfig.heightMultiplier!,
                                           ),
-                                          Text(
-                                            _homeController.waterStatus.value,
-                                            style: AppTextStyle.boldBlackText
-                                                .copyWith(color: kGreenColor),
+                                          Obx(
+                                            ()=> Text(
+                                              HomeController().getWaterGoalStatus().value,
+                                              style: AppTextStyle.boldBlackText
+                                                  .copyWith(color: kGreenColor),
+                                            ),
                                           ),
                                         ],
                                       ),

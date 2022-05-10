@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fitbasix/GetXNetworkManager.dart';
+import 'package:fitbasix/NetworkManager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import 'package:fitbasix/setup-my-app.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -87,6 +90,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    final temp = Get.put(NetworkManager());
+
     await dotenv.load(fileName: ".env");
     await initializeNotification();
     await Firebase.initializeApp();

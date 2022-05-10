@@ -746,8 +746,6 @@ class _HomePageState extends State<HomePage> {
                                                           .caloriesBurnt.value
                                                           .toInt()
                                                           .toDouble(), () {
-
-                                                        // Get.to(()=>CaloriesBurnetScreen());
                                                     showDialog(
                                                         context: context,
                                                         builder: (_) =>

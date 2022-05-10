@@ -24,6 +24,7 @@ import 'package:fitbasix/feature/log_in/view/reset_password.dart';
 import 'package:fitbasix/feature/message/view/chat_documentscreen.dart';
 import 'package:fitbasix/feature/message/view/chat_ui.dart';
 import 'package:fitbasix/feature/message/view/my_trainer_tile.dart';
+import 'package:fitbasix/feature/network_error/network_error_screen.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/posts/view/select_location_screen.dart';
 import 'package:fitbasix/feature/posts/view/select_media_screen.dart';
@@ -105,6 +106,7 @@ abstract class RouteName {
   static const selectProfilePhoto = "/select_profile_photo";
   static const myTrainersScreen = "/my_trainer_screen";
   static const viewAllUserWithDoc = "/view_all_user_with_document";
+  static const networkErrorScreen = "/network_error_screen";
   RouteName._();
 }
 
@@ -125,6 +127,14 @@ class GenerateRoute {
           BuildContext context,
         ) =>
             LoginScreen(),
+      );
+    }
+    if (route == RouteName.networkErrorScreen) {
+      return MaterialPageRoute(
+        builder: (
+          BuildContext context,
+        ) =>
+            NetworkErrorScreen(),
       );
     }
     if (route == RouteName.viewAllUserWithDoc) {

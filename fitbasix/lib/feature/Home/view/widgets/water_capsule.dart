@@ -63,7 +63,7 @@ class AnimatedLiquidCustomProgressIndicatorState
             height: 27 * SizeConfig.heightMultiplier!,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: darkGreyColor,
+              color: kPureWhite,
             ),
             child: Padding(
               padding:

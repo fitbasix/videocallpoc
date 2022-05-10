@@ -12,6 +12,7 @@ import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'NetworkManager.dart';
 import 'core/constants/image_path.dart';
 
 class FitBasixApp extends StatelessWidget {
@@ -22,6 +23,7 @@ class FitBasixApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return ScreenUtilInit(
         designSize: Size(360, 728),
         minTextAdapt: true,
@@ -32,6 +34,7 @@ class FitBasixApp extends StatelessWidget {
               SystemChrome.setPreferredOrientations(
                   [DeviceOrientation.portraitUp]);
               return GetMaterialApp(
+                  initialBinding: NetworkBinding(),
                   title: 'Fitbasix',
                   scaffoldMessengerKey: snackbarKey,
                   //  darkTheme: ThemeData.dark(),

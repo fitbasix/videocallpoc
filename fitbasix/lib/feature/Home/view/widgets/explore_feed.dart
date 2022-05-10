@@ -588,6 +588,17 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
             //   likes: 214,
             //   onReply: () {},
             // ),
+            SizedBox(
+              height: 16 * SizeConfig.heightMultiplier!,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!),
+              height: 1*SizeConfig.heightMultiplier!,
+              decoration: BoxDecoration(
+                color: kBlack,
+              ),
+            )
+
           ],
         ),
       ),

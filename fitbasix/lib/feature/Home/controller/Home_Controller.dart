@@ -91,6 +91,54 @@ class HomeController extends GetxController {
   RxMap<String, bool?> LikedPostMap = RxMap<String, bool?>(
     {},
   );
+
+
+  RxString getWaterGoalStatus(){
+    HomeController _homeController = Get.find();
+    print((_homeController
+        .waterLevel.value *
+        _homeController
+            .waterDetails
+            .value
+            .response!
+            .data![0]
+            .totalWaterRequired!).toString()+"  "+_homeController.goalWater.value.toString());
+    if(((_homeController
+        .waterLevel.value *
+        _homeController
+            .waterDetails
+            .value
+            .response!
+            .data![0]
+            .totalWaterRequired!)/_homeController.goalWater.value)*100<=20){
+      return 'Low'.obs;
+    }
+    else if(((_homeController
+        .waterLevel.value *
+        _homeController
+            .waterDetails
+            .value
+            .response!
+            .data![0]
+            .totalWaterRequired!)/_homeController.goalWater.value)*100<=40){
+
+      return 'Moderate'.obs;
+    }
+    else if(((_homeController
+        .waterLevel.value *
+        _homeController
+            .waterDetails
+            .value
+            .response!
+            .data![0]
+            .totalWaterRequired!)/_homeController.goalWater.value)*100<=60){
+
+      return 'Good'.obs;
+    }
+    else{
+      return 'Excellent'.obs;
+    }
+  }
   RxList<String> alreadyRenderedPostId = <String>[].obs;
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(

@@ -628,6 +628,7 @@ class _PostTileState extends State<PostTile> {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
+
             // Row(
             //   // mainAxisSize: MainAxisSize.min,
             //   children: [
@@ -670,6 +671,13 @@ class _PostTileState extends State<PostTile> {
             SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!),
+              height: 1*SizeConfig.heightMultiplier!,
+              decoration: BoxDecoration(
+                color: kBlack,
+              ),
+            )
           ],
         ),
       ),
