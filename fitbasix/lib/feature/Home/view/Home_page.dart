@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
+import 'package:fitbasix/feature/Home/view/calories_burnt_screen.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
@@ -745,6 +746,8 @@ class _HomePageState extends State<HomePage> {
                                                           .caloriesBurnt.value
                                                           .toInt()
                                                           .toDouble(), () {
+
+                                                        // Get.to(()=>CaloriesBurnetScreen());
                                                     showDialog(
                                                         context: context,
                                                         builder: (_) =>

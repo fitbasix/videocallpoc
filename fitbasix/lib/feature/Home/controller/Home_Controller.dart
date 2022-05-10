@@ -42,6 +42,7 @@ class HomeController extends GetxController {
   Rx<PostsModel> initialPostData = Rx(PostsModel());
   RxBool showLoader = RxBool(false);
   RxDouble caloriesBurnt = 0.0.obs;
+  RxList<MonthlyHealthData> monthlyHealthData = [MonthlyHealthData()].obs;
   RxBool waterConsumedDataLoading = false.obs;
   RxBool isConsumptionLoading = false.obs;
   RxBool isNeedToLoadData = true.obs;

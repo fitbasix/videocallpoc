@@ -16,6 +16,8 @@ import 'package:health/health.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../calories_burnt_screen.dart';
+
 enum AppState {
   DATA_NOT_FETCHED,
   FETCHING_DATA,
@@ -34,6 +36,7 @@ class HealthApp extends StatefulWidget {
 
 class _HealthAppState extends State<HealthApp> {
   List<HealthDataPoint> _healthDataList = [];
+  List<MonthlyHealthData> monthlyHealthData=[];
   final HomeController homeController = Get.find();
   AppState _state = AppState.DATA_NOT_FETCHED;
   int _nofSteps = 10;
@@ -58,28 +61,42 @@ class _HealthAppState extends State<HealthApp> {
     final permissions = [HealthDataAccess.READ];
 
     // get data within the last 24 hours
-    final now = DateTime.now();
-    final yesterday =
-        now.subtract(Duration(hours: int.parse(DateFormat('kk').format(now))));
+     DateTime now = DateTime.now();
+     DateTime yesterday = now.subtract(Duration(hours: int.parse(DateFormat('kk').format(now))));
+
+
 
     // requesting access to the data types before reading them
     // note that strictly speaking, the [permissions] are not
     // needed, since we only want READ access.
-    bool requested =
-        await health.requestAuthorization(types, permissions: permissions);
+
+    bool requested = await health.requestAuthorization(types, permissions: permissions);
 
     if (requested) {
       try {
+
         // fetch health data
-        String time = DateFormat('kk').format(DateTime.now());
-        print(int.parse(time));
-        List<HealthDataPoint> healthData =
-            await health.getHealthDataFromTypes(yesterday, now, types);
+        for(int i = 0;i<=29;i++){
+          double todayHealthData =0.0;
+          List<HealthDataPoint> healthData = await health.getHealthDataFromTypes(yesterday, now, types);
+          _healthDataList.addAll((healthData.length < 100) ? healthData : healthData.sublist(0, 100));
+          _healthDataList.forEach((x) {
+           todayHealthData  = x.value.toDouble()+todayHealthData;
+
+          });
+          print(todayHealthData.toString() +" "+ now.toString());
+          monthlyHealthData.add(MonthlyHealthData(caloriesBurntDate: now, caloriesBurnt: todayHealthData, caloriesHealthDataPoints: _healthDataList));
+          _healthDataList = [];
+          now = now.subtract(Duration(hours: 24));
+          yesterday = now.subtract(Duration(hours: int.parse(DateFormat('kk').format(now))));
+        }
+        // List<HealthDataPoint> healthData =
+        //     await health.getHealthDataFromTypes(yesterday, now, types);
 
         // save all the new data points (only the first 100)
-        _healthDataList.addAll((healthData.length < 100)
-            ? healthData
-            : healthData.sublist(0, 100));
+        // _healthDataList.addAll((healthData.length < 100)
+        //     ? healthData
+        //     : healthData.sublist(0, 100));
       } catch (error) {
         print("Exception in getHealthDataFromTypes: $error");
       }
@@ -88,14 +105,18 @@ class _HealthAppState extends State<HealthApp> {
       //_healthDataList = HealthFactory.removeDuplicates(_healthDataList);
       homeController.caloriesBurnt.value = 0.0;
       // print the results
-      _healthDataList.forEach((x) {
-        homeController.caloriesBurnt.value =
-            x.value.toDouble() + homeController.caloriesBurnt.value;
-        print(homeController.caloriesBurnt.value);
+
+      // _healthDataList.forEach((x) {
+      //   homeController.caloriesBurnt.value =
+      //       x.value.toDouble() + homeController.caloriesBurnt.value;
+      //   //print(homeController.caloriesBurnt.value);
+      // });
+      homeController.monthlyHealthData.value = monthlyHealthData;
+      monthlyHealthData.forEach((element) {
+        homeController.caloriesBurnt.value = element.caloriesBurnt!+homeController.caloriesBurnt.value;
       });
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString(
-          'caloriesBurnt', homeController.caloriesBurnt.value.toString());
+      prefs.setString('caloriesBurnt', homeController.caloriesBurnt.value.toString());
       // update the UI to display the results
       setState(() {
         _state =
@@ -247,8 +268,15 @@ class _HealthAppState extends State<HealthApp> {
               ),
               GestureDetector(
                 onTap: () {
-                  fetchData();
-                  Navigator.pop(context);
+                  if(homeController.caloriesBurnt.value>0){
+                    Navigator.pop(context);
+                    fetchData();
+                    Get.to(()=>const CaloriesBurnetScreen());
+                  }
+                  else{
+                    fetchData();
+                    Navigator.pop(context);
+                  }
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -332,4 +360,13 @@ class HealthTrackOptionTile extends StatelessWidget {
       ],
     );
   }
+}
+
+class MonthlyHealthData{
+  DateTime? caloriesBurntDate;
+  double? caloriesBurnt;
+  List<HealthDataPoint>? caloriesHealthDataPoints;
+  MonthlyHealthData({ this.caloriesBurntDate,  this.caloriesBurnt, this.caloriesHealthDataPoints});
+
+
 }
