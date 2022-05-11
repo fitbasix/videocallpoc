@@ -112,6 +112,7 @@ class CreatePostService {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getUsers, data: {"name": name});
+    print(response);
     return usersFromJson(response.toString());
   }
 

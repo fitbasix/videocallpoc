@@ -324,13 +324,16 @@ class TagPeopleScreen extends StatelessWidget {
 }
 
 class PeopleTile extends StatelessWidget {
-  const PeopleTile({
+
+   PeopleTile({
     Key? key,
     required this.name,
     required this.subtitle,
     required this.image,
     required this.value,
     required this.onTap,
+    this.wantCheckBox,
+
   }) : super(key: key);
 
   final String name;
@@ -338,6 +341,7 @@ class PeopleTile extends StatelessWidget {
   final String image;
   final bool value;
   final Function onTap;
+  bool? wantCheckBox;
 
   @override
   Widget build(BuildContext context) {
@@ -381,7 +385,7 @@ class PeopleTile extends StatelessWidget {
             ],
           ),
           Spacer(),
-          Checkbox(
+          (wantCheckBox!=null)?Container():Checkbox(
             value: value,
             checkColor: kPureBlack,
             side: BorderSide(

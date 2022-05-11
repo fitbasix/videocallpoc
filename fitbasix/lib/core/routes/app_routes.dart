@@ -4,6 +4,7 @@ import 'package:fitbasix/feature/Home/view/consumption_screen.dart';
 import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/explore.dart';
+import 'package:fitbasix/feature/Home/view/widgets/individual_user_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
@@ -107,6 +108,7 @@ abstract class RouteName {
   static const myTrainersScreen = "/my_trainer_screen";
   static const viewAllUserWithDoc = "/view_all_user_with_document";
   static const networkErrorScreen = "/network_error_screen";
+  static const individualUserProfileScreen = "/individual_user_profile_screen";
   RouteName._();
 }
 
@@ -127,6 +129,14 @@ class GenerateRoute {
           BuildContext context,
         ) =>
             LoginScreen(),
+      );
+    }
+    if (route == RouteName.individualUserProfileScreen) {
+      return MaterialPageRoute(
+        builder: (
+            BuildContext context,
+            ) =>
+            IndividualProfileScreen(),
       );
     }
     if (route == RouteName.networkErrorScreen) {

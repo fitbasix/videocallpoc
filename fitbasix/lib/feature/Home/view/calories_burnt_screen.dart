@@ -62,7 +62,7 @@ class _CaloriesBurnetScreenState extends State<CaloriesBurnetScreen> {
               height: 12 * SizeConfig.heightMultiplier!,
               color: Theme.of(context).primaryColor,
             )),
-        title: Text('Today’s Calories  Burned',style: AppTextStyle.black600Text.copyWith(color: Theme.of(context).primaryColor),),
+        title: Text('today_burned'.tr,style: AppTextStyle.black600Text.copyWith(color: Theme.of(context).primaryColor),),
 
         // Padding(
         //     padding: EdgeInsets.only(left: 5*SizeConfig.widthMultiplier!),

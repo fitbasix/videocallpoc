@@ -60,8 +60,7 @@ class ApiUrl {
   static String updateGoal = liveBaseURL + '/api/goal/updateGoalDetails';
   static String getWater = liveBaseURL + '/api/nutrition/water/get';
   static String updateWater = liveBaseURL + '/api/nutrition/water/update';
-  static String waterReminderData =
-      liveBaseURL + '/api/nutrition/water/getOptions';
+  static String waterReminderData = liveBaseURL + '/api/nutrition/water/getOptions';
   static String doUnfollow = liveBaseURL + '/api/follow/doUnfollow';
 
   ///create post
@@ -83,6 +82,7 @@ class ApiUrl {
   static String editProfile = liveBaseURL + '/api/auth/edit';
   static String profilePic = liveBaseURL + '/api/user/addProfilePic';
   static String coverPic = liveBaseURL + "/api/user/addCoverPic";
+  static String getIndividualUser = liveBaseURL + "/api/auth?userId=";
 
   ///plan demo
   static String planById = liveBaseURL + '/api/plan/getPlanById';

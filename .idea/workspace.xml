@@ -13,11 +13,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/individual_user_profile_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/routes/api_routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/routes/api_routes.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/core/routes/app_routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/core/routes/app_routes.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/controller/Home_Controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/controller/Home_Controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/services/home_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/services/home_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/calories_burnt_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/calories_burnt_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/healthData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/view/widgets/healthData.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/posts/model/UserModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/posts/model/UserModel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/posts/services/createPost_Services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/posts/services/createPost_Services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/posts/view/tag_people_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/posts/view/tag_people_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +60,14 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
+                    <option name="branchName" value="feature/vm/search_user_trainer" />
+                    <option name="lastUsedInstant" value="1652284172" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/vm/dateChanger_calories_burnt" />
+                    <option name="lastUsedInstant" value="1652201037" />
+                  </RecentBranch>
+                  <RecentBranch>
                     <option name="branchName" value="dev" />
                     <option name="lastUsedInstant" value="1652195761" />
                   </RecentBranch>
@@ -61,14 +78,6 @@
                   <RecentBranch>
                     <option name="branchName" value="feature/vm/burned_calories_feature" />
                     <option name="lastUsedInstant" value="1652191066" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="feature/vm/new_features_implementation" />
-                    <option name="lastUsedInstant" value="1651814588" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="feature/vm/External_storage_issue_android" />
-                    <option name="lastUsedInstant" value="1651213039" />
                   </RecentBranch>
                 </list>
               </option>

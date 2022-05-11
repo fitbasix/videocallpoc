@@ -13,6 +13,8 @@ import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../model/user_profile_model.dart';
+
 class HomeService {
   static var dio = DioUtil().getInstance();
   static HomeController homeController = Get.find();
@@ -89,6 +91,15 @@ class HomeService {
     var response = await dio!.get(ApiUrl.getWater);
     print(response.data.toString());
     return waterDetailFromJson(response.toString());
+  }
+
+  static Future<UserProfileModel> getIndividualUserProfileData({String? userId}) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
+    var response = await dio!.get(ApiUrl.getIndividualUser+userId!);
+    print(response.data.toString());
+    return userProfileModelFromJson(response.toString());
   }
 
   static Future<void> updateWaterDetails(double waterLevel) async {

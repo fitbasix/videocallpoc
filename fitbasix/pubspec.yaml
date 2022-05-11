@@ -97,6 +97,7 @@ dependencies:
   visibility_detector: ^0.2.2
   store_redirect: ^2.0.1
   connectivity: ^3.0.6
+  field_suggestion: ^0.2.3
 
 
 dev_dependencies:

@@ -54,22 +54,21 @@ class UserData {
     this.id,
     this.name,
     this.profilePhoto,
-    this.trainer,
+    this.trainerType,
     this.datumId,
   });
 
   String? id;
   String? name;
   String? profilePhoto;
-  Trainer? trainer;
+  List<TrainerType>? trainerType;
   String? datumId;
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         id: json["_id"],
         name: json["name"],
         profilePhoto: json["profilePhoto"],
-        trainer:
-            json["trainer"] == null ? null : Trainer.fromJson(json["trainer"]),
+        trainerType: json["trainerType"] == null ? null : List<TrainerType>.from(json["trainerType"].map((x) => TrainerType.fromJson(x))),
         datumId: json["id"],
       );
 
@@ -77,31 +76,61 @@ class UserData {
         "_id": id,
         "name": name,
         "profilePhoto": profilePhoto,
-        "trainer": trainer == null ? null : trainer!.toJson(),
+        //"trainerType": trainer == null ? null : trainer.toJson(),
         "id": datumId,
       };
 }
 
-class Trainer {
-  Trainer({
+// class TrainerData {
+//   TrainerData({
+//     this.id,
+//     this.trainerType,
+//     this.user,
+//   });
+//
+//   String? id;
+//   List<String>? trainerType;
+//   String? user;
+//
+//   factory TrainerData.fromJson(Map<String, dynamic> json) => TrainerData(
+//         id: json["_id"],
+//         trainerType: List<String>.from(json["trainerType"].map((x) => x)),
+//         user: json["user"],
+//       );
+//
+//   Map<String, dynamic> toJson() => {
+//         "_id": id,
+//         "trainerType": List<dynamic>.from(trainerType!.map((x) => x)),
+//         "user": user,
+//       };
+// }
+
+
+class TrainerType {
+  TrainerType({
     this.id,
-    this.trainerType,
-    this.user,
+    this.name,
+    this.serialId,
+    this.languageCode,
   });
 
-  String? id;
-  List<String>? trainerType;
-  String? user;
+  final String? id;
+  final String? name;
+  final int? serialId;
+  final int? languageCode;
 
-  factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
-        id: json["_id"],
-        trainerType: List<String>.from(json["trainerType"].map((x) => x)),
-        user: json["user"],
-      );
+  factory TrainerType.fromJson(Map<String, dynamic> json) => TrainerType(
+    id: json["_id"] == null ? null : json["_id"],
+    name: json["name"] == null ? null : json["name"],
+    serialId: json["serialId"] == null ? null : json["serialId"],
+    languageCode: json["languageCode"] == null ? null : json["languageCode"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
-        "trainerType": List<dynamic>.from(trainerType!.map((x) => x)),
-        "user": user,
-      };
+    "_id": id == null ? null : id,
+    "name": name == null ? null : name,
+    "serialId": serialId == null ? null : serialId,
+    "languageCode": languageCode == null ? null : languageCode,
+  };
 }
+

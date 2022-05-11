@@ -254,6 +254,13 @@
             </list>
           </value>
         </entry>
+        <entry key="field_suggestion">
+          <value>
+            <list>
+              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/field_suggestion-0.2.3/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="file">
           <value>
             <list>
@@ -566,6 +573,13 @@
           <value>
             <list>
               <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/health-3.4.3/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="highlightable">
+          <value>
+            <list>
+              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/highlightable-1.0.5/lib" />
             </list>
           </value>
         </entry>
@@ -1364,6 +1378,7 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/dropdown_button2-1.1.1/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/field_suggestion-0.2.3/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.4.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_analytics-9.1.4/lib" />
@@ -1406,6 +1421,7 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_platform_interface-2.1.1/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_web-0.10.0+4/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/health-3.4.3/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/highlightable-1.0.5/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/html-0.15.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />

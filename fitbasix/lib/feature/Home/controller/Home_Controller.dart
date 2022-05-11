@@ -21,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/routes/app_routes.dart';
+import '../../posts/model/UserModel.dart';
 
 class HomeController extends GetxController {
   final RemoteConfig remoteConfig = RemoteConfig.instance;
@@ -30,6 +31,10 @@ class HomeController extends GetxController {
   RxBool spgStatus = RxBool(false);
   Rx<double> videoPlayerVolume = 1.0.obs;
   Rx<UserProfileModel> userProfileData = Rx(UserProfileModel());
+  Rx<UserProfileModel> individualUserProfileData = Rx(UserProfileModel());
+  RxBool isIndividualUserProfileLoading = false.obs;
+  RxList<UserData> searchUsersData = [UserData()].obs;
+  RxBool isUserSearchLoading = false.obs;
   Rx<PersonalGoal> personalGoalData = Rx(PersonalGoal());
   Rx<PostsModel> posts = Rx(PostsModel());
   final TextEditingController commentController = TextEditingController();
