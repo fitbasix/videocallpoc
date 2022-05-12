@@ -20,9 +20,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_info/device_info.dart';
 
 const String APP_ID = "3";
-const String AUTH_KEY = "gMpX2qrGagaLrOK";
-const String AUTH_SECRET = "E9CspcTVVUW5zR2";
-const String ACCOUNT_KEY = "_HzHQFqz6LxyjhHGRDMQ";
+const String AUTH_KEY = "FbYzwnbjB422wLD";
+const String AUTH_SECRET = "RLqA5p2U6qPmsZE";
+const String ACCOUNT_KEY = "3jCDxx2gJCJ7QxkYGGf-";
 const String API_ENDPOINT = "https://apifitbasix.quickblox.com";
 const String CHAT_ENDPOINT = "chatfitbasix.quickblox.com";
 
@@ -59,18 +59,6 @@ class InitializeQuickBlox {
       _webRtcController.currentOSVersion.value = osVersion;
 
       ///init [WebRTC] only if os version is less then 12
-      if (osVersion < 12) {
-        try {
-          await QB.webrtc.init().then((value) {
-            subscribeCall();
-          });
-
-          print("webINIT");
-        } on PlatformException catch (e) {
-          print(e.toString() + "init error");
-        }
-      }
-    } else if (Platform.isIOS) {
       try {
         await QB.webrtc.init().then((value) {
           subscribeCall();
@@ -80,7 +68,6 @@ class InitializeQuickBlox {
         print(e.toString() + "init error");
       }
     }
-
     _setIceServers();
     _getIceServers();
     initVideoConference();
@@ -129,7 +116,6 @@ class InitializeQuickBlox {
         print(e);
         // Some error occurred, look at the exception message for more details
       }
-
     }
   }
 
@@ -170,12 +156,12 @@ class InitializeQuickBlox {
     try {
       print("demo subs");
       _callSubscription =
-      await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL, (data) {
+          await QB.webrtc.subscribeRTCEvent(QBRTCEventTypes.CALL, (data) {
         print("call subs triggers an event of call kkkkkk");
         Map<dynamic, dynamic> payloadMap =
-        Map<dynamic, dynamic>.from(data["payload"]);
+            Map<dynamic, dynamic>.from(data["payload"]);
         Map<dynamic, dynamic> sessionMap =
-        Map<dynamic, dynamic>.from(payloadMap["session"]);
+            Map<dynamic, dynamic>.from(payloadMap["session"]);
         String sessionId = sessionMap["id"];
         int initiatorId = sessionMap["initiatorId"];
         int callType = sessionMap["type"];
@@ -187,21 +173,21 @@ class InitializeQuickBlox {
                 ElevatedButton(
                     onPressed: () async {
                       final sharedPreferences =
-                      await SharedPreferences.getInstance()
-                          .then((sharedPreference) async {
+                          await SharedPreferences.getInstance()
+                              .then((sharedPreference) async {
                         try {
                           QBRTCSession? session =
-                          await QB.webrtc.accept(sessionId).then((value) {
+                              await QB.webrtc.accept(sessionId).then((value) {
                             Navigator.of(Get.overlayContext!).pop();
                             print(sharedPreference
-                                .getInt("userQuickBloxId")!
-                                .toString() +
+                                    .getInt("userQuickBloxId")!
+                                    .toString() +
                                 " got this sestion id");
                             Get.to(() => AcceptedVideoCallScreen(
-                              sessionIdForVideoCall: sessionId,
-                              userQuickBloxId: sharedPreference
-                                  .getInt("userQuickBloxId")!,
-                            ));
+                                  sessionIdForVideoCall: sessionId,
+                                  userQuickBloxId: sharedPreference
+                                      .getInt("userQuickBloxId")!,
+                                ));
                           });
                         } on PlatformException catch (e) {
                           // Some error occurred, look at the exception message for more details
