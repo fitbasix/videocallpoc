@@ -154,10 +154,10 @@ class ProfileServices {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var token = await LogInService.getAccessToken();
-    print(token);
     var response = await dio!
         .post(ApiUrl.getTrainerPosts, data: {"skip": skip == null ? 0 : skip});
 
+    print(response.toString());
 
     return postsModelFromJson(response.toString());
   }

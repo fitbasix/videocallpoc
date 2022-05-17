@@ -6,6 +6,9 @@ PODS:
   - AppAuth/ExternalUserAgent (1.4.0)
   - awesome_notifications (0.0.3):
     - Flutter
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
   - connectycube_flutter_call_kit (2.0.2):
     - Flutter
   - device_info (0.0.1):
@@ -255,6 +258,7 @@ PODS:
     - Flutter
     - QuickBlox (~> 2.17.11)
     - Quickblox-WebRTC (~> 2.7.6)
+  - Reachability (3.2)
   - SDWebImage (5.12.4):
     - SDWebImage/Core (= 5.12.4)
   - SDWebImage/Core (5.12.4)
@@ -272,6 +276,8 @@ PODS:
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
+  - store_redirect (0.0.1):
+    - Flutter
   - SwiftyGif (5.4.3)
   - uni_links (0.0.1):
     - Flutter
@@ -288,6 +294,7 @@ PODS:
 
 DEPENDENCIES:
   - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - connectycube_flutter_call_kit (from `.symlinks/plugins/connectycube_flutter_call_kit/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
@@ -318,6 +325,7 @@ DEPENDENCIES:
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - store_redirect (from `.symlinks/plugins/store_redirect/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
@@ -350,6 +358,7 @@ SPEC REPOS:
     - PromisesObjC
     - QuickBlox
     - Quickblox-WebRTC
+    - Reachability
     - SDWebImage
     - Sentry
     - SwiftyGif
@@ -358,6 +367,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   awesome_notifications:
     :path: ".symlinks/plugins/awesome_notifications/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   connectycube_flutter_call_kit:
     :path: ".symlinks/plugins/connectycube_flutter_call_kit/ios"
   device_info:
@@ -412,6 +423,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  store_redirect:
+    :path: ".symlinks/plugins/store_redirect/ios"
   uni_links:
     :path: ".symlinks/plugins/uni_links/ios"
   url_launcher_ios:
@@ -424,6 +437,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   awesome_notifications: 04530aafec8dac4635244ed4b4072f4aea6cc938
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   connectycube_flutter_call_kit: 401db1dd3c1984ed754b0b14e957a6700f95067e
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
@@ -471,12 +485,14 @@ SPEC CHECKSUMS:
   QuickBlox: 37d2eb7d791782469ba14fa40122633185944c01
   Quickblox-WebRTC: 162d2421d91cfb3d4f7e01f87e095633ca52bb1d
   quickblox_sdk: 183b78fa64f4d1ba46b3ca4e5bc65dc9f572e5b9
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 631cf572cc93dfdfe54162e556410a61f1141928
   Sentry: 0c5cd63d714187b4a39c331c1f0eb04ba7868341
   sentry_flutter: efb3df2c203cd03aad255892a8d628a458656d14
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  store_redirect: 2977747cf81689a39bd62c248c2deacb7a0d131e
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de

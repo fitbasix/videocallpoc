@@ -52,6 +52,7 @@ import '../../posts/model/UserModel.dart';
 import '../../posts/view/tag_people_screen.dart';
 import '../../profile/services/profile_services.dart';
 import '../../spg/view/set_goal_screen.dart';
+import '../controller/individual_user_controller.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -1928,39 +1929,33 @@ class _HomePageState extends State<HomePage> {
     }
   }
   void gotoIndividualUserPage(int index,String userId) async{
+    final IndividualUserController _individualUserController = Get.put(IndividualUserController());
       _homeController.individualUserProfileData.value = UserProfileModel();
-    _homeController.isIndividualUserProfileLoading.value =
-      true;
+    _homeController.isIndividualUserProfileLoading.value = true;
       Navigator.pushNamed(
           context, RouteName.individualUserProfileScreen);
       clearUserSearchData();
-
       var result = await HomeService.getIndividualUserProfileData(userId:userId);
       if(result.response !=null){
         _homeController.individualUserProfileData.value = result;
       }
-
-      // _trainerController.initialPostData.value =
-      // await HomeService.getTrainerPosts(
-      //     trainerId, 0);
     _homeController.isIndividualUserProfileLoading.value = false;
-      // if (_trainerController.initialPostData.value
-      //     .response!.data!.length !=
-      //     0) {
-      //   _trainerController.trainerPostList.value =
-      //   _trainerController.initialPostData.value
-      //       .response!.data!;
-      // } else {
-      //   _trainerController.trainerPostList.clear();
-      // }
-
+    _homeController.isLoading.value = true;
+    var response = await HomeService.getIndividualUserPosts(
+        userId, 0);
+    _individualUserController.userPostList.value = response.response!.data!;
+      if (response.response!.data!.length != 0) {
+        _individualUserController.userPostList.value = response.response!.data!;
+      } else {
+        _individualUserController.userPostList.clear();
+      }
+    _homeController.isLoading.value = false;
   }
   void clearUserSearchData(){
     showUserSearch.value = false;
     _homeController.searchUsersData.value = [UserData()];
     searchUserController.clear();
   }
-
   void showDialogForLiveLimitExceeded(BuildContext context) {
     showDialog(
       context: context,
@@ -2061,7 +2056,6 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
   Future<void> onTrendingPostRefresh() async {
     _homeController.initialPostData.value =
     await HomeService.getPosts(skip: null);

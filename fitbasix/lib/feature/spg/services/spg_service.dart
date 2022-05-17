@@ -14,6 +14,7 @@ class SPGService {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getSPGData, data: {});
+    print(response.toString());
     return spgModelFromJson(response.toString());
   }
 
@@ -22,8 +23,8 @@ class SPGService {
       int? gender,
       String? dob,
       int? height,
-      int? targetWeight,
-      int? currentWeight,
+      double? targetWeight,
+      double? currentWeight,
       int? activenessType,
       int? bodyType,
       int? foodType) async {

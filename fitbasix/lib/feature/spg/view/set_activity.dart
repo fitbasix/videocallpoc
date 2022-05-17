@@ -223,14 +223,12 @@ class SetActivity extends StatelessWidget {
                             .selectedGenderIndex.value.serialId,
                         _spgController.selectedDate.value,
                         _spgController.currentHeight.value,
-                        _spgController.weightType == "kg"
-                            ? _spgController.targetWeight.value
-                            : _spgController.targetWeight.value ~/
-                            2.205,
+                        ((_spgController.weightType == "kg") ? (_spgController.targetWeight.value)
+                            : (_spgController.targetWeight.value ~/ 2.205).toDouble()),
                         _spgController.weightType == "kg"
                             ? _spgController.currentWeight.value
-                            : _spgController.currentHeight.value ~/
-                            2.205,
+                            : (_spgController.currentHeight.value ~/
+                            2.205).toDouble(),
                         _spgController.activityNumber.value.toInt(),
                         _spgController.selectedBodyFat.value.serialId,
                         _spgController

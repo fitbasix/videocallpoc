@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
@@ -13,6 +14,7 @@ import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 import 'core/api_service/remote_config_service.dart';
@@ -23,8 +25,8 @@ import 'package:fitbasix/fitbasix_app.dart';
 import 'feature/Home/controller/Home_Controller.dart';
 import 'feature/Home/view/consumption_screen.dart';
 import 'feature/get_trained/controller/trainer_controller.dart';
-import 'feature/help_and_support/view/privacy_policy_and_term_of_use/legal_screen.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+
 
 Future<void> setupApp() async {
   Uri? _latestUri;
@@ -75,15 +77,20 @@ Future<void> setupApp() async {
 
     runApp(FitBasixApp(
       translations: translations,
-      child: accessToken == null
+      child:
+      accessToken == null
           ? LoginScreen()
           : (_initialUri != null || _latestUri != null)
               ? TrainerProfileScreen(
                   trainerID: "6226f41b28d9a579eeabb5ee",
                 )
               : HomeAndTrainerPage(),
-    ));
+    )
+    );
   }, (exception, stackTrace) async {
     await Sentry.captureException(exception, stackTrace: stackTrace);
   });
 }
+
+
+

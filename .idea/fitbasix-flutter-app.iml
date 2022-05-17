@@ -199,6 +199,18 @@
       <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/sentry_flutter/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/store_redirect/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/store_redirect/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/store_redirect/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/connectivity/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/connectivity/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/connectivity/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/store_redirect/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/store_redirect/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/store_redirect/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/connectivity/build" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/connectivity/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/fitbasix/ios/.symlinks/plugins/connectivity/.pub" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

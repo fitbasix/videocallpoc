@@ -87,7 +87,6 @@ class HomeService {
   static Future<WaterDetail> getWaterDetails() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-
     var response = await dio!.get(ApiUrl.getWater);
     print(response.data.toString());
     return waterDetailFromJson(response.toString());
@@ -98,7 +97,7 @@ class HomeService {
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
 
     var response = await dio!.get(ApiUrl.getIndividualUser+userId!);
-    print(response.data.toString());
+    print("88888"+response.data.toString());
     return userProfileModelFromJson(response.toString());
   }
 
@@ -217,5 +216,15 @@ class HomeService {
     String token = await LogInService.getAccessToken();
     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio.post(ApiUrl.deleteAccount);
+  }
+
+  static Future<PostsModel> getIndividualUserPosts(String userId, int? skip) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!
+        .post(ApiUrl.getTrainerPosts, data: {"userId": userId, "skip": skip});
+    log(response.toString());
+
+    return postsModelFromJson(response.toString());
   }
 }

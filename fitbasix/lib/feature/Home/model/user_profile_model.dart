@@ -91,7 +91,9 @@ class Profile {
       this.selectedInterest,
       this.followers,
       this.quickBloxId,
-      this.isPreviousEnrolled});
+      this.isPreviousEnrolled,
+      this.isFollowing
+      });
 
   final String? id;
   final String? name;
@@ -108,9 +110,10 @@ class Profile {
   final List<int>? selectedInterest;
   final Nutrition? nutrition;
   final int? following;
-  final int? followers;
+   int? followers;
   final int? quickBloxId;
   final bool? isPreviousEnrolled;
+  bool? isFollowing;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
       id: json["_id"],
@@ -130,6 +133,7 @@ class Profile {
           ? Nutrition()
           : Nutrition.fromJson(json["nutrition"]),
       following: json["following"],
+      isFollowing: json["isFollowing"],
 
       selectedInterest: List<int>.from(json["interests"].map((x) => x)),
 

@@ -78,9 +78,9 @@ class _SetWeightState extends State<SetWeight> {
                         GestureDetector(
                           onTap: () {
                             _spgController.currentWeight.value =
-                                _spgController.currentWeight.value ~/ 2;
+                                (_spgController.currentWeight.value ~/ 2).toDouble();
                             _spgController.targetWeight.value =
-                                _spgController.targetWeight.value ~/ 2;
+                                (_spgController.targetWeight.value ~/ 2).toDouble();
                             _spgController.weightType.value = "kg";
                           },
                           child: Container(
@@ -110,9 +110,8 @@ class _SetWeightState extends State<SetWeight> {
                         GestureDetector(
                           onTap: () {
                             _spgController.currentWeight.value =
-                                (_spgController.currentWeight.value * 2).toInt();
-                            _spgController.targetWeight.value =
-                                (_spgController.targetWeight.value * 2).toInt();
+                                (_spgController.currentWeight.value * 2).toInt().toDouble();
+                            _spgController.targetWeight.value = (_spgController.targetWeight.value * 2).toInt().toDouble();
                             _spgController.weightType.value = "lbs";
                           },
                           child: Container(
@@ -168,12 +167,15 @@ class _SetWeightState extends State<SetWeight> {
                           width: 135*SizeConfig.widthMultiplier!,
                           height: 72*SizeConfig.heightMultiplier!,
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             onChanged: (value){
                              if(_spgController.weightType.value == "kg"){
                                _spgController.rulerPickerController.value = (double.parse(value)).floor();
+                               _spgController.currentWeight.value = double.parse(value);
                              }
                              else{
-                               _spgController.rulerPickerController.value = (double.parse(value*2)).floor();
+                               _spgController.rulerPickerController.value = (double.parse(value)).floor();
+                               _spgController.currentWeight.value = double.parse(value);
                              }
                             },
                             controller: _currentWeightController,
@@ -246,7 +248,7 @@ class _SetWeightState extends State<SetWeight> {
                               controller: _spgController.rulerPickerController,
                               beginValue: 30,
                               endValue: 200,
-                              initValue: _spgController.currentWeight.value,
+                              initValue: _spgController.currentWeight.value.round(),
                         marker: Container(
                             width: 1.5 * SizeConfig.widthMultiplier!,
                             height: 50 * SizeConfig.heightMultiplier!,
@@ -267,7 +269,7 @@ class _SetWeightState extends State<SetWeight> {
                               },
                               onValueChange: (value) {
                                 userStartedEditing.value = true;
-                                _spgController.currentWeight.value = value;
+                                _spgController.currentWeight.value = value.toDouble();
                                 _currentWeightController.text = value.toString();
                               },
                               width: MediaQuery.of(context).size.width -
@@ -308,9 +310,11 @@ class _SetWeightState extends State<SetWeight> {
                             onChanged: (value){
                               if(_spgController.weightType.value == "kg"){
                                 _spgController.targetRulerPickerController.value = (double.parse(value)).floor();
+                                _spgController.targetWeight.value = (double.parse(value));
                               }
                               else{
                                 _spgController.targetRulerPickerController.value = (double.parse(value*2)).floor();
+                                _spgController.targetWeight.value = ((double.parse(value)*2));
                               }
                             },
                             controller: _targetWeightController,
@@ -347,7 +351,7 @@ class _SetWeightState extends State<SetWeight> {
                               controller: _spgController.targetRulerPickerController,
                               beginValue: 30,
                               endValue: 200,
-                              initValue: _spgController.targetWeight.value,
+                              initValue: _spgController.targetWeight.value.round(),
                               scaleLineStyleList: const [
                                 ScaleLineStyle(
                                     color: kGreenColor,
@@ -382,7 +386,7 @@ class _SetWeightState extends State<SetWeight> {
                               controller: _spgController.targetRulerPickerController,
                               beginValue: 30,
                               endValue: 200,
-                              initValue: _spgController.targetWeight.value,
+                              initValue: _spgController.targetWeight.value.round(),
                               onBuildRulerScalueText: (index, scaleValue) {
                                 return (scaleValue).toInt().toString() + "kg";
                               },
@@ -403,7 +407,7 @@ class _SetWeightState extends State<SetWeight> {
                               ],
                               onValueChange: (value) {
                                 userStartedEditing.value = true;
-                                _spgController.targetWeight.value = value;
+                                _spgController.targetWeight.value = value.toDouble();
                                 _targetWeightController.text = (value*2).toString();
                               },
                               width: MediaQuery.of(context).size.width -

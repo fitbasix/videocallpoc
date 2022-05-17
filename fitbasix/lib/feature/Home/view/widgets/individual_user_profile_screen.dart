@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/controller/individual_user_controller.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
@@ -16,6 +17,8 @@ import '../../../../core/constants/image_path.dart';
 import '../../../../core/reponsive/SizeConfig.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/universal_widgets/customized_circular_indicator.dart';
+import '../../../get_trained/services/trainer_services.dart';
+import '../../../get_trained/view/trainer_profile_screen.dart';
 import '../../../spg/view/set_goal_screen.dart';
 import '../../model/RecentCommentModel.dart';
 import '../../services/home_service.dart';
@@ -39,7 +42,10 @@ class _IndividualProfileScreenState extends State<IndividualProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(
-            () =>(!_homeController.isIndividualUserProfileLoading.value)? UserPageInfo(
+            () =>(!_homeController.isIndividualUserProfileLoading.value)? IndividualUserProfileUI(
+              onFollow: (){
+                followUser();
+              },
           username: _homeController
               .individualUserProfileData.value.response!.data!.profile!.name,
           userfollowerscount: _homeController
@@ -72,17 +78,38 @@ class _IndividualProfileScreenState extends State<IndividualProfileScreen> {
       ),
     );
   }
+
+  followUser(){
+    if (_homeController.individualUserProfileData.value.response!.data!.profile!.isFollowing!) {
+      _homeController.individualUserProfileData.value.response!.data!.profile!.isFollowing = false;
+      _homeController.individualUserProfileData.refresh();
+      _homeController.individualUserProfileData.value.response!.data!.profile!.followers =
+          (_homeController.individualUserProfileData.value.response!.data!.profile!.followers! - 1);
+      print(_homeController.individualUserProfileData.value.response!.data!.profile!.id!);
+      TrainerServices.unFollowTrainer(_homeController.individualUserProfileData.value.response!.data!.profile!.id!);
+    } else {
+      _homeController.individualUserProfileData.value.response!.data!.profile!.isFollowing = true;
+      print(_homeController.individualUserProfileData.value.response!.data!.profile!.id!);
+      _homeController.individualUserProfileData.refresh();
+      _homeController.individualUserProfileData.value.response!.data!.profile!.followers =
+          (_homeController.individualUserProfileData.value.response!.data!.profile!.followers! + 1);
+      TrainerServices.followTrainer(
+          _homeController.individualUserProfileData.value.response!.data!.profile!.id!);
+    }
+  }
 }
 
-class UserPageInfo extends StatefulWidget {
-  const UserPageInfo(
-      {this.username,
+class IndividualUserProfileUI extends StatefulWidget {
+  const IndividualUserProfileUI(
+      {
+        this.username,
         this.userImage,
         this.userCoverImage,
         this.userfollowerscount,
         this.userfollowingscount,
         this.aboutuser,
         this.onFollowButtonTap,
+        required this.onFollow,
         Key? key})
       : super(key: key);
 
@@ -93,14 +120,17 @@ class UserPageInfo extends StatefulWidget {
   final String? userfollowingscount;
   final String? aboutuser;
   final VoidCallback? onFollowButtonTap;
+  final VoidCallback onFollow;
   @override
-  _UserPageInfoState createState() => _UserPageInfoState();
+  _IndividualUserProfileUIState createState() => _IndividualUserProfileUIState();
 }
 
-class _UserPageInfoState extends State<UserPageInfo> {
+class _IndividualUserProfileUIState extends State<IndividualUserProfileUI> {
   //demo user interest list for design purpose
   final HomeController _homeController = Get.find();
   final ScrollController _scrollController = ScrollController();
+  final IndividualUserController _individualUserController = Get.find();
+  
   List<String> userinterestlist = [
     "Sports Nutrition",
     "Fat-loss",
@@ -112,34 +142,34 @@ class _UserPageInfoState extends State<UserPageInfo> {
   @override
   void initState() {
     super.initState();
-
+    _individualUserController.dataNeedToLoad.value = true;
     _scrollController.addListener(() async {
-      // if (_scrollController.position.maxScrollExtent == _scrollController.position.pixels) {
-      //   if(_profileController.dataNeedToLoad.value){
-      //     _profileController.showLoading.value = true;
-      //     final postQuery = await ProfileServices.getUserPosts(
-      //         skip: _profileController.currentPage.value * 5);
-      //
-      //     if (postQuery.response!.data!.length < 5) {
-      //       _profileController.dataNeedToLoad.value = false;
-      //       _profileController.userPostList.addAll(postQuery.response!.data!);
-      //       _profileController.showLoading.value = false;
-      //
-      //       return;
-      //     } else {
-      //       if (_profileController.userPostList.last.id ==
-      //           postQuery.response!.data!.last.id) {
-      //         _profileController.showLoading.value = false;
-      //         return;
-      //       }
-      //       _profileController.userPostList.addAll(postQuery.response!.data!);
-      //       _profileController.showLoading.value = false;
-      //     }
-      //     _profileController.currentPage.value++;
-      //     _profileController.showLoading.value = false;
-      //     setState(() {});
-      //   }
-      // }
+      if (_scrollController.position.maxScrollExtent == _scrollController.position.pixels) {
+        if(_individualUserController.dataNeedToLoad.value){
+          _individualUserController.showLoading.value = true;
+          final postQuery = await ProfileServices.getUserPosts(
+              skip: _individualUserController.currentPage.value * 5);
+
+          if (postQuery.response!.data!.length < 5) {
+            _individualUserController.dataNeedToLoad.value = false;
+            _individualUserController.userPostList.addAll(postQuery.response!.data!);
+            _individualUserController.showLoading.value = false;
+
+            return;
+          } else {
+            if (_individualUserController.userPostList.last.id ==
+                postQuery.response!.data!.last.id) {
+              _individualUserController.showLoading.value = false;
+              return;
+            }
+            _individualUserController.userPostList.addAll(postQuery.response!.data!);
+            _individualUserController.showLoading.value = false;
+          }
+          _individualUserController.currentPage.value++;
+          _individualUserController.showLoading.value = false;
+          setState(() {});
+        }
+      }
     });
   }
 
@@ -196,30 +226,28 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     SizedBox(
                                       height: 14 * SizeConfig.heightMultiplier!,
                                     ),
-                                    GestureDetector(
-                                      onTap: widget.onFollowButtonTap!,
-                                      child: Container(
-                                        margin: EdgeInsets.only(
-                                            right: 50 *
-                                                SizeConfig.widthMultiplier!),
-                                        height:
-                                        28 * SizeConfig.heightMultiplier!,
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 4 *
-                                                SizeConfig.heightMultiplier!,
-                                            horizontal: 16 *
-                                                SizeConfig.widthMultiplier!),
-                                        decoration: BoxDecoration(
-                                            color: kGreenColor,
-                                            borderRadius:
-                                            BorderRadius.circular(8.0)),
-                                        child: Text(
-                                          'follow'.tr,
-                                          style: AppTextStyle.greenSemiBoldText
-                                              .copyWith(color: kPureWhite),
-                                        ),
+                                    Obx(
+                                          () => _homeController.individualUserProfileData.value.response!.data!.profile!.isFollowing!
+                                          ? SizedBox(
+                                            width: 90*SizeConfig.widthMultiplier!,
+                                            child: CustomButton(
+                                        title: 'following'.tr,
+                                        onPress: widget.onFollow,
+                                        color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                        textColor: kgreen49,
                                       ),
-                                    )
+                                          )
+                                          : SizedBox(
+                                            width: 80*SizeConfig.widthMultiplier!,
+                                            child: CustomButton(
+                                            title: 'follow'.tr,
+                                            onPress: widget.onFollow,
+                                            color: kGreenColor,
+                                            textColor: Theme.of(context)
+                                                .primaryColor),
+                                          ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -357,328 +385,274 @@ class _UserPageInfoState extends State<UserPageInfo> {
                               SizedBox(
                                 height: 24 * SizeConfig.heightMultiplier!,
                               ),
-                              // Obx(
-                              //       () => _homeController.isLoading.value
-                              //       ? CustomizedCircularProgress()
-                              //       : ListView.builder(
-                              //       itemCount: _profileController
-                              //           .userPostList.length ==
-                              //           0
-                              //           ? 0
-                              //           : _profileController
-                              //           .userPostList.length,
-                              //       shrinkWrap: true,
-                              //       physics: NeverScrollableScrollPhysics(),
-                              //       itemBuilder: (_, index) {
-                              //         return Obx(() => Column(
-                              //           children: [
-                              //             Container(
-                              //               height: 16 *
-                              //                   SizeConfig
-                              //                       .heightMultiplier!,
-                              //               color: kBackgroundColor,
-                              //             ),
-                              //             PostTile(
-                              //               isUsersProfileScreen: true,
-                              //               isMe:  _profileController
-                              //                   .userPostList[index]
-                              //                   .isMe!,
-                              //               comment: _homeController
-                              //                   .commentsMap[
-                              //               _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .id] ==
-                              //                   null
-                              //                   ? _profileController
-                              //                   .userPostList[index]
-                              //                   .commentgiven
-                              //                   : _homeController
-                              //                   .commentsMap[
-                              //               _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .id],
-                              //               name: _profileController
-                              //                   .userPostList[index]
-                              //                   .userId!
-                              //                   .name
-                              //                   .toString(),
-                              //               profilePhoto:
-                              //               _profileController
-                              //                   .userPostList[index]
-                              //                   .userId!
-                              //                   .profilePhoto!,
-                              //               category: _profileController
-                              //                   .userPostList[index]
-                              //                   .postCategory![0]
-                              //                   .name!,
-                              //               date: DateFormat.d()
-                              //                   .add_MMM()
-                              //                   .format(
-                              //                   _profileController
-                              //                       .userPostList[
-                              //                   index]
-                              //                       .updatedAt!),
-                              //               place: _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .location!
-                              //                   .placeName!
-                              //                   .length ==
-                              //                   0
-                              //                   ? ''
-                              //                   : _profileController
-                              //                   .userPostList[index]
-                              //                   .location!
-                              //                   .placeName![1]
-                              //                   .toString(),
-                              //               imageUrl: _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .files!
-                              //                   .length ==
-                              //                   0
-                              //                   ? []
-                              //                   : _profileController
-                              //                   .userPostList[index]
-                              //                   .files!,
-                              //               caption: _profileController
-                              //                   .userPostList[index]
-                              //                   .caption ??
-                              //                   '',
-                              //               likes: _homeController
-                              //                   .updateCount[
-                              //               _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .id] ==
-                              //                   null
-                              //                   ? _profileController
-                              //                   .userPostList[index]
-                              //                   .likes
-                              //                   .toString()
-                              //                   : _homeController
-                              //                   .updateCount[
-                              //               _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .id]!
-                              //                   .likes!
-                              //                   .toString(),
-                              //               comments: _homeController
-                              //                   .updateCount[
-                              //               _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .id] ==
-                              //                   null
-                              //                   ? _profileController
-                              //                   .userPostList[index]
-                              //                   .comments
-                              //                   .toString()
-                              //                   : _homeController
-                              //                   .updateCount[
-                              //               _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .id]!
-                              //                   .comments!
-                              //                   .toString(),
-                              //               hitLike: () async {
-                              //                 bool val = _homeController
-                              //                     .LikedPostMap[
-                              //                 _profileController
-                              //                     .userPostList[
-                              //                 index]
-                              //                     .id] ==
-                              //                     null
-                              //                     ? _profileController
-                              //                     .userPostList[
-                              //                 index]
-                              //                     .isLiked!
-                              //                     : _homeController
-                              //                     .LikedPostMap[
-                              //                 _profileController
-                              //                     .userPostList[
-                              //                 index]
-                              //                     .id]!;
-                              //                 if (val) {
-                              //                   _profileController
-                              //                       .userPostList[index]
-                              //                       .isLiked = false;
-                              //                   _profileController
-                              //                       .userPostList[index]
-                              //                       .likes =
-                              //                   (_profileController
-                              //                       .userPostList[
-                              //                   index]
-                              //                       .likes! -
-                              //                       1);
-                              //                   _homeController
-                              //                       .LikedPostMap[
-                              //                   _profileController
-                              //                       .userPostList[
-                              //                   index]
-                              //                       .id!] = false;
-                              //                   await HomeService.unlikePost(
-                              //                       postId:
-                              //                       _profileController
-                              //                           .userPostList[
-                              //                       index]
-                              //                           .id!);
-                              //                 } else {
-                              //                   _profileController
-                              //                       .userPostList[index]
-                              //                       .isLiked = true;
-                              //                   _profileController
-                              //                       .userPostList[index]
-                              //                       .likes =
-                              //                   (_profileController
-                              //                       .userPostList[
-                              //                   index]
-                              //                       .likes! +
-                              //                       1);
-                              //                   _homeController
-                              //                       .LikedPostMap[
-                              //                   _profileController
-                              //                       .userPostList[
-                              //                   index]
-                              //                       .id!] = true;
-                              //                   await HomeService.likePost(
-                              //                       postId:
-                              //                       _profileController
-                              //                           .userPostList[
-                              //                       index]
-                              //                           .id!);
-                              //                 }
-                              //                 RecentCommentModel
-                              //                 recentComment =
-                              //                 RecentCommentModel();
-                              //                 recentComment = await HomeService
-                              //                     .recentComment(
-                              //                     postId: _profileController
-                              //                         .userPostList[
-                              //                     index]
-                              //                         .id!);
-                              //                 // _homeController.commentsMap[_homeController.post.value.id.toString()] =
-                              //                 //     recentComment.response!.data!.comment;
-                              //                 _homeController
-                              //                     .updateCount[
-                              //                 _profileController
-                              //                     .userPostList[
-                              //                 index]
-                              //                     .id!] =
-                              //                     recentComment
-                              //                         .response!
-                              //                         .data!
-                              //                         .data;
-                              //                 setState(() {});
-                              //               },
-                              //               addComment: () {
-                              //                 //   HomeService.addComment(
-                              //                 //       _profileController
-                              //                 // .userPostList[
-                              //                 //               index]
-                              //                 //           .id!,
-                              //                 //       _homeController
-                              //                 //           .comment.value);
-                              //
-                              //                 //   setState(() {});
-                              //
-                              //                 //   _homeController
-                              //                 //       .commentController
-                              //                 //       .clear();
-                              //               },
-                              //               postId: _profileController
-                              //                   .userPostList[index]
-                              //                   .id!,
-                              //               isLiked: _homeController
-                              //                   .LikedPostMap[
-                              //               _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .id!] ==
-                              //                   null
-                              //                   ? _profileController
-                              //                   .userPostList[index]
-                              //                   .isLiked!
-                              //                   : _homeController
-                              //                   .LikedPostMap[
-                              //               _profileController
-                              //                   .userPostList[
-                              //               index]
-                              //                   .id!]!,
-                              //               onTap: () async {
-                              //                 _homeController
-                              //                     .commentsList
-                              //                     .clear();
-                              //                 _homeController
-                              //                     .viewReplies!
-                              //                     .clear();
-                              //                 Navigator.pushNamed(
-                              //                     context,
-                              //                     RouteName.postScreen);
-                              //
-                              //                 _homeController
-                              //                     .postLoading
-                              //                     .value = true;
-                              //                 var postData = await HomeService
-                              //                     .getPostById(
-                              //                     _profileController
-                              //                         .userPostList[
-                              //                     index]
-                              //                         .id!);
-                              //
-                              //                 _homeController
-                              //                     .post.value =
-                              //                 postData
-                              //                     .response!.data!;
-                              //
-                              //                 _homeController
-                              //                     .postLoading
-                              //                     .value = false;
-                              //                 _homeController
-                              //                     .commentsLoading
-                              //                     .value = true;
-                              //                 _homeController
-                              //                     .postComments
-                              //                     .value =
-                              //                 await HomeService
-                              //                     .fetchComment(
-                              //                     postId: _profileController
-                              //                         .userPostList[
-                              //                     index]
-                              //                         .id!);
-                              //
-                              //                 if (_homeController
-                              //                     .postComments
-                              //                     .value
-                              //                     .response!
-                              //                     .data!
-                              //                     .length !=
-                              //                     0) {
-                              //                   _homeController
-                              //                       .commentsList
-                              //                       .value =
-                              //                   _homeController
-                              //                       .postComments
-                              //                       .value
-                              //                       .response!
-                              //                       .data!;
-                              //                 }
-                              //                 _homeController
-                              //                     .commentsLoading
-                              //                     .value = false;
-                              //               },
-                              //               people: _profileController
-                              //                   .userPostList[index]
-                              //                   .people!,
-                              //             ),
-                              //           ],
-                              //         ));
-                              //       }),
-                              // ),
+                              Obx(
+                                    () => _homeController.isLoading.value
+                                    ? Center(child: CustomizedCircularProgress())
+                                    : ListView.builder(
+                                    itemCount: _individualUserController.userPostList.length ==
+                                        0
+                                        ? 0
+                                        : _individualUserController.userPostList.length,
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemBuilder: (_, index) {
+                                      return Obx(() => Column(
+                                        children: [
+                                          Container(
+                                            height: 16 *
+                                                SizeConfig
+                                                    .heightMultiplier!,
+                                            color: kBackgroundColor,
+                                          ),
+                                          PostTile(
+                                            isMe:  _individualUserController.userPostList[index].isMe!,
+                                            userID: _individualUserController.userPostList[index].userId!.id,
+                                            isTrainerProfile: true,
+                                            comment: _homeController
+                                                .commentsMap[
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .id!] ==
+                                                null
+                                                ? _individualUserController.userPostList[
+                                            index]
+                                                .commentgiven
+                                                : _homeController
+                                                .commentsMap[
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .id],
+                                            name: _individualUserController.userPostList[index]
+                                                .userId!
+                                                .name!,
+                                            profilePhoto:
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .userId!
+                                                .profilePhoto!,
+                                            category: _individualUserController.userPostList[index]
+                                                .postCategory![0]
+                                                .name!,
+                                            date: DateFormat.d()
+                                                .add_MMM()
+                                                .format(_individualUserController.userPostList[
+                                            index]
+                                                .updatedAt!),
+                                            place: _individualUserController.userPostList[
+                                            index]
+                                                .location!
+                                                .placeName!
+                                                .length ==
+                                                0
+                                                ? ''
+                                                : _individualUserController.userPostList[
+                                            index]
+                                                .location!
+                                                .placeName![1]
+                                                .toString(),
+                                            imageUrl: _individualUserController.userPostList[
+                                            index]
+                                                .files!
+                                                .length ==
+                                                0
+                                                ? []
+                                                : _individualUserController.userPostList[
+                                            index]
+                                                .files!,
+                                            caption: _individualUserController.userPostList[
+                                            index]
+                                                .caption ??
+                                                '',
+                                            likes: _homeController
+                                                .updateCount[
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .id] ==
+                                                null
+                                                ? _individualUserController.userPostList[
+                                            index]
+                                                .likes
+                                                .toString()
+                                                : _homeController
+                                                .updateCount[
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .id]!
+                                                .likes!
+                                                .toString(),
+                                            comments: _homeController
+                                                .updateCount[
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .id] ==
+                                                null
+                                                ? _individualUserController.userPostList[
+                                            index]
+                                                .comments
+                                                .toString()
+                                                : _homeController
+                                                .updateCount[
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .id]!
+                                                .comments!
+                                                .toString(),
+                                            hitLike: () async {
+                                              bool val = _homeController
+                                                  .LikedPostMap[
+                                              _individualUserController.userPostList[
+                                              index]
+                                                  .id!] ==
+                                                  null
+                                                  ? _individualUserController.userPostList[
+                                              index]
+                                                  .isLiked!
+                                                  : _homeController
+                                                  .LikedPostMap[
+                                              _individualUserController.userPostList[
+                                              index]
+                                                  .id!]!;
+                                              if (val) {
+                                                _individualUserController.userPostList[
+                                                index]
+                                                    .isLiked = false;
+                                                _individualUserController.userPostList[
+                                                index]
+                                                    .likes =
+                                                (_individualUserController.userPostList[
+                                                index]
+                                                    .likes! -
+                                                    1);
+                                                await HomeService.unlikePost(
+                                                    postId:
+                                                    _individualUserController.userPostList[
+                                                    index]
+                                                        .id!);
+                                              } else {
+                                                _individualUserController.userPostList[
+                                                index]
+                                                    .isLiked = true;
+                                                _individualUserController.userPostList[
+                                                index]
+                                                    .likes =
+                                                (_individualUserController.userPostList[
+                                                index]
+                                                    .likes! +
+                                                    1);
+                                                await HomeService.likePost(
+                                                    postId:
+                                                    _individualUserController.userPostList[
+                                                    index]
+                                                        .id!);
+                                              }
+                                              RecentCommentModel
+                                              recentComment =
+                                              RecentCommentModel();
+                                              recentComment = await HomeService
+                                                  .recentComment(
+                                                  postId: _individualUserController.userPostList[
+                                                  index]
+                                                      .id!);
+                                              // _homeController.commentsMap[_homeController.post.value.id.toString()] =
+                                              //     recentComment.response!.data!.comment;
+                                              _homeController.updateCount[
+                                              _individualUserController.userPostList[
+                                              index]
+                                                  .id!] = recentComment
+                                                  .response!.data!.data;
+                                              setState(() {});
+                                            },
+                                            addComment: () {
+                                              // HomeService.addComment(
+                                              //     _trainerController
+                                              //         .trainerPostList[
+                                              //             index]
+                                              //         .id!,
+                                              //     _homeController
+                                              //         .comment.value);
+
+                                              setState(() {});
+
+                                              _homeController
+                                                  .commentController
+                                                  .clear();
+                                            },
+                                            postId: _individualUserController.userPostList[index]
+                                                .id!,
+                                            isLiked: _homeController
+                                                .LikedPostMap[
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .id!] ==
+                                                null
+                                                ? _individualUserController.userPostList[
+                                            index]
+                                                .isLiked!
+                                                : _homeController
+                                                .LikedPostMap[
+                                            _individualUserController.userPostList[
+                                            index]
+                                                .id]!,
+                                            onTap: () async {
+                                              _homeController.commentsList
+                                                  .clear();
+                                              _homeController.viewReplies!
+                                                  .clear();
+                                              Navigator.pushNamed(context,
+                                                  RouteName.postScreen);
+
+                                              _homeController.postLoading
+                                                  .value = true;
+                                              var postData = await HomeService
+                                                  .getPostById(
+                                                  _individualUserController.userPostList[
+                                                  index]
+                                                      .id!);
+
+                                              _homeController.post.value =
+                                              postData
+                                                  .response!.data!;
+
+                                              _homeController.postLoading
+                                                  .value = false;
+                                              _homeController
+                                                  .commentsLoading
+                                                  .value = true;
+                                              _homeController.postComments
+                                                  .value =
+                                              await HomeService.fetchComment(
+                                                  postId: _individualUserController.userPostList[
+                                                  index]
+                                                      .id!);
+
+                                              if (_homeController
+                                                  .postComments
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .length !=
+                                                  0) {
+                                                _homeController
+                                                    .commentsList
+                                                    .value =
+                                                _homeController
+                                                    .postComments
+                                                    .value
+                                                    .response!
+                                                    .data!;
+                                              }
+                                              _homeController
+                                                  .commentsLoading
+                                                  .value = false;
+                                            },
+                                            people: _individualUserController.userPostList[index]
+                                                .people!,
+                                          ),
+                                        ],
+                                      ));
+                                    }),
+                              ),
+
                             ],
                           ),
                           Stack(
@@ -763,12 +737,12 @@ class _UserPageInfoState extends State<UserPageInfo> {
                     ],
                   ),
                 ),
-                // Obx(() => _profileController.showLoading.value
-                //     ? Positioned(
-                //     bottom: 20 * SizeConfig.heightMultiplier!,
-                //     left: Get.width / 2 - 10,
-                //     child: Center(child: CustomizedCircularProgress()))
-                //     : SizedBox())
+                Obx(() => _individualUserController.showLoading.value
+                    ? Positioned(
+                    bottom: 20 * SizeConfig.heightMultiplier!,
+                    left: Get.width / 2 - 10,
+                    child: Center(child: CustomizedCircularProgress()))
+                    : SizedBox())
               ],
             ),
           ),

@@ -812,8 +812,7 @@ class _ChatScreenState extends State<ChatScreen> {
       "notification": {
         "body": messageBody,
         "title": "this is a title",
-        "imageUrl":
-            "https://community.custom-cursor.com/uploads/default/adcc703632967e01dba11b8ed4ed893d57b8388c",
+        "imageUrl": "https://community.custom-cursor.com/uploads/default/adcc703632967e01dba11b8ed4ed893d57b8388c",
         "name": _homeController.userQuickBloxId.value == 133642567
             ? "Tarun Prajapat"
             : "Vartika",

@@ -27,7 +27,7 @@ class HomeController extends GetxController {
   final RemoteConfig remoteConfig = RemoteConfig.instance;
   RxInt selectedIndex = 0.obs;
   RxInt userQuickBloxId = 0.obs;
-  RxBool isLoading = RxBool(false);
+  RxBool isLoading = RxBool(true);
   RxBool spgStatus = RxBool(false);
   Rx<double> videoPlayerVolume = 1.0.obs;
   Rx<UserProfileModel> userProfileData = Rx(UserProfileModel());

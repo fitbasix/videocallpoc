@@ -28,6 +28,7 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
   double height = 180;
   final BmrController bmrController = Get.put(BmrController());
   final HomeController _homeController = Get.find();
+  final _weightController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +203,10 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                             if (bodyweight > 0) {
                                               bodyweight--;
                                             }
-                                          });
+                                          }
+                                          );
+                                          _weightController.text = bodyweight.toString();
+                                          _weightController.selection = TextSelection.fromPosition(TextPosition(offset: _weightController.text.length));
                                         },
                                      //   color: kPureWhite,
                                         child: Icon(
@@ -211,20 +215,58 @@ class _BMRHomeScreenState extends State<BMRHomeScreen> {
                                         )
                                     ),
                                     Spacer(),
-                                    Text(
-                                      bodyweight.toString(),
-                                      style: AppTextStyle.hblackSemiBoldText
-                                          .copyWith(
-                                          color: Theme.of(context).textTheme.bodyText1?.color,
-                                              fontSize: 32 *
-                                                  SizeConfig.textMultiplier!),
+                                    Container(
+                                      width: 67*SizeConfig.widthMultiplier!,
+                                      decoration: BoxDecoration(
+                                        border: Border(bottom: BorderSide(width: 1,color: greyBorder))
+                                      ),
+                                      child: TextFormField(
+                                        controller: _weightController,
+                                        onChanged: (value){
+                                          bodyweight = double.parse(value);
+                                        },
+                                        textAlign: TextAlign.center,
+                                          style: AppTextStyle.hblackSemiBoldText
+                                              .copyWith(
+                                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                                  fontSize: 32 *
+                                                      SizeConfig.textMultiplier!),
+                                        decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.zero,
+                                          // enabledBorder: UnderlineInputBorder(
+                                          //   borderSide: BorderSide(color: greyColor),
+                                          // ),
+                                          focusedBorder:  UnderlineInputBorder(
+                                            borderSide: BorderSide(color: greyColor),
+                                          ),
+                                            enabledBorder: InputBorder.none,
+                                            errorBorder: InputBorder.none,
+                                            disabledBorder: InputBorder.none,
+                                            border:  OutlineInputBorder(
+                                                borderSide: BorderSide.none
+                                            ),
+                                          focusedErrorBorder: InputBorder.none,
+
+
+                                        ),
+                                      ),
                                     ),
+                                    // Text(
+                                    //   bodyweight.toString(),
+                                    //   style: AppTextStyle.hblackSemiBoldText
+                                    //       .copyWith(
+                                    //       color: Theme.of(context).textTheme.bodyText1?.color,
+                                    //           fontSize: 32 *
+                                    //               SizeConfig.textMultiplier!),
+                                    // ),
                                     Spacer(),
                                     RoundIconButton(
                                         onPressed: () {
                                           setState(() {
                                             bodyweight++;
                                           });
+                                          _weightController.text = bodyweight.toString();
+                                          _weightController.selection = TextSelection.fromPosition(TextPosition(offset: _weightController.text.length));
                                         },
                                         //color: Colors.black,
                                         child: Icon(

@@ -80,10 +80,10 @@ class GoalData {
   DateTime? dob;
   int? activenessType;
   int? bodyType;
-  int? currentWeight;
+  double? currentWeight;
   int? foodType;
   int? genderType;
-  int? targetWeight;
+  double? targetWeight;
   int? height;
 
   factory GoalData.fromJson(Map<String, dynamic> json) => GoalData(
@@ -98,10 +98,10 @@ class GoalData {
         dob: json["dob"] == null ? DateTime(1999) : DateTime.parse(json["dob"]),
         activenessType: json["activenessType"],
         bodyType: json["bodyType"],
-        currentWeight: json["currentWeight"],
+        currentWeight: double.parse(json["currentWeight"].toString()),
         foodType: json["foodType"],
         genderType: json["genderType"],
-        targetWeight: json["targetWeight"],
+        targetWeight: double.parse(json["targetWeight"].toString()),
         height: json["height"],
       );
 

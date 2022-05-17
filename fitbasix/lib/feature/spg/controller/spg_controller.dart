@@ -16,11 +16,11 @@ class SPGController extends GetxController {
   RxList<bool> genderSelection = <bool>[true].obs;
   final rulerPickerController = RulerPickerController(value: 2);
   final poundsRulerPickerController = RulerPickerController();
-  RxInt currentWeight = 65.obs;
+  RxDouble currentWeight = 65.0.obs;
   RxInt currentHeight = 170.obs;
   final targetRulerPickerController = RulerPickerController(value: 0);
   final heightRulerPickerController = RulerPickerController(value: 0);
-  RxInt targetWeight = 65.obs;
+  RxDouble targetWeight = 65.0.obs;
   Rx<GoalData> personalGoal = GoalData().obs;
   RxString selectedDate = DateTime(1999).toString().obs;
   Rx<BodyType> selectedBodyFat = BodyType().obs;

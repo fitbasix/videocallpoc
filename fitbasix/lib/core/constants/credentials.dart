@@ -57,16 +57,26 @@ class InitializeQuickBlox {
       var androidInfo = await DeviceInfoPlugin().androidInfo;
       double osVersion = double.parse(androidInfo.version.release);
       _webRtcController.currentOSVersion.value = osVersion;
+      if(osVersion<12){
+        try {
+          await QB.webrtc.init().then((value) {
+            subscribeCall();
+          });
 
-      ///init [WebRTC] only if os version is less then 12
-      try {
-        await QB.webrtc.init().then((value) {
-          subscribeCall();
-        });
-        print("webINIT");
-      } on PlatformException catch (e) {
-        print(e.toString() + "init error");
+          print("webINIT");
+        } on PlatformException catch (e) {
+          print(e.toString() +"init error");
+        }
       }
+      ///init [WebRTC] only if os version is less then 12
+      // try {
+      //   await QB.webrtc.init().then((value) {
+      //     subscribeCall();
+      //   });
+      //   print("webINIT");
+      // } on PlatformException catch (e) {
+      //   print(e.toString() + "init error");
+      // }
     }
     _setIceServers();
     _getIceServers();

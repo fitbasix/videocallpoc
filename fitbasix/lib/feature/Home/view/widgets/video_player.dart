@@ -45,7 +45,6 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
 
     _controller.addListener(() {
       videoProgress.value = ((_controller.value.isPlaying?_controller.value.position.inSeconds:0.0)/videoLength.value);
-      print(videoProgress.value.toString()+" yyyyy");
       setState(() {
         state = _controller.value.isPlaying;
         buffer = _controller.value.isBuffering;
