@@ -10,6 +10,7 @@ import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/posts/services/post_service.dart';
 import 'package:fitbasix/feature/posts/view/cached_network_image.dart';
 import 'package:fitbasix/feature/posts/view/camera_screen.dart';
+import 'package:fitbasix/feature/posts/view/widgets/Image_item_widget.dart';
 import 'package:fitbasix/feature/posts/view/widgets/custom_dropDown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -312,17 +313,25 @@ class AssetThumbnail extends StatelessWidget {
           builder: (_, snapshot) {
             // print("lll" + tag.toString());
             final image = snapshot.data;
-            if (image != null)
+            if (image != null) {
               return Stack(
                 children: [
                   Positioned.fill(
-                      child: Image(
-                    image: CacheImageProvider(
-                        img: snapshot.data!, tag: tag.toString()),
-                    fit: BoxFit.cover,
-                    //  loadingBuilder: CircularProgressIndicator(),
-                    key: ValueKey(tag),
-                  )),
+                      child: ImageItemWidget(
+              key: ValueKey<int>(tag),
+            entity: asset,
+            option: const ThumbnailOption(size: ThumbnailSize.square(200)),
+            )
+
+                  //     Image(
+                  //   image: CacheImageProvider(
+                  //       img: snapshot.data!, tag: tag.toString()),
+                  //   fit: BoxFit.cover,
+                  //   //  loadingBuilder: CircularProgressIndicator(),
+                  //   key: ValueKey(tag),
+                  // )
+
+            ),
                   if (asset.type == AssetType.video)
                     Center(
                       child: Icon(
@@ -360,6 +369,7 @@ class AssetThumbnail extends StatelessWidget {
                         )
                 ],
               );
+            }
             return Container();
           },
         ),

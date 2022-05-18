@@ -65,6 +65,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             Navigator.pushNamed(context, RouteName.edituserProfileScreen);
           },
           oneditcoverimage: () {
+            print("edit photo Clicked");
             profileController.isCoverPhoto.value = true;
             Navigator.pushNamed(context, RouteName.selectProfilePhoto);
           },

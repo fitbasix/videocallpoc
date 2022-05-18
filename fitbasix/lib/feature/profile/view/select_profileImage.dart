@@ -22,6 +22,7 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import '../../Home/controller/Home_Controller.dart';
 import '../../posts/services/post_service.dart';
+import '../../posts/view/widgets/Image_item_widget.dart';
 import '../controller/profile_controller.dart';
 
 class SelectProfilePicScreen extends StatefulWidget {
@@ -320,19 +321,26 @@ class AssetThumbnail extends StatelessWidget {
           builder: (_, snapshot) {
             // print("lll" + tag.toString());
             final image = snapshot.data;
-            if (image != null)
+            if (image != null) {
               return Stack(
                 children: [
                   asset.type == AssetType.video
                       ? Container()
                       : Positioned.fill(
-                          child: Image(
-                          image: CacheImageProvider(
-                              img: snapshot.data!, tag: tag.toString()),
-                          fit: BoxFit.cover,
-                          //  loadingBuilder: CircularProgressIndicator(),
-                          key: ValueKey(tag),
-                        )),
+                          child: ImageItemWidget(
+                            key: ValueKey<int>(tag),
+                            entity: asset,
+                            option: const ThumbnailOption(size: ThumbnailSize.square(200)),
+                          )
+
+                        //   Image(
+                        //   image: CacheImageProvider(
+                        //       img: snapshot.data!, tag: tag.toString()),
+                        //   fit: BoxFit.cover,
+                        //   //  loadingBuilder: CircularProgressIndicator(),
+                        //   key: ValueKey(tag),
+                        // )
+                  ),
                   isSelected
                       ? Positioned(
                           top: 7 * SizeConfig.heightMultiplier!,
@@ -362,6 +370,7 @@ class AssetThumbnail extends StatelessWidget {
                         )
                 ],
               );
+            }
             return Container();
           },
         ),
