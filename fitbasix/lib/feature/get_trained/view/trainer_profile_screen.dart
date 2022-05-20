@@ -109,7 +109,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   },
                   onMessage: () async {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => WebCall()));
+                        MaterialPageRoute(builder: (context) => InAppWebViewPage()));
                     // ///remove ! after testing
                     // if (_trainerController.atrainerDetail.value.isEnrolled!) {
                     //   int UserQuickBloxId =
