@@ -31,6 +31,15 @@ class InAppWebViewPage extends StatefulWidget {
 
 class _InAppWebViewPageState extends State<InAppWebViewPage> {
   @override
+  void initState() {
+    super.initState();
+    getCameraAndOtherPermissions();
+  }
+  void getCameraAndOtherPermissions() async {
+    if (await Permission.camera.request().isGranted) {}
+    if (await Permission.microphone.request().isGranted) {}
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text("Meeting")),

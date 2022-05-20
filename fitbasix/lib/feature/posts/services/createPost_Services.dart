@@ -12,8 +12,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:quickblox_sdk/models/qb_session.dart';
-import 'package:quickblox_sdk/quickblox_sdk.dart';
+// import 'package:quickblox_sdk/models/qb_session.dart';
+// import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants/credentials.dart';
@@ -140,10 +140,10 @@ class CreatePostService {
         final password = Crypt.sha256(
             userProfileModel.response!.data!.profile!.id!,
             salt: '10');
-        bool loggedIn = await LogInUserToQuickBlox(
-            userId,
-            password.hash.substring(0, 39),
-            userProfileModel.response!.data!.profile!.quickBloxId!);
+        // bool loggedIn = await LogInUserToQuickBlox(
+        //     userId,
+        //     password.hash.substring(0, 39),
+        //     userProfileModel.response!.data!.profile!.quickBloxId!);
       } catch (e) {
         throw e;
       }
@@ -158,14 +158,8 @@ class CreatePostService {
             userProfileModel.response!.data!.profile!.id!,
             salt: '10');
         String userName = userProfileModel.response!.data!.profile!.name!;
-        int? userQuickBloxId = await createUserOnQuickBlox(
-            name: userName,
-            loginId: userId,
-            password: password.hash.substring(0, 39));
 
-        int response = await updateUserQuickBloxId(userQuickBloxId!);
-        bool loggedIn =
-            await LogInUserToQuickBlox(userId, password.hash, userQuickBloxId);
+
 
         //await InitializeQuickBlox().initWebRTC();
         // await InitializeQuickBlox().subscribeCall();
@@ -185,89 +179,7 @@ class CreatePostService {
     return categoryModelFromJson(response.toString());
   }
 
-  static void getSessionQB() async {
-    try {
-      QBSession? session = await QB.auth.getSession().then((value) async {
-        QBSession? session2 = await QB.auth.setSession(value!);
-      });
-    } on PlatformException catch (e) {
-      throw e;
-      // Some error occurred, look at the exception message for more details
-      print(e.toString());
-    }
-  }
 
-  static Future<bool> LogInUserToQuickBlox(
-      String logIn, String password, int userQuickBloxId) async {
-    print("called login");
-
-    var connected = await QB.chat.isConnected();
-    if (connected!) {
-      print("called cat connected");
-      //todo remove the comment for webrtc
-      InitializeQuickBlox().initWebRTC();
-      //InitializeQuickBlox().subscribeCall();
-    }
-    var result = await QB.auth.login(logIn, password).then((value) async {
-      final sharedPreferences = await SharedPreferences.getInstance();
-      sharedPreferences.setInt("userQuickBloxId", value.qbUser!.id!);
-      connectUserToChat(password, userQuickBloxId);
-      if (value.qbUser != null) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-    ///connect user to chat
-
-    return false;
-  }
-
-  static connectUserToChat(String password, int userQuickBloxId) async {
-    var chatConnect = await QB.chat.isConnected();
-    if (chatConnect!) {
-      //todo remove comment for initWebRTC to enable video call
-      InitializeQuickBlox().initWebRTC();
-
-      //InitializeQuickBlox().subscribeCall();
-    }
-    print("called connect user to chat");
-    try {
-      var result =
-          await QB.chat.connect(userQuickBloxId, password).then((value) async {
-        var chatConnect = await QB.chat.isConnected();
-        if (chatConnect!) {
-          //todo remove comment for initWebRTC to enable video call
-          InitializeQuickBlox().initWebRTC();
-
-          //InitializeQuickBlox().subscribeCall();
-        }
-      });
-    } on PlatformException catch (e) {
-      throw e;
-      print(e.toString());
-      // Some error occurred, look at the exception message for more details
-    }
-  }
-
-  static Future<int?> createUserOnQuickBlox({
-    String? name,
-    String? loginId,
-    String? password,
-  }) async {
-    var result = await QB.users.createUser(
-      loginId!,
-      password!,
-      fullName: name,
-    );
-
-    print(_homeController.userQuickBloxId.value.toString() +
-        " is stored in homecontroller");
-    if (result != null) {
-      return result.id!;
-    }
-  }
 
   static Future<int> updateUserQuickBloxId(int userQuickBloxId) async {
     dio!.options.headers["language"] = "1";

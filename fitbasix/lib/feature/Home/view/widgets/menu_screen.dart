@@ -197,14 +197,13 @@ class MenuScreen extends StatelessWidget {
                         userClickedOnLogOut = true;
                         AwesomeNotifications().cancelAllSchedules();
                         AwesomeNotifications().cancelAll();
-                        InitializeQuickBlox().logOutUserSession();
                         final LoginController _controller =
                         Get.put(LoginController());
-                        await LogInService.logOut();
+                        LogInService.logOut();
                         userClickedOnLogOut = false;
                         final SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.clear();
-                        await _controller.googleSignout();
+                         _controller.googleSignout();
                         Navigator.pushNamedAndRemoveUntil(
                             context, RouteName.loginScreen, (route) => false);
                         Get.deleteAll();

@@ -147,8 +147,8 @@ class _IndividualUserProfileUIState extends State<IndividualUserProfileUI> {
       if (_scrollController.position.maxScrollExtent == _scrollController.position.pixels) {
         if(_individualUserController.dataNeedToLoad.value){
           _individualUserController.showLoading.value = true;
-          final postQuery = await ProfileServices.getUserPosts(
-              skip: _individualUserController.currentPage.value * 5);
+          final postQuery = await HomeService.getIndividualUserPosts(_homeController.individualUserProfileData.value.response!.data!.profile!.id!,
+              _individualUserController.currentPage.value * 5);
 
           if (postQuery.response!.data!.length < 5) {
             _individualUserController.dataNeedToLoad.value = false;

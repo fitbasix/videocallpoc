@@ -9,10 +9,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:quickblox_sdk/chat/constants.dart';
-import 'package:quickblox_sdk/models/qb_dialog.dart';
-import 'package:quickblox_sdk/models/qb_sort.dart';
-import 'package:quickblox_sdk/quickblox_sdk.dart';
+// import 'package:quickblox_sdk/chat/constants.dart';
+// import 'package:quickblox_sdk/models/qb_dialog.dart';
+// import 'package:quickblox_sdk/models/qb_sort.dart';
+// import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/image_path.dart';
@@ -26,7 +26,7 @@ class MyTrainerTileScreen extends StatefulWidget {
     Key? key,
     this.chatHistoryList,
   }) : super(key: key);
-  List<QBDialog>? chatHistoryList;
+  List<String>? chatHistoryList;
   @override
   State<MyTrainerTileScreen> createState() => _MyTrainerTileScreenState();
 }
@@ -245,12 +245,12 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                         itemCount: myTrainers!.length,
                         itemBuilder: (BuildContext context, int index) {
                           int indexWhereChatPresent = -1;
-                          if (widget.chatHistoryList != null &&
-                              widget.chatHistoryList![0].lastMessage != null) {
-                            indexWhereChatPresent = widget.chatHistoryList!
-                                .indexWhere((element) => element.occupantsIds!
-                                    .contains(myTrainers![index].quickBlox));
-                          }
+                          // if (widget.chatHistoryList != null &&
+                          //     widget.chatHistoryList![0].lastMessage != null) {
+                          //   indexWhereChatPresent = widget.chatHistoryList!
+                          //       .indexWhere((element) => element.occupantsIds!
+                          //           .contains(myTrainers![index].quickBlox));
+                          // }
                           return TrainersTileUI(
                             taggedPersonList: myTrainers![index]
                                     .strengths!
@@ -262,9 +262,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                 : [],
                             trainerName: myTrainers![index].name,
                             lastMessage: indexWhereChatPresent != -1
-                                ? widget.chatHistoryList![indexWhereChatPresent]
-                                    .lastMessage!
-                                    .capitalized()
+                                ? ""
                                 : "",
                             trainerProfilePicUrl:
                                 myTrainers![index].profilePhoto,
@@ -277,8 +275,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                     ? myTrainers![index].startDate
                                     : myTrainers![index].endDate,
                             lastMessageTime: indexWhereChatPresent != -1
-                                ? widget.chatHistoryList![indexWhereChatPresent]
-                                    .lastMessageDateSent
+                                ? 0
                                 : 0,
                             onTrainerTapped: () async {
                               isMessageLoading = true;
@@ -287,29 +284,32 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                               //133817477 user1
                               //133815819 trainer1
                               //133612091 trainer
-                              final sharedPreferences =
-                                  await SharedPreferences.getInstance();
-                              _homeController.userQuickBloxId.value =
-                                  sharedPreferences.getInt("userQuickBloxId")!;
-                              int UserQuickBloxId =
-                                  myTrainers![index].quickBlox!; //133819788;
-                              String trainerName = myTrainers![index].name!;
-                              bool isCurrentlyEnrolled =
-                                  myTrainers![index].isCurrentlyEnrolled!;
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChatScreen(
-                                            opponentID: UserQuickBloxId,
-                                            trainerTitle: trainerName,
-                                            isCurrentlyEnrolled:
-                                                isCurrentlyEnrolled,
-                                            profilePicURL: myTrainers![index]
-                                                .profilePhoto!,
-                                            trainerId: myTrainers![index].user,
-                                            time: myTrainers![index].time,
-                                            days: myTrainers![index].days,
-                                          )));
+                              // final sharedPreferences =
+                              //     await SharedPreferences.getInstance();
+                              // _homeController.userQuickBloxId.value =
+                              //     sharedPreferences.getInt("userQuickBloxId")!;
+                              // int UserQuickBloxId =
+                              //     myTrainers![index].quickBlox!; //133819788;
+                              // String trainerName = myTrainers![index].name!;
+                              // bool isCurrentlyEnrolled =
+                              //     myTrainers![index].isCurrentlyEnrolled!;
+                              // Navigator.push(
+                              //     context,
+                                  // MaterialPageRoute(
+                                  //     builder: (context) => ChatScreen(
+                                  //           opponentID: UserQuickBloxId,
+                                  //           trainerTitle: trainerName,
+                                  //           isCurrentlyEnrolled:
+                                  //               isCurrentlyEnrolled,
+                                  //           profilePicURL: myTrainers![index]
+                                  //               .profilePhoto!,
+                                  //           trainerId: myTrainers![index].user,
+                                  //           time: myTrainers![index].time,
+                                  //           days: myTrainers![index].days,
+                                  //         )
+                                  //
+                                  //
+                                  // ));
                             },
                           );
                         },

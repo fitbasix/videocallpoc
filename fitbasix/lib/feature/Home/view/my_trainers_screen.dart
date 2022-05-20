@@ -4,10 +4,10 @@ import 'package:fitbasix/feature/message/view/my_trainer_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:quickblox_sdk/chat/constants.dart';
-import 'package:quickblox_sdk/models/qb_dialog.dart';
-import 'package:quickblox_sdk/models/qb_sort.dart';
-import 'package:quickblox_sdk/quickblox_sdk.dart';
+// import 'package:quickblox_sdk/chat/constants.dart';
+// import 'package:quickblox_sdk/models/qb_dialog.dart';
+// import 'package:quickblox_sdk/models/qb_sort.dart';
+// import 'package:quickblox_sdk/quickblox_sdk.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/color_palette.dart';
 import '../../../core/constants/image_path.dart';
@@ -17,7 +17,7 @@ import '../controller/Home_Controller.dart';
 
 class MyTrainersScreen extends StatelessWidget {
   MyTrainersScreen({Key? key}) : super(key: key);
-  var userChatsHistory = [QBDialog()].obs;
+  // var userChatsHistory = [QBDialog()].obs;
   TrainerController _trainerController = Get.find();
 
 
@@ -25,12 +25,12 @@ class MyTrainersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<MyTrainer> _myTrainers = _trainerController.trainers.value.response!.data!.myTrainers!;
-    fetchAllChatOfUser();
+    //fetchAllChatOfUser();
     return Scaffold(
       body: Obx(()=>
          Center(
-            child: userChatsHistory[0].id!=null||_trainerController.trainers.value.response!.data!.myTrainers!.length>0
-                ? MyTrainerTileScreen(chatHistoryList: userChatsHistory,
+            child: _trainerController.trainers.value.response!.data!.myTrainers!.length>0
+                ? MyTrainerTileScreen(chatHistoryList: [],
               // myTrainers: _trainerController.trainers.value.response!.data!.myTrainers!,
             )
                 : NoTrainerScreen()),
@@ -39,21 +39,21 @@ class MyTrainersScreen extends StatelessWidget {
     );
   }
 
-  void fetchAllChatOfUser() async {
-    QBSort sort = QBSort();
-    sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
-    sort.ascending = true;
-    try {
-      List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) {
-        if(value.isNotEmpty){
-          userChatsHistory.value = List.from(value);
-        }
-        return value;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void fetchAllChatOfUser() async {
+  //   // QBSort sort = QBSort();
+  //   // sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+  //   sort.ascending = true;
+  //   try {
+  //     List<QBDialog?> dialogs = await QB.chat.getDialogs(sort: sort,).then((value) {
+  //       if(value.isNotEmpty){
+  //         userChatsHistory.value = List.from(value);
+  //       }
+  //       return value;
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
 }
 

@@ -62,8 +62,6 @@ Future<void> setupApp() async {
     }
     return value;
   });
-
-  InitializeQuickBlox().init();
   var accessToken = prefs.getString('AccessToken');
   final translations = GetTranslations.loadTranslations();
 

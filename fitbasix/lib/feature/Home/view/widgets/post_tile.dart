@@ -365,7 +365,7 @@ class _PostTileState extends State<PostTile> {
                 ],
               ),
             ),
-            Padding(
+            widget.caption.isNotEmpty?Padding(
               padding: EdgeInsets.only(
                   left: 16 * SizeConfig.widthMultiplier!,
                   bottom: 16 * SizeConfig.heightMultiplier!,
@@ -381,7 +381,7 @@ class _PostTileState extends State<PostTile> {
                     color: Theme.of(context).textTheme.bodyText1?.color,
                     fontSize: 14 * SizeConfig.textMultiplier!),
               ),
-            ),
+            ):SizedBox(),
             widget.imageUrl.length != 0
                 ? Container(
                     height: 360 * SizeConfig.widthMultiplier!,

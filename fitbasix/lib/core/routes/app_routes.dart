@@ -94,11 +94,11 @@ abstract class RouteName {
   static const liveStream = "/live_stream_screen";
   static const scheduledLiveStreamInformation =
       "/scheduled_live_information_screen";
-  static const trainerchatscreen = "/chat_ui";
+  // static const trainerchatscreen = "/chat_ui";
   static const userprofileinfo = "/user_profile_info";
   static const edituserProfileScreen = "/edit_userprofile_info";
   static const bmrresultScreen = "/bmr_resultpage.dart";
-  static const videocallScreen = "chat_videocallscreen.dart";
+  // static const videocallScreen = "chat_videocallscreen.dart";
   static const trainerdocumentScreen = "/chat_documentscreen.dart";
   static const trainerplanScreen = "/trainers_plan.dart";
   static const planInformationScreen = "/plan_info.dart";
@@ -381,15 +381,15 @@ class GenerateRoute {
         builder: (BuildContext context) => AccountAndSubscriptionScreen(),
       );
     }
-    if (route == RouteName.trainerchatscreen) {
-      return MaterialPageRoute(
-        builder: (BuildContext context) => ChatScreen(),
-      );
-    }
-    if (route == RouteName.videocallScreen) {
-      return MaterialPageRoute(
-          builder: (BuildContext context) => VideoCallScreen());
-    }
+    // if (route == RouteName.trainerchatscreen) {
+    //   return MaterialPageRoute(
+    //     builder: (BuildContext context) => ChatScreen(),
+    //   );
+    // }
+    // if (route == RouteName.videocallScreen) {
+    //   return MaterialPageRoute(
+    //       builder: (BuildContext context) => VideoCallScreen());
+    // }
     if (route == RouteName.userprofileinfo) {
       return MaterialPageRoute(
         builder: (BuildContext context) => UserProfileScreen(),

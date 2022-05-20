@@ -42,7 +42,7 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:fitbasix/feature/spg/view/set_goal_intro_screen.dart';
 
-import 'package:quickblox_sdk/users/module.dart';
+// import 'package:quickblox_sdk/users/module.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 

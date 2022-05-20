@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:quickblox_sdk/models/qb_message.dart';
+// import 'package:quickblox_sdk/models/qb_message.dart';
 
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/image_path.dart';
@@ -20,7 +20,7 @@ import '../../../core/constants/image_path.dart';
 
 class DocumentsViewerScreen extends StatefulWidget {
   String? opponentName;
-  List<QBMessage?>? messages;
+  List<String?>? messages;
 
   DocumentsViewerScreen({Key? key,this.messages,this.opponentName}) : super(key: key);
 
@@ -30,12 +30,11 @@ class DocumentsViewerScreen extends StatefulWidget {
 
 class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
   DateTime dateToShow = DateTime.now();
-  List<QBMessage?>? messageWithAttachment;
+  List<String?>? messageWithAttachment;
   String ShowDay = "demo";
 
   @override
   Widget build(BuildContext context) {
-    getAllMessageWithAttachments();
     return Scaffold(
       backgroundColor: kPureBlack,
       appBar: AppBarForAccount(
@@ -59,11 +58,11 @@ class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _getGroupByDate(messageWithAttachment![index]!.body!),
-                Container(
-                  margin: EdgeInsets.only(bottom: 16*SizeConfig.heightMultiplier!,left: 29*SizeConfig.widthMultiplier!),
-                  child: DocumentTiles(documentName: messageWithAttachment![index]!.attachments![0]!.name!,date: messageWithAttachment![index]!.dateSent!,),
-                ),
+                // _getGroupByDate(messageWithAttachment![index]!.body!),
+                // Container(
+                //   margin: EdgeInsets.only(bottom: 16*SizeConfig.heightMultiplier!,left: 29*SizeConfig.widthMultiplier!),
+                //   child: DocumentTiles(documentName: messageWithAttachment![index]!.attachments![0]!.name!,date: messageWithAttachment![index]!.dateSent!,),
+                // ),
               ],
             );
           }),
@@ -74,12 +73,12 @@ class _DocumentsViewerScreenState extends State<DocumentsViewerScreen> {
     );
   }
 
-  void getAllMessageWithAttachments() {
-    messageWithAttachment= List.from(widget.messages!.where((element) => element!.attachments != null));
-    messageWithAttachment!.forEach((element) {
-      element!.body = _getGroupByDateString(element.dateSent!);
-    });
-  }
+  // void getAllMessageWithAttachments() {
+  //   messageWithAttachment= List.from(widget.messages!.where((element) => element!.attachments != null));
+  //   messageWithAttachment!.forEach((element) {
+  //     element!.body = _getGroupByDateString(element.dateSent!);
+  //   });
+  // }
 
   Widget _getGroupByDate(String sentDateString) {
     final now = DateTime.now();

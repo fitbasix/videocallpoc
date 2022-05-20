@@ -919,13 +919,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
-  quickblox_sdk:
-    dependency: "direct main"
-    description:
-      name: quickblox_sdk
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.7-beta"
   quiver:
     dependency: transitive
     description:

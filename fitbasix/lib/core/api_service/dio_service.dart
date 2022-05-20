@@ -63,7 +63,7 @@ class DioUtil {
           }
         } else {
           if (e.response!.statusCode == 444) {
-            InitializeQuickBlox().logOutUserSession();
+
             final LoginController _controller = Get.put(LoginController());
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.clear();
@@ -80,7 +80,6 @@ class DioUtil {
             final SnackBar snackBar =
             SnackBar(content: Text(responseData["response"]["message"],style: const TextStyle(color: Colors.white),));
             snackbarKey.currentState?.showSnackBar(snackBar);
-            InitializeQuickBlox().logOutUserSession();
             final LoginController _controller = Get.put(LoginController());
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.clear();

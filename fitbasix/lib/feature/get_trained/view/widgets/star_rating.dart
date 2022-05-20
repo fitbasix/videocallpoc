@@ -19,7 +19,7 @@ class StarRating extends StatelessWidget {
   Widget buildStar(BuildContext context, int index) {
     Image icon;
     if (index >= rating) {
-      icon = new Image.asset(
+      icon =  Image.asset(
         ImagePath.starrating_no,
         width: 16 * SizeConfig.widthMultiplier!,
         height: 16 * SizeConfig.heightMultiplier!,
@@ -28,7 +28,7 @@ class StarRating extends StatelessWidget {
         color: Theme.of(context).buttonColor,
       );
     } else if (index > rating - 1 && index < rating) {
-      icon = new Image.asset(
+      icon =  Image.asset(
       ImagePath.starrating_half,
         width: 16 * SizeConfig.widthMultiplier!,
         height: 16 * SizeConfig.heightMultiplier!,
@@ -36,7 +36,7 @@ class StarRating extends StatelessWidget {
         color: color ?? kGreenColor,
       );
     } else {
-      icon = new Image.asset(
+      icon =  Image.asset(
         ImagePath.starrating_full,
         width: 16 * SizeConfig.widthMultiplier!,
         height: 16 * SizeConfig.heightMultiplier!,
@@ -44,7 +44,7 @@ class StarRating extends StatelessWidget {
         color: color ?? kGreenColor,
       );
     }
-    return new InkResponse(
+    return  InkResponse(
       onTap:
           onRatingChanged == null ? null : () => onRatingChanged!(index + 1.0),
       child: icon,
@@ -53,9 +53,9 @@ class StarRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Row(
+    return  Row(
        mainAxisAlignment: axisAlignmentFromStart==null? MainAxisAlignment.center:MainAxisAlignment.start,
         children:
-            new List.generate(starCount, (index) => buildStar(context, index)));
+             List.generate(starCount, (index) => buildStar(context, index)));
   }
 }

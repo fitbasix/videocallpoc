@@ -325,13 +325,17 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                           SizedBox(
                             width: 6.5 * SizeConfig.widthMultiplier!,
                           ),
-                          Text(widget.place,
-                              style: AppTextStyle.normalBlackText.copyWith(
-                                  fontSize: 12 * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .headline3
-                                      ?.color))
+                          Container(
+                            // width: 30,
+                            padding: EdgeInsets.only(right: 10*SizeConfig.widthMultiplier!),
+                            child: Text(widget.place,
+                                style: AppTextStyle.normalBlackText.copyWith(
+                                    fontSize: 12 * SizeConfig.textMultiplier!,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline3
+                                        ?.color),overflow: TextOverflow.ellipsis,),
+                          )
                         ],
                       )
                     ],
@@ -357,7 +361,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                 ],
               ),
             ),
-            Padding(
+            widget.caption.isNotEmpty?Padding(
               padding: EdgeInsets.only(
                   left: 16 * SizeConfig.widthMultiplier!,
                   bottom: 16 * SizeConfig.heightMultiplier!,
@@ -373,7 +377,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                     color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: 14 * SizeConfig.textMultiplier!),
               ),
-            ),
+            ):SizedBox(),
             widget.imageUrl.length != 0
                 ? Container(
                     height: 360 * SizeConfig.widthMultiplier!,

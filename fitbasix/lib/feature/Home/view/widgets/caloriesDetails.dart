@@ -438,13 +438,44 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    isConnected?Text(
-                      burntCalories.toString() + " kcal",
-                      style: AppTextStyle.boldBlackText
-                          .copyWith(
-                          color: Theme.of(context).textTheme.bodyText1?.color,
-                          fontSize: 14 * SizeConfig.textMultiplier!),
-                    )
+                    isConnected?
+                        RichText(text: TextSpan(
+                    children: [
+                      WidgetSpan(
+                        child: Container(
+                          constraints: BoxConstraints(
+                            maxWidth: 80*SizeConfig.widthMultiplier!
+                          ),
+                          child:
+                          Text(
+                            burntCalories.toString(),
+                            style: AppTextStyle.boldBlackText
+                                .copyWith(
+                                color: Theme.of(context).textTheme.bodyText1?.color,
+                                fontSize: 14 * SizeConfig.textMultiplier!),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines:1,
+                          ),
+                        )
+                      ),
+                      TextSpan(
+                        text: " kcal",
+                          style: AppTextStyle.boldBlackText
+                              .copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                              fontSize: 14 * SizeConfig.textMultiplier!),
+                      ),
+                    ]
+                ),
+
+                        )
+                    // Text(
+                    //   "999999999" + " kcal",
+                    //   style: AppTextStyle.boldBlackText
+                    //       .copyWith(
+                    //       color: Theme.of(context).textTheme.bodyText1?.color,
+                    //       fontSize: 14 * SizeConfig.textMultiplier!),
+                    // )
                         :Text('Not Connected',
                     style: AppTextStyle.hmediumBlackText.copyWith(
                       color: Theme.of(context).textTheme.bodyText1?.color,
