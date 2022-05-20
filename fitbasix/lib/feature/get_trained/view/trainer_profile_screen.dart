@@ -1,27 +1,15 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
-import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
-import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
+import 'package:fitbasix/feature/message/view/web_call.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:quickblox_sdk/chat/constants.dart';
-import 'package:quickblox_sdk/models/qb_dialog.dart';
-import 'package:quickblox_sdk/models/qb_filter.dart';
-import 'package:quickblox_sdk/models/qb_sort.dart';
-import 'package:quickblox_sdk/quickblox_sdk.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -34,15 +22,10 @@ import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
 import '../../Home/model/RecentCommentModel.dart';
-import '../../Home/view/my_trainers_screen.dart';
-import '../../message/view/chat_ui.dart';
 
 class TrainerProfileScreen extends StatefulWidget {
   String? trainerID;
-   TrainerProfileScreen({
-    this.trainerID,
-    Key? key}) : super(key: key);
-
+  TrainerProfileScreen({this.trainerID, Key? key}) : super(key: key);
 
   @override
   State<TrainerProfileScreen> createState() => _TrainerProfileScreenState();
@@ -55,26 +38,26 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
   // var isPlanLoading = true.obs;
 
   getAllTrainerPlanData() async {
-   if(widget.trainerID==null){
-     if (!_trainerController.isMyTrainerProfileLoading.value) {
-       _trainerController.planModel.value = PlanModel();
-       _trainerController.isPlanLoading.value = true;
-       _trainerController.planModel.value =
-       await TrainerServices.getPlanByTrainerId(
-           _trainerController.atrainerDetail.value.user!.id!)
-           .then((value) {
-         _trainerController.isPlanLoading.value = false;
-         setState(() {});
-         return value;
-       });
-     }
-   }
+    if (widget.trainerID == null) {
+      if (!_trainerController.isMyTrainerProfileLoading.value) {
+        _trainerController.planModel.value = PlanModel();
+        _trainerController.isPlanLoading.value = true;
+        _trainerController.planModel.value =
+            await TrainerServices.getPlanByTrainerId(
+                    _trainerController.atrainerDetail.value.user!.id!)
+                .then((value) {
+          _trainerController.isPlanLoading.value = false;
+          setState(() {});
+          return value;
+        });
+      }
+    }
   }
 
   @override
   void initState() {
     getAllTrainerPlanData();
-    if(widget.trainerID!=null){
+    if (widget.trainerID != null) {
       setTrainerDataForUniLink();
     }
     super.initState();
@@ -125,166 +108,168 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                     setState(() {});
                   },
                   onMessage: () async {
-                    ///remove ! after testing
-                    if (_trainerController.atrainerDetail.value.isEnrolled!) {
-                      int UserQuickBloxId =
-                      _trainerController.atrainerDetail.value.quickBlox!;
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChatScreen(
-                                opponentID: UserQuickBloxId,
-                                profilePicURL:
-                                _trainerController
-                                    .atrainerDetail
-                                    .value
-                                    .user!
-                                    .profilePhoto,
-                                trainerId: _trainerController
-                                    .atrainerDetail
-                                    .value
-                                    .user!
-                                    .id,
-                                isCurrentlyEnrolled:
-                                _trainerController
-                                    .atrainerDetail
-                                    .value
-                                    .isEnrolled,
-                                trainerTitle: trainerController
-                                    .atrainerDetail
-                                    .value
-                                    .user!
-                                    .name!,
-                                time: trainerController
-                                    .atrainerDetail.value.time,
-                                days: trainerController
-                                    .atrainerDetail.value.days,
-                              )));
-                      // if (!isMessageLoading) {
-                      //   isMessageLoading = true;
-                      //   bool dialogCreatedPreviously = false;
-                      //   int openPage = 0;
-                      //   //133817477	user1
-                      //   //133815819 trainer1
-                      //   //133612091 trainer
-                      //   final sharedPreferences =
-                      //       await SharedPreferences.getInstance();
-                      //   _homeController.userQuickBloxId.value =
-                      //       sharedPreferences.getInt("userQuickBloxId")!;
-                      //
-                      //
-                      //   // _homeController.userQuickBloxId.value == 133815819
-                      //   //     ? 133819788
-                      //   //    : 133815819;
-                      //
-                      //   QBSort sort = QBSort();
-                      //   sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
-                      //   sort.ascending = true;
-                      //   try {
-                      //     List<QBDialog?> dialogs = await QB.chat
-                      //         .getDialogs(
-                      //       sort: sort,
-                      //     )
-                      //         .then((value) async {
-                      //       for (int i = 0; i < value.length; i++) {
-                      //         if (value[i]!.occupantsIds!.contains(
-                      //                 _homeController.userQuickBloxId.value) &&
-                      //             value[i]!
-                      //                 .occupantsIds!
-                      //                 .contains(UserQuickBloxId)) {
-                      //           dialogCreatedPreviously = true;
-                      //           print(value[i]!.id.toString() + "maxxxx");
-                      //           isMessageLoading = false;
-                      //           if (openPage < 1) {
-                      //
-                      //             ++openPage;
-                      //           }
-                      //           isMessageLoading = false;
-                      //           break;
-                      //         }
-                      //       }
-                      //       if (!dialogCreatedPreviously) {
-                      //         List<int> occupantsIds = [
-                      //           _homeController.userQuickBloxId.value,
-                      //           UserQuickBloxId
-                      //         ];
-                      //         String dialogName = UserQuickBloxId.toString() +
-                      //             _homeController.userQuickBloxId.value
-                      //                 .toString() +
-                      //             DateTime.now().millisecond.toString();
-                      //         int dialogType = QBChatDialogTypes.CHAT;
-                      //         try {
-                      //           QBDialog? createdDialog = await QB.chat
-                      //               .createDialog(
-                      //             occupantsIds,
-                      //             dialogName,
-                      //             dialogType: QBChatDialogTypes.CHAT,
-                      //           )
-                      //               .then((value) {
-                      //             isMessageLoading = false;
-                      //             if (openPage < 1) {
-                      //               isMessageLoading = false;
-                      //               Navigator.push(
-                      //                   context,
-                      //                   MaterialPageRoute(
-                      //                       builder: (context) => ChatScreen(
-                      //                             userDialogForChat: value,
-                      //                             opponentID: UserQuickBloxId,
-                      //                             profilePicURL:
-                      //                                 _trainerController
-                      //                                     .atrainerDetail
-                      //                                     .value
-                      //                                     .user!
-                      //                                     .profilePhoto,
-                      //                             trainerId: _trainerController
-                      //                                 .atrainerDetail
-                      //                                 .value
-                      //                                 .user!
-                      //                                 .id,
-                      //                             isCurrentlyEnrolled:
-                      //                                 _trainerController
-                      //                                     .atrainerDetail
-                      //                                     .value
-                      //                                     .isEnrolled,
-                      //                             trainerTitle:
-                      //                                 trainerController
-                      //                                     .atrainerDetail
-                      //                                     .value
-                      //                                     .user!
-                      //                                     .name!,
-                      //                             time: trainerController
-                      //                                 .atrainerDetail
-                      //                                 .value
-                      //                                 .time,
-                      //                             days: trainerController
-                      //                                 .atrainerDetail
-                      //                                 .value
-                      //                                 .days,
-                      //                           )));
-                      //               ++openPage;
-                      //             }
-                      //           });
-                      //         } on PlatformException catch (e) {
-                      //           isMessageLoading = false;
-                      //           print(e.toString());
-                      //         }
-                      //       }
-                      //       return value;
-                      //     });
-                      //   } on PlatformException catch (e) {
-                      //     isMessageLoading = false;
-                      //     // some error occurred, look at the exception message for more details
-                      //   }
-                      // } else {
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //       SnackBar(content: Text("Message is loading")));
-                      // }
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              EnrollTrainerDialog());
-                    }
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WebCall()));
+                    // ///remove ! after testing
+                    // if (_trainerController.atrainerDetail.value.isEnrolled!) {
+                    //   int UserQuickBloxId =
+                    //   _trainerController.atrainerDetail.value.quickBlox!;
+                    //   Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => ChatScreen(
+                    //             opponentID: UserQuickBloxId,
+                    //             profilePicURL:
+                    //             _trainerController
+                    //                 .atrainerDetail
+                    //                 .value
+                    //                 .user!
+                    //                 .profilePhoto,
+                    //             trainerId: _trainerController
+                    //                 .atrainerDetail
+                    //                 .value
+                    //                 .user!
+                    //                 .id,
+                    //             isCurrentlyEnrolled:
+                    //             _trainerController
+                    //                 .atrainerDetail
+                    //                 .value
+                    //                 .isEnrolled,
+                    //             trainerTitle: trainerController
+                    //                 .atrainerDetail
+                    //                 .value
+                    //                 .user!
+                    //                 .name!,
+                    //             time: trainerController
+                    //                 .atrainerDetail.value.time,
+                    //             days: trainerController
+                    //                 .atrainerDetail.value.days,
+                    //           )));
+                    //   // if (!isMessageLoading) {
+                    //   //   isMessageLoading = true;
+                    //   //   bool dialogCreatedPreviously = false;
+                    //   //   int openPage = 0;
+                    //   //   //133817477	user1
+                    //   //   //133815819 trainer1
+                    //   //   //133612091 trainer
+                    //   //   final sharedPreferences =
+                    //   //       await SharedPreferences.getInstance();
+                    //   //   _homeController.userQuickBloxId.value =
+                    //   //       sharedPreferences.getInt("userQuickBloxId")!;
+                    //   //
+                    //   //
+                    //   //   // _homeController.userQuickBloxId.value == 133815819
+                    //   //   //     ? 133819788
+                    //   //   //    : 133815819;
+                    //   //
+                    //   //   QBSort sort = QBSort();
+                    //   //   sort.field = QBChatDialogSorts.LAST_MESSAGE_DATE_SENT;
+                    //   //   sort.ascending = true;
+                    //   //   try {
+                    //   //     List<QBDialog?> dialogs = await QB.chat
+                    //   //         .getDialogs(
+                    //   //       sort: sort,
+                    //   //     )
+                    //   //         .then((value) async {
+                    //   //       for (int i = 0; i < value.length; i++) {
+                    //   //         if (value[i]!.occupantsIds!.contains(
+                    //   //                 _homeController.userQuickBloxId.value) &&
+                    //   //             value[i]!
+                    //   //                 .occupantsIds!
+                    //   //                 .contains(UserQuickBloxId)) {
+                    //   //           dialogCreatedPreviously = true;
+                    //   //           print(value[i]!.id.toString() + "maxxxx");
+                    //   //           isMessageLoading = false;
+                    //   //           if (openPage < 1) {
+                    //   //
+                    //   //             ++openPage;
+                    //   //           }
+                    //   //           isMessageLoading = false;
+                    //   //           break;
+                    //   //         }
+                    //   //       }
+                    //   //       if (!dialogCreatedPreviously) {
+                    //   //         List<int> occupantsIds = [
+                    //   //           _homeController.userQuickBloxId.value,
+                    //   //           UserQuickBloxId
+                    //   //         ];
+                    //   //         String dialogName = UserQuickBloxId.toString() +
+                    //   //             _homeController.userQuickBloxId.value
+                    //   //                 .toString() +
+                    //   //             DateTime.now().millisecond.toString();
+                    //   //         int dialogType = QBChatDialogTypes.CHAT;
+                    //   //         try {
+                    //   //           QBDialog? createdDialog = await QB.chat
+                    //   //               .createDialog(
+                    //   //             occupantsIds,
+                    //   //             dialogName,
+                    //   //             dialogType: QBChatDialogTypes.CHAT,
+                    //   //           )
+                    //   //               .then((value) {
+                    //   //             isMessageLoading = false;
+                    //   //             if (openPage < 1) {
+                    //   //               isMessageLoading = false;
+                    //   //               Navigator.push(
+                    //   //                   context,
+                    //   //                   MaterialPageRoute(
+                    //   //                       builder: (context) => ChatScreen(
+                    //   //                             userDialogForChat: value,
+                    //   //                             opponentID: UserQuickBloxId,
+                    //   //                             profilePicURL:
+                    //   //                                 _trainerController
+                    //   //                                     .atrainerDetail
+                    //   //                                     .value
+                    //   //                                     .user!
+                    //   //                                     .profilePhoto,
+                    //   //                             trainerId: _trainerController
+                    //   //                                 .atrainerDetail
+                    //   //                                 .value
+                    //   //                                 .user!
+                    //   //                                 .id,
+                    //   //                             isCurrentlyEnrolled:
+                    //   //                                 _trainerController
+                    //   //                                     .atrainerDetail
+                    //   //                                     .value
+                    //   //                                     .isEnrolled,
+                    //   //                             trainerTitle:
+                    //   //                                 trainerController
+                    //   //                                     .atrainerDetail
+                    //   //                                     .value
+                    //   //                                     .user!
+                    //   //                                     .name!,
+                    //   //                             time: trainerController
+                    //   //                                 .atrainerDetail
+                    //   //                                 .value
+                    //   //                                 .time,
+                    //   //                             days: trainerController
+                    //   //                                 .atrainerDetail
+                    //   //                                 .value
+                    //   //                                 .days,
+                    //   //                           )));
+                    //   //               ++openPage;
+                    //   //             }
+                    //   //           });
+                    //   //         } on PlatformException catch (e) {
+                    //   //           isMessageLoading = false;
+                    //   //           print(e.toString());
+                    //   //         }
+                    //   //       }
+                    //   //       return value;
+                    //   //     });
+                    //   //   } on PlatformException catch (e) {
+                    //   //     isMessageLoading = false;
+                    //   //     // some error occurred, look at the exception message for more details
+                    //   //   }
+                    //   // } else {
+                    //   //   ScaffoldMessenger.of(context).showSnackBar(
+                    //   //       SnackBar(content: Text("Message is loading")));
+                    //   // }
+                    // } else {
+                    //   showDialog(
+                    //       context: context,
+                    //       builder: (BuildContext context) =>
+                    //           EnrollTrainerDialog());
+                    // }
                   },
                   onEnroll: () {
                     Navigator.pushNamed(context, RouteName.trainerplanScreen);
@@ -325,7 +310,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   void setTrainerDataForUniLink() async {
     _trainerController.isMyTrainerProfileLoading.value = true;
-    var response =  await TrainerServices.getATrainerDetail(widget.trainerID!);
+    var response = await TrainerServices.getATrainerDetail(widget.trainerID!);
     _trainerController.atrainerDetail.value = response.response!.data!;
     _trainerController.isMyTrainerProfileLoading.value = false;
     _trainerController.setUp();
@@ -981,8 +966,13 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   color: kBackgroundColor,
                                                 ),
                                                 PostTile(
-                                                  isMe:  _trainerController.trainerPostList[index].isMe!,
-                                                  userID: _trainerController.trainerPostList[index].userId!.id,
+                                                  isMe: _trainerController
+                                                      .trainerPostList[index]
+                                                      .isMe!,
+                                                  userID: _trainerController
+                                                      .trainerPostList[index]
+                                                      .userId!
+                                                      .id,
                                                   isTrainerProfile: true,
                                                   comment: _homeController
                                                                   .commentsMap[
