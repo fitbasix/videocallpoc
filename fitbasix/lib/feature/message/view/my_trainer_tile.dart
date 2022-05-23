@@ -4,6 +4,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/message/view/web_call.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,6 +22,7 @@ import '../../../core/routes/app_routes.dart';
 import '../../get_trained/model/get_trained_model.dart';
 import '../../get_trained/services/trainer_services.dart';
 import 'chat_ui.dart';
+
 class MyTrainerTileScreen extends StatefulWidget {
   MyTrainerTileScreen({
     Key? key,
@@ -30,6 +32,7 @@ class MyTrainerTileScreen extends StatefulWidget {
   @override
   State<MyTrainerTileScreen> createState() => _MyTrainerTileScreenState();
 }
+
 class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   TrainerController _trainerController = Get.find();
   ScrollController _scrollController = ScrollController();
@@ -74,7 +77,6 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
     });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -261,9 +263,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                         myTrainers![index].strengths![i].name!)
                                 : [],
                             trainerName: myTrainers![index].name,
-                            lastMessage: indexWhereChatPresent != -1
-                                ? ""
-                                : "",
+                            lastMessage: indexWhereChatPresent != -1 ? "" : "",
                             trainerProfilePicUrl:
                                 myTrainers![index].profilePhoto,
                             isCurrentlyEnrolled:
@@ -274,13 +274,20 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                 myTrainers![index].isCurrentlyEnrolled!
                                     ? myTrainers![index].startDate
                                     : myTrainers![index].endDate,
-                            lastMessageTime: indexWhereChatPresent != -1
-                                ? 0
-                                : 0,
+                            lastMessageTime:
+                                indexWhereChatPresent != -1 ? 0 : 0,
                             onTrainerTapped: () async {
                               isMessageLoading = true;
                               bool dialogCreatedPreviously = false;
                               int openPage = 0;
+                              String url = await TrainerServices.getEnablexUrl(
+                                  myTrainers![index].id.toString());
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => InAppWebViewPage(
+                                            url: url,
+                                          )));
                               //133817477 user1
                               //133815819 trainer1
                               //133612091 trainer
@@ -295,21 +302,21 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                               //     myTrainers![index].isCurrentlyEnrolled!;
                               // Navigator.push(
                               //     context,
-                                  // MaterialPageRoute(
-                                  //     builder: (context) => ChatScreen(
-                                  //           opponentID: UserQuickBloxId,
-                                  //           trainerTitle: trainerName,
-                                  //           isCurrentlyEnrolled:
-                                  //               isCurrentlyEnrolled,
-                                  //           profilePicURL: myTrainers![index]
-                                  //               .profilePhoto!,
-                                  //           trainerId: myTrainers![index].user,
-                                  //           time: myTrainers![index].time,
-                                  //           days: myTrainers![index].days,
-                                  //         )
-                                  //
-                                  //
-                                  // ));
+                              // MaterialPageRoute(
+                              //     builder: (context) => ChatScreen(
+                              //           opponentID: UserQuickBloxId,
+                              //           trainerTitle: trainerName,
+                              //           isCurrentlyEnrolled:
+                              //               isCurrentlyEnrolled,
+                              //           profilePicURL: myTrainers![index]
+                              //               .profilePhoto!,
+                              //           trainerId: myTrainers![index].user,
+                              //           time: myTrainers![index].time,
+                              //           days: myTrainers![index].days,
+                              //         )
+                              //
+                              //
+                              // ));
                             },
                           );
                         },
@@ -362,11 +369,13 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
         ));
   }
 }
+
 extension StringExtension on String {
   String capitalized() {
     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
 }
+
 class TrainersTileUI extends StatelessWidget {
   TrainersTileUI(
       {Key? key,
@@ -504,6 +513,7 @@ class TrainersTileUI extends StatelessWidget {
       ),
     );
   }
+
   void createMenuDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -615,6 +625,7 @@ class TrainersTileUI extends StatelessWidget {
       },
     );
   }
+
   setLastMessageDate() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -631,6 +642,7 @@ class TrainersTileUI extends StatelessWidget {
       lastMessageDateToShow.value = DateFormat("dd MMM yy").format(checkDate);
     }
   }
+
   Widget _taggedBar({List<String>? list, required BuildContext context}) {
     return Row(
       children: [
@@ -679,6 +691,7 @@ class TrainersTileUI extends StatelessWidget {
     );
   }
 }
+
 // Bottom sheet class
 class BottomSheetField extends StatelessWidget {
   final String? BottomFieldImage;

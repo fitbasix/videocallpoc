@@ -6,8 +6,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-var _lowCodeUrl =
-    "https://fitbasixapp.yourvideo.live/host/NjI4MjI2Zjg5MTEyYzAxM2FlZGQxNzdjLTYyODIyNjY1ZjVkMmFmNGI5YTIxNGQxMw==";
+// var _lowCodeUrl =
+//     "https://fitbasixapp.yourvideo.live/host/NjI4MjI2Zjg5MTEyYzAxM2FlZGQxNzdjLTYyODIyNjY1ZjVkMmFmNGI5YTIxNGQxMw==";
 
 // class WebCall extends StatelessWidget {
 //   const WebCall({Key? key}) : super(key: key);
@@ -25,7 +25,8 @@ var _lowCodeUrl =
 // }
 
 class InAppWebViewPage extends StatefulWidget {
-  const InAppWebViewPage();
+  String url;
+  InAppWebViewPage({required this.url});
 
   @override
   State<InAppWebViewPage> createState() => _InAppWebViewPageState();
@@ -37,14 +38,16 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
     super.initState();
     getCameraAndOtherPermissions();
   }
+
   void getCameraAndOtherPermissions() async {
     if (await Permission.camera.request().isGranted) {}
     if (await Permission.microphone.request().isGranted) {}
   }
+
   @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid) {
-      _lowCodeUrl += '?skipMediaPermissionPrompt';
+      widget.url += '?skipMediaPermissionPrompt';
     }
     return Scaffold(
         appBar: AppBarForAccount(
@@ -52,12 +55,11 @@ class _InAppWebViewPageState extends State<InAppWebViewPage> {
             Navigator.pop(context);
           },
           title: 'message'.tr,
-
         ),
         body: Column(children: <Widget>[
           Expanded(
             child: InAppWebView(
-              initialUrlRequest: URLRequest(url: Uri.parse(_lowCodeUrl)),
+              initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
               initialOptions: InAppWebViewGroupOptions(
                   crossPlatform: InAppWebViewOptions(
                     mediaPlaybackRequiresUserGesture: false,

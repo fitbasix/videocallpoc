@@ -1,16 +1,15 @@
 import '../../app_config.dart';
 
 class ApiUrl {
-
   static String liveBaseURL = AppConfig.api_url;
   //static String liveBaseURL = 'http://3.131.171.176';
-  // static String liveBaseURL = 'https://0455-103-15-254-57.ngrok.io';
-
+  // static String liveBaseURL = 'https://fc9b-223-190-91-158.ngrok.io';
 
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
-  static String getAbuseData = liveBaseURL + '/api/optionData/reportReasonList/getList';
+  static String getAbuseData =
+      liveBaseURL + '/api/optionData/reportReasonList/getList';
   static String sendAbuseData = liveBaseURL + '/api/report/create';
   static String uploadChatFileToDb =
       liveBaseURL + '/api/documents/createDocument';
@@ -60,7 +59,8 @@ class ApiUrl {
   static String updateGoal = liveBaseURL + '/api/goal/updateGoalDetails';
   static String getWater = liveBaseURL + '/api/nutrition/water/get';
   static String updateWater = liveBaseURL + '/api/nutrition/water/update';
-  static String waterReminderData = liveBaseURL + '/api/nutrition/water/getOptions';
+  static String waterReminderData =
+      liveBaseURL + '/api/nutrition/water/getOptions';
   static String doUnfollow = liveBaseURL + '/api/follow/doUnfollow';
 
   ///create post
@@ -94,4 +94,7 @@ class ApiUrl {
   /// de Active account
   static String deActiveAccount = liveBaseURL + "/api/auth/deactivateAccount";
   static String deleteAccount = liveBaseURL + "/api/auth/deleteAccount";
+
+  /// video call Url from enablex
+  static String getEnablexUrl = liveBaseURL + '/api/videoChat?trainerId=';
 }

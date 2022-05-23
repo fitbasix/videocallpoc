@@ -46,6 +46,18 @@ class TrainerServices {
     //return trainerModelFromJson(response.toString());
   }
 
+  static Future<String> getEnablexUrl(String id) async {
+    log(ApiUrl.getEnablexUrl+id);
+     var dio = DioUtil().getInstance();
+    dio!.options.headers["language"] = "1";
+    dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio.get(ApiUrl.getEnablexUrl+id);
+    log(ApiUrl.getEnablexUrl+id);
+    var jsonResponse = jsonDecode(response.toString());
+log(ApiUrl.getEnablexUrl+id);
+    return jsonResponse["response"]["data"]["sessionLink"];
+  }
+
   static Future<PlanFullDetails> getPlanById(String PlanId) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
