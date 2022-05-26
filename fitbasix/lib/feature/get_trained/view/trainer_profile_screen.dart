@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
@@ -114,14 +116,20 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                     if (_trainerController.atrainerDetail.value.isEnrolled!) {
                       String url = await TrainerServices.getEnablexUrl(
                           trainerController.atrainerDetail.value.user!.id.toString());
-                      launch(url);
+
                       // if (!await launchUrl(Uri.parse(url))) throw 'Could not launch';
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => InAppWebViewPage(
-                      //               url: url,
-                      //             )));
+                          if(Platform.isAndroid){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    InAppWebViewPage(
+                                        url: url,
+                                  )));
+                          }
+                      else{
+                      launch(url);
+                    }
                       // if (!isMessageLoading) {
                       //   isMessageLoading = true;
                       //   bool dialogCreatedPreviously = false;

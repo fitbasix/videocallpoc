@@ -1005,9 +1005,7 @@ class _HomePageState extends State<HomePage> {
                             // padding:
                             //     EdgeInsets.only(left: 16, bottom: 16),
                             decoration: BoxDecoration(
-                                color: Theme
-                                    .of(context)
-                                    .cardColor,
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
@@ -1137,27 +1135,19 @@ class _HomePageState extends State<HomePage> {
                                                     SizeConfig
                                                         .widthMultiplier!,
                                               ),
-
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 0.0 *
-                                                          SizeConfig
-                                                              .widthMultiplier!),
-                                                  child: Obx(
-                                                    ()=> CaloriesBurnt(
-                                                        _caloriesData.value>0?double.parse(NumberFormat("0.###").format(_caloriesData.value)):0.0, () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (_) =>
-                                                              HealthApp());
-                                                    },
-                                                        //is connected
-                                                        true,
-                                                        //Passing context for theme
-                                                        context),
-                                                  ),
-                                                ),
+                                              Text(
+                                                'add_water_intake'.tr,
+                                                style: AppTextStyle
+                                                    .smallBlackText
+                                                    .copyWith(
+                                                    color: Theme.of(
+                                                        context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        ?.color,
+                                                    fontSize: 14 *
+                                                        SizeConfig
+                                                            .textMultiplier!),
                                               )
                                             ],
                                           ),
@@ -1190,8 +1180,7 @@ class _HomePageState extends State<HomePage> {
                                                 style: AppTextStyle
                                                     .smallBlackText
                                                     .copyWith(
-                                                    color: Theme
-                                                        .of(
+                                                    color: Theme.of(
                                                         context)
                                                         .textTheme
                                                         .bodyText1
@@ -1216,7 +1205,7 @@ class _HomePageState extends State<HomePage> {
                                 )
                               ],
                             ),
-                          ),
+                          )
                         ),
                         SizedBox(
                           height: 16 * SizeConfig.heightMultiplier!,

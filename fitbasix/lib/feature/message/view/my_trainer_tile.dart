@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:ui';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
@@ -15,6 +16,7 @@ import 'package:intl/intl.dart';
 // import 'package:quickblox_sdk/models/qb_sort.dart';
 // import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
@@ -282,12 +284,17 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                               int openPage = 0;
                               String url = await TrainerServices.getEnablexUrl(
                                   myTrainers![index].id.toString());
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => InAppWebViewPage(
-                                            url: url,
-                                          )));
+                              if(Platform.isAndroid){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => InAppWebViewPage(
+                                          url: url,
+                                        )));
+                              }
+                              else{
+                                launch(url);
+                              }
                               //133817477 user1
                               //133815819 trainer1
                               //133612091 trainer

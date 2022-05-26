@@ -435,11 +435,15 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
                   height: 13 * SizeConfig.heightMultiplier!,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     isConnected?
-                        RichText(text: TextSpan(
+                        RichText(
+
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+
                     children: [
                       WidgetSpan(
                         child: Container(
@@ -452,9 +456,10 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
                             style: AppTextStyle.boldBlackText
                                 .copyWith(
                                 color: Theme.of(context).textTheme.bodyText1?.color,
-                                fontSize: 14 * SizeConfig.textMultiplier!),
+                                fontSize: 14 * SizeConfig.textMultiplier!,height: 1),
                             overflow: TextOverflow.ellipsis,
                             maxLines:1,
+
                           ),
                         )
                       ),
@@ -463,7 +468,7 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap,bool isConnected,B
                           style: AppTextStyle.boldBlackText
                               .copyWith(
                               color: Theme.of(context).textTheme.bodyText1?.color,
-                              fontSize: 14 * SizeConfig.textMultiplier!),
+                              fontSize: 14 * SizeConfig.textMultiplier!,height: 1),
                       ),
                     ]
                 ),

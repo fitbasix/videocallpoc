@@ -408,7 +408,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProfile.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -494,7 +494,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -580,7 +580,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -663,7 +663,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -746,7 +746,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -827,7 +827,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProfile.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -908,7 +908,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProfile.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -994,7 +994,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -1077,7 +1077,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -1158,7 +1158,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProfile.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -1297,7 +1297,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
@@ -1327,7 +1327,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19052022;
+				CURRENT_PROJECT_VERSION = 23052022;
 				DEVELOPMENT_TEAM = L6K6RCCH68;
 				ENABLE_BITCODE = NO;
 				FLUTTER_TARGET = lib/main_dev.dart;
