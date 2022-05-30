@@ -151,18 +151,18 @@ Future<void> main() async {
 
     FirebaseMessaging.onMessage.listen((message) async {
       print(message.data.toString() + " ooooo");
-      // AwesomeNotifications().createNotification(
-      //     content: NotificationContent(
-      //         displayOnForeground: true,
-      //         displayOnBackground: true,
-      //         channelKey: 'basic_channel',
-      //         id: 9999999,
-      //         title: message.notification!.title,
-      //         wakeUpScreen: true,
-      //         category: NotificationCategory.Reminder,
-      //         autoDismissible: false,
-      //         payload: {'uuid': 'uuid-test'},
-      //         body: message.notification!.body));
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              displayOnForeground: true,
+              displayOnBackground: true,
+              channelKey: 'basic_channel',
+              id: 10,
+              title: message.notification!.title.toString(),
+              wakeUpScreen: true,
+              category: NotificationCategory.Reminder,
+              autoDismissible: false,
+              payload: {'uuid': 'uuid-test'},
+              body: message.notification!.body.toString()));
 
       // print(message.data["message"]);
       // AndroidNotificationChannel channel = AndroidNotificationChannel(
