@@ -1,10 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
+import 'package:cometchat/cometchat_sdk.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/message/model/fetch_message_model.dart';
+import 'package:fitbasix/feature/message/view/screens/message_list.dart';
 import 'package:fitbasix/feature/message/view/web_call.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -254,8 +257,14 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                           //   indexWhereChatPresent = widget.chatHistoryList!
                           //       .indexWhere((element) => element.occupantsIds!
                           //           .contains(myTrainers![index].quickBlox));
+                          print(myTrainers![index].chatId.toString()+" ioiiiiii");
+                          print(myTrainers![index].name.toString()+" ioiiiiii");
+
                           // }
+                          print("iddddd "+myTrainers![index].chatId.toString());
+                          print("pic "+myTrainers![index].profilePhoto.toString());
                           return TrainersTileUI(
+                            userChatId: myTrainers![index].chatId,
                             taggedPersonList: myTrainers![index]
                                     .strengths!
                                     .isNotEmpty
@@ -265,9 +274,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                         myTrainers![index].strengths![i].name!)
                                 : [],
                             trainerName: myTrainers![index].name,
-                            lastMessage: indexWhereChatPresent != -1 ? "" : "",
-                            trainerProfilePicUrl:
-                                myTrainers![index].profilePhoto,
+                            trainerProfilePicUrl: myTrainers![index].profilePhoto,
                             isCurrentlyEnrolled:
                                 myTrainers![index].isCurrentlyEnrolled,
                             userHasChatHistory:
@@ -279,22 +286,39 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                             lastMessageTime:
                                 indexWhereChatPresent != -1 ? 0 : 0,
                             onTrainerTapped: () async {
-                              isMessageLoading = true;
-                              bool dialogCreatedPreviously = false;
-                              int openPage = 0;
-                              String url = await TrainerServices.getEnablexUrl(
-                                  myTrainers![index].id.toString());
-                              if(Platform.isAndroid){
+                              if(myTrainers![index].chatId != null){
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => InAppWebViewPage(
-                                          url: url,
+                                        builder: (context) => MessageList(
+                                          chatId: myTrainers![index].chatId,
+                                          trainerId: myTrainers![index].id.toString(),
+                                          profilePicURL: myTrainers![index]
+                                              .profilePhoto
+                                              .toString(),
+                                          trainerTitle:
+                                          myTrainers![index].name.toString(),
+                                          time: myTrainers![index].time,
+                                          days: myTrainers![index].days,
                                         )));
                               }
-                              else{
-                                launch(url);
-                              }
+
+
+
+
+                              // String url = await TrainerServices.getEnablexUrl(
+                              //     myTrainers![index].id.toString());
+                              // if(Platform.isAndroid){
+                              //   Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //           builder: (context) => InAppWebViewPage(
+                              //             url: url,
+                              //           )));
+                              // }
+                              // else{
+                              //   launch(url);
+                              // }
                               //133817477 user1
                               //133815819 trainer1
                               //133612091 trainer
@@ -386,29 +410,33 @@ extension StringExtension on String {
 class TrainersTileUI extends StatelessWidget {
   TrainersTileUI(
       {Key? key,
+
       required this.taggedPersonList,
       this.trainerName,
       this.trainerProfilePicUrl,
-      this.lastMessage,
       this.isCurrentlyEnrolled,
       this.userHasChatHistory,
       this.enrolledDate,
       this.lastMessageTime,
+        this.userChatId,
       this.onTrainerTapped})
       : super(key: key);
   List<String> taggedPersonList;
   String? trainerName;
-  String? lastMessage;
+  RxString lastMessage = ''.obs;
   String? trainerProfilePicUrl;
   bool? isCurrentlyEnrolled;
   bool? userHasChatHistory = true;
   DateTime? enrolledDate;
   int? lastMessageTime;
+  String? userChatId;
   var lastMessageDateToShow = "".obs;
+  var lastMessageIsLoading = true.obs;
   GestureTapCallback? onTrainerTapped;
   @override
   Widget build(BuildContext context) {
     setLastMessageDate();
+    fetchLastMessage();
     return GestureDetector(
       onTap: onTrainerTapped,
       child: Container(
@@ -479,16 +507,14 @@ class TrainersTileUI extends StatelessWidget {
                     right: 38 * SizeConfig.widthMultiplier!,
                     top: 16 * SizeConfig.heightMultiplier!,
                     bottom: 16 * SizeConfig.heightMultiplier!),
-                child: Text(
-                    lastMessage!.isNotEmpty
-                        ? lastMessage!
-                        : (userHasChatHistory!
-                            ? "loading..."
-                            : "lets_start_conversation".tr),
-                    style: AppTextStyle.hmedium13Text.copyWith(
-                        color: isCurrentlyEnrolled!
-                            ? Theme.of(context).textTheme.bodyText1!.color
-                            : greyB7)),
+                child: Obx(
+                      ()=> Text(
+                      lastMessageIsLoading.value?"loading...":(lastMessage.value.isNotEmpty ? lastMessage.value : "lets_start_conversation".tr),
+                      style: AppTextStyle.hmedium13Text.copyWith(
+                          color: isCurrentlyEnrolled!
+                              ? Theme.of(context).textTheme.bodyText1!.color
+                              : greyB7)),
+                ),
               ),
             ),
             Container(
@@ -519,6 +545,63 @@ class TrainersTileUI extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  fetchLastMessage(){
+    if(userChatId!=null){
+      lastMessageIsLoading.value = true;
+      CometChat.getConversation(userChatId!, ConversationType.user,
+          onSuccess: (Conversation conversation) {
+            print("fettttt");
+            MessagesRequest messageRequest = (MessagesRequestBuilder()
+              ..uid = userChatId
+              ..limit = 10
+              ..hideDeleted = false
+              ..categories = [
+                CometChatMessageCategory.message,
+                CometChatMessageCategory.custom,
+              ])
+                .build();
+
+            ItemFetcher<BaseMessage>().fetchPreviuos(messageRequest)
+                .then((List<BaseMessage> fetchedList) {
+
+              if (fetchedList.isEmpty) {
+                lastMessage.value = '';
+              } else {
+                List<BaseMessage> messages = List.from(fetchedList.reversed);
+                if(messages.isNotEmpty){
+                  if((messages[0] is TextMessage )){
+                    print("ololo");
+                    lastMessage.value = (messages[0] as TextMessage).text;
+                    print((messages[0] as TextMessage).text);
+                    lastMessageIsLoading.value = false;
+                  }
+                  else{
+                    lastMessage.value = "Attachment";
+                    print("found attachment");
+                    lastMessageIsLoading.value = false;
+
+                  }
+                }
+                else{
+                  lastMessage.value = '';
+                  lastMessageIsLoading.value = false;
+                  print("no chat found");
+                }
+
+              }
+            });
+          }, onError: (CometChatException e) {
+            debugPrint("Fetch Conversation  failed  : ${e.message}");
+            lastMessage.value = '';
+            lastMessageIsLoading.value = false;
+          });
+    }
+    else{
+      lastMessage.value = '';
+      lastMessageIsLoading.value = false;
+    }
   }
 
   void createMenuDialog(BuildContext context) {

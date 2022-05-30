@@ -97,7 +97,7 @@ class Trainer {
       this.isEnrolled,
       this.time,
       this.days,
-      this.quickBlox});
+      this.chatId});
 
   String? followers;
   final String? following;
@@ -120,7 +120,7 @@ class Trainer {
   final List<Certificate>? certificates;
   bool? isFollowing;
   bool? isEnrolled;
-  int? quickBlox;
+  String? chatId;
   String? time;
   List<int>? days;
 
@@ -161,7 +161,7 @@ class Trainer {
             : List<int>.from(json["days"].map((x) => x)),
         isFollowing: json["isFollowing"],
         isEnrolled: json["isEnrolled"],
-        quickBlox: json["quickBlox"],
+        chatId: json["chat"],
       );
 
   Map<String, dynamic> toJson() => {

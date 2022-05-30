@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -95,6 +97,15 @@ class GetTrainedScreen extends StatelessWidget {
                                         : SeeAllButton(
                                             title: "see_all_trainer".tr,
                                             onTap: () async {
+                                              SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                              String? userIdForCometChat = await sharedPreferences.getString("userIdForCometChat");
+                                              if(userIdForCometChat!=null) {
+                                                bool userIsLoggedIn = await CometChatService().logInUser(userIdForCometChat);
+                                                if(userIsLoggedIn){
+                                                  ///go to chat screen
+                                                }
+
+                                              }
                                               _trainerController
                                                   .searchMyTrainerController
                                                   .clear();

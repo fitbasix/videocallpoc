@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/GetXNetworkManager.dart';
 import 'package:fitbasix/NetworkManager.dart';
+import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +91,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    CometChatService().init();
 
     final temp = Get.put(NetworkManager());
 

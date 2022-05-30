@@ -92,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+  cometchat:
+    dependency: "direct main"
+    description:
+      name: cometchat
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   connectivity:
     dependency: "direct main"
     description:
@@ -695,6 +702,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  mime:
+    dependency: "direct main"
+    description:
+      name: mime
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   mime_type:
     dependency: "direct main"
     description:

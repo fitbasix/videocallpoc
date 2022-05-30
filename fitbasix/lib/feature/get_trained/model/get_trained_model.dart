@@ -153,7 +153,7 @@ class MyTrainer {
       this.endDate,
       this.name,
       this.profilePhoto,
-      this.quickBlox,
+      this.chatId,
       this.time,
       this.days});
 
@@ -165,7 +165,7 @@ class MyTrainer {
   DateTime? endDate;
   String? name;
   String? profilePhoto;
-  int? quickBlox;
+  String? chatId;
   String? time;
   List<int>? days;
 
@@ -184,7 +184,7 @@ class MyTrainer {
       endDate: json["endDate"] == null ? null : DateTime.parse(json["endDate"]),
       name: json["name"] == null ? null : json["name"],
       profilePhoto: json["profilePhoto"] == null ? null : json["profilePhoto"],
-      quickBlox: json["quickBlox"],
+      chatId: json["chat"],
       time: json["time"],
       days: List<int>.from(json["days"].map((x) => x)));
 
@@ -200,7 +200,7 @@ class MyTrainer {
         "endDate": endDate == null ? null : endDate!.toIso8601String(),
         "name": name == null ? null : name,
         "profilePhoto": profilePhoto == null ? null : profilePhoto,
-        "quickBlox": quickBlox,
+        "chat": chatId,
       };
 }
 

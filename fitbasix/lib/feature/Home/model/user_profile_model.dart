@@ -90,7 +90,7 @@ class Profile {
       this.following,
       this.selectedInterest,
       this.followers,
-      this.quickBloxId,
+      this.chatId,
       this.isPreviousEnrolled,
       this.isFollowing
       });
@@ -111,7 +111,7 @@ class Profile {
   final Nutrition? nutrition;
   final int? following;
    int? followers;
-  final int? quickBloxId;
+  final String? chatId;
   final bool? isPreviousEnrolled;
   bool? isFollowing;
 
@@ -138,7 +138,7 @@ class Profile {
       selectedInterest: List<int>.from(json["interests"].map((x) => x)),
 
       followers: json["followers"],
-      quickBloxId: json["quickBlox"]);
+      chatId: json["chat"]);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -148,7 +148,7 @@ class Profile {
         "nutrition": nutrition!.toJson(),
         "following": following,
         "followers": followers,
-        "quickBlox": quickBloxId
+        "chat": chatId
       };
 }
 

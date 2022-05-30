@@ -4,6 +4,7 @@ import 'package:crypt/crypt.dart';
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:fitbasix/feature/message/controller/chat_controller.dart';
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/model/post_model.dart';
@@ -126,49 +127,33 @@ class CreatePostService {
 
     UserProfileModel _userProfileModel =
         userProfileModelFromJson(response.toString());
+    print("rrrrrrrr"+response.toString());
     update(_userProfileModel);
 
     return _userProfileModel;
   }
 
   static Future<void> update(UserProfileModel userProfileModel) async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setInt("userQuickBloxId", 0);
-    if (userProfileModel.response!.data!.profile!.quickBloxId != null) {
-      try {
-        String userId = userProfileModel.response!.data!.profile!.id!;
-        final password = Crypt.sha256(
-            userProfileModel.response!.data!.profile!.id!,
-            salt: '10');
-        // bool loggedIn = await LogInUserToQuickBlox(
-        //     userId,
-        //     password.hash.substring(0, 39),
-        //     userProfileModel.response!.data!.profile!.quickBloxId!);
-      } catch (e) {
-        throw e;
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("userIdForCometChat",
+        "chat_" + userProfileModel.response!.data!.profile!.id!);
+    print(sharedPreferences.getString("userIdForCometChat"));
+    if (userProfileModel.response!.data!.profile!.chatId == null) {
+      print("creating user on comet chat");
+      CometChatService().createUser(
+          "chat_" + userProfileModel.response!.data!.profile!.id!,
+          userProfileModel.response!.data!.profile!.name!);
+      ChatController _chatController = Get.put(ChatController());
+      _chatController.USERID = "chat_" + userProfileModel.response!.data!.profile!.id!;
+      int response = await updateUserQuickBloxId(
+          userProfileModel.response!.data!.profile!.id!);
+      if (response == 200) {
+        print("UserUpdatedOnBackend");
       }
-
-      //await InitializeQuickBlox().initWebRTC();
-      // InitializeQuickBlox().subscribeCall();
-
     } else {
-      try {
-        String userId = userProfileModel.response!.data!.profile!.id!;
-        final password = Crypt.sha256(
-            userProfileModel.response!.data!.profile!.id!,
-            salt: '10');
-        String userName = userProfileModel.response!.data!.profile!.name!;
-
-
-
-        //await InitializeQuickBlox().initWebRTC();
-        // await InitializeQuickBlox().subscribeCall();
-
-      } catch (e) {
-        throw e;
-        //todo handle if QBlox has some backend error
-
-      }
+      ChatController _chatController = Get.put(ChatController());
+      _chatController.USERID = userProfileModel.response!.data!.profile!.chatId!;
     }
   }
 
@@ -181,13 +166,11 @@ class CreatePostService {
 
 
 
-  static Future<int> updateUserQuickBloxId(int userQuickBloxId) async {
+  static Future<int> updateUserQuickBloxId(String userQuickBloxId) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.updateUserQuickBloxId,
-        data: {"quickBloxId": userQuickBloxId});
-    print(response.statusCode.toString() + "QBID");
-
+        data: {"chatId": "chat_" + userQuickBloxId});
     return response.statusCode!;
   }
 }

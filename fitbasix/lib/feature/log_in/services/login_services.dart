@@ -26,7 +26,6 @@ class LogInService {
     dio!.options.headers["language"] = "1";
     var response = await dio!.post(ApiUrl.getOTP,
         data: {"phone": mobile, "countryCode": countryCode});
-
     return response.data['response']['message'];
   }
 

@@ -199,6 +199,7 @@ class MenuScreen extends StatelessWidget {
                         AwesomeNotifications().cancelAll();
                         final LoginController _controller =
                         Get.put(LoginController());
+                        CometChatService().logOutUserFromCometChat();
                         LogInService.logOut();
                         userClickedOnLogOut = false;
                         final SharedPreferences prefs = await SharedPreferences.getInstance();

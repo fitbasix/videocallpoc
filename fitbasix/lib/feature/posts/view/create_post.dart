@@ -528,6 +528,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                               height: 180 *
                                                   SizeConfig.heightMultiplier!,
                                               child: TextField(
+                                                textCapitalization: TextCapitalization.sentences,
                                                 controller: _postController
                                                     .postTextController,
                                                 onChanged: (value) {

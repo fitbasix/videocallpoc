@@ -8,5 +8,6 @@ class ChatController extends GetxController {
   RxMap<String,String> urlWithRespectToTaskId = RxMap<String,String>({});
 
   RxBool storagePermissionCalled = false.obs;
+  String USERID = '';
 
 }

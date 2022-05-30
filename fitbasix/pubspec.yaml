@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 1.0.0+11
+version: 1.0.0+13
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
@@ -62,6 +62,9 @@ dependencies:
   flutter_holo_date_picker: ^1.0.1+2
   flutter_ruler_picker: ^1.0.2
   intl: ^0.17.0
+  cometchat: ^3.0.0
+  mime:
+
 #  quickblox_sdk: ^0.6.7-beta
   crypt: ^4.2.1
   readmore: ^2.1.0

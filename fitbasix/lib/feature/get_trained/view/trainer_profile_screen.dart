@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cometchat/cometchat_sdk.dart' as cometChat;
+import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
@@ -8,11 +10,13 @@ import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
+import 'package:fitbasix/feature/message/view/screens/message_list.dart';
 import 'package:fitbasix/feature/message/view/web_call.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -112,24 +116,47 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                     setState(() {});
                   },
                   onMessage: () async {
-                    ///remove ! after testing
                     if (_trainerController.atrainerDetail.value.isEnrolled!) {
-                      String url = await TrainerServices.getEnablexUrl(
-                          trainerController.atrainerDetail.value.user!.id.toString());
+                      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                      String? userIdForCometChat = await sharedPreferences.getString("userIdForCometChat");
+                      if(userIdForCometChat!=null) {
+                        bool userIsLoggedIn = await CometChatService().logInUser(userIdForCometChat);
+                        if(userIsLoggedIn){
+                          if(_trainerController.atrainerDetail.value.chatId != null ){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MessageList(
+                                      chatId: _trainerController.atrainerDetail.value.chatId,
+                                      trainerId: _trainerController.atrainerDetail.value.user!.id,
+                                      profilePicURL: _trainerController.atrainerDetail.value.user!.profilePhoto,
+                                      trainerTitle:_trainerController.atrainerDetail.value.user!.name,
+                                      time: _trainerController.atrainerDetail.value.time,
+                                      days: _trainerController.atrainerDetail.value.days,
+                                    )));
+                          }
+                        }
+
+                      }
+
+
+
+                      // String url = await TrainerServices.getEnablexUrl(
+                      //     trainerController.atrainerDetail.value.user!.id.toString());
 
                       // if (!await launchUrl(Uri.parse(url))) throw 'Could not launch';
-                          if(Platform.isAndroid){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    InAppWebViewPage(
-                                        url: url,
-                                  )));
-                          }
-                      else{
-                      launch(url);
-                    }
+                    //       if(Platform.isAndroid){
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 InAppWebViewPage(
+                    //                     url: url,
+                    //               )));
+                    //       }
+                    //   else{
+                    //   launch(url);
+                    // }
                       // if (!isMessageLoading) {
                       //   isMessageLoading = true;
                       //   bool dialogCreatedPreviously = false;
