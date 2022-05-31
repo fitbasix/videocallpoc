@@ -62,7 +62,7 @@ class MessageList extends StatefulWidget {
 }
 
 class _MessageListState extends State<MessageList>
-    with MessageListener, GroupListener, UserListener {
+    with MessageListener, GroupListener, UserListener, WidgetsBindingObserver, ConnectionListener {
   ChatController _chatController = Get.find();
   final RxList<BaseMessage> _messageList = <BaseMessage>[].obs;
   final _itemFetcher = ItemFetcher<BaseMessage>();
@@ -178,16 +178,35 @@ class _MessageListState extends State<MessageList>
 
     CometChat.addMessageListener("listenerId", this);
     _focus.addListener(_onFocusChange);
-
-
-
+    WidgetsBinding.instance!.addObserver(this);
+    checkCometChatConnectionStatus();
     super.initState();
 
   }
 
   @override
+  void onDisconnected() {
+    CometChat.connect();
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    checkCometChatConnectionStatus();
+  }
+
+  void checkCometChatConnectionStatus() async {
+    String connectionStatus = await CometChat.getConnectionStatus();
+    if(connectionStatus == CometChatWSState.disconnected){
+      CometChat.connect();
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
     CometChat.removeMessageListener(listenerId);
