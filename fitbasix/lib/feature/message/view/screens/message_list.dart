@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/feature/message/view/screens/videoCall_conference.dart';
 import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
@@ -34,6 +35,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -97,7 +99,19 @@ class _MessageListState extends State<MessageList>
   
   /// variable for chat loading
   RxBool isChatLoading = true.obs;
-  
+
+  checkUserLogInStatus() async {
+    ///login user if not logged in
+    final prefs = await SharedPreferences.getInstance();
+    String? Id = await prefs.getString("userIdForCometChat");
+    bool loginStatus = await CometChatService().logInUser(Id!);
+    if(loginStatus){
+      fetchUserMessages();
+    }
+    else{
+      checkUserLogInStatus();
+    }
+  }
 
   fetchUserMessages(){
     CometChat.getUser(widget.chatId!,
@@ -176,8 +190,8 @@ class _MessageListState extends State<MessageList>
   }
   @override
   void initState() {
+    checkUserLogInStatus();
     fetchUserMessages();
-
     CometChat.addMessageListener("listenerId", this);
     _focus.addListener(_onFocusChange);
     WidgetsBinding.instance!.addObserver(this);
