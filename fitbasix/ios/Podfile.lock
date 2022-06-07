@@ -6,6 +6,10 @@ PODS:
   - AppAuth/ExternalUserAgent (1.4.0)
   - awesome_notifications (0.0.3):
     - Flutter
+  - cometchat (3.0.0):
+    - CometChatPro (= 3.0.900)
+    - Flutter
+  - CometChatPro (3.0.900)
   - connectivity (0.0.1):
     - Flutter
     - Reachability
@@ -298,6 +302,7 @@ PODS:
 
 DEPENDENCIES:
   - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
+  - cometchat (from `.symlinks/plugins/cometchat/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - connectycube_flutter_call_kit (from `.symlinks/plugins/connectycube_flutter_call_kit/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
@@ -338,6 +343,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AppAuth
+    - CometChatPro
     - DKImagePickerController
     - DKPhotoGallery
     - Firebase
@@ -372,6 +378,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   awesome_notifications:
     :path: ".symlinks/plugins/awesome_notifications/ios"
+  cometchat:
+    :path: ".symlinks/plugins/cometchat/ios"
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
   connectycube_flutter_call_kit:
@@ -442,6 +450,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   awesome_notifications: 04530aafec8dac4635244ed4b4072f4aea6cc938
+  cometchat: 0c5cb1bcf57e48adaafc990d16f57524bf4f1038
+  CometChatPro: 09623c146b21a4175bee89bbd581b8408c55db49
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   connectycube_flutter_call_kit: 401db1dd3c1984ed754b0b14e957a6700f95067e
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175

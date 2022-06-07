@@ -17,6 +17,10 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        flatDir {
+            dirs 'src/main/libs'
+            dirs project(':enx_flutter_plugin').file('libs')
+        }
     }
 }
 
