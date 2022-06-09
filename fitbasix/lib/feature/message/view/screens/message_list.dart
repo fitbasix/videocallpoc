@@ -102,15 +102,19 @@ class _MessageListState extends State<MessageList>
 
   checkUserLogInStatus() async {
     ///login user if not logged in
-    final prefs = await SharedPreferences.getInstance();
-    String? Id = await prefs.getString("userIdForCometChat");
-    bool loginStatus = await CometChatService().logInUser(Id!);
-    if(loginStatus){
-      fetchUserMessages();
+    final user = await CometChat.getLoggedInUser();
+    if(user == null){
+      final prefs = await SharedPreferences.getInstance();
+      String? Id = await prefs.getString("userIdForCometChat");
+      bool loginStatus = await CometChatService().logInUser(Id!);
+      if(loginStatus){
+        fetchUserMessages();
+      }
+      else{
+        checkUserLogInStatus();
+      }
     }
-    else{
-      checkUserLogInStatus();
-    }
+
   }
 
   fetchUserMessages(){

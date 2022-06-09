@@ -6,6 +6,8 @@ import 'package:fitbasix/feature/message/view/screens/message_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:cometchat/cometchat_sdk.dart';
 import 'package:get/get.dart';
+import 'package:selectable_autolink_text/selectable_autolink_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../controller/chat_controller.dart';
 
@@ -85,11 +87,47 @@ class _MessageWidgetState extends State<MessageWidget> {
                       color: background,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(text ?? "",
-                        style: sentByMe == true
-                            ? AppTextStyle.white400Text
-                            : AppTextStyle.black400Text
-                                .copyWith(color: kPureWhite)),
+                    child: SelectableAutoLinkText(text??"",
+                      style: sentByMe == true
+                          ? AppTextStyle.white400Text
+                          : AppTextStyle.black400Text
+                          .copyWith(color: kPureWhite),
+                      linkStyle: AppTextStyle.white400Text.copyWith(color: Colors.blue,decoration: TextDecoration.underline,),
+                      highlightedLinkStyle: TextStyle(
+                        color: Colors.blueAccent,
+                        backgroundColor: Colors.blueAccent.withAlpha(0x33),
+                      ),
+                      onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
+                      onTap: (url) async {
+                        if (await canLaunch(url)) {
+                          launch(url, forceSafariVC: false);
+                        } else {
+
+                        }
+                      },
+                      onLongPress: (url) {
+                        print('🍔LongPress: $url');
+                      },
+                      onTapOther: (local, global) {
+                        print('🍇️onTapOther: $local, $global');
+                      },
+                    )
+
+                    // AutolinkText(
+                    //     text: 'Your text with link www.example.com',
+                    //     textStyle: sentByMe == true
+                    //         ? AppTextStyle.white400Text
+                    //         : AppTextStyle.black400Text
+                    //         .copyWith(color: kPureWhite),
+                    //     linkStyle: AppTextStyle.white400Text.copyWith(color: Colors.blue,decoration: TextDecoration.underline,),
+                    //     onWebLinkTap: (link) => launch(link)
+                    // ),
+
+                    // Text(text ?? "",
+                    //     style: sentByMe == true
+                    //         ? AppTextStyle.white400Text
+                    //         : AppTextStyle.black400Text
+                    //             .copyWith(color: kPureWhite)),
                   )
                 ],
               ),
