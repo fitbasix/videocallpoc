@@ -961,6 +961,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.3"
+  selectable_autolink_text:
+    dependency: "direct main"
+    description:
+      name: selectable_autolink_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.0"
   sentry:
     dependency: transitive
     description:

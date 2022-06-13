@@ -100,7 +100,7 @@ class _MessageListState extends State<MessageList>
   /// variable for chat loading
   RxBool isChatLoading = true.obs;
 
-  checkUserLogInStatus() async {
+  Future<void> checkUserLogInStatus() async {
     ///login user if not logged in
     final user = await CometChat.getLoggedInUser();
     if(user == null){
@@ -108,17 +108,17 @@ class _MessageListState extends State<MessageList>
       String? Id = await prefs.getString("userIdForCometChat");
       bool loginStatus = await CometChatService().logInUser(Id!);
       if(loginStatus){
-        fetchUserMessages();
+        await fetchUserMessages();
       }
       else{
-        checkUserLogInStatus();
+       await checkUserLogInStatus();
       }
     }
 
   }
 
-  fetchUserMessages(){
-    CometChat.getUser(widget.chatId!,
+  Future<void> fetchUserMessages()async{
+    await CometChat.getUser(widget.chatId!,
         onSuccess: (User user) {
           Conversation createConversation = Conversation(
             conversationType: ConversationType.user,
@@ -126,7 +126,7 @@ class _MessageListState extends State<MessageList>
           );
           widget.conversation.value = createConversation;
           isChatLoading.value = false;
-
+          isChatLoading.refresh();
           getChatFromHistory();
 
         }, onError: (CometChatException e) {
@@ -190,7 +190,6 @@ class _MessageListState extends State<MessageList>
       // setState(() {
       //
       // });
-
   }
   @override
   void initState() {

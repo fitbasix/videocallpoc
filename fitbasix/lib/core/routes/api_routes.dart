@@ -4,6 +4,8 @@ class ApiUrl {
   static String liveBaseURL = AppConfig.api_url;
   //static String liveBaseURL = 'http://3.131.171.176';
   // static String liveBaseURL = 'https://fc9b-223-190-91-158.ngrok.io';
+  // static String liveBaseURL =
+  //     'https://d747-122-161-95-230.in.ngrok.io';
 
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
@@ -26,6 +28,8 @@ class ApiUrl {
   ///register device token
   static String updateDeviceToken =
       liveBaseURL + '/api/notification/registerDeviceToken';
+  static String removeDeviceId =
+      liveBaseURL + '/api/notification/removeDeviceId';
 
   ///auth
   static String logOut = liveBaseURL + '/api/auth/logout';

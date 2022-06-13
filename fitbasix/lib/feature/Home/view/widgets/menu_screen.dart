@@ -135,7 +135,6 @@ class MenuScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pop;
                       Navigator.pushNamed(context, RouteName.editPersonalInfo);
-
                     })
                 : Container(),
             jsonOb['document'] == 1
@@ -193,18 +192,20 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.logOut,
                     menuItemText: 'logOut'.tr,
                     onTap: () async {
-                      if(!userClickedOnLogOut){
+                      if (!userClickedOnLogOut) {
                         userClickedOnLogOut = true;
                         AwesomeNotifications().cancelAllSchedules();
                         AwesomeNotifications().cancelAll();
                         final LoginController _controller =
-                        Get.put(LoginController());
+                            Get.put(LoginController());
                         CometChatService().logOutUserFromCometChat();
                         LogInService.logOut();
+                        LogInService.removeDeviceId();
                         userClickedOnLogOut = false;
-                        final SharedPreferences prefs = await SharedPreferences.getInstance();
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
                         prefs.clear();
-                         _controller.googleSignout();
+                        _controller.googleSignout();
                         Navigator.pushNamedAndRemoveUntil(
                             context, RouteName.loginScreen, (route) => false);
                         Get.deleteAll();
