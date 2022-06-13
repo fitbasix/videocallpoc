@@ -807,12 +807,12 @@ class _MessageListState extends State<MessageList>
                 String token = user['token'].toString();
                 print('apptoken${token}');
                 if(token!='null' && token.isNotEmpty) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            VideoConferenceScreen(token: token,)),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) =>
+                  //           VideoConferenceScreen(token: token,)),
+                  // );
                   //  Navigator.pushNamed(context, '/Conference');
 
                 }
