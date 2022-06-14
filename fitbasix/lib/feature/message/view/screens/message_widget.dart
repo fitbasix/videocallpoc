@@ -1,4 +1,3 @@
-
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
@@ -76,59 +75,61 @@ class _MessageWidgetState extends State<MessageWidget> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 300 * SizeConfig.widthMultiplier!,
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 10.0 * SizeConfig.heightMultiplier!,
-                      horizontal: 10.0 * SizeConfig.widthMultiplier!,
-                    ),
-                    decoration: BoxDecoration(
-                      color: background,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: SelectableAutoLinkText(text??"",
-                      style: sentByMe == true
-                          ? AppTextStyle.white400Text
-                          : AppTextStyle.black400Text
-                          .copyWith(color: kPureWhite),
-                      linkStyle: AppTextStyle.white400Text.copyWith(color: Colors.blue,decoration: TextDecoration.underline,),
-                      highlightedLinkStyle: TextStyle(
-                        color: Colors.blueAccent,
-                        backgroundColor: Colors.blueAccent.withAlpha(0x33),
+                      constraints: BoxConstraints(
+                        maxWidth: 300 * SizeConfig.widthMultiplier!,
                       ),
-                      onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
-                      onTap: (url) async {
-                        if (await canLaunch(url)) {
-                          launch(url, forceSafariVC: false);
-                        } else {
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10.0 * SizeConfig.heightMultiplier!,
+                        horizontal: 10.0 * SizeConfig.widthMultiplier!,
+                      ),
+                      decoration: BoxDecoration(
+                        color: background,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: SelectableAutoLinkText(
+                        text ?? "",
+                        style: sentByMe == true
+                            ? AppTextStyle.white400Text
+                            : AppTextStyle.black400Text
+                                .copyWith(color: kPureWhite),
+                        linkStyle: AppTextStyle.white400Text.copyWith(
+                          color: Colors.white,
+                          decoration: TextDecoration.underline,
+                        ),
+                        highlightedLinkStyle: TextStyle(
+                          color: Colors.white,
+                          backgroundColor: Colors.transparent,
+                        ),
+                        onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
+                        onTap: (url) async {
+                          if (await canLaunch(url)) {
+                            launch(url, forceSafariVC: false);
+                          } else {}
+                        },
+                        onLongPress: (url) {
+                          print('🍔LongPress: $url');
+                        },
+                        onTapOther: (local, global) {
+                          print('🍇️onTapOther: $local, $global');
+                        },
+                      )
 
-                        }
-                      },
-                      onLongPress: (url) {
-                        print('🍔LongPress: $url');
-                      },
-                      onTapOther: (local, global) {
-                        print('🍇️onTapOther: $local, $global');
-                      },
-                    )
+                      // AutolinkText(
+                      //     text: 'Your text with link www.example.com',
+                      //     textStyle: sentByMe == true
+                      //         ? AppTextStyle.white400Text
+                      //         : AppTextStyle.black400Text
+                      //         .copyWith(color: kPureWhite),
+                      //     linkStyle: AppTextStyle.white400Text.copyWith(color: Colors.blue,decoration: TextDecoration.underline,),
+                      //     onWebLinkTap: (link) => launch(link)
+                      // ),
 
-                    // AutolinkText(
-                    //     text: 'Your text with link www.example.com',
-                    //     textStyle: sentByMe == true
-                    //         ? AppTextStyle.white400Text
-                    //         : AppTextStyle.black400Text
-                    //         .copyWith(color: kPureWhite),
-                    //     linkStyle: AppTextStyle.white400Text.copyWith(color: Colors.blue,decoration: TextDecoration.underline,),
-                    //     onWebLinkTap: (link) => launch(link)
-                    // ),
-
-                    // Text(text ?? "",
-                    //     style: sentByMe == true
-                    //         ? AppTextStyle.white400Text
-                    //         : AppTextStyle.black400Text
-                    //             .copyWith(color: kPureWhite)),
-                  )
+                      // Text(text ?? "",
+                      //     style: sentByMe == true
+                      //         ? AppTextStyle.white400Text
+                      //         : AppTextStyle.black400Text
+                      //             .copyWith(color: kPureWhite)),
+                      )
                 ],
               ),
             )),
