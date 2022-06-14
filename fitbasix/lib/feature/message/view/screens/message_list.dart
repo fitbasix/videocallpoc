@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
-
+import 'package:fitbasix/core/constants/credentials.dart';
+import 'package:fitbasix/feature/message/view/screens/videoCall_conference.dart';
+import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -32,6 +35,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -62,7 +66,7 @@ class MessageList extends StatefulWidget {
 }
 
 class _MessageListState extends State<MessageList>
-    with MessageListener, GroupListener, UserListener {
+    with MessageListener, GroupListener, UserListener, WidgetsBindingObserver, ConnectionListener {
   ChatController _chatController = Get.find();
   final RxList<BaseMessage> _messageList = <BaseMessage>[].obs;
   final _itemFetcher = ItemFetcher<BaseMessage>();
@@ -95,7 +99,23 @@ class _MessageListState extends State<MessageList>
   
   /// variable for chat loading
   RxBool isChatLoading = true.obs;
-  
+
+  checkUserLogInStatus() async {
+    ///login user if not logged in
+    final user = await CometChat.getLoggedInUser();
+    if(user == null){
+      final prefs = await SharedPreferences.getInstance();
+      String? Id = await prefs.getString("userIdForCometChat");
+      bool loginStatus = await CometChatService().logInUser(Id!);
+      if(loginStatus){
+        fetchUserMessages();
+      }
+      else{
+        checkUserLogInStatus();
+      }
+    }
+
+  }
 
   fetchUserMessages(){
     CometChat.getUser(widget.chatId!,
@@ -174,20 +194,39 @@ class _MessageListState extends State<MessageList>
   }
   @override
   void initState() {
+    checkUserLogInStatus();
     fetchUserMessages();
-
     CometChat.addMessageListener("listenerId", this);
     _focus.addListener(_onFocusChange);
-
-
-
+    WidgetsBinding.instance!.addObserver(this);
+    checkCometChatConnectionStatus();
     super.initState();
 
   }
 
   @override
+  void onDisconnected() {
+    CometChat.connect();
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    checkCometChatConnectionStatus();
+  }
+
+  void checkCometChatConnectionStatus() async {
+    String connectionStatus = await CometChat.getConnectionStatus();
+    if(connectionStatus == CometChatWSState.disconnected){
+      CometChat.connect();
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
     CometChat.removeMessageListener(listenerId);
@@ -565,63 +604,6 @@ class _MessageListState extends State<MessageList>
                 ),
               ))
 
-        // Row(
-        //   children: [
-        //     Expanded(
-        //         child: TextFormField(
-        //           cursorColor: const Color(0xff141414).withOpacity(0.58),
-        //           focusNode: _focus,
-        //           controller: TextEditingController(text: messageText),
-        //           onChanged: (val) {
-        //             messageText = val;
-        //           },
-        //           decoration: const InputDecoration(
-        //             hintText: "Message",
-        //             focusedBorder: InputBorder.none,
-        //             enabledBorder: InputBorder.none,
-        //           ),
-        //         ))
-        //   ],
-        // ),
-        // const Divider(height: 1),
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: Row(
-        //     mainAxisSize: MainAxisSize.max,
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Row(
-        //         mainAxisSize: MainAxisSize.min,
-        //         children: [
-        //           IconButton(
-        //               iconSize: 24,
-        //               padding: const EdgeInsets.all(0),
-        //               constraints: const BoxConstraints(),
-        //               icon: Icon(Icons.attachment, size: 24,),
-        //               onPressed: sendMediaMessage //do something,
-        //           ),
-        //           const SizedBox(
-        //             width: 10,
-        //           ),
-        //           IconButton(
-        //               iconSize: 24,
-        //               padding: const EdgeInsets.all(0),
-        //               constraints: const BoxConstraints(),
-        //               icon: SvgPicture.asset(
-        //                 "assets/Send.svg",
-        //                 width: 24,
-        //                 height: 24,
-        //               ),
-        //               onPressed: () {
-        //                 FocusScope.of(context).requestFocus(FocusNode());
-        //                 sendTextMessage();
-        //               } //do something,
-        //           ),
-        //         ],
-        //       )
-        //     ],
-        //   ),
-        // )
       ],
     );
   }
@@ -801,17 +783,47 @@ class _MessageListState extends State<MessageList>
           ///get video call url from backend
           String url =
           await TrainerServices.getEnablexUrl(widget.trainerId!);
-          if (Platform.isAndroid) {
-            ///play in app if android
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => InAppWebViewPage(
-                      url: url,
-                    )));
-          } else {
-            ///redirect to browser in ios
-            launch(url);
+          bool cameraStatus = await Permission.camera.request().isGranted;
+          bool micStatus = await Permission.microphone.request().isGranted;
+          if(cameraStatus&&micStatus){
+            String? roomID =  await TrainerServices.getEnablexUrl(widget.trainerId!);
+            if(roomID != null){
+              var value = {
+                'user_ref': "2236",
+                "roomId": roomID,
+                "role": "participant",
+                "name": widget.trainerTitle
+              };
+              print(jsonEncode(value));
+              var response = await http.post(
+                  Uri.parse(
+                      kBaseURL + "createToken"), // replace FQDN with Your Server API URL
+                  headers: headerForVideoCall,
+                  body: jsonEncode(value));
+              print(kBaseURL);
+              print("ppppm "+response.body);
+              if (response.statusCode == 200) {
+                print(response.body);
+                Map<String, dynamic> user = jsonDecode(response.body);
+                String token = user['token'].toString();
+                print('apptoken${token}');
+                if(token!='null' && token.isNotEmpty) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            VideoConferenceScreen(token: token,)),
+                  );
+                  //  Navigator.pushNamed(context, '/Conference');
+
+                }
+
+              }else{
+
+
+              }
+
+            }
           }
           ///call with timing logic
           // log(widget.days!.toString());

@@ -34,7 +34,6 @@ initializeNotification() {
             channelKey: 'basic_channel',
             channelName: 'Basic notifications',
             channelDescription: 'Notification channel for basic tests',
-            defaultColor: Color(0xFF9D50DD),
             importance: NotificationImportance.Max,
             ledColor: Colors.white)
       ],
@@ -55,6 +54,25 @@ void selectNotification(String? payload) async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("background notification llllll");
+  AwesomeNotifications().initialize(
+    // set the icon to null if you want to use the default app icon
+      null,
+      [
+        NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            importance: NotificationImportance.Max,
+            ledColor: Colors.white)
+      ],
+      // Channel groups are only visual and are not required
+      channelGroups: [
+        NotificationChannelGroup(
+            channelGroupkey: 'basic_channel_group',
+            channelGroupName: 'Basic group')
+      ],
+      debug: true);
   // await AwesomeNotifications().createNotification(
   //     content: NotificationContent(
   //       displayOnForeground: true,
@@ -151,18 +169,18 @@ Future<void> main() async {
 
     FirebaseMessaging.onMessage.listen((message) async {
       print(message.data.toString() + " ooooo");
-      // AwesomeNotifications().createNotification(
-      //     content: NotificationContent(
-      //         displayOnForeground: true,
-      //         displayOnBackground: true,
-      //         channelKey: 'basic_channel',
-      //         id: 9999999,
-      //         title: message.notification!.title,
-      //         wakeUpScreen: true,
-      //         category: NotificationCategory.Reminder,
-      //         autoDismissible: false,
-      //         payload: {'uuid': 'uuid-test'},
-      //         body: message.notification!.body));
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              displayOnForeground: true,
+              displayOnBackground: true,
+              channelKey: 'basic_channel',
+              id: 10,
+              title: message.notification!.title.toString(),
+              wakeUpScreen: true,
+              category: NotificationCategory.Reminder,
+              autoDismissible: false,
+              payload: {'uuid': 'uuid-test'},
+              body: message.notification!.body.toString()));
 
       // print(message.data["message"]);
       // AndroidNotificationChannel channel = AndroidNotificationChannel(
