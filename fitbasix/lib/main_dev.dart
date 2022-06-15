@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/GetXNetworkManager.dart';
 import 'package:fitbasix/NetworkManager.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
+import 'package:fitbasix/feature/message/view/screens/message_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ void selectNotification(String? payload) async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("background notification llllll");
   AwesomeNotifications().initialize(
-    // set the icon to null if you want to use the default app icon
+      // set the icon to null if you want to use the default app icon
       null,
       [
         NotificationChannel(
@@ -157,32 +158,54 @@ Future<void> main() async {
       print(value.toString() + " APN Token");
     });
 
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        print("background tap called1");
-      }
-    });
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-    FirebaseMessaging.onMessage.listen((message) async {
-      print(message.data.toString() + " ooooo");
-      AwesomeNotifications().createNotification(
-          content: NotificationContent(
-              displayOnForeground: true,
-              displayOnBackground: true,
-              channelKey: 'basic_channel',
-              id: 10,
-              title: message.notification!.title.toString(),
-              wakeUpScreen: true,
-              category: NotificationCategory.Reminder,
-              autoDismissible: false,
-              payload: {'uuid': 'uuid-test'},
-              body: message.notification!.body.toString()));
+    AwesomeNotifications()
+        .actionStream
+        .listen((ReceivedNotification notification) async{
+      var json = jsonDecode(notification.payload!['data'].toString()) as Map<String,dynamic>;
+      var chatId = json['senderChatId'];
+      var userId = json['senderId'];
+      var userName = json['senderName'];
+      var userImage = json['senderProfilePhoto'];
 
-      // print(message.data["message"]);
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String? userIdForCometChat = await sharedPreferences.getString("userIdForCometChat");
+      if(userIdForCometChat!=null) {
+        bool userIsLoggedIn = await CometChatService().logInUser(userIdForCometChat);
+        if(userIsLoggedIn){
+          if( chatId != null && userId != null){
+            Get.to( ()=>MessageList(
+                      chatId:chatId,
+                      trainerId: userId,
+                      profilePicURL: userImage,
+                      trainerTitle:userName,
+                      time: '',
+                      days: [0],
+                    ));
+          }
+        }
+
+      }
+    });
+
+    FirebaseMessaging.onMessage.listen((message) async {
+      print('===========>'+message.data.toString());
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            displayOnForeground: true,
+            displayOnBackground: true,
+            channelKey: 'basic_channel',
+            id: 10,
+            title: message.notification!.title.toString(),
+            wakeUpScreen: true,
+            category: NotificationCategory.Reminder,
+            autoDismissible: false,
+            payload: {'data':jsonEncode(message.data)},
+            body: message.notification!.body.toString()),
+      );
+
       // AndroidNotificationChannel channel = AndroidNotificationChannel(
       //     "channel_id", "some_title",
       //     description: "some_description", importance: Importance.high);
@@ -204,8 +227,61 @@ Future<void> main() async {
       //     id, title, body, NotificationDetails(android: details));
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print("background tap called");
+    FirebaseMessaging.instance.getInitialMessage().then((initialMessage) async{
+      if(initialMessage != null){
+        var json = jsonDecode(jsonEncode(initialMessage.data).toString()) as Map<String,dynamic>;
+       var chatId = json['senderChatId'];
+      var  userId = json['senderId'];git
+      var  userName = json['senderName'];
+      var  userImage = json['senderProfilePhoto'];
+
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        String? userIdForCometChat = await sharedPreferences.getString("userIdForCometChat");
+        if(userIdForCometChat!=null) {
+          bool userIsLoggedIn = await CometChatService().logInUser(userIdForCometChat);
+          if(userIsLoggedIn){
+            if( chatId != null && userId != null){
+              Get.to( ()=>MessageList(
+                chatId:chatId,
+                trainerId: userId,
+                profilePicURL: userImage,
+                trainerTitle:userName,
+                time: '',
+                days: [0],
+              ));
+            }
+          }
+
+        }
+      }
+    } );
+
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async{
+      var json = jsonDecode(jsonEncode(message.data).toString()) as Map<String,dynamic>;
+       var chatId = json['senderChatId'];
+     var userId = json['senderId'];
+     var  userName = json['senderName'];
+     var userImage = json['senderProfilePhoto'];
+
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String? userIdForCometChat = await sharedPreferences.getString("userIdForCometChat");
+      if(userIdForCometChat!=null) {
+        bool userIsLoggedIn = await CometChatService().logInUser(userIdForCometChat);
+        if(userIsLoggedIn){
+          if( chatId != null && userId != null){
+            Get.to( ()=>MessageList(
+              chatId:chatId,
+              trainerId: userId,
+              profilePicURL: userImage,
+              trainerTitle:userName,
+              time: '',
+              days: [0],
+            ));
+          }
+        }
+
+      }
     });
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -216,6 +292,34 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
+//
+// Future<void> sendToMessageList(
+//     String  chatId,
+//     String userId,
+//     String userName,
+//     String userImage,
+//     )async {
+//   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//   String? userIdForCometChat = await sharedPreferences.getString(
+//       "userIdForCometChat");
+//   if (userIdForCometChat != null) {
+//     bool userIsLoggedIn = await CometChatService().logInUser(
+//         userIdForCometChat);
+//     if (userIsLoggedIn) {
+//       if (chatId != null && userId != null) {
+//         Get.to(() =>
+//             MessageList(
+//               chatId: chatId,
+//               trainerId: userId,
+//               profilePicURL: userImage,
+//               trainerTitle: userName,
+//               time: '',
+//               days: [0],
+//             ));
+//       }
+//     }
+//   }
+// }
 
 Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
   return <String, dynamic>{
