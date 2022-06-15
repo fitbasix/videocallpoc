@@ -1,11 +1,11 @@
 import '../../app_config.dart';
 
 class ApiUrl {
-  // static String liveBaseURL = AppConfig.api_url;
+  static String liveBaseURL = AppConfig.api_url;
   //static String liveBaseURL = 'http://3.131.171.176';
   // static String liveBaseURL = 'https://fc9b-223-190-91-158.ngrok.io';
-  static String liveBaseURL =
-      'https://edcd-2409-4050-2e05-4c27-51a3-5753-a534-c73d.in.ngrok.io';
+  // static String liveBaseURL =
+  //     'https://edcd-2409-4050-2e05-4c27-51a3-5753-a534-c73d.in.ngrok.io';
 
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
