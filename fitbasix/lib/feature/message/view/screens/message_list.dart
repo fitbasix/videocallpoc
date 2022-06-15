@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 import 'package:fitbasix/core/constants/credentials.dart';
@@ -52,8 +53,10 @@ class MessageList extends StatefulWidget {
       this.chatId})
       : super(key: key);
 
-   Rx<Conversation> conversation = Conversation(conversationType: ConversationType.user,
-     conversationWith: User(name: ''),).obs;
+  Rx<Conversation> conversation = Conversation(
+    conversationType: ConversationType.user,
+    conversationWith: User(name: ''),
+  ).obs;
   String? profilePicURL;
   String? trainerTitle;
   String? trainerId;
@@ -66,7 +69,12 @@ class MessageList extends StatefulWidget {
 }
 
 class _MessageListState extends State<MessageList>
-    with MessageListener, GroupListener, UserListener, WidgetsBindingObserver, ConnectionListener {
+    with
+        MessageListener,
+        GroupListener,
+        UserListener,
+        WidgetsBindingObserver,
+        ConnectionListener {
   ChatController _chatController = Get.find();
   final RxList<BaseMessage> _messageList = <BaseMessage>[].obs;
   final _itemFetcher = ItemFetcher<BaseMessage>();
@@ -75,6 +83,7 @@ class _MessageListState extends State<MessageList>
   String listenerId = "message_list_listener";
   bool _isLoading = true;
   bool _hasMore = true;
+  bool _isLoggingIn = false;
   MessagesRequest? messageRequest;
   String appTitle = "";
   String appSubtitle = "";
@@ -96,119 +105,136 @@ class _MessageListState extends State<MessageList>
   final TrainerController _trainerController = Get.find();
   HomeController _homeController = Get.find();
   final ReportAbuseController _reportAbuseController = Get.find();
-  
+
   /// variable for chat loading
   RxBool isChatLoading = true.obs;
 
   checkUserLogInStatus() async {
     ///login user if not logged in
+    var loginStatus = false;
     final user = await CometChat.getLoggedInUser();
-    if(user == null){
+    if (user == null && (_isLoggingIn == false)) {
       final prefs = await SharedPreferences.getInstance();
       String? Id = await prefs.getString("userIdForCometChat");
-      bool loginStatus = await CometChatService().logInUser(Id!);
-      if(loginStatus){
-        fetchUserMessages();
-      }
-      else{
+      setState(() {
+        _isLoggingIn = true;
+      });
+      loginStatus = await CometChatService().logInUser(Id!);
+      if (loginStatus) {
         checkUserLogInStatus();
       }
+    } else if (user == null && _isLoggingIn == true) {
+      checkUserLogInStatus();
+    } else {
+      fetchUserMessages();
     }
-
   }
 
-  fetchUserMessages(){
-    CometChat.getUser(widget.chatId!,
-        onSuccess: (User user) {
-          Conversation createConversation = Conversation(
-            conversationType: ConversationType.user,
-            conversationWith: user,
-          );
-          widget.conversation.value = createConversation;
-          isChatLoading.value = false;
+  fetchUserMessages() async {
+    CometChat.addMessageListener("listenerId", this);
+    log("testing here");
 
-          getChatFromHistory();
-
-        }, onError: (CometChatException e) {
-          debugPrint("User Fetch Failed: ${e.message}");
-        });
+    await CometChat.getUser(widget.chatId!, onSuccess: (User user) {
+      Conversation createConversation = Conversation(
+        conversationType: ConversationType.user,
+        conversationWith: user,
+      );
+      log("test 1");
+      setState(() {
+        isChatLoading.value = false;
+        widget.conversation.value = createConversation;
+      });
+      isChatLoading.refresh();
+      widget.conversation.refresh();
+      print('isChatLoading' + isChatLoading.value.toString());
+      getChatFromHistory();
+    }, onError: (CometChatException e) {
+      log("error fetch " + e.toString());
+      debugPrint("User Fetch Failed: ${e.message}");
+    });
   }
 
   ///recover all the previous chat
-  getChatFromHistory(){
+  getChatFromHistory() {
     print("got hete");
     int _limit = 30;
+    setState(() {
+      isChatLoading.value = false;
+    });
+    isChatLoading.refresh();
     String? _avatar;
-      if (widget.conversation.value.conversationType == "user") {
-        conversationWithId = (widget.conversation.value.conversationWith as User).uid;
-      } else {
-        conversationWithId = (widget.conversation.value.conversationWith as Group).guid;
-      }
-      if (widget.conversation.value.conversationType == CometChatReceiverType.user) {
-        messageRequest = (MessagesRequestBuilder()
-          ..uid = (widget.conversation.value.conversationWith as User).uid
-          ..limit = _limit
-          ..hideDeleted = true
-          ..categories = [
-            CometChatMessageCategory.action,
-            CometChatMessageCategory.message,
-            CometChatMessageCategory.custom
-          ])
-            .build();
-        appTitle = (widget.conversation.value.conversationWith as User).name;
-        _avatar = (widget.conversation.value.conversationWith as User).avatar;
-        appSubtitle = (widget.conversation.value.conversationWith as User).status ?? '';
-      } else {
-        messageRequest = (MessagesRequestBuilder()
-          ..guid = (widget.conversation.value.conversationWith as Group).guid
-          ..limit = _limit
-          ..hideDeleted = true
-          ..categories = [
-            CometChatMessageCategory.action,
-            CometChatMessageCategory.message,
-            CometChatMessageCategory.custom
-          ])
-            .build();
-        appTitle = (widget.conversation.value.conversationWith as Group).name;
-        _avatar = (widget.conversation.value.conversationWith as Group).icon;
-        appSubtitle =
-        "${(widget.conversation.value.conversationWith as Group).membersCount.toString()} members";
-      }
+    if (widget.conversation.value.conversationType == "user") {
+      conversationWithId =
+          (widget.conversation.value.conversationWith as User).uid;
+    } else {
+      conversationWithId =
+          (widget.conversation.value.conversationWith as Group).guid;
+    }
+    if (widget.conversation.value.conversationType ==
+        CometChatReceiverType.user) {
+      messageRequest = (MessagesRequestBuilder()
+            ..uid = (widget.conversation.value.conversationWith as User).uid
+            ..limit = _limit
+            ..hideDeleted = true
+            ..categories = [
+              CometChatMessageCategory.action,
+              CometChatMessageCategory.message,
+              CometChatMessageCategory.custom
+            ])
+          .build();
+      appTitle = (widget.conversation.value.conversationWith as User).name;
+      _avatar = (widget.conversation.value.conversationWith as User).avatar;
+      appSubtitle =
+          (widget.conversation.value.conversationWith as User).status ?? '';
+    } else {
+      messageRequest = (MessagesRequestBuilder()
+            ..guid = (widget.conversation.value.conversationWith as Group).guid
+            ..limit = _limit
+            ..hideDeleted = true
+            ..categories = [
+              CometChatMessageCategory.action,
+              CometChatMessageCategory.message,
+              CometChatMessageCategory.custom
+            ])
+          .build();
+      appTitle = (widget.conversation.value.conversationWith as Group).name;
+      _avatar = (widget.conversation.value.conversationWith as Group).icon;
+      appSubtitle =
+          "${(widget.conversation.value.conversationWith as Group).membersCount.toString()} members";
+    }
 
-      appBarAvatar = Hero(
-        tag: widget.conversation.value,
-        child: CircleAvatar(
-            child: _avatar != null && _avatar.trim() != ''
-                ? Image.network(
-              _avatar,
-            )
-                : Text(appTitle.substring(0, 2))),
-      );
+    appBarAvatar = Hero(
+      tag: widget.conversation.value,
+      child: CircleAvatar(
+          child: _avatar != null && _avatar.trim() != ''
+              ? Image.network(
+                  _avatar,
+                )
+              : Text(appTitle.substring(0, 2))),
+    );
     _isLoading = true;
     _hasMore = true;
     _loadMore();
-      // setState(() {
-      //
-      // });
-
+    // setState(() {
+    //
+    // });
   }
+
   @override
   void initState() {
     checkUserLogInStatus();
-    fetchUserMessages();
-    CometChat.addMessageListener("listenerId", this);
+    // fetchUserMessages();
+
     _focus.addListener(_onFocusChange);
     WidgetsBinding.instance!.addObserver(this);
     checkCometChatConnectionStatus();
     super.initState();
-
   }
 
   @override
   void onDisconnected() {
     CometChat.connect();
   }
-
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -218,8 +244,12 @@ class _MessageListState extends State<MessageList>
 
   void checkCometChatConnectionStatus() async {
     String connectionStatus = await CometChat.getConnectionStatus();
-    if(connectionStatus == CometChatWSState.disconnected){
+    if (connectionStatus == CometChatWSState.disconnected) {
       CometChat.connect();
+      // setState(() {
+      //   isChatLoading.value = false;
+      // });
+      // isChatLoading.refresh();
     }
   }
 
@@ -234,7 +264,8 @@ class _MessageListState extends State<MessageList>
 
   void _onFocusChange() {
     if (_focus.hasFocus) {
-      if (widget.conversation.value.conversationType == CometChatReceiverType.user) {
+      if (widget.conversation.value.conversationType ==
+          CometChatReceiverType.user) {
         User _user = widget.conversation.value.conversationWith as User;
         CometChat.startTyping(
           receaverUid: _user.uid,
@@ -248,7 +279,8 @@ class _MessageListState extends State<MessageList>
         );
       }
     } else if (!_focus.hasFocus) {
-      if (widget.conversation.value.conversationType == CometChatReceiverType.user) {
+      if (widget.conversation.value.conversationType ==
+          CometChatReceiverType.user) {
         User _user = widget.conversation.value.conversationWith as User;
         CometChat.endTyping(
             receaverUid: _user.uid, receiverType: CometChatReceiverType.user);
@@ -351,7 +383,8 @@ class _MessageListState extends State<MessageList>
   // Triggers fetch() and then add new items or change _hasMore flag
   void _loadMore() {
     _isLoading = true;
-    _itemFetcher.fetchPreviuos(messageRequest)
+    _itemFetcher
+        .fetchPreviuos(messageRequest)
         .then((List<BaseMessage> fetchedList) {
       if (fetchedList.isEmpty) {
         setState(() {
@@ -603,7 +636,6 @@ class _MessageListState extends State<MessageList>
                   ),
                 ),
               ))
-
       ],
     );
   }
@@ -781,13 +813,13 @@ class _MessageListState extends State<MessageList>
       appBar: AppbarforChat(
         onHangUpTapped: (value) async {
           ///get video call url from backend
-          String url =
-          await TrainerServices.getEnablexUrl(widget.trainerId!);
+          String url = await TrainerServices.getEnablexUrl(widget.trainerId!);
           bool cameraStatus = await Permission.camera.request().isGranted;
           bool micStatus = await Permission.microphone.request().isGranted;
-          if(cameraStatus&&micStatus){
-            String? roomID =  await TrainerServices.getEnablexUrl(widget.trainerId!);
-            if(roomID != null){
+          if (cameraStatus && micStatus) {
+            String? roomID =
+                await TrainerServices.getEnablexUrl(widget.trainerId!);
+            if (roomID != null) {
               var value = {
                 'user_ref': "2236",
                 "roomId": roomID,
@@ -796,35 +828,31 @@ class _MessageListState extends State<MessageList>
               };
               print(jsonEncode(value));
               var response = await http.post(
-                  Uri.parse(
-                      kBaseURL + "createToken"), // replace FQDN with Your Server API URL
+                  Uri.parse(kBaseURL +
+                      "createToken"), // replace FQDN with Your Server API URL
                   headers: headerForVideoCall,
                   body: jsonEncode(value));
               print(kBaseURL);
-              print("ppppm "+response.body);
+              print("ppppm " + response.body);
               if (response.statusCode == 200) {
                 print(response.body);
                 Map<String, dynamic> user = jsonDecode(response.body);
                 String token = user['token'].toString();
                 print('apptoken${token}');
-                if(token!='null' && token.isNotEmpty) {
+                if (token != 'null' && token.isNotEmpty) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
                             VideoConferenceScreen(token: token,)),
                   );
-                  //  Navigator.pushNamed(context, '/Conference');
+                   Navigator.pushNamed(context, '/Conference');
 
                 }
-
-              }else{
-
-
-              }
-
+              } else {}
             }
           }
+
           ///call with timing logic
           // log(widget.days!.toString());
 
@@ -859,104 +887,102 @@ class _MessageListState extends State<MessageList>
       body: SafeArea(
           child: Column(
         children: [
-          Obx(()=>!isChatLoading.value?Expanded(
-            child: Obx(
-              () => ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                reverse: true,
-                // to diisplay loading tile if more items
-                itemCount:
-                    _hasMore ? _messageList.length + 1 : _messageList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  // Uncomment the following line to see in real time how ListView.builder works
-                  // print('ListView.builder is building index $index');
-                  if (index >= _messageList.length) {
-                    // Don't trigger if one async loading is already under way
-                    if (!_isLoading) {
-                      _loadMore();
-                    }
-                    return const LoadingIndicator();
-                  }
-                  return getMessageWidget(index);
-                },
-              ),
-            ),
-          ):Expanded(
-            child: Shimmer.fromColors(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Spacer(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 16 * SizeConfig.widthMultiplier!),
-                    height: 28 * SizeConfig.heightMultiplier!,
-                    width: 176 * SizeConfig.widthMultiplier!,
-                    color: Color(0xFF3646464),
-                  ),
-                  SizedBox(
-                    height: 8 * SizeConfig.heightMultiplier!,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 16 * SizeConfig.widthMultiplier!),
-                    height: 49 * SizeConfig.heightMultiplier!,
-                    width: 215 * SizeConfig.widthMultiplier!,
-                    color: Color(0xFF3646464),
-                  ),
-                  SizedBox(
-                    height: 8 * SizeConfig.heightMultiplier!,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 16 * SizeConfig.widthMultiplier!),
-                    height: 28 * SizeConfig.heightMultiplier!,
-                    width: 176 * SizeConfig.widthMultiplier!,
-                    color: Color(0xFF3646464),
-                  ),
-                  SizedBox(
-                      height: 16 * SizeConfig.heightMultiplier!),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          right:
-                          16 * SizeConfig.widthMultiplier!),
-                      height: 42 * SizeConfig.heightMultiplier!,
-                      width: 191 * SizeConfig.widthMultiplier!,
-                      color: Color(0xFF3646464),
+          Obx(() => !isChatLoading.value
+              ? Expanded(
+                  child: Obx(
+                    () => ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      reverse: true,
+                      // to diisplay loading tile if more items
+                      itemCount: _hasMore
+                          ? _messageList.length + 1
+                          : _messageList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        // Uncomment the following line to see in real time how ListView.builder works
+                        // print('ListView.builder is building index $index');
+                        if (index >= _messageList.length) {
+                          // Don't trigger if one async loading is already under way
+                          if (!_isLoading) {
+                            _loadMore();
+                          }
+                          return const LoadingIndicator();
+                        }
+                        return getMessageWidget(index);
+                      },
                     ),
                   ),
-                  SizedBox(
-                      height: 16 * SizeConfig.heightMultiplier!),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 16 * SizeConfig.widthMultiplier!),
-                    height: 28 * SizeConfig.heightMultiplier!,
-                    width: 176 * SizeConfig.widthMultiplier!,
-                    color: Color(0xFF3646464),
-                  ),
-                  SizedBox(
-                      height: 16 * SizeConfig.heightMultiplier!),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          right:
-                          16 * SizeConfig.widthMultiplier!),
-                      height: 78 * SizeConfig.heightMultiplier!,
-                      width: 232 * SizeConfig.widthMultiplier!,
-                      color: Color(0xFF3646464),
+                )
+              : Expanded(
+                  child: Shimmer.fromColors(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Spacer(),
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 16 * SizeConfig.widthMultiplier!),
+                          height: 28 * SizeConfig.heightMultiplier!,
+                          width: 176 * SizeConfig.widthMultiplier!,
+                          color: Color(0xFF3646464),
+                        ),
+                        SizedBox(
+                          height: 8 * SizeConfig.heightMultiplier!,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 16 * SizeConfig.widthMultiplier!),
+                          height: 49 * SizeConfig.heightMultiplier!,
+                          width: 215 * SizeConfig.widthMultiplier!,
+                          color: Color(0xFF3646464),
+                        ),
+                        SizedBox(
+                          height: 8 * SizeConfig.heightMultiplier!,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 16 * SizeConfig.widthMultiplier!),
+                          height: 28 * SizeConfig.heightMultiplier!,
+                          width: 176 * SizeConfig.widthMultiplier!,
+                          color: Color(0xFF3646464),
+                        ),
+                        SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                right: 16 * SizeConfig.widthMultiplier!),
+                            height: 42 * SizeConfig.heightMultiplier!,
+                            width: 191 * SizeConfig.widthMultiplier!,
+                            color: Color(0xFF3646464),
+                          ),
+                        ),
+                        SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: 16 * SizeConfig.widthMultiplier!),
+                          height: 28 * SizeConfig.heightMultiplier!,
+                          width: 176 * SizeConfig.widthMultiplier!,
+                          color: Color(0xFF3646464),
+                        ),
+                        SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                right: 16 * SizeConfig.widthMultiplier!),
+                            height: 78 * SizeConfig.heightMultiplier!,
+                            width: 232 * SizeConfig.widthMultiplier!,
+                            color: Color(0xFF3646464),
+                          ),
+                        ),
+                      ],
                     ),
+                    baseColor:
+                        Color.fromARGB(0, 255, 255, 255).withOpacity(0.1),
+                    highlightColor:
+                        Color.fromARGB(1, 255, 255, 255).withOpacity(0.46),
                   ),
-                ],
-              ),
-              baseColor: Color.fromARGB(0, 255, 255, 255)
-                  .withOpacity(0.1),
-              highlightColor: Color.fromARGB(1, 255, 255, 255)
-                  .withOpacity(0.46),
-            ),
-          )),
+                )),
           if (typing == true) getTypingIndicator(),
           getMessageComposer(context)
         ],
@@ -1060,45 +1086,42 @@ class _MessageListState extends State<MessageList>
                     GestureDetector(
                       onTap: () async {
                         //_trainerController.atrainerDetail.value = Trainer();
-                        _trainerController.atrainerDetail.value = trainer_model.Trainer();
+                        _trainerController.atrainerDetail.value =
+                            trainer_model.Trainer();
 
-                                  _trainerController.isProfileLoading.value =
-                                      true;
-                                  _trainerController
-                                      .isMyTrainerProfileLoading.value = true;
-                                  Navigator.pushNamed(
-                                      context, RouteName.trainerProfileScreen);
+                        _trainerController.isProfileLoading.value = true;
+                        _trainerController.isMyTrainerProfileLoading.value =
+                            true;
+                        Navigator.pushNamed(
+                            context, RouteName.trainerProfileScreen);
 
-                                  var result =
-                                      await TrainerServices.getATrainerDetail(
-                                          widget.trainerId!);
-                                  _trainerController.atrainerDetail.value =
-                                      result.response!.data!;
+                        var result = await TrainerServices.getATrainerDetail(
+                            widget.trainerId!);
+                        _trainerController.atrainerDetail.value =
+                            result.response!.data!;
 
-                                  _trainerController.planModel.value =
-                                      await TrainerServices.getPlanByTrainerId(
-                                          widget.trainerId!);
+                        _trainerController.planModel.value =
+                            await TrainerServices.getPlanByTrainerId(
+                                widget.trainerId!);
 
-                                  _trainerController.initialPostData.value =
-                                      await TrainerServices.getTrainerPosts(
-                                          widget.trainerId!, 0);
-                                  _trainerController
-                                      .isMyTrainerProfileLoading.value = false;
-                                  _trainerController.loadingIndicator.value =
-                                      false;
-                                  if (_trainerController.initialPostData.value
-                                          .response!.data!.length !=
-                                      0) {
-                                    _trainerController.trainerPostList.value =
-                                        _trainerController.initialPostData.value
-                                            .response!.data!;
-                                  } else {
-                                    _trainerController.trainerPostList.clear();
-                                  }
-                                  _trainerController.isProfileLoading.value =
-                                      false;
-                                  _trainerController
-                                      .isMyTrainerProfileLoading.value = false;
+                        _trainerController.initialPostData.value =
+                            await TrainerServices.getTrainerPosts(
+                                widget.trainerId!, 0);
+                        _trainerController.isMyTrainerProfileLoading.value =
+                            false;
+                        _trainerController.loadingIndicator.value = false;
+                        if (_trainerController
+                                .initialPostData.value.response!.data!.length !=
+                            0) {
+                          _trainerController.trainerPostList.value =
+                              _trainerController
+                                  .initialPostData.value.response!.data!;
+                        } else {
+                          _trainerController.trainerPostList.clear();
+                        }
+                        _trainerController.isProfileLoading.value = false;
+                        _trainerController.isMyTrainerProfileLoading.value =
+                            false;
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,

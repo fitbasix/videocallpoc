@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:fitbasix/feature/log_in/model/third_party_login.dart';
 import 'package:fitbasix/main_dev.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_info/device_info.dart';
 
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
@@ -16,7 +18,6 @@ import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
 
 import '../../../core/constants/image_path.dart';
 import '../view/login_screen.dart';
-
 
 class LogInService {
   static LoginController loginController = Get.put(LoginController());
@@ -121,10 +122,13 @@ class LogInService {
         loginController.otpErrorMessage.value =
             responseData['response']['message'];
       }
-      if(putResponse.statusCode == 445){
+      if (putResponse.statusCode == 445) {
         Get.deleteAll();
-        final SnackBar snackBar =
-        SnackBar(content: Text(responseData["response"]["message"],style: const TextStyle(color: Colors.white),));
+        final SnackBar snackBar = SnackBar(
+            content: Text(
+          responseData["response"]["message"],
+          style: const TextStyle(color: Colors.white),
+        ));
         snackbarKey.currentState?.showSnackBar(snackBar);
         Navigator.pop(context);
       }
@@ -193,5 +197,24 @@ class LogInService {
     print(RefreshToken);
     var response =
         await dio!.post(ApiUrl.logOut, data: {"refreshToken": RefreshToken});
+  }
+
+  static Future<void> removeDeviceId() async {
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    AndroidDeviceInfo? androidInfo;
+    IosDeviceInfo? iosInfo;
+    if (Platform.isAndroid == true) {
+      androidInfo = await deviceInfoPlugin.androidInfo;
+    } else {
+      iosInfo = await deviceInfoPlugin.iosInfo;
+    }
+    String deviceId = Platform.isAndroid
+        ? androidInfo!.androidId
+        : iosInfo!.identifierForVendor;
+    var response = await dio!.delete(
+      ApiUrl.removeDeviceId,
+      data: {"deviceId": deviceId},
+    );
+    print(response.statusMessage);
   }
 }

@@ -98,7 +98,7 @@ packages:
       name: cometchat
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   connectivity:
     dependency: "direct main"
     description:
@@ -252,7 +252,7 @@ packages:
       name: enx_flutter_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.8"
+    version: "2.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -961,6 +961,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.3"
+  selectable_autolink_text:
+    dependency: "direct main"
+    description:
+      name: selectable_autolink_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.0"
   sentry:
     dependency: transitive
     description:

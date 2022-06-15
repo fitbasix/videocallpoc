@@ -62,7 +62,7 @@ dependencies:
   flutter_holo_date_picker: ^1.0.1+2
   flutter_ruler_picker: ^1.0.2
   intl: ^0.17.0
-  cometchat: ^3.0.0
+  cometchat: ^3.0.1
   mime:
 
 #  quickblox_sdk: ^0.6.7-beta

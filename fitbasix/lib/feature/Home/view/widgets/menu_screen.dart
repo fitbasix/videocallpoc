@@ -7,6 +7,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/view/Home_page.dart';
 import 'package:fitbasix/feature/Home/view/widgets/feedback_dialogbox.dart';
@@ -135,7 +136,6 @@ class MenuScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pop;
                       Navigator.pushNamed(context, RouteName.editPersonalInfo);
-
                     })
                 : Container(),
             jsonOb['document'] == 1
@@ -193,18 +193,20 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.logOut,
                     menuItemText: 'logOut'.tr,
                     onTap: () async {
-                      if(!userClickedOnLogOut){
+                      if (!userClickedOnLogOut) {
                         userClickedOnLogOut = true;
                         AwesomeNotifications().cancelAllSchedules();
                         AwesomeNotifications().cancelAll();
                         final LoginController _controller =
-                        Get.put(LoginController());
+                            Get.put(LoginController());
                         CometChatService().logOutUserFromCometChat();
                         LogInService.logOut();
+                        LogInService.removeDeviceId();
                         userClickedOnLogOut = false;
-                        final SharedPreferences prefs = await SharedPreferences.getInstance();
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
                         prefs.clear();
-                         _controller.googleSignout();
+                        _controller.googleSignout();
                         Navigator.pushNamedAndRemoveUntil(
                             context, RouteName.loginScreen, (route) => false);
                         Get.deleteAll();
