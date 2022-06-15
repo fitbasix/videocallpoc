@@ -231,7 +231,7 @@ Future<void> main() async {
       if(initialMessage != null){
         var json = jsonDecode(jsonEncode(initialMessage.data).toString()) as Map<String,dynamic>;
        var chatId = json['senderChatId'];
-      var  userId = json['senderId'];git
+      var  userId = json['senderId'];
       var  userName = json['senderName'];
       var  userImage = json['senderProfilePhoto'];
 
