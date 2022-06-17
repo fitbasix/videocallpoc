@@ -8,6 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/GetXNetworkManager.dart';
 import 'package:fitbasix/NetworkManager.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/message/controller/chat_controller.dart';
 import 'package:fitbasix/feature/message/view/screens/message_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:device_info/device_info.dart';
@@ -54,7 +56,6 @@ void selectNotification(String? payload) async {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("background notification llllll");
   AwesomeNotifications().initialize(
       // set the icon to null if you want to use the default app icon
       null,
@@ -74,6 +75,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
             channelGroupName: 'Basic group')
       ],
       debug: true);
+
+  print('===================> In background message');
+
+  var jsonResponse =
+      jsonDecode(jsonEncode(message.data).toString()) as Map<String, dynamic>;
+
+  print('===================> ' + jsonResponse.toString());
+
   // await AwesomeNotifications().createNotification(
   //     content: NotificationContent(
   //       displayOnForeground: true,
@@ -147,6 +156,14 @@ Future<void> main() async {
         : iosInfo!.identifierForVendor;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('AccessToken');
+    prefs.remove('senderChatId');
+    prefs.remove('senderId');
+    prefs.remove('senderName');
+    prefs.remove('senderProfilePhoto');
+
+    Get.put(TrainerController());
+    Get.put(ChatController());
+
     FirebaseMessaging.instance.getToken().then((value) async {
       if (accessToken != null) {
         LogInService.RegisterDeviceToken(value.toString(), deviceId);
@@ -193,7 +210,7 @@ Future<void> main() async {
     });
 
     FirebaseMessaging.onMessage.listen((message) async {
-      print('===========>' + message.data.toString());
+      print('===========> ' + message.data.toString());
       AwesomeNotifications().createNotification(
         content: NotificationContent(
             displayOnForeground: true,
@@ -230,19 +247,26 @@ Future<void> main() async {
     });
 
     FirebaseMessaging.instance.getInitialMessage().then((initialMessage) async {
+      print('===================> Get initial message');
       if (initialMessage != null) {
+        print('===================> Initial message ' +
+            initialMessage.data.toString());
         var json = jsonDecode(jsonEncode(initialMessage.data).toString())
             as Map<String, dynamic>;
-        await sendToMessageList(
-          json['senderChatId'],
-          json['senderId'],
-          json['senderName'],
-          json['senderProfilePhoto'],
-        );
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+
+        sharedPreferences.setString('senderChatId', json['senderChatId']);
+        sharedPreferences.setString('senderId', json['senderId']);
+        sharedPreferences.setString('senderName', json['senderName']);
+        sharedPreferences.setString(
+            'senderProfilePhoto', json['senderProfilePhoto']);
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      print('===================> On message opened app ' +
+          message.data.toString());
       var json = jsonDecode(jsonEncode(message.data).toString())
           as Map<String, dynamic>;
       await sendToMessageList(

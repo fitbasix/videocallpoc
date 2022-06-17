@@ -256,10 +256,19 @@ class _MessageListState extends State<MessageList>
   @override
   void dispose() {
     super.dispose();
+    removeLocalChatIds();
     WidgetsBinding.instance!.removeObserver(this);
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
     CometChat.removeMessageListener(listenerId);
+  }
+
+  void removeLocalChatIds() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove('senderChatId');
+    sharedPreferences.remove('senderId');
+    sharedPreferences.remove('senderName');
+    sharedPreferences.remove('senderProfilePhoto');
   }
 
   void _onFocusChange() {
@@ -777,7 +786,7 @@ class _MessageListState extends State<MessageList>
     }
   }
 
-  sendTextMessage() {
+  sendTextMessage() async {
     late String receiverID;
     String messagesText = _massageController.text.trim();
     late String receiverType;
@@ -794,6 +803,7 @@ class _MessageListState extends State<MessageList>
         text: messagesText,
         receiverUid: receiverID,
         receiverType: receiverType,
+        muid: receiverID,
         type: type);
 
     CometChat.sendMessage(textMessage, onSuccess: (TextMessage message) {
@@ -843,11 +853,11 @@ class _MessageListState extends State<MessageList>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            VideoConferenceScreen(token: token,)),
+                        builder: (context) => VideoConferenceScreen(
+                              token: token,
+                            )),
                   );
-                   Navigator.pushNamed(context, '/Conference');
-
+                  Navigator.pushNamed(context, '/Conference');
                 }
               } else {}
             }

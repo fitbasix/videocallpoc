@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
@@ -10,6 +11,7 @@ import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
 import 'package:fitbasix/feature/Home/model/water_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
+import 'package:fitbasix/feature/message/view/screens/message_list.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
 import 'package:fitbasix/feature/spg/controller/spg_controller.dart';
@@ -48,7 +50,8 @@ class HomeController extends GetxController {
   RxBool showLoader = RxBool(false);
   RxDouble caloriesBurnt = 0.0.obs;
   RxList<MonthlyHealthData> monthlyHealthData = [MonthlyHealthData()].obs;
-  RxList<MonthlyHealthData> monthlyHealthDataAfterFilter = [MonthlyHealthData()].obs;
+  RxList<MonthlyHealthData> monthlyHealthDataAfterFilter =
+      [MonthlyHealthData()].obs;
   RxBool waterConsumedDataLoading = false.obs;
   RxBool isConsumptionLoading = false.obs;
   RxBool isNeedToLoadData = true.obs;
@@ -98,53 +101,40 @@ class HomeController extends GetxController {
     {},
   );
 
-
-  RxString getWaterGoalStatus(){
+  RxString getWaterGoalStatus() {
     HomeController _homeController = Get.find();
-    print((_homeController
-        .waterLevel.value *
-        _homeController
-            .waterDetails
-            .value
-            .response!
-            .data![0]
-            .totalWaterRequired!).toString()+"  "+_homeController.goalWater.value.toString());
-    if(((_homeController
-        .waterLevel.value *
-        _homeController
-            .waterDetails
-            .value
-            .response!
-            .data![0]
-            .totalWaterRequired!)/_homeController.goalWater.value)*100<=20){
+    print((_homeController.waterLevel.value *
+                _homeController
+                    .waterDetails.value.response!.data![0].totalWaterRequired!)
+            .toString() +
+        "  " +
+        _homeController.goalWater.value.toString());
+    if (((_homeController.waterLevel.value *
+                    _homeController.waterDetails.value.response!.data![0]
+                        .totalWaterRequired!) /
+                _homeController.goalWater.value) *
+            100 <=
+        20) {
       return 'Low'.obs;
-    }
-    else if(((_homeController
-        .waterLevel.value *
-        _homeController
-            .waterDetails
-            .value
-            .response!
-            .data![0]
-            .totalWaterRequired!)/_homeController.goalWater.value)*100<=40){
-
+    } else if (((_homeController.waterLevel.value *
+                    _homeController.waterDetails.value.response!.data![0]
+                        .totalWaterRequired!) /
+                _homeController.goalWater.value) *
+            100 <=
+        40) {
       return 'Moderate'.obs;
-    }
-    else if(((_homeController
-        .waterLevel.value *
-        _homeController
-            .waterDetails
-            .value
-            .response!
-            .data![0]
-            .totalWaterRequired!)/_homeController.goalWater.value)*100<=60){
-
+    } else if (((_homeController.waterLevel.value *
+                    _homeController.waterDetails.value.response!.data![0]
+                        .totalWaterRequired!) /
+                _homeController.goalWater.value) *
+            100 <=
+        60) {
       return 'Good'.obs;
-    }
-    else{
+    } else {
       return 'Excellent'.obs;
     }
   }
+
   RxList<String> alreadyRenderedPostId = <String>[].obs;
   Future<void> selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -271,8 +261,6 @@ class HomeController extends GetxController {
     print("test");
     userProfileData.value = await CreatePostService.getUserProfile();
 
-
-
     ///todo after
     if (userProfileData.value.response!.data!.profile!.email == null) {
       Get.deleteAll();
@@ -358,6 +346,35 @@ class HomeController extends GetxController {
   @override
   Future<void> onInit() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var senderChatId = prefs.getString('senderChatId');
+    var senderId = prefs.getString('senderId');
+    var senderName = prefs.getString('senderName');
+    var senderProfilePhoto = prefs.getString('senderProfilePhoto');
+    var userIdForCometChat = prefs.getString("userIdForCometChat");
+
+    print(
+        '===================> Home Controller $senderChatId $senderId $senderName $senderProfilePhoto');
+
+    if (senderChatId != null && senderId != null) {
+      if (userIdForCometChat != null) {
+        bool userIsLoggedIn =
+            await CometChatService().logInUser(userIdForCometChat);
+        if (userIsLoggedIn) {
+          Get.to(
+            () => MessageList(
+              chatId: senderChatId,
+              trainerId: senderId,
+              profilePicURL: senderProfilePhoto,
+              trainerTitle: senderName,
+              time: '',
+              days: [0],
+            ),
+          );
+        }
+      }
+    }
+
     AppState _state = AppState.DATA_NOT_FETCHED;
     var calories = prefs.getString('caloriesBurnt');
 
