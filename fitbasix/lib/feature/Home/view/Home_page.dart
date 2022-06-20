@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                 : RefreshIndicator(
               backgroundColor: kBlack,
               color: kGreenColor,
-              onRefresh: onTrendingPostRefresh,
+              onRefresh: _homeController.onTrendingPostRefresh,
               child: SingleChildScrollView(
                 controller: _scrollController,
                 child: Stack(

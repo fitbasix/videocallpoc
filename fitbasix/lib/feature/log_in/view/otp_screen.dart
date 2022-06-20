@@ -46,7 +46,7 @@ class OtpScreen extends StatelessWidget {
               ),
               Positioned(
                   top: 16.12,
-                  left: 18.67,
+                  left: 8.67,
                   child: CustomBackButton(color: Theme.of(context).primaryColor)
               ),
               Align(

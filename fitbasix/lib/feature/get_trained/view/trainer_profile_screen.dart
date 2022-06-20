@@ -1278,7 +1278,7 @@ class _TrainerPageState extends State<TrainerPage> {
                           height: 177 * SizeConfig.heightMultiplier!,
                           child: Image.network(
                             widget.trainerCoverImage,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                           ),
                         ),
                         Positioned(

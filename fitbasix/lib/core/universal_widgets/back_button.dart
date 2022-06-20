@@ -16,6 +16,7 @@ class CustomBackButton extends StatelessWidget {
           Navigator.pop(context);
         },
         child: Container(
+          margin: EdgeInsets.all(10),
           height: 16,
           width: 16,
           color: Colors.transparent,
