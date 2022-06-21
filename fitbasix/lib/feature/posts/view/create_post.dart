@@ -95,14 +95,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   actions: [
                     Obx(() => (_postController.postData.value.response!.data!
                                         .files!.length >
-                                    0 ||
+                                    0 || _postController.postText.value != "" ||
                                 (_postController.postData.value.response!.data!
                                             .caption !=
                                         null &&
                                     _postController.postData.value.response!
                                             .data!.caption !=
                                         "" &&
-                                    _postController.postText.value != "")) &&
+                                    _postController.postText.value != ""
+                                    ))
+                        &&
                             _postController
                                     .postData.value.response!.data!.category !=
                                 null

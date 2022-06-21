@@ -139,6 +139,7 @@ class DialogboxForFeedback extends StatelessWidget {
                               //GoTo the AppStore
                               StoreRedirect.redirect(
                                 androidAppId: "com.fitbasixco.fitbasix",
+                                iOSAppId: "1618003884"
                               );
                             },
                             child: Text(

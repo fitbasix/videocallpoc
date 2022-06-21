@@ -443,4 +443,18 @@ class HomeController extends GetxController {
     setup();
     super.onInit();
   }
+
+  Future<void> getProfileData() async {
+    userProfileData.value = await CreatePostService.getUserProfile();
+  }
+
+  Future<void> onTrendingPostRefresh() async {
+    initialPostData.value =
+    await HomeService.getPosts(skip: null);
+
+    if (initialPostData.value.response!.data!.length != 0) {
+      trendingPostList.value =
+      initialPostData.value.response!.data!;
+    }
+  }
 }

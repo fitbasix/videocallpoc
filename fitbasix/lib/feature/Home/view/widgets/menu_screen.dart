@@ -193,6 +193,10 @@ class MenuScreen extends StatelessWidget {
                     menuItemImage: ImagePath.logOut,
                     menuItemText: 'logOut'.tr,
                     onTap: () async {
+                      Get.dialog(
+                          Center(child: CustomizedCircularProgress()),
+                          barrierDismissible: false
+                      );
                       if (!userClickedOnLogOut) {
                         userClickedOnLogOut = true;
                         AwesomeNotifications().cancelAllSchedules();

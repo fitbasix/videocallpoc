@@ -367,7 +367,6 @@ void registerFcmToken() async {
     if (accessToken != null) {
       LogInService.RegisterDeviceToken(value.toString(), deviceId);
     }
-
     print("fcm token" + value.toString());
   });
 }

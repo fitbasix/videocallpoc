@@ -143,6 +143,8 @@ class _CameraProfileViewScreenState extends State<CameraProfileViewScreen> {
                                 });
                               }
                             }
+                            homeController.getProfileData();
+                            profileController.getProfilePosts();
                           },
                           child: Container(
                             height: 48 * SizeConfig.heightMultiplier!,

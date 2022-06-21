@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:get/get.dart';
@@ -200,5 +201,12 @@ class ProfileController extends GetxController {
     interests.value = await TrainerServices.getAllInterest();
     isLoading.value = false;
     super.onInit();
+  }
+
+  Future<void> getProfilePosts() async{
+    final postQuery = await ProfileServices.getUserPosts(
+        skip: 0);
+    userPostList.clear();
+    userPostList.addAll(postQuery.response!.data!);
   }
 }

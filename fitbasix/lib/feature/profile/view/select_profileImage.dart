@@ -138,6 +138,8 @@ class _SelectProfilePicScreenState extends State<SelectProfilePicScreen> {
                           //     mediaUrl.response!.data![0];
                         }
                         profileController.isLoading.value = false;
+                        homeController..getProfileData()..onTrendingPostRefresh();
+                        profileController.getProfilePosts();
                         Navigator.pop(context);
                       },
                     )

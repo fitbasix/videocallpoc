@@ -33,7 +33,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final ProfileController profileController = Get.find();
   @override
   void initState() {
-    selectedRadio = profileController.gender.value;
+    selectedRadio = profileController.homeController.userProfileData.value
+        .response?.data?.profile?.gender ??
+        1;
     super.initState();
   }
 
@@ -668,6 +670,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     // profileController.homeController.
                                     Navigator.pop(context);
                                     profileController.isLoading.value = false;
+                                    profileController.homeController
+                                        .getProfileData();
                                     //change user personal data on cloud
                                   },
                                   child: Text(
