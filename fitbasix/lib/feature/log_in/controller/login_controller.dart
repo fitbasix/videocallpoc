@@ -8,6 +8,8 @@ import 'package:fitbasix/feature/log_in/model/countries_model.dart';
 import 'package:fitbasix/feature/log_in/model/logInRegisterModel.dart';
 import 'package:fitbasix/feature/log_in/model/third_party_model.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+
 
 class LoginController extends GetxController {
   final googleSignIn = GoogleSignIn().obs;
@@ -89,6 +91,26 @@ class LoginController extends GetxController {
   @override
   Future<void> onInit() async {
     await getCountries();
+    await _initData();
     super.onInit();
+  }
+
+  Future<void> _initData() async {
+    try {
+      var _timezone = await FlutterNativeTimezone.getLocalTimezone();
+      print(' =====================>  $_timezone');
+      if (_timezone == 'Asia/Kolkata' ||
+          _timezone == 'Asia/Calcutta' ||
+          _timezone == 'Asia/Chennai' ||
+          _timezone == 'Asia/Delhi' ||
+          _timezone == 'Asia/New Delhi') {
+        selectedCountry.value = countryList[1];
+      } else {
+        selectedCountry.value = countryList[0];
+      }
+      update();
+    } catch (e) {
+      print('Could not get the local timezone');
+    }
   }
 }

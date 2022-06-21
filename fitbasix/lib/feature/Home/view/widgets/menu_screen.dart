@@ -204,16 +204,22 @@ class MenuScreen extends StatelessWidget {
                         final LoginController _controller =
                             Get.put(LoginController());
                         CometChatService().logOutUserFromCometChat();
-                        LogInService.logOut();
-                        LogInService.removeDeviceId();
-                        userClickedOnLogOut = false;
-                        final SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.clear();
-                        _controller.googleSignout();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, RouteName.loginScreen, (route) => false);
-                        Get.deleteAll();
+                       try {
+                         await LogInService.removeDeviceId().then((value) async{
+                           await LogInService.logOut();
+                         });
+                          userClickedOnLogOut = false;
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.clear();
+                          _controller.googleSignout();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, RouteName.loginScreen, (route) => false);
+                          Get.deleteAll();
+                        }
+                        catch (e){
+                         Get.back();
+                        }
                       }
                     })
                 : Container()
