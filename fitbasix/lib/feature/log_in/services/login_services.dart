@@ -197,6 +197,7 @@ class LogInService {
     print(RefreshToken);
     var response =
         await dio!.post(ApiUrl.logOut, data: {"refreshToken": RefreshToken});
+    print(response.statusMessage);
   }
 
   static Future<void> removeDeviceId() async {
@@ -211,6 +212,10 @@ class LogInService {
     String deviceId = Platform.isAndroid
         ? androidInfo!.androidId
         : iosInfo!.identifierForVendor;
+
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+
     var response = await dio!.delete(
       ApiUrl.removeDeviceId,
       data: {"deviceId": deviceId},
