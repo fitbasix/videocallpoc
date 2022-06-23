@@ -165,7 +165,7 @@ log(ApiUrl.getEnablexUrl+id);
   }
 
   static Future<bool> bookSlot(List<String> slots, String id, int time,
-      List<int> days, BuildContext context) async {
+      List<int> days, String trainerId, BuildContext context) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var token = await LogInService.getAccessToken();
@@ -179,7 +179,7 @@ log(ApiUrl.getEnablexUrl+id);
     try {
       response = await Dio().post(ApiUrl.bookDemo,
           options: Options(headers: {"language": 1, "Authorization": token}),
-          data: {"days": slots, "planId": id, "time": time, "day": days});
+          data: {"days": slots, "planId": id, "time": time, "day": days, "trainerId":trainerId});
       return true;
     } on DioError catch (e) {
       final responseData = jsonDecode(e.response.toString());

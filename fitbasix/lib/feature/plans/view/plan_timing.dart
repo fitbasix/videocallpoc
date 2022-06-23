@@ -518,6 +518,7 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                 trainerController
                                                     .selectedTimeSlot.value,
                                                 selectedDays,
+                                                trainerController.atrainerDetail.value.user?.id ?? '',
                                                 context);
                                         if (booked == true) {
                                           trainerController.enrolledTrainer.add(
