@@ -361,13 +361,13 @@ class Conference extends State<VideoConferenceScreen> {
     EnxRtc.onACKStopLiveRecording=(Map<dynamic, dynamic> map){
       print('onACKStopLiveRecording' + jsonEncode(map));
     };
-    EnxRtc.onLiveRecordingNotification=(Map<dynamic, dynamic> map){
-      print('onLiveRecordingNotification' + jsonEncode(map));
-    };
-    EnxRtc.onRoomliverecordOn=(Map<dynamic, dynamic> map){
-      print('onRoomliverecordOn' + jsonEncode(map));
-
-    };
+    // EnxRtc.onLiveRecordingNotification=(Map<dynamic, dynamic> map){
+    //   print('onLiveRecordingNotification' + jsonEncode(map));
+    // };
+    // EnxRtc.onRoomliverecordOn=(Map<dynamic, dynamic> map){
+    //   print('onRoomliverecordOn' + jsonEncode(map));
+    //
+    // };
   }
 
   void _setMediaDevice(String value) {

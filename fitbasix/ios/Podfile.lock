@@ -51,11 +51,11 @@ PODS:
   - DKPhotoGallery/Resource (0.0.17):
     - SDWebImage
     - SwiftyGif
-  - enx_flutter_plugin (2.1.0):
-    - EnxRTCiOS (= 2.1.5)
+  - enx_flutter_plugin (2.1.1):
+    - EnxRTCiOS (= 2.2.0)
     - Flutter
     - Socket.IO-Client-Swift (~> 15.1.0)
-  - EnxRTCiOS (2.1.5):
+  - EnxRTCiOS (2.2.0):
     - GoogleWebRTC (= 1.1.31999)
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
@@ -174,6 +174,8 @@ PODS:
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_native_splash (0.0.1):
+    - Flutter
+  - flutter_native_timezone (0.0.1):
     - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -330,6 +332,7 @@ DEPENDENCIES:
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - flutter_native_timezone (from `.symlinks/plugins/flutter_native_timezone/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - GTMSessionFetcher (= 1.5.0)
   - health (from `.symlinks/plugins/health/ios`)
@@ -428,6 +431,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
+  flutter_native_timezone:
+    :path: ".symlinks/plugins/flutter_native_timezone/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
   health:
@@ -476,8 +481,8 @@ SPEC CHECKSUMS:
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   DKImagePickerController: 72fd378f244cef3d27288e0aebf217a4467e4012
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  enx_flutter_plugin: e8af5fc2bef1eaeaa9cfbe7ed177a901e3eef144
-  EnxRTCiOS: bf31ce2219cee62fc63cff11d66fd341b64e401a
+  enx_flutter_plugin: bd74ba8a459e86022f92b40a48907e61304ee504
+  EnxRTCiOS: d602ea3aee200891a48b01fd816f4fbe7d13c48e
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c
   firebase_analytics: 777a9c75820a3caea0f14ee9dc07396fb0fd5bcd
@@ -499,6 +504,7 @@ SPEC CHECKSUMS:
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
+  flutter_native_timezone: 5f05b2de06c9776b4cc70e1839f03de178394d22
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in: c5cecea71f3be43282263550556e311c4cc03582
   GoogleAppMeasurement: aa3cb422fab2b05d2efac543a5720d1a85b9dea5

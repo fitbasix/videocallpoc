@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 1.0.0+13
+version: 1.0.0+20
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
@@ -102,7 +102,7 @@ dependencies:
   connectivity: ^3.0.6
   field_suggestion: ^0.2.3
   flutter_inappwebview: ^5.3.2
-  enx_flutter_plugin: ^2.0.7
+  enx_flutter_plugin: ^2.1.2
   selectable_autolink_text: ^2.3.0
   flutter_native_timezone: ^2.0.0
 
