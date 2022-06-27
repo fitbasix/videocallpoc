@@ -161,6 +161,7 @@ class TrainerController extends GetxController {
     trainers.value = await TrainerServices.getTrainers();
     interests.value = await TrainerServices.getAllInterest();
     getTrainedIsLoading.value = false;
+    update();
   }
 
   Rx<SortByModel> filterOptions = SortByModel().obs;

@@ -156,10 +156,6 @@ Future<void> main() async {
         : iosInfo!.identifierForVendor;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('AccessToken');
-    prefs.remove('senderChatId');
-    prefs.remove('senderId');
-    prefs.remove('senderName');
-    prefs.remove('senderProfilePhoto');
 
     Get.put(TrainerController());
     Get.put(ChatController());
@@ -261,6 +257,11 @@ Future<void> main() async {
         sharedPreferences.setString('senderName', json['senderName']);
         sharedPreferences.setString(
             'senderProfilePhoto', json['senderProfilePhoto']);
+      } else {
+        prefs.remove('senderChatId');
+        prefs.remove('senderId');
+        prefs.remove('senderName');
+        prefs.remove('senderProfilePhoto');
       }
     });
 

@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95.apps.googleusercontent.com</string>
+	<string>608132731672-nqcs0c53ptccnpmv0is1rt3kb5jc8aum.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.608132731672-eg1vj0da89edtfb4ne5gdkioj8mbnu95</string>
+	<string>com.googleusercontent.apps.608132731672-nqcs0c53ptccnpmv0is1rt3kb5jc8aum</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>608132731672-c03lmq3db3i313m5vhjqldvloc4g1ocs.apps.googleusercontent.com</string>
+	<string>608132731672-4339963d5bkfd12ntgl8ucg3r786a836.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCfzkrLgry6BKeVmnrtMN_reObkiUgcUBU</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.antino.fitbasix.dev</string>
+	<string>com.fitbasixco.fitbasix.prod</string>
 	<key>PROJECT_ID</key>
 	<string>fitbitsix-d1493</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:608132731672:ios:0a331c552f775fdcad046d</string>
+	<string>1:608132731672:ios:b52cb7b9689934f8ad046d</string>
 </dict>
 </plist>
