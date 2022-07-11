@@ -1,5 +1,5 @@
 // import 'dart:convert';
-
+//
 // import 'package:flutter/material.dart';
 // import 'dart:async';
 // import 'package:enx_flutter_plugin/enx_player_widget.dart';
@@ -8,18 +8,18 @@
 // import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:flutter_switch/flutter_switch.dart';
 // import 'package:sliding_up_panel/sliding_up_panel.dart';
-
+//
 // import '../../../../core/constants/color_palette.dart';
 // import '../../../../core/constants/image_path.dart';
 // import '../../../../core/reponsive/SizeConfig.dart';
-
+//
 // class VideoConferenceScreen extends StatefulWidget {
 //   VideoConferenceScreen({required this.token});
 //   final String token;
 //   @override
 //   Conference createState() => Conference();
 // }
-
+//
 // class Conference extends State<VideoConferenceScreen> {
 //   bool isAudioMuted = false;
 //   bool isVideoMuted = false;
@@ -36,19 +36,19 @@
 //     print('Enablex Demo');
 //     initEnxRtc();
 //     openBottomPanel();
-
+//
 //     // _initForegroundTask();
-
-
+//
+//
 //     _addEnxrtcEventHandlers();
 //   }
-
+//
 //   void openBottomPanel(){
 //     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
 //       panelController.open();
 //     });
 //   }
-
+//
 //   Future<void> initEnxRtc() async {
 //     Map<String, dynamic> map2 = {
 //       'minWidth': 320,
@@ -72,22 +72,22 @@
 //       'allow_reconnect': true,
 //       'number_of_attempts': 3,
 //       'timeout_interval': 15,
-
+//
 //     };
-
+//
 //     print('tokenRelease:${widget.token}');
 //     await EnxRtc.joinRoom(widget.token, map1, {}, []);
 //   }
-
+//
 //   void _addEnxrtcEventHandlers() {
 //     EnxRtc.onRoomConnected = (Map<dynamic, dynamic> map) {
 //       setState(() {
 //         print('onRoomConnectedFlutter' + jsonEncode(map));
 //       });
 //       EnxRtc.publish();
-
+//
 //     };
-
+//
 //     EnxRtc.onPublishedStream = (Map<dynamic, dynamic> map) {
 //       setState(() {
 //         print('onPublishedStream' + jsonEncode(map));
@@ -100,22 +100,22 @@
 //         base64String=bitmap;
 //         print('OnCapturedView' + bitmap);
 //         Clipboard.setData(ClipboardData(text: bitmap));
-
-
-
+//
+//
+//
 //       });
 //     };
 //     EnxRtc.onStreamAdded = (Map<dynamic, dynamic> map) {
 //       print('onStreamAdded' + jsonEncode(map));
 //       print('onStreamAdded Id' + map['streamId']);
-
+//
 //       late  String streamId1;
 //       setState(() {
 //         streamId1 = map['streamId'];
 //       });
 //       EnxRtc.subscribe(streamId1);
 //     };
-
+//
 //     EnxRtc.onRoomError = (Map<dynamic, dynamic> map) {
 //       setState(() {
 //         print('onRoomError' + jsonEncode(map));
@@ -124,10 +124,10 @@
 //     EnxRtc.onNotifyDeviceUpdate = (String deviceName) {
 //       print('onNotifyDeviceUpdate' + deviceName);
 //     };
-
+//
 //     EnxRtc.onActiveTalkerList = (Map<dynamic, dynamic> map) {
 //       print('onActiveTalkerList ' + map.toString());
-
+//
 //       final items = (map['activeList'] as List)
 //           .map((i) => new ActiveListModel.fromJson(i));
 //       if(_remoteUsers.length>0){
@@ -135,7 +135,7 @@
 //           setState(() {
 //             _remoteUsers.removeAt(i);
 //           });
-
+//
 //         }
 //       }
 //       if (items.length > 0) {
@@ -151,16 +151,16 @@
 //         }
 //         print('_remoteUsersascashjc');
 //         print(_remoteUsers);
-
+//
 //       }
 //     };
-
+//
 //     EnxRtc.onEventError = (Map<dynamic, dynamic> map) {
 //       setState(() {
 //         print('onEventError' + jsonEncode(map));
 //       });
 //     };
-
+//
 //     EnxRtc.onEventInfo = (Map<dynamic, dynamic> map) {
 //       setState(() {
 //         print('onEventInfo' + jsonEncode(map));
@@ -174,7 +174,7 @@
 //     EnxRtc.onUserDisConnected = (Map<dynamic, dynamic> map) {
 //       setState(() {
 //         print('onUserDisConnected' + jsonEncode(map));
-
+//
 //       });
 //     };
 //     EnxRtc.onRoomDisConnected = (Map<dynamic, dynamic> map) {
@@ -207,16 +207,16 @@
 //     EnxRtc.onAckSubscribeTalkerNotification=(Map<dynamic, dynamic> map) {
 //       isAudioEnergy = true;
 //       print('onAckSubscribeTalkerNotification12' + jsonEncode(map));
-
+//
 //     };
 //     EnxRtc.onAckUnsubscribeTalkerNotification=(Map<dynamic, dynamic> map) {
 //       print('onAckUnsubscribeTalkerNotification12' + jsonEncode(map));
 //       isAudioEnergy = false;
-
+//
 //     };
 //     EnxRtc.onTalkerNtification=(Map<dynamic, dynamic> map) {
 //       print('onTalkerNtification' + jsonEncode(map));
-
+//
 //     };
 //     EnxRtc.onClientDiagnosisFailed=(Map<dynamic, dynamic> map) {
 //       print('onClientDiagnosisFailed' + jsonEncode(map));
@@ -273,7 +273,7 @@
 //     EnxRtc.onUserDisconnectedFromBreakoutRoom=(Map<dynamic, dynamic> map) {
 //       print('onUserDisconnectedFromBreakoutRoom' + jsonEncode(map));
 //     };
-
+//
 //     EnxRtc.onUserAwaited=(Map<dynamic, dynamic> map) {
 //       print('onUserAwaited' + jsonEncode(map));
 //     };
@@ -292,68 +292,68 @@
 //     EnxRtc.onAckAddSpotlightUsers=(Map<dynamic, dynamic> map) {
 //       isAudioEnergy = true;
 //       print('onAckAddSpotlightUsers' + jsonEncode(map));
-
+//
 //     };
 //     EnxRtc.onAckRemoveSpotlightUsers=(Map<dynamic, dynamic> map) {
 //       isAudioEnergy = false;
 //       print('onAckRemoveSpotlightUsers' + jsonEncode(map));
-
+//
 //     };
 //     EnxRtc.onUpdateSpotlightUsers=(Map<dynamic, dynamic> map) {
 //       print('onUpdateSpotlightUsers' + jsonEncode(map));
 //     };
 //     EnxRtc.onAckSwitchedRoom=(Map<dynamic, dynamic> map) {
 //       print('onAckSwitchedRoom' + jsonEncode(map));
-
+//
 //     };
 //     EnxRtc.onRoomModeSwitched=(Map<dynamic, dynamic> map) {
 //       print('onRoomModeSwitched' + jsonEncode(map));
-
+//
 //     };
 //     //
 //     EnxRtc.onHardMutedAudio=(Map<dynamic, dynamic> map){
 //       isAudioMuted=true;
 //     };
-
+//
 //     EnxRtc.onHardUnMutedAudio=(Map<dynamic, dynamic> map){
 //       isAudioMuted=false;
-
+//
 //     };
 //     EnxRtc.onReceivedHardMuteAudio=(Map<dynamic, dynamic> map){
 //       isAudioMuted=false;
 //     };
-
+//
 //     EnxRtc.onReceivedHardUnMuteAudio=(Map<dynamic, dynamic> map){
 //       isAudioMuted=false;
 //     };
-
+//
 //     EnxRtc.onRoomBandwidthAlert=(Map<dynamic,dynamic> map){
-
+//
 //     };
 //     EnxRtc.onAckForDenyAwaitedUser=(Map<dynamic,dynamic> map){
-
+//
 //     };
 //     EnxRtc.onRoomAwaited=(Map<dynamic,dynamic> map){
-
+//
 //     };
-
+//
 //     EnxRtc.onUserAwaited=(Map<dynamic,dynamic> map){
-
+//
 //     };
-
+//
 //     EnxRtc.onMessageReceived=(Map<dynamic,dynamic> map){
-
+//
 //     };
-
+//
 //     EnxRtc.onScreenSharedStarted=(Map<dynamic, dynamic> map){
-
+//
 //     };
-
+//
 //     EnxRtc.onScreenSharedStopped=(Map<dynamic, dynamic> map){
 //       setState(() {
 //         isScreenShare=false;
 //       });
-
+//
 //     };
 //     EnxRtc.onACKStartLiveRecording=(Map<dynamic, dynamic> map){
 //       print('onACKStartLiveRecording' + jsonEncode(map));
@@ -369,11 +369,11 @@
 //     //
 //     // };
 //   }
-
+//
 //   void _setMediaDevice(String value) {
 //     EnxRtc.switchMediaDevice(value);
 //   }
-
+//
 //   // createDialog() {
 //   //   showDialog(
 //   //       context: context,
@@ -409,18 +409,18 @@
 //   //         );
 //   //       });
 //   // }
-
+//
 //   //
-
-
-
-
-
+//
+//
+//
+//
+//
 //   void _disconnectRoom() {
-
+//
 //     // EnxRtc.captureScreenShot(streamId2.toString());
 //     EnxRtc.disconnect();
-
+//
 //     Navigator.of(context).pop();
 //     //EnxRtc.hardUnMuteVideo(clientId)
 //     // if(isAudioMuted){
@@ -431,7 +431,7 @@
 //     //   EnxRtc.startScreenShare();
 //     //
 //     // }
-
+//
 //     /* else
 //       EnxRtc.stopScreenShare();*/
 //     /*  if(isAudioMuted)
@@ -440,12 +440,12 @@
 //       EnxRtc.hardMuteVideo(base64String);*/
 //     //EnxRtc.onScreenSharedStarted()
 //   }
-
-
+//
+//
 //   void knockKnock(){
-
+//
 //   }
-
+//
 // /* void _precallTest() {
 //    Map<String, dynamic> map = {
 //      'regionId': 'IN',
@@ -454,16 +454,16 @@
 //    };
 //    EnxRtc.clientDiagnostics(map);
 //  }*/
-
+//
 //   void _spotLight(){
-
+//
 //     /* var userlist= ['81c168cf-2007-405c-8867-172c59224cda'];
 //     if (isAudioEnergy) {
 //       EnxRtc.addSpotlightUsers(userlist);
 //     } else {
 //       EnxRtc.removeSpotlightUsers(userlist);
 //     }*/
-
+//
 //     //create breakoutroom
 //     /* Map<String, dynamic> map = {
 //       "participants" :2,
@@ -474,17 +474,17 @@
 //       "max_rooms": 1
 //     };
 //     EnxRtc.createBreakOutRoom(map);*/
-
+//
 //     if(!isAudioEnergy)
 //       EnxRtc.switchRoomMode("lecture");
 //     else
 //       EnxRtc.switchRoomMode("group");
-
+//
 //     isAudioEnergy=!isAudioEnergy;
 //   }
-
+//
 //   void _toggleAudioEnergy() {
-
+//
 //     if (isAudioEnergy) {
 //       EnxRtc.subscribeForTalkerNotification(false);
 //     } else {
@@ -500,7 +500,7 @@
 //       EnxRtc.muteSelfAudio(true);
 //     }
 //   }
-
+//
 //   void _toggleVideo() {
 //     if (isVideoMuted) {
 //       //EnxRtc.stopLiveRecording();
@@ -510,8 +510,8 @@
 //       EnxRtc.muteSelfVideo(true);
 //     }
 //   }
-
-
+//
+//
 //   void _toggleSpeaker() async {
 //     List<dynamic> list = await EnxRtc.getDevices();
 //     setState(() {
@@ -523,16 +523,16 @@
 //       _setMediaDevice(element);
 //     });
 //   }
-
+//
 //   void _toggleCamera() {
 //     // EnxRtc.sendMessage(
 //     //     "🤑", true, []);
 //     EnxRtc.switchCamera();
 //   }
-
+//
 //   int remoteView = -1;
 //   late List<dynamic> deviceList;
-
+//
 //   Widget _viewRows() {
 //     return ListView(
 //       scrollDirection: Axis.horizontal,
@@ -542,24 +542,24 @@
 //             height: 120,
 //             width: 120,
 //             child: widget,
-
+//
 //           ),
-
+//
 //       ],
 //     );
 //   }
-
+//
 //   Iterable<Widget> get _renderWidget sync* {
 //     for (final streamId in _remoteUsers) {
 //       // double width = MediaQuery.of(context).size.width;
 //       yield EnxPlayerWidget(streamId, local: false,width:40,height:40);
-
+//
 //     }
 //   }
-
+//
 //   final _remoteUsers = <int>[];
-
-
+//
+//
 //   @override
 //   Widget build(BuildContext context) {
 //     int playerWidth = MediaQuery.of(context).size.width.toInt();
@@ -720,12 +720,12 @@
 //       ),
 //     );
 //   }
-
+//
 // }
-
-
-
-
+//
+//
+//
+//
 // class PanelWidget extends StatefulWidget {
 //   final ScrollController? controller;
 //   final PanelController panelController;
@@ -733,7 +733,7 @@
 //   GestureTapCallback? onMicTap;
 //   GestureTapCallback? onCameraTap;
 //   GestureTapCallback? onSpeakerTap;
-
+//
 //   PanelWidget(
 //       {Key? key,
 //         this.controller,
@@ -743,17 +743,17 @@
 //         this.onCameraTap,
 //         this.onSpeakerTap})
 //       : super(key: key);
-
+//
 //   @override
 //   State<PanelWidget> createState() => _PanelWidgetState();
 // }
-
+//
 // class _PanelWidgetState extends State<PanelWidget> {
 //   bool? ismicon = true;
 //   bool? isspeakeron = true;
 //   bool? iscameraon = true;
 //   bool status = true;
-
+//
 //   @override
 //   Widget build(BuildContext context) {
 //     return ListView(
@@ -893,7 +893,7 @@
 //       ],
 //     );
 //   }
-
+//
 //   Widget buildDragHandle() => GestureDetector(
 //     child: Center(
 //       child: Container(
@@ -907,19 +907,19 @@
 //     ),
 //     onTap: togglePanel,
 //   );
-
+//
 //   Future<void> togglePanel() => widget.panelController.isPanelOpen
 //       ? widget.panelController.close()
 //       : widget.panelController.open();
 // }
-
+//
 // class ActiveList {
 //   bool active;
 //   List<ActiveListModel> activeList = [];
 //   String event;
-
+//
 //   ActiveList(this.active, this.activeList, this.event);
-
+//
 //   factory ActiveList.fromJson(Map<dynamic, dynamic> json) {
 //     return ActiveList(
 //       json['active'] as bool,
@@ -930,7 +930,7 @@
 //     );
 //   }
 // }
-
+//
 // class ActiveListModel {
 //   String name;
 //   int streamId;
@@ -939,10 +939,10 @@
 //   String mediatype;
 //   bool videomuted;
 //   String reason;
-
+//
 //   ActiveListModel(this.name, this.streamId, this.clientId,
 //       this.videoaspectratio, this.mediatype, this.videomuted, this.reason);
-
+//
 //   // convert Json to an exercise object
 //   factory ActiveListModel.fromJson(Map<dynamic, dynamic> json) {
 //     int sId = int.parse(json['streamId'].toString());

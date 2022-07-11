@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 1.0.0+20
+version: 1.0.0+21
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
@@ -69,14 +69,14 @@ dependencies:
   crypt: ^4.2.1
   readmore: ^2.1.0
   health: ^3.4.3
-  syncfusion_flutter_charts: ^19.4.48
+  syncfusion_flutter_charts: ^20.2.36
   liquid_progress_indicator: ^0.4.0
   getwidget: ^2.0.4
   dropdown_button2: ^1.1.1
   video_player: ^2.2.18
   file_picker: ^4.4.0
   mime_type: ^1.0.0
-  permission_handler:
+  permission_handler: ^10.0.0
   flutter_dotenv: ^5.0.2
   url_launcher: ^6.0.20
   flutter_native_splash: ^2.1.1
@@ -87,7 +87,7 @@ dependencies:
   flutter_local_notifications: ^9.3.2
   connectycube_flutter_call_kit: ^2.0.2
   percent_indicator: ^4.0.0
-  syncfusion_flutter_gauges: ^19.4.54
+  syncfusion_flutter_gauges: ^20.2.36
   awesome_notifications: ^0.6.21
   images_picker: ^1.2.10
   flutter_time_picker_spinner: ^2.0.0
@@ -101,8 +101,8 @@ dependencies:
   store_redirect: ^2.0.1
   connectivity: ^3.0.6
   field_suggestion: ^0.2.3
-  flutter_inappwebview: ^5.3.2
-  # enx_flutter_plugin: ^2.1.2
+#  flutter_inappwebview: ^5.4.3+7
+#  enx_flutter_plugin: ^2.1.2
   selectable_autolink_text: ^2.3.0
   flutter_native_timezone: ^2.0.0
 

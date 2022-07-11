@@ -23,11 +23,10 @@ class FitBasixApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ScreenUtilInit(
         designSize: Size(360, 728),
         minTextAdapt: true,
-        builder: () {
+        builder: (_,__) {
           return LayoutBuilder(builder: (context, constraints) {
             return OrientationBuilder(builder: (context, orientation) {
               SizeConfig().init(constraints, orientation);

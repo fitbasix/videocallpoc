@@ -157,7 +157,7 @@ Future<void> main() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('AccessToken');
 
-    Get.put(TrainerController());
+    // Get.put(TrainerController());
     Get.put(ChatController());
 
     FirebaseMessaging.instance.getToken().then((value) async {

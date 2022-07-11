@@ -2,11 +2,10 @@ import '../../app_config.dart';
 
 class ApiUrl {
   static String liveBaseURL = AppConfig.api_url;
-  //static String liveBaseURL = 'http://3.131.171.176';
+  // static String liveBaseURL = 'https://ce95-122-161-81-124.in.ngrok.io';
   // static String liveBaseURL = 'https://fc9b-223-190-91-158.ngrok.io';
   // static String liveBaseURL =
-  //     'https://ae8c-2409-4050-db2-c556-e8cf-b783-d1ff-37bf.in.ngrok.io';
-
+  //     'https://5a8f-2405-204-1381-30f5-68df-e09f-ad27-9907.in.ngrok.io';
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
   // static String liveBaseURL = 'https://8ed2-103-15-254-251.ngrok.io';
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
