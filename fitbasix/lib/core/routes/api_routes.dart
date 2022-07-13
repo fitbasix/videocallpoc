@@ -1,8 +1,8 @@
 import '../../app_config.dart';
 
 class ApiUrl {
-  static String liveBaseURL = AppConfig.api_url;
-  // static String liveBaseURL = 'https://74dd-122-161-82-110.in.ngrok.io';
+  // static String liveBaseURL = AppConfig.api_url;
+  static String liveBaseURL = 'https://7e1d-122-161-82-110.in.ngrok.io';
   // static String liveBaseURL = 'https://fc9b-223-190-91-158.ngrok.io';
   // static String liveBaseURL =
   //     'https://5a8f-2405-204-1381-30f5-68df-e09f-ad27-9907.in.ngrok.io';
@@ -100,4 +100,7 @@ class ApiUrl {
 
   /// video call Url from enablex
   static String getEnablexUrl = liveBaseURL + '/api/videoChat?trainerId=';
+
+  /// payment APIs
+  static String getPaymentLink = liveBaseURL + '/api/payment/link';
 }

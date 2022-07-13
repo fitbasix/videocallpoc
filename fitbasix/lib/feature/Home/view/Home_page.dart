@@ -1856,7 +1856,21 @@ class _HomePageState extends State<HomePage> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            Get.to(()=>PaymentPage());
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PaymentPage(),
+                                )).then((value){
+                                  printInfo(info: value);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PaymentPage(initialUrl: value,),
+                                  ));
+                            });
+                            // if(response != null ){
+                            //   Get.to(()=>PaymentPage(initialUrl: response,));
+                            // }
                           },
                           child: Padding(
                               padding: EdgeInsets.only(

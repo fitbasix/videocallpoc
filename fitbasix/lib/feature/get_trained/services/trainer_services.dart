@@ -255,4 +255,5 @@ log(ApiUrl.getEnablexUrl+id);
     var response = await dio!.get(ApiUrl.getAllSlots);
     return timingModelFromJson(response.toString());
   }
+
 }
