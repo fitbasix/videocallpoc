@@ -53,6 +53,7 @@ import '../../posts/view/tag_people_screen.dart';
 import '../../profile/services/profile_services.dart';
 import '../../spg/view/set_goal_screen.dart';
 import '../controller/individual_user_controller.dart';
+import 'widgets/payment_page.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -1853,13 +1854,18 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        Padding(
-                            padding: EdgeInsets.only(
-                                top: 23 * SizeConfig.heightMultiplier!),
-                            child: SvgPicture.asset(
-                              ImagePath.bellIcon, color: Colors.white,
-                              height: 19.5 * SizeConfig.heightMultiplier!,
-                              width: 16 * SizeConfig.widthMultiplier!,))
+                        GestureDetector(
+                          onTap: (){
+                            Get.to(()=>PaymentPage());
+                          },
+                          child: Padding(
+                              padding: EdgeInsets.only(
+                                  top: 23 * SizeConfig.heightMultiplier!),
+                              child: SvgPicture.asset(
+                                ImagePath.bellIcon, color: Colors.white,
+                                height: 19.5 * SizeConfig.heightMultiplier!,
+                                width: 16 * SizeConfig.widthMultiplier!,)),
+                        )
                       ],
                     ),
                   ],

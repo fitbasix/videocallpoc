@@ -2,7 +2,7 @@ import '../../app_config.dart';
 
 class ApiUrl {
   static String liveBaseURL = AppConfig.api_url;
-  // static String liveBaseURL = 'https://ce95-122-161-81-124.in.ngrok.io';
+  // static String liveBaseURL = 'https://74dd-122-161-82-110.in.ngrok.io';
   // static String liveBaseURL = 'https://fc9b-223-190-91-158.ngrok.io';
   // static String liveBaseURL =
   //     'https://5a8f-2405-204-1381-30f5-68df-e09f-ad27-9907.in.ngrok.io';
