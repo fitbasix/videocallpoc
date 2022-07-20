@@ -7,6 +7,7 @@ import 'package:fitbasix/feature/Home/view/explore.dart';
 import 'package:fitbasix/feature/Home/view/widgets/individual_user_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
+import 'package:fitbasix/feature/plans/view/payment_page.dart';
 import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/help_and_support/view/help_and_support_screen.dart';
 import 'package:fitbasix/feature/help_and_support/view/privacy_policy_and_term_of_use/legal_screen.dart';
@@ -87,6 +88,7 @@ abstract class RouteName {
   static const exploreSearch = "/explore_search";
   static const accountAndSubscription = "/account_and_subscription_screen";
   static const editPersonalInfo = "/edit_personal_info_screen";
+  static const paymentPage = "/payment_page";
   static const helpAndSupport = "/help_and_support_screen";
   static const legal = "/legal_screen";
   static const privacyAndPolicy = "/privacy_policy_screen";
@@ -131,11 +133,16 @@ class GenerateRoute {
             LoginScreen(),
       );
     }
+    if (route == RouteName.paymentPage) {
+      return MaterialPageRoute(
+        builder: (BuildContext context) => PaymentPage(),
+      );
+    }
     if (route == RouteName.individualUserProfileScreen) {
       return MaterialPageRoute(
         builder: (
-            BuildContext context,
-            ) =>
+          BuildContext context,
+        ) =>
             IndividualProfileScreen(),
       );
     }

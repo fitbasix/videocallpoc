@@ -562,57 +562,57 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                   height: 48 * SizeConfig.heightMultiplier!,
                                   child: TextButton(
                                     onPressed: () async {
-                                      if (trainerController
-                                                  .selectedDays.length !=
-                                              0 &&
-                                          (trainerController
-                                                      .selectedDays.length %
-                                                  3 ==
-                                              0)) {
-                                        List<int> selectedDays = [];
-                                        trainerController.selectedDays
-                                            .forEach((days) {
-                                          selectedDays.add(trainerController
-                                              .weekAvailableSlots[
-                                                  trainerController
-                                                      .weekAvailableSlots
-                                                      .indexWhere((element) =>
-                                                          element.id == days)]
-                                              .day!);
-                                        });
-
-                                        bool booked =
-                                            await TrainerServices.bookSlot(
-                                                trainerController.selectedDays,
-                                                trainerController
-                                                    .selectedPlan.value.id!,
-                                                trainerController
-                                                    .selectedTimeSlot.value,
-                                                selectedDays,
-                                                trainerController.atrainerDetail
-                                                        .value.user?.id ??
-                                                    '',
-                                                context);
-                                        if (booked == true) {
-                                          trainerController.enrolledTrainer.add(
-                                              trainerController
-                                                  .atrainerDetail.value.id!);
-                                          trainerController.setUp();
-                                          showDialogForSessionBooked(context);
-
-                                          trainerController.atrainerDetail.value
-                                              .isEnrolled = true;
-                                          Future.delayed(Duration(seconds: 3),
-                                              () {
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
-                                          });
-                                          final HomeController _homeController =
-                                              Get.find();
-                                          _homeController.setup();
-                                          trainerController.setUp();
-                                        }
+                                      // if (trainerController
+                                      //             .selectedDays.length !=
+                                      //         0 &&
+                                      //     (trainerController
+                                      //                 .selectedDays.length %
+                                      //             3 ==
+                                      //         0)) {
+                                      //   List<int> selectedDays = [];
+                                      //   trainerController.selectedDays
+                                      //       .forEach((days) {
+                                      //     selectedDays.add(trainerController
+                                      //         .weekAvailableSlots[
+                                      //             trainerController
+                                      //                 .weekAvailableSlots
+                                      //                 .indexWhere((element) =>
+                                      //                     element.id == days)]
+                                      //         .day!);
+                                      //   });
+                                      //
+                                      //   bool booked =
+                                      //       await TrainerServices.bookSlot(
+                                      //           trainerController.selectedDays,
+                                      //           trainerController
+                                      //               .selectedPlan.value.id!,
+                                      //           trainerController
+                                      //               .selectedTimeSlot.value,
+                                      //           selectedDays,
+                                      //           trainerController.atrainerDetail
+                                      //                   .value.user?.id ??
+                                      //               '',
+                                      //           context);
+                                      //   if (booked == true) {
+                                      //     trainerController.enrolledTrainer.add(
+                                      //         trainerController
+                                      //             .atrainerDetail.value.id!);
+                                      //     trainerController.setUp();
+                                      //     showDialogForSessionBooked(context);
+                                      //
+                                      //     trainerController.atrainerDetail.value
+                                      //         .isEnrolled = true;
+                                      //     Future.delayed(Duration(seconds: 3),
+                                      //         () {
+                                      //       Navigator.pop(context);
+                                      //       Navigator.pop(context);
+                                      //       Navigator.pop(context);
+                                      //     });
+                                      //     final HomeController _homeController =
+                                      //         Get.find();
+                                      //     _homeController.setup();
+                                      //     trainerController.setUp();
+                                      //   }
 
                                         // Navigator.pop(context);
                                         // Navigator.pop(context);
@@ -622,7 +622,7 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                         //         builder: (_) =>
                                         //             TrainerPlansScreen()),
                                         //  (route) => false);
-                                      }
+                                      // }
                                     },
                                     child: Text('Book Session'.tr,
                                         style: isDaySelected

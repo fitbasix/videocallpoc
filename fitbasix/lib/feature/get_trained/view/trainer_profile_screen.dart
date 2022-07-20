@@ -117,46 +117,56 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   },
                   onMessage: () async {
                     if (_trainerController.atrainerDetail.value.isEnrolled!) {
-                      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                      String? userIdForCometChat = await sharedPreferences.getString("userIdForCometChat");
-                      if(userIdForCometChat!=null) {
-                        bool userIsLoggedIn = await CometChatService().logInUser(userIdForCometChat);
-                        if(userIsLoggedIn){
-                          if(_trainerController.atrainerDetail.value.chatId != null ){
+                      SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      String? userIdForCometChat = await sharedPreferences
+                          .getString("userIdForCometChat");
+                      if (userIdForCometChat != null) {
+                        bool userIsLoggedIn = await CometChatService()
+                            .logInUser(userIdForCometChat);
+                        if (userIsLoggedIn) {
+                          if (_trainerController.atrainerDetail.value.chatId !=
+                              null) {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MessageList(
-                                      chatId: _trainerController.atrainerDetail.value.chatId,
-                                      trainerId: _trainerController.atrainerDetail.value.user!.id,
-                                      profilePicURL: _trainerController.atrainerDetail.value.user!.profilePhoto,
-                                      trainerTitle:_trainerController.atrainerDetail.value.user!.name,
-                                      time: _trainerController.atrainerDetail.value.time,
-                                      days: _trainerController.atrainerDetail.value.days,
-                                    )));
+                                          chatId: _trainerController
+                                              .atrainerDetail.value.chatId,
+                                          trainerId: _trainerController
+                                              .atrainerDetail.value.user!.id,
+                                          profilePicURL: _trainerController
+                                              .atrainerDetail
+                                              .value
+                                              .user!
+                                              .profilePhoto,
+                                          trainerTitle: _trainerController
+                                              .atrainerDetail.value.user!.name,
+                                          time: _trainerController
+                                              .atrainerDetail.value.time,
+                                          days: _trainerController
+                                              .atrainerDetail.value.days,
+                                        )));
                           }
                         }
-
                       }
-
-
 
                       // String url = await TrainerServices.getEnablexUrl(
                       //     trainerController.atrainerDetail.value.user!.id.toString());
 
                       // if (!await launchUrl(Uri.parse(url))) throw 'Could not launch';
-                    //       if(Platform.isAndroid){
-                    //     Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (context) =>
-                    //                 InAppWebViewPage(
-                    //                     url: url,
-                    //               )));
-                    //       }
-                    //   else{
-                    //   launch(url);
-                    // }
+                      //       if(Platform.isAndroid){
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) =>
+                      //                 InAppWebViewPage(
+                      //                     url: url,
+                      //               )));
+                      //       }
+                      //   else{
+                      //   launch(url);
+                      // }
                       // if (!isMessageLoading) {
                       //   isMessageLoading = true;
                       //   bool dialogCreatedPreviously = false;

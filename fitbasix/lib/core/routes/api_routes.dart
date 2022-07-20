@@ -2,8 +2,9 @@ import '../../app_config.dart';
 
 class ApiUrl {
   // static String liveBaseURL = AppConfig.api_url;
-  static String liveBaseURL = 'https://7e1d-122-161-82-110.in.ngrok.io';
-  // static String liveBaseURL = 'https://fc9b-223-190-91-158.ngrok.io';
+  // static String liveBaseURL = 'https://ac75-122-161-82-52.in.ngrok.io';
+
+  static String liveBaseURL = 'https://1306-2409-4050-2e04-20be-74da-34b0-9043-6ac0.in.ngrok.io';
   // static String liveBaseURL =
   //     'https://5a8f-2405-204-1381-30f5-68df-e09f-ad27-9907.in.ngrok.io';
   // static String liveBaseURL = 'https://a1c9-103-15-254-206.ngrok.io';IA Emulator
@@ -102,5 +103,6 @@ class ApiUrl {
   static String getEnablexUrl = liveBaseURL + '/api/videoChat?trainerId=';
 
   /// payment APIs
-  static String getPaymentLink = liveBaseURL + '/api/payment/link';
+  static String getPaymentLink = liveBaseURL + '/api/payment/paymentLink';
+
 }

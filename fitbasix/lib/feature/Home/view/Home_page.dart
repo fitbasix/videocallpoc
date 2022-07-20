@@ -12,6 +12,7 @@ import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/view/calories_burnt_screen.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/plans/controller/plans_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
@@ -53,7 +54,6 @@ import '../../posts/view/tag_people_screen.dart';
 import '../../profile/services/profile_services.dart';
 import '../../spg/view/set_goal_screen.dart';
 import '../controller/individual_user_controller.dart';
-import 'widgets/payment_page.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
@@ -1856,21 +1856,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PaymentPage(),
-                                )).then((value){
-                                  printInfo(info: value);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PaymentPage(initialUrl: value,),
-                                  ));
-                            });
-                            // if(response != null ){
-                            //   Get.to(()=>PaymentPage(initialUrl: response,));
-                            // }
                           },
                           child: Padding(
                               padding: EdgeInsets.only(

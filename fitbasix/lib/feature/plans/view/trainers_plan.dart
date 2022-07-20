@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
+import 'package:fitbasix/feature/plans/controller/plans_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ import '../../get_trained/view/widgets/star_rating.dart';
 class TrainerPlansScreen extends StatelessWidget {
   TrainerPlansScreen({Key? key}) : super(key: key);
   @override
+
   // constant values for designing purpose
   // static const imageurl =
   //     "https://t4.ftcdn.net/jpg/04/41/05/23/360_F_441052304_xqszd9uBMcbW8dS3WD1JolMbztuF2KNx.jpg";
@@ -33,7 +35,6 @@ class TrainerPlansScreen extends StatelessWidget {
 
   Widget build(BuildContext context) {
     final TrainerController trainerController = Get.find();
-    //getPlan(trainerController);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -96,49 +97,54 @@ class TrainerPlansScreen extends StatelessWidget {
                             planTitle: trainerController.planModel.value
                                 .response!.data![index].planType!,
                             planDescription: trainerController.planModel.value
-                                .response!.data![index].description!,
+                                .response!.data![index].planDescription!,
                             sessionCount: trainerController.planModel.value
                                 .response!.data![index].session!,
                             planDuration: trainerController.planModel.value
                                 .response!.data![index].planDuration!,
                             ////remove index==0 after testing
-                            isDemoExpired: index == 0 &&
-                                !trainerController.planModel.value.response!
-                                    .data![index].isDemoAvailable!,
+                            // isDemoExpired: index == 0 &&
+                            //     !trainerController.planModel.value.response!
+                            //         .data![index].isDemoAvailable!,
                             planPrice: trainerController
                                 .planModel.value.response!.data![index].price!,
                             onPlanEnrollTapped: () async {
-                              trainerController.weekAvailableSlots.value = [];
-                              trainerController.selectedTimeSlot.value = 0;
+                              Get.put(PlansController());
+                              Get.find<PlansController>()..setListValue()..selectedPlan = trainerController
+                                  .planModel.value.response!.data![index];
                               Navigator.pushNamed(
-                                  context, RouteName.planTimingScreen);
-                              trainerController.selectedPlan.value =
-                                  trainerController
-                                      .planModel.value.response!.data![index];
-
-                              // trainerController.fullPlanDetails.value.response!.data!
-                              //             .isEnrolled ==
-                              //         false
-                              //     ? Navigator.pushNamed(
-                              //         context, RouteName.planTimingScreen)
-                              //     : "";
-                              trainerController
-                                  .isAvailableSlotDataLoading.value = true;
-                              var output =
-                                  await TrainerServices.getAllTimeSlot();
-                              trainerController.getAllSlots.value =
-                                  output.response!.data!;
-                              trainerController.fullPlanDetails.value =
-                                  await TrainerServices.getPlanById(
-                                      trainerController.planModel.value
-                                          .response!.data![index].id!);
-
-                              trainerController.availableTime.value =
-                                  await TrainerServices.getEnrolledPlanDetails(
-                                      trainerController.planModel.value
-                                          .response!.data![index].trainer!);
-                              trainerController
-                                  .isAvailableSlotDataLoading.value = false;
+                                  context, RouteName.paymentPage,);
+                              // trainerController.weekAvailableSlots.value = [];
+                              // trainerController.selectedTimeSlot.value = 0;
+                              // Navigator.pushNamed(
+                              //     context, RouteName.planTimingScreen);
+                              // trainerController.selectedPlan.value =
+                              //     trainerController
+                              //         .planModel.value.response!.data![index];
+                              //
+                              // // trainerController.fullPlanDetails.value.response!.data!
+                              // //             .isEnrolled ==
+                              // //         false
+                              // //     ? Navigator.pushNamed(
+                              // //         context, RouteName.planTimingScreen)
+                              // //     : "";
+                              // trainerController
+                              //     .isAvailableSlotDataLoading.value = true;
+                              // var output =
+                              //     await TrainerServices.getAllTimeSlot();
+                              // trainerController.getAllSlots.value =
+                              //     output.response!.data!;
+                              // trainerController.fullPlanDetails.value =
+                              //     await TrainerServices.getPlanById(
+                              //         trainerController.planModel.value
+                              //             .response!.data![index].id!);
+                              //
+                              // trainerController.availableTime.value =
+                              //     await TrainerServices.getEnrolledPlanDetails(
+                              //         trainerController.planModel.value
+                              //             .response!.data![index].trainer!);
+                              // trainerController
+                              //     .isAvailableSlotDataLoading.value = false;
                             },
                             planFeaturesList: trainerController.planModel.value
                                 .response!.data![index].keyPoints),
@@ -183,18 +189,18 @@ class TrainerPlansScreen extends StatelessWidget {
     );
   }
 
-  Widget BuildPlancard(
-          {required String planImage,
-          required String planTitle,
-          required String planName,
-          String? planDescription,
-          required int planPrice,
-          int? sessionCount,
-          int? planDuration,
-          required VoidCallback onPlanEnrollTapped,
-          required BuildContext context,
-          bool? isDemoExpired,
-          List<String>? planFeaturesList}) =>
+  Widget BuildPlancard({
+    required String planImage,
+    required String planTitle,
+    required String planName,
+    String? planDescription,
+    required int planPrice,
+    int? sessionCount,
+    int? planDuration,
+    required VoidCallback onPlanEnrollTapped,
+    required BuildContext context,
+    List<String>? planFeaturesList,
+  }) =>
       Container(
         height: 555 * SizeConfig.heightMultiplier!,
         width: MediaQuery.of(context).size.width -
@@ -207,9 +213,9 @@ class TrainerPlansScreen extends StatelessWidget {
               vertical: 32 * SizeConfig.heightMultiplier!),
           decoration: BoxDecoration(
               // image: DecorationImage(image: AssetImage(ImagePath.unselectedPlanBackgroundImage)),
-              gradient: LinearGradient(colors: [
-                isDemoExpired! ? Color(0xff404040) : Color(0xff333E33),
-                isDemoExpired ? Color(0xff111111) : Color(0xff1C1E1C),
+              gradient: const LinearGradient(colors: [
+                Color(0xff333E33),
+                Color(0xff1C1E1C),
               ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               borderRadius: BorderRadius.all(
                   Radius.circular(20 * SizeConfig.widthMultiplier!))),
@@ -283,22 +289,20 @@ class TrainerPlansScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: isDemoExpired ? null : onPlanEnrollTapped,
+                      onTap: onPlanEnrollTapped,
                       child: Container(
                         width: 264 * SizeConfig.widthMultiplier!,
                         height: 45 * SizeConfig.heightMultiplier!,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.heightMultiplier!),
-                          color: isDemoExpired ? hintGrey : kgreen49,
+                          color: kgreen49,
                         ),
                         child: Center(
                           child: Text(
-                            isDemoExpired ? "already_taken".tr : "enroll".tr,
-                            style: AppTextStyle.normalWhiteText.copyWith(
-                                color: isDemoExpired
-                                    ? Color(0xff333333)
-                                    : kPureWhite),
+                            "enroll".tr,
+                            style: AppTextStyle.normalWhiteText
+                                .copyWith(color: kPureWhite),
                           ),
                         ),
                       ),
