@@ -60,8 +60,6 @@ class PlansController extends GetxController {
     } else {
       cardNumberErrortext = null;
     }
-    printInfo(info: cardNumberController.text.length.toString());
-    printInfo(info: cardNumberErrortext.toString());
     update(['card-number-field']);
   }
 
@@ -118,8 +116,8 @@ class PlansController extends GetxController {
 
   String getSelectedDays(){
     var days = '';
-    printInfo(info: Get.find<TrainerController>().selectedDays.toString());
-    printInfo(info: Get.find<TrainerController>().weekAvailableSlots.toString());
+    printInfo(info: Get.find<TrainerController>().selectedDays.length.toString());
+    printInfo(info: Get.find<TrainerController>().weekAvailableSlots.length.toString());
 
     for (var selected in Get.find<TrainerController>().selectedDays) {
       for (var available in Get.find<TrainerController>().weekAvailableSlots) {

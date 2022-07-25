@@ -12,6 +12,7 @@ import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
 import 'package:fitbasix/feature/get_trained/model/sortbymodel.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:fitbasix/feature/plans/controller/plans_controller.dart';
 import 'package:fitbasix/feature/plans/models/AvailableSlot.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -157,6 +158,7 @@ log(ApiUrl.getEnablexUrl+id);
       String trainerId, int time) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    print(time.toString());
     var response = await dio!.post(ApiUrl.getSchedules,
         data: {"trainerId": trainerId, "time": time});
     return availableSlotFromJson(response.toString());
@@ -173,11 +175,19 @@ log(ApiUrl.getEnablexUrl+id);
       "time": time,
       "day": days
     }).toString());
-    var response;
+
+    var timeIndex;
+
+    for(var i in Get.find<TrainerController>().weekAvailableSlots.value){
+     if(slots[0] == i.id){
+       timeIndex = i.time;
+     }
+    }
+
     try {
-      response = await Dio().post(ApiUrl.bookDemo,
+    var response = await Dio().post(ApiUrl.bookDemo,
           options: Options(headers: {"language": 1, "Authorization": token}),
-          data: {"days": slots, "planId": id, "time": time, "day": days, "trainerId":trainerId});
+          data: {"days": slots, "planId": id, "time": timeIndex, "day": days, "trainerId":trainerId,"planDuration":Get.find<PlansController>().selectedPlan!.planDuration});
       return true;
     } on DioError catch (e) {
       final responseData = jsonDecode(e.response.toString());

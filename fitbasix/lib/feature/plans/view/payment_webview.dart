@@ -201,11 +201,10 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                     Navigator.pop(context, paymentResponse);
                   } else {
                     Navigator.pop(context);
-                    showDialogForPaymentStatus(
-                        context: context,
+                    Get.dialog(SuccessFailureDialog(
                         message: jsonDecode(parsedString)["response"]
                             ["error_message"],
-                        isSuccess: false);
+                        isSuccess: false));
                   }
                 } else {
                   if (jsonDecode(parsedString)["response"]["response_code"] ==
@@ -214,9 +213,6 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
-
-                    // showDialogForPaymentStatus(
-                    //     isSuccess: true, context: context, message: 'Payment Successful');
 
                     planController.clearValues();
                     List<int> selectedDays = [];
@@ -237,32 +233,30 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                         context);
 
                     if (booked == true) {
+                      Get.dialog(const SuccessFailureDialog(
+                          message: "Booking Successful", isSuccess: true));
+
                       trainerController.enrolledTrainer
                           .add(trainerController.atrainerDetail.value.id!);
                       trainerController.setUp();
-
-                      showDialogForPaymentStatus(
-                          isSuccess: true,
-                          context: context,
-                          message: 'Booking Successful');
 
                       trainerController.atrainerDetail.value.isEnrolled = true;
                       final HomeController _homeController = Get.find();
                       _homeController.setup();
                       trainerController.setUp();
                     } else {
-                      showDialogForPaymentStatus(
-                          isSuccess: false,
-                          context: context,
-                          message: 'Booking failed');
+                      Get.dialog(SuccessFailureDialog(
+                          message: jsonDecode(parsedString)["response"]
+                              ["error_message"],
+                          isSuccess: false));
                     }
                   } else {
                     Navigator.pop(context);
-                    showDialogForPaymentStatus(
-                        context: context,
+
+                    Get.dialog(SuccessFailureDialog(
                         message: jsonDecode(parsedString)["response"]
                             ["error_message"],
-                        isSuccess: false);
+                        isSuccess: false));
                   }
                 }
               },
@@ -309,95 +303,101 @@ class _PaymentWebviewState extends State<PaymentWebview> {
       ),
     );
   }
+}
 
-  void showDialogForPaymentStatus(
-      {required BuildContext context,
-      required bool isSuccess,
-      required String message}) {
-    Get.dialog(
-         GestureDetector(
-          onTap: () async {
-            Navigator.pop(context);
-          },
-          child: Container(
-            color: kBlack.withOpacity(0.6),
-            child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                child: AlertDialog(
-                  insetPadding: EdgeInsets.zero,
-                  titlePadding: EdgeInsets.zero,
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 0,
-                      horizontal: 10 * SizeConfig.widthMultiplier!),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          8 * SizeConfig.imageSizeMultiplier!)),
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  content: Stack(
-                    children: [
-                      if (isSuccess)
-                        SizedBox(
-                          height: 330 * SizeConfig.heightMultiplier!,
-                          width: 250 * SizeConfig.widthMultiplier!,
-                          child: Image.asset(
-                            ImagePath.animatedCongratulationIcon,
-                            fit: BoxFit.cover,
+class SuccessFailureDialog extends StatelessWidget {
+  const SuccessFailureDialog({
+    Key? key,
+    required this.isSuccess,
+    required this.message,
+  });
+
+  final bool isSuccess;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        Get.back();
+      },
+      child: Container(
+        color: kBlack.withOpacity(0.6),
+        child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              titlePadding: EdgeInsets.zero,
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: 0, horizontal: 10 * SizeConfig.widthMultiplier!),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      8 * SizeConfig.imageSizeMultiplier!)),
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              content: Stack(
+                children: [
+                  if (isSuccess)
+                    SizedBox(
+                      height: 330 * SizeConfig.heightMultiplier!,
+                      width: 250 * SizeConfig.widthMultiplier!,
+                      child: Image.asset(
+                        ImagePath.animatedCongratulationIcon,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  Container(
+                    height: 330 * SizeConfig.heightMultiplier!,
+                    width: 250 * SizeConfig.widthMultiplier!,
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          isSuccess
+                              ? SizedBox(
+                                  height: 42 * SizeConfig.heightMultiplier!,
+                                  width: 42 * SizeConfig.widthMultiplier!,
+                                  child: SvgPicture.asset(
+                                      ImagePath.greenRightTick))
+                              : const Icon(
+                                  Icons.info_outline,
+                                  color: Colors.red,
+                                  size: 60,
+                                ),
+                          SizedBox(
+                            height: 8 * SizeConfig.heightMultiplier!,
                           ),
-                        ),
-                      Container(
-                        height: 330 * SizeConfig.heightMultiplier!,
-                        width: 250 * SizeConfig.widthMultiplier!,
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              isSuccess
-                                  ? SizedBox(
-                                      height: 42 * SizeConfig.heightMultiplier!,
-                                      width: 42 * SizeConfig.widthMultiplier!,
-                                      child: SvgPicture.asset(
-                                          ImagePath.greenRightTick))
-                                  : const Icon(
-                                      Icons.info_outline,
-                                      color: Colors.red,
-                                      size: 60,
-                                    ),
-                              SizedBox(
-                                height: 8 * SizeConfig.heightMultiplier!,
-                              ),
-                              Text(
-                                isSuccess ? "congratulations".tr : "Ooops!",
-                                style: AppTextStyle.black400Text.copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                    fontSize: 24 * SizeConfig.textMultiplier!,
-                                    fontWeight: FontWeight.w700),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(
-                                height: 8 * SizeConfig.heightMultiplier!,
-                              ),
-                              Text(
-                                message,
-                                style: AppTextStyle.black400Text.copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                    fontWeight: FontWeight.w600),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                          Text(
+                            isSuccess ? "congratulations".tr : "Ooops!",
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontSize: 24 * SizeConfig.textMultiplier!,
+                                fontWeight: FontWeight.w700),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                )),
-          ),
-        )
+                          SizedBox(
+                            height: 8 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            message,
+                            style: AppTextStyle.black400Text.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .color,
+                                fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )),
+      ),
     );
   }
 }
