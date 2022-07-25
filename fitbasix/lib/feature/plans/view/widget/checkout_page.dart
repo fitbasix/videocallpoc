@@ -34,7 +34,12 @@ class CheckoutPage extends StatelessWidget {
                     child: CachedNetworkImage(
                       height: 50 * SizeConfig.heightMultiplier!,
                       width: 50 * SizeConfig.widthMultiplier!,
-                      imageUrl: '',
+                      imageUrl: Get.find<TrainerController>()
+                          .atrainerDetail
+                          .value
+                          .user!
+                          .profilePhoto!,
+                      fit: BoxFit.cover,
                       errorWidget: (context, _, __) => CircleAvatar(
                         radius: 25,
                       ),
@@ -48,14 +53,23 @@ class CheckoutPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "12 Week Plan",
+                          Get.find<TrainerController>()
+                              .atrainerDetail
+                              .value
+                              .user!
+                              .name!.capitalizeFirst!,
                           style: AppTextStyle.boldWhiteText.copyWith(
                               fontSize: 15 * SizeConfig.textMultiplier!),
                         ),
                         Text(
-                          "Lorem Ipsum stealing my content are you now",
+                          _plansController.selectedPlan!.planName!,
                           style: AppTextStyle.grey400Text.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!),
+                              fontSize: 13 * SizeConfig.textMultiplier!),
+                        ),
+                        Text(
+                          "${(_plansController.selectedPlan!.planDuration! / 7).toStringAsFixed(0)} week plan",
+                          style: AppTextStyle.grey400Text.copyWith(
+                              fontSize: 13 * SizeConfig.textMultiplier!),
                         ),
                       ],
                     ),
@@ -73,22 +87,50 @@ class CheckoutPage extends StatelessWidget {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      '${_plansController.selectedPlan!.price}',
+                      'AED ${_plansController.selectedPlan!.price}',
                       style: AppTextStyle.boldWhiteText
-                          .copyWith(fontSize: 18 * SizeConfig.textMultiplier!),
+                          .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
                     ),
                   )
                 ],
               ),
               SizedBox(
-                height: 40 * SizeConfig.heightMultiplier!,
+                height: 20 * SizeConfig.heightMultiplier!,
               ),
+              // Text(
+              //   "Selected Slots",
+              //   style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
+              //       fontSize: 18 * SizeConfig.textMultiplier!,
+              //       color: Theme.of(context).textTheme.bodyText1?.color),
+              // ),
+              SizedBox(
+                height: 16 * SizeConfig.heightMultiplier!,
+              ),
+              Text(
+                _plansController.selectedTime.replaceFirst('-', ' - '),
+                style: AppTextStyle.white400Text.copyWith(
+                  fontSize: 16 * SizeConfig.textMultiplier!,
+                ),
+              ),
+              Text(
+                _plansController.getSelectedDays(),
+                style: AppTextStyle.white400Text.copyWith(
+                  fontSize: 16 * SizeConfig.textMultiplier!,
+                  color: kGreenColor
+                ),
+              ),
+              SizedBox(height: 16 * SizeConfig.heightMultiplier!),
+              const Divider(
+                color: greyBorder,
+              ),
+
               Text(
                 "Payment Method",
                 style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
                     fontSize: 18 * SizeConfig.textMultiplier!,
                     color: Theme.of(context).textTheme.bodyText1?.color),
               ),
+
               SizedBox(
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
@@ -162,7 +204,9 @@ class CheckoutPage extends StatelessWidget {
                   suffixIconConstraints: BoxConstraints(
                       minWidth: 80 * SizeConfig.widthMultiplier!),
                   suffixIcon: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                     icon: Text(
                       'Apply',
                       style: AppTextStyle.boldWhiteText.copyWith(
@@ -315,6 +359,7 @@ class CheckoutPage extends StatelessWidget {
                     userName: _plansController.cardNameController.text,
                     planId: _plansController.selectedPlan!.id,
                     trainerId: _trainerController.atrainerDetail.value.user!.id,
+                    planDuration: _plansController.selectedPlan!.planDuration,
                   ),
                 )).then((value) {
               var response = jsonDecode(jsonEncode(value).toString())
@@ -326,6 +371,10 @@ class CheckoutPage extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => PaymentWebview(
                         initialUrl: response["payment_link"],
+                        selectedPlan: _plansController.selectedPlan,
+                        planId: _plansController.selectedPlan!.id,
+                        trainerId:
+                            _trainerController.atrainerDetail.value.user!.id,
                       ),
                     ));
               } else {

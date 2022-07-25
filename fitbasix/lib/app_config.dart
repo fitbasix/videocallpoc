@@ -18,7 +18,7 @@ class AppConfig {
       case Flavor.DEVELOPMENT:
         return 'https://fitbasix.com';
       case Flavor.STAGING:
-        return 'http://15.184.55.142';
+        return 'https://stage-api.fitbasix.com';
       default:
         return 'https://fitbasix.com';
     }

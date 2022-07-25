@@ -150,8 +150,6 @@ log(ApiUrl.getEnablexUrl+id);
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response =
         await dio!.post(ApiUrl.getSchedules, data: {"trainerId": trainerId});
-    print(response.data);
-
     return timeModelFromJson(response.toString());
   }
 

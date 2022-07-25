@@ -1,4 +1,6 @@
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/plans/view/widget/add_card_details.dart';
 import 'package:fitbasix/feature/plans/view/widget/checkout_page.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +21,11 @@ class PlansController extends GetxController {
   String? cardExpiryDateErrortext;
   String? cardCvvErrortext;
 
-
+  TrainerController trainerController = Get.find<TrainerController>();
 
   Plan? selectedPlan;
+
+  String selectedTime = '';
 
   var pageList = <Widget>[];
 
@@ -32,7 +36,7 @@ class PlansController extends GetxController {
     ];
   }
 
-  String? validateCardName() {
+  void validateCardName() {
     if (cardNameController.text.isEmpty) {
       cardNameErrortext = "Field Required";
     } else {
@@ -41,19 +45,27 @@ class PlansController extends GetxController {
     update(['card-name-field']);
   }
 
-  String? validateCardNumber() {
+  void validateCardNumber() {
     if (cardNumberController.text.isEmpty) {
       cardNumberErrortext = "Field Required";
-    }
-    // else if (cardNumberController.text.length <16) {
-    //   cardNumberErrortext = "Invalid Card Number";
-    // }
-    else{
+    } else {
       cardNumberErrortext = null;
     }
     update(['card-number-field']);
   }
-  String? validateCardExpiry() {
+
+  void validateCardNumberLength() {
+    if (cardNumberController.text.length < 19) {
+      cardNumberErrortext = "Invalid Card Number";
+    } else {
+      cardNumberErrortext = null;
+    }
+    printInfo(info: cardNumberController.text.length.toString());
+    printInfo(info: cardNumberErrortext.toString());
+    update(['card-number-field']);
+  }
+
+  void validateCardExpiry() {
     if (cardExpiryDateController.text.isEmpty) {
       cardExpiryDateErrortext = "Field Required";
     } else {
@@ -61,7 +73,8 @@ class PlansController extends GetxController {
     }
     update(['card-expiry-field']);
   }
-  String? validateCardCvv() {
+
+  void validateCardCvv() {
     if (cardCvvController.text.isEmpty) {
       cardCvvErrortext = "Field Required";
     } else {
@@ -70,7 +83,7 @@ class PlansController extends GetxController {
     update(['card-cvv-field']);
   }
 
-  void clearValues(){
+  void clearValues() {
     cardCvvController.clear();
     cardCvvErrortext = null;
     cardExpiryDateController.clear();
@@ -81,6 +94,43 @@ class PlansController extends GetxController {
     cardNameErrortext = null;
     pageIndex.value = 0;
   }
+  @override
+  void onInit() {
+    getSelectedTime();
+    super.onInit();
+  }
+
+  void getSelectedTime() async{
+
+    var output =
+        await TrainerServices.getAllTimeSlot();
+
+    selectedTime = trainerController.getTime(
+        output.response!.data![trainerController
+            .availableTime
+            .value
+            .response!
+            .data![0]
+            .time![Get.find<TrainerController>().selectedTimeSlot.value]]
+            .name!);
+    update();
+  }
+
+  String getSelectedDays(){
+    var days = '';
+    printInfo(info: Get.find<TrainerController>().selectedDays.toString());
+    printInfo(info: Get.find<TrainerController>().weekAvailableSlots.toString());
+
+    for (var selected in Get.find<TrainerController>().selectedDays) {
+      for (var available in Get.find<TrainerController>().weekAvailableSlots) {
+        if (selected == available.id) {
+          days += "${trainerController.numberToDay[available.day]!} ";
+        }
+      }
+    }
+    return days;
+  }
+
 
   @override
   void dispose() {

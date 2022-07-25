@@ -9,8 +9,14 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
+import 'package:fitbasix/feature/plans/controller/plans_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,6 +36,8 @@ class PaymentWebview extends StatefulWidget {
     this.amount,
     this.planId,
     this.trainerId,
+    this.planDuration,
+    this.selectedPlan,
   }) : super(key: key);
 
   final String? initialUrl;
@@ -40,6 +48,8 @@ class PaymentWebview extends StatefulWidget {
   final String? amount;
   final String? planId;
   final String? trainerId;
+  final int? planDuration;
+  final Plan? selectedPlan;
 
   @override
   State<PaymentWebview> createState() => _PaymentWebviewState();
@@ -50,6 +60,8 @@ class _PaymentWebviewState extends State<PaymentWebview> {
   Uuid uuid = const Uuid();
   bool isLoading = true;
   InAppWebViewController? webViewController;
+  TrainerController trainerController = Get.find<TrainerController>();
+  var planController = Get.find<PlansController>();
 
   var accessCode = 'USyYFjt6JLdOqLvng6Ar';
   var merchantIdendifier = '7f2c4c82';
@@ -64,7 +76,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
 
   var paymentForm = {};
 
-  static Future<Map<String,dynamic>> getPaymentLink({
+  static Future<Map<String, dynamic>> getPaymentLink({
     required String accessCode,
     required String merchantIdentifier,
     required String merchantReference,
@@ -75,6 +87,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
     required String tokenName,
     required String trainerId,
     required String planId,
+    required int planDuration,
   }) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
@@ -83,6 +96,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
       "access_code": accessCode,
       "merchant_extra": trainerId,
       "merchant_extra1": planId,
+      "merchant_extra3": planDuration,
       "merchant_identifier": merchantIdentifier,
       "merchant_reference": merchantReference,
       "currency": currency,
@@ -93,16 +107,17 @@ class _PaymentWebviewState extends State<PaymentWebview> {
       "return_url": "${ApiUrl.liveBaseURL}/api/payment/purchaseUrl"
     });
     return {
-      "response_code":response.statusCode,
-      "response_message":response.statusMessage,
-      "payment_link": jsonDecode(response.toString())["response"]["paymentLink"]};
+      "response_code": response.statusCode,
+      "response_message": response.statusMessage,
+      "payment_link": jsonDecode(response.toString())["response"]["paymentLink"]
+    };
   }
 
   @override
   void initState() {
     merchantReference = DateTime.now().microsecondsSinceEpoch.toString();
     if (widget.cardNumber != null) {
-      cardNumber = widget.cardNumber!.replaceAll('-', '');
+      cardNumber = widget.cardNumber!.replaceAll(' ', '');
       expiryDate = widget.expiryDate!.replaceAll('/', '');
       cardSecurityCode = widget.cardSecurityCode!;
     }
@@ -178,6 +193,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                       trainerId: widget.trainerId!,
                       merchantIdentifier: merchantIdendifier,
                       merchantReference: merchantReference,
+                      planDuration: widget.planDuration!,
                       tokenName: jsonDecode(parsedString)["response"]
                           ["token_name"],
                     );
@@ -187,7 +203,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                     Navigator.pop(context);
                     showDialogForPaymentStatus(
                         context: context,
-                        errorMessage: jsonDecode(parsedString)["response"]
+                        message: jsonDecode(parsedString)["response"]
                             ["error_message"],
                         isSuccess: false);
                   }
@@ -197,13 +213,54 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    showDialogForPaymentStatus(
-                        context: context, errorMessage: "", isSuccess: true);
+                    Navigator.pop(context);
+
+                    // showDialogForPaymentStatus(
+                    //     isSuccess: true, context: context, message: 'Payment Successful');
+
+                    planController.clearValues();
+                    List<int> selectedDays = [];
+                    for (var days in trainerController.selectedDays) {
+                      selectedDays.add(trainerController
+                          .weekAvailableSlots[trainerController
+                              .weekAvailableSlots
+                              .indexWhere((element) => element.id == days)]
+                          .day!);
+                    }
+
+                    bool booked = await TrainerServices.bookSlot(
+                        trainerController.selectedDays,
+                        planController.selectedPlan!.id!,
+                        trainerController.selectedTimeSlot.value,
+                        selectedDays,
+                        trainerController.atrainerDetail.value.user?.id ?? '',
+                        context);
+
+                    if (booked == true) {
+                      trainerController.enrolledTrainer
+                          .add(trainerController.atrainerDetail.value.id!);
+                      trainerController.setUp();
+
+                      showDialogForPaymentStatus(
+                          isSuccess: true,
+                          context: context,
+                          message: 'Booking Successful');
+
+                      trainerController.atrainerDetail.value.isEnrolled = true;
+                      final HomeController _homeController = Get.find();
+                      _homeController.setup();
+                      trainerController.setUp();
+                    } else {
+                      showDialogForPaymentStatus(
+                          isSuccess: false,
+                          context: context,
+                          message: 'Booking failed');
+                    }
                   } else {
                     Navigator.pop(context);
                     showDialogForPaymentStatus(
                         context: context,
-                        errorMessage: jsonDecode(parsedString)["response"]
+                        message: jsonDecode(parsedString)["response"]
                             ["error_message"],
                         isSuccess: false);
                   }
@@ -256,12 +313,10 @@ class _PaymentWebviewState extends State<PaymentWebview> {
   void showDialogForPaymentStatus(
       {required BuildContext context,
       required bool isSuccess,
-      required String errorMessage}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return GestureDetector(
-          onTap: () {
+      required String message}) {
+    Get.dialog(
+         GestureDetector(
+          onTap: () async {
             Navigator.pop(context);
           },
           child: Container(
@@ -325,7 +380,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                                 height: 8 * SizeConfig.heightMultiplier!,
                               ),
                               Text(
-                                isSuccess ? "Payment Successful" : errorMessage,
+                                message,
                                 style: AppTextStyle.black400Text.copyWith(
                                     color: Theme.of(context)
                                         .textTheme
@@ -342,8 +397,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                   ),
                 )),
           ),
-        );
-      },
+        )
     );
   }
 }

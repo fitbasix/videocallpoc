@@ -7,6 +7,7 @@ import 'package:fitbasix/feature/plans/controller/plans_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
 class AddCardDetails extends StatelessWidget {
   AddCardDetails({Key? key}) : super(key: key);
@@ -65,6 +66,9 @@ class AddCardDetails extends StatelessWidget {
                       onChanged: (value) {
                         _plansController.validateCardName();
                       },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp("[a-zA-Z -]"))
+                      ],
                       style: AppTextStyle.normalBlackText.copyWith(
                           color: Theme.of(context).textTheme.bodyText1?.color),
                       decoration: InputDecoration(
@@ -118,9 +122,9 @@ class AddCardDetails extends StatelessWidget {
                       },
                       inputFormatters: [
                         MaskedTextInputFormatter(
-                          mask: 'xxxx-xxxx-xxxx-xxxx',
-                          separator: '-',
-                        )
+                          mask: 'xxxx xxxx xxxx xxxx',
+                          separator: ' ',
+                        ),
                       ],
                       style: AppTextStyle.normalBlackText.copyWith(
                           color: Theme.of(context).textTheme.bodyText1?.color),
@@ -247,6 +251,7 @@ class AddCardDetails extends StatelessWidget {
                               _plansController.validateCardCvv();
                             },
                             inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
                               MaskedTextInputFormatter(
                                 mask: 'xxx',
                                 separator: '-',
@@ -337,10 +342,11 @@ class AddCardDetails extends StatelessWidget {
             _plansController.validateCardExpiry();
             _plansController.validateCardNumber();
             _plansController.validateCardName();
-            if (_plansController.cardNameController.text.isNotEmpty &&
-                _plansController.cardNumberController.text.isNotEmpty &&
-                _plansController.cardExpiryDateController.text.isNotEmpty &&
-                _plansController.cardCvvController.text.isNotEmpty) {
+            _plansController.validateCardNumberLength();
+            if (_plansController.cardNameErrortext == null &&
+                _plansController.cardNumberErrortext == null &&
+                _plansController.cardExpiryDateErrortext == null &&
+                _plansController.cardCvvErrortext == null) {
               _plansController.pageIndex.value += 1;
             }
           },

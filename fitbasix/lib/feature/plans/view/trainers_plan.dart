@@ -109,42 +109,37 @@ class TrainerPlansScreen extends StatelessWidget {
                             planPrice: trainerController
                                 .planModel.value.response!.data![index].price!,
                             onPlanEnrollTapped: () async {
-                              Get.put(PlansController());
-                              Get.find<PlansController>()..setListValue()..selectedPlan = trainerController
-                                  .planModel.value.response!.data![index];
+                              trainerController.weekAvailableSlots.value = [];
+                              trainerController.selectedTimeSlot.value = 0;
                               Navigator.pushNamed(
-                                  context, RouteName.paymentPage,);
-                              // trainerController.weekAvailableSlots.value = [];
-                              // trainerController.selectedTimeSlot.value = 0;
-                              // Navigator.pushNamed(
-                              //     context, RouteName.planTimingScreen);
-                              // trainerController.selectedPlan.value =
-                              //     trainerController
-                              //         .planModel.value.response!.data![index];
-                              //
-                              // // trainerController.fullPlanDetails.value.response!.data!
-                              // //             .isEnrolled ==
-                              // //         false
-                              // //     ? Navigator.pushNamed(
-                              // //         context, RouteName.planTimingScreen)
-                              // //     : "";
-                              // trainerController
-                              //     .isAvailableSlotDataLoading.value = true;
-                              // var output =
-                              //     await TrainerServices.getAllTimeSlot();
-                              // trainerController.getAllSlots.value =
-                              //     output.response!.data!;
-                              // trainerController.fullPlanDetails.value =
-                              //     await TrainerServices.getPlanById(
-                              //         trainerController.planModel.value
-                              //             .response!.data![index].id!);
-                              //
-                              // trainerController.availableTime.value =
-                              //     await TrainerServices.getEnrolledPlanDetails(
-                              //         trainerController.planModel.value
-                              //             .response!.data![index].trainer!);
-                              // trainerController
-                              //     .isAvailableSlotDataLoading.value = false;
+                                  context, RouteName.planTimingScreen);
+                              trainerController.selectedPlan.value =
+                              trainerController
+                                  .planModel.value.response!.data![index];
+
+                              // trainerController.fullPlanDetails.value.response!.data!
+                              //             .isEnrolled ==
+                              //         false
+                              //     ? Navigator.pushNamed(
+                              //         context, RouteName.planTimingScreen)
+                              //     : "";
+                              trainerController
+                                  .isAvailableSlotDataLoading.value = true;
+                              var output =
+                              await TrainerServices.getAllTimeSlot();
+                              trainerController.getAllSlots.value =
+                              output.response!.data!;
+                              trainerController.fullPlanDetails.value =
+                              await TrainerServices.getPlanById(
+                                  trainerController.planModel.value
+                                      .response!.data![index].id!);
+
+                              trainerController.availableTime.value =
+                              await TrainerServices.getEnrolledPlanDetails(
+                                  trainerController.atrainerDetail.value.user!.id!);
+
+                              trainerController
+                                  .isAvailableSlotDataLoading.value = false;
                             },
                             planFeaturesList: trainerController.planModel.value
                                 .response!.data![index].keyPoints),

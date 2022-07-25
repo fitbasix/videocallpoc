@@ -98,28 +98,27 @@ class TrainerController extends GetxController {
     6: "Sat",
   };
 
-  bool isVideoAvailable(String time) {
-    List<String> times = time.split("_");
-    // var inputFormat = DateFormat('dd/MM/yyyy');
-    TimeOfDay inputDate1 =
-        TimeOfDay.fromDateTime(DateTime.parse(times[0]).toLocal());
-    TimeOfDay inputDate2 =
-        TimeOfDay.fromDateTime(DateTime.parse(times[1]).toLocal());
-    TimeOfDay now = TimeOfDay.now();
-    int nowInMinutes = now.hour * 60 + now.minute;
-    int time1 = inputDate1.hour * 60 + inputDate1.minute;
-    int time2 = inputDate2.hour * 60 + inputDate2.minute;
-    log(nowInMinutes.toString() +
-        '  ' +
-        time1.toString() +
-        " " +
-        time2.toString());
-    if (time1 < nowInMinutes && time2 > nowInMinutes) {
-      return true;
-    }
-
-    return false;
-  }
+  // bool isVideoAvailable(String time) {
+  //   List<String> times = time.split("_");
+  //   // var inputFormat = DateFormat('dd/MM/yyyy');
+  //   TimeOfDay inputDate1 =
+  //       TimeOfDay.fromDateTime(DateTime.parse(times[0]).toLocal());
+  //   TimeOfDay inputDate2 =
+  //       TimeOfDay.fromDateTime(DateTime.parse(times[1]).toLocal());
+  //   TimeOfDay now = TimeOfDay.now();
+  //   int nowInMinutes = now.hour * 60 + now.minute;
+  //   int time1 = inputDate1.hour * 60 + inputDate1.minute;
+  //   int time2 = inputDate2.hour * 60 + inputDate2.minute;
+  //   log(nowInMinutes.toString() +
+  //       '  ' +
+  //       time1.toString() +
+  //       " " +
+  //       time2.toString());
+  //   if (time1 < nowInMinutes && time2 > nowInMinutes) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   String GetDays(List<int>? days) {
     String day = "";

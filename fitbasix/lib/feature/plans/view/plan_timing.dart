@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
+import 'package:fitbasix/feature/plans/controller/plans_controller.dart';
 import 'package:fitbasix/feature/plans/view/plan_info.dart';
 import 'package:fitbasix/feature/plans/view/trainers_plan.dart';
 import 'package:flutter/cupertino.dart';
@@ -344,12 +346,16 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                           3) {
                                                     ///if selected days is less then 3 or user is de selecting a day
                                                     if (trainerController
+                                                                .selectedDays
+                                                                .length <
+                                                            3 ||
+                                                        trainerController
                                                             .selectedDays
-                                                            .length <
-                                                        3 || trainerController
-                                                            .selectedDays.contains(trainerController
-                                                              .weekAvailableSlots[
-                                                                  index].id)) {
+                                                            .contains(
+                                                                trainerController
+                                                                    .weekAvailableSlots[
+                                                                        index]
+                                                                    .id)) {
                                                       if (trainerController
                                                           .selectedDays
                                                           .contains(
@@ -562,67 +568,15 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                   height: 48 * SizeConfig.heightMultiplier!,
                                   child: TextButton(
                                     onPressed: () async {
-                                      // if (trainerController
-                                      //             .selectedDays.length !=
-                                      //         0 &&
-                                      //     (trainerController
-                                      //                 .selectedDays.length %
-                                      //             3 ==
-                                      //         0)) {
-                                      //   List<int> selectedDays = [];
-                                      //   trainerController.selectedDays
-                                      //       .forEach((days) {
-                                      //     selectedDays.add(trainerController
-                                      //         .weekAvailableSlots[
-                                      //             trainerController
-                                      //                 .weekAvailableSlots
-                                      //                 .indexWhere((element) =>
-                                      //                     element.id == days)]
-                                      //         .day!);
-                                      //   });
-                                      //
-                                      //   bool booked =
-                                      //       await TrainerServices.bookSlot(
-                                      //           trainerController.selectedDays,
-                                      //           trainerController
-                                      //               .selectedPlan.value.id!,
-                                      //           trainerController
-                                      //               .selectedTimeSlot.value,
-                                      //           selectedDays,
-                                      //           trainerController.atrainerDetail
-                                      //                   .value.user?.id ??
-                                      //               '',
-                                      //           context);
-                                      //   if (booked == true) {
-                                      //     trainerController.enrolledTrainer.add(
-                                      //         trainerController
-                                      //             .atrainerDetail.value.id!);
-                                      //     trainerController.setUp();
-                                      //     showDialogForSessionBooked(context);
-                                      //
-                                      //     trainerController.atrainerDetail.value
-                                      //         .isEnrolled = true;
-                                      //     Future.delayed(Duration(seconds: 3),
-                                      //         () {
-                                      //       Navigator.pop(context);
-                                      //       Navigator.pop(context);
-                                      //       Navigator.pop(context);
-                                      //     });
-                                      //     final HomeController _homeController =
-                                      //         Get.find();
-                                      //     _homeController.setup();
-                                      //     trainerController.setUp();
-                                      //   }
-
-                                        // Navigator.pop(context);
-                                        // Navigator.pop(context);
-                                        // Navigator.pushAndRemoveUntil(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //         builder: (_) =>
-                                        //             TrainerPlansScreen()),
-                                        //  (route) => false);
-                                      // }
+                                      Get.put(PlansController());
+                                      Get.find<PlansController>()
+                                        ..setListValue()
+                                        ..selectedPlan = trainerController
+                                            .selectedPlan.value;
+                                      Navigator.pushNamed(
+                                        context,
+                                        RouteName.paymentPage,
+                                      );
                                     },
                                     child: Text('Book Session'.tr,
                                         style: isDaySelected
