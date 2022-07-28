@@ -182,7 +182,6 @@ class GetTrainedScreen extends StatelessWidget {
                                                   context,
                                                   RouteName
                                                       .trainerProfileScreen);
-
                                               var result = await TrainerServices
                                                   .getATrainerDetail(trainerId);
                                               _trainerController

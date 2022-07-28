@@ -152,12 +152,6 @@ class _PaymentWebviewState extends State<PaymentWebview> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: true,
-          // title: Text(
-          //   'Payment Processing ...',
-          //   style: AppTextStyle.titleText.copyWith(
-          //       color: Theme.of(context).appBarTheme.titleTextStyle?.color,
-          //       fontSize: 16 * SizeConfig.textMultiplier!),
-          // ),
         ),
         body: Stack(
           children: [
@@ -179,6 +173,14 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                 final String parsedString =
                     parse(document.body!.text).documentElement!.text;
                 printInfo(info: parsedString);
+
+                // if(widget.initialUrl == null && !parsedString.contains('18000')){
+                //   Navigator.pop(context);
+                //   Get.dialog(
+                //       const SuccessFailureDialog(
+                //       message: 'There is an error. Please try again later.',
+                //       isSuccess: false));
+                // }
 
                 if (widget.initialUrl == null) {
                   if (jsonDecode(parsedString)["response"]["response_code"] ==

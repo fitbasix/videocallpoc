@@ -5,6 +5,7 @@ import 'package:fitbasix/feature/message/view/screens/message_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:cometchat/cometchat_sdk.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:selectable_autolink_text/selectable_autolink_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -72,7 +73,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                   right: 16 * SizeConfig.widthMultiplier!,
                   left: 16 * SizeConfig.widthMultiplier!),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: sentByMe? CrossAxisAlignment.end :CrossAxisAlignment.start,
                 children: [
                   Container(
                       constraints: BoxConstraints(
@@ -129,7 +130,19 @@ class _MessageWidgetState extends State<MessageWidget> {
                       //         ? AppTextStyle.white400Text
                       //         : AppTextStyle.black400Text
                       //             .copyWith(color: kPureWhite)),
+                      ),
+                  SizedBox(
+                    height: 5.0 * SizeConfig.heightMultiplier!,
+                  ),
+                  Text(DateFormat.jm().format(widget.passedMessage.sentAt!),
+                      style: sentByMe == true
+                          ? AppTextStyle.white400Text.copyWith(
+                          fontSize: 9.0 * SizeConfig.textMultiplier!
                       )
+                          : AppTextStyle.black400Text
+                              .copyWith(color: kPureWhite,
+                      fontSize: 9.0 * SizeConfig.textMultiplier!
+                      )),
                 ],
               ),
             )),

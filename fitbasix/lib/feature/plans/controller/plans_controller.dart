@@ -5,6 +5,7 @@ import 'package:fitbasix/feature/plans/view/widget/add_card_details.dart';
 import 'package:fitbasix/feature/plans/view/widget/checkout_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class PlansController extends GetxController {
   RxBool saveCreditCardInfo = true.obs;
@@ -34,6 +35,20 @@ class PlansController extends GetxController {
       AddCardDetails(),
       CheckoutPage(),
     ];
+  }
+
+  void validateCardExpiryDate(){
+    var dayYear = cardExpiryDateController.text.split('/');
+
+    if(int.parse(dayYear[0]) < int.parse(DateFormat("dd-MM-yy").format(DateTime.now()).split('-')[2])){
+      cardExpiryDateErrortext = "Invalid Expiry Date";
+    }
+    else if(int.parse(dayYear[1])>12 || int.parse(dayYear[1])<1){
+      cardExpiryDateErrortext = "Invalid Expiry Date";
+    }
+    else{
+      cardExpiryDateErrortext = null;
+    }
   }
 
   void validateCardName() {
@@ -115,16 +130,19 @@ class PlansController extends GetxController {
   }
 
   String getSelectedDays(){
+    var daysIndex = [];
     var days = '';
-    printInfo(info: Get.find<TrainerController>().selectedDays.length.toString());
-    printInfo(info: Get.find<TrainerController>().weekAvailableSlots.length.toString());
 
-    for (var selected in Get.find<TrainerController>().selectedDays) {
+    for (var selected in Get.find<TrainerController>().selectedDays.value) {
       for (var available in Get.find<TrainerController>().weekAvailableSlots) {
         if (selected == available.id) {
-          days += "${trainerController.numberToDay[available.day]!} ";
+          daysIndex.add(available.day);
         }
       }
+    }
+    daysIndex.sort();
+    for(var day in daysIndex){
+      days += "${trainerController.numberToDay[day]!} ";
     }
     return days;
   }

@@ -343,6 +343,7 @@ class AddCardDetails extends StatelessWidget {
             _plansController.validateCardNumber();
             _plansController.validateCardName();
             _plansController.validateCardNumberLength();
+            _plansController.validateCardExpiryDate();
             if (_plansController.cardNameErrortext == null &&
                 _plansController.cardNumberErrortext == null &&
                 _plansController.cardExpiryDateErrortext == null &&

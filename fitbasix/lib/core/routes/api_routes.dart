@@ -1,9 +1,9 @@
 import '../../app_config.dart';
 
 class ApiUrl {
-  // static String liveBaseURL = AppConfig.api_url;
+  static String liveBaseURL = AppConfig.api_url;
 
-  static String liveBaseURL = 'https://2a19-122-161-80-134.in.ngrok.io';
+  // static String liveBaseURL = 'https://04d8-2409-4050-2e4b-e78d-485a-d9b5-586-a883.in.ngrok.io';
 
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getAbuseData =
@@ -84,7 +84,8 @@ class ApiUrl {
   static String coverPic = liveBaseURL + "/api/user/addCoverPic";
   static String getIndividualUser = liveBaseURL + "/api/auth?userId=";
 
-  ///plan demo
+  ///plan
+  static String getActivePlans = liveBaseURL +'/api/enrollPlan/getActivePlan';
   static String planById = liveBaseURL + '/api/plan/getPlanById';
   static String getSchedules = liveBaseURL + '/api/schedule/getSchedules';
   static String getAllPlans =

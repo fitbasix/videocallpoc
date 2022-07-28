@@ -155,12 +155,12 @@ log(ApiUrl.getEnablexUrl+id);
   }
 
   static Future<AvailableSlot> getAllWeekDays(
-      String trainerId, int time) async {
+      String trainerId, int time, int planDuration) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     print(time.toString());
     var response = await dio!.post(ApiUrl.getSchedules,
-        data: {"trainerId": trainerId, "time": time});
+        data: {"trainerId": trainerId, "time": time, "planDuration":planDuration});
     return availableSlotFromJson(response.toString());
   }
 

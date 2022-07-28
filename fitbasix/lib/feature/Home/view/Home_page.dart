@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:core';
 
 import 'dart:ui';
 
@@ -246,7 +247,6 @@ class _HomePageState extends State<HomePage> {
                 controller: _scrollController,
                 child: Stack(
                   children: [
-
                     Container(
                       height: 178 * SizeConfig.heightMultiplier!,
                       color: Theme
@@ -616,6 +616,99 @@ class _HomePageState extends State<HomePage> {
                         //     ],
                         //   ),
                         // ),
+                        if( _homeController.activePlans.isNotEmpty )  SizedBox(
+                          height: 16 * SizeConfig.heightMultiplier!,
+                        ),
+                       if( _homeController.activePlans.isNotEmpty )  Padding(
+                          padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
+                          child: Text(
+                            'Active Plans',
+                            style: AppTextStyle.boldBlackText.copyWith(
+                                fontSize: 16 * SizeConfig.textMultiplier!,
+                                color: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.color),
+                          ),
+                        ),
+                        ListView.builder(
+                          padding: EdgeInsets.symmetric(horizontal:16 * SizeConfig.widthMultiplier! ),
+                          shrinkWrap: true,
+                          itemCount: _homeController.activePlans.length,
+                          itemBuilder: (context,index){
+                          return Container(
+                            padding: EdgeInsets.all(10 * SizeConfig.widthMultiplier!),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                                color: Theme.of(context).cardColor
+                            ),
+                            child: Row(
+                              children: [
+                            ClipRRect(
+                            borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                            child: CachedNetworkImage(
+                              height: 70 * SizeConfig.heightMultiplier! ,
+                              width: 70 * SizeConfig.widthMultiplier!,
+                              imageUrl: _homeController.activePlans[index].trainer!.profilePhoto!,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                                SizedBox(
+                                  width: 16 * SizeConfig.widthMultiplier!,
+                                ),
+                            Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                            Text(
+                            _homeController.activePlans[index].trainer!.name!,
+                            style: AppTextStyle.normalWhiteText,
+                            ),
+                            Text(
+                            _homeController.activePlans[index].planDetails!.planName!,
+                            style: AppTextStyle.grey400Text,
+                            ),
+                            SizedBox(height: 5 *  SizeConfig.heightMultiplier!,),
+                            Row(
+                              children: [
+                                Text(
+                                "Active till ",
+                                  style: AppTextStyle.normalWhiteText.copyWith(
+                                    fontSize: 12 *SizeConfig.textMultiplier!
+                                  ),
+                                ),
+                                Text(
+                                  DateFormat('MMM d yyyy').format(_homeController.activePlans[index].expiryDate!),
+                                  style: AppTextStyle.grey400Text.copyWith(
+                                      color: kGreenColor,
+                                    fontSize: 12 *SizeConfig.textMultiplier!
+                                  ),
+                                ),
+                              ],
+                            ),
+                              Text(
+                                _homeController.getDaysFromIndex(_homeController.activePlans[index].weekDays!),
+                                style: AppTextStyle.grey400Text.copyWith(
+                                  color: kGreenColor,
+                                    fontSize: 12 *SizeConfig.textMultiplier!
+                                ),
+                              ),
+                              Text(
+                                Get.find<TrainerController>().getTime(_homeController.activePlans[index].sessionTime!.name!),
+                                style: AppTextStyle.grey400Text.copyWith(
+                                  color: kPureWhite,
+                                    fontSize: 12 *SizeConfig.textMultiplier!
+                                ),
+                              ),
+
+                            ],
+                            ),
+                              ],),);
+
+
+                        },),
+
                         SizedBox(
                           height: 16 * SizeConfig.heightMultiplier!,
                         ),

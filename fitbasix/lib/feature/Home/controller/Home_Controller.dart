@@ -4,6 +4,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
+import 'package:fitbasix/feature/Home/model/active_plans_model.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
@@ -11,6 +12,7 @@ import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
 import 'package:fitbasix/feature/Home/model/water_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/message/view/screens/message_list.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +92,7 @@ class HomeController extends GetxController {
   RxList<String> likedPost = RxList<String>([]);
   RxBool updateWaterData = false.obs;
   RxString openCommentId = "".obs;
+  RxList<PlanDetail> activePlans= RxList<PlanDetail>([]);
 
   RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
     {},
@@ -446,6 +449,15 @@ class HomeController extends GetxController {
 
   Future<void> getProfileData() async {
     userProfileData.value = await CreatePostService.getUserProfile();
+  }
+
+  String getDaysFromIndex(List daysIndex){
+    var days= '';
+    daysIndex.sort();
+    for(var day in daysIndex){
+      days += "${Get.find<TrainerController>().numberToDay[day]!} ";
+    }
+    return days;
   }
 
   Future<void> onTrendingPostRefresh() async {

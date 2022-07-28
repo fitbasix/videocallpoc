@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import '../../get_trained/services/trainer_services.dart';
 const String kBaseURL = "https://demo.enablex.io/";
@@ -24,5 +25,13 @@ class ChatController extends GetxController {
   RxBool storagePermissionCalled = false.obs;
   String USERID = '';
 
+  String getDayString(DateTime dateTime1, DateTime dateTime2) {
+    if (dateTime2.day - dateTime1.day == 0) {
+      return 'Today';
+    } else if (dateTime2.day - dateTime1.day == 1) {
+      return 'Yesterday';
+    } else
+      return DateFormat('d MMM').format(dateTime1);
+  }
 
 }

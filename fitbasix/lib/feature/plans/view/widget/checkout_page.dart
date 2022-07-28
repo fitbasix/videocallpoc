@@ -274,7 +274,7 @@ class CheckoutPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "${_plansController.selectedPlan!.price}",
+                    "AED ${_plansController.selectedPlan!.price}",
                     style: AppTextStyle.white400Text.copyWith(
                       fontSize: 17 * SizeConfig.textMultiplier!,
                     ),
@@ -292,7 +292,7 @@ class CheckoutPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "\$0",
+                    "+ AED 0",
                     style: AppTextStyle.white400Text.copyWith(
                       fontSize: 17 * SizeConfig.textMultiplier!,
                     ),
@@ -310,7 +310,7 @@ class CheckoutPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "-\$0",
+                    "- AED 0",
                     style: AppTextStyle.white400Text.copyWith(
                         fontSize: 17 * SizeConfig.textMultiplier!,
                         color: kGreenColor),
@@ -333,7 +333,7 @@ class CheckoutPage extends StatelessWidget {
                                 Theme.of(context).textTheme.bodyText1?.color),
                   ),
                   Text(
-                    "${_plansController.selectedPlan!.price}",
+                    "AED ${_plansController.selectedPlan!.price}",
                     style: AppTextStyle.normalPureBlackTextWithWeight600
                         .copyWith(
                             fontSize: 18 * SizeConfig.textMultiplier!,

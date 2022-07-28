@@ -266,14 +266,13 @@ class _PlanTimingUIState extends State<PlanTimingUI> {
                                                 .selectedDays.value = [];
                                             var output = await TrainerServices
                                                 .getAllWeekDays(
-                                                    trainerController
-                                                        .atrainerDetail
-                                                        .value
-                                                        .user!
-                                                        .id!,
-                                                    trainerController
-                                                        .TimeSlotSelected
-                                                        .value);
+                                              trainerController.atrainerDetail
+                                                  .value.user!.id!,
+                                              trainerController
+                                                  .TimeSlotSelected.value,
+                                              trainerController.selectedPlan
+                                                  .value.planDuration!,
+                                            );
                                             trainerController.weekAvailableSlots
                                                 .value = output.response!.data!;
                                             // isTimeSlotSelected

@@ -650,17 +650,59 @@ class _MessageListState extends State<MessageList>
   }
 
   Widget getMessageWidget(int index) {
+    printInfo(info: _messageList[index].sentAt!.difference(DateTime.now()).inDays.toString());
     print("got in messageWidget");
     if (_messageList[index] is MediaMessage) {
       return MediaMessageWidget(
         passedMessage: (_messageList[index] as MediaMessage),
       );
     } else if (_messageList[index] is TextMessage) {
-      return MessageWidget(
-        passedMessage: (_messageList[index] as TextMessage),
-        deleteFunction: deleteMessage,
-        conversation: widget.conversation.value,
-        editFunction: editMessage,
+     return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment:
+        _chatController.USERID == _messageList[index].sender!.uid
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
+        children: [
+          if (index == _messageList.length-1)
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: 18 * SizeConfig.heightMultiplier!),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                      _chatController.getDayString(
+                          _messageList[index].sentAt!, DateTime.now()),
+                      style: AppTextStyle.grey400Text
+                          .copyWith(fontSize: 12 * SizeConfig.textMultiplier!)),
+                ],
+              ),
+            ),
+          if (_messageList.length > index + 1)
+            if (_messageList[index].sentAt!.day >
+                _messageList[index + 1].sentAt!.day)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 18 * SizeConfig.heightMultiplier!),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        _chatController.getDayString(
+                            _messageList[index].sentAt!, DateTime.now()),
+                        style: AppTextStyle.grey400Text.copyWith(
+                            fontSize: 12 * SizeConfig.textMultiplier!)),
+                  ],
+                ),
+              ),
+          MessageWidget(
+            passedMessage: (_messageList[index] as TextMessage),
+            deleteFunction: deleteMessage,
+            conversation: widget.conversation!.value,
+            editFunction: editMessage,
+          ),
+        ],
       );
     } else if (_messageList[index] is action_alias.Action) {
       return ActionWidget(
@@ -903,7 +945,7 @@ class _MessageListState extends State<MessageList>
                     () => ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       reverse: true,
-                      // to diisplay loading tile if more items
+                      // to display loading tile if more items
                       itemCount: _hasMore
                           ? _messageList.length + 1
                           : _messageList.length,

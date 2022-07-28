@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
+import 'package:fitbasix/feature/Home/model/active_plans_model.dart';
 import 'package:fitbasix/feature/Home/model/comment_model.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/model/post_model.dart';
@@ -130,7 +132,16 @@ class HomeService {
     var response = await dio!
         .post(ApiUrl.addComment, data: {"postId": postId, "comment": comment});
 
-    print(response.data['code']);
+    log(response.data['code']);
+  }
+
+  static Future<List<PlanDetail>> getActivePlans()async{
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.get(ApiUrl.getActivePlans,);
+    var activePlans = activePlansModelFromJson(response.toString());
+    log(activePlans.response.toString());
+    return activePlans.response!.planDetails!;
   }
 
   static Future<void> replyComment(
