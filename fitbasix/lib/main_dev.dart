@@ -119,7 +119,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    CometChatService().init();
+    // CometChatService().init();
 
     final temp = Get.put(NetworkManager());
 
@@ -183,26 +183,26 @@ Future<void> main() async {
       var userName = json['senderName'];
       var userImage = json['senderProfilePhoto'];
 
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      String? userIdForCometChat =
-          await sharedPreferences.getString("userIdForCometChat");
-      if (userIdForCometChat != null) {
-        bool userIsLoggedIn =
-            await CometChatService().logInUser(userIdForCometChat);
-        if (userIsLoggedIn) {
-          if (chatId != null && userId != null) {
-            Get.to(() => MessageList(
-                  chatId: chatId,
-                  trainerId: userId,
-                  profilePicURL: userImage,
-                  trainerTitle: userName,
-                  time: '',
-                  days: [0],
-                ));
-          }
-        }
-      }
+      // SharedPreferences sharedPreferences =
+      //     await SharedPreferences.getInstance();
+      // String? userIdForCometChat =
+      //     await sharedPreferences.getString("userIdForCometChat");
+      // if (userIdForCometChat != null) {
+      //   bool userIsLoggedIn =
+      //       await CometChatService().logInUser(userIdForCometChat);
+      //   if (userIsLoggedIn) {
+      //     if (chatId != null && userId != null) {
+      //       Get.to(() => MessageList(
+      //             chatId: chatId,
+      //             trainerId: userId,
+      //             profilePicURL: userImage,
+      //             trainerTitle: userName,
+      //             time: '',
+      //             days: [0],
+      //           ));
+      //     }
+      //   }
+      // }
     });
 
     FirebaseMessaging.onMessage.listen((message) async {
@@ -270,12 +270,12 @@ Future<void> main() async {
           message.data.toString());
       var json = jsonDecode(jsonEncode(message.data).toString())
           as Map<String, dynamic>;
-      await sendToMessageList(
-        json['senderChatId'],
-        json['senderId'],
-        json['senderName'],
-        json['senderProfilePhoto'],
-      );
+      // await sendToMessageList(
+      //   json['senderChatId'],
+      //   json['senderId'],
+      //   json['senderName'],
+      //   json['senderProfilePhoto'],
+      // );
     });
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -287,32 +287,32 @@ Future<void> main() async {
   });
 }
 
-Future<void> sendToMessageList(
-  String chatId,
-  String userId,
-  String userName,
-  String userImage,
-) async {
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  String? userIdForCometChat =
-      await sharedPreferences.getString("userIdForCometChat");
-  if (userIdForCometChat != null) {
-    bool userIsLoggedIn =
-        await CometChatService().logInUser(userIdForCometChat);
-    if (userIsLoggedIn) {
-      if (chatId != null && userId != null) {
-        Get.to(() => MessageList(
-              chatId: chatId,
-              trainerId: userId,
-              profilePicURL: userImage,
-              trainerTitle: userName,
-              time: '',
-              days: [0],
-            ));
-      }
-    }
-  }
-}
+// Future<void> sendToMessageList(
+//   String chatId,
+//   String userId,
+//   String userName,
+//   String userImage,
+// ) async {
+//   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//   String? userIdForCometChat =
+//       await sharedPreferences.getString("userIdForCometChat");
+//   if (userIdForCometChat != null) {
+//     bool userIsLoggedIn =
+//         await CometChatService().logInUser(userIdForCometChat);
+//     if (userIsLoggedIn) {
+//       if (chatId != null && userId != null) {
+//         Get.to(() => MessageList(
+//               chatId: chatId,
+//               trainerId: userId,
+//               profilePicURL: userImage,
+//               trainerTitle: userName,
+//               time: '',
+//               days: [0],
+//             ));
+//       }
+//     }
+//   }
+// }
 
 Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
   return <String, dynamic>{

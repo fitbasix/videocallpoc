@@ -36,11 +36,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get: ^4.6.1
-  firebase_core: ^1.13.1
+  firebase_core: ^1.20.0
   firebase_auth: ^3.3.3
   google_sign_in: ^5.2.1
   dio: ^4.0.0
   firebase_crashlytics: ^2.5.1
+  cloud_firestore: ^3.4.2
   firebase_analytics: ^9.1.0
   firebase_remote_config: ^2.0.2
   flutter_svg: ^1.0.0
@@ -62,7 +63,7 @@ dependencies:
   flutter_holo_date_picker: ^1.0.1+2
   flutter_ruler_picker: ^1.0.2
   intl: ^0.17.0
-  cometchat: ^3.0.1
+#  cometchat: ^3.0.1
   mime:
 
 #  quickblox_sdk: ^0.6.7-beta

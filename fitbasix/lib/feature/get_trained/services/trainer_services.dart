@@ -146,11 +146,11 @@ log(ApiUrl.getEnablexUrl+id);
     return getTrainerModelFromJson(response.toString());
   }
 
-  static Future<TimeModel> getEnrolledPlanDetails(String trainerId) async {
+  static Future<TimeModel> getEnrolledPlanDetails(String trainerId,int planDuration) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response =
-        await dio!.post(ApiUrl.getSchedules, data: {"trainerId": trainerId});
+        await dio!.post(ApiUrl.getSchedules, data: {"trainerId": trainerId,"planDuration":planDuration});
     return timeModelFromJson(response.toString());
   }
 

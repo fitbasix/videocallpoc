@@ -203,7 +203,7 @@ class MenuScreen extends StatelessWidget {
                         AwesomeNotifications().cancelAll();
                         final LoginController _controller =
                             Get.put(LoginController());
-                        CometChatService().logOutUserFromCometChat();
+                        // CometChatService().logOutUserFromCometChat();
                        try {
                          await LogInService.removeDeviceId().then((value) async{
                            await LogInService.logOut();

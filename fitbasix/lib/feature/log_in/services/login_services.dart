@@ -33,7 +33,6 @@ class LogInService {
   static Future<Countries> getCountries() async {
     dio!.options.headers["language"] = "1";
     var response = await dio!.get(ApiUrl.getCountries);
-
     return countriesFromJson(response.toString());
   }
 
@@ -112,10 +111,13 @@ class LogInService {
       if (responseData['code'] == 0) {
         loginController.token.value = responseData['response']['user']['token'];
         final SharedPreferences prefs = await SharedPreferences.getInstance();
+        loginController.userId.value =  responseData['response']['user']['id'];
+        loginController.profilePhoto.value = responseData['response']['user']['profilePhoto'];
         prefs.setString(
             'AccessToken', responseData['response']['user']['token']);
         prefs.setString(
             'RefreshToken', responseData['response']['refreshToken']);
+        prefs.setString('userId',loginController.userId.value );
         registerFcmToken();
         print(responseData['response']['refreshToken']);
       } else {

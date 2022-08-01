@@ -97,15 +97,15 @@ class GetTrainedScreen extends StatelessWidget {
                                         : SeeAllButton(
                                             title: "see_all_trainer".tr,
                                             onTap: () async {
-                                              SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                                              String? userIdForCometChat = await sharedPreferences.getString("userIdForCometChat");
-                                              if(userIdForCometChat!=null) {
-                                                bool userIsLoggedIn = await CometChatService().logInUser(userIdForCometChat);
-                                                if(userIsLoggedIn){
-                                                  ///go to chat screen
-                                                }
-
-                                              }
+                                              // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                              // String? userIdForCometChat = await sharedPreferences.getString("userIdForCometChat");
+                                              // if(userIdForCometChat!=null) {
+                                              //   bool userIsLoggedIn = await CometChatService().logInUser(userIdForCometChat);
+                                              //   if(userIsLoggedIn){
+                                              //     ///go to chat screen
+                                              //   }
+                                              //
+                                              // }
                                               _trainerController
                                                   .searchMyTrainerController
                                                   .clear();
@@ -538,7 +538,12 @@ class GetTrainedScreen extends StatelessWidget {
                         //252
                         child: Row(
                       children: [
-                        for (int index = 0; index < 5; index++)
+                        for (int index = 0; index < _trainerController
+                            .trainers
+                            .value
+                            .response!
+                            .data!
+                            .fitnessConsultant!.length; index++)
                           _trainerController.getTrainedIsLoading.value
                               ? Shimmer.fromColors(
                                   child: Padding(
@@ -765,7 +770,12 @@ class GetTrainedScreen extends StatelessWidget {
                         //252
                         child: Row(
                       children: [
-                        for (int index = 0; index < 5; index++)
+                        for (int index = 0; index < _trainerController
+                            .trainers
+                            .value
+                            .response!
+                            .data!
+                            .nutritionConsultant!.length; index++)
                           _trainerController.getTrainedIsLoading.value
                               ? Shimmer.fromColors(
                                   child: Padding(

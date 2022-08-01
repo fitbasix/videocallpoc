@@ -1,10 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
-import 'package:cometchat/cometchat_sdk.dart';
+// import 'package:cometchat/cometchat_sdk.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
+import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/message/model/fetch_message_model.dart';
 import 'package:fitbasix/feature/message/view/screens/message_list.dart';
@@ -257,12 +259,16 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                           //   indexWhereChatPresent = widget.chatHistoryList!
                           //       .indexWhere((element) => element.occupantsIds!
                           //           .contains(myTrainers![index].quickBlox));
-                          print(myTrainers![index].chatId.toString()+" ioiiiiii");
-                          print(myTrainers![index].name.toString()+" ioiiiiii");
+                          print(myTrainers![index].chatId.toString() +
+                              " ioiiiiii");
+                          print(
+                              myTrainers![index].name.toString() + " ioiiiiii");
 
                           // }
-                          print("iddddd "+myTrainers![index].chatId.toString());
-                          print("pic "+myTrainers![index].profilePhoto.toString());
+                          print(
+                              "iddddd " + myTrainers![index].chatId.toString());
+                          print("pic " +
+                              myTrainers![index].profilePhoto.toString());
                           return TrainersTileUI(
                             userChatId: myTrainers![index].chatId,
                             taggedPersonList: myTrainers![index]
@@ -274,7 +280,8 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                         myTrainers![index].strengths![i].name!)
                                 : [],
                             trainerName: myTrainers![index].name,
-                            trainerProfilePicUrl: myTrainers![index].profilePhoto,
+                            trainerProfilePicUrl:
+                                myTrainers![index].profilePhoto,
                             isCurrentlyEnrolled:
                                 myTrainers![index].isCurrentlyEnrolled,
                             userHasChatHistory:
@@ -286,26 +293,30 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                             lastMessageTime:
                                 indexWhereChatPresent != -1 ? 0 : 0,
                             onTrainerTapped: () async {
-                              if(myTrainers![index].chatId != null){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MessageList(
-                                          chatId: myTrainers![index].chatId,
-                                          trainerId: myTrainers![index].id.toString(),
-                                          profilePicURL: myTrainers![index]
-                                              .profilePhoto
-                                              .toString(),
-                                          trainerTitle:
-                                          myTrainers![index].name.toString(),
-                                          time: myTrainers![index].time,
-                                          days: myTrainers![index].days,
-                                        )));
+                              if (myTrainers![index].chatId != null) {
+                                var controller =
+                                    Get.put(FirebaseChatController());
+                                controller.chatId = myTrainers![index].id!;
+                                controller.senderPhoto = myTrainers![index].profilePhoto!;
+                                controller.senderName = myTrainers![index].name!;
+                                Get.to(
+                                  () => ChatPage(),
+                                );
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => MessageList(
+                                //           chatId: myTrainers![index].chatId,
+                                //           trainerId: myTrainers![index].id.toString(),
+                                //           profilePicURL: myTrainers![index]
+                                //               .profilePhoto
+                                //               .toString(),
+                                //           trainerTitle:
+                                //           myTrainers![index].name.toString(),
+                                //           time: myTrainers![index].time,
+                                //           days: myTrainers![index].days,
+                                //         )));
                               }
-
-
-
-
                               // String url = await TrainerServices.getEnablexUrl(
                               //     myTrainers![index].id.toString());
                               // if(Platform.isAndroid){
@@ -410,7 +421,6 @@ extension StringExtension on String {
 class TrainersTileUI extends StatelessWidget {
   TrainersTileUI(
       {Key? key,
-
       required this.taggedPersonList,
       this.trainerName,
       this.trainerProfilePicUrl,
@@ -418,7 +428,7 @@ class TrainersTileUI extends StatelessWidget {
       this.userHasChatHistory,
       this.enrolledDate,
       this.lastMessageTime,
-        this.userChatId,
+      this.userChatId,
       this.onTrainerTapped})
       : super(key: key);
   List<String> taggedPersonList;
@@ -436,7 +446,7 @@ class TrainersTileUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     setLastMessageDate();
-    fetchLastMessage();
+    // fetchLastMessage();
     return GestureDetector(
       onTap: onTrainerTapped,
       child: Container(
@@ -508,8 +518,12 @@ class TrainersTileUI extends StatelessWidget {
                     top: 16 * SizeConfig.heightMultiplier!,
                     bottom: 16 * SizeConfig.heightMultiplier!),
                 child: Obx(
-                      ()=> Text(
-                      lastMessageIsLoading.value?"loading...":(lastMessage.value.isNotEmpty ? lastMessage.value : "lets_start_conversation".tr),
+                  () => Text(
+                      lastMessageIsLoading.value
+                          ? "loading..."
+                          : (lastMessage.value.isNotEmpty
+                              ? lastMessage.value
+                              : "lets_start_conversation".tr),
                       style: AppTextStyle.hmedium13Text.copyWith(
                           color: isCurrentlyEnrolled!
                               ? Theme.of(context).textTheme.bodyText1!.color
@@ -547,62 +561,62 @@ class TrainersTileUI extends StatelessWidget {
     );
   }
 
-  fetchLastMessage(){
-    if(userChatId!=null){
-      lastMessageIsLoading.value = true;
-      CometChat.getConversation(userChatId!, ConversationType.user,
-          onSuccess: (Conversation conversation) {
-            print("fettttt");
-            MessagesRequest messageRequest = (MessagesRequestBuilder()
-              ..uid = userChatId
-              ..limit = 10
-              ..hideDeleted = false
-              ..categories = [
-                CometChatMessageCategory.message,
-                CometChatMessageCategory.custom,
-              ])
-                .build();
-
-            ItemFetcher<BaseMessage>().fetchPreviuos(messageRequest)
-                .then((List<BaseMessage> fetchedList) {
-
-              if (fetchedList.isEmpty) {
-                lastMessage.value = '';
-              } else {
-                List<BaseMessage> messages = List.from(fetchedList.reversed);
-                if(messages.isNotEmpty){
-                  if((messages[0] is TextMessage )){
-                    print("ololo");
-                    lastMessage.value = (messages[0] as TextMessage).text;
-                    print((messages[0] as TextMessage).text);
-                    lastMessageIsLoading.value = false;
-                  }
-                  else{
-                    lastMessage.value = "Attachment";
-                    print("found attachment");
-                    lastMessageIsLoading.value = false;
-
-                  }
-                }
-                else{
-                  lastMessage.value = '';
-                  lastMessageIsLoading.value = false;
-                  print("no chat found");
-                }
-
-              }
-            });
-          }, onError: (CometChatException e) {
-            debugPrint("Fetch Conversation  failed  : ${e.message}");
-            lastMessage.value = '';
-            lastMessageIsLoading.value = false;
-          });
-    }
-    else{
-      lastMessage.value = '';
-      lastMessageIsLoading.value = false;
-    }
-  }
+  // fetchLastMessage(){
+  //   if(userChatId!=null){
+  //     lastMessageIsLoading.value = true;
+  //     CometChat.getConversation(userChatId!, ConversationType.user,
+  //         onSuccess: (Conversation conversation) {
+  //           print("fettttt");
+  //           MessagesRequest messageRequest = (MessagesRequestBuilder()
+  //             ..uid = userChatId
+  //             ..limit = 10
+  //             ..hideDeleted = false
+  //             ..categories = [
+  //               CometChatMessageCategory.message,
+  //               CometChatMessageCategory.custom,
+  //             ])
+  //               .build();
+  //
+  //           ItemFetcher<BaseMessage>().fetchPreviuos(messageRequest)
+  //               .then((List<BaseMessage> fetchedList) {
+  //
+  //             if (fetchedList.isEmpty) {
+  //               lastMessage.value = '';
+  //             } else {
+  //               List<BaseMessage> messages = List.from(fetchedList.reversed);
+  //               if(messages.isNotEmpty){
+  //                 if((messages[0] is TextMessage )){
+  //                   print("ololo");
+  //                   lastMessage.value = (messages[0] as TextMessage).text;
+  //                   print((messages[0] as TextMessage).text);
+  //                   lastMessageIsLoading.value = false;
+  //                 }
+  //                 else{
+  //                   lastMessage.value = "Attachment";
+  //                   print("found attachment");
+  //                   lastMessageIsLoading.value = false;
+  //
+  //                 }
+  //               }
+  //               else{
+  //                 lastMessage.value = '';
+  //                 lastMessageIsLoading.value = false;
+  //                 print("no chat found");
+  //               }
+  //
+  //             }
+  //           });
+  //         }, onError: (CometChatException e) {
+  //           debugPrint("Fetch Conversation  failed  : ${e.message}");
+  //           lastMessage.value = '';
+  //           lastMessageIsLoading.value = false;
+  //         });
+  //   }
+  //   else{
+  //     lastMessage.value = '';
+  //     lastMessageIsLoading.value = false;
+  //   }
+  // }
 
   void createMenuDialog(BuildContext context) {
     showDialog(

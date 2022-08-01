@@ -136,7 +136,7 @@ class TrainerPlansScreen extends StatelessWidget {
 
                               trainerController.availableTime.value =
                               await TrainerServices.getEnrolledPlanDetails(
-                                  trainerController.atrainerDetail.value.user!.id!);
+                                  trainerController.atrainerDetail.value.user!.id!,trainerController.selectedPlan.value.planDuration!);
 
                               trainerController
                                   .isAvailableSlotDataLoading.value = false;

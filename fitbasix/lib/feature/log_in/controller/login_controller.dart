@@ -15,10 +15,12 @@ class LoginController extends GetxController {
   final googleSignIn = GoogleSignIn().obs;
   Rx<bool> isGoogleSignInLoading = false.obs;
   //GoogleSignInAccount? _user;
-  var _user = Rx<GoogleSignInAccount?>(null);
+  final _user = Rx<GoogleSignInAccount?>(null);
   //GoogleSignInAccount get user => _user!;
   RxString mobile = RxString('');
+  RxString userId = RxString('');
   RxString otp = RxString('');
+  RxString profilePhoto = RxString('');
   RxString userDetail = RxString('');
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -98,7 +100,7 @@ class LoginController extends GetxController {
   Future<void> _initData() async {
     try {
       var _timezone = await FlutterNativeTimezone.getLocalTimezone();
-      print(' =====================>  $_timezone');
+      print('Timezone ==>  $_timezone');
       if (_timezone == 'Asia/Kolkata' ||
           _timezone == 'Asia/Calcutta' ||
           _timezone == 'Asia/Chennai' ||

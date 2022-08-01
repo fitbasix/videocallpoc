@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cometchat/cometchat_sdk.dart' as cometChat;
+// import 'package:cometchat/cometchat_sdk.dart' as cometChat;
 import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
@@ -86,11 +86,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   trainerCoverImage: trainerController
                       .atrainerDetail.value.user!.coverPhoto!
                       .toString(),
-                  isEnrolled: _trainerController.enrolledTrainer.indexOf(
-                              trainerController.atrainerDetail.value.id!) ==
-                          -1
-                      ? _trainerController.atrainerDetail.value.isEnrolled!
-                      : true,
+                  isEnrolled:  _trainerController.atrainerDetail.value.isEnrolled!
+                      ,
                   onFollow: () {
                     if (trainerController.atrainerDetail.value.isFollowing!) {
                       trainerController.atrainerDetail.value.isFollowing =
@@ -119,37 +116,37 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                     if (_trainerController.atrainerDetail.value.isEnrolled!) {
                       SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
-                      String? userIdForCometChat = await sharedPreferences
-                          .getString("userIdForCometChat");
-                      if (userIdForCometChat != null) {
-                        bool userIsLoggedIn = await CometChatService()
-                            .logInUser(userIdForCometChat);
-                        if (userIsLoggedIn) {
-                          if (_trainerController.atrainerDetail.value.chatId !=
-                              null) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MessageList(
-                                          chatId: _trainerController
-                                              .atrainerDetail.value.chatId,
-                                          trainerId: _trainerController
-                                              .atrainerDetail.value.user!.id,
-                                          profilePicURL: _trainerController
-                                              .atrainerDetail
-                                              .value
-                                              .user!
-                                              .profilePhoto,
-                                          trainerTitle: _trainerController
-                                              .atrainerDetail.value.user!.name,
-                                          time: _trainerController
-                                              .atrainerDetail.value.time,
-                                          days: _trainerController
-                                              .atrainerDetail.value.days,
-                                        )));
-                          }
-                        }
-                      }
+                      // String? userIdForCometChat = await sharedPreferences
+                      //     .getString("userIdForCometChat");
+                      // if (userIdForCometChat != null) {
+                      //   bool userIsLoggedIn = await CometChatService()
+                      //       .logInUser(userIdForCometChat);
+                      //   if (userIsLoggedIn) {
+                      //     if (_trainerController.atrainerDetail.value.chatId !=
+                      //         null) {
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => MessageList(
+                      //                     chatId: _trainerController
+                      //                         .atrainerDetail.value.chatId,
+                      //                     trainerId: _trainerController
+                      //                         .atrainerDetail.value.user!.id,
+                      //                     profilePicURL: _trainerController
+                      //                         .atrainerDetail
+                      //                         .value
+                      //                         .user!
+                      //                         .profilePhoto,
+                      //                     trainerTitle: _trainerController
+                      //                         .atrainerDetail.value.user!.name,
+                      //                     time: _trainerController
+                      //                         .atrainerDetail.value.time,
+                      //                     days: _trainerController
+                      //                         .atrainerDetail.value.days,
+                      //                   )));
+                      //     }
+                      //   }
+                      // }
 
                       // String url = await TrainerServices.getEnablexUrl(
                       //     trainerController.atrainerDetail.value.user!.id.toString());
@@ -393,6 +390,8 @@ class _TrainerPageState extends State<TrainerPage> {
   @override
   void initState() {
     super.initState();
+  printInfo(info: " ===========> ${widget.isEnrolled}");
+    printInfo(info: " ===========> ${ _trainerController.atrainerDetail.value.user!.id!}");
 
     _trainerController.currentPostPage.value = 1;
 

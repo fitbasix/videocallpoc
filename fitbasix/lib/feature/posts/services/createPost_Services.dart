@@ -141,9 +141,9 @@ class CreatePostService {
     print(sharedPreferences.getString("userIdForCometChat"));
     if (userProfileModel.response!.data!.profile!.chatId == null) {
       print("creating user on comet chat");
-      CometChatService().createUser(
-          "chat_" + userProfileModel.response!.data!.profile!.id!,
-          userProfileModel.response!.data!.profile!.name!);
+      // CometChatService().createUser(
+      //     "chat_" + userProfileModel.response!.data!.profile!.id!,
+      //     userProfileModel.response!.data!.profile!.name!);
       ChatController _chatController = Get.put(ChatController());
       _chatController.USERID = "chat_" + userProfileModel.response!.data!.profile!.id!;
       int response = await updateUserQuickBloxId(

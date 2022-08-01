@@ -360,22 +360,22 @@ class HomeController extends GetxController {
         '===================> Home Controller $senderChatId $senderId $senderName $senderProfilePhoto');
 
     if (senderChatId != null && senderId != null) {
-      if (userIdForCometChat != null) {
-        bool userIsLoggedIn =
-            await CometChatService().logInUser(userIdForCometChat);
-        if (userIsLoggedIn) {
-          Get.to(
-            () => MessageList(
-              chatId: senderChatId,
-              trainerId: senderId,
-              profilePicURL: senderProfilePhoto,
-              trainerTitle: senderName,
-              time: '',
-              days: [0],
-            ),
-          );
-        }
-      }
+      // if (userIdForCometChat != null) {
+      //   bool userIsLoggedIn =
+      //       await CometChatService().logInUser(userIdForCometChat);
+      //   if (userIsLoggedIn) {
+      //     Get.to(
+      //       () => MessageList(
+      //         chatId: senderChatId,
+      //         trainerId: senderId,
+      //         profilePicURL: senderProfilePhoto,
+      //         trainerTitle: senderName,
+      //         time: '',
+      //         days: [0],
+      //       ),
+      //     );
+      //   }
+      // }
     }
 
     AppState _state = AppState.DATA_NOT_FETCHED;
