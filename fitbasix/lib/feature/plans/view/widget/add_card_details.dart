@@ -194,7 +194,7 @@ class AddCardDetails extends StatelessWidget {
                                     .bodyText1
                                     ?.color),
                             decoration: InputDecoration(
-                              hintText: "YY/MM",
+                              hintText: "MM/YY",
                               errorText:
                                   _plansController.cardExpiryDateErrortext,
                               hintStyle: AppTextStyle.grey400Text.copyWith(
@@ -309,30 +309,30 @@ class AddCardDetails extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 50 * SizeConfig.heightMultiplier!,
-              ),
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Save credit card information for next time",
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15 * SizeConfig.widthMultiplier!,
-                  ),
-                  Obx(
-                    () => Switch(
-                      value: _plansController.saveCreditCardInfo.value,
-                      onChanged: (value) {
-                        _plansController.saveCreditCardInfo.value = value;
-                      },
-                      activeColor: kGreenColor,
-                    ),
-                  )
-                ],
-              )
+              // SizedBox(
+              //   height: 50 * SizeConfig.heightMultiplier!,
+              // ),
+              // Row(
+              //   children: [
+              //     const Expanded(
+              //       child: Text(
+              //         "Save credit card information for next time",
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       width: 15 * SizeConfig.widthMultiplier!,
+              //     ),
+              //     Obx(
+              //       () => Switch(
+              //         value: _plansController.saveCreditCardInfo.value,
+              //         onChanged: (value) {
+              //           _plansController.saveCreditCardInfo.value = value;
+              //         },
+              //         activeColor: kGreenColor,
+              //       ),
+              //     )
+              //   ],
+              // )
             ],
           ),
         ),
@@ -344,6 +344,7 @@ class AddCardDetails extends StatelessWidget {
             _plansController.validateCardName();
             _plansController.validateCardNumberLength();
             _plansController.validateCardExpiryDate();
+            _plansController.validateCvv();
             if (_plansController.cardNameErrortext == null &&
                 _plansController.cardNumberErrortext == null &&
                 _plansController.cardExpiryDateErrortext == null &&

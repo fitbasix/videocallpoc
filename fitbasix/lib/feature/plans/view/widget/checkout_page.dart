@@ -154,7 +154,7 @@ class CheckoutPage extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        _plansController.cardNumberController.text,
+                        _plansController.cardNumberController.text.replaceRange(0, 14, '**** **** ****'),
                         style: AppTextStyle.normalWhiteText.copyWith(
                             fontSize: 16 * SizeConfig.textMultiplier!),
                       ),

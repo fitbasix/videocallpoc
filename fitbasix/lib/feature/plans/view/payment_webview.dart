@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -118,7 +119,8 @@ class _PaymentWebviewState extends State<PaymentWebview> {
     merchantReference = DateTime.now().microsecondsSinceEpoch.toString();
     if (widget.cardNumber != null) {
       cardNumber = widget.cardNumber!.replaceAll(' ', '');
-      expiryDate = widget.expiryDate!.replaceAll('/', '');
+      var dates = widget.expiryDate!.split('/');
+      expiryDate = dates[1] + dates[0];
       cardSecurityCode = widget.cardSecurityCode!;
     }
 
@@ -164,8 +166,15 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                 method: 'POST',
               ),
               onLoadStop: (controller, __) async {
-                var url = await controller.getUrl();
-                printInfo(info: url.toString());
+                if (widget.initialUrl == null) {
+                  setState(() {
+                    isLoading = true;
+                  });
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
                 var response = await controller.evaluateJavascript(
                     contentWorld: ContentWorld.PAGE,
                     source: "document.documentElement.innerHTML");
@@ -267,17 +276,35 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                   isLoading = false;
                 });
               },
+              onProgressChanged: (
+                controller,
+                _,
+              ) async{
+                if (widget.initialUrl == null && isLoading == false) {
+                  setState(() {
+                    isLoading = true;
+                  });
+                }
+                var url = await controller.getUrl();
+                printInfo(info: url.toString());
+                if(url.toString() == "${ApiUrl.liveBaseURL}/api/payment/purchaseUrl"){
+                  printInfo(info:'=================> Matched');
+                  setState(() {
+                    isLoading = true;
+                  });
+                }
+              },
               onWebViewCreated: (controller) async {
                 webViewController = controller;
               },
             ),
-            if (isLoading && widget.initialUrl == null)
+            if (isLoading)
               Container(
                 height: Get.height,
                 width: Get.width,
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
-            if (isLoading && widget.initialUrl == null)
+            if (isLoading)
               Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

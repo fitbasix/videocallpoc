@@ -538,12 +538,7 @@ class GetTrainedScreen extends StatelessWidget {
                         //252
                         child: Row(
                       children: [
-                        for (int index = 0; index < _trainerController
-                            .trainers
-                            .value
-                            .response!
-                            .data!
-                            .fitnessConsultant!.length; index++)
+                        for (int index = 0; index <5; index++)
                           _trainerController.getTrainedIsLoading.value
                               ? Shimmer.fromColors(
                                   child: Padding(
@@ -770,12 +765,7 @@ class GetTrainedScreen extends StatelessWidget {
                         //252
                         child: Row(
                       children: [
-                        for (int index = 0; index < _trainerController
-                            .trainers
-                            .value
-                            .response!
-                            .data!
-                            .nutritionConsultant!.length; index++)
+                        for (int index = 0; index < 5; index++)
                           _trainerController.getTrainedIsLoading.value
                               ? Shimmer.fromColors(
                                   child: Padding(

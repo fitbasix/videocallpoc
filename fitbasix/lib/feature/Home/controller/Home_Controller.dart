@@ -12,6 +12,8 @@ import 'package:fitbasix/feature/Home/model/waterReminderModel.dart';
 import 'package:fitbasix/feature/Home/model/water_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/widgets/healthData.dart';
+import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
+import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/message/view/screens/message_list.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
@@ -92,7 +94,7 @@ class HomeController extends GetxController {
   RxList<String> likedPost = RxList<String>([]);
   RxBool updateWaterData = false.obs;
   RxString openCommentId = "".obs;
-  RxList<PlanDetail> activePlans= RxList<PlanDetail>([]);
+  RxList<PlanDetail> activePlans = RxList<PlanDetail>([]);
 
   RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
     {},
@@ -359,7 +361,15 @@ class HomeController extends GetxController {
     print(
         '===================> Home Controller $senderChatId $senderId $senderName $senderProfilePhoto');
 
-    if (senderChatId != null && senderId != null) {
+    if (senderId != null) {
+      var controller = Get.find<FirebaseChatController>();
+      controller.getValues();
+      controller.receiverId = senderId;
+      controller.senderPhoto = senderProfilePhoto!;
+      controller.senderName = senderName!;
+      Get.to(
+        () => ChatPage(),
+      );
       // if (userIdForCometChat != null) {
       //   bool userIsLoggedIn =
       //       await CometChatService().logInUser(userIdForCometChat);
@@ -451,22 +461,20 @@ class HomeController extends GetxController {
     userProfileData.value = await CreatePostService.getUserProfile();
   }
 
-  String getDaysFromIndex(List daysIndex){
-    var days= '';
+  String getDaysFromIndex(List daysIndex) {
+    var days = '';
     daysIndex.sort();
-    for(var day in daysIndex){
+    for (var day in daysIndex) {
       days += "${Get.find<TrainerController>().numberToDay[day]!} ";
     }
     return days;
   }
 
   Future<void> onTrendingPostRefresh() async {
-    initialPostData.value =
-    await HomeService.getPosts(skip: null);
+    initialPostData.value = await HomeService.getPosts(skip: null);
 
     if (initialPostData.value.response!.data!.length != 0) {
-      trendingPostList.value =
-      initialPostData.value.response!.data!;
+      trendingPostList.value = initialPostData.value.response!.data!;
     }
   }
 }

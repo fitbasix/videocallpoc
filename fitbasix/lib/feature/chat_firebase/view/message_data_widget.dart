@@ -26,7 +26,7 @@ class _MessageWidgetState extends State<MessageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_chatController.userId == widget.messageData.senderId) {
+    if (_chatController.senderId == widget.messageData.senderId) {
       sentByMe = true;
     } else {
       sentByMe = false;

@@ -40,10 +40,10 @@ class PlansController extends GetxController {
   void validateCardExpiryDate(){
     var dayYear = cardExpiryDateController.text.split('/');
 
-    if(int.parse(dayYear[0]) < int.parse(DateFormat("dd-MM-yy").format(DateTime.now()).split('-')[2])){
+    if(int.parse(dayYear[1]) < int.parse(DateFormat("dd-MM-yy").format(DateTime.now()).split('-')[2])){
       cardExpiryDateErrortext = "Invalid Expiry Date";
     }
-    else if(int.parse(dayYear[1])>12 || int.parse(dayYear[1])<1){
+    else if(int.parse(dayYear[0])>12 || int.parse(dayYear[0])<1){
       cardExpiryDateErrortext = "Invalid Expiry Date";
     }
     else{
@@ -95,6 +95,16 @@ class PlansController extends GetxController {
     }
     update(['card-cvv-field']);
   }
+
+  void validateCvv(){
+    if (cardCvvController.text.length <3) {
+      cardCvvErrortext = "Invalid Cvv Number";
+    } else {
+      cardCvvErrortext = null;
+    }
+    update(['card-cvv-field']);
+  }
+
 
   void clearValues() {
     cardCvvController.clear();

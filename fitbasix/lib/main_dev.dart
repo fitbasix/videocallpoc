@@ -8,6 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/GetXNetworkManager.dart';
 import 'package:fitbasix/NetworkManager.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
+import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
+import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/message/controller/chat_controller.dart';
 import 'package:fitbasix/feature/message/view/screens/message_list.dart';
@@ -157,8 +159,7 @@ Future<void> main() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('AccessToken');
 
-    // Get.put(TrainerController());
-    Get.put(ChatController());
+    Get.put(FirebaseChatController());
 
     FirebaseMessaging.instance.getToken().then((value) async {
       if (accessToken != null) {
@@ -182,6 +183,16 @@ Future<void> main() async {
       var userId = json['senderId'];
       var userName = json['senderName'];
       var userImage = json['senderProfilePhoto'];
+
+      var controller =
+      Get.find<FirebaseChatController>();
+      controller.getValues();
+      controller.receiverId =userId;
+      controller.senderPhoto = userImage;
+      controller.senderName = userName!;
+      Get.to(
+            () => ChatPage(),
+      );
 
       // SharedPreferences sharedPreferences =
       //     await SharedPreferences.getInstance();
@@ -270,12 +281,12 @@ Future<void> main() async {
           message.data.toString());
       var json = jsonDecode(jsonEncode(message.data).toString())
           as Map<String, dynamic>;
-      // await sendToMessageList(
-      //   json['senderChatId'],
-      //   json['senderId'],
-      //   json['senderName'],
-      //   json['senderProfilePhoto'],
-      // );
+      await sendToMessageList(
+        json['senderChatId'],
+        json['senderId'],
+        json['senderName'],
+        json['senderProfilePhoto'],
+      );
     });
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -287,32 +298,41 @@ Future<void> main() async {
   });
 }
 
-// Future<void> sendToMessageList(
-//   String chatId,
-//   String userId,
-//   String userName,
-//   String userImage,
-// ) async {
-//   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-//   String? userIdForCometChat =
-//       await sharedPreferences.getString("userIdForCometChat");
-//   if (userIdForCometChat != null) {
-//     bool userIsLoggedIn =
-//         await CometChatService().logInUser(userIdForCometChat);
-//     if (userIsLoggedIn) {
-//       if (chatId != null && userId != null) {
-//         Get.to(() => MessageList(
-//               chatId: chatId,
-//               trainerId: userId,
-//               profilePicURL: userImage,
-//               trainerTitle: userName,
-//               time: '',
-//               days: [0],
-//             ));
-//       }
-//     }
-//   }
-// }
+Future<void> sendToMessageList(
+  String chatId,
+  String userId,
+  String userName,
+  String userImage,
+) async {
+  var controller =
+  Get.find<FirebaseChatController>();
+  controller.getValues();
+  controller.receiverId =userId;
+  controller.senderPhoto = userImage;
+  controller.senderName = userName!;
+  Get.to(
+        () => ChatPage(),
+  );
+  // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  // String? userIdForCometChat =
+  //     await sharedPreferences.getString("userIdForCometChat");
+  // if (userIdForCometChat != null) {
+  //   bool userIsLoggedIn =
+  //       await CometChatService().logInUser(userIdForCometChat);
+  //   if (userIsLoggedIn) {
+  //     if (chatId != null && userId != null) {
+  //       Get.to(() => MessageList(
+  //             chatId: chatId,
+  //             trainerId: userId,
+  //             profilePicURL: userImage,
+  //             trainerTitle: userName,
+  //             time: '',
+  //             days: [0],
+  //           ));
+  //     }
+  //   }
+  // }
+}
 
 Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
   return <String, dynamic>{

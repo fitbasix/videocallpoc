@@ -1,6 +1,7 @@
 import 'dart:io';
 
 // import 'package:cometchat/cometchat_sdk.dart' as cometChat;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
@@ -8,6 +9,8 @@ import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/post_tile.dart';
+import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
+import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/message/view/screens/message_list.dart';
@@ -116,6 +119,19 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                     if (_trainerController.atrainerDetail.value.isEnrolled!) {
                       SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
+
+                      var controller =
+                      Get.put(FirebaseChatController());
+                      controller.getValues();
+                      controller.receiverId =  _trainerController
+                                               .atrainerDetail.value.user!.id!;
+                      controller.senderPhoto = _trainerController
+                          .atrainerDetail.value.user!.profilePhoto!;
+                      controller.senderName = _trainerController
+                          .atrainerDetail.value.user!.name!;
+                      Get.to(
+                            () => ChatPage(),
+                      );
                       // String? userIdForCometChat = await sharedPreferences
                       //     .getString("userIdForCometChat");
                       // if (userIdForCometChat != null) {

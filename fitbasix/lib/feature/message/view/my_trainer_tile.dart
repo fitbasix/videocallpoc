@@ -6,6 +6,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
+import 'package:fitbasix/feature/chat_firebase/services/firebase_service.dart';
 import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/message/model/fetch_message_model.dart';
@@ -296,7 +297,8 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                               if (myTrainers![index].chatId != null) {
                                 var controller =
                                     Get.put(FirebaseChatController());
-                                controller.chatId = myTrainers![index].id!;
+                                controller.getValues();
+                                controller.receiverId = myTrainers![index].id!;
                                 controller.senderPhoto = myTrainers![index].profilePhoto!;
                                 controller.senderName = myTrainers![index].name!;
                                 Get.to(
@@ -446,7 +448,7 @@ class TrainersTileUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     setLastMessageDate();
-    // fetchLastMessage();
+    fetchLastMessage();
     return GestureDetector(
       onTap: onTrainerTapped,
       child: Container(
@@ -559,6 +561,16 @@ class TrainersTileUI extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  fetchLastMessage()async{
+   var firebaseService = FirebaseServices();
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+   var senderId = prefs.getString('userId')!;
+   printInfo(info: userChatId!);
+   lastMessage.value = await firebaseService.getLastMessage(receiverId: userChatId!.replaceAll('chat_', ''), senderId: senderId);
+   printInfo(info: lastMessage.value);
+   lastMessageIsLoading.value = false;
   }
 
   // fetchLastMessage(){

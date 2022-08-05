@@ -3,7 +3,7 @@ import '../../app_config.dart';
 class ApiUrl {
   static String liveBaseURL = AppConfig.api_url;
 
-  // static String liveBaseURL = 'https://04d8-2409-4050-2e4b-e78d-485a-d9b5-586-a883.in.ngrok.io';
+  // static String liveBaseURL = 'https://d25c-122-161-90-159.in.ngrok.io';
 
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getAbuseData =
@@ -101,5 +101,8 @@ class ApiUrl {
 
   /// payment APIs
   static String getPaymentLink = liveBaseURL + '/api/payment/paymentLink';
+
+  /// chat notification API
+  static String sendChatNotification = liveBaseURL + '/api/chat/chatNotification';
 
 }
