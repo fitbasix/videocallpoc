@@ -117,7 +117,7 @@ class _FullPostTileState extends State<FullPostTile> {
                               children: [
                                 widget.people.length == 0
                                     ? Text(
-                                  widget.name,
+                                  widget.name.capitalize!,
                                   style: AppTextStyle.boldBlackText.copyWith(
                                       color: Theme.of(context)
                                           .textTheme
@@ -133,7 +133,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                     WrapCrossAlignment.center,
                                     children: [
                                       Text(
-                                        widget.name,
+                                        widget.name.capitalize!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
                                             color: Theme.of(context)
@@ -171,7 +171,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                         width: 4 * SizeConfig.widthMultiplier!,
                                       ),
                                       Text(
-                                        widget.people[0].name!,
+                                        widget.people[0].name!.capitalize!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
                                             color: Theme.of(context)
@@ -191,7 +191,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                     WrapCrossAlignment.center,
                                     children: [
                                       Text(
-                                        widget.name,
+                                        widget.name.capitalize!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
                                             color: Theme.of(context)
@@ -231,7 +231,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                       ),
 
                                       Text(
-                                        widget.people[0].name!,
+                                        widget.people[0].name!.capitalize!,
                                         style: AppTextStyle.boldBlackText
                                             .copyWith(
                                             color: Theme.of(context)

@@ -22,6 +22,7 @@ class TrainerController extends GetxController {
   RxBool showLoaderOnMyTrainer = false.obs;
 
   var currentMyTrainerPage = 0.obs;
+  var currentPlanType = -1;
 
   var fromTimeForFilter = DateTime.now().obs;
   var toTimeForFilter = DateTime.now().obs;

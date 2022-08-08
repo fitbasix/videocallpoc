@@ -29,11 +29,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     var jsonOb = json.decode(dependencyupdate);
     var screenlength = widget.length;
     void onTapped(int index) {
+
+      if(index == 0 && _homeController.selectedIndex.value == 0){
+        _homeController.scrollController.animateTo(0,
+            duration: const Duration(seconds: 2), curve: Curves.linear);
+      }
+
       index == screenlength
           ? _homeController.drawerKey.currentState!.openEndDrawer()
           : setState(() {
               _homeController.selectedIndex.value = index;
-              print('object');
             });
     }
 

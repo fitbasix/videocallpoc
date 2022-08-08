@@ -19,7 +19,7 @@ class FirebaseServices {
   FirebaseServices._private();
 
   final firestoreDatabase = FirebaseFirestore.instance;
-  final firebaseStorage = FirebaseStorage.instance.ref();
+  final firebaseStorage = FirebaseStorage.instance;
 
   String getChatRoomId(String senderId, String receiverId) {
     if (!(senderId.compareTo(receiverId) > 0)) {
@@ -88,21 +88,15 @@ class FirebaseServices {
   }
 
   Future<String> uploadFile(File file, String fileName, String senderId) async {
-    var reference = firebaseStorage.child(
-        '$senderId-${DateTime.now().millisecondsSinceEpoch}-$fileName'); // get a reference to the path of the image directory
+    var url = '';
+    var reference = firebaseStorage.ref().child(
+        '$senderId/${DateTime.now().millisecondsSinceEpoch}_$fileName'); // get a reference to the path of the image directory
     String storagePath = reference.fullPath;
     printInfo(info: 'Uploading to $storagePath');
     var uploadTask =
-        await reference.putFile(file).then((TaskSnapshot taskSnapshot) {
-      if (taskSnapshot.state == TaskState.success) {
-        printInfo(info: "Image uploaded Successful");
-      } else if (taskSnapshot.state == TaskState.running) {
-      } else if (taskSnapshot.state == TaskState.error) {
-        printInfo(info: "Image uploaded Failed");
-      }
-    });
-    var url = uploadTask.ref.getDownloadURL();
-    printInfo(info: 'Download Url $url');
-    return url;
+    await reference.putFile(file);
+    var data = await uploadTask.ref.getDownloadURL();
+    printInfo(info: "Image Uploaded");
+    return data;
   }
 }

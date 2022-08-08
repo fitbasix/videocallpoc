@@ -197,7 +197,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                       .planModel.value =
                                                   await TrainerServices
                                                       .getPlanByTrainerId(
-                                                          trainerId);
+                                                          trainerId,_trainerController.currentPlanType);
                                               _trainerController
                                                   .isPlanLoading.value = false;
                                               _trainerController
@@ -423,6 +423,7 @@ class GetTrainedScreen extends StatelessWidget {
                                           .strength!
                                           .length,
                                       onTap: () async {
+                                        _trainerController.currentPlanType = 0;
                                         Navigator.pushNamed(context,
                                             RouteName.trainerProfileScreen);
                                         _trainerController
@@ -655,6 +656,7 @@ class GetTrainedScreen extends StatelessWidget {
                                         .strength!
                                         .length,
                                     onTap: () async {
+                                      _trainerController.currentPlanType = 1;
                                       Navigator.pushNamed(context,
                                           RouteName.trainerProfileScreen);
                                       _trainerController
@@ -882,6 +884,7 @@ class GetTrainedScreen extends StatelessWidget {
                                         .strength!
                                         .length,
                                     onTap: () async {
+                                      _trainerController.currentPlanType = 2;
                                       Navigator.pushNamed(context,
                                           RouteName.trainerProfileScreen);
                                       _trainerController

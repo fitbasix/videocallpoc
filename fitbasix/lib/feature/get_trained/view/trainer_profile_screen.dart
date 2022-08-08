@@ -55,7 +55,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
         _trainerController.isPlanLoading.value = true;
         _trainerController.planModel.value =
             await TrainerServices.getPlanByTrainerId(
-                    _trainerController.atrainerDetail.value.user!.id!)
+                    _trainerController.atrainerDetail.value.user!.id!,_trainerController.currentPlanType)
                 .then((value) {
           _trainerController.isPlanLoading.value = false;
           setState(() {});
@@ -89,8 +89,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   trainerCoverImage: trainerController
                       .atrainerDetail.value.user!.coverPhoto!
                       .toString(),
-                  isEnrolled:  _trainerController.atrainerDetail.value.isEnrolled!
-                      ,
+                  isEnrolled:
+                      _trainerController.atrainerDetail.value.isEnrolled!,
                   onFollow: () {
                     if (trainerController.atrainerDetail.value.isFollowing!) {
                       trainerController.atrainerDetail.value.isFollowing =
@@ -120,17 +120,16 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
 
-                      var controller =
-                      Get.put(FirebaseChatController());
+                      var controller = Get.put(FirebaseChatController());
                       controller.getValues();
-                      controller.receiverId =  _trainerController
-                                               .atrainerDetail.value.user!.id!;
+                      controller.receiverId =
+                          _trainerController.atrainerDetail.value.user!.id!;
                       controller.senderPhoto = _trainerController
                           .atrainerDetail.value.user!.profilePhoto!;
-                      controller.senderName = _trainerController
-                          .atrainerDetail.value.user!.name!;
+                      controller.senderName =
+                          _trainerController.atrainerDetail.value.user!.name!;
                       Get.to(
-                            () => ChatPage(),
+                        () => ChatPage(),
                       );
                       // String? userIdForCometChat = await sharedPreferences
                       //     .getString("userIdForCometChat");
@@ -345,7 +344,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   void setTrainerDataForUniLink() async {
     _trainerController.isMyTrainerProfileLoading.value = true;
-    var response = await TrainerServices.getATrainerDetail(widget.trainerID!);
+    var response = await TrainerServices.getATrainerDetail(widget.trainerID!,);
     _trainerController.atrainerDetail.value = response.response!.data!;
     _trainerController.isMyTrainerProfileLoading.value = false;
     _trainerController.setUp();
@@ -406,8 +405,10 @@ class _TrainerPageState extends State<TrainerPage> {
   @override
   void initState() {
     super.initState();
-  printInfo(info: " ===========> ${widget.isEnrolled}");
-    printInfo(info: " ===========> ${ _trainerController.atrainerDetail.value.user!.id!}");
+    printInfo(info: " ===========> ${widget.isEnrolled}");
+    printInfo(
+        info:
+            " ===========> ${_trainerController.atrainerDetail.value.user!.id!}");
 
     _trainerController.currentPostPage.value = 1;
 

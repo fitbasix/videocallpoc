@@ -27,11 +27,12 @@ import '../model/trainer_by_id_model.dart';
 class TrainerServices {
   static var dio = DioUtil().getInstance();
   static TrainerController _trainerController = Get.find();
-  static Future<PlanModel> getPlanByTrainerId(String trainerId) async {
+
+  static Future<PlanModel> getPlanByTrainerId(String trainerId,int filterType) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!
-        .post(ApiUrl.getPlanByTrainerId, data: {"trainerId": trainerId});
+        .post(ApiUrl.getPlanByTrainerId, data: {"trainerId": trainerId,"filterType":filterType});
     return planModelFromJson(response.toString());
   }
 

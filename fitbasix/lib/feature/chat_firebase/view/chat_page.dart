@@ -405,7 +405,7 @@ class _MessageTileState extends State<MessageTile> {
         if (widget.messageList.length > widget.index + 1)
           if ((DateTime.parse(message.sentAt)).day >
               DateTime.parse((MessageData.fromJson(
-                          widget.messageList[widget.index].data()
+                          widget.messageList[widget.index+1].data()
                               as Map<String, dynamic>)
                       .sentAt))
                   .day)
@@ -580,7 +580,7 @@ class SendMessageWidget extends StatelessWidget {
                                                     SizeConfig.widthMultiplier!,
                                                 child: IconButton(
                                                     onPressed: () {
-                                                      // sendImageFromCamera();
+                                                     _chatController.sendImageFromCamera(context);
                                                     },
                                                     icon: SvgPicture.asset(
                                                       ImagePath.openCameraIcon,

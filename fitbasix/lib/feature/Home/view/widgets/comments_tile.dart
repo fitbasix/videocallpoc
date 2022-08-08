@@ -84,7 +84,7 @@ class _CommentsTileState extends State<CommentsTile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.name,
+                      widget.name.capitalize!,
                       style: AppTextStyle.boldBlackText
                           .copyWith(
                           color: Theme.of(context).textTheme.bodyText1?.color,

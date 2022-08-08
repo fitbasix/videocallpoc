@@ -83,6 +83,7 @@ class HomeController extends GetxController {
   RxBool postLoading = RxBool(false);
   RxInt skipCommentCount = RxInt(1);
   final TextEditingController replyController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
   RxString reply = RxString('');
   RxList<Comments> replyList = RxList<Comments>([]);
   RxList<bool>? viewReplies = RxList<bool>([]);

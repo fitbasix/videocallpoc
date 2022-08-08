@@ -59,7 +59,6 @@ import '../controller/individual_user_controller.dart';
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
-
   @override
   Widget build(BuildContext context) {
     var dependencyupdate =
@@ -131,7 +130,6 @@ class _HomePageState extends State<HomePage> {
       ReportAbuseController());
   final HomeController _homeController = Get.find();
   final PostController postController = Get.put(PostController());
-  final ScrollController _scrollController = ScrollController();
   TextEditingController searchUserController = TextEditingController();
   RxBool showUserSearch = false.obs;
 
@@ -147,7 +145,6 @@ class _HomePageState extends State<HomePage> {
     print(_caloriesData.value);
   }
 
-
   DateTime? currentBackPressTime;
 
   @override
@@ -155,12 +152,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _homeController.currentPage.value = 1;
-    _scrollController.addListener(() async {
+    _homeController.scrollController.addListener(() async {
       print(_homeController.currentPage.value.toString() + " ppppp");
       print(_homeController.isNeedToLoadData.value);
       if (_homeController.isNeedToLoadData.value == true) {
-        if (_scrollController.position.maxScrollExtent ==
-            _scrollController.position.pixels) {
+        if (_homeController.scrollController.position.maxScrollExtent ==
+            _homeController.scrollController.position.pixels) {
           _homeController.showLoader.value = true;
           final postQuery = await HomeService.getPosts(
               skip: _homeController.currentPage.value);
@@ -192,11 +189,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _homeController.scrollController.dispose();
+  //   super.dispose();
+  // }
 
   Future<bool> onWillPop() async {
     DateTime now = DateTime.now();
@@ -244,7 +241,8 @@ class _HomePageState extends State<HomePage> {
               color: kGreenColor,
               onRefresh: _homeController.onTrendingPostRefresh,
               child: SingleChildScrollView(
-                controller: _scrollController,
+                key: const PageStorageKey<String>('feed-screen'),
+                controller: _homeController.scrollController,
                 child: Stack(
                   children: [
                     Container(
@@ -1990,7 +1988,7 @@ class _HomePageState extends State<HomePage> {
 
       _trainerController.planModel.value =
           await TrainerServices.getPlanByTrainerId(
-          trainerId);
+          trainerId,_trainerController.currentPlanType);
 
       _trainerController.initialPostData.value =
           await TrainerServices.getTrainerPosts(
