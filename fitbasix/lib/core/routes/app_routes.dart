@@ -226,11 +226,11 @@ class GenerateRoute {
             HelpAndSupportScreen(),
       );
     }
-    if (route == RouteName.otpScreen) {
-      return MaterialPageRoute(
-        builder: (BuildContext context) => OtpScreen(),
-      );
-    }
+    // if (route == RouteName.otpScreen) {
+    //   return MaterialPageRoute(
+    //     builder: (BuildContext context) => OtpScreen(),
+    //   );
+    // }
     if (route == RouteName.resetPassword) {
       return MaterialPageRoute(
           builder: (BuildContext context) => ResetPasswordScreen());

@@ -69,7 +69,9 @@ class FirebaseServices {
         .orderBy('sentAt', descending: true)
         .get();
     if (data.docs.isNotEmpty) {
-      var message =  MessageData.fromJson(data.docs[0].data() as Map<String, dynamic>).message;
+      var message =
+          MessageData.fromJson(data.docs[0].data() as Map<String, dynamic>)
+              .message;
       printInfo(info: message);
       return message;
     }
@@ -93,8 +95,7 @@ class FirebaseServices {
         '$senderId/${DateTime.now().millisecondsSinceEpoch}_$fileName'); // get a reference to the path of the image directory
     String storagePath = reference.fullPath;
     printInfo(info: 'Uploading to $storagePath');
-    var uploadTask =
-    await reference.putFile(file);
+    var uploadTask = await reference.putFile(file);
     var data = await uploadTask.ref.getDownloadURL();
     printInfo(info: "Image Uploaded");
     return data;

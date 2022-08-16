@@ -106,7 +106,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                   ),
                   Text(
                       DateFormat.jm()
-                          .format(DateTime.parse(widget.messageData.sentAt)),
+                          .format(DateTime.parse(widget.messageData.sentAt).toLocal()),
                       style: sentByMe == true
                           ? AppTextStyle.white400Text.copyWith(
                               fontSize: 9.0 * SizeConfig.textMultiplier!)

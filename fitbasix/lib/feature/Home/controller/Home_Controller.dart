@@ -352,42 +352,42 @@ class HomeController extends GetxController {
   @override
   Future<void> onInit() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    var senderChatId = prefs.getString('senderChatId');
-    var senderId = prefs.getString('senderId');
-    var senderName = prefs.getString('senderName');
-    var senderProfilePhoto = prefs.getString('senderProfilePhoto');
-    var userIdForCometChat = prefs.getString("userIdForCometChat");
-
-    print(
-        '===================> Home Controller $senderChatId $senderId $senderName $senderProfilePhoto');
-
-    if (senderId != null) {
-      var controller = Get.find<FirebaseChatController>();
-      controller.getValues();
-      controller.receiverId = senderId;
-      controller.senderPhoto = senderProfilePhoto!;
-      controller.senderName = senderName!;
-      Get.to(
-        () => ChatPage(),
-      );
-      // if (userIdForCometChat != null) {
-      //   bool userIsLoggedIn =
-      //       await CometChatService().logInUser(userIdForCometChat);
-      //   if (userIsLoggedIn) {
-      //     Get.to(
-      //       () => MessageList(
-      //         chatId: senderChatId,
-      //         trainerId: senderId,
-      //         profilePicURL: senderProfilePhoto,
-      //         trainerTitle: senderName,
-      //         time: '',
-      //         days: [0],
-      //       ),
-      //     );
-      //   }
-      // }
-    }
+    //
+    // var senderChatId = prefs.getString('senderChatId');
+    // var senderId = prefs.getString('senderId');
+    // var senderName = prefs.getString('senderName');
+    // var senderProfilePhoto = prefs.getString('senderProfilePhoto');
+    // var userIdForCometChat = prefs.getString("userIdForCometChat");
+    //
+    // print(
+    //     '===================> Home Controller $senderChatId $senderId $senderName $senderProfilePhoto');
+    //
+    // if (senderId != null) {
+    //   var controller = Get.find<FirebaseChatController>();
+    //   controller.getValues();
+    //   controller.receiverId = senderId;
+    //   controller.senderPhoto = senderProfilePhoto!;
+    //   controller.senderName = senderName!;
+    //   Get.to(
+    //     () => ChatPage(),
+    //   );
+    //   // if (userIdForCometChat != null) {
+    //   //   bool userIsLoggedIn =
+    //   //       await CometChatService().logInUser(userIdForCometChat);
+    //   //   if (userIsLoggedIn) {
+    //   //     Get.to(
+    //   //       () => MessageList(
+    //   //         chatId: senderChatId,
+    //   //         trainerId: senderId,
+    //   //         profilePicURL: senderProfilePhoto,
+    //   //         trainerTitle: senderName,
+    //   //         time: '',
+    //   //         days: [0],
+    //   //       ),
+    //   //     );
+    //   //   }
+    //   // }
+    // }
 
     AppState _state = AppState.DATA_NOT_FETCHED;
     var calories = prefs.getString('caloriesBurnt');

@@ -50,7 +50,7 @@ class FirebaseChatController extends GetxController {
   }
 
   sendTextMessage(BuildContext context) async {
-    firebaseService.sendMessage(
+   await firebaseService.sendMessage(
       senderId: senderId,
       context: context,
       receiverId: receiverId,
@@ -59,7 +59,7 @@ class FirebaseChatController extends GetxController {
         senderId: senderId,
         senderAvatar: senderPhoto,
         message: messageController.text,
-        sentAt: DateTime.now().toString(),
+        sentAt: DateTime.now().toUtc().toString(),
       ),
     );
   }
@@ -106,7 +106,7 @@ class FirebaseChatController extends GetxController {
               mediaUrl: url,
               mediaName: fileName.value,
               mediaType: messageType,
-              sentAt: DateTime.now().toString(),
+              sentAt: DateTime.now().toUtc().toString(),
             ),
             senderId: senderId)
             .then((value) {
@@ -165,7 +165,7 @@ class FirebaseChatController extends GetxController {
               message: '',
               isMedia: true,
               mediaUrl: url,
-              sentAt: DateTime.now().toString(),
+              sentAt: DateTime.now().toUtc().toString(),
             ),
             senderId: senderId);
       } on Exception catch (e) {

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
+import 'package:fitbasix/feature/log_in/view/otp_screen.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/black_textfield.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/custom_dropdown.dart';
 import 'package:flutter/gestures.dart';
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   CountryData? hint;
   AnimationController? _animationController;
   final LoginController _loginController = Get.put(LoginController());
-
+  final user = FirebaseAuth.instance.currentUser;
 
   String title = RemoteConfigService.remoteConfig.getString('welcome');
 
@@ -176,8 +177,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final LoginController _loginController = Get.put(LoginController());
     return GestureDetector(onTap: (){
       print(Get.isOverlaysOpen);
     },
@@ -334,7 +333,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   _loginController.isLoading.value = true;
                                   await _loginController.getOTP();
                                   _loginController.isLoading.value = false;
-                                  Navigator.pushNamed(context, RouteName.otpScreen);
+                                var number = _loginController.mobileController.text;
+                                  Get.put(LoginController());
+                                  Get.to(()=>OtpScreen(mobile: number,));
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(

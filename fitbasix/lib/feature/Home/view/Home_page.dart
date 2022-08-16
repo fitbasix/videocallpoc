@@ -6,6 +6,8 @@ import 'dart:ui';
 import 'dart:developer';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:fitbasix/feature/Home/view/widgets/individual_user_profile_screen.dart';
+import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
+import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -150,7 +152,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    fetchNotification();
     _homeController.currentPage.value = 1;
     _homeController.scrollController.addListener(() async {
       print(_homeController.currentPage.value.toString() + " ppppp");
@@ -187,6 +189,30 @@ class _HomePageState extends State<HomePage> {
         }
       }
     });
+  }
+
+  void fetchNotification()async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var senderChatId = prefs.getString('senderChatId');
+    var senderId = prefs.getString('senderId');
+    var senderName = prefs.getString('senderName');
+    var senderProfilePhoto = prefs.getString('senderProfilePhoto');
+    var userIdForCometChat = prefs.getString("userIdForCometChat");
+
+    print(
+        '===================> Home Controller $senderChatId $senderId $senderName $senderProfilePhoto');
+
+    if (senderId != null) {
+      var controller = Get.find<FirebaseChatController>();
+      controller.getValues();
+      controller.receiverId = senderId;
+      controller.senderPhoto = senderProfilePhoto!;
+      controller.senderName = senderName!;
+      Get.to(
+            () => ChatPage(),
+      );
+    }
   }
 
   // @override

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
@@ -64,23 +65,23 @@ class _MediaMessageState extends State<MediaMessageWidget> {
               decoration: BoxDecoration(
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                  color: sentByMe ? greenChatColor : kBlack),
+                  color: sentByMe ? Colors.grey[900] : Colors.grey[800]),
               child: ClipRRect(
                 borderRadius:
                     BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                child: Image.network(
-                  widget.passedMessage.mediaUrl,
+                child: CachedNetworkImage(
+                  imageUrl: widget.passedMessage.mediaUrl,
                   fit: BoxFit.cover,
-                  cacheWidth: 150 * SizeConfig.widthMultiplier!.toInt(),
-                  cacheHeight: 200 * SizeConfig.heightMultiplier!.toInt(),
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
+                  height: 200 * SizeConfig.widthMultiplier!,
+                  width: 200 * SizeConfig.heightMultiplier!,
+                  placeholder: (BuildContext context, String url) {
                     return Container(
                       height: 200 * SizeConfig.heightMultiplier!,
                       width: 150 * SizeConfig.widthMultiplier!,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: kGreenColor,
+                        ),
                       ),
                     );
                   },
@@ -106,8 +107,21 @@ class _MediaMessageState extends State<MediaMessageWidget> {
             backgroundColor: background,
             sendByMe: sentByMe,
           ),
-        // if (sentByMe == true)
-        // MessageReceipts(passedMessage: widget.passedMessage)
+        Padding(
+          padding: EdgeInsets.only(
+              bottom: 8.0 * SizeConfig.heightMultiplier!,
+              right: 16 * SizeConfig.widthMultiplier!,
+              left: 16 * SizeConfig.widthMultiplier!),
+          child: Text(
+              DateFormat.jm()
+                  .format(DateTime.parse(widget.passedMessage.sentAt).toLocal()),
+              style: sentByMe == true
+                  ? AppTextStyle.white400Text.copyWith(
+                  fontSize: 9.0 * SizeConfig.textMultiplier!)
+                  : AppTextStyle.black400Text.copyWith(
+                  color: kPureWhite,
+                  fontSize: 9.0 * SizeConfig.textMultiplier!)),
+        ),
       ],
     );
   }
@@ -141,8 +155,12 @@ class _FileCardState extends State<FileCard> {
   Widget build(BuildContext context) {
     Color backgroundColor = widget.sendByMe ? greenChatColor : kBlack;
     checkFileExistence(widget.passedMessage.mediaUrl);
-    fileExtension =
-        widget.passedMessage.mediaUrl.split(".").last.toUpperCase().split('?').first;
+    fileExtension = widget.passedMessage.mediaUrl
+        .split(".")
+        .last
+        .toUpperCase()
+        .split('?')
+        .first;
     return Padding(
       padding: EdgeInsets.only(
           bottom: 8.0 * SizeConfig.heightMultiplier!,
@@ -197,9 +215,12 @@ class _FileCardState extends State<FileCard> {
                                             isDownloadingStarted.value = true;
                                             isDownloaded.value =
                                                 await _getImageUrl(
-                                                    widget.passedMessage
-                                                        .mediaUrl,
-                                                    widget.passedMessage.mediaUrl.split('/').last);
+                                                    widget
+                                                        .passedMessage.mediaUrl,
+                                                    widget
+                                                        .passedMessage.mediaUrl
+                                                        .split('/')
+                                                        .last);
                                           },
                                           child: Image.asset(
                                             ImagePath.downloadDocIcon,
@@ -280,7 +301,9 @@ class _FileCardState extends State<FileCard> {
                                             right: 10 *
                                                 SizeConfig.widthMultiplier!),
                                         child: Text(
-                                            widget.passedMessage.mediaUrl.split('/').last,
+                                          widget.passedMessage.mediaUrl
+                                              .split('/')
+                                              .last,
                                           overflow: TextOverflow.ellipsis,
                                           style: AppTextStyle
                                               .whiteTextWithWeight600,

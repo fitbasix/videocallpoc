@@ -161,13 +161,12 @@ Future<void> main() async {
 
     Get.put(FirebaseChatController());
 
-    FirebaseMessaging.instance.getToken().then((value) async {
-      if (accessToken != null) {
-        LogInService.RegisterDeviceToken(value.toString(), deviceId);
-      }
+    var token = await FirebaseMessaging.instance.getToken();
+    if (accessToken != null) {
+      LogInService.RegisterDeviceToken(token.toString(), deviceId);
+      print("fcm token" + token.toString());
+    }
 
-      print("fcm token" + value.toString());
-    });
     FirebaseMessaging.instance.getAPNSToken().then((value) {
       print(value.toString() + " APN Token");
     });
@@ -184,14 +183,13 @@ Future<void> main() async {
       var userName = json['senderName'];
       var userImage = json['senderProfilePhoto'];
 
-      var controller =
-      Get.find<FirebaseChatController>();
+      var controller = Get.find<FirebaseChatController>();
       controller.getValues();
-      controller.receiverId =userId;
+      controller.receiverId = userId;
       controller.senderPhoto = userImage;
       controller.senderName = userName!;
       Get.to(
-            () => ChatPage(),
+        () => ChatPage(),
       );
 
       // SharedPreferences sharedPreferences =
@@ -304,14 +302,13 @@ Future<void> sendToMessageList(
   String userName,
   String userImage,
 ) async {
-  var controller =
-  Get.find<FirebaseChatController>();
+  var controller = Get.find<FirebaseChatController>();
   controller.getValues();
-  controller.receiverId =userId;
+  controller.receiverId = userId;
   controller.senderPhoto = userImage;
   controller.senderName = userName!;
   Get.to(
-        () => ChatPage(),
+    () => ChatPage(),
   );
   // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   // String? userIdForCometChat =
@@ -384,10 +381,9 @@ void registerFcmToken() async {
   log('Running on ${deviceData['device']}');
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   var accessToken = prefs.getString('AccessToken');
-  FirebaseMessaging.instance.getToken().then((value) async {
-    if (accessToken != null) {
-      LogInService.RegisterDeviceToken(value.toString(), deviceId);
-    }
-    print("fcm token" + value.toString());
-  });
+  var token = await FirebaseMessaging.instance.getToken();
+  if (accessToken != null) {
+    LogInService.RegisterDeviceToken(token.toString(), deviceId);
+    print("fcm token" + token.toString());
+  }
 }

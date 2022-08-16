@@ -396,18 +396,18 @@ class _MessageTileState extends State<MessageTile> {
               children: [
                 Text(
                     _chatController.getDayString(
-                        DateTime.parse(message.sentAt), DateTime.now()),
+                        DateTime.parse(message.sentAt).toLocal(), DateTime.now()),
                     style: AppTextStyle.grey400Text
                         .copyWith(fontSize: 12 * SizeConfig.textMultiplier!)),
               ],
             ),
           ),
         if (widget.messageList.length > widget.index + 1)
-          if ((DateTime.parse(message.sentAt)).day >
+          if ((DateTime.parse(message.sentAt).toLocal()).day >
               DateTime.parse((MessageData.fromJson(
                           widget.messageList[widget.index+1].data()
                               as Map<String, dynamic>)
-                      .sentAt))
+                      .sentAt)).toLocal()
                   .day)
             Padding(
               padding: EdgeInsets.symmetric(
@@ -417,7 +417,7 @@ class _MessageTileState extends State<MessageTile> {
                 children: [
                   Text(
                       _chatController.getDayString(
-                          message.sentAt as DateTime, DateTime.now()),
+                          DateTime.parse(message.sentAt).toLocal(), DateTime.now()),
                       style: AppTextStyle.grey400Text
                           .copyWith(fontSize: 12 * SizeConfig.textMultiplier!)),
                 ],

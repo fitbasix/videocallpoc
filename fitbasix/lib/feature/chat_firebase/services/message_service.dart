@@ -7,10 +7,11 @@ import '../../../core/routes/api_routes.dart';
 class MessageService {
   static var dio = DioUtil().getInstance();
 
-  static Future<void> sendMessageNotification(
-      {required String receiverId,
-      required String senderId,
-      required String message}) async {
+  static Future<bool> sendMessageNotification({
+    required String receiverId,
+    required String senderId,
+    required String message,
+  }) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
 
@@ -25,5 +26,10 @@ class MessageService {
         }
       },
     );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

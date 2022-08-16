@@ -12,13 +12,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpScreen extends StatelessWidget {
-  OtpScreen({Key? key}) : super(key: key);
+  OtpScreen({Key? key,required this.mobile}) : super(key: key);
+
+  final String mobile;
+
 //  final LoginController _loginController = Get.find();
  final LoginController _loginController= Get.find();
+
   @override
   Widget build(BuildContext context) {
+    print(_loginController.mobileController.text+" jjj");
     print(_loginController.mobile.value+" jjj");
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -81,7 +87,7 @@ class OtpScreen extends StatelessWidget {
                       ),
                       Text(
                         'enter_otp_text'
-                            .trParams({'number': _loginController.mobile.value}),
+                            .trParams({'number':  mobile}),
                         style: AppTextStyle.NormalText.copyWith(
                             color: Theme.of(context).textTheme.bodyText1?.color,
                           fontSize: (12) * SizeConfig.textMultiplier!,
@@ -170,10 +176,9 @@ class OtpScreen extends StatelessWidget {
                           : ProceedButton(
                           title: 'verify'.tr,
                           onPressed: () async {
-                            _loginController.mobileController.clear();
                             _loginController.isLoading.value = true;
                             final redScreen = await LogInService.loginAndSignup(
-                                _loginController.mobile.value,
+                                mobile,
                                 _loginController.otp.value,
                                 _loginController.selectedCountry.value.code!,
                                 "",context);
@@ -195,6 +200,7 @@ class OtpScreen extends StatelessWidget {
                                   context, RouteName.homePage, (route) => false);
                               _loginController.mobileController.clear();
                             }
+                            _loginController.mobileController.clear();
                           })),
                       SizedBox(
                         height: 32 * SizeConfig.heightMultiplier!,
