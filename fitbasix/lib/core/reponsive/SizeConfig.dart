@@ -37,9 +37,9 @@ class SizeConfig {
     // heightMultiplier = _blockSizeVertical / 6.4;
     // widthMultiplier = _blockSizeHorizontal / 3.6;
 
-    textMultiplier = 1.sp;
+    textMultiplier = 0.9.sp;
     imageSizeMultiplier = 1;
-    heightMultiplier = 1.h;
-    widthMultiplier = 1.w;
+    heightMultiplier = 0.9.h;
+    widthMultiplier = 0.9.w;
   }
 }

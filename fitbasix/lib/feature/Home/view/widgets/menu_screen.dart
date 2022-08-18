@@ -194,33 +194,126 @@ class MenuScreen extends StatelessWidget {
                     menuItemText: 'logOut'.tr,
                     onTap: () async {
                       Get.dialog(
-                          Center(child: CustomizedCircularProgress()),
-                          barrierDismissible: false
-                      );
-                      if (!userClickedOnLogOut) {
-                        userClickedOnLogOut = true;
-                        AwesomeNotifications().cancelAllSchedules();
-                        AwesomeNotifications().cancelAll();
-                        final LoginController _controller =
-                            Get.put(LoginController());
-                        // CometChatService().logOutUserFromCometChat();
-                       try {
-                         await LogInService.removeDeviceId().then((value) async{
-                           await LogInService.logOut();
-                         });
-                          userClickedOnLogOut = false;
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          prefs.clear();
-                          _controller.googleSignout();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, RouteName.loginScreen, (route) => false);
-                          Get.deleteAll();
-                        }
-                        catch (e){
-                         Get.back();
-                        }
-                      }
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal:
+                                20 * SizeConfig.widthMultiplier!),
+                            child: Dialog(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 25 * SizeConfig.heightMultiplier!,
+                                    horizontal:
+                                        20 * SizeConfig.widthMultiplier!),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Are you sure you want to logout ?',
+                                      style: AppTextStyle.whiteTextWithWeight600
+                                          .copyWith(
+                                              fontSize: 16 *
+                                                  SizeConfig.textMultiplier!),
+                                    ),
+                                    SizedBox(
+                                      height: 20 * SizeConfig.heightMultiplier!,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        GestureDetector(
+                                          onTap:()async{
+                                            Get.back();
+                                            Get.dialog(
+                                                Center(child: CustomizedCircularProgress()),
+                                                barrierDismissible: false
+                                            );
+                                            if (!userClickedOnLogOut) {
+                                              userClickedOnLogOut = true;
+                                              AwesomeNotifications().cancelAllSchedules();
+                                              AwesomeNotifications().cancelAll();
+                                              final LoginController _controller =
+                                                  Get.put(LoginController());
+                                              // CometChatService().logOutUserFromCometChat();
+                                             try {
+                                               await LogInService.removeDeviceId().then((value) async{
+                                                 await LogInService.logOut();
+                                               });
+                                                userClickedOnLogOut = false;
+                                                final SharedPreferences prefs =
+                                                    await SharedPreferences.getInstance();
+                                                prefs.clear();
+                                                _controller.googleSignout();
+                                                Navigator.pushNamedAndRemoveUntil(
+                                                    context, RouteName.loginScreen, (route) => false);
+                                                Get.deleteAll();
+                                              }
+                                              catch (e){
+                                               Get.back();
+                                              }
+                                            }
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(8),
+                                                color: kPureBlack),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 8.0 *
+                                                      SizeConfig.heightMultiplier!,
+                                                  horizontal: 23 *
+                                                      SizeConfig.widthMultiplier!),
+                                              child: Text(
+                                                'Yes',
+                                                style: AppTextStyle.normalWhiteText
+                                                    .copyWith(
+                                                    fontSize: 14 *
+                                                        SizeConfig
+                                                            .textMultiplier!),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20 * SizeConfig.widthMultiplier!,
+                                        ),
+                                        GestureDetector(
+                                          onTap: (){
+                                            Get.back();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                color: kgreen4F),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 8.0 *
+                                                      SizeConfig.heightMultiplier!,
+                                                  horizontal: 23 *
+                                                      SizeConfig.widthMultiplier!),
+                                              child: Text(
+                                                'Cancel',
+                                                style: AppTextStyle.normalWhiteText
+                                                    .copyWith(
+                                                        fontSize: 14 *
+                                                            SizeConfig
+                                                                .textMultiplier!),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              backgroundColor: kPureBlack,
+                              insetPadding: EdgeInsets.zero,
+                            ),
+                          ),
+                          barrierColor: Colors.transparent);
+
                     })
                 : Container()
           ],

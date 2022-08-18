@@ -80,6 +80,9 @@ class DiscardPostBottomSheet extends StatelessWidget {
               Navigator.pop(context);
               // Navigator.pushNamedAndRemoveUntil(
               //     context, RouteName.homePage, (route) => false);
+              _postController.searchSuggestion.value.predictions!.clear();
+              _postController.locationSearchController.clear();
+              _postController.selectedLocation.value = '';
               _postController.postId.value = "";
               _postController.postTextController.clear();
               _postController.postText.value = '';

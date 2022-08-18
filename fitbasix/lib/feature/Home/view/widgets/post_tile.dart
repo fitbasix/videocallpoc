@@ -625,10 +625,9 @@ class _PostTileState extends State<PostTile> {
             //   likes: 214,
             //   onReply: () {},
             // ),
-            SizedBox(
-              height: 16 * SizeConfig.heightMultiplier!,
-            ),
-
+            // SizedBox(
+            //   height: 16 * SizeConfig.heightMultiplier!,
+            // ),
             // Row(
             //   // mainAxisSize: MainAxisSize.min,
             //   children: [
@@ -668,7 +667,7 @@ class _PostTileState extends State<PostTile> {
             //         ))
             //   ],
             // ),
-            SizedBox(
+            if(widget.comment != null) SizedBox(
               height: 16 * SizeConfig.heightMultiplier!,
             ),
             Container(

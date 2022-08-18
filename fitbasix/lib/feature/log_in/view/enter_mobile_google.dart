@@ -75,7 +75,7 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
                             null
                         ? ""
                         : _loginController
-                            .thirdPartyLogin.value.response!.user!.name!
+                            .thirdPartyLogin.value.response!.user!.name!.capitalize!
                   }),
                   style: AppTextStyle.titleText.copyWith(
                     color: Theme.of(context).textTheme.bodyText1?.color

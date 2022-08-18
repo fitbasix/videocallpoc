@@ -34,8 +34,8 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin{
-
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   GlobalKey? _key;
   bool isMenuOpen = false;
   Offset? buttonPosition;
@@ -52,8 +52,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   // hint: ,
   // borderRadius: BorderRadius.circular(8),
   // ),
-   List<CountryData>? listofItems;
-  final BorderRadius _borderRadius=BorderRadius.circular(8);
+  List<CountryData>? listofItems;
+  final BorderRadius _borderRadius = BorderRadius.circular(8);
   final Color backgroundColor = const Color(0xFFF67C0B9);
   CountryData? hint;
   AnimationController? _animationController;
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   @override
   void initState() {
     listofItems = _loginController.countryList;
-    hint=_loginController.selectedCountry.value;
+    hint = _loginController.selectedCountry.value;
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 250),
@@ -79,14 +79,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     initRemoteConfigService();
     super.initState();
   }
+
   OverlayEntry _overlayEntryBuilder() {
     return OverlayEntry(
       builder: (context) {
         return Positioned(
           top: buttonPosition!.dy + 10,
-          left: buttonPosition!.dx+12,
+          left: buttonPosition!.dx + 12,
           width: buttonSize!.width,
-          child:CompositedTransformFollower(
+          child: CompositedTransformFollower(
             link: layerLink,
             child: Material(
               color: Colors.transparent,
@@ -109,8 +110,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
                     child: Container(
-                      width: 82*SizeConfig.widthMultiplier!,
-                      height: 66*SizeConfig.heightMultiplier!,
+                      width: 82 * SizeConfig.widthMultiplier!,
+                      height: 66 * SizeConfig.heightMultiplier!,
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: _borderRadius,
@@ -123,21 +124,25 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          children:
-                          List.generate(listofItems!.length, (index) {
+                          children: List.generate(listofItems!.length, (index) {
                             return GestureDetector(
                                 onTap: () {
                                   _loginController.selectedCountry.value =
-                                  listofItems![index];
+                                      listofItems![index];
                                   closeMenu();
                                 },
                                 child: Align(
                                   alignment: Alignment.topLeft,
                                   child: Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 16*SizeConfig.widthMultiplier!,vertical: 8*SizeConfig.heightMultiplier!),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            16 * SizeConfig.widthMultiplier!,
+                                        vertical:
+                                            8 * SizeConfig.heightMultiplier!),
                                     child: SvgPicture.network(
-                                     listofItems![index].flag!,
-                                      width: 24*SizeConfig.imageSizeMultiplier!,
+                                      listofItems![index].flag!,
+                                      width:
+                                          24 * SizeConfig.imageSizeMultiplier!,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -155,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       },
     );
   }
+
   findButton() {
     RenderBox renderBox = _key!.currentContext!.findRenderObject() as RenderBox;
     buttonSize = renderBox.size;
@@ -169,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
   void openMenu() {
     findButton();
-   // _animationController!.forward();
+    // _animationController!.forward();
     _overlayEntry = _overlayEntryBuilder();
     Overlay.of(context)!.insert(_overlayEntry!);
     isMenuOpen = !isMenuOpen;
@@ -177,9 +183,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: (){
-      print(Get.isOverlaysOpen);
-    },
+    return GestureDetector(
+      onTap: () {
+        print(Get.isOverlaysOpen);
+      },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: kPureBlack,
@@ -201,161 +208,187 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   fit: BoxFit.cover,
                 ),
               ),
-              Obx(
-                  ()=> !_loginController.isGoogleSignInLoading.value?Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Spacer(),
-                      Text(
-                        'lets_begin'.tr,
-                        style: AppTextStyle.boldWhiteText.copyWith(
-                            color: kPureWhite,
-                            fontSize: 24 * SizeConfig.textMultiplier!),
-                      ),
-                      SizedBox(
-                        height: 16 * SizeConfig.heightMultiplier!,
-                      ),
-                      Obx(
-                        () => BlackCutomizedTextField(
-                          color: Colors.transparent,
-                          child: TextFieldContainer(
-                              onChanged: (value) {
-                                _loginController.mobile.value = value;
-                                print(_loginController.mobile.value+" iii");
-                              },
-                              maxLength: 10,
-                              isTextFieldActive: true,
-                              preFixWidget: Container(
-                                width: 90*SizeConfig.widthMultiplier!,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      key: _key,
-                                      decoration: BoxDecoration(
-                                        // color: const Color(0xfff5c6373),
-                                        borderRadius: _borderRadius,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              FocusScopeNode currentFocus = FocusScope.of(context);
-                                              if (isMenuOpen) {
-                                                closeMenu();
-                                              } else {
-                                                openMenu();
-                                              }
-                                            },
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.start,
+              Obx(() => !_loginController.isGoogleSignInLoading.value
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Spacer(),
+                          Text(
+                            'lets_begin'.tr,
+                            style: AppTextStyle.boldWhiteText.copyWith(
+                                color: kPureWhite,
+                                fontSize: 24 * SizeConfig.textMultiplier!),
+                          ),
+                          SizedBox(
+                            height: 16 * SizeConfig.heightMultiplier!,
+                          ),
+                          Obx(
+                            () => BlackCutomizedTextField(
+                              color: Colors.transparent,
+                              child: TextFieldContainer(
+                                  onChanged: (value) {
+                                    _loginController.mobile.value = value;
+                                    print(
+                                        _loginController.mobile.value + " iii");
+                                  },
+                                  maxLength: 10,
+                                  isTextFieldActive: true,
+                                  preFixWidget: Container(
+                                    width: 90 * SizeConfig.widthMultiplier!,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                            key: _key,
+                                            decoration: BoxDecoration(
+                                              // color: const Color(0xfff5c6373),
+                                              borderRadius: _borderRadius,
+                                            ),
+                                            child: Row(
                                               children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 14*SizeConfig.widthMultiplier!,
-                                                      right: 14*SizeConfig.widthMultiplier!
-                                                  ),
-                                                  child: SvgPicture.network(
-                                                    _loginController.selectedCountry.value.flag == null
-                                                        ? 'https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg'
-                                                        : _loginController.selectedCountry.value.flag!,
-                                                    width: 24.w,
-                                                    fit: BoxFit.cover,
+                                                InkWell(
+                                                  onTap: () {
+                                                    FocusScopeNode
+                                                        currentFocus =
+                                                        FocusScope.of(context);
+                                                    if (isMenuOpen) {
+                                                      closeMenu();
+                                                    } else {
+                                                      openMenu();
+                                                    }
+                                                  },
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.only(
+                                                            left: 14 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!,
+                                                            right: 14 *
+                                                                SizeConfig
+                                                                    .widthMultiplier!),
+                                                        child:
+                                                            SvgPicture.network(
+                                                          _loginController
+                                                                      .selectedCountry
+                                                                      .value
+                                                                      .flag ==
+                                                                  null
+                                                              ? 'https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg'
+                                                              : _loginController
+                                                                  .selectedCountry
+                                                                  .value
+                                                                  .flag!,
+                                                          width: 24.w,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                      CompositedTransformTarget(
+                                                          link: layerLink,
+                                                          child: Container())
+                                                    ],
                                                   ),
                                                 ),
-                                                CompositedTransformTarget(
-                                                    link: layerLink,
-                                                    child: Container())
+                                                InkWell(
+                                                  onTap: () {
+                                                    if (isMenuOpen) {
+                                                      closeMenu();
+                                                    } else {
+                                                      openMenu();
+                                                    }
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    color: greyB7,
+                                                  ),
+                                                )
                                               ],
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              if (isMenuOpen) {
-                                                closeMenu();
-                                              } else {
-                                                openMenu();
-                                              }
-                                            },
-                                            child: const Icon(
-                                              Icons.keyboard_arrow_down,
-                                              color: greyB7,
-                                            ),
-                                          )
-                                        ],
-                                      )),
-                                    // CountryDropDown(
-                                    //   hint: _loginController.selectedCountry.value,
-                                    //   listofItems: _loginController.countryList,
-                                    //   onChanged: (value) {
-                                    //     _loginController.selectedCountry.value =
-                                    //         value;
-                                    //     print(_loginController
-                                    //         .selectedCountry.value.code);
-                                    //   },
-                                    // ),
-                                    SizedBox(
-                                      width: 16 * SizeConfig.widthMultiplier!,
+                                            )),
+                                        // CountryDropDown(
+                                        //   hint: _loginController.selectedCountry.value,
+                                        //   listofItems: _loginController.countryList,
+                                        //   onChanged: (value) {
+                                        //     _loginController.selectedCountry.value =
+                                        //         value;
+                                        //     print(_loginController
+                                        //         .selectedCountry.value.code);
+                                        //   },
+                                        // ),
+                                        SizedBox(
+                                          width:
+                                              16 * SizeConfig.widthMultiplier!,
+                                        ),
+                                        const Text(
+                                          '|',
+                                          style: TextStyle(
+                                              fontSize: 24, color: kGreyColor),
+                                        ),
+                                      ],
                                     ),
-                                    const Text(
-                                      '|',
-                                      style: TextStyle(
-                                          fontSize: 24, color: kGreyColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              textEditingController: _loginController.mobileController,
-                              isNumber: true,
-                              hint: 'enter_number_hint'.tr),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16 * SizeConfig.heightMultiplier!,
-                      ),
-                      Obx(() => _loginController.isLoading.value
-                          ? Center(
-                              child: CustomizedCircularProgress(),
-                            )
-                          : ProceedButton(
-                              title: 'next'.tr,
-                              onPressed: () async {
-                                if (isMenuOpen) {
-                                  closeMenu();
-                                }
-                                FocusScope.of(context).unfocus();
-                                if (_loginController.mobile.value.length == 10&&RegExp(r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$").hasMatch(_loginController.mobile.value)) {
-                                  print(_loginController.mobile.value+" kkk");
-                                  _loginController.isLoading.value = true;
-                                  await _loginController.getOTP();
-                                  _loginController.isLoading.value = false;
-                                var number = _loginController.mobileController.text;
-                                  Get.put(LoginController());
-                                  Get.to(()=>OtpScreen(mobile: number,));
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Please enter valid mobile number')));
-                                }
-                              })),
-                      SizedBox(
-                        height: 8 * SizeConfig.heightMultiplier!,
-                      ),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            children: [
+                                  ),
+                                  textEditingController:
+                                      _loginController.mobileController,
+                                  isNumber: true,
+                                  hint: 'enter_number_hint'.tr),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 16 * SizeConfig.heightMultiplier!,
+                          ),
+                          Obx(() => _loginController.isLoading.value
+                              ? Center(
+                                  child: CustomizedCircularProgress(),
+                                )
+                              : ProceedButton(
+                                  title: 'next'.tr,
+                                  onPressed: () async {
+                                    if (isMenuOpen) {
+                                      closeMenu();
+                                    }
+                                    FocusScope.of(context).unfocus();
+                                    if (_loginController.mobile.value.length ==
+                                            10 &&
+                                        RegExp(r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$")
+                                            .hasMatch(_loginController
+                                                .mobile.value)) {
+                                      print(_loginController.mobile.value +
+                                          " kkk");
+                                      _loginController.isLoading.value = true;
+                                      await _loginController.getOTP();
+                                      _loginController.isLoading.value = false;
+                                      var number = _loginController
+                                          .mobileController.text;
+                                      Get.put(LoginController());
+                                      Get.to(() => OtpScreen(
+                                            mobile: number,
+                                          ));
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Please enter valid mobile number')));
+                                    }
+                                  })),
+                          SizedBox(
+                            height: 8 * SizeConfig.heightMultiplier!,
+                          ),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(children: [
                               TextSpan(
                                 text: 'By signing up you agree our ',
                                 style: AppTextStyle.NormalText.copyWith(
                                     fontSize: 12 * SizeConfig.textMultiplier!,
                                     color: lightGrey),
-
                               ),
                               TextSpan(
                                 text: 'terms & conditions ',
@@ -363,7 +396,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12 * SizeConfig.textMultiplier!,
                                     color: lightGrey),
-                                recognizer: new TapGestureRecognizer()..onTap = () => launch(ApiUrl.liveBaseURL+'/terms'),
+                                recognizer: new TapGestureRecognizer()
+                                  ..onTap = () =>
+                                      launch(ApiUrl.liveBaseURL + '/terms'),
                               ),
                               TextSpan(
                                 text: 'and ',
@@ -377,23 +412,245 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12 * SizeConfig.textMultiplier!,
                                     color: lightGrey),
-                                recognizer: new TapGestureRecognizer()..onTap = () => launch(ApiUrl.liveBaseURL+'/privacy_fitbasix'),
+                                recognizer: new TapGestureRecognizer()
+                                  ..onTap = () => launch(
+                                      ApiUrl.liveBaseURL + '/privacy_fitbasix'),
                               ),
-                            ]
-                        ),
-                      ),
-                      SizedBox(
-                        height: 32 * SizeConfig.heightMultiplier!,
-                      ),
-                      Platform.isIOS
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
+                            ]),
+                          ),
+                          SizedBox(
+                            height: 32 * SizeConfig.heightMultiplier!,
+                          ),
+                          Platform.isIOS
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        _loginController
+                                            .isGoogleSignInLoading.value = true;
+                                        await _loginController.googleLogin();
+                                        final user =
+                                            FirebaseAuth.instance.currentUser;
+                                        if (user != null) {
+                                          user.getIdToken().then((value) {
+                                            _loginController.idToken.value =
+                                                value;
+                                          });
+
+                                          _loginController
+                                                  .thirdPartyLogin.value =
+                                              await LogInService
+                                                  .thirdPartyLogin(
+                                                      'Google',
+                                                      _loginController
+                                                          .idToken.value);
+
+                                          // log(_loginController.thirdPartyLogin.value.code
+                                          //     .toString());
+
+                                          if (_loginController
+                                                  .thirdPartyLogin
+                                                  .value
+                                                  .response!
+                                                  .user!
+                                                  .token !=
+                                              null) {
+                                            final SharedPreferences prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            prefs.setString(
+                                                'AccessToken',
+                                                _loginController
+                                                    .thirdPartyLogin
+                                                    .value
+                                                    .response!
+                                                    .user!
+                                                    .token!);
+                                            prefs.setString(
+                                                'RefreshToken',
+                                                _loginController
+                                                    .thirdPartyLogin
+                                                    .value
+                                                    .response!
+                                                    .refreshToken!);
+                                          }
+
+                                          if (_loginController.thirdPartyLogin
+                                                  .value.response!.screenId ==
+                                              15) {
+                                            _loginController
+                                                .isGoogleSignInLoading
+                                                .value = false;
+                                            Navigator.pushNamed(context,
+                                                RouteName.enterMobileGoogle);
+                                          } else if (_loginController
+                                                  .thirdPartyLogin
+                                                  .value
+                                                  .response!
+                                                  .screenId ==
+                                              16) {
+                                            _loginController
+                                                .isGoogleSignInLoading
+                                                .value = false;
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                RouteName.homePage,
+                                                (route) => false);
+                                          }
+                                        } else {
+                                          _loginController.isGoogleSignInLoading
+                                              .value = false;
+                                        }
+                                      },
+                                      child: Container(
+                                        width:
+                                            156 * SizeConfig.widthMultiplier!,
+                                        height:
+                                            48 * SizeConfig.heightMultiplier!,
+                                        padding: const EdgeInsets.only(
+                                            left: 18, right: 54),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border:
+                                                Border.all(color: greyBorder)),
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                ImagePath.googleICon,
+                                              height:
+                                              20 * SizeConfig.heightMultiplier!,
+                                            ),
+                                            SizedBox(
+                                              width: 20 *
+                                                  SizeConfig.widthMultiplier!,
+                                            ),
+                                            Text(
+                                              'Sign In',
+                                              style: AppTextStyle.boldWhiteText
+                                                  .copyWith(
+                                                      fontSize: 14 *
+                                                          SizeConfig
+                                                              .textMultiplier!),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final credential = await SignInWithApple
+                                            .getAppleIDCredential(
+                                          scopes: [
+                                            AppleIDAuthorizationScopes.email,
+                                            AppleIDAuthorizationScopes.fullName,
+                                          ],
+                                        );
+
+                                        OAuthProvider oAuthProvider =
+                                            new OAuthProvider("apple.com");
+                                        final AuthCredential authCredential =
+                                            oAuthProvider.credential(
+                                          idToken: credential.identityToken,
+                                          accessToken:
+                                              credential.authorizationCode,
+                                        );
+                                        await FirebaseAuth.instance
+                                            .signInWithCredential(
+                                                authCredential);
+                                        _loginController.thirdPartyLogin.value =
+                                            await LogInService.thirdPartyAppleLogin(
+                                                "Apple",
+                                                credential.familyName == null
+                                                    ? ""
+                                                    : "${credential.givenName} " +
+                                                        credential.familyName!,
+                                                credential.identityToken!);
+                                        print(credential.identityToken!);
+                                        if (_loginController.thirdPartyLogin
+                                                .value.response!.user!.token !=
+                                            null) {
+                                          final SharedPreferences prefs =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          prefs.setString(
+                                              'AccessToken',
+                                              _loginController
+                                                  .thirdPartyLogin
+                                                  .value
+                                                  .response!
+                                                  .user!
+                                                  .token!);
+
+                                          prefs.setString(
+                                              'RefreshToken',
+                                              _loginController
+                                                  .thirdPartyLogin
+                                                  .value
+                                                  .response!
+                                                  .refreshToken!);
+                                        }
+                                        if (_loginController.thirdPartyLogin
+                                                .value.response!.screenId! ==
+                                            15) {
+                                          Navigator.pushNamed(context,
+                                              RouteName.enterMobileGoogle);
+                                        } else {
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              RouteName.homePage,
+                                              (route) => false);
+                                          ;
+                                        }
+                                      },
+                                      child: Container(
+                                        width:
+                                            156 * SizeConfig.widthMultiplier!,
+                                        height:
+                                            48 * SizeConfig.heightMultiplier!,
+                                        padding: EdgeInsets.only(
+                                            left: 18,
+                                            right: 54),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border:
+                                                Border.all(color: greyBorder)),
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              ImagePath.appleIcon,
+                                              color: kPureWhite,
+                                              height:
+                                              20 * SizeConfig.heightMultiplier!,
+                                            ),
+                                            SizedBox(
+                                              width: 20 *
+                                                  SizeConfig.widthMultiplier!,
+                                            ),
+                                            Text(
+                                              'Sign In',
+                                              style: AppTextStyle.boldWhiteText
+                                                  .copyWith(
+                                                      fontSize: 14 *
+                                                          SizeConfig
+                                                              .textMultiplier!),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : GestureDetector(
                                   onTap: () async {
-                                    _loginController.isGoogleSignInLoading.value = true;
+                                    _loginController
+                                        .isGoogleSignInLoading.value = true;
                                     await _loginController.googleLogin();
-                                    final user = FirebaseAuth.instance.currentUser;
+                                    final user =
+                                        FirebaseAuth.instance.currentUser;
                                     if (user != null) {
                                       user.getIdToken().then((value) {
                                         _loginController.idToken.value = value;
@@ -404,233 +661,87 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                               'Google',
                                               _loginController.idToken.value);
 
-                                      // log(_loginController.thirdPartyLogin.value.code
-                                      //     .toString());
-
                                       if (_loginController.thirdPartyLogin.value
                                               .response!.user!.token !=
                                           null) {
                                         final SharedPreferences prefs =
-                                            await SharedPreferences.getInstance();
+                                            await SharedPreferences
+                                                .getInstance();
                                         prefs.setString(
                                             'AccessToken',
-                                            _loginController.thirdPartyLogin.value
-                                                .response!.user!.token!);
+                                            _loginController.thirdPartyLogin
+                                                .value.response!.user!.token!);
                                         prefs.setString(
                                             'RefreshToken',
-                                            _loginController.thirdPartyLogin.value
-                                                .response!.refreshToken!);
+                                            _loginController.thirdPartyLogin
+                                                .value.response!.refreshToken!);
                                       }
 
                                       if (_loginController.thirdPartyLogin.value
                                               .response!.screenId ==
                                           15) {
-                                        _loginController.isGoogleSignInLoading.value = false;
-                                        Navigator.pushNamed(
-                                            context, RouteName.enterMobileGoogle);
-                                      } else if (_loginController.thirdPartyLogin
-                                              .value.response!.screenId ==
+                                        _loginController.isGoogleSignInLoading
+                                            .value = false;
+                                        Navigator.pushNamed(context,
+                                            RouteName.enterMobileGoogle);
+                                      } else if (_loginController
+                                              .thirdPartyLogin
+                                              .value
+                                              .response!
+                                              .screenId ==
                                           16) {
-                                        _loginController.isGoogleSignInLoading.value = false;
-                                        Navigator.pushNamedAndRemoveUntil(context,
-                                            RouteName.homePage, (route) => false);
+                                        _loginController.isGoogleSignInLoading
+                                            .value = false;
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            RouteName.homePage,
+                                            (route) => false);
                                       }
-                                    }
-                                    else{
-                                      _loginController.isGoogleSignInLoading.value = false;
-                                    }
-                                  },
-                                  child: Container(
-                                    width: 156 * SizeConfig.widthMultiplier!,
-                                    height: 48 * SizeConfig.heightMultiplier!,
-                                    padding: const EdgeInsets.only(
-                                        left: 18, top: 14, bottom: 14, right: 54),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: greyBorder)),
-                                    child: Row(
-                                      children: [
-                                        SvgPicture.asset(ImagePath.googleICon),
-                                        SizedBox(
-                                          width: 20 * SizeConfig.widthMultiplier!,
-                                        ),
-                                        Text(
-                                          'Sign In',
-                                          style: AppTextStyle.boldWhiteText
-                                              .copyWith(
-                                                  fontSize: 14 *
-                                                      SizeConfig.textMultiplier!),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    final credential =
-                                        await SignInWithApple.getAppleIDCredential(
-                                      scopes: [
-                                        AppleIDAuthorizationScopes.email,
-                                        AppleIDAuthorizationScopes.fullName,
-                                      ],
-                                    );
-
-                                    OAuthProvider oAuthProvider =
-                                        new OAuthProvider("apple.com");
-                                    final AuthCredential authCredential =
-                                        oAuthProvider.credential(
-                                      idToken: credential.identityToken,
-                                      accessToken: credential.authorizationCode,
-                                    );
-                                    await FirebaseAuth.instance
-                                        .signInWithCredential(authCredential);
-                                    _loginController.thirdPartyLogin.value =
-                                        await LogInService.thirdPartyAppleLogin(
-                                            "Apple",
-                                            credential.familyName == null
-                                                ? ""
-                                                : "${credential.givenName} " +
-                                                    credential.familyName!,
-                                            credential.identityToken!);
-                                    print(credential.identityToken!);
-                                    if (_loginController.thirdPartyLogin.value
-                                            .response!.user!.token !=
-                                        null) {
-                                      final SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      prefs.setString(
-                                          'AccessToken',
-                                          _loginController.thirdPartyLogin.value
-                                              .response!.user!.token!);
-
-                                      prefs.setString(
-                                          'RefreshToken',
-                                          _loginController.thirdPartyLogin.value
-                                              .response!.refreshToken!);
-                                    }
-                                    if (_loginController.thirdPartyLogin.value
-                                            .response!.screenId! ==
-                                        15) {
-                                      Navigator.pushNamed(
-                                          context, RouteName.enterMobileGoogle);
                                     } else {
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          RouteName.homePage, (route) => false);
-                                      ;
+                                      _loginController
+                                          .isGoogleSignInLoading.value = false;
                                     }
                                   },
                                   child: Container(
-                                    width: 156 * SizeConfig.widthMultiplier!,
+                                    width: Get.width,
                                     height: 48 * SizeConfig.heightMultiplier!,
-                                    padding: EdgeInsets.only(
-                                        left: 18, top: 14, bottom: 14, right: 54),
+                                    padding:
+                                        EdgeInsets.only(left: 18, right: 54),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(color: greyBorder)),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         SvgPicture.asset(
-                                          ImagePath.appleIcon,
-                                          color: kPureWhite,
+                                          ImagePath.googleICon,
+                                          height:
+                                              20 * SizeConfig.heightMultiplier!,
                                         ),
                                         SizedBox(
-                                          width: 20 * SizeConfig.widthMultiplier!,
+                                          width:
+                                              20 * SizeConfig.widthMultiplier!,
                                         ),
                                         Text(
                                           'Sign In',
                                           style: AppTextStyle.boldWhiteText
                                               .copyWith(
                                                   fontSize: 14 *
-                                                      SizeConfig.textMultiplier!),
+                                                      SizeConfig
+                                                          .textMultiplier!),
                                         )
                                       ],
                                     ),
                                   ),
-                                )
-                              ],
-                            )
-                          : GestureDetector(
-                              onTap: () async {
-                                _loginController.isGoogleSignInLoading.value = true;
-                                await _loginController.googleLogin();
-                                final user = FirebaseAuth.instance.currentUser;
-                                if (user != null) {
-                                  user.getIdToken().then((value) {
-                                    _loginController.idToken.value = value;
-                                  });
-
-                                  _loginController.thirdPartyLogin.value =
-                                      await LogInService.thirdPartyLogin(
-                                          'Google', _loginController.idToken.value);
-
-
-
-                                  if (_loginController.thirdPartyLogin.value
-                                          .response!.user!.token !=
-                                      null) {
-                                    final SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-                                    prefs.setString(
-                                        'AccessToken',
-                                        _loginController.thirdPartyLogin.value
-                                            .response!.user!.token!);
-                                    prefs.setString(
-                                        'RefreshToken',
-                                        _loginController.thirdPartyLogin.value
-                                            .response!.refreshToken!);
-                                  }
-
-                                  if (_loginController.thirdPartyLogin.value.response!.screenId ==
-                                      15) {
-                                    _loginController.isGoogleSignInLoading.value = false;
-                                    Navigator.pushNamed(
-                                        context, RouteName.enterMobileGoogle);
-                                  } else if (_loginController.thirdPartyLogin.value
-                                          .response!.screenId ==
-                                      16) {
-                                    _loginController.isGoogleSignInLoading.value = false;
-                                    Navigator.pushNamedAndRemoveUntil(context,
-                                        RouteName.homePage, (route) => false);
-                                  }
-                                }
-                                else
-                                {
-                                  _loginController.isGoogleSignInLoading.value = false;
-                                }
-                              },
-                              child: Container(
-                                width: Get.width,
-                                height: 48 * SizeConfig.heightMultiplier!,
-                                padding: EdgeInsets.only(
-                                    left: 18, top: 14, bottom: 14, right: 54),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: greyBorder)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(ImagePath.googleICon),
-                                    SizedBox(
-                                      width: 20 * SizeConfig.widthMultiplier!,
-                                    ),
-                                    Text(
-                                      'Sign In',
-                                      style: AppTextStyle.boldWhiteText.copyWith(
-                                          fontSize:
-                                              14 * SizeConfig.textMultiplier!),
-                                    )
-                                  ],
                                 ),
-                              ),
-                            ),
-                      SizedBox(
-                        height: 32 * SizeConfig.heightMultiplier!,
-                      )
-                    ],
-                  ),
-                ):Center(child: CustomizedCircularProgress())
-              ),
-
+                          SizedBox(
+                            height: 32 * SizeConfig.heightMultiplier!,
+                          )
+                        ],
+                      ),
+                    )
+                  : Center(child: CustomizedCircularProgress())),
             ],
           ),
         ),

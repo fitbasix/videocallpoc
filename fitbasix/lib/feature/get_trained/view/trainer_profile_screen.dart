@@ -596,14 +596,14 @@ class _TrainerPageState extends State<TrainerPage> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
-                                            widget.ratingCount.toString(),
-                                            style:
-                                                AppTextStyle.greenSemiBoldText,
-                                          ),
-                                          SizedBox(
-                                              width: 8 *
-                                                  SizeConfig.widthMultiplier!),
+                                          // Text(
+                                          //   widget.ratingCount.toString(),
+                                          //   style:
+                                          //       AppTextStyle.greenSemiBoldText,
+                                          // ),
+                                          // SizedBox(
+                                          //     width: 8 *
+                                          //         SizeConfig.widthMultiplier!),
                                           StarRating(
                                             rating: widget.rating,
                                           )

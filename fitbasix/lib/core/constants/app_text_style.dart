@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyle {
 
-
   static TextStyle italicWelcomeText = GoogleFonts.openSans(
     fontSize: (16) * SizeConfig.textMultiplier!,
     fontWeight: FontWeight.w400,
