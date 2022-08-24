@@ -73,6 +73,7 @@ class HomeController extends GetxController {
   RxBool commentsLoading = RxBool(false);
   RxBool isExploreSearch = false.obs;
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController reviewController = TextEditingController();
   RxString exploreSearchText = "".obs;
   Rx<int> selectedPostCategoryIndex = (-1).obs;
   RxBool isExploreDataLoading = false.obs;
@@ -288,6 +289,13 @@ class HomeController extends GetxController {
     }
     isLoading.value = false;
     await getTrendingPost();
+    await getActivePlans();
+  }
+
+  Future<void> getActivePlans()async{
+   var data =  await HomeService.getActivePlans();
+   activePlans.addAll(data);
+activePlans.refresh();
   }
 
   Future<void> getTrendingPost({int? skip}) async {

@@ -138,10 +138,51 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
                         _postController.isLoading.value = false;
                       },
                     )
-                  : Padding(
-                      padding: EdgeInsets.only(
-                          right: 16 * SizeConfig.widthMultiplier!),
-                      child: CustomizedCircularProgress(),
+                  : Row(
+                      children: [
+                        Text(
+                          'Uploading',
+                          style: AppTextStyle.white400Text,
+                        ),
+                        SizedBox(
+                          width: 10 * SizeConfig.widthMultiplier!,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                right: 16 * SizeConfig.widthMultiplier!),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 28 * SizeConfig.heightMultiplier!,
+                                  width: 28 * SizeConfig.widthMultiplier!,
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: CircularProgressIndicator(
+                                      value: _postController
+                                              .uploadingProgress.value /
+                                          100,
+                                      valueColor:
+                                          const AlwaysStoppedAnimation<Color>(
+                                        kGreenColor,
+                                      ),
+                                      backgroundColor: kBlack,
+                                      strokeWidth:
+                                          4 * SizeConfig.heightMultiplier!,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  _postController.uploadingProgress.value
+                                      .toString()
+                                      .split('.')
+                                      .first,
+                                  style: AppTextStyle.white400Text
+                                      .copyWith(fontSize: 10),
+                                )
+                              ],
+                            )),
+                      ],
                     )
               : Row(
                   children: [
@@ -318,20 +359,21 @@ class AssetThumbnail extends StatelessWidget {
                 children: [
                   Positioned.fill(
                       child: ImageItemWidget(
-              key: ValueKey<int>(tag),
-            entity: asset,
-            option: const ThumbnailOption(size: ThumbnailSize.square(200)),
-            )
+                    key: ValueKey<int>(tag),
+                    entity: asset,
+                    option:
+                        const ThumbnailOption(size: ThumbnailSize.square(200)),
+                  )
 
-                  //     Image(
-                  //   image: CacheImageProvider(
-                  //       img: snapshot.data!, tag: tag.toString()),
-                  //   fit: BoxFit.cover,
-                  //   //  loadingBuilder: CircularProgressIndicator(),
-                  //   key: ValueKey(tag),
-                  // )
+                      //     Image(
+                      //   image: CacheImageProvider(
+                      //       img: snapshot.data!, tag: tag.toString()),
+                      //   fit: BoxFit.cover,
+                      //   //  loadingBuilder: CircularProgressIndicator(),
+                      //   key: ValueKey(tag),
+                      // )
 
-            ),
+                      ),
                   if (asset.type == AssetType.video)
                     Center(
                       child: Icon(

@@ -34,17 +34,19 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   GlobalKey _key = GlobalKey();
   Rx<double> videoProgress = 0.05.obs;
   Rx<int> videoLength = 1.obs;
-  
+
   @override
   void initState() {
-    
     getThumbnail();
     super.initState();
     _controller = VideoPlayerController.network(widget.videoUrl);
     _controllerThumb = VideoPlayerController.network(widget.videoUrl);
 
     _controller.addListener(() {
-      videoProgress.value = ((_controller.value.isPlaying?_controller.value.position.inSeconds:0.0)/videoLength.value);
+      videoProgress.value = ((_controller.value.isPlaying
+              ? _controller.value.position.inSeconds
+              : 0.0) /
+          videoLength.value);
       setState(() {
         state = _controller.value.isPlaying;
         buffer = _controller.value.isBuffering;
@@ -60,7 +62,8 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
     thumbnail = await VideoThumbnail.thumbnailData(
       video: widget.videoUrl,
       imageFormat: ImageFormat.JPEG,
-      maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      maxWidth: Get.width
+          .toInt(), // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
       quality: 25,
     );
   }
@@ -77,30 +80,32 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
     return Stack(
       children: [
         //Positioned.fill(child: Image.memory(thumbnail!)),
-        Positioned.fill(child: Container(
-          child: AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controllerThumb),
-          ),
-        ),),
-        ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-                sigmaX: 10.0, sigmaY: 10.0),
-            child: Container(
-              width: 360*SizeConfig.widthMultiplier!,
-              height: 360*SizeConfig.heightMultiplier!,
+        Positioned.fill(
+          child: Container(
+            child: AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controllerThumb),
             ),
           ),
         ),
+        // ClipRect(
+        //   child: BackdropFilter(
+        //     filter: ImageFilter.blur(
+        //         sigmaX: 10.0, sigmaY: 10.0),
+        //     child: Container(
+        //       width: 360*SizeConfig.widthMultiplier!,
+        //       height: 360*SizeConfig.heightMultiplier!,
+        //     ),
+        //   ),
+        // ),
         VisibilityDetector(
           onVisibilityChanged: (VisibilityInfo info) {
-            if ((info.visibleFraction == 0||info.visibleFraction < 0.8) && this.mounted) {
+            if ((info.visibleFraction == 0 || info.visibleFraction < 0.8) &&
+                this.mounted) {
               _controller.setVolume(_homeController.videoPlayerVolume.value);
               _controller.pause();
-
             }
-            if(info.visibleFraction == 1||info.visibleFraction > 0.8){
+            if (info.visibleFraction == 1 || info.visibleFraction > 0.6) {
               _controller.setVolume(_homeController.videoPlayerVolume.value);
               _controller.play();
             }
@@ -123,62 +128,72 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
                   : _controller.play();
             });
           },
-          child: Center(
-            child: buffer
-                ? CustomizedCircularProgress()
-                : !state ?Icon(
-                    //state ? Icons.pause :
-                    Icons.play_arrow,
-                    color: kPureWhite,
-                    size: 56 * SizeConfig.heightMultiplier!,
-                  ):Container(),
+          child: AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            child: Center(
+              child: buffer
+                  ? CustomizedCircularProgress()
+                  : !state
+                      ? Icon(
+                          //state ? Icons.pause :
+                          Icons.play_arrow,
+                          color: kPureWhite,
+                          size: 56 * SizeConfig.heightMultiplier!,
+                        )
+                      : Container(),
+            ),
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            if(_homeController.videoPlayerVolume.value == 0.0){
-              _homeController.videoPlayerVolume.value = 1.0;
-            }
-            else{
-              _homeController.videoPlayerVolume.value = 0.0;
-            }
-            _controller.setVolume(_homeController.videoPlayerVolume.value);
+        AspectRatio(
+          aspectRatio: _controller.value.aspectRatio,
+          child: GestureDetector(
+            onTap: () {
+              if (_homeController.videoPlayerVolume.value == 0.0) {
+                _homeController.videoPlayerVolume.value = 1.0;
+              } else {
+                _homeController.videoPlayerVolume.value = 0.0;
+              }
+              _controller.setVolume(_homeController.videoPlayerVolume.value);
             },
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child:Container(
-              color: Colors.transparent,
-              child: Padding(
-                padding:  EdgeInsets.all(8.0*SizeConfig.widthMultiplier!),
-                child: Obx(
-                    ()=> CircleAvatar(
-                      radius: 9.5*SizeConfig.heightMultiplier!,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                color: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0 * SizeConfig.widthMultiplier!),
+                  child: Obx(
+                    () => CircleAvatar(
+                      radius: 9.5 * SizeConfig.heightMultiplier!,
                       backgroundColor: Colors.black.withOpacity(0.5),
                       child: Icon(
-                      //state ? Icons.pause :
-                      _homeController.videoPlayerVolume.value == 0.0?Icons.volume_off:Icons.volume_up,
-                      color: kPureWhite,
-                      size: 13 * SizeConfig.heightMultiplier!,
-                  ),
+                        //state ? Icons.pause :
+                        _homeController.videoPlayerVolume.value == 0.0
+                            ? Icons.volume_off
+                            : Icons.volume_up,
+                        color: kPureWhite,
+                        size: 13 * SizeConfig.heightMultiplier!,
+                      ),
                     ),
+                  ),
                 ),
               ),
             ),
           ),
         ),
         Obx(
-          ()=> Align(
-            alignment: Alignment.bottomCenter,
-            child: LinearProgressIndicator(
-              value: videoProgress.value,
-              minHeight: 5*SizeConfig.heightMultiplier!,
-              color: kBlack.withOpacity(0.7),
-              backgroundColor: Colors.transparent,
+          () => AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: LinearProgressIndicator(
+                value: videoProgress.value,
+                minHeight: 5 * SizeConfig.heightMultiplier!,
+                color: kBlack.withOpacity(0.7),
+                backgroundColor: Colors.transparent,
+              ),
             ),
           ),
         ),
-
-
       ],
     );
   }

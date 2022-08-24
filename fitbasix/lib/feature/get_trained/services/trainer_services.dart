@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
+import 'package:fitbasix/feature/Home/model/postpone_model.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
@@ -28,11 +29,12 @@ class TrainerServices {
   static var dio = DioUtil().getInstance();
   static TrainerController _trainerController = Get.find();
 
-  static Future<PlanModel> getPlanByTrainerId(String trainerId,int filterType) async {
+  static Future<PlanModel> getPlanByTrainerId(
+      String trainerId, int filterType) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!
-        .post(ApiUrl.getPlanByTrainerId, data: {"trainerId": trainerId,"filterType":filterType});
+    var response = await dio!.post(ApiUrl.getPlanByTrainerId,
+        data: {"trainerId": trainerId, "filterType": filterType});
     return planModelFromJson(response.toString());
   }
 
@@ -49,14 +51,14 @@ class TrainerServices {
   }
 
   static Future<String> getEnablexUrl(String id) async {
-    log(ApiUrl.getEnablexUrl+id);
-     var dio = DioUtil().getInstance();
+    log(ApiUrl.getEnablexUrl + id);
+    var dio = DioUtil().getInstance();
     dio!.options.headers["language"] = "1";
     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio.get(ApiUrl.getEnablexUrl+id);
-    log(ApiUrl.getEnablexUrl+id);
+    var response = await dio.get(ApiUrl.getEnablexUrl + id);
+    log(ApiUrl.getEnablexUrl + id);
     var jsonResponse = jsonDecode(response.toString());
-log(ApiUrl.getEnablexUrl+id);
+    log(ApiUrl.getEnablexUrl + id);
     return jsonResponse["response"]["data"]["sessionLink"];
   }
 
@@ -147,11 +149,12 @@ log(ApiUrl.getEnablexUrl+id);
     return getTrainerModelFromJson(response.toString());
   }
 
-  static Future<TimeModel> getEnrolledPlanDetails(String trainerId,int planDuration) async {
+  static Future<TimeModel> getEnrolledPlanDetails(
+      String trainerId, int planDuration) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response =
-        await dio!.post(ApiUrl.getSchedules, data: {"trainerId": trainerId,"planDuration":planDuration});
+    var response = await dio!.post(ApiUrl.getSchedules,
+        data: {"trainerId": trainerId, "planDuration": planDuration});
     return timeModelFromJson(response.toString());
   }
 
@@ -160,8 +163,11 @@ log(ApiUrl.getEnablexUrl+id);
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     print(time.toString());
-    var response = await dio!.post(ApiUrl.getSchedules,
-        data: {"trainerId": trainerId, "time": time, "planDuration":planDuration});
+    var response = await dio!.post(ApiUrl.getSchedules, data: {
+      "trainerId": trainerId,
+      "time": time,
+      "planDuration": planDuration
+    });
     return availableSlotFromJson(response.toString());
   }
 
@@ -179,16 +185,24 @@ log(ApiUrl.getEnablexUrl+id);
 
     var timeIndex;
 
-    for(var i in Get.find<TrainerController>().weekAvailableSlots.value){
-     if(slots[0] == i.id){
-       timeIndex = i.time;
-     }
+    for (var i in Get.find<TrainerController>().weekAvailableSlots.value) {
+      if (slots[0] == i.id) {
+        timeIndex = i.time;
+      }
     }
 
     try {
-    var response = await Dio().post(ApiUrl.bookDemo,
+      var response = await Dio().post(ApiUrl.bookDemo,
           options: Options(headers: {"language": 1, "Authorization": token}),
-          data: {"days": slots, "planId": id, "time": timeIndex, "day": days, "trainerId":trainerId,"planDuration":Get.find<PlansController>().selectedPlan!.planDuration});
+          data: {
+            "days": slots,
+            "planId": id,
+            "time": timeIndex,
+            "day": days,
+            "trainerId": trainerId,
+            "planDuration":
+                Get.find<PlansController>().selectedPlan!.planDuration
+          });
       return true;
     } on DioError catch (e) {
       final responseData = jsonDecode(e.response.toString());
@@ -265,4 +279,58 @@ log(ApiUrl.getEnablexUrl+id);
     return timingModelFromJson(response.toString());
   }
 
+  static Future<SessionData?> postponeSession({
+    required String trainerId,
+    required DateTime expiryDate,
+    required String planId,
+    required String timeSlot,
+    required List<int> days,
+  }) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    try {
+      var response = await dio!.post(
+        ApiUrl.postponeSession,
+        data: {
+          'trainerId': trainerId,
+          'expiryDate': expiryDate.toIso8601String(),
+          'planId': planId,
+          'time': timeSlot,
+          'days': days
+        },
+      );
+      log(response.toString());
+      return postponeModelFromJson(response.toString()).response!.sessionData;
+    } on Exception catch (e) {
+      return null;
+    }
+  }
+
+  static Future<bool> cancelSubscription({
+    required String trainerName,
+    required String planId,
+    required String planName,
+  }) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    try {
+      var response = await dio!.post(
+        ApiUrl.cancelSubscription,
+        data: {
+          'trainerName': trainerName,
+          'planId': planId,
+          'planName': planName
+        },
+      );
+      log(response.data.toString());
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
 }

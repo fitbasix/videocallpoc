@@ -89,7 +89,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).primaryColorDark,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -260,16 +260,16 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                           //   indexWhereChatPresent = widget.chatHistoryList!
                           //       .indexWhere((element) => element.occupantsIds!
                           //           .contains(myTrainers![index].quickBlox));
-                          print(myTrainers![index].chatId.toString() +
-                              " ioiiiiii");
-                          print(
-                              myTrainers![index].name.toString() + " ioiiiiii");
-
-                          // }
-                          print(
-                              "iddddd " + myTrainers![index].chatId.toString());
-                          print("pic " +
-                              myTrainers![index].profilePhoto.toString());
+                          // print(myTrainers![index].chatId.toString() +
+                          //     " ioiiiiii");
+                          // print(
+                          //     myTrainers![index].name.toString() + " ioiiiiii");
+                          //
+                          // // }
+                          // print(
+                          //     "iddddd " + myTrainers![index].chatId.toString());
+                          // print("pic " +
+                          //     myTrainers![index].profilePhoto.toString());
                           return TrainersTileUI(
                             userChatId: myTrainers![index].chatId,
                             taggedPersonList: myTrainers![index]
@@ -280,7 +280,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                     (i) =>
                                         myTrainers![index].strengths![i].name!)
                                 : [],
-                            trainerName: myTrainers![index].name,
+                            trainerName: myTrainers![index].name!.capitalize,
                             trainerProfilePicUrl:
                                 myTrainers![index].profilePhoto,
                             isCurrentlyEnrolled:
@@ -517,8 +517,8 @@ class TrainersTileUI extends StatelessWidget {
                 padding: EdgeInsets.only(
                     left: 16 * SizeConfig.widthMultiplier!,
                     right: 38 * SizeConfig.widthMultiplier!,
-                    top: 16 * SizeConfig.heightMultiplier!,
-                    bottom: 16 * SizeConfig.heightMultiplier!),
+                    top: 10 * SizeConfig.heightMultiplier!,
+                    bottom: 10 * SizeConfig.heightMultiplier!),
                 child: Obx(
                   () => Text(
                       lastMessageIsLoading.value
@@ -536,8 +536,8 @@ class TrainersTileUI extends StatelessWidget {
             Container(
               child: Padding(
                 padding: EdgeInsets.only(
-                    left: 16 * SizeConfig.widthMultiplier!,
-                    bottom: 24 * SizeConfig.heightMultiplier!),
+                    left: 15 * SizeConfig.widthMultiplier!,
+                    bottom: 15 * SizeConfig.heightMultiplier!),
                 child: Row(
                   children: [
                     Text(
@@ -765,7 +765,7 @@ class TrainersTileUI extends StatelessWidget {
         Container(
           height: 28 * SizeConfig.heightMultiplier!,
           decoration: BoxDecoration(
-              color: Color(0xff747474),
+              color: greyBorder,
               borderRadius:
                   BorderRadius.circular(28 * SizeConfig.heightMultiplier!)),
           child: Padding(
@@ -787,7 +787,7 @@ class TrainersTileUI extends StatelessWidget {
             ? Container(
                 height: 28 * SizeConfig.heightMultiplier!,
                 decoration: BoxDecoration(
-                    color: Color(0xff747474),
+                    color: greyBorder,
                     borderRadius: BorderRadius.circular(
                         28 * SizeConfig.heightMultiplier!)),
                 child: Padding(

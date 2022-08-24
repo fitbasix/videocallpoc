@@ -5,6 +5,20 @@ final GlobalKey<ScaffoldMessengerState> snackbarKey =
 
 class ImagePath {
   static const String arrowRightIcon = "assets/Icons/arrow-right.svg";
+  static const String biceps = "assets/Icons/biceps.svg";
+  static const String apple = "assets/Icons/apple.svg";
+  static const String videocam = "assets/Icons/videocam.svg";
+
+  static const String bg1 = "assets/mytrainers/f1.png";
+  static const String bg2 = "assets/mytrainers/f2.png";
+  static const String bg3 = "assets/mytrainers/f3.png";
+
+  static const String refresh = "assets/Icons/refresh.svg";
+  static const String gfit = "assets/Icons/fit.svg";
+  static const String health = "assets/Icons/health.png";
+
+  static const String getTrained = "assets/Icons/get_trained.svg";
+  static const String sadFace = "assets/Icons/sad.png";
   static const String selectImageIcon = "assets/Icons/gallary_icon.svg";
   static const String fileIcon = "assets/Icons/file_icon.svg";
   static const String muteBell = "assets/Icons/mute_bell.svg";
@@ -32,6 +46,12 @@ class ImagePath {
   static const String jpgFileIcon = "assets/Icons/jpg_file_icon.png";
   static const String privacyPolicyIcon =
       "assets/Icons/privacy_policy_icon.svg";
+
+  static const String logo = 'assets/icon.svg';
+  static const String chatIcon = "assets/Icons/chat.png";
+  static const String starActive = "assets/Icons/star_ac.svg";
+  static const String star = "assets/Icons/star.svg";
+
   static const String termOfUseIcon = "assets/Icons/term_of_use_icon.svg";
   static const String LiveIcon = "assets/Icons/live_icon.svg";
   static const String addPersonIcon = "assets/Icons/add_person_icon.svg";
@@ -123,6 +143,7 @@ class ImagePath {
   static const String notrainerenrollframe =
       "assets/mytrainers/notrainerframe.svg";
   static const String closedialogIcon = "assets/mytrainers/closedialogicon.svg";
+  static const String dumbbell = "assets/mytrainers/dumbbell.svg";
   static const String nomatchesfoundImage =
       "assets/get_trained/no_matchesfoundImage.png";
 

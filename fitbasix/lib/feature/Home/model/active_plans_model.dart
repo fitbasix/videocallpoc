@@ -43,12 +43,12 @@ class Response {
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
     message: json["message"],
-    planDetails: List<PlanDetail>.from(json["planDetails"].map((x) => PlanDetail.fromJson(x))),
+    planDetails: List<PlanDetail>.from(json["subscriptionData"].map((x) => PlanDetail.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "message": message,
-    "planDetails": List<dynamic>.from(planDetails!.map((x) => x.toJson())),
+    "subscriptionData": List<dynamic>.from(planDetails!.map((x) => x.toJson())),
   };
 }
 
@@ -68,12 +68,13 @@ class PlanDetail {
   Trainer? trainer;
   SessionTime? sessionTime;
   PlanDetails? planDetails;
+  bool isExpanded = false;
 
   factory PlanDetail.fromJson(Map<String, dynamic> json) => PlanDetail(
     id: json["_id"],
     expiryDate: DateTime.parse(json["expiryDate"]),
     weekDays: List<int>.from(json["weekDays"].map((x) => x)),
-    trainer: Trainer.fromJson(json["trainer"]),
+    trainer: Trainer.fromJson(json["trainers"]),
     sessionTime: SessionTime.fromJson(json["sessionTime"]),
     planDetails: PlanDetails.fromJson(json["planDetails"]),
   );
@@ -82,7 +83,7 @@ class PlanDetail {
     "_id": id,
     "expiryDate": expiryDate!.toIso8601String(),
     "weekDays": List<dynamic>.from(weekDays!.map((x) => x)),
-    "trainer": trainer!.toJson(),
+    "trainers": trainer!.toJson(),
     "sessionTime": sessionTime!.toJson(),
     "planDetails": planDetails!.toJson(),
   };
@@ -128,18 +129,23 @@ class Trainer {
   Trainer({
     this.name,
     this.profilePhoto,
+    this.id,
   });
 
   String? name;
   String? profilePhoto;
+  String? id;
 
   factory Trainer.fromJson(Map<String, dynamic> json) => Trainer(
     name: json["name"],
     profilePhoto: json["profilePhoto"],
+    id: json["_id"],
+
   );
 
   Map<String, dynamic> toJson() => {
     "name": name,
     "profilePhoto": profilePhoto,
+    "id":id
   };
 }

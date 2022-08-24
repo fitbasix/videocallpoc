@@ -6,6 +6,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
+import 'package:get/get.dart';
 
 class TrainerCard extends StatelessWidget {
   const TrainerCard({
@@ -45,7 +46,7 @@ class TrainerCard extends StatelessWidget {
             vertical: 24 * SizeConfig.heightMultiplier!,
             horizontal: 12 * SizeConfig.widthMultiplier!),
         decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+            color: Colors.black.withOpacity(0.66),
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
@@ -66,7 +67,7 @@ class TrainerCard extends StatelessWidget {
               height: 8 * SizeConfig.heightMultiplier!,
             ),
             Text(
-              name,
+              name.capitalize!,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyle.titleText.copyWith(
@@ -115,9 +116,10 @@ class TrainerCard extends StatelessWidget {
               about,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: AppTextStyle.NormalText.copyWith(
                   fontSize: 10 * SizeConfig.textMultiplier!,
-                  color: Theme.of(context).textTheme.headline1?.color),
+                  color: kPureWhite),
             ),
             SizedBox(
               height: 8 * SizeConfig.heightMultiplier!,
@@ -132,7 +134,7 @@ class TrainerCard extends StatelessWidget {
               '($raters)',
               style: AppTextStyle.NormalText.copyWith(
                   fontSize: 10 * SizeConfig.textMultiplier!,
-                  color: Theme.of(context).textTheme.headline1?.color),
+                  color: kPureWhite),
             ),
             SizedBox(
               height: 0 * SizeConfig.heightMultiplier!,

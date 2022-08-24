@@ -1,8 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/feature/Home/model/active_plans_model.dart';
+import 'package:fitbasix/feature/Home/view/widgets/review_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -15,7 +20,7 @@ import 'package:fitbasix/feature/get_trained/view/widgets/custom_app_bar.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/trainer_card.dart';
 
 import '../../Home/controller/Home_Controller.dart';
-import '../model/all_trainer_model.dart';
+import '../model/all_trainer_model.dart' as TrainerModel;
 
 class GetTrainedScreen extends StatelessWidget {
   GetTrainedScreen({Key? key}) : super(key: key);
@@ -120,47 +125,37 @@ class GetTrainedScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(
-                                height: 30 * SizeConfig.heightMultiplier!,
+                                height: 20 * SizeConfig.heightMultiplier!,
                               ),
-                              Container(
-                                height: 110 * SizeConfig.heightMultiplier!,
-                                margin: EdgeInsets.only(
-                                    left: 16 * SizeConfig.widthMultiplier!),
-                                child: ListView.builder(
-                                    physics: BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: _trainerController.trainers.value
-                                        .response!.data!.myTrainers!.length,
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              right: 16 *
-                                                  SizeConfig.widthMultiplier!),
-                                          child: MyTrainersTile(
-                                            name: _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .myTrainers![index]
+                              // Container(
+                              //   height: 250 * SizeConfig.heightMultiplier!,
+                              //   child: ListView.separated(
+                              //     padding: EdgeInsets.only(left: 12*SizeConfig.widthMultiplier!),
+                              //     shrinkWrap: true,
+                              //     physics: const BouncingScrollPhysics(),
+                              //     scrollDirection: Axis.horizontal,
+                              //     itemCount: _homeController.activePlans.length,
+                              //     itemBuilder: (context, index) {
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: List<Widget>.generate(
+                                      _homeController.activePlans.length,
+                                      (index) => MyTrainersTile(
+                                            planDetail: _homeController
+                                                .activePlans[index],
+                                            name: _homeController
+                                                .activePlans[index]
+                                                .trainer!
                                                 .name
                                                 .toString(),
-                                            imageUrl: _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .myTrainers![index]
+                                            imageUrl: _homeController
+                                                .activePlans[index]
+                                                .trainer!
                                                 .profilePhoto
                                                 .toString(),
-                                            isCurrentlyEnrolled:
-                                                _trainerController
-                                                    .trainers
-                                                    .value
-                                                    .response!
-                                                    .data!
-                                                    .myTrainers![index]
-                                                    .isCurrentlyEnrolled!,
+                                            isCurrentlyEnrolled: true,
                                             onMyTrainerTileTapped: () async {
                                               String trainerId =
                                                   _trainerController
@@ -170,8 +165,9 @@ class GetTrainedScreen extends StatelessWidget {
                                                       .data!
                                                       .myTrainers![index]
                                                       .user!;
-                                              _trainerController.atrainerDetail
-                                                  .value = Trainer();
+                                              _trainerController
+                                                      .atrainerDetail.value =
+                                                  TrainerModel.Trainer();
                                               _trainerController
                                                   .isMyTrainerProfileLoading
                                                   .value = true;
@@ -197,7 +193,9 @@ class GetTrainedScreen extends StatelessWidget {
                                                       .planModel.value =
                                                   await TrainerServices
                                                       .getPlanByTrainerId(
-                                                          trainerId,_trainerController.currentPlanType);
+                                                          trainerId,
+                                                          _trainerController
+                                                              .currentPlanType);
                                               _trainerController
                                                   .isPlanLoading.value = false;
                                               _trainerController
@@ -229,9 +227,18 @@ class GetTrainedScreen extends StatelessWidget {
                                                     .clear();
                                               }
                                             },
-                                          ));
-                                    }),
+                                          )),
+                                ),
                               ),
+                              // },
+                              // separatorBuilder:
+                              //     (BuildContext context, int index) {
+                              //   return SizedBox(
+                              //     width: 10 * SizeConfig.widthMultiplier!,
+                              //   );
+                              // },
+                              //   ),
+                              // ),
                               SizedBox(
                                 height: 16 * SizeConfig.heightMultiplier!,
                               ),
@@ -241,7 +248,7 @@ class GetTrainedScreen extends StatelessWidget {
                                 color: Theme.of(context).cardColor,
                               ),
                               SizedBox(
-                                height: 19 * SizeConfig.heightMultiplier!,
+                                height: 15 * SizeConfig.heightMultiplier!,
                               ),
                             ],
                           );
@@ -249,702 +256,955 @@ class GetTrainedScreen extends StatelessWidget {
                     return Container();
                   }
                 }),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 12 * SizeConfig.widthMultiplier!),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                Container(
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(ImagePath.bg2), fit: BoxFit.cover)),
+                  child: Column(
                     children: [
-                      SvgPicture.asset(ImagePath.getTrainerIcon),
                       SizedBox(
-                        width: 7 * SizeConfig.widthMultiplier!,
+                        height: 15 * SizeConfig.heightMultiplier!,
                       ),
-                      GetTrainedTitle(
-                        title: 'getTrainer'.tr,
-                      ),
-                      Spacer(),
-                      Obx(() => _trainerController.getTrainedIsLoading.value
-                          ? Container()
-                          : SeeAllButton(
-                              onTap: () async {
-                                Navigator.pushNamed(
-                                    context, RouteName.allTrainerScreen);
-                                _trainerController.availability.value = [];
-                                _trainerController.isLoading.value = true;
-                                _trainerController.pageTitle.value =
-                                    'trainers'.tr;
-                                _trainerController.SelectedSortMethod.value =
-                                    -1;
-                                _trainerController.SelectedInterestIndex.value =
-                                    0;
-                                _trainerController.trainerType.value = 0;
-                                _trainerController.searchedName.value = "";
-                                _trainerController.searchController.text = "";
-                                _trainerController.allTrainer.value =
-                                    await TrainerServices.getAllTrainer();
-                                _trainerController.isLoading.value = false;
-                              },
-                            ))
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  //19
-                  height: 18 * SizeConfig.heightMultiplier!,
-                ),
-                Obx(
-                  () => Container(
-                    // height: 242 * SizeConfig.heightMultiplier!,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (int index = 0;
-                              index <
-                                  (_trainerController.getTrainedIsLoading.value
-                                      ? 5
-                                      : _trainerController.trainers.value
-                                          .response!.data!.trainers!.length);
-                              index++)
-                            _trainerController.getTrainedIsLoading.value
-                                ? Shimmer.fromColors(
-                                    child: Padding(
-                                      padding: index == 0
-                                          ? EdgeInsets.only(
-                                              left: 12 *
-                                                  SizeConfig.widthMultiplier!)
-                                          : EdgeInsets.all(0),
-                                      child: TrainerCard(
-                                          name: '',
-                                          certificateCount: 0,
-                                          profilePhoto:
-                                              'https://randomuser.me/api/portraits/men/1.jpg',
-                                          strength: '',
-                                          strengthLength: 0,
-                                          about: '',
-                                          raters: '',
-                                          rating: 0,
-                                          onTap: () {}),
-                                    ),
-                                    baseColor: Color.fromARGB(0, 255, 255, 255)
-                                        .withOpacity(0),
-                                    highlightColor:
-                                        Color.fromARGB(1, 255, 255, 255)
-                                            .withOpacity(0.46),
-                                  )
-                                : Padding(
-                                    padding: index == 0
-                                        ? EdgeInsets.only(
-                                            left: 12 *
-                                                SizeConfig.widthMultiplier!)
-                                        : EdgeInsets.all(0),
-                                    child: TrainerCard(
-                                      name: _trainerController
-                                                  .trainers
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .user !=
-                                              null
-                                          ? _trainerController
-                                                  .trainers
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .user!
-                                                  .name ??
-                                              ''
-                                          : '',
-                                      certificateCount: _trainerController
-                                          .trainers
-                                          .value
-                                          .response!
-                                          .data!
-                                          .trainers![index]
-                                          .certificates!
-                                          .length,
-                                      rating: double.tryParse(_trainerController
-                                          .trainers
-                                          .value
-                                          .response!
-                                          .data!
-                                          .trainers![index]
-                                          .rating!)!,
-                                      profilePhoto: _trainerController
-                                                  .trainers
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .user !=
-                                              null
-                                          ? _trainerController
-                                                  .trainers
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers![index]
-                                                  .user!
-                                                  .profilePhoto ??
-                                              ''
-                                          : '',
-                                      about: _trainerController
-                                          .trainers
-                                          .value
-                                          .response!
-                                          .data!
-                                          .trainers![index]
-                                          .about!,
-                                      raters: _trainerController
-                                          .trainers
-                                          .value
-                                          .response!
-                                          .data!
-                                          .trainers![index]
-                                          .totalRating!,
-                                      strength: _trainerController
-                                          .trainers
-                                          .value
-                                          .response!
-                                          .data!
-                                          .trainers![index]
-                                          .strength![0]
-                                          .name
-                                          .toString(),
-                                      strengthLength: _trainerController
-                                          .trainers
-                                          .value
-                                          .response!
-                                          .data!
-                                          .trainers![index]
-                                          .strength!
-                                          .length,
-                                      onTap: () async {
-                                        _trainerController.currentPlanType = 0;
-                                        Navigator.pushNamed(context,
-                                            RouteName.trainerProfileScreen);
-                                        _trainerController
-                                            .isProfileLoading.value = true;
-                                        _trainerController
-                                                .atrainerDetail.value =
-                                            _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers![index];
-                                        _trainerController
-                                            .loadingIndicator.value = false;
-                                        // _trainerController.isPlanLoading.value =
-                                        //     true;
-                                        // _trainerController.planModel.value =
-                                        //     await TrainerServices
-                                        //         .getPlanByTrainerId(
-                                        //             _trainerController
-                                        //                 .trainers
-                                        //                 .value
-                                        //                 .response!
-                                        //                 .data!
-                                        //                 .trainers![index]
-                                        //                 .user!
-                                        //                 .id!);
-                                        // _trainerController.isPlanLoading.value =
-                                        //     false;
-                                        _trainerController
-                                                .initialPostData.value =
-                                            await TrainerServices
-                                                .getTrainerPosts(
-                                                    _trainerController
-                                                        .trainers
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .trainers![index]
-                                                        .user!
-                                                        .id!,
-                                                    0);
-                                        if (_trainerController.initialPostData
-                                                .value.response!.data!.length !=
-                                            0) {
-                                          _trainerController
-                                                  .trainerPostList.value =
-                                              _trainerController.initialPostData
-                                                  .value.response!.data!;
-                                        } else {
-                                          _trainerController.trainerPostList
-                                              .clear();
-                                        }
-                                        _trainerController
-                                            .isProfileLoading.value = false;
-                                      },
-                                    ),
-                                  )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  //39
-                  height: 37 * SizeConfig.heightMultiplier!,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 12 * SizeConfig.widthMultiplier!),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(ImagePath.getFitnessConsultationIcon),
-                      SizedBox(
-                        width: 7 * SizeConfig.widthMultiplier!,
-                      ),
-                      GetTrainedTitle(
-                        title: 'getFitnessConsult'.tr,
-                      ),
-                      Spacer(),
-                      Obx(() => _trainerController.getTrainedIsLoading.value
-                          ? Container()
-                          : SeeAllButton(
-                              onTap: () async {
-                                Navigator.pushNamed(
-                                    context, RouteName.allTrainerScreen);
-                                _trainerController.isLoading.value = true;
-                                _trainerController.pageTitle.value =
-                                    'fitnessConsult'.tr;
-                                _trainerController.availability.value = [];
-                                _trainerController.SelectedInterestIndex.value =
-                                    0;
-                                _trainerController.searchedName.value = "";
-                                _trainerController.trainerType.value = 1;
-                                _trainerController.searchController.text = "";
-                                _trainerController.allTrainer.value =
-                                    await TrainerServices.getAllTrainer();
-
-                                _trainerController.isLoading.value = false;
-                              },
-                            ))
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  //19
-                  height: 18 * SizeConfig.heightMultiplier!,
-                ),
-                Obx(
-                  () => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                        //252
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12 * SizeConfig.widthMultiplier!),
                         child: Row(
-                      children: [
-                        for (int index = 0; index <5; index++)
-                          _trainerController.getTrainedIsLoading.value
-                              ? Shimmer.fromColors(
-                                  child: Padding(
-                                    padding: index == 0
-                                        ? EdgeInsets.only(
-                                            left: 12 *
-                                                SizeConfig.widthMultiplier!)
-                                        : EdgeInsets.all(0),
-                                    child: TrainerCard(
-                                        name: '',
-                                        certificateCount: 0,
-                                        profilePhoto:
-                                            'https://randomuser.me/api/portraits/men/1.jpg',
-                                        strength: '',
-                                        strengthLength: 0,
-                                        about: '',
-                                        raters: '',
-                                        rating: 0,
-                                        onTap: () {}),
-                                  ),
-                                  baseColor: Color.fromARGB(0, 255, 255, 255)
-                                      .withOpacity(0),
-                                  highlightColor:
-                                      Color.fromARGB(1, 255, 255, 255)
-                                          .withOpacity(0.46),
-                                )
-                              : Padding(
-                                  padding: index == 0
-                                      ? EdgeInsets.only(
-                                          left:
-                                              12 * SizeConfig.widthMultiplier!)
-                                      : EdgeInsets.all(0),
-                                  child: TrainerCard(
-                                    name: _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .fitnessConsultant![index]
-                                                .user !=
-                                            null
-                                        ? _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .fitnessConsultant![index]
-                                                .user!
-                                                .name ??
-                                            ''
-                                        : '',
-                                    certificateCount: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .fitnessConsultant![index]
-                                        .certificates!
-                                        .length,
-                                    rating: double.tryParse(_trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .fitnessConsultant![index]
-                                        .rating!)!,
-                                    profilePhoto: _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .fitnessConsultant![index]
-                                                .user !=
-                                            null
-                                        ? _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .fitnessConsultant![index]
-                                                .user!
-                                                .profilePhoto ??
-                                            ''
-                                        : '',
-                                    about: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .fitnessConsultant![index]
-                                        .about!,
-                                    raters: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .fitnessConsultant![index]
-                                        .totalRating!,
-                                    strength: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .fitnessConsultant![index]
-                                        .strength![0]
-                                        .name
-                                        .toString(),
-                                    strengthLength: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .fitnessConsultant![index]
-                                        .strength!
-                                        .length,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(ImagePath.biceps),
+                            SizedBox(
+                              width: 7 * SizeConfig.widthMultiplier!,
+                            ),
+                            GetTrainedTitle(
+                              title: 'getTrainer'.tr,
+                            ),
+                            Spacer(),
+                            Obx(() => _trainerController
+                                    .getTrainedIsLoading.value
+                                ? Container()
+                                : SeeAllButton(
                                     onTap: () async {
-                                      _trainerController.currentPlanType = 1;
-                                      Navigator.pushNamed(context,
-                                          RouteName.trainerProfileScreen);
+                                      Navigator.pushNamed(
+                                          context, RouteName.allTrainerScreen);
+                                      _trainerController.availability.value =
+                                          [];
+                                      _trainerController.isLoading.value = true;
+                                      _trainerController.pageTitle.value =
+                                          'trainers'.tr;
                                       _trainerController
-                                          .isProfileLoading.value = true;
-                                      _trainerController.atrainerDetail.value =
-                                          _trainerController
+                                          .SelectedSortMethod.value = -1;
+                                      _trainerController
+                                          .SelectedInterestIndex.value = 0;
+                                      _trainerController.trainerType.value = 0;
+                                      _trainerController.searchedName.value =
+                                          "";
+                                      _trainerController.searchController.text =
+                                          "";
+                                      _trainerController.allTrainer.value =
+                                          await TrainerServices.getAllTrainer();
+                                      _trainerController.isLoading.value =
+                                          false;
+                                    },
+                                  ))
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        //19
+                        height: 18 * SizeConfig.heightMultiplier!,
+                      ),
+                      Obx(
+                        () => SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for (int index = 0;
+                                  index <
+                                      (_trainerController
+                                              .getTrainedIsLoading.value
+                                          ? 5
+                                          : _trainerController
                                               .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .fitnessConsultant![index];
-                                      // _trainerController.isPlanLoading.value =
-                                      //     true;
-                                      // _trainerController.planModel.value =
-                                      //     await TrainerServices
-                                      //         .getPlanByTrainerId(
-                                      //             _trainerController
-                                      //                 .trainers
-                                      //                 .value
-                                      //                 .response!
-                                      //                 .data!
-                                      //                 .fitnessConsultant![index]
-                                      //                 .user!
-                                      //                 .id!);
-                                      // _trainerController.isPlanLoading.value =
-                                      //     false;
+                                              .trainers!
+                                              .length);
+                                  index++)
+                                _trainerController.getTrainedIsLoading.value
+                                    ? Shimmer.fromColors(
+                                        child: Padding(
+                                          padding: index == 0
+                                              ? EdgeInsets.only(
+                                                  left: 12 *
+                                                      SizeConfig
+                                                          .widthMultiplier!)
+                                              : EdgeInsets.all(0),
+                                          child: TrainerCard(
+                                              name: '',
+                                              certificateCount: 0,
+                                              profilePhoto:
+                                                  'https://randomuser.me/api/portraits/men/1.jpg',
+                                              strength: '',
+                                              strengthLength: 0,
+                                              about: '',
+                                              raters: '',
+                                              rating: 0,
+                                              onTap: () {}),
+                                        ),
+                                        baseColor:
+                                            Color.fromARGB(0, 255, 255, 255)
+                                                .withOpacity(0),
+                                        highlightColor:
+                                            Color.fromARGB(1, 255, 255, 255)
+                                                .withOpacity(0.46),
+                                      )
+                                    : Padding(
+                                        padding: index == 0
+                                            ? EdgeInsets.only(
+                                                left: 12 *
+                                                    SizeConfig.widthMultiplier!)
+                                            : const EdgeInsets.all(0),
+                                        child: TrainerCard(
+                                          name: _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user !=
+                                                  null
+                                              ? _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user!
+                                                      .name ??
+                                                  ''
+                                              : '',
+                                          certificateCount: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers![index]
+                                              .certificates!
+                                              .length,
+                                          rating: double.tryParse(
+                                              _trainerController
+                                                  .trainers
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .trainers![index]
+                                                  .rating!)!,
+                                          profilePhoto: _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user !=
+                                                  null
+                                              ? _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .trainers![index]
+                                                      .user!
+                                                      .profilePhoto ??
+                                                  ''
+                                              : '',
+                                          about: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers![index]
+                                              .about!,
+                                          raters: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers![index]
+                                              .totalRating!,
+                                          strength: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers![index]
+                                              .strength![0]
+                                              .name
+                                              .toString(),
+                                          strengthLength: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers![index]
+                                              .strength!
+                                              .length,
+                                          onTap: () async {
+                                            _trainerController.currentPlanType =
+                                                0;
+                                            Navigator.pushNamed(context,
+                                                RouteName.trainerProfileScreen);
+                                            _trainerController
+                                                .isProfileLoading.value = true;
+                                            _trainerController
+                                                    .atrainerDetail.value =
+                                                _trainerController
+                                                    .trainers
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .trainers![index];
+                                            _trainerController
+                                                .loadingIndicator.value = false;
+                                            // _trainerController.isPlanLoading.value =
+                                            //     true;
+                                            // _trainerController.planModel.value =
+                                            //     await TrainerServices
+                                            //         .getPlanByTrainerId(
+                                            //             _trainerController
+                                            //                 .trainers
+                                            //                 .value
+                                            //                 .response!
+                                            //                 .data!
+                                            //                 .trainers![index]
+                                            //                 .user!
+                                            //                 .id!);
+                                            // _trainerController.isPlanLoading.value =
+                                            //     false;
+                                            _trainerController
+                                                    .initialPostData.value =
+                                                await TrainerServices
+                                                    .getTrainerPosts(
+                                                        _trainerController
+                                                            .trainers
+                                                            .value
+                                                            .response!
+                                                            .data!
+                                                            .trainers![index]
+                                                            .user!
+                                                            .id!,
+                                                        0);
+                                            if (_trainerController
+                                                    .initialPostData
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .length !=
+                                                0) {
+                                              _trainerController
+                                                      .trainerPostList.value =
+                                                  _trainerController
+                                                      .initialPostData
+                                                      .value
+                                                      .response!
+                                                      .data!;
+                                            } else {
+                                              _trainerController.trainerPostList
+                                                  .clear();
+                                            }
+                                            _trainerController
+                                                .isProfileLoading.value = false;
+                                          },
+                                        ),
+                                      )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 18 * SizeConfig.heightMultiplier!,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 5 * SizeConfig.heightMultiplier!,
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(ImagePath.bg3), fit: BoxFit.cover)),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12 * SizeConfig.widthMultiplier!),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(ImagePath.videocam),
+                            SizedBox(
+                              width: 7 * SizeConfig.widthMultiplier!,
+                            ),
+                            GetTrainedTitle(
+                              title: 'getFitnessConsult'.tr,
+                            ),
+                            Spacer(),
+                            Obx(() => _trainerController
+                                    .getTrainedIsLoading.value
+                                ? Container()
+                                : SeeAllButton(
+                                    onTap: () async {
+                                      Navigator.pushNamed(
+                                          context, RouteName.allTrainerScreen);
+                                      _trainerController.isLoading.value = true;
+                                      _trainerController.pageTitle.value =
+                                          'fitnessConsult'.tr;
+                                      _trainerController.availability.value =
+                                          [];
                                       _trainerController
-                                          .loadingIndicator.value = false;
-                                      _trainerController.initialPostData.value =
-                                          await TrainerServices.getTrainerPosts(
+                                          .SelectedInterestIndex.value = 0;
+                                      _trainerController.searchedName.value =
+                                          "";
+                                      _trainerController.trainerType.value = 1;
+                                      _trainerController.searchController.text =
+                                          "";
+                                      _trainerController.allTrainer.value =
+                                          await TrainerServices.getAllTrainer();
+
+                                      _trainerController.isLoading.value =
+                                          false;
+                                    },
+                                  ))
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        //19
+                        height: 18 * SizeConfig.heightMultiplier!,
+                      ),
+                      Obx(
+                        () => SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Container(
+                              //252
+                              child: Row(
+                            children: [
+                              for (int index = 0; index < 5; index++)
+                                _trainerController.getTrainedIsLoading.value
+                                    ? Shimmer.fromColors(
+                                        child: Padding(
+                                          padding: index == 0
+                                              ? EdgeInsets.only(
+                                                  left: 12 *
+                                                      SizeConfig
+                                                          .widthMultiplier!)
+                                              : EdgeInsets.all(0),
+                                          child: TrainerCard(
+                                              name: '',
+                                              certificateCount: 0,
+                                              profilePhoto:
+                                                  'https://randomuser.me/api/portraits/men/1.jpg',
+                                              strength: '',
+                                              strengthLength: 0,
+                                              about: '',
+                                              raters: '',
+                                              rating: 0,
+                                              onTap: () {}),
+                                        ),
+                                        baseColor:
+                                            Color.fromARGB(0, 255, 255, 255)
+                                                .withOpacity(0),
+                                        highlightColor:
+                                            Color.fromARGB(1, 255, 255, 255)
+                                                .withOpacity(0.46),
+                                      )
+                                    : Padding(
+                                        padding: index == 0
+                                            ? EdgeInsets.only(
+                                                left: 12 *
+                                                    SizeConfig.widthMultiplier!)
+                                            : EdgeInsets.all(0),
+                                        child: TrainerCard(
+                                          name: _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .fitnessConsultant![index]
+                                                      .user !=
+                                                  null
+                                              ? _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .fitnessConsultant![index]
+                                                      .user!
+                                                      .name ??
+                                                  ''
+                                              : '',
+                                          certificateCount: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .fitnessConsultant![index]
+                                              .certificates!
+                                              .length,
+                                          rating: double.tryParse(
                                               _trainerController
                                                   .trainers
                                                   .value
                                                   .response!
                                                   .data!
                                                   .fitnessConsultant![index]
-                                                  .user!
-                                                  .id!,
-                                              0);
-                                      if (_trainerController.initialPostData
-                                              .value.response!.data!.length !=
-                                          0) {
-                                        _trainerController
-                                                .trainerPostList.value =
-                                            _trainerController.initialPostData
-                                                .value.response!.data!;
-                                      } else {
-                                        _trainerController.trainerPostList
-                                            .clear();
-                                      }
-                                      _trainerController
-                                          .isProfileLoading.value = false;
-                                    },
-                                  ),
-                                )
-                      ],
-                    )),
-                  ),
-                ),
-                SizedBox(
-                  //39
-                  height: 37 * SizeConfig.heightMultiplier!,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 12 * SizeConfig.widthMultiplier!),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(ImagePath.getNutritionConsultationIcon),
-                      SizedBox(
-                        width: 7 * SizeConfig.widthMultiplier!,
-                      ),
-                      GetTrainedTitle(
-                        title: 'getNutritionConsult'.tr,
-                      ),
-                      Spacer(),
-                      Obx(() => _trainerController.getTrainedIsLoading.value
-                          ? Container()
-                          : SeeAllButton(
-                              onTap: () async {
-                                _trainerController.SelectedInterestIndex.value =
-                                    0;
-                                _trainerController.searchedName.value = "";
-                                _trainerController.trainerType.value = 2;
-                                _trainerController.searchController.text = "";
-                                _trainerController.availability.value = [];
-                                Navigator.pushNamed(
-                                    context, RouteName.allTrainerScreen);
-                                _trainerController.isLoading.value = true;
-                                _trainerController.pageTitle.value =
-                                    'nutritionConsult'.tr;
-                                _trainerController.allTrainer.value =
-                                    await TrainerServices.getAllTrainer();
-                                _trainerController.isLoading.value = false;
-                              },
-                            ))
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  //19
-                  height: 18 * SizeConfig.heightMultiplier!,
-                ),
-                Obx(
-                  () => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                        //252
-                        child: Row(
-                      children: [
-                        for (int index = 0; index < 5; index++)
-                          _trainerController.getTrainedIsLoading.value
-                              ? Shimmer.fromColors(
-                                  child: Padding(
-                                    padding: index == 0
-                                        ? EdgeInsets.only(
-                                            left: 12 *
-                                                SizeConfig.widthMultiplier!)
-                                        : EdgeInsets.all(0),
-                                    child: TrainerCard(
-                                        name: '',
-                                        certificateCount: 0,
-                                        profilePhoto:
-                                            'https://randomuser.me/api/portraits/men/1.jpg',
-                                        strength: '',
-                                        strengthLength: 0,
-                                        about: '',
-                                        raters: '',
-                                        rating: 0,
-                                        onTap: () {}),
-                                  ),
-                                  baseColor: Color.fromARGB(0, 255, 255, 255)
-                                      .withOpacity(0),
-                                  highlightColor:
-                                      Color.fromARGB(1, 255, 255, 255)
-                                          .withOpacity(0.46),
-                                )
-                              : Padding(
-                                  padding: index == 0
-                                      ? EdgeInsets.only(
-                                          left:
-                                              12 * SizeConfig.widthMultiplier!)
-                                      : EdgeInsets.all(0),
-                                  child: TrainerCard(
-                                    name: _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .nutritionConsultant![index]
-                                                .user !=
-                                            null
-                                        ? _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .nutritionConsultant![index]
-                                                .user!
-                                                .name ??
-                                            ''
-                                        : '',
-                                    certificateCount: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .nutritionConsultant![index]
-                                        .certificates!
-                                        .length,
-                                    rating: double.tryParse(_trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .nutritionConsultant![index]
-                                        .rating!)!,
-                                    profilePhoto: _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .nutritionConsultant![index]
-                                                .user !=
-                                            null
-                                        ? _trainerController
-                                                .trainers
-                                                .value
-                                                .response!
-                                                .data!
-                                                .nutritionConsultant![index]
-                                                .user!
-                                                .profilePhoto ??
-                                            ''
-                                        : '',
-                                    about: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .nutritionConsultant![index]
-                                        .about!,
-                                    raters: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .nutritionConsultant![index]
-                                        .totalRating!,
-                                    strength: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .nutritionConsultant![index]
-                                        .strength![0]
-                                        .name
-                                        .toString(),
-                                    strengthLength: _trainerController
-                                        .trainers
-                                        .value
-                                        .response!
-                                        .data!
-                                        .nutritionConsultant![index]
-                                        .strength!
-                                        .length,
-                                    onTap: () async {
-                                      _trainerController.currentPlanType = 2;
-                                      Navigator.pushNamed(context,
-                                          RouteName.trainerProfileScreen);
-                                      _trainerController
-                                          .isProfileLoading.value = true;
-                                      _trainerController.atrainerDetail.value =
-                                          _trainerController
+                                                  .rating!)!,
+                                          profilePhoto: _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .fitnessConsultant![index]
+                                                      .user !=
+                                                  null
+                                              ? _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .fitnessConsultant![index]
+                                                      .user!
+                                                      .profilePhoto ??
+                                                  ''
+                                              : '',
+                                          about: _trainerController
                                               .trainers
                                               .value
                                               .response!
                                               .data!
-                                              .nutritionConsultant![index];
-                                      // _trainerController.isPlanLoading.value =
-                                      //     true;
-                                      // _trainerController.planModel.value =
-                                      //     await TrainerServices
-                                      //         .getPlanByTrainerId(
-                                      //             _trainerController
-                                      //                 .trainers
-                                      //                 .value
-                                      //                 .response!
-                                      //                 .data!
-                                      //                 .nutritionConsultant![
-                                      //                     index]
-                                      //                 .user!
-                                      //                 .id!);
-                                      // _trainerController.isPlanLoading.value =
-                                      //     false;
+                                              .fitnessConsultant![index]
+                                              .about!,
+                                          raters: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .fitnessConsultant![index]
+                                              .totalRating!,
+                                          strength: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .fitnessConsultant![index]
+                                              .strength![0]
+                                              .name
+                                              .toString(),
+                                          strengthLength: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .fitnessConsultant![index]
+                                              .strength!
+                                              .length,
+                                          onTap: () async {
+                                            _trainerController.currentPlanType =
+                                                1;
+                                            Navigator.pushNamed(context,
+                                                RouteName.trainerProfileScreen);
+                                            _trainerController
+                                                .isProfileLoading.value = true;
+                                            _trainerController
+                                                    .atrainerDetail.value =
+                                                _trainerController
+                                                    .trainers
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .fitnessConsultant![index];
+                                            // _trainerController.isPlanLoading.value =
+                                            //     true;
+                                            // _trainerController.planModel.value =
+                                            //     await TrainerServices
+                                            //         .getPlanByTrainerId(
+                                            //             _trainerController
+                                            //                 .trainers
+                                            //                 .value
+                                            //                 .response!
+                                            //                 .data!
+                                            //                 .fitnessConsultant![index]
+                                            //                 .user!
+                                            //                 .id!);
+                                            // _trainerController.isPlanLoading.value =
+                                            //     false;
+                                            _trainerController
+                                                .loadingIndicator.value = false;
+                                            _trainerController
+                                                    .initialPostData.value =
+                                                await TrainerServices
+                                                    .getTrainerPosts(
+                                                        _trainerController
+                                                            .trainers
+                                                            .value
+                                                            .response!
+                                                            .data!
+                                                            .fitnessConsultant![
+                                                                index]
+                                                            .user!
+                                                            .id!,
+                                                        0);
+                                            if (_trainerController
+                                                    .initialPostData
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .length !=
+                                                0) {
+                                              _trainerController
+                                                      .trainerPostList.value =
+                                                  _trainerController
+                                                      .initialPostData
+                                                      .value
+                                                      .response!
+                                                      .data!;
+                                            } else {
+                                              _trainerController.trainerPostList
+                                                  .clear();
+                                            }
+                                            _trainerController
+                                                .isProfileLoading.value = false;
+                                          },
+                                        ),
+                                      )
+                            ],
+                          )),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 18 * SizeConfig.heightMultiplier!,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 5 * SizeConfig.heightMultiplier!,
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(ImagePath.bg1), fit: BoxFit.cover)),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12 * SizeConfig.widthMultiplier!),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(ImagePath.apple),
+                            SizedBox(
+                              width: 7 * SizeConfig.widthMultiplier!,
+                            ),
+                            GetTrainedTitle(
+                              title: 'getNutritionConsult'.tr,
+                            ),
+                            Spacer(),
+                            Obx(() => _trainerController
+                                    .getTrainedIsLoading.value
+                                ? Container()
+                                : SeeAllButton(
+                                    onTap: () async {
                                       _trainerController
-                                          .loadingIndicator.value = false;
-                                      _trainerController.initialPostData.value =
-                                          await TrainerServices.getTrainerPosts(
+                                          .SelectedInterestIndex.value = 0;
+                                      _trainerController.searchedName.value =
+                                          "";
+                                      _trainerController.trainerType.value = 2;
+                                      _trainerController.searchController.text =
+                                          "";
+                                      _trainerController.availability.value =
+                                          [];
+                                      Navigator.pushNamed(
+                                          context, RouteName.allTrainerScreen);
+                                      _trainerController.isLoading.value = true;
+                                      _trainerController.pageTitle.value =
+                                          'nutritionConsult'.tr;
+                                      _trainerController.allTrainer.value =
+                                          await TrainerServices.getAllTrainer();
+                                      _trainerController.isLoading.value =
+                                          false;
+                                    },
+                                  ))
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 18 * SizeConfig.heightMultiplier!,
+                      ),
+                      Obx(
+                        () => SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for (int index = 0; index < 5; index++)
+                                _trainerController.getTrainedIsLoading.value
+                                    ? Shimmer.fromColors(
+                                        child: Padding(
+                                          padding: index == 0
+                                              ? EdgeInsets.only(
+                                                  left: 12 *
+                                                      SizeConfig
+                                                          .widthMultiplier!)
+                                              : EdgeInsets.all(0),
+                                          child: TrainerCard(
+                                              name: '',
+                                              certificateCount: 0,
+                                              profilePhoto:
+                                                  'https://randomuser.me/api/portraits/men/1.jpg',
+                                              strength: '',
+                                              strengthLength: 0,
+                                              about: '',
+                                              raters: '',
+                                              rating: 0,
+                                              onTap: () {}),
+                                        ),
+                                        baseColor:
+                                            Color.fromARGB(0, 255, 255, 255)
+                                                .withOpacity(0),
+                                        highlightColor:
+                                            Color.fromARGB(1, 255, 255, 255)
+                                                .withOpacity(0.46),
+                                      )
+                                    : Padding(
+                                        padding: index == 0
+                                            ? EdgeInsets.only(
+                                                left: 12 *
+                                                    SizeConfig.widthMultiplier!)
+                                            : EdgeInsets.all(0),
+                                        child: TrainerCard(
+                                          name: _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .nutritionConsultant![
+                                                          index]
+                                                      .user !=
+                                                  null
+                                              ? _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .nutritionConsultant![
+                                                          index]
+                                                      .user!
+                                                      .name ??
+                                                  ''
+                                              : '',
+                                          certificateCount: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .nutritionConsultant![index]
+                                              .certificates!
+                                              .length,
+                                          rating: double.tryParse(
                                               _trainerController
                                                   .trainers
                                                   .value
                                                   .response!
                                                   .data!
                                                   .nutritionConsultant![index]
-                                                  .user!
-                                                  .id!,
-                                              0);
-                                      if (_trainerController.initialPostData
-                                              .value.response!.data!.length !=
-                                          0) {
-                                        _trainerController
-                                                .trainerPostList.value =
-                                            _trainerController.initialPostData
-                                                .value.response!.data!;
-                                      } else {
-                                        _trainerController.trainerPostList
-                                            .clear();
-                                      }
-                                      _trainerController
-                                          .isProfileLoading.value = false;
-                                    },
-                                  ),
-                                )
-                      ],
-                    )),
+                                                  .rating!)!,
+                                          profilePhoto: _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .nutritionConsultant![
+                                                          index]
+                                                      .user !=
+                                                  null
+                                              ? _trainerController
+                                                      .trainers
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .nutritionConsultant![
+                                                          index]
+                                                      .user!
+                                                      .profilePhoto ??
+                                                  ''
+                                              : '',
+                                          about: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .nutritionConsultant![index]
+                                              .about!,
+                                          raters: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .nutritionConsultant![index]
+                                              .totalRating!,
+                                          strength: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .nutritionConsultant![index]
+                                              .strength![0]
+                                              .name
+                                              .toString(),
+                                          strengthLength: _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .nutritionConsultant![index]
+                                              .strength!
+                                              .length,
+                                          onTap: () async {
+                                            _trainerController.currentPlanType =
+                                                2;
+                                            Navigator.pushNamed(context,
+                                                RouteName.trainerProfileScreen);
+                                            _trainerController
+                                                .isProfileLoading.value = true;
+                                            _trainerController
+                                                    .atrainerDetail.value =
+                                                _trainerController
+                                                        .trainers
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .nutritionConsultant![
+                                                    index];
+                                            // _trainerController.isPlanLoading.value =
+                                            //     true;
+                                            // _trainerController.planModel.value =
+                                            //     await TrainerServices
+                                            //         .getPlanByTrainerId(
+                                            //             _trainerController
+                                            //                 .trainers
+                                            //                 .value
+                                            //                 .response!
+                                            //                 .data!
+                                            //                 .nutritionConsultant![
+                                            //                     index]
+                                            //                 .user!
+                                            //                 .id!);
+                                            // _trainerController.isPlanLoading.value =
+                                            //     false;
+                                            _trainerController
+                                                .loadingIndicator.value = false;
+                                            _trainerController
+                                                    .initialPostData.value =
+                                                await TrainerServices
+                                                    .getTrainerPosts(
+                                                        _trainerController
+                                                            .trainers
+                                                            .value
+                                                            .response!
+                                                            .data!
+                                                            .nutritionConsultant![
+                                                                index]
+                                                            .user!
+                                                            .id!,
+                                                        0);
+                                            if (_trainerController
+                                                    .initialPostData
+                                                    .value
+                                                    .response!
+                                                    .data!
+                                                    .length !=
+                                                0) {
+                                              _trainerController
+                                                      .trainerPostList.value =
+                                                  _trainerController
+                                                      .initialPostData
+                                                      .value
+                                                      .response!
+                                                      .data!;
+                                            } else {
+                                              _trainerController.trainerPostList
+                                                  .clear();
+                                            }
+                                            _trainerController
+                                                .isProfileLoading.value = false;
+                                          },
+                                        ),
+                                      ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 18 * SizeConfig.heightMultiplier!,
+                      ),
+                    ],
                   ),
                 ),
+                SizedBox(
+                  height: 20 * SizeConfig.heightMultiplier!,
+                ),
+                Container(
+                  margin:
+                      EdgeInsets.only(left: 12 * SizeConfig.widthMultiplier!),
+                  width: Get.width - 24 * SizeConfig.widthMultiplier!,
+                  padding: EdgeInsets.symmetric(
+                      vertical: 13 * SizeConfig.heightMultiplier!,
+                      horizontal: 16 * SizeConfig.widthMultiplier!),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                    color: Theme.of(context).cardColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Did you know?'.toUpperCase(),
+                        style: AppTextStyle.boldWhiteText.copyWith(
+                            fontSize: 18 * SizeConfig.textMultiplier!,
+                            fontWeight: FontWeight.w900),
+                      ),
+                      SizedBox(
+                        height: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          text:
+                              'Working out under a Coach helps you achieve your Goals  ',
+                          style: AppTextStyle.grey400Text.copyWith(
+                            fontSize: 16 * SizeConfig.textMultiplier!,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: '3x',
+                              style: AppTextStyle.greenSemiBoldText.copyWith(
+                                fontSize: 32 * SizeConfig.textMultiplier!,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' Faster!',
+                              style: AppTextStyle.greenSemiBoldText.copyWith(
+                                fontSize: 16 * SizeConfig.textMultiplier!,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20 * SizeConfig.heightMultiplier!,
+                ),
+                Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: 12 * SizeConfig.widthMultiplier!),
+                      width: Get.width - 24 * SizeConfig.widthMultiplier!,
+                      padding: EdgeInsets.symmetric(
+                          vertical: 13 * SizeConfig.heightMultiplier!,
+                          horizontal: 16 * SizeConfig.widthMultiplier!),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            8 * SizeConfig.heightMultiplier!),
+                        color: Theme.of(context).cardColor,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'How to choose',
+                            style: AppTextStyle.boldWhiteText.copyWith(
+                                fontSize: 18 * SizeConfig.textMultiplier!,
+                                fontWeight: FontWeight.w900),
+                          ),
+                          Text(
+                            '"Your Perfect Cocach"'.toUpperCase(),
+                            style: AppTextStyle.boldWhiteText.copyWith(
+                                fontSize: 18 * SizeConfig.textMultiplier!,
+                                fontWeight: FontWeight.w900),
+                          ),
+                          SizedBox(
+                            height: 15 * SizeConfig.heightMultiplier!,
+                          ),
+                          ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            minLeadingWidth: 5,
+                            leading: Text(
+                              '•',
+                            ),
+                            title: Text(
+                              'Know your Goals.',
+                              style: AppTextStyle.grey400Text.copyWith(
+                                fontSize: 16 * SizeConfig.textMultiplier!,
+                              ),
+                            ),
+                          ),
+                          ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            minLeadingWidth: 5,
+                            leading: Text(
+                              '•',
+                            ),
+                            title: Text(
+                              'Look for the Coach with similar interests as yours.',
+                              style: AppTextStyle.grey400Text.copyWith(
+                                fontSize: 16 * SizeConfig.textMultiplier!,
+                              ),
+                            ),
+                          ),
+                          ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            minLeadingWidth: 5,
+                            leading: Text(
+                              '•',
+                            ),
+                            title: Text(
+                              'Use Free 3 trial sessions to better understand your Coach.',
+                              style: AppTextStyle.grey400Text.copyWith(
+                                fontSize: 16 * SizeConfig.textMultiplier!,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.all(10 * SizeConfig.heightMultiplier!),
+                      child: SvgPicture.asset(ImagePath.dumbbell),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 40 * SizeConfig.heightMultiplier!,
+                ),
+                Center(
+                  child: SvgPicture.asset(
+                    ImagePath.logo,
+                    width: 80 * SizeConfig.heightMultiplier!,
+                  ),
+                )
               ],
             ),
           ),
@@ -987,52 +1247,930 @@ class SeeAllButton extends StatelessWidget {
             style: AppTextStyle.NormalText.copyWith(
                 fontSize: 14 * SizeConfig.textMultiplier!,
                 decoration: TextDecoration.underline,
-                color: Theme.of(context).textTheme.headline1?.color),
+                color: kPureWhite),
           ),
         ));
   }
 }
 
-class MyTrainersTile extends StatelessWidget {
-  MyTrainersTile(
-      {Key? key,
-      required this.name,
-      required this.imageUrl,
-      required this.isCurrentlyEnrolled,
-      this.onMyTrainerTileTapped})
-      : super(key: key);
+class MyTrainersTile extends StatefulWidget {
+  MyTrainersTile({
+    Key? key,
+    required this.name,
+    required this.imageUrl,
+    required this.isCurrentlyEnrolled,
+    this.onMyTrainerTileTapped,
+    required this.planDetail,
+    this.isSubscriptionPage = false,
+  }) : super(key: key);
   String imageUrl;
   String name;
   bool isCurrentlyEnrolled;
   GestureTapCallback? onMyTrainerTileTapped;
+  PlanDetail planDetail;
+  bool isSubscriptionPage;
+
+  @override
+  State<MyTrainersTile> createState() => _MyTrainersTileState();
+}
+
+class _MyTrainersTileState extends State<MyTrainersTile> {
+  final HomeController _homeController = Get.find();
+
+  final TrainerController _trainerController = Get.find();
+
+  bool showChangeTiming = false;
+
   @override
   Widget build(BuildContext context) {
-    print(isCurrentlyEnrolled.toString());
     return GestureDetector(
-      onTap: onMyTrainerTileTapped,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CircleAvatar(
-            radius: 32 * SizeConfig.imageSizeMultiplier!,
-            backgroundImage: NetworkImage(imageUrl),
+      onTap: widget.onMyTrainerTileTapped,
+      child: Container(
+        margin: widget.isSubscriptionPage
+            ? EdgeInsets.symmetric(horizontal: 10 * SizeConfig.widthMultiplier!)
+            : EdgeInsets.only(left: 12 * SizeConfig.widthMultiplier!),
+        width: widget.isSubscriptionPage
+            ? Get.width
+            : Get.width - 24 * SizeConfig.widthMultiplier!,
+        padding: EdgeInsets.symmetric(
+            vertical: 13 * SizeConfig.heightMultiplier!,
+            horizontal: 16 * SizeConfig.widthMultiplier!),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+          color: Theme.of(context).cardColor,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 25 * SizeConfig.imageSizeMultiplier!,
+                  backgroundImage: NetworkImage(widget.imageUrl),
+                ),
+                SizedBox(
+                  width: 12 * SizeConfig.widthMultiplier!,
+                ),
+                Text(
+                  widget.name.capitalize!,
+                  style: AppTextStyle.white400Text,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      widget.planDetail.isExpanded =
+                          !widget.planDetail.isExpanded;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        widget.planDetail.isExpanded
+                            ? 'Hide details'
+                            : 'Show details',
+                        style: AppTextStyle.NormalText.copyWith(
+                            fontSize: 14 * SizeConfig.textMultiplier!,
+                            color:
+                                Theme.of(context).textTheme.headline1?.color),
+                      ),
+                      SizedBox(
+                        width: 5 * SizeConfig.widthMultiplier!,
+                      ),
+                      Icon(
+                        widget.planDetail.isExpanded
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                        size: 25 * SizeConfig.heightMultiplier!,
+                        color: Theme.of(context).textTheme.headline1?.color,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 15 * SizeConfig.heightMultiplier!,
+            ),
+            widget.planDetail.isExpanded
+                ? Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            color: kGreyColor,
+                            size: 20 * SizeConfig.heightMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            'Timings',
+                            style: AppTextStyle.white400Text.copyWith(
+                              color: kGreyColor,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            Get.find<TrainerController>()
+                                .getTime(widget.planDetail.sessionTime!.name!),
+                            style: AppTextStyle.white400Text,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10 * SizeConfig.heightMultiplier!,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_rounded,
+                            color: kGreyColor,
+                            size: 20 * SizeConfig.heightMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            'Days',
+                            style: AppTextStyle.white400Text.copyWith(
+                              color: kGreyColor,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            _homeController
+                                .getDaysFromIndex(widget.planDetail.weekDays!),
+                            style: AppTextStyle.white400Text,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10 * SizeConfig.heightMultiplier!,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.note_alt_outlined,
+                            color: kGreyColor,
+                            size: 20 * SizeConfig.heightMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            'Plan',
+                            style: AppTextStyle.white400Text.copyWith(
+                              color: kGreyColor,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            widget.planDetail.planDetails!.planName!,
+                            style: AppTextStyle.white400Text,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10 * SizeConfig.heightMultiplier!,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.alarm,
+                            color: kGreyColor,
+                            size: 20 * SizeConfig.heightMultiplier!,
+                          ),
+                          SizedBox(
+                            width: 10 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            'Plan Expiry',
+                            style: AppTextStyle.white400Text.copyWith(
+                              color: kGreyColor,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            DateFormat('d MMMM yyyy')
+                                .format(widget.planDetail.expiryDate!),
+                            style: AppTextStyle.white400Text,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        Get.find<TrainerController>()
+                            .getTime(widget.planDetail.sessionTime!.name!),
+                        style: AppTextStyle.white400Text,
+                      ),
+                      Text(
+                        _homeController
+                            .getDaysFromIndex(widget.planDetail.weekDays!),
+                        style: AppTextStyle.white400Text,
+                      ),
+                    ],
+                  ),
+            if (widget.planDetail.isExpanded)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 5 * SizeConfig.heightMultiplier!),
+                child: Divider(
+                  color: Colors.white.withOpacity(0.16),
+                ),
+              ),
+            if (widget.planDetail.isExpanded && !widget.isSubscriptionPage)
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showChangeTiming = !showChangeTiming;
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Request a change in timings',
+                      style: AppTextStyle.NormalText.copyWith(
+                          fontSize: 14 * SizeConfig.textMultiplier!,
+                          color: kPureWhite,
+                          decoration: TextDecoration.underline),
+                    ),
+                    SizedBox(
+                      width: 5 * SizeConfig.widthMultiplier!,
+                    ),
+                    Icon(
+                      showChangeTiming
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      size: 25 * SizeConfig.heightMultiplier!,
+                      color: Theme.of(context).textTheme.headline1?.color,
+                    )
+                  ],
+                ),
+              ),
+            if (showChangeTiming && widget.planDetail.isExpanded)
+              GestureDetector(
+                onTap: () {
+                  Get.dialog(
+                    PostponeSessionWidget(
+                      trainerId: widget.planDetail.trainer!.id!,
+                      planId: widget.planDetail.id!,
+                      expiryDate: widget.planDetail.expiryDate!,
+                      days: widget.planDetail.weekDays!,
+                      time: widget.planDetail.sessionTime!.name!,
+                    ),
+                  );
+                },
+                child: Container(
+                  margin:
+                      EdgeInsets.only(top: 10 * SizeConfig.heightMultiplier!),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20 * SizeConfig.widthMultiplier!,
+                    vertical: 15 * SizeConfig.heightMultiplier!,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(4 * SizeConfig.heightMultiplier!),
+                    color: grey2B,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.history,
+                        color: kPureWhite,
+                      ),
+                      SizedBox(
+                        width: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      Text(
+                        'Postpone next session',
+                        style: AppTextStyle.NormalText.copyWith(
+                          fontSize: 14 * SizeConfig.textMultiplier!,
+                          color: kPureWhite,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            if (widget.planDetail.isExpanded && widget.isSubscriptionPage)
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(
+                        () => ReviewPage(
+                          image: widget.planDetail.trainer!.profilePhoto!,
+                          name: widget.planDetail.trainer!.name!,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 8 * SizeConfig.heightMultiplier!),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20 * SizeConfig.widthMultiplier!,
+                        vertical: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            4 * SizeConfig.heightMultiplier!),
+                        color: kgreen49,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.star_border,
+                            color: kPureWhite,
+                          ),
+                          SizedBox(
+                            width: 15 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            'Rate and review',
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kPureWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.dialog(
+                        CancelSubscriptionWidget(
+                          trainerName: widget.planDetail.trainer!.name!,
+                          planId: widget.planDetail.id!,
+                          planName: widget.planDetail.planDetails!.planName!,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 8 * SizeConfig.heightMultiplier!),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20 * SizeConfig.widthMultiplier!,
+                        vertical: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            4 * SizeConfig.heightMultiplier!),
+                        color: grey2B,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.close,
+                            color: kPureWhite,
+                          ),
+                          SizedBox(
+                            width: 15 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            'Cancel Subcription',
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kPureWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PostponeSessionWidget extends StatelessWidget {
+  PostponeSessionWidget({
+    Key? key,
+    required this.trainerId,
+    required this.planId,
+    required this.time,
+    // required this.date,
+    required this.days,
+    required this.expiryDate,
+  }) : super(key: key);
+
+  final String trainerId;
+  final String planId;
+  final String time;
+  // final DateTime date;
+  final List<int> days;
+  final DateTime expiryDate;
+
+  final _trainerController = Get.find<TrainerController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: 30 * SizeConfig.heightMultiplier!,
+          horizontal: 30 * SizeConfig.widthMultiplier!,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircleAvatar(
+              child: Icon(
+                Icons.question_mark,
+                color: kBlack,
+              ),
+              backgroundColor: kGreenColor,
+            ),
+            SizedBox(
+              height: 15 * SizeConfig.heightMultiplier!,
+            ),
+            Text(
+              'Are you sure',
+              style: AppTextStyle.boldWhiteText.copyWith(
+                fontSize: 24 * SizeConfig.textMultiplier!,
+              ),
+            ),
+            SizedBox(
+              height: 8 * SizeConfig.heightMultiplier!,
+            ),
+            Text(
+              'Your sessions will be postponed to end of your subscription',
+              textAlign: TextAlign.center,
+              style: AppTextStyle.boldWhiteText.copyWith(
+                fontSize: 14 * SizeConfig.textMultiplier!,
+              ),
+            ),
+            SizedBox(
+              height: 40 * SizeConfig.heightMultiplier!,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: Get.back,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 10 * SizeConfig.heightMultiplier!),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20 * SizeConfig.widthMultiplier!,
+                        vertical: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            4 * SizeConfig.heightMultiplier!),
+                        color: grey2B,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Cancel',
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kPureWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 8 * SizeConfig.widthMultiplier!,
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      Get.back();
+                      Get.dialog(
+                        Center(child: CustomizedCircularProgress()),
+                        barrierDismissible: false,
+                      );
+                      var response = await _trainerController.postponeSession(
+                        trainerId: trainerId,
+                        expiryDate: expiryDate,
+                        planId: planId,
+                        time: time,
+                        days: days,
+                      );
+                      if (response != null) {
+                        Get.back();
+                        Get.dialog(
+                          PostponeSessionSuccess(
+                              expiryDate: response.expiryDate.toString(),
+                              postponeSessionLeft:
+                                  response.postponeSessionLeft.toString()),
+                        );
+                      } else {
+                        Get.back();
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 10 * SizeConfig.heightMultiplier!),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20 * SizeConfig.widthMultiplier!,
+                        vertical: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            4 * SizeConfig.heightMultiplier!),
+                        color: grey2B,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Confirm',
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kPureWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30 * SizeConfig.heightMultiplier!,
+            ),
+            Row(
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  color: hintGrey,
+                  size: 15 * SizeConfig.heightMultiplier!,
+                ),
+                SizedBox(
+                  width: 10 * SizeConfig.widthMultiplier!,
+                ),
+                Expanded(
+                  child: Text(
+                    'You have only postpone three times',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.grey400Text,
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PostponeSessionSuccess extends StatelessWidget {
+  const PostponeSessionSuccess(
+      {Key? key, required this.expiryDate, required this.postponeSessionLeft})
+      : super(key: key);
+
+  final String postponeSessionLeft;
+  final String expiryDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      child: GestureDetector(
+        onTap: Get.back,
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: 30 * SizeConfig.heightMultiplier!,
+            horizontal: 30 * SizeConfig.widthMultiplier!,
           ),
-          SizedBox(
-            height: 8 * SizeConfig.heightMultiplier!,
+          decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
           ),
-          Container(
-              width: 64 * SizeConfig.widthMultiplier!,
-              child: Text(
-                name,
-                style: AppTextStyle.normalPureBlackTextWithWeight600.copyWith(
-                    color: isCurrentlyEnrolled
-                        ? Theme.of(context).textTheme.bodyText1!.color
-                        : Theme.of(context).textTheme.headline1!.color),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircleAvatar(
+                child: Icon(
+                  Icons.check,
+                  color: kBlack,
+                ),
+                backgroundColor: kGreenColor,
+              ),
+              SizedBox(
+                height: 15 * SizeConfig.heightMultiplier!,
+              ),
+              Text(
+                'Thank you',
+                style: AppTextStyle.boldWhiteText.copyWith(
+                  fontSize: 24 * SizeConfig.textMultiplier!,
+                ),
+              ),
+              SizedBox(
+                height: 23 * SizeConfig.heightMultiplier!,
+              ),
+              Text.rich(
+                TextSpan(
+                  text: 'Your session has been \npostponed to ',
+                  children: [
+                    TextSpan(
+                      text: DateFormat('d MMMM yyyy')
+                          .format(DateTime.parse(expiryDate)),
+                      style: AppTextStyle.boldWhiteText.copyWith(
+                          fontSize: 14 * SizeConfig.textMultiplier!,
+                          color: kGreenColor),
+                    )
+                  ],
+                ),
                 textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ))
-        ],
+                style: AppTextStyle.boldWhiteText.copyWith(
+                  fontSize: 14 * SizeConfig.textMultiplier!,
+                ),
+              ),
+              SizedBox(
+                height: 30 * SizeConfig.heightMultiplier!,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    color: hintGrey,
+                    size: 15 * SizeConfig.heightMultiplier!,
+                  ),
+                  SizedBox(
+                    width: 10 * SizeConfig.widthMultiplier!,
+                  ),
+                  Text(
+                    'You have only ${postponeSessionLeft} postpone left',
+                    style: AppTextStyle.grey400Text,
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CancelSubscriptionWidget extends StatelessWidget {
+  CancelSubscriptionWidget({
+    Key? key,
+    required this.trainerName,
+    required this.planId,
+    required this.planName,
+  }) : super(key: key);
+
+  final String trainerName;
+  final String planId;
+  final String planName;
+
+  final _trainerController = Get.find<TrainerController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: 30 * SizeConfig.heightMultiplier!,
+          horizontal: 30 * SizeConfig.widthMultiplier!,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircleAvatar(
+              child: Icon(
+                Icons.question_mark,
+                color: kBlack,
+              ),
+              backgroundColor: kGreenColor,
+            ),
+            SizedBox(
+              height: 15 * SizeConfig.heightMultiplier!,
+            ),
+            Text(
+              'Are you sure',
+              style: AppTextStyle.boldWhiteText.copyWith(
+                fontSize: 24 * SizeConfig.textMultiplier!,
+              ),
+            ),
+            SizedBox(
+              height: 8 * SizeConfig.heightMultiplier!,
+            ),
+            Text(
+              'Your subscription will be \ncancelled upon confirmation',
+              textAlign: TextAlign.center,
+              style: AppTextStyle.boldWhiteText.copyWith(
+                fontSize: 14 * SizeConfig.textMultiplier!,
+              ),
+            ),
+            SizedBox(
+              height: 40 * SizeConfig.heightMultiplier!,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: Get.back,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 10 * SizeConfig.heightMultiplier!),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20 * SizeConfig.widthMultiplier!,
+                        vertical: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            4 * SizeConfig.heightMultiplier!),
+                        color: grey2B,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Go back',
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kPureWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 8 * SizeConfig.widthMultiplier!,
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      Get.back();
+                      Get.dialog(Center(child: CustomizedCircularProgress()),
+                          barrierDismissible: false);
+                      var response =
+                          await _trainerController.cancelSubscription(
+                        planId: planId,
+                        planName: planName,
+                        trainerName: trainerName,
+                      );
+                      if (response) {
+                        Get.back();
+                        Get.dialog(const CancelSubscriptionConfirmWidget());
+                      } else {
+                        Get.back();
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 10 * SizeConfig.heightMultiplier!),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20 * SizeConfig.widthMultiplier!,
+                        vertical: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            4 * SizeConfig.heightMultiplier!),
+                        color: grey2B,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'I\'m sure',
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kPureWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CancelSubscriptionConfirmWidget extends StatelessWidget {
+  const CancelSubscriptionConfirmWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: 30 * SizeConfig.heightMultiplier!,
+          horizontal: 30 * SizeConfig.widthMultiplier!,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              ImagePath.sadFace,
+              scale: 3.5,
+            ),
+            SizedBox(
+              height: 15 * SizeConfig.heightMultiplier!,
+            ),
+            Text(
+              'Sorry to see \nyou go.',
+              textAlign: TextAlign.center,
+              style: AppTextStyle.boldWhiteText.copyWith(
+                fontSize: 18 * SizeConfig.textMultiplier!,
+              ),
+            ),
+            SizedBox(
+              height: 8 * SizeConfig.heightMultiplier!,
+            ),
+            Text(
+              'Your request has been \nupdated.You’ll hear from \nour team soon',
+              textAlign: TextAlign.center,
+              style: AppTextStyle.boldWhiteText.copyWith(
+                fontSize: 14 * SizeConfig.textMultiplier!,
+              ),
+            ),
+            SizedBox(
+              height: 24 * SizeConfig.heightMultiplier!,
+            ),
+            GestureDetector(
+              onTap: () async {
+                Get.back();
+                Get.back();
+                Get.find<HomeController>()
+                  ..selectedIndex.value = 0
+                  ..update();
+                Get.back();
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: 10 * SizeConfig.heightMultiplier!),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20 * SizeConfig.widthMultiplier!,
+                  vertical: 15 * SizeConfig.heightMultiplier!,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(4 * SizeConfig.heightMultiplier!),
+                  color: kgreen49,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Back to Home',
+                      style: AppTextStyle.NormalText.copyWith(
+                        fontSize: 14 * SizeConfig.textMultiplier!,
+                        color: kPureWhite,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 40 * SizeConfig.heightMultiplier!,
+            ),
+          ],
+        ),
       ),
     );
   }

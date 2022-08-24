@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -67,10 +69,17 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   label: 'home'.tr),
             if (jsonOb['get_trained'] == 1)
               BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.chat_bubble_outline,
-                  ),
-                  label: 'getTrainedTitle'.tr),
+                icon: SvgPicture.asset(
+                  ImagePath.getTrained,
+                  height: 20,
+                ),
+                label: 'my_trainees'.tr,
+                activeIcon: SvgPicture.asset(
+                  ImagePath.getTrained,
+                  height: 20,
+                  color: kGreenColor,
+                ),
+              ),
             if (jsonOb['post'] == 1)
               BottomNavigationBarItem(
                   icon: const Icon(

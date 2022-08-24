@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
+import 'package:fitbasix/feature/Home/model/postpone_model.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
@@ -160,9 +161,9 @@ class TrainerController extends GetxController {
   Future<void> setUp() async {
     getTrainedIsLoading.value = true;
     trainers.value = await TrainerServices.getTrainers();
-    for (var trainer in trainers.value.response!.data!.myTrainers!){
+    for (var trainer in trainers.value.response!.data!.myTrainers!) {
       printInfo(info: trainer.isCurrentlyEnrolled.toString());
-      if(trainer.isCurrentlyEnrolled!){
+      if (trainer.isCurrentlyEnrolled!) {
         myTrainers.value.add(trainer);
       }
     }
@@ -178,5 +179,32 @@ class TrainerController extends GetxController {
   void onInit() {
     super.onInit();
     setUp();
+  }
+
+  Future<bool> cancelSubscription({
+    required String trainerName,
+    required String planId,
+    required String planName,
+  }) async {
+    var response = await TrainerServices.cancelSubscription(
+        trainerName: trainerName, planId: planId, planName: planName);
+
+    return response;
+  }
+
+  Future<SessionData?> postponeSession({
+    required String trainerId,
+    required String planId,
+    required DateTime expiryDate,
+    required List<int> days,
+    required String time,
+  }) async {
+    var response = await TrainerServices.postponeSession(
+        trainerId: trainerId,
+        planId: planId,
+        expiryDate: expiryDate,
+        days: days,
+        timeSlot: time);
+    return response;
   }
 }

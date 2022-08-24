@@ -1111,6 +1111,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
+                                  _postController.uploadingProgress.value = 0;
                                   if(!userClickedOnPhotoVideoButton){
                                     userClickedOnPhotoVideoButton = true;
                                     _postController.currentPage.value = 0;

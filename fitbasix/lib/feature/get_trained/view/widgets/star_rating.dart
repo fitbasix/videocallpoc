@@ -25,7 +25,7 @@ class StarRating extends StatelessWidget {
         height: 16 * SizeConfig.heightMultiplier!,
         // Icons.star_border,
         // size: 16,
-        color: Theme.of(context).buttonColor,
+        color: kPureWhite,
       );
     } else if (index > rating - 1 && index < rating) {
       icon =  Image.asset(
@@ -33,7 +33,7 @@ class StarRating extends StatelessWidget {
         width: 16 * SizeConfig.widthMultiplier!,
         height: 16 * SizeConfig.heightMultiplier!,
      //   size: 16,
-        color: color ?? kGreenColor,
+        color: kPureWhite,
       );
     } else {
       icon =  Image.asset(
@@ -41,7 +41,7 @@ class StarRating extends StatelessWidget {
         width: 16 * SizeConfig.widthMultiplier!,
         height: 16 * SizeConfig.heightMultiplier!,
         //size: 16,
-        color: color ?? kGreenColor,
+        color: kPureWhite,
       );
     }
     return  InkResponse(

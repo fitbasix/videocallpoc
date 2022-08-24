@@ -62,6 +62,8 @@ class PostController extends GetxController {
   RxBool iscreateingPost = RxBool(false);
   RxBool isUpdated = RxBool(false);
   RxBool isclicked = RxBool(false);
+  RxDouble uploadingProgress = RxDouble(0);
+
 
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;

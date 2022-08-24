@@ -1,3 +1,4 @@
+import 'package:fitbasix/feature/Home/view/widgets/my_subscriptions.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:fitbasix/feature/profile/view/appbar_for_account.dart';
@@ -228,108 +229,132 @@ class EditPersonalInfoScreen extends StatelessWidget {
               ),
 
               Container(
-                  margin:
-                      EdgeInsets.only(top: 32 * SizeConfig.heightMultiplier!),
-                  width: double.infinity,
-                  height: 48 * SizeConfig.heightMultiplier!,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(0),
-                          backgroundColor: MaterialStateProperty.all(kgreen4F),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      8 * SizeConfig.widthMultiplier!)))),
-                      onPressed: () async {
-                        //change user personal data on cloud
-                        String? updatedEmailId =
-                            _profileController.emailController.text ==
-                                    homeController.userProfileData.value
-                                        .response!.data!.profile!.email
-                                ? null
-                                : _profileController.emailController.text;
-                        String? updatedPhnNumber = _profileController
-                                    .loginController!.mobile.value ==
+                margin: EdgeInsets.only(top: 32 * SizeConfig.heightMultiplier!),
+                width: double.infinity,
+                height: 48 * SizeConfig.heightMultiplier!,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      backgroundColor: MaterialStateProperty.all(kgreen4F),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              8 * SizeConfig.widthMultiplier!)))),
+                  onPressed: () async {
+                    //change user personal data on cloud
+                    String? updatedEmailId =
+                        _profileController.emailController.text ==
+                                homeController.userProfileData.value.response!
+                                    .data!.profile!.email
+                            ? null
+                            : _profileController.emailController.text;
+                    String? updatedPhnNumber =
+                        _profileController.loginController!.mobile.value ==
                                 homeController.userProfileData.value.response!
                                     .data!.profile!.mobileNumber
                             ? null
                             : _profileController.loginController!.mobile.value;
-                        String updatedCountryCode = _profileController
-                            .loginController!.selectedCountry.value.code!;
+                    String updatedCountryCode = _profileController
+                        .loginController!.selectedCountry.value.code!;
 
-                        String? updatedDob =
-                            _profileController.DOBController.text ==
-                                    homeController.userProfileData.value
-                                        .response!.data!.profile!.dob
-                                ? null
-                                : _profileController.DOBController.text;
-                        if (updatedPhnNumber == null) {
-                          await ProfileServices.editProfile(
-                              countryCode: updatedCountryCode,
-                              phone: updatedPhnNumber,
-                              dob: updatedDob == "" ? null : updatedDob,
-                              context: context);
+                    String? updatedDob =
+                        _profileController.DOBController.text ==
+                                homeController.userProfileData.value.response!
+                                    .data!.profile!.dob
+                            ? null
+                            : _profileController.DOBController.text;
+                    if (updatedPhnNumber == null) {
+                      await ProfileServices.editProfile(
+                          countryCode: updatedCountryCode,
+                          phone: updatedPhnNumber,
+                          dob: updatedDob == "" ? null : updatedDob,
+                          context: context);
 
-                          Navigator.pop(context);
-                          homeController.userProfileData.value =
-                              await CreatePostService.getUserProfile();
-                        } else {
-                          // bool isNumberRegistered= await ProfileServices.getOTP(
-                          //      updatedPhnNumber, updatedCountryCode, context);
+                      Navigator.pop(context);
+                      homeController.userProfileData.value =
+                          await CreatePostService.getUserProfile();
+                    } else {
+                      // bool isNumberRegistered= await ProfileServices.getOTP(
+                      //      updatedPhnNumber, updatedCountryCode, context);
 
-                          Navigator.pushNamed(context, RouteName.otpReScreen);
-                        }
+                      Navigator.pushNamed(context, RouteName.otpReScreen);
+                    }
 
-                        // _profileController.emailController.text.length != 0 &&
-                        //         _profileController
-                        //                 .loginController!.mobile.value.length !=
-                        //             0 &&
-                        //         _profileController.DOBController.text.length != 0
-                        //     ? ProfileServices.editProfile(
-                        //         email: _profileController.emailController.text,
-                        //         countryCode: _profileController
-                        //             .loginController!.selectedCountry.value.code,
-                        //         phone: _profileController
-                        //             .loginController!.mobile.value,
-                        //         dob: _profileController.DOBController.text)
-                        //     : _profileController.emailController.text.length == 0 &&
-                        //             _profileController.loginController!.mobile
-                        //                     .value.length !=
-                        //                 0 &&
-                        //             _profileController.DOBController.text.length !=
-                        //                 0
-                        //         ? ProfileServices.editProfile(
-                        //             email: null,
-                        //             countryCode: _profileController
-                        //                 .loginController!
-                        //                 .selectedCountry
-                        //                 .value
-                        //                 .code,
-                        //             phone: _profileController
-                        //                 .loginController!.mobile.value,
-                        //             dob: _profileController.DOBController.text)
-                        //         : null;
-                        //
-                        // _profileController.emailController.text.length == 0
-                        //     ? ProfileServices.editProfile(
-                        //         email: null,
-                        //         countryCode: _profileController
-                        //             .loginController!.selectedCountry.value.code,
-                        //         phone: _profileController
-                        //             .loginController!.mobile.value,
-                        //         dob: _profileController.DOBController.text)
-                        //     : ProfileServices.editProfile(
-                        //         email: _profileController.emailController.text,
-                        //         countryCode: _profileController
-                        //             .loginController!.selectedCountry.value.code,
-                        //         phone: _profileController
-                        //             .loginController!.mobile.value,
-                        //         dob: _profileController.DOBController.text);
-                      },
-                      child: Text(
-                        "change details".tr,
-                        style: AppTextStyle.boldWhiteText,
-                      ))),
+                    // _profileController.emailController.text.length != 0 &&
+                    //         _profileController
+                    //                 .loginController!.mobile.value.length !=
+                    //             0 &&
+                    //         _profileController.DOBController.text.length != 0
+                    //     ? ProfileServices.editProfile(
+                    //         email: _profileController.emailController.text,
+                    //         countryCode: _profileController
+                    //             .loginController!.selectedCountry.value.code,
+                    //         phone: _profileController
+                    //             .loginController!.mobile.value,
+                    //         dob: _profileController.DOBController.text)
+                    //     : _profileController.emailController.text.length == 0 &&
+                    //             _profileController.loginController!.mobile
+                    //                     .value.length !=
+                    //                 0 &&
+                    //             _profileController.DOBController.text.length !=
+                    //                 0
+                    //         ? ProfileServices.editProfile(
+                    //             email: null,
+                    //             countryCode: _profileController
+                    //                 .loginController!
+                    //                 .selectedCountry
+                    //                 .value
+                    //                 .code,
+                    //             phone: _profileController
+                    //                 .loginController!.mobile.value,
+                    //             dob: _profileController.DOBController.text)
+                    //         : null;
+                    //
+                    // _profileController.emailController.text.length == 0
+                    //     ? ProfileServices.editProfile(
+                    //         email: null,
+                    //         countryCode: _profileController
+                    //             .loginController!.selectedCountry.value.code,
+                    //         phone: _profileController
+                    //             .loginController!.mobile.value,
+                    //         dob: _profileController.DOBController.text)
+                    //     : ProfileServices.editProfile(
+                    //         email: _profileController.emailController.text,
+                    //         countryCode: _profileController
+                    //             .loginController!.selectedCountry.value.code,
+                    //         phone: _profileController
+                    //             .loginController!.mobile.value,
+                    //         dob: _profileController.DOBController.text);
+                  },
+                  child: Text(
+                    "change details".tr,
+                    style: AppTextStyle.boldWhiteText,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 17 * SizeConfig.heightMultiplier!,
+              ),
+              GestureDetector(
+                onTap: (){
+                  Get.to(()=>MySubscriptions());
+                },
+                child: Container(
+                  height: 48 * SizeConfig.heightMultiplier!,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                    border: Border.all(color: kgreen49),
+                  ),
+                  child: Text(
+                    'My Subscriptions',
+                    style: AppTextStyle.boldWhiteText.copyWith(
+                      color: kgreen49
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
