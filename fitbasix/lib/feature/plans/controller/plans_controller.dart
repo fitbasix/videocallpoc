@@ -1,3 +1,4 @@
+import 'package:credit_card_type_detector/credit_card_type_detector.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
@@ -22,7 +23,11 @@ class PlansController extends GetxController {
   String? cardExpiryDateErrortext;
   String? cardCvvErrortext;
 
+  var creditCardType = CreditCardType.unknown;
+
   TrainerController trainerController = Get.find<TrainerController>();
+
+  FocusNode cvvFocusNode = FocusNode();
 
   Plan? selectedPlan;
 
@@ -57,16 +62,18 @@ class PlansController extends GetxController {
     } else {
       cardNameErrortext = null;
     }
-    update(['card-name-field']);
+    update(['card-name-field','credit-card-widget']);
   }
 
   void validateCardNumber() {
+    creditCardType = detectCCType(cardNumberController.text);
     if (cardNumberController.text.isEmpty) {
       cardNumberErrortext = "Field Required";
     } else {
       cardNumberErrortext = null;
     }
-    update(['card-number-field']);
+    printInfo(info: creditCardType.toString());
+    update(['card-number-field','credit-card-widget']);
   }
 
   void validateCardNumberLength() {
@@ -75,7 +82,7 @@ class PlansController extends GetxController {
     } else {
       cardNumberErrortext = null;
     }
-    update(['card-number-field']);
+    update(['card-number-field','credit-card-widget']);
   }
 
   void validateCardExpiry() {
@@ -84,7 +91,7 @@ class PlansController extends GetxController {
     } else {
       cardExpiryDateErrortext = null;
     }
-    update(['card-expiry-field']);
+    update(['card-expiry-field','credit-card-widget']);
   }
 
   void validateCardCvv() {
@@ -93,7 +100,7 @@ class PlansController extends GetxController {
     } else {
       cardCvvErrortext = null;
     }
-    update(['card-cvv-field']);
+    update(['card-cvv-field','credit-card-widget']);
   }
 
   void validateCvv(){
@@ -102,7 +109,7 @@ class PlansController extends GetxController {
     } else {
       cardCvvErrortext = null;
     }
-    update(['card-cvv-field']);
+    update(['card-cvv-field','credit-card-widget']);
   }
 
 
@@ -116,6 +123,7 @@ class PlansController extends GetxController {
     cardNameController.clear();
     cardNameErrortext = null;
     pageIndex.value = 0;
+    creditCardType = CreditCardType.unknown;
   }
   @override
   void onInit() {

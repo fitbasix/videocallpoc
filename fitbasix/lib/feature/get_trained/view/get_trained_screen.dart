@@ -137,6 +137,8 @@ class GetTrainedScreen extends StatelessWidget {
                               //     itemCount: _homeController.activePlans.length,
                               //     itemBuilder: (context, index) {
                               SingleChildScrollView(
+                                padding: EdgeInsets.only(
+                                    right: 10 * SizeConfig.widthMultiplier!),
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,14 +159,10 @@ class GetTrainedScreen extends StatelessWidget {
                                                 .toString(),
                                             isCurrentlyEnrolled: true,
                                             onMyTrainerTileTapped: () async {
-                                              String trainerId =
-                                                  _trainerController
-                                                      .trainers
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .myTrainers![index]
-                                                      .user!;
+                                              String trainerId = _homeController
+                                                  .activePlans[index]
+                                                  .trainer!
+                                                  .id!;
                                               _trainerController
                                                       .atrainerDetail.value =
                                                   TrainerModel.Trainer();
@@ -284,6 +282,8 @@ class GetTrainedScreen extends StatelessWidget {
                                 ? Container()
                                 : SeeAllButton(
                                     onTap: () async {
+                                      _trainerController.currentPlanType == 0;
+
                                       Navigator.pushNamed(
                                           context, RouteName.allTrainerScreen);
                                       _trainerController.availability.value =
@@ -557,6 +557,8 @@ class GetTrainedScreen extends StatelessWidget {
                                 ? Container()
                                 : SeeAllButton(
                                     onTap: () async {
+                                      _trainerController.currentPlanType == 1;
+
                                       Navigator.pushNamed(
                                           context, RouteName.allTrainerScreen);
                                       _trainerController.isLoading.value = true;
@@ -820,6 +822,8 @@ class GetTrainedScreen extends StatelessWidget {
                                 ? Container()
                                 : SeeAllButton(
                                     onTap: () async {
+                                      _trainerController.currentPlanType == 2;
+
                                       _trainerController
                                           .SelectedInterestIndex.value = 0;
                                       _trainerController.searchedName.value =
@@ -1519,7 +1523,9 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                   ],
                 ),
               ),
-            if (showChangeTiming && widget.planDetail.isExpanded)
+            if (showChangeTiming &&
+                widget.planDetail.isExpanded &&
+                widget.planDetail.postponeSessionLeft! > 0)
               GestureDetector(
                 onTap: () {
                   Get.dialog(
@@ -1565,6 +1571,17 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                   ),
                 ),
               ),
+            if (showChangeTiming &&
+                widget.planDetail.isExpanded &&
+                widget.planDetail.postponeSessionLeft! < 1)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 10 * SizeConfig.heightMultiplier!),
+                child: Text(
+                    'You have already postponed your sessions three times',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.grey400Text),
+              ),
             if (widget.planDetail.isExpanded && widget.isSubscriptionPage)
               Column(
                 children: [
@@ -1574,6 +1591,7 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                         () => ReviewPage(
                           image: widget.planDetail.trainer!.profilePhoto!,
                           name: widget.planDetail.trainer!.name!,
+                          trainerId: widget.planDetail.trainer!.id!,
                         ),
                       );
                     },
@@ -1783,6 +1801,7 @@ class PostponeSessionWidget extends StatelessWidget {
                               expiryDate: response.expiryDate.toString(),
                               postponeSessionLeft:
                                   response.postponeSessionLeft.toString()),
+                          barrierDismissible: false,
                         );
                       } else {
                         Get.back();
@@ -1832,7 +1851,7 @@ class PostponeSessionWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    'You have only postpone three times',
+                    'You can only postpone three times',
                     textAlign: TextAlign.center,
                     style: AppTextStyle.grey400Text,
                   ),
@@ -1859,7 +1878,12 @@ class PostponeSessionSuccess extends StatelessWidget {
     return Dialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: GestureDetector(
-        onTap: Get.back,
+        onTap: () async {
+          var data = await Get.find<HomeController>().getActivePlans();
+          Get.find<HomeController>().update();
+          Get.find<TrainerController>().update();
+          Get.back();
+        },
         child: Container(
           padding: EdgeInsets.symmetric(
             vertical: 30 * SizeConfig.heightMultiplier!,

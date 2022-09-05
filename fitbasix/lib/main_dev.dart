@@ -149,6 +149,7 @@ Future<void> main() async {
       androidInfo = await deviceInfoPlugin.androidInfo;
       print(Platform.operatingSystemVersion + " os version");
 
+
       //String osVersion = Platform.operatingSystem
     } else {
       iosInfo = await deviceInfoPlugin.iosInfo;

@@ -9,6 +9,11 @@ class ImagePath {
   static const String apple = "assets/Icons/apple.svg";
   static const String videocam = "assets/Icons/videocam.svg";
 
+  static const String visa = "assets/Icons/visa.svg";
+  static const String mastercard = "assets/Icons/mastercard.svg";
+  static const String discover = "assets/Icons/discover-card.svg";
+  static const String american = "assets/Icons/american-express.svg";
+
   static const String bg1 = "assets/mytrainers/f1.png";
   static const String bg2 = "assets/mytrainers/f2.png";
   static const String bg3 = "assets/mytrainers/f3.png";

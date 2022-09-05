@@ -60,12 +60,14 @@ class PlanDetail {
     this.trainer,
     this.sessionTime,
     this.planDetails,
+    this.postponeSessionLeft,
   });
 
   String? id;
   DateTime? expiryDate;
   List<int>? weekDays;
   Trainer? trainer;
+  int? postponeSessionLeft;
   SessionTime? sessionTime;
   PlanDetails? planDetails;
   bool isExpanded = false;
@@ -77,6 +79,7 @@ class PlanDetail {
     trainer: Trainer.fromJson(json["trainers"]),
     sessionTime: SessionTime.fromJson(json["sessionTime"]),
     planDetails: PlanDetails.fromJson(json["planDetails"]),
+    postponeSessionLeft: json["postponeSessionLeft"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -86,6 +89,7 @@ class PlanDetail {
     "trainers": trainer!.toJson(),
     "sessionTime": sessionTime!.toJson(),
     "planDetails": planDetails!.toJson(),
+    "postponeSessionLeft":postponeSessionLeft
   };
 }
 

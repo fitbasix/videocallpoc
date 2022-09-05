@@ -112,14 +112,17 @@ class TrainerCard extends StatelessWidget {
             SizedBox(
               height: 8 * SizeConfig.heightMultiplier!,
             ),
-            Text(
-              about,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.NormalText.copyWith(
-                  fontSize: 10 * SizeConfig.textMultiplier!,
-                  color: kPureWhite),
+            SizedBox(
+              height: 25 * SizeConfig.heightMultiplier!,
+              child: Text(
+                about,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.NormalText.copyWith(
+                    fontSize: 10 * SizeConfig.textMultiplier!,
+                    color: kPureWhite),
+              ),
             ),
             SizedBox(
               height: 8 * SizeConfig.heightMultiplier!,

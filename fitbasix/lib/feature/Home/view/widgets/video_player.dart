@@ -25,7 +25,6 @@ class VideoPlayerContainer extends StatefulWidget {
 class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   final HomeController _homeController = Get.find();
   late VideoPlayerController _controller;
-  late VideoPlayerController _controllerThumb;
   bool videoIsMute = false;
 
   bool state = false;
@@ -40,7 +39,6 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
     getThumbnail();
     super.initState();
     _controller = VideoPlayerController.network(widget.videoUrl);
-    _controllerThumb = VideoPlayerController.network(widget.videoUrl);
 
     _controller.addListener(() {
       videoProgress.value = ((_controller.value.isPlaying
@@ -55,7 +53,6 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
     _controller.initialize().then((value) {
       videoLength.value = _controller.value.duration.inSeconds;
     });
-    _controllerThumb.initialize();
   }
 
   getThumbnail() async {
@@ -71,7 +68,6 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   @override
   void dispose() {
     _controller.dispose();
-    _controllerThumb.dispose();
     super.dispose();
   }
 
@@ -80,14 +76,12 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
     return Stack(
       children: [
         //Positioned.fill(child: Image.memory(thumbnail!)),
-        Positioned.fill(
-          child: Container(
-            child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controllerThumb),
-            ),
-          ),
-        ),
+        // Positioned.fill(
+        //   child: AspectRatio(
+        //     aspectRatio: _controller.value.aspectRatio,
+        //     child: VideoPlayer(_controllerThumb),
+        //   ),
+        // ),
         // ClipRect(
         //   child: BackdropFilter(
         //     filter: ImageFilter.blur(
@@ -100,7 +94,7 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
         // ),
         VisibilityDetector(
           onVisibilityChanged: (VisibilityInfo info) {
-            if ((info.visibleFraction == 0 || info.visibleFraction < 0.8) &&
+            if ((info.visibleFraction == 0 || info.visibleFraction < 0.6) &&
                 this.mounted) {
               _controller.setVolume(_homeController.videoPlayerVolume.value);
               _controller.pause();
@@ -112,11 +106,9 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
           },
           key: _key,
           child: Center(
-            child: Container(
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              ),
+            child: AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
             ),
           ),
         ),

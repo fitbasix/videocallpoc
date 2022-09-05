@@ -83,7 +83,7 @@ Widget WaterConsumed(
                           child: Column(
                             children: [
                               Text(
-                                '${homeController.waterLevel.value.toStringAsFixed(1)} L',
+                                '${consumedWater.toStringAsFixed(1)} L',
                                 style: AppTextStyle.boldWhiteText.copyWith(
                                     fontSize: 25 * SizeConfig.textMultiplier!,
                                     fontStyle: FontStyle.italic),
@@ -113,7 +113,7 @@ Widget WaterConsumed(
                             ],
                           ),
                           value:
-                              (homeController.waterLevel.value / totalWater) *
+                              (consumedWater / totalWater) *
                                   100,
                           width: 12 * SizeConfig.widthMultiplier!,
                           sizeUnit: GaugeSizeUnit.logicalPixel,
@@ -487,7 +487,7 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap, bool isConnected,
                                 Color(0xffF54633),
                               ],
                             ),
-                            value: isConnected ? 60 : 100,
+                            value: isConnected ? burntCalories : 100,
                             cornerStyle: CornerStyle.bothCurve,
                             width: 12 * SizeConfig.widthMultiplier!,
                             sizeUnit: GaugeSizeUnit.logicalPixel),
@@ -507,6 +507,7 @@ Widget CaloriesBurnt(double burntCalories, VoidCallback onTap, bool isConnected,
                         //             Theme.of(context).primaryIconTheme.color,
                         //         borderWidth: 2 * SizeConfig.widthMultiplier!,
                         //         color: kgreen49))
+
                       ],
                     ),
                   ],

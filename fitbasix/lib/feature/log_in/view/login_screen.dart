@@ -505,26 +505,27 @@ class _LoginScreenState extends State<LoginScreen>
                                         }
                                       },
                                       child: Container(
+                                        alignment: Alignment.center,
                                         width:
                                             156 * SizeConfig.widthMultiplier!,
                                         height:
                                             48 * SizeConfig.heightMultiplier!,
-                                        padding: const EdgeInsets.only(
-                                            left: 18, right: 54),
+
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                             border:
                                                 Border.all(color: greyBorder)),
                                         child: Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             SvgPicture.asset(
-                                                ImagePath.googleICon,
-                                              height:
-                                              20 * SizeConfig.heightMultiplier!,
+                                              ImagePath.googleICon,
+                                              height: 20 *
+                                                  SizeConfig.heightMultiplier!,
                                             ),
                                             SizedBox(
-                                              width: 20 *
+                                              width: 15 *
                                                   SizeConfig.widthMultiplier!,
                                             ),
                                             Text(
@@ -606,38 +607,37 @@ class _LoginScreenState extends State<LoginScreen>
                                         }
                                       },
                                       child: Container(
+                                        alignment: Alignment.center,
                                         width:
                                             156 * SizeConfig.widthMultiplier!,
                                         height:
                                             48 * SizeConfig.heightMultiplier!,
-                                        padding: EdgeInsets.only(
-                                            left: 18,
-                                            right: 54),
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                             border:
                                                 Border.all(color: greyBorder)),
                                         child: Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             SvgPicture.asset(
                                               ImagePath.appleIcon,
                                               color: kPureWhite,
-                                              height:
-                                              20 * SizeConfig.heightMultiplier!,
+                                              height: 20 *
+                                                  SizeConfig.heightMultiplier!,
                                             ),
                                             SizedBox(
-                                              width: 20 *
+                                              width: 15 *
                                                   SizeConfig.widthMultiplier!,
                                             ),
                                             Text(
                                               'Sign In',
                                               style: AppTextStyle.boldWhiteText
                                                   .copyWith(
-                                                      fontSize: 14 *
-                                                          SizeConfig
-                                                              .textMultiplier!),
-                                            )
+                                                fontSize: 14 *
+                                                    SizeConfig.textMultiplier!,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),

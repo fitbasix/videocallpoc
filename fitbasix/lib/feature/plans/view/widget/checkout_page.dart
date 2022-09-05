@@ -1,14 +1,17 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:credit_card_type_detector/credit_card_type_detector.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/plans/controller/plans_controller.dart';
 import 'package:fitbasix/feature/plans/view/payment_webview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class CheckoutPage extends StatelessWidget {
@@ -57,7 +60,8 @@ class CheckoutPage extends StatelessWidget {
                               .atrainerDetail
                               .value
                               .user!
-                              .name!.capitalizeFirst!,
+                              .name!
+                              .capitalizeFirst!,
                           style: AppTextStyle.boldWhiteText.copyWith(
                               fontSize: 15 * SizeConfig.textMultiplier!),
                         ),
@@ -115,9 +119,8 @@ class CheckoutPage extends StatelessWidget {
               Text(
                 _plansController.getSelectedDays(),
                 style: AppTextStyle.white400Text.copyWith(
-                  fontSize: 16 * SizeConfig.textMultiplier!,
-                  color: kGreenColor
-                ),
+                    fontSize: 16 * SizeConfig.textMultiplier!,
+                    color: kGreenColor),
               ),
               SizedBox(height: 16 * SizeConfig.heightMultiplier!),
               const Divider(
@@ -135,8 +138,8 @@ class CheckoutPage extends StatelessWidget {
                 height: 16 * SizeConfig.heightMultiplier!,
               ),
               Container(
-                padding: EdgeInsets.all(
-                  16 * SizeConfig.widthMultiplier!,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10 * SizeConfig.widthMultiplier!,
                 ),
                 decoration: BoxDecoration(
                   borderRadius:
@@ -145,16 +148,36 @@ class CheckoutPage extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.credit_card,
-                      color: Colors.white,
-                    ),
+                    _plansController.creditCardType == CreditCardType.mastercard
+                        ? SvgPicture.asset(
+                            ImagePath.mastercard,
+                          )
+                        : _plansController.creditCardType == CreditCardType.visa
+                            ? SvgPicture.asset(
+                                ImagePath.visa,
+                              )
+                            : _plansController.creditCardType ==
+                                    CreditCardType.discover
+                                ? SvgPicture.asset(
+                                    ImagePath.discover,
+                                  )
+                                : _plansController.creditCardType ==
+                                        CreditCardType.amex
+                                    ? SvgPicture.asset(
+                                        ImagePath.american,
+                                      )
+                                    : const Icon(
+                                        Icons.credit_card_outlined,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
                     SizedBox(
                       width: 16 * SizeConfig.widthMultiplier!,
                     ),
                     Expanded(
                       child: Text(
-                        _plansController.cardNumberController.text.replaceRange(0, 14, '**** **** ****'),
+                        _plansController.cardNumberController.text
+                            .replaceRange(0, 14, '**** **** ****'),
                         style: AppTextStyle.normalWhiteText.copyWith(
                             fontSize: 16 * SizeConfig.textMultiplier!),
                       ),
@@ -204,9 +227,7 @@ class CheckoutPage extends StatelessWidget {
                   suffixIconConstraints: BoxConstraints(
                       minWidth: 80 * SizeConfig.widthMultiplier!),
                   suffixIcon: IconButton(
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                     icon: Text(
                       'Apply',
                       style: AppTextStyle.boldWhiteText.copyWith(

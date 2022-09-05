@@ -13,6 +13,7 @@ import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/model/active_plans_model.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
@@ -39,6 +40,7 @@ class PaymentWebview extends StatefulWidget {
     this.trainerId,
     this.planDuration,
     this.selectedPlan,
+    this.days,
   }) : super(key: key);
 
   final String? initialUrl;
@@ -51,6 +53,7 @@ class PaymentWebview extends StatefulWidget {
   final String? trainerId;
   final int? planDuration;
   final Plan? selectedPlan;
+  final List<int>? days;
 
   @override
   State<PaymentWebview> createState() => _PaymentWebviewState();
@@ -247,6 +250,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                       Get.dialog(const SuccessFailureDialog(
                           message: "Booking Successful", isSuccess: true));
 
+                      Get.find<TrainerController>().update();
                       trainerController.enrolledTrainer
                           .add(trainerController.atrainerDetail.value.id!);
                       trainerController.setUp();
@@ -255,6 +259,13 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                       final HomeController _homeController = Get.find();
                       _homeController.setup();
                       trainerController.setUp();
+                      var result = await TrainerServices.getATrainerDetail(
+                          trainerController.atrainerDetail.value.chatId!
+                              .replaceAll('chat_', '')!);
+                      if (result.response!.data != null) {
+                        trainerController.atrainerDetail.value =
+                            result.response!.data!;
+                      }
                     } else {
                       Get.dialog(SuccessFailureDialog(
                           message: jsonDecode(parsedString)["response"]
@@ -263,10 +274,17 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                     }
                   } else {
                     Navigator.pop(context);
-
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(
+                    //     content: Text(
+                    //       jsonDecode(parsedString)["response"]
+                    //       ["response_message"],
+                    //     ),
+                    //   ),
+                    // );
                     Get.dialog(SuccessFailureDialog(
                         message: jsonDecode(parsedString)["response"]
-                            ["error_message"],
+                            ["response_message"],
                         isSuccess: false));
                   }
                 }
@@ -279,7 +297,7 @@ class _PaymentWebviewState extends State<PaymentWebview> {
               onProgressChanged: (
                 controller,
                 _,
-              ) async{
+              ) async {
                 if (widget.initialUrl == null && isLoading == false) {
                   setState(() {
                     isLoading = true;
@@ -287,8 +305,9 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                 }
                 var url = await controller.getUrl();
                 printInfo(info: url.toString());
-                if(url.toString() == "${ApiUrl.liveBaseURL}/api/payment/purchaseUrl"){
-                  printInfo(info:'=================> Matched');
+                if (url.toString() ==
+                    "${ApiUrl.liveBaseURL}/api/payment/purchaseUrl") {
+                  printInfo(info: '=================> Matched');
                   setState(() {
                     isLoading = true;
                   });
@@ -363,66 +382,46 @@ class SuccessFailureDialog extends StatelessWidget {
                   borderRadius: BorderRadius.circular(
                       8 * SizeConfig.imageSizeMultiplier!)),
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              content: Stack(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (isSuccess)
-                    SizedBox(
-                      height: 330 * SizeConfig.heightMultiplier!,
-                      width: 250 * SizeConfig.widthMultiplier!,
-                      child: Image.asset(
-                        ImagePath.animatedCongratulationIcon,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  Container(
-                    height: 330 * SizeConfig.heightMultiplier!,
-                    width: 250 * SizeConfig.widthMultiplier!,
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          isSuccess
-                              ? SizedBox(
-                                  height: 42 * SizeConfig.heightMultiplier!,
-                                  width: 42 * SizeConfig.widthMultiplier!,
-                                  child: SvgPicture.asset(
-                                      ImagePath.greenRightTick))
-                              : const Icon(
-                                  Icons.info_outline,
-                                  color: Colors.red,
-                                  size: 60,
-                                ),
-                          SizedBox(
-                            height: 8 * SizeConfig.heightMultiplier!,
-                          ),
-                          Text(
-                            isSuccess ? "congratulations".tr : "Ooops!",
-                            style: AppTextStyle.black400Text.copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontSize: 24 * SizeConfig.textMultiplier!,
-                                fontWeight: FontWeight.w700),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(
-                            height: 8 * SizeConfig.heightMultiplier!,
-                          ),
-                          Text(
-                            message,
-                            style: AppTextStyle.black400Text.copyWith(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .color,
-                                fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
+                  SizedBox(
+                    height: 80 * SizeConfig.heightMultiplier!,
+                  ),
+                  isSuccess
+                      ? SizedBox(
+                          height: 42 * SizeConfig.heightMultiplier!,
+                          width: 42 * SizeConfig.widthMultiplier!,
+                          child: SvgPicture.asset(ImagePath.greenRightTick))
+                      : const Icon(
+                          Icons.info_outline,
+                          color: Colors.red,
+                          size: 60,
+                        ),
+                  SizedBox(
+                    height: 8 * SizeConfig.heightMultiplier!,
+                  ),
+                  Text(
+                    isSuccess ? "congratulations".tr : "Ooops!",
+                    style: AppTextStyle.black400Text.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: 24 * SizeConfig.textMultiplier!,
+                        fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 8 * SizeConfig.heightMultiplier!,
+                  ),
+                  Text(
+                    message,
+                    style: AppTextStyle.black400Text.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 80 * SizeConfig.heightMultiplier!,
+                  ),
                 ],
               ),
             )),

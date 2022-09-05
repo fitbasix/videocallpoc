@@ -1,9 +1,9 @@
 import '../../app_config.dart';
 
 class ApiUrl {
-  // static String liveBaseURL = AppConfig.api_url;
+  static String liveBaseURL = AppConfig.api_url;
 
-  static String liveBaseURL = 'https://8a29-223-190-94-154.in.ngrok.io';
+  // static String liveBaseURL = 'https://66a5-122-161-92-249.in.ngrok.io';
 
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getAbuseData =
@@ -85,15 +85,16 @@ class ApiUrl {
   static String getIndividualUser = liveBaseURL + "/api/auth?userId=";
 
   ///plan
-  static String getActivePlans = liveBaseURL +'/api/enrollPlan/getSubscription';
+  static String getActivePlans =
+      liveBaseURL + '/api/enrollPlan/getSubscription';
   static String planById = liveBaseURL + '/api/plan/getPlanById';
   static String getSchedules = liveBaseURL + '/api/schedule/getSchedules';
   static String getAllPlans =
       liveBaseURL + "/api/optionData/timeSlots/getSlots";
   static String bookDemo = liveBaseURL + "/api/schedule/appointment";
   static String postponeSession = liveBaseURL + "/api/schedule/sessionPostpone";
-  static String cancelSubscription = liveBaseURL + "/api/auth/cancelSubscription";
-
+  static String cancelSubscription =
+      liveBaseURL + "/api/auth/cancelSubscription";
 
   /// de Active account
   static String deActiveAccount = liveBaseURL + "/api/auth/deactivateAccount";
@@ -106,6 +107,9 @@ class ApiUrl {
   static String getPaymentLink = liveBaseURL + '/api/payment/paymentLink';
 
   /// chat notification API
-  static String sendChatNotification = liveBaseURL + '/api/chat/chatNotification';
+  static String sendChatNotification =
+      liveBaseURL + '/api/chat/chatNotification';
 
+  /// rate and review
+  static String rateAndReview = liveBaseURL + '/api/rating/rateAndReview';
 }

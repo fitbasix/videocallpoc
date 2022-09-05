@@ -3,6 +3,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
@@ -23,10 +24,12 @@ class ReviewPage extends StatefulWidget {
     Key? key,
     required this.name,
     required this.image,
+    required this.trainerId,
   }) : super(key: key);
 
   final String name;
   final String image;
+  final String trainerId;
 
   @override
   State<ReviewPage> createState() => _ReviewPageState();
@@ -112,7 +115,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     glow: false,
                     itemCount: 5,
                     unratedColor: greyBorder,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                     itemBuilder: (context, rating) => const Icon(
                       Icons.star,
                       color: kgreen49,
@@ -185,24 +188,47 @@ class _ReviewPageState extends State<ReviewPage> {
               ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            margin: EdgeInsets.all(20 * SizeConfig.heightMultiplier!),
-            padding: EdgeInsets.symmetric(
-              horizontal: 20 * SizeConfig.widthMultiplier!,
-              vertical: 15 * SizeConfig.heightMultiplier!,
-            ),
-            decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.circular(4 * SizeConfig.heightMultiplier!),
-              color: kgreen49,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              'Submit',
-              style: AppTextStyle.NormalText.copyWith(
-                fontSize: 14 * SizeConfig.textMultiplier!,
-                color: kPureWhite,
+          GestureDetector(
+            onTap: () async {
+              Get.dialog(
+                  Center(
+                    child: CustomizedCircularProgress(),
+                  ),
+                  barrierDismissible: false);
+              var response = await _homeController.postRateAndReview(
+                trainerId: widget.trainerId,
+                review: _homeController.reviewController.text,
+                rating: rating,
+              );
+              Get.back();
+              Get.back();
+              _homeController.reviewController.clear();
+              rating = 5;
+              if (response != null) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Review Added'),
+                ));
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              margin: EdgeInsets.all(20 * SizeConfig.heightMultiplier!),
+              padding: EdgeInsets.symmetric(
+                horizontal: 20 * SizeConfig.widthMultiplier!,
+                vertical: 15 * SizeConfig.heightMultiplier!,
+              ),
+              decoration: BoxDecoration(
+                borderRadius:
+                    BorderRadius.circular(4 * SizeConfig.heightMultiplier!),
+                color: kgreen49,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                'Submit',
+                style: AppTextStyle.NormalText.copyWith(
+                  fontSize: 14 * SizeConfig.textMultiplier!,
+                  color: kPureWhite,
+                ),
               ),
             ),
           ),

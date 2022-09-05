@@ -101,7 +101,7 @@ class TrainerPlansScreen extends StatelessWidget {
                             sessionCount: trainerController.planModel.value
                                 .response!.data![index].session!,
                             planDuration: trainerController.planModel.value
-                                .response!.data![index].planDuration!,
+                                .response!.data![index].planDuration! ~/ 7,
                             ////remove index==0 after testing
                             // isDemoExpired: index == 0 &&
                             //     !trainerController.planModel.value.response!

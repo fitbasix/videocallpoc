@@ -1,11 +1,14 @@
+import 'package:credit_card_type_detector/credit_card_type_detector.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/plans/controller/plans_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 
@@ -131,6 +134,57 @@ class AddCardDetails extends StatelessWidget {
                       decoration: InputDecoration(
                         errorText: _plansController.cardNumberErrortext,
                         hintText: "Card number",
+                        suffixIcon: _plansController.creditCardType ==
+                                CreditCardType.mastercard
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                    right: 10 * SizeConfig.widthMultiplier!),
+                                child: SvgPicture.asset(
+                                  ImagePath.mastercard,
+                                  height: 18 * SizeConfig.heightMultiplier!,
+                                ),
+                              )
+                            : _plansController.creditCardType ==
+                                    CreditCardType.visa
+                                ? Padding(
+                                    padding: EdgeInsets.only(
+                                        right:
+                                            10 * SizeConfig.widthMultiplier!),
+                                    child: SvgPicture.asset(
+                                      ImagePath.visa,
+                                      height: 18 * SizeConfig.heightMultiplier!,
+                                    ),
+                                  )
+                                : _plansController.creditCardType ==
+                                        CreditCardType.discover
+                                    ? Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 10 *
+                                                SizeConfig.widthMultiplier!),
+                                        child: SvgPicture.asset(
+                                          ImagePath.discover,
+                                          height:
+                                              18 * SizeConfig.heightMultiplier!,
+                                        ),
+                                      )
+                                    : _plansController.creditCardType ==
+                                            CreditCardType.amex
+                                        ? Padding(
+                                            padding: EdgeInsets.only(
+                                                right: 10 *
+                                                    SizeConfig
+                                                        .widthMultiplier!),
+                                            child: SvgPicture.asset(
+                                              ImagePath.american,
+                                              height: 18 *
+                                                  SizeConfig.heightMultiplier!,
+                                            ),
+                                          )
+                                        : const Icon(
+                                            Icons.credit_card_outlined,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
                         hintStyle: AppTextStyle.grey400Text.copyWith(
                             fontSize: 16 * SizeConfig.heightMultiplier!),
                         contentPadding: EdgeInsets.fromLTRB(
@@ -245,6 +299,7 @@ class AddCardDetails extends StatelessWidget {
                         id: 'card-cvv-field',
                         builder: (controller) {
                           return TextFormField(
+                            focusNode: _plansController.cvvFocusNode,
                             keyboardType: TextInputType.number,
                             controller: _plansController.cardCvvController,
                             onChanged: (value) {
@@ -309,9 +364,9 @@ class AddCardDetails extends StatelessWidget {
                   ),
                 ],
               ),
-              // SizedBox(
-              //   height: 50 * SizeConfig.heightMultiplier!,
-              // ),
+              SizedBox(
+                height: 20 * SizeConfig.heightMultiplier!,
+              ),
               // Row(
               //   children: [
               //     const Expanded(

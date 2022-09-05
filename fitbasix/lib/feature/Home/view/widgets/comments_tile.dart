@@ -60,146 +60,148 @@ class _CommentsTileState extends State<CommentsTile> {
           SizedBox(
             width: 8 * SizeConfig.widthMultiplier!,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                // height: 84 * SizeConfig.heightMultiplier!,
-                // width: Get.width - 80 * SizeConfig.widthMultiplier!,
-                constraints: BoxConstraints(
-                    minWidth: widget.minWidth, maxWidth: widget.maxWidth),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  // height: 84 * SizeConfig.heightMultiplier!,
+                  width: double.infinity,
+                  // constraints: BoxConstraints(
+                  //     minWidth: widget.minWidth, maxWidth: widget.maxWidth),
 
-                padding: EdgeInsets.only(
-                    top: 12 * SizeConfig.heightMultiplier!,
-                    left: 12 * SizeConfig.widthMultiplier!,
-                    right: 12 * SizeConfig.widthMultiplier!,
-                    bottom: 16 * SizeConfig.heightMultiplier!),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8))),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.name.capitalize!,
-                      style: AppTextStyle.boldBlackText
-                          .copyWith(
-                          color: Theme.of(context).textTheme.bodyText1?.color,
-                          fontSize: 12 * SizeConfig.textMultiplier!),
-                    ),
-                    SizedBox(
-                      height: 8 * SizeConfig.heightMultiplier!,
-                    ),
-                    RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                          text: widget.taggedPersonName,
-                          style: AppTextStyle.boldBlackText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!,
-                              color: kGreenColor)),
-                      TextSpan(text: ' '),
-                      TextSpan(
-                          text: widget.comment.length > length && !showAll
-                              ? widget.comment.substring(0, length) + '...'
-                              : widget.comment,
-                          style: AppTextStyle.normalBlackText.copyWith(
+                  padding: EdgeInsets.only(
+                      top: 12 * SizeConfig.heightMultiplier!,
+                      left: 12 * SizeConfig.widthMultiplier!,
+                      right: 12 * SizeConfig.widthMultiplier!,
+                      bottom: 16 * SizeConfig.heightMultiplier!),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.name.capitalize!,
+                        style: AppTextStyle.boldBlackText
+                            .copyWith(
                             color: Theme.of(context).textTheme.bodyText1?.color,
-                              fontSize: 14 * SizeConfig.textMultiplier!)),
-                      widget.comment.length > length
-                          ? WidgetSpan(
-                              child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  showAll = !showAll;
-                                });
-                              },
-                              child: Text(
-                                  showAll
-                                      ? ' ' + 'see_less'.tr
-                                      : ' ' + 'see_more'.tr,
-                                  style: AppTextStyle.normalBlackText.copyWith(
-                                      fontSize: 12 * SizeConfig.textMultiplier!,
-                                      color: hintGrey)),
-                            ))
-                          : TextSpan()
-                    ])),
-                    // ReadMoreText(
-                    //   widget.comment,
-                    //   trimLines: 2,
-                    //   trimMode: TrimMode.Line,
-                    //   trimCollapsedText: 'see_more'.tr,
-                    //   trimExpandedText: 'see_less'.tr,
-                    //   colorClickableText: hintGrey,
-                    //   style: AppTextStyle.normalBlackText
-                    //       .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
-                    // )
-                    // Text(
-                    //   comment,
-                    //   style: AppTextStyle.normalBlackText
-                    //       .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
-                    // )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 8 * SizeConfig.heightMultiplier!,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 4 * SizeConfig.widthMultiplier!),
-                child: Row(
-                  children: [
-                    Text(widget.time,
-                        style: AppTextStyle.normalBlackText.copyWith(
-                            fontSize: 12 * SizeConfig.textMultiplier!,
-                            color: Theme.of(context).textTheme.headline6?.color
-                        )),
-                    SizedBox(
-                      width: 13 * SizeConfig.widthMultiplier!,
-                    ),
-                    InkWell(
-                      onTap: widget.onLikeComment,
-                      child: Container(
-                        color: Colors.transparent,
-                        padding: EdgeInsets.only(right: 5 * SizeConfig.widthMultiplier!),
-                        child: Icon(
-                          Icons.favorite,
-                          color: Theme.of(context).textTheme.headline6?.color,
-                          size: 14*SizeConfig.heightMultiplier!,
-                        ),
+                            fontSize: 12 * SizeConfig.textMultiplier!),
                       ),
-                    ),
-                    Text(
-                        'likes'.trParams({'no_likes': widget.likes.toString()}),
-                        style: AppTextStyle.normalBlackText.copyWith(
-                            fontSize: 12 * SizeConfig.textMultiplier!,
-                            color: Theme.of(context).textTheme.headline6?.color
-                        )),
-                    SizedBox(
-                      width: 13 * SizeConfig.widthMultiplier!,
-                    ),
-                    Icon(
-                      Icons.reply,
-                      color: Theme.of(context).textTheme.headline6?.color,
-                      size: 18*SizeConfig.heightMultiplier!,
-                    ),
-                    SizedBox(
-                      width: 4 * SizeConfig.widthMultiplier!,
-                    ),
-                    GestureDetector(
-                      onTap: widget.onReply,
-                      child: Text('reply'.tr,
+                      SizedBox(
+                        height: 8 * SizeConfig.heightMultiplier!,
+                      ),
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                            text: widget.taggedPersonName,
+                            style: AppTextStyle.boldBlackText.copyWith(
+                                fontSize: 14 * SizeConfig.textMultiplier!,
+                                color: kGreenColor)),
+                        TextSpan(text: ' '),
+                        TextSpan(
+                            text: widget.comment.length > length && !showAll
+                                ? widget.comment.substring(0, length) + '...'
+                                : widget.comment,
+                            style: AppTextStyle.normalBlackText.copyWith(
+                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                fontSize: 14 * SizeConfig.textMultiplier!)),
+                        widget.comment.length > length
+                            ? WidgetSpan(
+                                child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showAll = !showAll;
+                                  });
+                                },
+                                child: Text(
+                                    showAll
+                                        ? ' ' + 'see_less'.tr
+                                        : ' ' + 'see_more'.tr,
+                                    style: AppTextStyle.normalBlackText.copyWith(
+                                        fontSize: 12 * SizeConfig.textMultiplier!,
+                                        color: hintGrey)),
+                              ))
+                            : TextSpan()
+                      ])),
+                      // ReadMoreText(
+                      //   widget.comment,
+                      //   trimLines: 2,
+                      //   trimMode: TrimMode.Line,
+                      //   trimCollapsedText: 'see_more'.tr,
+                      //   trimExpandedText: 'see_less'.tr,
+                      //   colorClickableText: hintGrey,
+                      //   style: AppTextStyle.normalBlackText
+                      //       .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                      // )
+                      // Text(
+                      //   comment,
+                      //   style: AppTextStyle.normalBlackText
+                      //       .copyWith(fontSize: 14 * SizeConfig.textMultiplier!),
+                      // )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 8 * SizeConfig.heightMultiplier!,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 4 * SizeConfig.widthMultiplier!),
+                  child: Row(
+                    children: [
+                      Text(widget.time,
                           style: AppTextStyle.normalBlackText.copyWith(
                               fontSize: 12 * SizeConfig.textMultiplier!,
                               color: Theme.of(context).textTheme.headline6?.color
                           )),
-                    ),
-                  ],
-                ),
-              )
-            ],
+                      SizedBox(
+                        width: 13 * SizeConfig.widthMultiplier!,
+                      ),
+                      InkWell(
+                        onTap: widget.onLikeComment,
+                        child: Container(
+                          color: Colors.transparent,
+                          padding: EdgeInsets.only(right: 5 * SizeConfig.widthMultiplier!),
+                          child: Icon(
+                            Icons.favorite,
+                            color: Theme.of(context).textTheme.headline6?.color,
+                            size: 14*SizeConfig.heightMultiplier!,
+                          ),
+                        ),
+                      ),
+                      Text(
+                          'likes'.trParams({'no_likes': widget.likes.toString()}),
+                          style: AppTextStyle.normalBlackText.copyWith(
+                              fontSize: 12 * SizeConfig.textMultiplier!,
+                              color: Theme.of(context).textTheme.headline6?.color
+                          )),
+                      SizedBox(
+                        width: 13 * SizeConfig.widthMultiplier!,
+                      ),
+                      Icon(
+                        Icons.reply,
+                        color: Theme.of(context).textTheme.headline6?.color,
+                        size: 18*SizeConfig.heightMultiplier!,
+                      ),
+                      SizedBox(
+                        width: 4 * SizeConfig.widthMultiplier!,
+                      ),
+                      GestureDetector(
+                        onTap: widget.onReply,
+                        child: Text('reply'.tr,
+                            style: AppTextStyle.normalBlackText.copyWith(
+                                fontSize: 12 * SizeConfig.textMultiplier!,
+                                color: Theme.of(context).textTheme.headline6?.color
+                            )),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),

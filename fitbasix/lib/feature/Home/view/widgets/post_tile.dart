@@ -30,7 +30,7 @@ import '../../../report_abuse/report_abuse_controller.dart';
 import '../../../spg/view/set_goal_screen.dart';
 
 class PostTile extends StatefulWidget {
-  PostTile(
+  const PostTile(
       {Key? key,
       required this.name,
       required this.profilePhoto,
@@ -404,14 +404,16 @@ class _PostTileState extends State<PostTile> {
                         width: Get.width,
                         fit: BoxFit.cover,
                       )
-                    : VideoPlayerContainer(videoUrl: widget.imageUrl[0])
-                : AspectRatio(
-                    aspectRatio: 4 / 5,
-                    child: ListView.builder(
-                        itemCount: widget.imageUrl.length,
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
+                    : VideoPlayerContainer(
+                        videoUrl: widget.imageUrl[0],
+                        key: Key(widget.imageUrl[0]),
+                      )
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(
+                        widget.imageUrl.length,
+                        (index) {
                           return Stack(
                             children: [
                               // _postController
@@ -447,24 +449,20 @@ class _PostTileState extends State<PostTile> {
                               _postController
                                           .getUrlType(widget.imageUrl[index]) ==
                                       0
-                                  ? AspectRatio(
-                                      aspectRatio: 4 / 5,
-                                      child: CachedNetworkImage(
-                                        imageUrl: widget.imageUrl[index],
-                                        placeholder: (context, url) =>
-                                            ShimmerEffect(),
-                                        errorWidget: (context, url, error) =>
-                                            ShimmerEffect(),
-                                        // height: 360 * SizeConfig.widthMultiplier!,
-                                        // width: 360 * SizeConfig.widthMultiplier!,
-                                        fit: BoxFit.cover,
-                                      ),
+                                  ? CachedNetworkImage(
+                                      imageUrl: widget.imageUrl[index],
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
+                                      errorWidget: (context, url, error) =>
+                                          ShimmerEffect(),
+                                      width: Get.width,
+                                      // height: 360 * SizeConfig.widthMultiplier!,
+                                      // width: 360 * SizeConfig.widthMultiplier!,
+                                      fit: BoxFit.cover,
                                     )
-                                  : AspectRatio(
-                                      aspectRatio: 4 / 5,
-                                      child: VideoPlayerContainer(
-                                        videoUrl: widget.imageUrl[index],
-                                      ),
+                                  : VideoPlayerContainer(
+                                      key: Key(widget.imageUrl[0]),
+                                      videoUrl: widget.imageUrl[index],
                                     ),
                               // Positioned(
                               //   top: 0,
@@ -512,7 +510,9 @@ class _PostTileState extends State<PostTile> {
                                   : SizedBox()
                             ],
                           );
-                        }),
+                        },
+                      ),
+                    ),
                   ),
             Padding(
               padding: EdgeInsets.only(

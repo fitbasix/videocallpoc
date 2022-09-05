@@ -292,10 +292,11 @@ class HomeController extends GetxController {
     await getActivePlans();
   }
 
-  Future<void> getActivePlans()async{
-   var data =  await HomeService.getActivePlans();
-   activePlans.addAll(data);
-activePlans.refresh();
+  Future<void> getActivePlans() async {
+    activePlans.clear();
+    var data = await HomeService.getActivePlans();
+    activePlans.addAll(data);
+    activePlans.refresh();
   }
 
   Future<void> getTrendingPost({int? skip}) async {
@@ -485,5 +486,15 @@ activePlans.refresh();
     if (initialPostData.value.response!.data!.length != 0) {
       trendingPostList.value = initialPostData.value.response!.data!;
     }
+  }
+
+  Future<bool?> postRateAndReview({
+    required String trainerId,
+    required String review,
+    required double rating,
+  }) async {
+    var data = HomeService.postRateAndReview(
+        trainerId: trainerId, review: review, rating: rating);
+    return data;
   }
 }

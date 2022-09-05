@@ -22,7 +22,7 @@ class HomeService {
   static HomeController homeController = Get.find();
 
   static Future<PostsModel> getPosts({int? skip}) async {
-    print(skip.toString()+" skips");
+    print(skip.toString() + " skips");
     // var response = http.post(
     //   Uri.parse(ApiUrl.getPosts),
     //   headers: {
@@ -94,12 +94,13 @@ class HomeService {
     return waterDetailFromJson(response.toString());
   }
 
-  static Future<UserProfileModel> getIndividualUserProfileData({String? userId}) async {
+  static Future<UserProfileModel> getIndividualUserProfileData(
+      {String? userId}) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
 
-    var response = await dio!.get(ApiUrl.getIndividualUser+userId!);
-    print("88888"+response.data.toString());
+    var response = await dio!.get(ApiUrl.getIndividualUser + userId!);
+    print("88888" + response.data.toString());
     return userProfileModelFromJson(response.toString());
   }
 
@@ -132,13 +133,15 @@ class HomeService {
     var response = await dio!
         .post(ApiUrl.addComment, data: {"postId": postId, "comment": comment});
 
-    log(response.data['code']);
+    log(response.data.toString());
   }
 
-  static Future<List<PlanDetail>> getActivePlans()async{
+  static Future<List<PlanDetail>> getActivePlans() async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.get(ApiUrl.getActivePlans,);
+    var response = await dio!.get(
+      ApiUrl.getActivePlans,
+    );
     var activePlans = activePlansModelFromJson(response.toString());
     log(activePlans.response.toString());
     return activePlans.response!.planDetails!;
@@ -190,7 +193,6 @@ class HomeService {
     var response = await dio!.post(ApiUrl.getComment,
         data: postId == null ? getCommentReply : getPostComment);
 
-
     return commentModelFromJson(response.toString());
   }
 
@@ -208,7 +210,6 @@ class HomeService {
 
     var response =
         await dio!.post(ApiUrl.getPostById, data: {"postId": postId});
-
 
     return postModelFromJson(response.toString());
   }
@@ -229,7 +230,8 @@ class HomeService {
     var response = await dio.post(ApiUrl.deleteAccount);
   }
 
-  static Future<PostsModel> getIndividualUserPosts(String userId, int? skip) async {
+  static Future<PostsModel> getIndividualUserPosts(
+      String userId, int? skip) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!
@@ -237,5 +239,21 @@ class HomeService {
     log(response.toString());
 
     return postsModelFromJson(response.toString());
+  }
+
+  static Future<bool?> postRateAndReview({
+    required String trainerId,
+    required String review,
+    required double rating,
+  }) async {
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var response = await dio!.post(ApiUrl.rateAndReview,
+        data: {"trainerId": trainerId, "review": review, "rating": rating});
+    log(response.toString());
+    if(response.statusCode == 200){
+      return true;
+    }
+    return null;
   }
 }

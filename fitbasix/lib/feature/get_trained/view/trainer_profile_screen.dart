@@ -307,7 +307,6 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   },
                   onEnroll: () {
                     Navigator.pushNamed(context, RouteName.trainerplanScreen);
-
                     // showDialog(
                     //     context: context,
                     //     builder: (BuildContext context) => EnrollTrainerDialog());

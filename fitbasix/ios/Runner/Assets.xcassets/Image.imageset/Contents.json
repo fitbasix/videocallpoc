@@ -1,18 +1,18 @@
 {
   "images" : [
     {
-      "filename" : "background.png",
-      "idiom" : "universal",
+      "filename" : "background1.png",
+      "idiom" : "iphone",
       "scale" : "1x"
     },
     {
-      "filename" : "background1.png",
-      "idiom" : "universal",
+      "filename" : "background.png",
+      "idiom" : "iphone",
       "scale" : "2x"
     },
     {
       "filename" : "background2.png",
-      "idiom" : "universal",
+      "idiom" : "iphone",
       "scale" : "3x"
     }
   ],

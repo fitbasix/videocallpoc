@@ -115,6 +115,7 @@ class _HomePageState extends State<HomePage> {
   final PostController postController = Get.put(PostController());
   TextEditingController searchUserController = TextEditingController();
   RxBool showUserSearch = false.obs;
+  int switchValue = 1;
 
   RxDouble _caloriesData = 0.0.obs;
 
@@ -137,8 +138,6 @@ class _HomePageState extends State<HomePage> {
 
     _homeController.currentPage.value = 1;
     _homeController.scrollController.addListener(() async {
-      print(_homeController.currentPage.value.toString() + " ppppp");
-      print(_homeController.isNeedToLoadData.value);
       if (_homeController.isNeedToLoadData.value == true) {
         if (_homeController.scrollController.position.maxScrollExtent ==
             _homeController.scrollController.position.pixels) {
@@ -467,9 +466,22 @@ class _HomePageState extends State<HomePage> {
                                                       width: 216 *
                                                           SizeConfig
                                                               .widthMultiplier!,
-                                                      child: Text(
-                                                        //todo string for translation
-                                                        'take_demo_subtitle'.tr,
+                                                      child: Text.rich(
+                                                        TextSpan(
+                                                          text: 'You can get a lot more out of it.\nStart with our ',
+                                                          children: [
+                                                            TextSpan(
+                                                              text: 'demo plan ',
+                                                              style: AppTextStyle
+                                                                  .black600Text
+                                                                  .copyWith(
+                                                                  fontSize: 14 *
+                                                                      SizeConfig
+                                                                          .textMultiplier!,
+                                                                  color: kgreen49),
+                                                            )
+                                                          ]
+                                                        ),
                                                         style: AppTextStyle
                                                             .black600Text
                                                             .copyWith(
@@ -483,7 +495,7 @@ class _HomePageState extends State<HomePage> {
                                                                     ?.color),
                                                       ),
                                                     ),
-                                                    Spacer(),
+                                                    const Spacer(),
                                                     //join button
                                                     GestureDetector(
                                                       onTap: () {
@@ -1056,11 +1068,35 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   Expanded(
                                                     child: GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            RouteName
-                                                                .exploreSearch);
+                                                      onTap: () async{
+                                                        _homeController
+                                                            .explorePageCount.value = 0;
+                                                        Navigator.pushNamed(context,
+                                                            RouteName.exploreSearch);
+                                                        _homeController.searchController
+                                                            .clear();
+                                                        _homeController
+                                                            .exploreSearchText.value = "";
+                                                        postController.getCategory();
+                                                        _homeController
+                                                            .isExploreDataLoading
+                                                            .value = true;
+                                                        _homeController
+                                                            .explorePostModel.value =
+                                                            await HomeService
+                                                            .getExplorePosts(
+                                                          skip: 0,
+                                                        );
+                                                        _homeController
+                                                            .explorePostList.value =
+                                                        _homeController
+                                                            .explorePostModel
+                                                            .value
+                                                            .response!
+                                                            .data!;
+                                                        _homeController
+                                                            .isExploreDataLoading
+                                                            .value = false;
                                                       },
                                                       child: Container(
                                                           padding: EdgeInsets.only(
@@ -1229,10 +1265,10 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                     ),
                                                     Positioned(
-                                                        top: 70 *
+                                                        top: 78 *
                                                             SizeConfig
                                                                 .heightMultiplier!,
-                                                        left: 15 *
+                                                        left: 13 *
                                                             SizeConfig
                                                                 .heightMultiplier!,
                                                         child: Text(
@@ -1286,9 +1322,25 @@ class _HomePageState extends State<HomePage> {
                                                                     SizeConfig
                                                                         .widthMultiplier!,
                                                               ),
-                                                              Text(
-                                                                'Track hydration',
-                                                                style: AppTextStyle.smallBlackText.copyWith(
+                                                              Text.rich(
+                                                               TextSpan(
+                                                                 text:  'Track ',
+                                                                 children: [
+                                                                   TextSpan(
+                                                                     text: 'hydration',
+                                                                     style:  AppTextStyle.boldWhiteText.copyWith(
+                                                                         color: Theme.of(
+                                                                             context)
+                                                                             .textTheme
+                                                                             .bodyText1
+                                                                             ?.color,
+                                                                         fontSize: 14 *
+                                                                             SizeConfig
+                                                                                 .textMultiplier!),
+                                                                   )
+                                                                 ]
+                                                               ),
+                                                                style: AppTextStyle.grey400Text.copyWith(
                                                                     color: Theme.of(
                                                                             context)
                                                                         .textTheme
@@ -1327,12 +1379,27 @@ class _HomePageState extends State<HomePage> {
                                                                     SizeConfig
                                                                         .widthMultiplier!,
                                                               ),
-                                                              Text(
-                                                                'track_calories'
-                                                                    .tr,
-                                                                style: AppTextStyle.smallBlackText.copyWith(
+                                                              Text.rich(
+                                                                TextSpan(
+                                                                    text:  'Track ',
+                                                                    children: [
+                                                                      TextSpan(
+                                                                        text: 'calories',
+                                                                        style:  AppTextStyle.boldWhiteText.copyWith(
+                                                                            color: Theme.of(
+                                                                                context)
+                                                                                .textTheme
+                                                                                .bodyText1
+                                                                                ?.color,
+                                                                            fontSize: 14 *
+                                                                                SizeConfig
+                                                                                    .textMultiplier!),
+                                                                      )
+                                                                    ]
+                                                                ),
+                                                                style: AppTextStyle.grey400Text.copyWith(
                                                                     color: Theme.of(
-                                                                            context)
+                                                                        context)
                                                                         .textTheme
                                                                         .bodyText1
                                                                         ?.color,
@@ -1345,13 +1412,16 @@ class _HomePageState extends State<HomePage> {
                                                         ],
                                                       ),
                                                       Spacer(),
-                                                      GreenCircleArrowButton(
-                                                        onTap: () {
-                                                          Navigator.pushNamed(
-                                                              context,
-                                                              RouteName
-                                                                  .setGoalIntro);
-                                                        },
+                                                      SizedBox(
+                                                        height: 40 * SizeConfig.heightMultiplier!,
+                                                        child: GreenCircleArrowButton(
+                                                          onTap: () {
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                RouteName
+                                                                    .setGoalIntro);
+                                                          },
+                                                        ),
                                                       )
                                                     ],
                                                   ),
@@ -1371,10 +1441,6 @@ class _HomePageState extends State<HomePage> {
                                             16 * SizeConfig.widthMultiplier!),
                                     child: Container(
                                       padding: EdgeInsets.only(
-                                          top:
-                                              12 * SizeConfig.heightMultiplier!,
-                                          bottom:
-                                              12 * SizeConfig.heightMultiplier!,
                                           left:
                                               16 * SizeConfig.widthMultiplier!),
                                       height: 55 * SizeConfig.heightMultiplier!,
@@ -1894,6 +1960,7 @@ class _HomePageState extends State<HomePage> {
                                 width: 80 * SizeConfig.widthMultiplier!,
                               ),
                             ),
+
                             // Row(
                             //   mainAxisSize: MainAxisSize.min,
                             //   crossAxisAlignment: CrossAxisAlignment.start,

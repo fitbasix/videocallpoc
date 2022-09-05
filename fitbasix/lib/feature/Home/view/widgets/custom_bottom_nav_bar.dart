@@ -73,7 +73,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   ImagePath.getTrained,
                   height: 20,
                 ),
-                label: 'my_trainees'.tr,
+                label: 'my_trainers'.tr,
                 activeIcon: SvgPicture.asset(
                   ImagePath.getTrained,
                   height: 20,
