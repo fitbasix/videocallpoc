@@ -404,11 +404,6 @@ class _TrainerPageState extends State<TrainerPage> {
   @override
   void initState() {
     super.initState();
-    printInfo(info: " ===========> ${widget.isEnrolled}");
-    printInfo(
-        info:
-            " ===========> ${_trainerController.atrainerDetail.value.user!.id!}");
-
     _trainerController.currentPostPage.value = 1;
 
     _scrollController.addListener(() async {
@@ -663,6 +658,118 @@ class _TrainerPageState extends State<TrainerPage> {
                             SizedBox(height: 28 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
+                                  left:
+                                  24.0 * SizeConfig.widthMultiplier!),
+                              child: Text(
+                                'about'.tr,
+                                style: AppTextStyle.greenSemiBoldText
+                                    .copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                                height:
+                                12 * SizeConfig.heightMultiplier!),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left:
+                                  24.0 * SizeConfig.widthMultiplier!,
+                                  right:
+                                  24.0 * SizeConfig.widthMultiplier!),
+                              child: Text(
+                                widget.aboutTrainer,
+                                style: AppTextStyle.lightMediumBlackText
+                                    .copyWith(
+                                  fontSize:
+                                  (14) * SizeConfig.textMultiplier!,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+                            // SizedBox(
+                            //     height:
+                            //     23 * SizeConfig.heightMultiplier!),
+                            widget.certifcateTitle.length == 0
+                                ? Container()
+                                : Padding(
+                              padding: EdgeInsets.only(
+                                  left: 24.0 *
+                                      SizeConfig.widthMultiplier!,
+                                  top: 24 *
+                                      SizeConfig.heightMultiplier!,
+                                  bottom: 12 *
+                                      SizeConfig.heightMultiplier!),
+                              child: Text(
+                                'achivement'.tr,
+                                style: AppTextStyle
+                                    .greenSemiBoldText
+                                    .copyWith(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+                            widget.certifcateTitle.length == 0
+                                ? Container()
+                                : Container(
+                              height:
+                              81 * SizeConfig.heightMultiplier!,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                  widget.certifcateTitle.length,
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context,
+                                      int index) {
+                                    return Padding(
+                                      padding: index == 0
+                                          ? EdgeInsets.only(
+                                          left: 24.0 *
+                                              SizeConfig
+                                                  .widthMultiplier!)
+                                          : EdgeInsets.only(),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 12.0 *
+                                                SizeConfig
+                                                    .widthMultiplier!),
+                                        child:
+                                        AchivementCertificateTile(
+                                          certificateDescription:
+                                          widget
+                                              .certifcateTitle[
+                                          index]
+                                              .certificateName!,
+                                          certificateIcon: widget
+                                              .certifcateTitle[
+                                          index]
+                                              .url!,
+                                          color: index % 2 == 0
+                                              ? Theme.of(context)
+                                              .highlightColor
+                                              : Theme.of(context)
+                                              .indicatorColor,
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            ),
+
+                            SizedBox(
+                                height:
+                                24 * SizeConfig.heightMultiplier!),
+                            Padding(
+                              padding: EdgeInsets.only(
                                   bottom: 24 * SizeConfig.heightMultiplier!),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -739,117 +846,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                           );
                                         }),
                                   ),
-                                  widget.certifcateTitle.length == 0
-                                      ? Container()
-                                      : Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 24.0 *
-                                                  SizeConfig.widthMultiplier!,
-                                              top: 24 *
-                                                  SizeConfig.heightMultiplier!,
-                                              bottom: 12 *
-                                                  SizeConfig.heightMultiplier!),
-                                          child: Text(
-                                            'achivement'.tr,
-                                            style: AppTextStyle
-                                                .greenSemiBoldText
-                                                .copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1
-                                                  ?.color,
-                                            ),
-                                          ),
-                                        ),
-                                  widget.certifcateTitle.length == 0
-                                      ? Container()
-                                      : Container(
-                                          height:
-                                              81 * SizeConfig.heightMultiplier!,
-                                          child: ListView.builder(
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount:
-                                                  widget.certifcateTitle.length,
-                                              shrinkWrap: true,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Padding(
-                                                  padding: index == 0
-                                                      ? EdgeInsets.only(
-                                                          left: 24.0 *
-                                                              SizeConfig
-                                                                  .widthMultiplier!)
-                                                      : EdgeInsets.only(),
-                                                  child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 12.0 *
-                                                            SizeConfig
-                                                                .widthMultiplier!),
-                                                    child:
-                                                        AchivementCertificateTile(
-                                                      certificateDescription:
-                                                          widget
-                                                              .certifcateTitle[
-                                                                  index]
-                                                              .certificateName!,
-                                                      certificateIcon: widget
-                                                          .certifcateTitle[
-                                                              index]
-                                                          .url!,
-                                                      color: index % 2 == 0
-                                                          ? Theme.of(context)
-                                                              .highlightColor
-                                                          : Theme.of(context)
-                                                              .indicatorColor,
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                        ),
-                                  SizedBox(
-                                      height:
-                                          23 * SizeConfig.heightMultiplier!),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left:
-                                            24.0 * SizeConfig.widthMultiplier!),
-                                    child: Text(
-                                      'about'.tr,
-                                      style: AppTextStyle.greenSemiBoldText
-                                          .copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.color,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          12 * SizeConfig.heightMultiplier!),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left:
-                                            24.0 * SizeConfig.widthMultiplier!,
-                                        right:
-                                            24.0 * SizeConfig.widthMultiplier!),
-                                    child: Text(
-                                      widget.aboutTrainer,
-                                      style: AppTextStyle.lightMediumBlackText
-                                          .copyWith(
-                                        fontSize:
-                                            (14) * SizeConfig.textMultiplier!,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.color,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          24 * SizeConfig.heightMultiplier!),
+
+
                                   // Padding(
                                   //   padding: EdgeInsets.only(
                                   //     left: 24.0 * SizeConfig.widthMultiplier!,

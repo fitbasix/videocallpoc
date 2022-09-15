@@ -78,12 +78,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       ],
       debug: true);
 
-  print('===================> In background message');
-
   var jsonResponse =
       jsonDecode(jsonEncode(message.data).toString()) as Map<String, dynamic>;
-
-  print('===================> ' + jsonResponse.toString());
 
   // await AwesomeNotifications().createNotification(
   //     content: NotificationContent(
@@ -216,7 +212,6 @@ Future<void> main() async {
     });
 
     FirebaseMessaging.onMessage.listen((message) async {
-      print('===========> ' + message.data.toString());
       AwesomeNotifications().createNotification(
         content: NotificationContent(
             displayOnForeground: true,
@@ -253,10 +248,7 @@ Future<void> main() async {
     });
 
     FirebaseMessaging.instance.getInitialMessage().then((initialMessage) async {
-      print('===================> Get initial message');
       if (initialMessage != null) {
-        print('===================> Initial message ' +
-            initialMessage.data.toString());
         var json = jsonDecode(jsonEncode(initialMessage.data).toString())
             as Map<String, dynamic>;
         SharedPreferences sharedPreferences =
@@ -276,8 +268,6 @@ Future<void> main() async {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
-      print('===================> On message opened app ' +
-          message.data.toString());
       var json = jsonDecode(jsonEncode(message.data).toString())
           as Map<String, dynamic>;
       await sendToMessageList(

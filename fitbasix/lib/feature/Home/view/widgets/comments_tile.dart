@@ -69,7 +69,6 @@ class _CommentsTileState extends State<CommentsTile> {
                   width: double.infinity,
                   // constraints: BoxConstraints(
                   //     minWidth: widget.minWidth, maxWidth: widget.maxWidth),
-
                   padding: EdgeInsets.only(
                       top: 12 * SizeConfig.heightMultiplier!,
                       left: 12 * SizeConfig.widthMultiplier!,

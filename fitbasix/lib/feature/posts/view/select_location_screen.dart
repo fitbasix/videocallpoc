@@ -105,7 +105,6 @@ class SelectLocationScreen extends StatelessWidget {
                           onChanged: (value) async {
                             _postController.searchLoading.value = true;
                             if (value.isEmpty) {
-                              printInfo(info: "Emptyyyyyyyy");
                               _postController
                                   .searchSuggestion.value.predictions!
                                   .clear();

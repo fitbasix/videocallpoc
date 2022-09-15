@@ -1,15 +1,12 @@
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
-import 'package:fitbasix/feature/get_started_page/view/get_started_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import 'package:fitbasix/core/analytics/analytics_service.dart';
 import 'package:fitbasix/core/localization/translations.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
-import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'NetworkManager.dart';
@@ -24,14 +21,15 @@ class FitBasixApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: Size(360, 728),
+        designSize: const Size(360, 728),
         minTextAdapt: true,
-        builder: (_,__) {
+        builder: (_, __) {
           return LayoutBuilder(builder: (context, constraints) {
             return OrientationBuilder(builder: (context, orientation) {
               SizeConfig().init(constraints, orientation);
-              SystemChrome.setPreferredOrientations(
-                  [DeviceOrientation.portraitUp]);
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp,
+              ]);
               return GetMaterialApp(
                   initialBinding: NetworkBinding(),
                   title: 'Fitbasix',
@@ -47,17 +45,17 @@ class FitBasixApp extends StatelessWidget {
                     primaryColorLight: kPureWhite,
                     primaryColorDark: kBlack,
                     // used in achiements certificate
-                    highlightColor: Color(0xff28362B),
-                    indicatorColor: Color(0xff37342F),
+                    highlightColor: const Color(0xff28362B),
+                    indicatorColor: const Color(0xff37342F),
                     // icon used in homescreen & used in needle color
-                    primaryIconTheme: IconThemeData(color: kPureWhite),
-                    appBarTheme: AppBarTheme(
+                    primaryIconTheme: const IconThemeData(color: kPureWhite),
+                    appBarTheme: const AppBarTheme(
                         color: kPureWhite,
                         titleTextStyle: TextStyle(color: kPureWhite),
                         iconTheme: IconThemeData(color: kPureWhite),
                         actionsIconTheme: IconThemeData(color: kPureWhite)),
                     // primary text theme
-                    textTheme: TextTheme(
+                    textTheme: const TextTheme(
                       //primary text color used in gettrainerscreen & trainer profile Screen & home Screen
                       bodyText1: TextStyle(color: kPureWhite),
                       // used in home screen today text
@@ -78,14 +76,13 @@ class FitBasixApp extends StatelessWidget {
                     //Trainer card in get trainer screen & all trainer Screen & home sceen
                     cardColor: kBlack,
                   ),
-                  // theme: ThemeData(
-                  //   primarySwatch: Colors.blue,
-                  // ),
                   translations: translations,
                   locale: const Locale('en', 'US'),
                   fallbackLocale: const Locale('es', 'ES'),
                   onGenerateRoute: GenerateRoute.generateRoute,
-                  navigatorObservers: [SentryNavigatorObserver()],
+                  navigatorObservers: [
+                    SentryNavigatorObserver(),
+                  ],
                   home: child);
             });
           });

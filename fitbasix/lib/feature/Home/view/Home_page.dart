@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'dart:ui';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
@@ -1515,6 +1516,19 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 SizedBox(
+                                  height: 9 * SizeConfig.heightMultiplier!,
+                                ),
+                                CarouselSlider(
+                                  items: [ImagePath.banner1,ImagePath.banner2,ImagePath.banner3,ImagePath.banner4,ImagePath.banner5,].map((e) =>Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 10 * SizeConfig.heightMultiplier!),
+                                    child: Image.asset(e,fit: BoxFit.cover,),), ).toList(), options: CarouselOptions(
+                                  autoPlay: true,
+                                  viewportFraction: 1,
+                                  height: 135 * SizeConfig.heightMultiplier!,
+                                  autoPlayInterval: const Duration(seconds: 3),
+
+                                ),),
+                                SizedBox(
                                   height: 10 * SizeConfig.heightMultiplier!,
                                 ),
                                 Container(
@@ -1940,18 +1954,18 @@ class _HomePageState extends State<HomePage> {
                                 : SizedBox()),
 
                             /// search users logic and UI
-                            Obx(() => showUserSearch.value
-                                ? GestureDetector(
-                                    onTap: () {
-                                      clearUserSearchData();
-                                    },
-                                    child: Container(
-                                      height: Get.height,
-                                      width: Get.width,
-                                      color: kPureBlack.withOpacity(0.5),
-                                    ),
-                                  )
-                                : Container()),
+                            // Obx(() => showUserSearch.value
+                            //     ? GestureDetector(
+                            //         onTap: () {
+                            //           clearUserSearchData();
+                            //         },
+                            //         child: Container(
+                            //           height: Get.height,
+                            //           width: Get.width,
+                            //           color: kPureBlack.withOpacity(0.5),
+                            //         ),
+                            //       )
+                            //     : Container()),
                             Padding(
                               padding: EdgeInsets.all(
                                   15.0 * SizeConfig.widthMultiplier!),
@@ -1960,7 +1974,6 @@ class _HomePageState extends State<HomePage> {
                                 width: 80 * SizeConfig.widthMultiplier!,
                               ),
                             ),
-
                             // Row(
                             //   mainAxisSize: MainAxisSize.min,
                             //   crossAxisAlignment: CrossAxisAlignment.start,

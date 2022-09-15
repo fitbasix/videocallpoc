@@ -111,6 +111,7 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   credit_card_type_detector: ^2.0.0
   html: ^0.15.0
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -159,6 +160,7 @@ flutter:
     - assets/plans/
     - assets/log_in/
     - assets/gif/
+    - assets/banners/
     - assets/
     - .env
   #   - images/a_dot_ham.jpeg

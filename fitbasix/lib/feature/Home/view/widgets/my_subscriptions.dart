@@ -24,8 +24,10 @@ class MySubscriptions extends StatelessWidget {
           Navigator.pop(context);
         },
       ),
-      body: ListView.separated(
+      body:
+      ListView.separated(
         itemBuilder: (context, index) => MyTrainersTile(
+          index: index,
           isSubscriptionPage: true,
           planDetail: _homeController.activePlans[index],
           name: _homeController.activePlans[index].trainer!.name.toString(),

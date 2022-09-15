@@ -150,6 +150,7 @@ class _ReviewPageState extends State<ReviewPage> {
                   padding: EdgeInsets.symmetric(
                       horizontal: 20 * SizeConfig.widthMultiplier!),
                   child: TextField(
+                    textCapitalization: TextCapitalization.sentences,
                     controller: _homeController.reviewController,
                     onChanged: (value) {},
                     style: AppTextStyle.hintText.copyWith(color: kPureWhite),

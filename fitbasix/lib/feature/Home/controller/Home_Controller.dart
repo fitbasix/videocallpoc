@@ -320,8 +320,7 @@ class HomeController extends GetxController {
 
     if (difference.inDays > 8) {
       var inputFormat = DateFormat('dd/MM/yyyy');
-      var inputDate = inputFormat.parse(dateString);
-      String date = DateFormat('dd LLLL yyyy').format(inputDate);
+      String date = DateFormat('dd LLLL yyyy').format(notificationDate);
       return date;
     } else if ((difference.inDays / 7).floor() >= 1) {
       return (numericDates) ? '1 week ago' : 'Last week';
@@ -459,11 +458,13 @@ class HomeController extends GetxController {
           _state = AppState.DATA_NOT_FETCHED;
         }
       }
-
       fetchData();
     }
-
     setup();
+    var ip = await HomeService.getIp();
+    if (ip != null) {
+      prefs.setString('ip', ip);
+    }
     super.onInit();
   }
 

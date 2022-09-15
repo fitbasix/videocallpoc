@@ -69,15 +69,21 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   label: 'home'.tr),
             if (jsonOb['get_trained'] == 1)
               BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  ImagePath.getTrained,
-                  height: 20,
+                icon: Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: SvgPicture.asset(
+                    ImagePath.dumbell,
+                    height: 20,
+                  ),
                 ),
-                label: 'my_trainers'.tr,
-                activeIcon: SvgPicture.asset(
-                  ImagePath.getTrained,
-                  height: 20,
-                  color: kGreenColor,
+                label: 'Get Trained'.tr,
+                activeIcon: Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: SvgPicture.asset(
+                    ImagePath.dumbell,
+                    height: 20,
+                    color: kGreenColor,
+                  ),
                 ),
               ),
             if (jsonOb['post'] == 1)

@@ -251,9 +251,14 @@ class HomeService {
     var response = await dio!.post(ApiUrl.rateAndReview,
         data: {"trainerId": trainerId, "review": review, "rating": rating});
     log(response.toString());
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       return true;
     }
     return null;
+  }
+
+  static Future<String?> getIp() async {
+    var response = await dio!.get('https://api.ipify.org?format=json');
+    return response.data['ip'];
   }
 }

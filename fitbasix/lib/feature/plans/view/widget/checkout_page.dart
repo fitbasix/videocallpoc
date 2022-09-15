@@ -399,9 +399,8 @@ class CheckoutPage extends StatelessWidget {
                       ),
                     ));
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(response["response_message"]),
-                ));
+                Get.dialog(const SuccessFailureDialog(
+                    message: "Transaction Declined", isSuccess: false));
               }
             });
           },

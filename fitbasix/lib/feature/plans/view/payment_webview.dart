@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:fitbasix/core/api_service/dio_service.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -24,6 +25,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:html/parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -78,6 +80,8 @@ class _PaymentWebviewState extends State<PaymentWebview> {
   var serviceCommand = 'TOKENIZATION';
   var cardSecurityCode = '';
 
+  var email = '';
+
   var paymentForm = {};
 
   static Future<Map<String, dynamic>> getPaymentLink({
@@ -92,10 +96,12 @@ class _PaymentWebviewState extends State<PaymentWebview> {
     required String trainerId,
     required String planId,
     required int planDuration,
+    required String ip,
   }) async {
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.getPaymentLink, data: {
+      "customer_ip": ip,
       "command": "PURCHASE",
       "access_code": accessCode,
       "merchant_extra": trainerId,
@@ -109,7 +115,9 @@ class _PaymentWebviewState extends State<PaymentWebview> {
       "amount": amount,
       "token_name": tokenName,
       "return_url": "${ApiUrl.liveBaseURL}/api/payment/purchaseUrl"
-    });
+    },
+    );
+    log(response.data.toString());
     return {
       "response_code": response.statusCode,
       "response_message": response.statusMessage,
@@ -137,6 +145,14 @@ class _PaymentWebviewState extends State<PaymentWebview> {
     signature = digest.toString();
 
     printInfo(info: digest.toString());
+
+    email = Get.find<HomeController>()
+        .userProfileData
+        .value
+        .response!
+        .data!
+        .profile!
+        .email!;
 
     super.initState();
   }
@@ -193,15 +209,17 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                 //       message: 'There is an error. Please try again later.',
                 //       isSuccess: false));
                 // }
-
+                var prefs = await SharedPreferences.getInstance();
+                var ip = prefs.getString('ip');
                 if (widget.initialUrl == null) {
                   if (jsonDecode(parsedString)["response"]["response_code"] ==
                       200) {
                     var paymentResponse = await getPaymentLink(
+                      ip: ip ?? '',
                       accessCode: accessCode,
                       amount: widget.amount!,
                       currency: "AED",
-                      customerEmail: "email@gmail.com",
+                      customerEmail: email,
                       language: "en",
                       planId: widget.planId!,
                       trainerId: widget.trainerId!,
@@ -307,7 +325,6 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                 printInfo(info: url.toString());
                 if (url.toString() ==
                     "${ApiUrl.liveBaseURL}/api/payment/purchaseUrl") {
-                  printInfo(info: '=================> Matched');
                   setState(() {
                     isLoading = true;
                   });

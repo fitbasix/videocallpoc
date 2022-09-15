@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
 import 'package:fitbasix/feature/Home/model/postpone_model.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
@@ -47,6 +49,8 @@ class TrainerController extends GetxController {
   RxBool isMyTrainerSearchActive = RxBool(false);
 
   final TextEditingController searchController = TextEditingController();
+  final CarouselController carouselController = CarouselController();
+
   final TextEditingController searchMyTrainerController =
       TextEditingController();
   RxString search = RxString('');
@@ -81,6 +85,14 @@ class TrainerController extends GetxController {
   RxList<String> enrolledTrainer = <String>[].obs;
   Rx<TimingModel> timingModel = TimingModel().obs;
   RxBool isTiming = false.obs;
+  RxInt trainerListIndex = 0.obs;
+  RxInt fitnessListIndex = 0.obs;
+  RxInt nutritionListIndex = 0.obs;
+
+  RxBool isCarouselExpanded = false.obs;
+  RxBool showChangeTiming = false.obs;
+
+
   RxList<int> availability = <int>[].obs;
   Map<String, int> daysInt = {
     "Sun": 0,
@@ -172,6 +184,18 @@ class TrainerController extends GetxController {
     getTrainedIsLoading.value = false;
     update();
   }
+
+  @override
+  void onClose(){
+    collapseTiles();
+  }
+
+  void collapseTiles(){
+    for (var trainer in Get.find<HomeController>().activePlans){
+      trainer.isExpanded = false;
+    }
+  }
+
 
   Rx<SortByModel> filterOptions = SortByModel().obs;
 

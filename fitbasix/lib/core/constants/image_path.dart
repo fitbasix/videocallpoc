@@ -18,6 +18,9 @@ class ImagePath {
   static const String bg2 = "assets/mytrainers/f2.png";
   static const String bg3 = "assets/mytrainers/f3.png";
 
+  static const String trainerBg = "assets/get_trained/trainerBg.png";
+
+
   static const String refresh = "assets/Icons/refresh.svg";
   static const String gfit = "assets/Icons/fit.svg";
   static const String health = "assets/Icons/health.png";
@@ -115,13 +118,17 @@ class ImagePath {
   static const String resetpasskeyIcon =
       "assets/menuSlider/resetpassKeyIcon.svg";
 
+  static const String getTrained1 = "assets/get_trained/trainerBanner1.png";
+  static const String getTrained2 = "assets/get_trained/fitnessBanner1.png";
+  static const String getTrained3 = "assets/get_trained/nutritionBanner1.png";
+
   ///home healthImage
   static const String carbsIcon = "assets/home/carbs.svg";
   static const String fatIcon = "assets/home/fat.svg";
   static const String proteinIcon = "assets/home/protein.svg";
   static const String water = "assets/home/water.svg";
   static const String fire = "assets/home/fire 2.svg";
-  static const String power = "assets/home/power.svg";
+  static const String dumbell = "assets/Icons/dumbell.svg";
   static const String add = "assets/home/add.svg";
   static const String appleHealth = "assets/home/appleHealth.png";
   static const String googleFit = "assets/home/googleFit.svg";
@@ -191,5 +198,10 @@ class ImagePath {
   static const String detail_intro_image =
       "assets/log_in/detail_screenImage.png";
 
-  //PASSWORD
+  ///BANNERS
+  static const String banner1 = "assets/banners/banner1.png";
+  static const String banner2 = "assets/banners/banner2.png";
+  static const String banner3 = "assets/banners/banner3.png";
+  static const String banner4 = "assets/banners/banner4.png";
+  static const String banner5 = "assets/banners/banner5.png";
 }

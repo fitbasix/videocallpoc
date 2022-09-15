@@ -78,13 +78,16 @@ class TrainerCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  strengthLength == 1
-                      ? '$strength'
-                      : '$strength + ${strengthLength - 1}',
-                  style: AppTextStyle.NormalText.copyWith(
-                      color: Theme.of(context).textTheme.bodyText1?.color,
-                      fontSize: 10 * SizeConfig.textMultiplier!),
+                Expanded(
+                  child: Text(
+                    strengthLength == 1
+                        ? '$strength'
+                        : '$strength + ${strengthLength - 1}',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.NormalText.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1?.color,
+                        fontSize: 12 * SizeConfig.textMultiplier!),
+                  ),
                 ),
                 SizedBox(
                   width: 8 * SizeConfig.widthMultiplier!,

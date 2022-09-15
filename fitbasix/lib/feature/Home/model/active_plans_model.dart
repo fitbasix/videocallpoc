@@ -71,6 +71,7 @@ class PlanDetail {
   SessionTime? sessionTime;
   PlanDetails? planDetails;
   bool isExpanded = false;
+  bool isChangeExpanded = false;
 
   factory PlanDetail.fromJson(Map<String, dynamic> json) => PlanDetail(
     id: json["_id"],
