@@ -66,7 +66,7 @@ class TrainerPlansScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       physics: BouncingScrollPhysics(),
                       child: Row(
-
+                        crossAxisAlignment: CrossAxisAlignment.start,
                           ///remove plans.length+2 after testing
                           children: List.generate(
                         trainerController
@@ -197,7 +197,6 @@ class TrainerPlansScreen extends StatelessWidget {
     List<String>? planFeaturesList,
   }) =>
       Container(
-        height: 555 * SizeConfig.heightMultiplier!,
         width: MediaQuery.of(context).size.width -
             40 * SizeConfig.widthMultiplier!,
         padding: EdgeInsets.only(left: 16 * SizeConfig.widthMultiplier!),

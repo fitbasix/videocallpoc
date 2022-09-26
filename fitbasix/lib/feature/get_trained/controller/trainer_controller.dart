@@ -25,7 +25,7 @@ class TrainerController extends GetxController {
   RxBool showLoaderOnMyTrainer = false.obs;
 
   var currentMyTrainerPage = 0.obs;
-  var currentPlanType = -1;
+  var currentPlanType = 0;
 
   var fromTimeForFilter = DateTime.now().obs;
   var toTimeForFilter = DateTime.now().obs;
@@ -193,9 +193,12 @@ class TrainerController extends GetxController {
   void collapseTiles(){
     for (var trainer in Get.find<HomeController>().activePlans){
       trainer.isExpanded = false;
+      trainer.isChangeExpanded = false;
     }
+    isCarouselExpanded.value = false;
+    showChangeTiming.value = false;
+    update();
   }
-
 
   Rx<SortByModel> filterOptions = SortByModel().obs;
 

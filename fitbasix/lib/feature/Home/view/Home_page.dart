@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
+import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
@@ -14,6 +15,7 @@ import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
+import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/report_abuse/report_abuse_controller.dart';
 import 'package:flutter/material.dart';
@@ -180,9 +182,7 @@ class _HomePageState extends State<HomePage> {
     var senderName = prefs.getString('senderName');
     var senderProfilePhoto = prefs.getString('senderProfilePhoto');
     var userIdForCometChat = prefs.getString("userIdForCometChat");
-
-    print(
-        '===================> Home Controller $senderChatId $senderId $senderName $senderProfilePhoto');
+    var postId = prefs.getString('postId');
 
     if (senderId != null) {
       var controller = Get.find<FirebaseChatController>();
@@ -193,14 +193,26 @@ class _HomePageState extends State<HomePage> {
       Get.to(
         () => ChatPage(),
       );
+    }else if(postId != null){
+      _homeController.commentsList.clear();
+      _homeController.viewReplies!.clear();
+      _homeController.postLoading.value = true;
+      Get.to(PostScreen());
+      var post = await HomeService.getPostById(postId);
+      _homeController.post.value = post.response!.data!;
+      _homeController.postLoading.value = false;
+      _homeController.commentsLoading.value = true;
+      _homeController.postComments.value =
+      await HomeService.fetchComment(postId: postId);
+
+      if (_homeController.postComments.value.response!.data!.isNotEmpty) {
+        _homeController.commentsList.value =
+        _homeController.postComments.value.response!.data!;
+      }
+      _homeController.commentsLoading.value = false;
     }
   }
 
-  // @override
-  // void dispose() {
-  //   _homeController.scrollController.dispose();
-  //   super.dispose();
-  // }
 
   Future<bool> onWillPop() async {
     DateTime now = DateTime.now();
@@ -248,19 +260,19 @@ class _HomePageState extends State<HomePage> {
                       color: kGreenColor,
                       onRefresh: _homeController.onTrendingPostRefresh,
                       child: SingleChildScrollView(
-                        key: const PageStorageKey<String>('feed-screen'),
+                        // key: const PageStorageKey<String>('feed-screen'),
                         controller: _homeController.scrollController,
                         child: Stack(
                           children: [
                             Container(
-                              height: 178 * SizeConfig.heightMultiplier!,
+                              height: 300 * SizeConfig.heightMultiplier!,
                               color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: 42 * SizeConfig.heightMultiplier!,
+                                  height: 50 * SizeConfig.heightMultiplier!,
                                   color:
                                       Theme.of(context).scaffoldBackgroundColor,
                                 ),
@@ -1521,12 +1533,11 @@ class _HomePageState extends State<HomePage> {
                                 CarouselSlider(
                                   items: [ImagePath.banner1,ImagePath.banner2,ImagePath.banner3,ImagePath.banner4,ImagePath.banner5,].map((e) =>Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 10 * SizeConfig.heightMultiplier!),
-                                    child: Image.asset(e,fit: BoxFit.cover,),), ).toList(), options: CarouselOptions(
+                                    child: Image.asset(e,fit: BoxFit.contain,),), ).toList(), options: CarouselOptions(
                                   autoPlay: true,
                                   viewportFraction: 1,
-                                  height: 135 * SizeConfig.heightMultiplier!,
                                   autoPlayInterval: const Duration(seconds: 3),
-
+                                  aspectRatio: 3,
                                 ),),
                                 SizedBox(
                                   height: 10 * SizeConfig.heightMultiplier!,
@@ -1967,147 +1978,166 @@ class _HomePageState extends State<HomePage> {
                             //       )
                             //     : Container()),
                             Padding(
-                              padding: EdgeInsets.all(
-                                  15.0 * SizeConfig.widthMultiplier!),
+                              padding: EdgeInsets.only(
+                                left: 15.0 * SizeConfig.widthMultiplier!,
+                                 top: 20.0 * SizeConfig.widthMultiplier!,
+                              right: 15.0 * SizeConfig.widthMultiplier!,
+                              ),
                               child: SvgPicture.asset(
                                 ImagePath.logo,
                                 width: 80 * SizeConfig.widthMultiplier!,
                               ),
                             ),
-                            // Row(
-                            //   mainAxisSize: MainAxisSize.min,
-                            //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   children: [
-                            //     Container(
-                            //       width: Get.width - 2 * (16 * SizeConfig.widthMultiplier!) ,
-                            //       margin: EdgeInsets.symmetric(
-                            //           horizontal: 16 * SizeConfig.widthMultiplier!,
-                            //           vertical: 12 * SizeConfig.heightMultiplier!),
-                            //       decoration: BoxDecoration(
-                            //         color: Theme
-                            //             .of(context)
-                            //             .textTheme
-                            //             .headline4
-                            //             ?.color,
-                            //         borderRadius: BorderRadius.circular(
-                            //             8 * SizeConfig.widthMultiplier!),
-                            //       ),
-                            //       child: Column(
-                            //         mainAxisSize: MainAxisSize.min,
-                            //         children: [
-                            //           TextField(
-                            //             controller: searchUserController,
-                            //             onChanged: (value) async {
-                            //               if (value.isNotEmpty) {
-                            //                 WidgetsBinding.instance!
-                            //                     .addPostFrameCallback((_) async {
-                            //                   showUserSearch.value = true;
-                            //                   var users = await CreatePostService
-                            //                       .getUsers(value);
-                            //                   _homeController.searchUsersData
-                            //                       .value = users.response!.data!;
-                            //                 });
-                            //               }
-                            //               else {
-                            //                 WidgetsBinding.instance!
-                            //                     .addPostFrameCallback((_) {
-                            //                   showUserSearch.value = false;
-                            //                   _homeController.searchUsersData.value = [UserData()];
-                            //                 });
-                            //               }
-                            //
-                            //               //_homeController.searchUsersData.value = users.response!.data!;
-                            //             },
-                            //             style: AppTextStyle.normalGreenText.copyWith(
-                            //                 color:
-                            //                 Theme
-                            //                     .of(context)
-                            //                     .textTheme
-                            //                     .bodyText1
-                            //                     ?.color),
-                            //             onSubmitted: (value) {},
-                            //             decoration: InputDecoration(
-                            //               prefixIcon: Transform(
-                            //                 transform: Matrix4.translationValues(
-                            //                     0, 2, 0),
-                            //                 child: Icon(
-                            //                   Icons.search,
-                            //                   color: hintGrey,
-                            //                 ),
-                            //               ),
-                            //               border: InputBorder.none,
-                            //               hintText: 'search'.tr,
-                            //               hintStyle: AppTextStyle.smallGreyText
-                            //                   .copyWith(
-                            //                   fontSize: 14 * SizeConfig.textMultiplier!,
-                            //                   color: hintGrey),
-                            //             ),
-                            //           ),
-                            //
-                            //           Obx(() =>
-                            //           showUserSearch.value &&
-                            //               (_homeController.searchUsersData.isNotEmpty &&
-                            //                   _homeController.searchUsersData[0].name !=
-                            //                       null) ? Container(
-                            //               height: 250 * SizeConfig.heightMultiplier!,
-                            //               padding: EdgeInsets.only(bottom: 10*SizeConfig.heightMultiplier!),
-                            //               child: ListView.builder(
-                            //                   shrinkWrap: true,
-                            //                   physics: BouncingScrollPhysics(),
-                            //                   itemCount: _homeController.searchUsersData
-                            //                       .length,
-                            //                   itemBuilder: (context, index) {
-                            //                     return Obx(() =>
-                            //                         Padding(
-                            //                           padding: EdgeInsets.symmetric(
-                            //                               horizontal: 16 * SizeConfig
-                            //                                   .widthMultiplier!),
-                            //                           child: GestureDetector(
-                            //                             onTap: (){
-                            //                              if(_homeController.searchUsersData[index].trainerType!.isNotEmpty){
-                            //                                gotoIndividualPage(index,_homeController.searchUsersData[index].id!);
-                            //                              }
-                            //                              else{
-                            //                               gotoIndividualUserPage(index, _homeController.searchUsersData[index].id!);
-                            //                              }
-                            //                             },
-                            //                             child: PeopleTile(
-                            //                               wantCheckBox: false,
-                            //                               name: _homeController
-                            //                                   .searchUsersData[index]
-                            //                                   .name!,
-                            //                               subtitle:
-                            //                               _homeController
-                            //                                   .searchUsersData[index]
-                            //                                   .name!,
-                            //                               image: _homeController
-                            //                                   .searchUsersData[index]
-                            //                                   .profilePhoto!,
-                            //                               onTap: (value) async {
-                            //
-                            //                               },
-                            //                               value: false,
-                            //                             ),
-                            //                           ),
-                            //                         ));
-                            //                   })
-                            //           ) : Container())
-                            //         ],
-                            //       ),
-                            //     ),
-                            // GestureDetector(
-                            //   onTap: (){
-                            //   },
-                            //   child: Padding(
-                            //       padding: EdgeInsets.only(
-                            //           top: 23 * SizeConfig.heightMultiplier!),
-                            //       child: SvgPicture.asset(
-                            //         ImagePath.bellIcon, color: Colors.white,
-                            //         height: 19.5 * SizeConfig.heightMultiplier!,
-                            //         width: 16 * SizeConfig.widthMultiplier!,)),
-                            // )
-                            //   ],
-                            // ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: Get.width - 150 * SizeConfig.widthMultiplier!,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 16 * SizeConfig.widthMultiplier!,
+                                        vertical: 12 * SizeConfig.heightMultiplier!),
+                                    decoration: BoxDecoration(
+                                      color: Theme
+                                          .of(context)
+                                          .textTheme
+                                          .headline4
+                                          ?.color,
+                                      borderRadius: BorderRadius.circular(
+                                          8 * SizeConfig.widthMultiplier!),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 10 * SizeConfig.widthMultiplier!,),
+                                    Icon(
+                                        Icons.search,
+                                        color: hintGrey,
+                                     size: 20 * SizeConfig.heightMultiplier!,
+                                      ),
+                                            Expanded(
+                                              child: TextField(
+                                                controller: searchUserController,
+                                                onChanged: (value) async {
+                                                  if (value.isNotEmpty) {
+                                                    WidgetsBinding.instance!
+                                                        .addPostFrameCallback((_) async {
+                                                      showUserSearch.value = true;
+                                                      var users = await CreatePostService
+                                                          .getUsers(value);
+                                                      _homeController.searchUsersData
+                                                          .value = users.response!.data!;
+                                                    });
+                                                  }
+                                                  else {
+                                                    WidgetsBinding.instance!
+                                                        .addPostFrameCallback((_) {
+                                                      showUserSearch.value = false;
+                                                      _homeController.searchUsersData.value = [UserData()];
+                                                    });
+                                                  }
+                                                  //_homeController.searchUsersData.value = users.response!.data!;
+                                                },
+                                                style: AppTextStyle.normalGreenText.copyWith(
+                                                    color:
+                                                    Theme
+                                                        .of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        ?.color),
+                                                onSubmitted: (value) {},
+                                                decoration: InputDecoration(
+                                                  isDense: true,
+                                                  contentPadding: EdgeInsets.fromLTRB(10 * SizeConfig.heightMultiplier!,10 * SizeConfig.heightMultiplier!, 10* SizeConfig.heightMultiplier!, 10 * SizeConfig.heightMultiplier!,),
+                                                  // prefixIcon: Transform(
+                                                  //   transform: Matrix4.translationValues(
+                                                  //       0, 2, 0),
+                                                  //   child: Icon(
+                                                  //     Icons.search,
+                                                  //     color: hintGrey,
+                                                  //   ),
+                                                  // ),
+                                                  border: InputBorder.none,
+                                                  hintText: 'search'.tr,
+                                                  hintStyle: AppTextStyle.smallGreyText
+                                                      .copyWith(
+                                                      fontSize: 14 * SizeConfig.textMultiplier!,
+                                                      color: hintGrey),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Obx(() =>
+                                        showUserSearch.value &&
+                                            (_homeController.searchUsersData.isNotEmpty &&
+                                                _homeController.searchUsersData[0].name !=
+                                                    null) ? Container(
+                                            height: 250 * SizeConfig.heightMultiplier!,
+                                            padding: EdgeInsets.only(bottom: 10*SizeConfig.heightMultiplier!),
+                                            child: ListView.builder(
+                                                shrinkWrap: true,
+                                                physics: BouncingScrollPhysics(),
+                                                itemCount: _homeController.searchUsersData
+                                                    .length,
+                                                itemBuilder: (context, index) {
+                                                  return Obx(() =>
+                                                      Padding(
+                                                        padding: EdgeInsets.symmetric(
+                                                            horizontal: 16 * SizeConfig
+                                                                .widthMultiplier!),
+                                                        child: GestureDetector(
+                                                          onTap: (){
+                                                           if(_homeController.searchUsersData[index].trainerType!.isNotEmpty){
+                                                             gotoIndividualPage(index,_homeController.searchUsersData[index].id!);
+                                                           }
+                                                           else{
+                                                            gotoIndividualUserPage(index, _homeController.searchUsersData[index].id!);
+                                                           }
+                                                          },
+                                                          child: PeopleTile(
+                                                            wantCheckBox: false,
+                                                            name: _homeController
+                                                                .searchUsersData[index]
+                                                                .name!,
+                                                            subtitle:
+                                                            _homeController
+                                                                .searchUsersData[index]
+                                                                .name!,
+                                                            image: _homeController
+                                                                .searchUsersData[index]
+                                                                .profilePhoto!,
+                                                            onTap: (value) async {
+
+                                                            },
+                                                            value: false,
+                                                          ),
+                                                        ),
+                                                      ));
+                                                })
+                                        ) : Container())
+                                      ],
+                                    ),
+                                  ),
+                              // GestureDetector(
+                              //   onTap: (){
+                              //   },
+                              //   child: Padding(
+                              //       padding: EdgeInsets.only(
+                              //           top: 23 * SizeConfig.heightMultiplier!),
+                              //       child: SvgPicture.asset(
+                              //         ImagePath.bellIcon, color: Colors.white,
+                              //         height: 19.5 * SizeConfig.heightMultiplier!,
+                              //         width: 16 * SizeConfig.widthMultiplier!,)),
+                              // )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

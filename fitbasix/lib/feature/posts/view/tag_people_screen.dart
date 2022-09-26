@@ -197,7 +197,7 @@ class TagPeopleScreen extends StatelessWidget {
                                               Text(
                                                 _postController
                                                     .selectedUserData[index]
-                                                    .id!,
+                                                    .name!.capitalize!,
                                                 style: AppTextStyle
                                                     .boldBlackText
                                                     .copyWith(
@@ -256,7 +256,7 @@ class TagPeopleScreen extends StatelessWidget {
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return Obx(() => PeopleTile(
-                                      name: _postController.users[index].name!,
+                                      name: _postController.users[index].name!.capitalize!,
                                       subtitle:
                                           _postController.users[index].name!,
                                       image: _postController

@@ -522,7 +522,7 @@ class TrainersTileUI extends StatelessWidget {
                 child: Obx(
                   () => Text(
                       lastMessageIsLoading.value
-                          ? "loading..."
+                          ? "lets_start_conversation".tr
                           : (lastMessage.value.isNotEmpty
                               ? lastMessage.value
                               : "lets_start_conversation".tr),

@@ -20,7 +20,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -55,7 +54,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
         _trainerController.isPlanLoading.value = true;
         _trainerController.planModel.value =
             await TrainerServices.getPlanByTrainerId(
-                    _trainerController.atrainerDetail.value.user!.id!,_trainerController.currentPlanType)
+                    _trainerController.atrainerDetail.value.user!.id!,
+                    _trainerController.currentPlanType)
                 .then((value) {
           _trainerController.isPlanLoading.value = false;
           setState(() {});
@@ -93,15 +93,13 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       _trainerController.atrainerDetail.value.isEnrolled!,
                   onFollow: () {
                     if (trainerController.atrainerDetail.value.isFollowing!) {
-                      trainerController.atrainerDetail.value.isFollowing =
-                          false;
-                      trainerController.atrainerDetail.value.followers =
-                          (int.tryParse(trainerController
-                                      .atrainerDetail.value.followers!)! -
-                                  1)
-                              .toString();
-                      TrainerServices.unFollowTrainer(
-                          trainerController.atrainerDetail.value.user!.id!);
+                      Get.dialog(
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20 * SizeConfig.widthMultiplier!),
+                            child: UnfollowDialog(),
+                          ),
+                          barrierColor: Colors.transparent);
                     } else {
                       trainerController.atrainerDetail.value.isFollowing = true;
                       trainerController.atrainerDetail.value.followers =
@@ -112,7 +110,6 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       TrainerServices.followTrainer(
                           trainerController.atrainerDetail.value.user!.id!);
                     }
-
                     setState(() {});
                   },
                   onMessage: () async {
@@ -343,7 +340,9 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 
   void setTrainerDataForUniLink() async {
     _trainerController.isMyTrainerProfileLoading.value = true;
-    var response = await TrainerServices.getATrainerDetail(widget.trainerID!,);
+    var response = await TrainerServices.getATrainerDetail(
+      widget.trainerID!,
+    );
     _trainerController.atrainerDetail.value = response.response!.data!;
     _trainerController.isMyTrainerProfileLoading.value = false;
     _trainerController.setUp();
@@ -470,7 +469,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                     height: 187 * SizeConfig.heightMultiplier!,
                                   ),
                                   Text(
-                                    widget.name,
+                                    widget.name.capitalize!,
                                     style: AppTextStyle.titleText.copyWith(
                                         fontSize:
                                             18 * SizeConfig.textMultiplier!,
@@ -658,12 +657,10 @@ class _TrainerPageState extends State<TrainerPage> {
                             SizedBox(height: 28 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left:
-                                  24.0 * SizeConfig.widthMultiplier!),
+                                  left: 24.0 * SizeConfig.widthMultiplier!),
                               child: Text(
                                 'about'.tr,
-                                style: AppTextStyle.greenSemiBoldText
-                                    .copyWith(
+                                style: AppTextStyle.greenSemiBoldText.copyWith(
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyText1
@@ -671,21 +668,16 @@ class _TrainerPageState extends State<TrainerPage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                                height:
-                                12 * SizeConfig.heightMultiplier!),
+                            SizedBox(height: 12 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
-                                  left:
-                                  24.0 * SizeConfig.widthMultiplier!,
-                                  right:
-                                  24.0 * SizeConfig.widthMultiplier!),
+                                  left: 24.0 * SizeConfig.widthMultiplier!,
+                                  right: 24.0 * SizeConfig.widthMultiplier!),
                               child: Text(
                                 widget.aboutTrainer,
-                                style: AppTextStyle.lightMediumBlackText
-                                    .copyWith(
-                                  fontSize:
-                                  (14) * SizeConfig.textMultiplier!,
+                                style:
+                                    AppTextStyle.lightMediumBlackText.copyWith(
+                                  fontSize: (14) * SizeConfig.textMultiplier!,
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyText1
@@ -699,75 +691,65 @@ class _TrainerPageState extends State<TrainerPage> {
                             widget.certifcateTitle.length == 0
                                 ? Container()
                                 : Padding(
-                              padding: EdgeInsets.only(
-                                  left: 24.0 *
-                                      SizeConfig.widthMultiplier!,
-                                  top: 24 *
-                                      SizeConfig.heightMultiplier!,
-                                  bottom: 12 *
-                                      SizeConfig.heightMultiplier!),
-                              child: Text(
-                                'achivement'.tr,
-                                style: AppTextStyle
-                                    .greenSemiBoldText
-                                    .copyWith(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      ?.color,
-                                ),
-                              ),
-                            ),
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            24.0 * SizeConfig.widthMultiplier!,
+                                        top: 24 * SizeConfig.heightMultiplier!,
+                                        bottom:
+                                            12 * SizeConfig.heightMultiplier!),
+                                    child: Text(
+                                      'achivement'.tr,
+                                      style: AppTextStyle.greenSemiBoldText
+                                          .copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
+                                      ),
+                                    ),
+                                  ),
                             widget.certifcateTitle.length == 0
                                 ? Container()
                                 : Container(
-                              height:
-                              81 * SizeConfig.heightMultiplier!,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                  widget.certifcateTitle.length,
-                                  shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext context,
-                                      int index) {
-                                    return Padding(
-                                      padding: index == 0
-                                          ? EdgeInsets.only(
-                                          left: 24.0 *
-                                              SizeConfig
-                                                  .widthMultiplier!)
-                                          : EdgeInsets.only(),
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            right: 12.0 *
-                                                SizeConfig
-                                                    .widthMultiplier!),
-                                        child:
-                                        AchivementCertificateTile(
-                                          certificateDescription:
-                                          widget
-                                              .certifcateTitle[
-                                          index]
-                                              .certificateName!,
-                                          certificateIcon: widget
-                                              .certifcateTitle[
-                                          index]
-                                              .url!,
-                                          color: index % 2 == 0
-                                              ? Theme.of(context)
-                                              .highlightColor
-                                              : Theme.of(context)
-                                              .indicatorColor,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            ),
+                                    height: 81 * SizeConfig.heightMultiplier!,
+                                    child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:
+                                            widget.certifcateTitle.length,
+                                        shrinkWrap: true,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Padding(
+                                            padding: index == 0
+                                                ? EdgeInsets.only(
+                                                    left: 24.0 *
+                                                        SizeConfig
+                                                            .widthMultiplier!)
+                                                : EdgeInsets.only(),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 12.0 *
+                                                      SizeConfig
+                                                          .widthMultiplier!),
+                                              child: AchivementCertificateTile(
+                                                certificateDescription: widget
+                                                    .certifcateTitle[index]
+                                                    .certificateName!,
+                                                certificateIcon: widget
+                                                    .certifcateTitle[index]
+                                                    .url!,
+                                                color: index % 2 == 0
+                                                    ? Theme.of(context)
+                                                        .highlightColor
+                                                    : Theme.of(context)
+                                                        .indicatorColor,
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  ),
 
-                            SizedBox(
-                                height:
-                                24 * SizeConfig.heightMultiplier!),
+                            SizedBox(height: 24 * SizeConfig.heightMultiplier!),
                             Padding(
                               padding: EdgeInsets.only(
                                   bottom: 24 * SizeConfig.heightMultiplier!),
@@ -846,7 +828,6 @@ class _TrainerPageState extends State<TrainerPage> {
                                           );
                                         }),
                                   ),
-
 
                                   // Padding(
                                   //   padding: EdgeInsets.only(
@@ -1531,12 +1512,12 @@ class PlanTile extends StatelessWidget {
             Container(
               height: 144 * SizeConfig.heightMultiplier!,
               width: 160 * SizeConfig.widthMultiplier!,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(10.0),
                       topLeft: Radius.circular(10.0))),
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(10.0),
                     topLeft: Radius.circular(10.0)),
                 child: Image.network(
@@ -1634,6 +1615,105 @@ class PlanTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class UnfollowDialog extends StatefulWidget {
+  const UnfollowDialog({Key? key}) : super(key: key);
+
+  @override
+  State<UnfollowDialog> createState() => _UnfollowDialogState();
+}
+
+class _UnfollowDialogState extends State<UnfollowDialog> {
+  var trainerController = Get.find<TrainerController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        decoration: BoxDecoration(
+          color: kBlack,
+          borderRadius: BorderRadius.circular(8 *SizeConfig.heightMultiplier!),
+        ),
+        padding: EdgeInsets.symmetric(
+            vertical: 15 * SizeConfig.heightMultiplier!,
+            horizontal: 15 * SizeConfig.widthMultiplier!),
+        margin: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Are you sure you want to unfollow ?',
+              style: AppTextStyle.whiteTextWithWeight600
+                  .copyWith(fontSize: 16 * SizeConfig.textMultiplier!),
+            ),
+            SizedBox(
+              height: 20 * SizeConfig.heightMultiplier!,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    trainerController.atrainerDetail.value.isFollowing = false;
+                    trainerController.atrainerDetail.value.followers =
+                        (int.tryParse(trainerController
+                                    .atrainerDetail.value.followers!)! -
+                                1)
+                            .toString();
+                    trainerController.atrainerDetail.refresh();
+                    TrainerServices.unFollowTrainer(
+                        trainerController.atrainerDetail.value.user!.id!);
+                    Get.back();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8), color: kBlack),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 8.0 * SizeConfig.heightMultiplier!,
+                          horizontal: 23 * SizeConfig.widthMultiplier!),
+                      child: Text(
+                        'Yes',
+                        style: AppTextStyle.normalWhiteText.copyWith(
+                            fontSize: 14 * SizeConfig.textMultiplier!),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20 * SizeConfig.widthMultiplier!,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: kgreen4F),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 8.0 * SizeConfig.heightMultiplier!,
+                          horizontal: 23 * SizeConfig.widthMultiplier!),
+                      child: Text(
+                        'Cancel',
+                        style: AppTextStyle.normalWhiteText.copyWith(
+                            fontSize: 14 * SizeConfig.textMultiplier!),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.zero,
     );
   }
 }

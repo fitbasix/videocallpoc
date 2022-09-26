@@ -256,7 +256,7 @@ class MenuScreen extends StatelessWidget {
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                 BorderRadius.circular(8),
-                                                color: kPureBlack),
+                                                color: kBlack),
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
                                                   vertical: 8.0 *
@@ -308,7 +308,7 @@ class MenuScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              backgroundColor: kPureBlack,
+                              backgroundColor: kBlack,
                               insetPadding: EdgeInsets.zero,
                             ),
                           ),

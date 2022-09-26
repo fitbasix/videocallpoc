@@ -17,57 +17,64 @@ class MySubscriptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarForAccount(
-        title: "Subscription Details",
-        onback: () {
-          Navigator.pop(context);
-        },
-      ),
-      body:
-      ListView.separated(
-        itemBuilder: (context, index) => MyTrainersTile(
-          index: index,
-          isSubscriptionPage: true,
-          planDetail: _homeController.activePlans[index],
-          name: _homeController.activePlans[index].trainer!.name.toString(),
-          imageUrl: _homeController.activePlans[index].trainer!.profilePhoto
-              .toString(),
-          isCurrentlyEnrolled: true,
-          onMyTrainerTileTapped: () async {
-            String trainerId = _trainerController
-                .trainers.value.response!.data!.myTrainers![index].user!;
-            _trainerController.atrainerDetail.value = Trainer();
-            _trainerController.isMyTrainerProfileLoading.value = true;
-            _trainerController.isProfileLoading.value = true;
-            Navigator.pushNamed(context, RouteName.trainerProfileScreen);
-            var result = await TrainerServices.getATrainerDetail(trainerId);
-            _trainerController.atrainerDetail.value = result.response!.data!;
-            _trainerController.isMyTrainerProfileLoading.value = false;
-
-            _trainerController.isPlanLoading.value = true;
-            _trainerController.planModel.value =
-                await TrainerServices.getPlanByTrainerId(
-                    trainerId, _trainerController.currentPlanType);
-            _trainerController.isPlanLoading.value = false;
-            _trainerController.initialPostData.value =
-                await TrainerServices.getTrainerPosts(trainerId, 0);
-            _trainerController.isProfileLoading.value = false;
-
-            if (_trainerController
-                    .initialPostData.value.response!.data!.length !=
-                0) {
-              _trainerController.trainerPostList.value =
-                  _trainerController.initialPostData.value.response!.data!;
-            } else {
-              _trainerController.trainerPostList.clear();
-            }
+    return WillPopScope(
+      onWillPop: (){
+        Get.find<TrainerController>().collapseTiles();
+        return Future.value(true);
+      },
+      child: Scaffold(
+        appBar: AppBarForAccount(
+          title: "Subscription Details",
+          onback: () {
+            Get.find<TrainerController>().collapseTiles();
+            Navigator.pop(context);
           },
         ),
-        separatorBuilder: (context, index) => SizedBox(
-          height: 10,
+        body:
+        ListView.separated(
+          itemBuilder: (context, index) => MyTrainersTile(
+            index: index,
+            isSubscriptionPage: true,
+            planDetail: _homeController.activePlans[index],
+            name: _homeController.activePlans[index].trainer!.name.toString(),
+            imageUrl: _homeController.activePlans[index].trainer!.profilePhoto
+                .toString(),
+            isCurrentlyEnrolled: true,
+            onMyTrainerTileTapped: () async {
+              String trainerId = _trainerController
+                  .trainers.value.response!.data!.myTrainers![index].user!;
+              _trainerController.atrainerDetail.value = Trainer();
+              _trainerController.isMyTrainerProfileLoading.value = true;
+              _trainerController.isProfileLoading.value = true;
+              Navigator.pushNamed(context, RouteName.trainerProfileScreen);
+              var result = await TrainerServices.getATrainerDetail(trainerId);
+              _trainerController.atrainerDetail.value = result.response!.data!;
+              _trainerController.isMyTrainerProfileLoading.value = false;
+
+              _trainerController.isPlanLoading.value = true;
+              _trainerController.planModel.value =
+                  await TrainerServices.getPlanByTrainerId(
+                      trainerId, _trainerController.currentPlanType);
+              _trainerController.isPlanLoading.value = false;
+              _trainerController.initialPostData.value =
+                  await TrainerServices.getTrainerPosts(trainerId, 0);
+              _trainerController.isProfileLoading.value = false;
+
+              if (_trainerController
+                      .initialPostData.value.response!.data!.length !=
+                  0) {
+                _trainerController.trainerPostList.value =
+                    _trainerController.initialPostData.value.response!.data!;
+              } else {
+                _trainerController.trainerPostList.clear();
+              }
+            },
+          ),
+          separatorBuilder: (context, index) => SizedBox(
+            height: 10,
+          ),
+          itemCount: _homeController.activePlans.length,
         ),
-        itemCount: _homeController.activePlans.length,
       ),
     );
   }

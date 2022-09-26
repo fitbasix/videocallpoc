@@ -43,29 +43,18 @@ class _ReviewPageState extends State<ReviewPage> {
   final _trainerController = Get.find<TrainerController>();
 
   String getRatingMessage() {
-    if (rating == 0.5) {
-      return 'Terrible';
-    } else if (rating == 1.0) {
-      return 'Bad';
-    } else if (rating == 1.5) {
-      return 'Not Bad';
-    } else if (rating == 2.0) {
-      return 'Okay';
-    } else if (rating == 2.5) {
-      return 'Above Average';
-    } else if (rating == 3.0) {
+    if (rating == 0.5 || rating == 1) {
+      return 'Unsatisfactory';
+    } else if (rating == 1.5 || rating == 2) {
       return 'Satisfactory';
-    } else if (rating == 3.5) {
+    } else if (rating == 2.5 || rating == 3) {
       return 'Good';
-    } else if (rating == 4.0) {
+    } else if (rating == 3.5 || rating == 4) {
       return 'Very Good';
-    } else if (rating == 4.5) {
-      return 'Best';
-    } else if (rating == 5.0) {
+    } else if (rating == 4.5 || rating == 5) {
       return 'Excellent';
-    } else {
-      return 'Worst';
     }
+    return 'Bad';
   }
 
   @override

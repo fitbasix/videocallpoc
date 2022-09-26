@@ -8,6 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fitbasix/GetXNetworkManager.dart';
 import 'package:fitbasix/NetworkManager.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
@@ -27,6 +29,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'app_config.dart';
+import 'feature/Home/services/home_service.dart';
+import 'feature/Home/view/widgets/full_post_tile.dart';
 import 'feature/log_in/services/login_services.dart';
 
 initializeNotification() {
@@ -80,39 +84,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   var jsonResponse =
       jsonDecode(jsonEncode(message.data).toString()) as Map<String, dynamic>;
-
-  // await AwesomeNotifications().createNotification(
-  //     content: NotificationContent(
-  //       displayOnForeground: true,
-  //       displayOnBackground: true,
-  //       id: 1999,
-  //       channelKey: 'basic_channel',
-  //       title: 'Water Reminder',
-  //       body: 'drink Water $notificationId',
-  //       wakeUpScreen: true,
-  //       category: NotificationCategory.Reminder,
-  //       payload: {'uuid': 'uuid-test'},
-  //       autoDismissible: false,
-  //     ),
-  //     schedule:NotificationCalendar(
-  //         second: startTime.second,
-  //         year: startTime.year,
-  //         minute: startTime.minute,
-  //         repeats: true,
-  //         allowWhileIdle: true,
-  //         preciseAlarm: true
-  //     )
-  // );
 }
-// Future<void> main() async {
-//   await SentryFlutter.init(
-//           (options) {
-//         options.dsn = 'https://75565b8907e24a44b497620700c41d09@o1222554.ingest.sentry.io/6366529';
-//         // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-//         // We recommend adjusting this value in production.
-//         options.tracesSampleRate = 1.0;
-//       },
-//       appRunner: () => runApp(MyApp()),
 
 Future<void> main() async {
   await runZonedGuarded(() async {
@@ -145,7 +117,6 @@ Future<void> main() async {
       androidInfo = await deviceInfoPlugin.androidInfo;
       print(Platform.operatingSystemVersion + " os version");
 
-
       //String osVersion = Platform.operatingSystem
     } else {
       iosInfo = await deviceInfoPlugin.iosInfo;
@@ -175,40 +146,27 @@ Future<void> main() async {
         .listen((ReceivedNotification notification) async {
       var json = jsonDecode(notification.payload!['data'].toString())
           as Map<String, dynamic>;
+
+      log(json.toString());
+
       var chatId = json['senderChatId'];
       var userId = json['senderId'];
       var userName = json['senderName'];
       var userImage = json['senderProfilePhoto'];
+      var postId = json['postId'];
 
-      var controller = Get.find<FirebaseChatController>();
-      controller.getValues();
-      controller.receiverId = userId;
-      controller.senderPhoto = userImage;
-      controller.senderName = userName!;
-      Get.to(
-        () => ChatPage(),
-      );
-
-      // SharedPreferences sharedPreferences =
-      //     await SharedPreferences.getInstance();
-      // String? userIdForCometChat =
-      //     await sharedPreferences.getString("userIdForCometChat");
-      // if (userIdForCometChat != null) {
-      //   bool userIsLoggedIn =
-      //       await CometChatService().logInUser(userIdForCometChat);
-      //   if (userIsLoggedIn) {
-      //     if (chatId != null && userId != null) {
-      //       Get.to(() => MessageList(
-      //             chatId: chatId,
-      //             trainerId: userId,
-      //             profilePicURL: userImage,
-      //             trainerTitle: userName,
-      //             time: '',
-      //             days: [0],
-      //           ));
-      //     }
-      //   }
-      // }
+      if (postId != '') {
+       await sendToPost(postId: postId);
+      } else {
+        var controller = Get.find<FirebaseChatController>();
+        controller.getValues();
+        controller.receiverId = userId;
+        controller.senderPhoto = userImage;
+        controller.senderName = userName!;
+        Get.to(
+          () => ChatPage(),
+        );
+      }
     });
 
     FirebaseMessaging.onMessage.listen((message) async {
@@ -225,26 +183,6 @@ Future<void> main() async {
             payload: {'data': jsonEncode(message.data)},
             body: message.notification!.body.toString()),
       );
-
-      // AndroidNotificationChannel channel = AndroidNotificationChannel(
-      //     "channel_id", "some_title",
-      //     description: "some_description", importance: Importance.high);
-      // AndroidNotificationDetails details = AndroidNotificationDetails(
-      //     channel.id, channel.name,
-      //     channelDescription: channel.description, icon: "launch_background");
-      //
-      // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      //     FlutterLocalNotificationsPlugin();
-      // await flutterLocalNotificationsPlugin
-      //     .resolvePlatformSpecificImplementation<
-      //         AndroidFlutterLocalNotificationsPlugin>()
-      //     ?.createNotificationChannel(channel);
-      // var messageData = jsonDecode(message.data["message"]);
-      // int id = message.hashCode;
-      // String title = messageData["message"]["notification"]["name"].toString();
-      // String body = messageData["message"]["notification"]["body"].toString();
-      // flutterLocalNotificationsPlugin.show(
-      //     id, title, body, NotificationDetails(android: details));
     });
 
     FirebaseMessaging.instance.getInitialMessage().then((initialMessage) async {
@@ -254,28 +192,42 @@ Future<void> main() async {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
 
-        sharedPreferences.setString('senderChatId', json['senderChatId']);
-        sharedPreferences.setString('senderId', json['senderId']);
-        sharedPreferences.setString('senderName', json['senderName']);
-        sharedPreferences.setString(
-            'senderProfilePhoto', json['senderProfilePhoto']);
+        if (json['postId'] != '') {
+          sharedPreferences.setString('isChat', json['isChat']);
+          sharedPreferences.setString('postId', json['postId']);
+        } else {
+          sharedPreferences.setString('senderChatId', json['senderChatId']);
+          sharedPreferences.setString('senderId', json['senderId']);
+          sharedPreferences.setString('senderName', json['senderName']);
+          sharedPreferences.setString(
+              'senderProfilePhoto', json['senderProfilePhoto']);
+        }
       } else {
         prefs.remove('senderChatId');
         prefs.remove('senderId');
         prefs.remove('senderName');
         prefs.remove('senderProfilePhoto');
+        prefs.remove('postId');
+        prefs.remove('isChat');
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       var json = jsonDecode(jsonEncode(message.data).toString())
           as Map<String, dynamic>;
-      await sendToMessageList(
-        json['senderChatId'],
-        json['senderId'],
-        json['senderName'],
-        json['senderProfilePhoto'],
-      );
+      var isChat = json['isChat'];
+      var postId = json['postId'];
+
+      if (postId != '') {
+        await sendToPost(postId: postId);
+      } else {
+        await sendToMessageList(
+          json['senderChatId'],
+          json['senderId'],
+          json['senderName'],
+          json['senderProfilePhoto'],
+        );
+      }
     });
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -285,6 +237,26 @@ Future<void> main() async {
   }, (error, stackTrace) {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
+}
+
+Future<void> sendToPost({required String postId}) async {
+  var homeController = Get.put(HomeController());
+  homeController.commentsList.clear();
+  homeController.viewReplies!.clear();
+  homeController.postLoading.value = true;
+  Get.to(PostScreen());
+  var post = await HomeService.getPostById(postId);
+  homeController.post.value = post.response!.data!;
+  homeController.postLoading.value = false;
+  homeController.commentsLoading.value = true;
+  homeController.postComments.value =
+      await HomeService.fetchComment(postId: postId);
+
+  if (homeController.postComments.value.response!.data!.isNotEmpty) {
+    homeController.commentsList.value =
+        homeController.postComments.value.response!.data!;
+  }
+  homeController.commentsLoading.value = false;
 }
 
 Future<void> sendToMessageList(
@@ -301,25 +273,6 @@ Future<void> sendToMessageList(
   Get.to(
     () => ChatPage(),
   );
-  // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  // String? userIdForCometChat =
-  //     await sharedPreferences.getString("userIdForCometChat");
-  // if (userIdForCometChat != null) {
-  //   bool userIsLoggedIn =
-  //       await CometChatService().logInUser(userIdForCometChat);
-  //   if (userIsLoggedIn) {
-  //     if (chatId != null && userId != null) {
-  //       Get.to(() => MessageList(
-  //             chatId: chatId,
-  //             trainerId: userId,
-  //             profilePicURL: userImage,
-  //             trainerTitle: userName,
-  //             time: '',
-  //             days: [0],
-  //           ));
-  //     }
-  //   }
-  // }
 }
 
 Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {

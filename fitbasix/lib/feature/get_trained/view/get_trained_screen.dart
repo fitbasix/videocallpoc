@@ -61,7 +61,7 @@ class GetTrainedScreen extends StatelessWidget {
             child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(
-                top: 27 * SizeConfig.heightMultiplier!,
+                // top: 27 * SizeConfig.heightMultiplier!,
                 bottom: 69 * SizeConfig.heightMultiplier!),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -136,8 +136,8 @@ class GetTrainedScreen extends StatelessWidget {
                                       : _trainerController
                                               .isCarouselExpanded.value
                                           ? 260 * SizeConfig.heightMultiplier!
-                                          : 130 * SizeConfig.heightMultiplier!,
-                                  viewportFraction: 0.9,
+                                          : 125 * SizeConfig.heightMultiplier!,
+                                  viewportFraction: 0.92,
                                   autoPlay: false,
                                   enableInfiniteScroll: false,
                                   initialPage: 0,
@@ -385,7 +385,7 @@ class GetTrainedScreen extends StatelessWidget {
                                     ? Container()
                                     : SeeAllButton(
                                         onTap: () async {
-                                          _trainerController.currentPlanType ==
+                                          _trainerController.currentPlanType =
                                               0;
 
                                           Navigator.pushNamed(context,
@@ -471,7 +471,7 @@ class GetTrainedScreen extends StatelessWidget {
                                           Image.asset(ImagePath.trainerBg),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 15.0 *
+                                                horizontal: 14.0 *
                                                     SizeConfig
                                                         .heightMultiplier!,
                                                 vertical: 10 *
@@ -494,7 +494,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                                   .textMultiplier!),
                                                 ),
                                                 SizedBox(
-                                                  height: 8 *
+                                                  height: 6 *
                                                       SizeConfig
                                                           .widthMultiplier!,
                                                 ),
@@ -528,7 +528,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                                         .textMultiplier!),
                                                       ),
                                                       SizedBox(
-                                                        height: 10 *
+                                                        height: 8 *
                                                             SizeConfig
                                                                 .widthMultiplier!,
                                                       ),
@@ -567,7 +567,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  height: 8 *
+                                                  height: 6 *
                                                       SizeConfig
                                                           .widthMultiplier!,
                                                 ),
@@ -626,7 +626,7 @@ class GetTrainedScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  height: 8 *
+                                                  height: 6 *
                                                       SizeConfig
                                                           .widthMultiplier!,
                                                 ),
@@ -634,9 +634,10 @@ class GetTrainedScreen extends StatelessWidget {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                   children: [
-                                                    const Icon(
+                                                     Icon(
                                                       Icons.arrow_back,
                                                       color: Colors.white,
+                                                      size: 20 * SizeConfig.heightMultiplier!,
                                                     ),
                                                     Text(
                                                       ' Swipe to see trainers',
@@ -660,9 +661,6 @@ class GetTrainedScreen extends StatelessWidget {
                                   for (int index = 0;
                                       index <
                                           (_trainerController
-                                                  .getTrainedIsLoading.value
-                                              ? 5
-                                              : _trainerController
                                                   .trainers
                                                   .value
                                                   .response!
@@ -927,9 +925,8 @@ class GetTrainedScreen extends StatelessWidget {
                                     ? Container()
                                     : SeeAllButton(
                                         onTap: () async {
-                                          _trainerController.currentPlanType ==
+                                          _trainerController.currentPlanType =
                                               1;
-
                                           Navigator.pushNamed(context,
                                               RouteName.allTrainerScreen);
                                           _trainerController.isLoading.value =
@@ -1188,7 +1185,12 @@ class GetTrainedScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  for (int index = 0; index < 5; index++)
+                                  for (int index = 0; index < _trainerController
+                                      .trainers
+                                      .value
+                                      .response!
+                                      .data!
+                                      .fitnessConsultant!.length; index++)
                                     _trainerController.getTrainedIsLoading.value
                                         ? Shimmer.fromColors(
                                             child: Padding(
@@ -1453,7 +1455,7 @@ class GetTrainedScreen extends StatelessWidget {
                                     ? Container()
                                     : SeeAllButton(
                                         onTap: () async {
-                                          _trainerController.currentPlanType ==
+                                          _trainerController.currentPlanType =
                                               2;
 
                                           _trainerController
@@ -1710,7 +1712,12 @@ class GetTrainedScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  for (int index = 0; index < 5; index++)
+                                  for (int index = 0; index < _trainerController
+                                      .trainers
+                                      .value
+                                      .response!
+                                      .data!
+                                      .nutritionConsultant!.length; index++)
                                     _trainerController.getTrainedIsLoading.value
                                         ? Shimmer.fromColors(
                                             child: Padding(
@@ -2218,6 +2225,9 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                           !widget.planDetail.isExpanded;
                       _trainerController.isCarouselExpanded.value =
                           widget.planDetail.isExpanded;
+                      if (widget.planDetail.isExpanded == false) {
+                        _trainerController.showChangeTiming.value = false;
+                      }
                     });
                   },
                   child: Row(
@@ -2390,8 +2400,8 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                     _homeController.activePlans[widget.index].isChangeExpanded =
                         !_homeController
                             .activePlans[widget.index].isChangeExpanded;
-                    _trainerController.showChangeTiming.value =
-                        _homeController.activePlans[widget.index].isChangeExpanded;
+                    _trainerController.showChangeTiming.value = _homeController
+                        .activePlans[widget.index].isChangeExpanded;
                   });
                 },
                 child: Row(
@@ -2533,6 +2543,7 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                       );
                     },
                     child: Container(
+                      width: double.infinity,
                       margin: EdgeInsets.only(
                           top: 8 * SizeConfig.heightMultiplier!),
                       padding: EdgeInsets.symmetric(
@@ -2698,6 +2709,7 @@ class PostponeSessionWidget extends StatelessWidget {
                                   response.postponeSessionLeft.toString()),
                           barrierDismissible: false,
                         );
+                        _trainerController.collapseTiles();
                       } else {
                         Get.back();
                       }

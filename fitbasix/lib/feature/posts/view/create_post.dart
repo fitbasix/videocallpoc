@@ -42,13 +42,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     super.initState();
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    print(_postController.isLoading.value.toString() +" jjjjj");
-    print(_postController.iscreateingPost.value.toString()+" llll");
+    print(_postController.isLoading.value.toString() + " jjjjj");
+    print(_postController.iscreateingPost.value.toString() + " llll");
     print(_postController.postId.value.toString() + "  postId");
     print(_postController.isUpdated.value.toString() + "  post Updated");
     return GestureDetector(
@@ -94,17 +91,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   ),
                   actions: [
                     Obx(() => (_postController.postData.value.response!.data!
-                                        .files!.length >
-                                    0 || _postController.postText.value != "" ||
+                                    .files!.isNotEmpty ||
+                                _postController.postText.value != "" ||
                                 (_postController.postData.value.response!.data!
                                             .caption !=
                                         null &&
                                     _postController.postData.value.response!
                                             .data!.caption !=
                                         "" &&
-                                    _postController.postText.value != ""
-                                    ))
-                        &&
+                                    _postController.postText.value != "")) &&
                             _postController
                                     .postData.value.response!.data!.category !=
                                 null
@@ -121,12 +116,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     _postController.isLoading.value = true;
                                     _postController.postData.value =
                                         await CreatePostService.createPost(
-                                            postId:
-                                                _postController.postId.value,
-                                            isPublish: true,
-                                            caption: _postController.postText.value,
-
-                                        );
+                                      postId: _postController.postId.value,
+                                      isPublish: true,
+                                      caption: _postController.postText.value,
+                                    );
                                     _postController.isLoading.value = false;
                                     if (_postController.postData.value.code ==
                                         0) {
@@ -261,7 +254,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                           0
                                       ? Text(
                                           _homeController.userProfileData.value
-                                              .response!.data!.profile!.name
+                                              .response!.data!.profile!.name!.capitalize
                                               .toString(),
                                           style: AppTextStyle.boldBlackText
                                               .copyWith(
@@ -290,7 +283,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         .response!
                                                         .data!
                                                         .profile!
-                                                        .name!,
+                                                        .name!.capitalize!,
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
@@ -346,7 +339,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         .response!
                                                         .data!
                                                         .people![0]
-                                                        .name!,
+                                                        .name!.capitalize!,
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
@@ -376,7 +369,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         .response!
                                                         .data!
                                                         .profile!
-                                                        .name!,
+                                                        .name!.capitalize!,
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
@@ -437,7 +430,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         .response!
                                                         .data!
                                                         .people![0]
-                                                        .name!,
+                                                        .name!.capitalize!,
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
@@ -509,10 +502,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                   onChanged: (value) async {
                                     print(_postController.postData.value
                                         .response!.data!.category);
-                                    _postController.selectedCategory.value = value;
+                                    _postController.selectedCategory.value =
+                                        value;
                                     _postController.postData.value =
                                         await CreatePostService.createPost(
-                                            postId: _postController.postId.value,
+                                            postId:
+                                                _postController.postId.value,
                                             category: _postController
                                                 .selectedCategory
                                                 .value
@@ -530,7 +525,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                               height: 180 *
                                                   SizeConfig.heightMultiplier!,
                                               child: TextField(
-                                                textCapitalization: TextCapitalization.sentences,
+                                                textCapitalization:
+                                                    TextCapitalization
+                                                        .sentences,
                                                 controller: _postController
                                                     .postTextController,
                                                 onChanged: (value) {
@@ -633,86 +630,77 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                                           .files![
                                                                       0]) ==
                                                               0
-                                                          ? Stack(
-                                                              children: [
-                                                                CachedNetworkImage(
-                                                                    imageUrl: _postController
-                                                                            .postData
-                                                                            .value
-                                                                            .response!
-                                                                            .data!
-                                                                            .files![
-                                                                        0],
-                                                                    height: 336 *
-                                                                        SizeConfig
-                                                                            .heightMultiplier!,
-                                                                    width: double
-                                                                        .infinity,
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                    placeholder:
-                                                                        (_, __) =>
-                                                                            AspectRatio(
-                                                                              aspectRatio: 1.6,
-                                                                              child: BlurHash(
-                                                                                hash: 'L6Pj0^i_.AyE_3t7t7R**0o#DgR4',
-                                                                              ),
-                                                                            )),
-                                                                Positioned(
-                                                                    top: 10 *
-                                                                        SizeConfig
-                                                                            .heightMultiplier!,
-                                                                    right: 10 *
-                                                                        SizeConfig
-                                                                            .widthMultiplier!,
-                                                                    child:
-                                                                        GestureDetector(
-                                                                      onTap:
-                                                                          () async {
-                                                                        _postController
-                                                                            .deletingFile
-                                                                            .value = true;
-                                                                        if (_postController.selectedFiles.length !=
-                                                                            0) {
-                                                                          _postController
-                                                                              .selectedFiles
-                                                                              .removeAt(0);
-
-                                                                          _postController
-                                                                              .uploadedFiles
-                                                                              .value = await PostService.uploadMedia(
-                                                                            _postController.selectedFiles,
-                                                                          );
-                                                                        } else {
-                                                                          _postController
-                                                                              .uploadedFiles
-                                                                              .value = await PostService.uploadMedia(
-                                                                            [],
-                                                                          );
-                                                                        }
-                                                                        if (_postController.uploadedFiles.value.code ==
-                                                                            0) {
-                                                                          _postController.postData.value = await CreatePostService.createPost(
-                                                                              postId: _postController.postId.value,
-                                                                              files: _postController.uploadedFiles.value.response!.data);
-                                                                        }
-                                                                        _postController
-                                                                            .deletingFile
-                                                                            .value = false;
-                                                                      },
-                                                                      child: SvgPicture
-                                                                          .asset(
-                                                                        ImagePath
-                                                                            .cancelIcon,
-                                                                        height: 24 *
-                                                                            SizeConfig.widthMultiplier!,
-                                                                        width: 24 *
-                                                                            SizeConfig.widthMultiplier!,
-                                                                        fit: BoxFit
-                                                                            .contain,
+                                                          ? SizedBox(
+                                                              height: 336 *
+                                                                  SizeConfig
+                                                                      .heightMultiplier!,
+                                                              width: double
+                                                                  .infinity,
+                                                              child: Center(
+                                                                child: Stack(
+                                                                  children: [
+                                                                    CachedNetworkImage(
+                                                                      imageUrl: _postController
+                                                                          .postData
+                                                                          .value
+                                                                          .response!
+                                                                          .data!
+                                                                          .files![0],
+                                                                      fit: BoxFit
+                                                                          .contain,
+                                                                      placeholder:
+                                                                          (_, __) =>
+                                                                              Center(
+                                                                        child:
+                                                                            CustomizedCircularProgress(),
                                                                       ),
-                                                                    ))
-                                                              ],
+                                                                    ),
+                                                                    Positioned(
+                                                                        top: 10 *
+                                                                            SizeConfig
+                                                                                .heightMultiplier!,
+                                                                        right: 10 *
+                                                                            SizeConfig
+                                                                                .widthMultiplier!,
+                                                                        child:
+                                                                            GestureDetector(
+                                                                          onTap:
+                                                                              () async {
+                                                                            _postController.deletingFile.value =
+                                                                                true;
+                                                                            if (_postController.selectedFiles.length !=
+                                                                                0) {
+                                                                              _postController.selectedFiles.removeAt(0);
+
+                                                                              _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                _postController.selectedFiles,
+                                                                              );
+                                                                            } else {
+                                                                              _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                [],
+                                                                              );
+                                                                            }
+                                                                            if (_postController.uploadedFiles.value.code ==
+                                                                                0) {
+                                                                              _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
+                                                                            }
+                                                                            _postController.deletingFile.value =
+                                                                                false;
+                                                                          },
+                                                                          child:
+                                                                              SvgPicture.asset(
+                                                                            ImagePath.cancelIcon,
+                                                                            height:
+                                                                                24 * SizeConfig.widthMultiplier!,
+                                                                            width:
+                                                                                24 * SizeConfig.widthMultiplier!,
+                                                                            fit:
+                                                                                BoxFit.contain,
+                                                                          ),
+                                                                        ))
+                                                                  ],
+                                                                ),
+                                                              ),
                                                             )
                                                           : FutureBuilder<
                                                                   File?>(
@@ -1112,17 +1100,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               GestureDetector(
                                 onTap: () async {
                                   _postController.uploadingProgress.value = 0;
-                                  if(!userClickedOnPhotoVideoButton){
+                                  if (!userClickedOnPhotoVideoButton) {
                                     userClickedOnPhotoVideoButton = true;
                                     _postController.currentPage.value = 0;
                                     _postController.assets.value =
-                                    await _postController.fetchAssets(
-                                        presentPage: _postController
-                                            .currentPage.value);
+                                        await _postController.fetchAssets(
+                                            presentPage: _postController
+                                                .currentPage.value);
                                     userClickedOnPhotoVideoButton = false;
                                     Navigator.pushNamed(
                                         context, RouteName.customGallery);
-
                                   }
                                 },
                                 child: Container(

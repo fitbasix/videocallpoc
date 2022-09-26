@@ -194,7 +194,7 @@ class PostController extends GetxController {
       postId.value = postData.value.response!.data!.id!;
       getCategory();
     } else {
-      // await getPostData();
+      await getPostData();
     }
     Future.delayed(Duration(milliseconds: 50), () {
       iscreateingPost.value = false;

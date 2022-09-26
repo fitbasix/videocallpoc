@@ -95,7 +95,7 @@ class DiscardPostBottomSheet extends StatelessWidget {
               _postController.isLoading.value = false;
               _postController.selectedFiles.clear();
               _homeController.selectedIndex.value = 0;
-              _postController.searchSuggestion.value.predictions!.clear();
+              // _postController.searchSuggestion.value.predictions!.clear();
             },
             icon: const Icon(Icons.delete_outline),
             label: Text(

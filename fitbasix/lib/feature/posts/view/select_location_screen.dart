@@ -25,7 +25,7 @@ class SelectLocationScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () {
         _postController.locationSearchController.clear();
-        _postController.searchSuggestion.value.predictions!.clear();
+        // _postController.searchSuggestion.value.predictions!.clear();
         return Future.value(true);
       },
       child: Scaffold(
@@ -36,7 +36,7 @@ class SelectLocationScreen extends StatelessWidget {
           leading: IconButton(
               onPressed: () {
                 _postController.locationSearchController.clear();
-                _postController.searchSuggestion.value.predictions!.clear();
+                // _postController.searchSuggestion.value.predictions!.clear();
                 Navigator.pop(context);
                 _postController.isLoading.value = false;
               },

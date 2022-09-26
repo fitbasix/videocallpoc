@@ -3,7 +3,7 @@ import '../../app_config.dart';
 class ApiUrl {
   static String liveBaseURL = AppConfig.api_url;
 
-  // static String liveBaseURL = 'https://9afb-122-161-92-249.in.ngrok.io';
+  // static String liveBaseURL = 'https://b69c-103-13-107-204.in.ngrok.io';
 
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getAbuseData =
