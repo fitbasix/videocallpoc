@@ -112,6 +112,7 @@ dependencies:
   credit_card_type_detector: ^2.0.0
   html: ^0.15.0
   carousel_slider: ^4.1.1
+  easy_pdf_viewer: ^1.0.2
 
 dev_dependencies:
   flutter_test:

@@ -51,7 +51,7 @@ class Response {
     "subscriptionData": List<dynamic>.from(planDetails!.map((x) => x.toJson())),
   };
 }
-
+///Added invoicePdf in PlanDetail -- by Pavan S.
 class PlanDetail {
   PlanDetail({
     this.id,
@@ -61,6 +61,7 @@ class PlanDetail {
     this.sessionTime,
     this.planDetails,
     this.postponeSessionLeft,
+    this.invoicePdf
   });
 
   String? id;
@@ -72,6 +73,7 @@ class PlanDetail {
   PlanDetails? planDetails;
   bool isExpanded = false;
   bool isChangeExpanded = false;
+  String? invoicePdf;
 
   factory PlanDetail.fromJson(Map<String, dynamic> json) => PlanDetail(
     id: json["_id"],
@@ -81,6 +83,7 @@ class PlanDetail {
     sessionTime: SessionTime.fromJson(json["sessionTime"]),
     planDetails: PlanDetails.fromJson(json["planDetails"]),
     postponeSessionLeft: json["postponeSessionLeft"],
+    invoicePdf: json["invoicePdf"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -90,7 +93,8 @@ class PlanDetail {
     "trainers": trainer!.toJson(),
     "sessionTime": sessionTime!.toJson(),
     "planDetails": planDetails!.toJson(),
-    "postponeSessionLeft":postponeSessionLeft
+    "postponeSessionLeft":postponeSessionLeft,
+    "invoicePdf": invoicePdf
   };
 }
 
