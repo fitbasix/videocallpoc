@@ -97,7 +97,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 20 * SizeConfig.widthMultiplier!),
-                            child: UnfollowDialog(),
+                            child: const UnfollowDialog(),
                           ),
                           barrierColor: Colors.transparent);
                     } else {
@@ -299,7 +299,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) =>
-                              EnrollTrainerDialog());
+                              const EnrollTrainerDialog());
                     }
                   },
                   onEnroll: () {
@@ -725,7 +725,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                                     left: 24.0 *
                                                         SizeConfig
                                                             .widthMultiplier!)
-                                                : EdgeInsets.only(),
+                                                : const EdgeInsets.only(),
                                             child: Padding(
                                               padding: EdgeInsets.only(
                                                   right: 12.0 *
@@ -971,7 +971,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                           : _trainerController
                                               .trainerPostList.length,
                                       shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
+                                      physics: const NeverScrollableScrollPhysics(),
                                       itemBuilder: (_, index) {
                                         return Obx(() => Column(
                                               children: [
@@ -1335,7 +1335,7 @@ class _TrainerPageState extends State<TrainerPage> {
                     bottom: 90 * SizeConfig.heightMultiplier!,
                     left: Get.width / 2 - 10,
                     child: Center(child: CustomizedCircularProgress()))
-                : SizedBox()),
+                : const SizedBox()),
 
             //To be docked at bottom center
             Obx(() => _trainerController.isPlanLoading.value == false

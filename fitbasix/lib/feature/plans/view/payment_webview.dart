@@ -84,38 +84,47 @@ class _PaymentWebviewState extends State<PaymentWebview> {
 
   var paymentForm = {};
 
-  static Future<Map<String, dynamic>> getPaymentLink({
-    required String accessCode,
-    required String merchantIdentifier,
-    required String merchantReference,
-    required String currency,
-    required String customerEmail,
-    required String language,
-    required String amount,
-    required String tokenName,
-    required String trainerId,
-    required String planId,
-    required int planDuration,
-    required String ip,
-  }) async {
+  ///Added weekDays & time - By Pavan S
+  static Future<Map<String, dynamic>> getPaymentLink(
+      {required String accessCode,
+      required String merchantIdentifier,
+      required String merchantReference,
+      required String currency,
+      required String customerEmail,
+      required String language,
+      required String amount,
+      required String tokenName,
+      required String trainerId,
+      required String planId,
+      required int planDuration,
+      required String ip,
+      required List<int> weekDays,
+      required int time}) async {
+    debugPrint("${weekDays} ${time}");
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var response = await dio!.post(ApiUrl.getPaymentLink, data: {
-      "customer_ip": ip,
-      "command": "PURCHASE",
-      "access_code": accessCode,
-      "merchant_extra": trainerId,
-      "merchant_extra1": planId,
-      "merchant_extra3": planDuration,
-      "merchant_identifier": merchantIdentifier,
-      "merchant_reference": merchantReference,
-      "currency": currency,
-      "customer_email": customerEmail,
-      "language": language,
-      "amount": amount,
-      "token_name": tokenName,
-      "return_url": "${ApiUrl.liveBaseURL}/api/payment/purchaseUrl"
-    },
+
+    ///Added merchant_extra4 & merchant_extra5 - By Pavan S
+    var response = await dio!.post(
+      ApiUrl.getPaymentLink,
+      data: {
+        "customer_ip": ip,
+        "command": "PURCHASE",
+        "access_code": accessCode,
+        "merchant_extra": trainerId,
+        "merchant_extra1": planId,
+        "merchant_extra3": planDuration,
+        "merchant_identifier": merchantIdentifier,
+        "merchant_reference": merchantReference,
+        "currency": currency,
+        "customer_email": customerEmail,
+        "language": language,
+        "amount": amount,
+        "token_name": tokenName,
+        "return_url": "${ApiUrl.liveBaseURL}/api/payment/purchaseUrl",
+        // "merchant_extra4": weekDays,
+        // "merchant_extra5": time.toString(),
+      },
     );
     log(response.data.toString());
     return {
@@ -214,7 +223,20 @@ class _PaymentWebviewState extends State<PaymentWebview> {
                 if (widget.initialUrl == null) {
                   if (jsonDecode(parsedString)["response"]["response_code"] ==
                       200) {
+                    ///selecting days of the plan.
+                    List<int> selectedDays = [];
+                    for (var days in trainerController.selectedDays) {
+                      selectedDays.add(trainerController
+                          .weekAvailableSlots[trainerController
+                              .weekAvailableSlots
+                              .indexWhere((element) => element.id == days)]
+                          .day!);
+                    }
+
+                    ///Added weekDays & time - By Pavan S
                     var paymentResponse = await getPaymentLink(
+                      time: trainerController.selectedTimeSlot.value,
+                      weekDays: selectedDays,
                       ip: ip ?? '',
                       accessCode: accessCode,
                       amount: widget.amount!,

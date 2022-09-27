@@ -346,7 +346,8 @@ class TrainerPlansScreen extends StatelessWidget {
                         )),
               ),
               SizedBox(
-                height: 15 * SizeConfig.heightMultiplier!,
+                ///Changed from 15 to 0 for the overflow.
+                height: 0 * SizeConfig.heightMultiplier!,
               ),
             ],
           ),

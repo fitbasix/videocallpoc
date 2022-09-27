@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
@@ -5,10 +7,14 @@ import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/model/active_plans_model.dart';
 import 'package:fitbasix/feature/Home/view/widgets/review_page.dart';
+import 'package:fitbasix/feature/pdf/view/pdf.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -19,6 +25,7 @@ import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart'
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/custom_app_bar.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/trainer_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../Home/controller/Home_Controller.dart';
@@ -634,10 +641,12 @@ class GetTrainedScreen extends StatelessWidget {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                   children: [
-                                                     Icon(
+                                                    Icon(
                                                       Icons.arrow_back,
                                                       color: Colors.white,
-                                                      size: 20 * SizeConfig.heightMultiplier!,
+                                                      size: 20 *
+                                                          SizeConfig
+                                                              .heightMultiplier!,
                                                     ),
                                                     Text(
                                                       ' Swipe to see trainers',
@@ -661,12 +670,12 @@ class GetTrainedScreen extends StatelessWidget {
                                   for (int index = 0;
                                       index <
                                           (_trainerController
-                                                  .trainers
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .trainers!
-                                                  .length);
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .trainers!
+                                              .length);
                                       index++)
                                     _trainerController.getTrainedIsLoading.value
                                         ? Shimmer.fromColors(
@@ -1185,12 +1194,16 @@ class GetTrainedScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  for (int index = 0; index < _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .fitnessConsultant!.length; index++)
+                                  for (int index = 0;
+                                      index <
+                                          _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .fitnessConsultant!
+                                              .length;
+                                      index++)
                                     _trainerController.getTrainedIsLoading.value
                                         ? Shimmer.fromColors(
                                             child: Padding(
@@ -1712,12 +1725,16 @@ class GetTrainedScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  for (int index = 0; index < _trainerController
-                                      .trainers
-                                      .value
-                                      .response!
-                                      .data!
-                                      .nutritionConsultant!.length; index++)
+                                  for (int index = 0;
+                                      index <
+                                          _trainerController
+                                              .trainers
+                                              .value
+                                              .response!
+                                              .data!
+                                              .nutritionConsultant!
+                                              .length;
+                                      index++)
                                     _trainerController.getTrainedIsLoading.value
                                         ? Shimmer.fromColors(
                                             child: Padding(
@@ -2489,6 +2506,47 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
             if (widget.planDetail.isExpanded && widget.isSubscriptionPage)
               Column(
                 children: [
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => PdfViewerFile(
+                              link: _homeController
+                                  .activePlans[widget.index].invoicePdf
+                                  .toString())));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 8 * SizeConfig.heightMultiplier!),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20 * SizeConfig.widthMultiplier!,
+                        vertical: 15 * SizeConfig.heightMultiplier!,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            4 * SizeConfig.heightMultiplier!),
+                        color: kgreen49,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.download,
+                            color: kPureWhite,
+                          ),
+                          SizedBox(
+                            width: 15 * SizeConfig.heightMultiplier!,
+                          ),
+                          Text(
+                            'Download invoice',
+                            style: AppTextStyle.NormalText.copyWith(
+                              fontSize: 14 * SizeConfig.textMultiplier!,
+                              color: kPureWhite,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       Get.to(
