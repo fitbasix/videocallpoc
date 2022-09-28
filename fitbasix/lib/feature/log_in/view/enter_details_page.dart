@@ -117,9 +117,6 @@ class EnterDetailsPage extends StatelessWidget {
                     wantWhiteBG: true,
                     color: Colors.transparent,
                     child: TextFieldContainer(
-                      inputFormatters: [
-                                        UpperCaseTextFormatter()
-                                      ],
                         onChanged: (value) {
                           _loginController.email.value = value;
                         },
