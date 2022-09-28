@@ -36,7 +36,7 @@ Widget TextFieldContainer(
     bool? readOnly,
     bool? isNotCapital,
     bool? isTextFieldActive,
-    String? hint,
+    String? hint, 
     int? maxLength,
     Widget? preFixWidget,
     Widget? suffixWidget}) {

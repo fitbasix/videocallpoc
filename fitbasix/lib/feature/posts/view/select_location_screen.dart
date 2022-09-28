@@ -13,6 +13,7 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/location_service.dart';
 
+import '../../../core/universal_widgets/capitalizeText.dart';
 import '../model/suggestion_model.dart';
 
 class SelectLocationScreen extends StatelessWidget {
@@ -98,6 +99,10 @@ class SelectLocationScreen extends StatelessWidget {
                               8 * SizeConfig.widthMultiplier!),
                         ),
                         child: TextField(
+                          inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                           controller: _postController.locationSearchController,
                           style: AppTextStyle.normalGreenText.copyWith(
                               color:

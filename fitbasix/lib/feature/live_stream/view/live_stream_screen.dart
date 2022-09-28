@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/constants/image_path.dart';
+import '../../../core/universal_widgets/capitalizeText.dart';
 import '../../get_trained/view/widgets/custom_app_bar.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,10 @@ class LiveStreamScreen extends StatelessWidget {
                         ),
                         child: Center(
                           child: TextField(
+                            inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                             controller: _liveStreamController.searchController,
                             style: AppTextStyle.smallGreyText.copyWith(
                                 fontSize: 14 * SizeConfig.textMultiplier!,

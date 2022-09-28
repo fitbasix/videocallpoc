@@ -17,6 +17,7 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/log_in/view/widgets/country_dropdown.dart';
 
+import '../../../core/universal_widgets/capitalizeText.dart';
 import '../../../core/universal_widgets/proceed_button.dart';
 
 class EnterMobileDetailsGoogle extends StatelessWidget {
@@ -97,6 +98,9 @@ class EnterMobileDetailsGoogle extends StatelessWidget {
                   () => BlackCutomizedTextField(
                     color: Colors.transparent,
                     child: TextFieldContainer(
+                      inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
                         onChanged: (value) {
                           _loginController.mobile.value = value;
                         },

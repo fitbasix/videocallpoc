@@ -5,6 +5,7 @@ import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/back_button.dart';
+import 'package:fitbasix/core/universal_widgets/capitalizeText.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/core/universal_widgets/proceed_button_with_arrow.dart';
 import 'package:fitbasix/core/universal_widgets/text_Field.dart';
@@ -90,9 +91,13 @@ class EnterDetailsPage extends StatelessWidget {
                     height: 16 * SizeConfig.heightMultiplier!,
                   ),
                   CutomizedTextField(
+
                     wantWhiteBG: true,
                     color: Colors.transparent,
                     child: TextFieldContainer(
+                      inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
                       onChanged: (value) {
                         _loginController.name.value = value;
                       },
@@ -112,6 +117,9 @@ class EnterDetailsPage extends StatelessWidget {
                     wantWhiteBG: true,
                     color: Colors.transparent,
                     child: TextFieldContainer(
+                      inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
                         onChanged: (value) {
                           _loginController.email.value = value;
                         },

@@ -20,6 +20,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../core/universal_widgets/capitalizeText.dart';
 import '../../../spg/view/set_goal_screen.dart';
 
 class FullPostTile extends StatefulWidget {
@@ -801,6 +802,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                   ),
                                                                   child:
                                                                       TextField(
+                                                                        inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                                                                     controller:
                                                                         _homeController
                                                                             .replyController,
@@ -1129,6 +1134,10 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                                                     borderRadius: BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
                                                                                                   ),
                                                                                                   child: TextField(
+                                                                                                    inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                                                                                                     controller: _homeController.replyController,
                                                                                                     onChanged: (value) {
                                                                                                       _homeController.reply.value = value;
@@ -1297,6 +1306,10 @@ class _FullPostTileState extends State<FullPostTile> {
                             8 * SizeConfig.widthMultiplier!),
                       ),
                       child: TextField(
+                        inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                         controller: _homeController.commentController,
                         onChanged: (value) {
                           _homeController.comment.value = value;

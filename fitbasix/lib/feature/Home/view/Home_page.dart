@@ -43,6 +43,7 @@ import 'package:fitbasix/feature/posts/view/create_post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../core/universal_widgets/capitalizeText.dart';
 import '../../get_trained/services/trainer_services.dart';
 import '../../get_trained/view/get_trained_screen.dart';
 import '../../posts/model/UserModel.dart';
@@ -2022,6 +2023,10 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                             Expanded(
                                               child: TextField(
+                                                inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                                                 controller: searchUserController,
                                                 onChanged: (value) async {
                                                   if (value.isNotEmpty) {

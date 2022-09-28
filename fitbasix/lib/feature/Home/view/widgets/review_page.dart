@@ -16,6 +16,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../core/universal_widgets/capitalizeText.dart';
 import '../../../get_trained/model/all_trainer_model.dart';
 import '../../../log_in/view/widgets/black_textfield.dart';
 
@@ -139,7 +140,10 @@ class _ReviewPageState extends State<ReviewPage> {
                   padding: EdgeInsets.symmetric(
                       horizontal: 20 * SizeConfig.widthMultiplier!),
                   child: TextField(
-                    textCapitalization: TextCapitalization.sentences,
+                    inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                     controller: _homeController.reviewController,
                     onChanged: (value) {},
                     style: AppTextStyle.hintText.copyWith(color: kPureWhite),

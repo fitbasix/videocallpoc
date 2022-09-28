@@ -29,6 +29,7 @@ import 'package:fitbasix/feature/get_trained/view/trainer_profile_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/widgets/star_rating.dart';
 import 'package:fitbasix/feature/log_in/model/TrainerDetailModel.dart';
 
+import '../../../core/universal_widgets/capitalizeText.dart';
 import '../model/timing_model.dart';
 
 class AllTrainerScreen extends StatefulWidget {
@@ -120,6 +121,10 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             8 * SizeConfig.widthMultiplier!),
                       ),
                       child: TextField(
+                        inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                         controller: _trainerController.searchController,
                         style: AppTextStyle.smallGreyText.copyWith(
                             fontSize: 14 * SizeConfig.textMultiplier!,
