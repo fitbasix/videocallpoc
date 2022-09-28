@@ -64,7 +64,6 @@ class PostController extends GetxController {
   RxBool isclicked = RxBool(false);
   RxDouble uploadingProgress = RxDouble(0);
 
-
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
     foldersAvailable.value = await PhotoManager.getAssetPathList(onlyAll: true);
@@ -79,15 +78,20 @@ class PostController extends GetxController {
 //         foldersAvailable.singleWhere(
 //             (element) => element.name.toLowerCase().contains("all photos")));
 //     }
-    var assetList = <AssetEntity>[];
-    assetList = await foldersAvailable[0].getAssetListPaged(
-      page: currentPage.value,
-      size: 100,
-    );
 
-    currentPage++;
+    if (foldersAvailable.value.isEmpty) {
+      return [];
+    } else {
+      var assetList = <AssetEntity>[];
+      assetList = await foldersAvailable[0].getAssetListPaged(
+        page: currentPage.value,
+        size: 100,
+      );
 
-    return assetList;
+      currentPage++;
+
+      return assetList;
+    }
   }
 
   void updatePostId() {
