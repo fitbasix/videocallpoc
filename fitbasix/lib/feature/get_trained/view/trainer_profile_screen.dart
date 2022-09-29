@@ -124,7 +124,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                       controller.senderPhoto = _trainerController
                           .atrainerDetail.value.user!.profilePhoto!;
                       controller.senderName =
-                          _trainerController.atrainerDetail.value.user!.name!;
+                          _trainerController.atrainerDetail.value.user!.name!.capitalize!;
                       Get.to(
                         () => ChatPage(),
                       );
@@ -311,7 +311,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   onBack: () {
                     Navigator.pop(context);
                   },
-                  name: trainerController.atrainerDetail.value.user!.name!,
+                  name: trainerController.atrainerDetail.value.user!.name!.capitalize!,
                   followersCount: NumberFormatter.textFormatter(
                       trainerController.atrainerDetail.value.followers!),
                   followingCount: NumberFormatter.textFormatter(
@@ -1010,7 +1010,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   name: _trainerController
                                                       .trainerPostList[index]
                                                       .userId!
-                                                      .name!,
+                                                      .name!.capitalize!,
                                                   profilePhoto:
                                                       _trainerController
                                                           .trainerPostList[
@@ -1020,7 +1020,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   category: _trainerController
                                                       .trainerPostList[index]
                                                       .postCategory![0]
-                                                      .name!,
+                                                      .name!.capitalize!,
                                                   date: DateFormat.d()
                                                       .add_MMM()
                                                       .format(_trainerController

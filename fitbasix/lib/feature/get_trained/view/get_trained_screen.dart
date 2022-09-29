@@ -2455,7 +2455,7 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                       planId: widget.planDetail.id!,
                       expiryDate: widget.planDetail.expiryDate!,
                       days: widget.planDetail.weekDays!,
-                      time: widget.planDetail.sessionTime!.name!,
+                      time: widget.planDetail.sessionTime!.name!.capitalize!,
                     ),
                   );
                 },
@@ -2552,7 +2552,7 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                       Get.to(
                         () => ReviewPage(
                           image: widget.planDetail.trainer!.profilePhoto!,
-                          name: widget.planDetail.trainer!.name!,
+                          name: widget.planDetail.trainer!.name!.capitalize!,
                           trainerId: widget.planDetail.trainer!.id!,
                         ),
                       );
@@ -2594,7 +2594,7 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                     onTap: () {
                       Get.dialog(
                         CancelSubscriptionWidget(
-                          trainerName: widget.planDetail.trainer!.name!,
+                          trainerName: widget.planDetail.trainer!.name!.capitalize!,
                           planId: widget.planDetail.id!,
                           planName: widget.planDetail.planDetails!.planName!,
                         ),
