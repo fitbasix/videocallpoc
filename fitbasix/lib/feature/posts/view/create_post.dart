@@ -22,6 +22,8 @@ import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../core/universal_widgets/capitalizeText.dart';
+
 class CreatePostScreen extends StatefulWidget {
   CreatePostScreen({Key? key}) : super(key: key);
 
@@ -253,8 +255,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                               .response!.data!.people!.length ==
                                           0
                                       ? Text(
-                                          _homeController.userProfileData.value
-                                              .response!.data!.profile!.name!.capitalize
+                                          _homeController
+                                              .userProfileData
+                                              .value
+                                              .response!
+                                              .data!
+                                              .profile!
+                                              .name!
+                                              .capitalize
                                               .toString(),
                                           style: AppTextStyle.boldBlackText
                                               .copyWith(
@@ -283,7 +291,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         .response!
                                                         .data!
                                                         .profile!
-                                                        .name!.capitalize!,
+                                                        .name!
+                                                        .capitalize!,
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
@@ -339,7 +348,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         .response!
                                                         .data!
                                                         .people![0]
-                                                        .name!.capitalize!,
+                                                        .name!
+                                                        .capitalize!,
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
@@ -369,7 +379,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         .response!
                                                         .data!
                                                         .profile!
-                                                        .name!.capitalize!,
+                                                        .name!
+                                                        .capitalize!,
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
@@ -430,7 +441,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                         .response!
                                                         .data!
                                                         .people![0]
-                                                        .name!.capitalize!,
+                                                        .name!
+                                                        .capitalize!,
                                                     style: AppTextStyle
                                                         .boldBlackText
                                                         .copyWith(
@@ -525,6 +537,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                               height: 180 *
                                                   SizeConfig.heightMultiplier!,
                                               child: TextField(
+                                                inputFormatters: [
+                                                  UpperCaseTextFormatter()
+                                                ],
                                                 textCapitalization:
                                                     TextCapitalization
                                                         .sentences,
@@ -583,6 +598,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                             SizeConfig
                                                                 .heightMultiplier!,
                                                         child: TextField(
+                                                          inputFormatters: [
+                                                            UpperCaseTextFormatter()
+                                                          ],
+                                                          textCapitalization:
+                                                              TextCapitalization
+                                                                  .sentences,
                                                           controller:
                                                               _postController
                                                                   .postTextController,
@@ -804,6 +825,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                             SizeConfig
                                                                 .heightMultiplier!,
                                                         child: TextField(
+                                                          inputFormatters: [
+                                                            UpperCaseTextFormatter()
+                                                          ],
+                                                          textCapitalization:
+                                                              TextCapitalization
+                                                                  .sentences,
                                                           controller:
                                                               _postController
                                                                   .postTextController,

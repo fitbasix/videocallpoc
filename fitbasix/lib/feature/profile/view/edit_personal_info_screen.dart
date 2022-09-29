@@ -1,3 +1,4 @@
+import 'package:fitbasix/core/universal_widgets/capitalizeText.dart';
 import 'package:fitbasix/feature/Home/view/widgets/my_subscriptions.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
@@ -120,6 +121,7 @@ class EditPersonalInfoScreen extends StatelessWidget {
                   child: TextFieldContainer(
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
+                        UpperCaseTextFormatter()
                       ],
                       onChanged: (value) {
                         _profileController.loginController!.mobile.value =

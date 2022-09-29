@@ -5,6 +5,7 @@ import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/universal_widgets/capitalizeText.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/model/chat_model.dart';
 import 'package:fitbasix/feature/chat_firebase/view/media_message_widget.dart';
@@ -51,7 +52,7 @@ class _ChatPageState extends State<ChatPage> {
         onHangUpTapped: (value) async {},
         onMenuTap: () {},
         parentContext: context,
-        trainertitle: _chatController.senderName,
+        trainertitle: CapitalizeFunction.capitalize(_chatController.senderName),
         trainerstatus: '',
         trainerProfilePicUrl: _chatController.senderPhoto,
         // trainerProfilePicUrl: _chatController.senderPhoto,
@@ -532,6 +533,10 @@ class SendMessageWidget extends StatelessWidget {
                                     ),
                                     child: TextField(
                                       // focusNode: _focus,
+                                      inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                                       keyboardType: TextInputType.multiline,
                                       onChanged: (value) {
                                         _chatController

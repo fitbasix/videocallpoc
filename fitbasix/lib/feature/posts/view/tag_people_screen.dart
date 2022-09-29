@@ -15,6 +15,7 @@ import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 
+import '../../../core/universal_widgets/capitalizeText.dart';
 import '../../spg/view/set_goal_screen.dart';
 
 class CheckboxState {
@@ -112,6 +113,10 @@ class TagPeopleScreen extends StatelessWidget {
                       ),
                       child: Center(
                         child: TextField(
+                          inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                           onChanged: (value) async {
                             print(value);
                             var users = await CreatePostService.getUsers(value);

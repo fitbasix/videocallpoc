@@ -20,6 +20,7 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/routes/app_routes.dart';
+import '../../../core/universal_widgets/capitalizeText.dart';
 
 class ExploreFeed extends StatefulWidget {
   @override
@@ -103,6 +104,10 @@ class _ExploreFeedState extends State<ExploreFeed> {
                     ),
                     child: Center(
                       child: TextField(
+                        inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                         controller: homeController.searchController,
                         style: AppTextStyle.smallGreyText.copyWith(
                             fontSize: 14 * SizeConfig.textMultiplier!,

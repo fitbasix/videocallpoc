@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/universal_widgets/capitalizeText.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
@@ -118,8 +119,9 @@ class _UserPageInfoState extends State<UserPageInfo> {
     super.initState();
 
     _scrollController.addListener(() async {
-      if (_scrollController.position.maxScrollExtent == _scrollController.position.pixels) {
-        if(_profileController.dataNeedToLoad.value){
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        if (_profileController.dataNeedToLoad.value) {
           _profileController.showLoading.value = true;
           final postQuery = await ProfileServices.getUserPosts(
               skip: _profileController.currentPage.value * 5);
@@ -191,7 +193,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                           187 * SizeConfig.heightMultiplier!,
                                     ),
                                     Text(
-                                      widget.username.toString(),
+                                      CapitalizeFunction.capitalize(
+                                          widget.username.toString()),
                                       style: AppTextStyle.titleText.copyWith(
                                           color: Theme.of(context)
                                               .textTheme
@@ -221,7 +224,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                             borderRadius:
                                                 BorderRadius.circular(8.0)),
                                         child: Text(
-                                          'edit_yourprofile'.tr,
+                                          CapitalizeFunction.capitalize(
+                                              'edit_yourprofile'.tr),
                                           style: AppTextStyle.greenSemiBoldText
                                               .copyWith(color: kPureWhite),
                                         ),
@@ -387,7 +391,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                                   ),
                                                   PostTile(
                                                     isUsersProfileScreen: true,
-                                                    isMe:  _profileController
+                                                    isMe: _profileController
                                                         .userPostList[index]
                                                         .isMe!,
                                                     comment: _homeController
@@ -695,7 +699,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                 height: 177 * SizeConfig.heightMultiplier!,
                                 child: CachedNetworkImage(
                                   imageUrl: widget.userCoverImage!,
-                                  placeholder: (context, url) => ShimmerEffect(),
+                                  placeholder: (context, url) =>
+                                      ShimmerEffect(),
                                   errorWidget: (context, url, error) =>
                                       ShimmerEffect(),
                                   fit: BoxFit.cover,
@@ -710,7 +715,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                         sigmaX: 7.0, sigmaY: 7.0),
                                     child: CachedNetworkImage(
                                       imageUrl: widget.userCoverImage!,
-                                      placeholder: (context, url) => ShimmerEffect(),
+                                      placeholder: (context, url) =>
+                                          ShimmerEffect(),
                                       errorWidget: (context, url, error) =>
                                           ShimmerEffect(),
                                       fit: BoxFit.contain,
@@ -725,11 +731,11 @@ class _UserPageInfoState extends State<UserPageInfo> {
                             left: 16 * SizeConfig.widthMultiplier!,
                             child: Stack(
                               children: [
-
                                 Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                          width: 4 * SizeConfig.widthMultiplier!,
+                                          width:
+                                              4 * SizeConfig.widthMultiplier!,
                                           color: kPureWhite),
                                       shape: BoxShape.circle),
                                   height: 120 * SizeConfig.widthMultiplier!,
@@ -745,8 +751,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     left: 90 * SizeConfig.widthMultiplier!,
                                     child: GestureDetector(
                                       onTap: () async {
-                                        Navigator.pushNamed(
-                                            context, RouteName.selectProfilePhoto);
+                                        Navigator.pushNamed(context,
+                                            RouteName.selectProfilePhoto);
                                         // final pickedFile = await ImagesPicker.pick(
                                         //     count: 1, pickType: PickType.image);
                                         // if (pickedFile != null) {
@@ -757,10 +763,13 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                         // open user profilepic for change
                                       },
                                       child: Container(
-                                        height: 28 * SizeConfig.heightMultiplier!,
-                                        width: 28 * SizeConfig.heightMultiplier!,
+                                        height:
+                                            28 * SizeConfig.heightMultiplier!,
+                                        width:
+                                            28 * SizeConfig.heightMultiplier!,
                                         decoration: BoxDecoration(
-                                            shape: BoxShape.circle, color: kPureWhite),
+                                            shape: BoxShape.circle,
+                                            color: kPureWhite),
                                         child: SvgPicture.asset(
                                           ImagePath.selectImageIcon,
                                           color: kPureBlack,

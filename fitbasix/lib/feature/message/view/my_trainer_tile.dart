@@ -27,6 +27,7 @@ import '../../../core/constants/app_text_style.dart';
 import '../../../core/constants/image_path.dart';
 import '../../../core/reponsive/SizeConfig.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/universal_widgets/capitalizeText.dart';
 import '../../get_trained/model/get_trained_model.dart';
 import '../../get_trained/services/trainer_services.dart';
 import 'chat_ui.dart';
@@ -119,6 +120,10 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                           8 * SizeConfig.widthMultiplier!),
                     ),
                     child: TextField(
+                      inputFormatters: [
+                                        UpperCaseTextFormatter()
+                                      ],
+                                      textCapitalization: TextCapitalization.sentences,
                       controller: _trainerController.searchMyTrainerController,
                       style: AppTextStyle.smallGreyText.copyWith(
                           fontSize: 14 * SizeConfig.textMultiplier!,
