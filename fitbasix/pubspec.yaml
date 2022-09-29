@@ -113,6 +113,7 @@ dependencies:
   html: ^0.15.0
   carousel_slider: ^4.1.1
   easy_pdf_viewer: ^1.0.2
+  photo_view: ^0.14.0
 
 dev_dependencies:
   flutter_test:

@@ -50,7 +50,7 @@ class FirebaseChatController extends GetxController {
   }
 
   sendTextMessage(BuildContext context) async {
-   await firebaseService.sendMessage(
+    await firebaseService.sendMessage(
       senderId: senderId,
       context: context,
       receiverId: receiverId,
@@ -68,7 +68,7 @@ class FirebaseChatController extends GetxController {
     String filePath = "";
     late String messageType;
     FilePickerResult? result =
-    await FilePicker.platform.pickFiles(type: FileType.any);
+        await FilePicker.platform.pickFiles(type: FileType.any);
 
     if (result != null && result.files.single.path != null) {
       userWantToSendMedia.value = true;
@@ -77,6 +77,7 @@ class FirebaseChatController extends GetxController {
       fileName.value = result.files[0].name;
 
       String? fileExtension = lookupMimeType(result.files.single.path!);
+      print("extension " + fileExtension.toString());
       if (fileExtension != null) {
         if (fileExtension.startsWith("audio")) {
           messageType = "audio";
@@ -90,25 +91,26 @@ class FirebaseChatController extends GetxController {
       }
 
       try {
-        var url =  await firebaseService
-            .uploadFile(File(result.files[0].path!), fileName.value, senderId);
+        print("extension " + fileExtension.toString());
+        var url = await firebaseService.uploadFile(
+            File(result.files[0].path!), fileName.value, senderId);
         printInfo(info: "Url $url");
         await firebaseService
             .sendMessage(
-            context: Get.context!,
-            receiverId: receiverId,
-            messageData: MessageData(
-              senderName: userName,
-              senderId: senderId,
-              senderAvatar: senderPhoto,
-              message: '',
-              isMedia: true,
-              mediaUrl: url,
-              mediaName: fileName.value,
-              mediaType: messageType,
-              sentAt: DateTime.now().toUtc().toString(),
-            ),
-            senderId: senderId)
+                context: Get.context!,
+                receiverId: receiverId,
+                messageData: MessageData(
+                  senderName: userName,
+                  senderId: senderId,
+                  senderAvatar: senderPhoto,
+                  message: '',
+                  isMedia: true,
+                  mediaUrl: url,
+                  mediaName: fileName.value,
+                  mediaType: messageType,
+                  sentAt: DateTime.now().toUtc().toString(),
+                ),
+                senderId: senderId)
             .then((value) {
           mediaIsUploading.value = false;
           userWantToSendMedia.value = false;
@@ -126,16 +128,17 @@ class FirebaseChatController extends GetxController {
     }
   }
 
-  Future<XFile?> pickFromCamera() async {
+  Future<XFile?> pickFromCamera({required bool gallery}) async {
     final ImagePicker picker = ImagePicker();
-    XFile? file = await picker.pickImage(source: ImageSource.camera);
+    XFile? file = await picker.pickImage(
+        source: gallery ? ImageSource.gallery : ImageSource.camera);
     if (file != null) {
       return file;
     } else
       return null;
   }
 
-  void sendImageFromCamera(context) async {
+  void sendImageFromCamera(context, {required bool gallery}) async {
     late String receiverID;
     late String messageType;
     String filePath = "";
@@ -144,17 +147,30 @@ class FirebaseChatController extends GetxController {
     // } else {
     //   receiverID = (widget.conversation.value.conversationWith as Group).guid;
     // }
-    XFile? pickedFile = await pickFromCamera();
+    XFile? pickedFile = await pickFromCamera(gallery: gallery);
     if (pickedFile != null) {
       userWantToSendMedia.value = true;
       mediaIsUploading.value = true;
       fileName.value = pickedFile.name;
       filePath = pickedFile.path;
 
+      String? fileExtension = lookupMimeType(filePath);
+      print("extension " + fileExtension.toString());
+      if (fileExtension != null) {
+        if (fileExtension.startsWith("audio")) {
+          messageType = "audio";
+        } else if (fileExtension.startsWith("image")) {
+          messageType = "image";
+        } else if (fileExtension.startsWith("video")) {
+          messageType = "video";
+        } else {
+          messageType = "file";
+        }
+      }
+
       try {
         var url = await firebaseService.uploadFile(
             File(filePath), fileName.value, senderId);
-
         firebaseService.sendMessage(
             context: Get.context!,
             receiverId: receiverId,
@@ -165,13 +181,18 @@ class FirebaseChatController extends GetxController {
               message: '',
               isMedia: true,
               mediaUrl: url,
+              mediaType: messageType,
               sentAt: DateTime.now().toUtc().toString(),
             ),
             senderId: senderId);
+        mediaIsUploading.value = false;
+        userWantToSendMedia.value = false;
       } on Exception catch (e) {
+        print(e.toString());
         mediaIsUploading.value = false;
         userWantToSendMedia.value = false;
       } on Error catch (e) {
+        print(e.toString());
         mediaIsUploading.value = false;
         userWantToSendMedia.value = false;
       }

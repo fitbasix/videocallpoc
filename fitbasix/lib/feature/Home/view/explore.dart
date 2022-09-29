@@ -356,7 +356,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                         name: homeController
                                             .explorePostList[index]
                                             .userId!
-                                            .name!,
+                                            .name!.capitalize!,
                                         profilePhoto: homeController
                                             .explorePostList[index]
                                             .userId!
@@ -364,7 +364,7 @@ class _ExploreFeedState extends State<ExploreFeed> {
                                         category: homeController
                                             .explorePostList[index]
                                             .postCategory![0]
-                                            .name!,
+                                            .name!.capitalize!,
                                         isFollowing: homeController
                                             .explorePostList[index]
                                             .isFollowing!,

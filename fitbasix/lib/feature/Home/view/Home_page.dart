@@ -1684,7 +1684,7 @@ class _HomePageState extends State<HomePage> {
                                                                       index]
                                                                   .postCategory![
                                                                       0]
-                                                                  .name!,
+                                                                  .name!.capitalize!,
                                                               date: DateFormat
                                                                       .d()
                                                                   .add_MMM()
@@ -2107,9 +2107,9 @@ class _HomePageState extends State<HomePage> {
                                                           },
                                                           child: PeopleTile(
                                                             wantCheckBox: false,
-                                                            name: _homeController
+                                                            name: CapitalizeFunction.capitalize(_homeController
                                                                 .searchUsersData[index]
-                                                                .name!,
+                                                                .name!.capitalize!),
                                                             subtitle:
                                                             _homeController
                                                                 .searchUsersData[index]

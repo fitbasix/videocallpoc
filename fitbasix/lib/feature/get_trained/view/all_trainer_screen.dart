@@ -430,13 +430,13 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             return Obx(() => _trainerController.isLoading.value
                                 ? Shimmer.fromColors(
                                     child: ItemCategory(
-                                        interest: _trainerController
+                                        interest: CapitalizeFunction.capitalize(_trainerController
                                             .interests
                                             .value
                                             .response!
                                             .response!
                                             .data![index]
-                                            .name!,
+                                            .name!.capitalize!),
                                         onTap: () {},
                                         isSelected: false),
                                     baseColor:
@@ -483,13 +483,13 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                               index
                                           ? true
                                           : false,
-                                      interest: _trainerController
+                                      interest: CapitalizeFunction.capitalize(_trainerController
                                           .interests
                                           .value
                                           .response!
                                           .response!
                                           .data![index]
-                                          .name!,
+                                          .name!.capitalize!),
                                     ),
                                   ));
                           }),
@@ -629,17 +629,16 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                     .trainers![index]
                                                     .user !=
                                                 null
-                                            ? _trainerController
+                                            ? CapitalizeFunction.capitalize(_trainerController
                                                     .allTrainer
                                                     .value
                                                     .response!
                                                     .data!
                                                     .trainers![index]
                                                     .user!
-                                                    .name ??
-                                                ''
+                                                    .name ?? '')
                                             : '',
-                                        strength: _trainerController
+                                        strength: CapitalizeFunction.capitalize(_trainerController
                                             .allTrainer
                                             .value
                                             .response!
@@ -647,7 +646,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                             .trainers![index]
                                             .strength![0]
                                             .name
-                                            .toString(),
+                                            .toString()),
                                         strengthCount: _trainerController
                                                 .allTrainer
                                                 .value

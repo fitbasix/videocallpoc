@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:fitbasix/core/constants/app_text_style.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
+import 'package:fitbasix/core/universal_widgets/image_viewer.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/model/chat_model.dart';
 import 'package:fitbasix/feature/message/controller/chat_controller.dart';
@@ -33,7 +34,7 @@ class _MediaMessageState extends State<MediaMessageWidget> {
   var _chatController = Get.find<FirebaseChatController>();
   String? text;
   bool sentByMe = false;
-
+  
   @override
   Widget build(BuildContext context) {
     bool _isDownloading = false;
@@ -113,14 +114,14 @@ class _MediaMessageState extends State<MediaMessageWidget> {
               right: 16 * SizeConfig.widthMultiplier!,
               left: 16 * SizeConfig.widthMultiplier!),
           child: Text(
-              DateFormat.jm()
-                  .format(DateTime.parse(widget.passedMessage.sentAt).toLocal()),
+              DateFormat.jm().format(
+                  DateTime.parse(widget.passedMessage.sentAt).toLocal()),
               style: sentByMe == true
-                  ? AppTextStyle.white400Text.copyWith(
-                  fontSize: 9.0 * SizeConfig.textMultiplier!)
+                  ? AppTextStyle.white400Text
+                      .copyWith(fontSize: 9.0 * SizeConfig.textMultiplier!)
                   : AppTextStyle.black400Text.copyWith(
-                  color: kPureWhite,
-                  fontSize: 9.0 * SizeConfig.textMultiplier!)),
+                      color: kPureWhite,
+                      fontSize: 9.0 * SizeConfig.textMultiplier!)),
         ),
       ],
     );

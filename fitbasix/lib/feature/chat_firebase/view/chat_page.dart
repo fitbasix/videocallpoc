@@ -6,6 +6,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/constants/image_path.dart';
 import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:fitbasix/core/universal_widgets/capitalizeText.dart';
+import 'package:fitbasix/core/universal_widgets/image_viewer.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/model/chat_model.dart';
 import 'package:fitbasix/feature/chat_firebase/view/media_message_widget.dart';
@@ -74,28 +75,32 @@ class _ChatPageState extends State<ChatPage> {
                             ConnectionState.waiting) {
                           if (!firstLoad) {
                             return Expanded(
-                              child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                reverse: true,
-                                // to display loading tile if more items
-                                itemCount: snapshot.data?.docs.length ?? 0,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return MessageData.fromJson(snapshot
-                                      .data!.docs[index]
-                                      .data()
-                                  as Map<String, dynamic>)
-                                      .isMedia
-                                      ? MediaMessageWidget(
-                                      passedMessage:
-                                      MessageData.fromJson(snapshot
-                                          .data!.docs[index]
-                                          .data()
-                                      as Map<String, dynamic>))
-                                      : MessageTile(
-                                    index: index,
-                                    messageList: snapshot.data!.docs,
-                                  );
-                                },
+                              child: Container(
+                                color: Colors.transparent,
+                                child: ListView.builder(
+                                  keyboardDismissBehavior:
+                                      ScrollViewKeyboardDismissBehavior.manual,
+                                  physics: const BouncingScrollPhysics(),
+                                  reverse: true,
+                                  // to display loading tile if more items
+                                  itemCount: snapshot.data?.docs.length ?? 0,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return MessageData.fromJson(snapshot
+                                                .data!.docs[index]
+                                                .data() as Map<String, dynamic>)
+                                            .isMedia
+                                        ? MediaMessageWidget(
+                                            passedMessage: MessageData.fromJson(
+                                                snapshot.data!.docs[index]
+                                                        .data()
+                                                    as Map<String, dynamic>))
+                                        : MessageTile(
+                                            index: index,
+                                            messageList: snapshot.data!.docs,
+                                          );
+                                  },
+                                ),
                               ),
                             );
                           } else {
@@ -112,7 +117,7 @@ class _ChatPageState extends State<ChatPage> {
                                               16 * SizeConfig.widthMultiplier!),
                                       height: 28 * SizeConfig.heightMultiplier!,
                                       width: 176 * SizeConfig.widthMultiplier!,
-                                      color: Color(0xFF3646464),
+                                      color: const Color(0xFF3646464),
                                     ),
                                     SizedBox(
                                       height: 8 * SizeConfig.heightMultiplier!,
@@ -123,7 +128,7 @@ class _ChatPageState extends State<ChatPage> {
                                               16 * SizeConfig.widthMultiplier!),
                                       height: 49 * SizeConfig.heightMultiplier!,
                                       width: 215 * SizeConfig.widthMultiplier!,
-                                      color: Color(0xFF3646464),
+                                      color: const Color(0xFF3646464),
                                     ),
                                     SizedBox(
                                       height: 8 * SizeConfig.heightMultiplier!,
@@ -134,7 +139,7 @@ class _ChatPageState extends State<ChatPage> {
                                               16 * SizeConfig.widthMultiplier!),
                                       height: 28 * SizeConfig.heightMultiplier!,
                                       width: 176 * SizeConfig.widthMultiplier!,
-                                      color: Color(0xFF3646464),
+                                      color: const Color(0xFF3646464),
                                     ),
                                     SizedBox(
                                         height:
@@ -149,7 +154,7 @@ class _ChatPageState extends State<ChatPage> {
                                             42 * SizeConfig.heightMultiplier!,
                                         width:
                                             191 * SizeConfig.widthMultiplier!,
-                                        color: Color(0xFF3646464),
+                                        color: const Color(0xFF3646464),
                                       ),
                                     ),
                                     SizedBox(
@@ -161,7 +166,7 @@ class _ChatPageState extends State<ChatPage> {
                                               16 * SizeConfig.widthMultiplier!),
                                       height: 28 * SizeConfig.heightMultiplier!,
                                       width: 176 * SizeConfig.widthMultiplier!,
-                                      color: Color(0xFF3646464),
+                                      color: const Color(0xFF3646464),
                                     ),
                                     SizedBox(
                                         height:
@@ -176,7 +181,7 @@ class _ChatPageState extends State<ChatPage> {
                                             78 * SizeConfig.heightMultiplier!,
                                         width:
                                             232 * SizeConfig.widthMultiplier!,
-                                        color: Color(0xFF3646464),
+                                        color: const Color(0xFF3646464),
                                       ),
                                     ),
                                   ],
@@ -198,25 +203,57 @@ class _ChatPageState extends State<ChatPage> {
                                   return ListView.builder(
                                     physics: const BouncingScrollPhysics(),
                                     reverse: true,
+                                    keyboardDismissBehavior:
+                                        ScrollViewKeyboardDismissBehavior
+                                            .onDrag,
                                     // to display loading tile if more items
                                     itemCount: snapshot.data!.docs.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                          return MessageData.fromJson(snapshot
-                                              .data!.docs[index]
-                                              .data()
-                                          as Map<String, dynamic>)
+                                      return MessageData.fromJson(snapshot
+                                                      .data!.docs[index]
+                                                      .data()
+                                                  as Map<String, dynamic>)
                                               .isMedia
-                                              ? MediaMessageWidget(
-                                              passedMessage:
-                                              MessageData.fromJson(snapshot
-                                                  .data!.docs[index]
-                                                  .data()
-                                              as Map<String, dynamic>))
-                                              : MessageTile(
-                                            index: index,
-                                            messageList: snapshot.data!.docs,
-                                          );
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) => ImageViewer(
+                                                            label: "",
+                                                            imgUrl: MessageData.fromJson(snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                        .data()
+                                                                    as Map<
+                                                                        String,
+                                                                        dynamic>)
+                                                                .mediaUrl)));
+                                              },
+                                              child: Hero(
+                                                tag: MessageData.fromJson(snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                        .data()
+                                                                    as Map<
+                                                                        String,
+                                                                        dynamic>)
+                                                                .mediaUrl,
+                                                child: MediaMessageWidget(
+                                                    passedMessage:
+                                                        MessageData.fromJson(
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                    .data()
+                                                                as Map<String,
+                                                                    dynamic>)),
+                                              ),
+                                            )
+                                          : MessageTile(
+                                              index: index,
+                                              messageList: snapshot.data!.docs,
+                                            );
                                     },
                                   );
                                 }),
@@ -298,50 +335,50 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
           ),
         ],
       ),
-      actions: [
-        //call icon
-        Container(
-          child: FlutterSwitch(
-            onToggle: onHangUpTapped!,
-            value: false,
-            height: 24 * SizeConfig.heightMultiplier!,
-            width: 48 * SizeConfig.widthMultiplier!,
-            borderRadius: 30.0,
-            padding: 1.0,
-            activeToggleColor: kPureWhite,
-            inactiveToggleColor: Color(0xffB7B7B7),
-            // toggleSize: 28,
-            activeColor: Color(0xff49AE50),
-            inactiveColor: Colors.transparent,
-            activeIcon: Icon(
-              Icons.videocam,
-              color: Color(0xff49AE50),
-            ),
-            inactiveIcon: Icon(
-              Icons.videocam,
-              color: kPureWhite,
-            ),
+    //   actions: [
+    //     //call icon
+    //     Container(
+    //       child: FlutterSwitch(
+    //         onToggle: onHangUpTapped!,
+    //         value: false,
+    //         height: 24 * SizeConfig.heightMultiplier!,
+    //         width: 48 * SizeConfig.widthMultiplier!,
+    //         borderRadius: 30.0,
+    //         padding: 1.0,
+    //         activeToggleColor: kPureWhite,
+    //         inactiveToggleColor: const Color(0xffB7B7B7),
+    //         // toggleSize: 28,
+    //         activeColor: const Color(0xff49AE50),
+    //         inactiveColor: Colors.transparent,
+    //         activeIcon: const Icon(
+    //           Icons.videocam,
+    //           color: Color(0xff49AE50),
+    //         ),
+    //         inactiveIcon: const Icon(
+    //           Icons.videocam,
+    //           color: kPureWhite,
+    //         ),
 
-            inactiveSwitchBorder: Border.all(
-              color: Color(0xffB7B7B7),
-              width: 1.0,
-            ),
-            activeToggleBorder: Border.all(
-              color: Color(0xff49AE50),
-              width: 1.0,
-            ),
-          ),
-        ),
-        // popupmenu icon
-        IconButton(
-            onPressed: onMenuTap,
-            icon: SvgPicture.asset(
-              ImagePath.chatpopupmenuIcon,
-              width: 4 * SizeConfig.widthMultiplier!,
-              height: 20 * SizeConfig.heightMultiplier!,
-              color: Theme.of(context).primaryColor,
-            )),
-      ],
+    //         inactiveSwitchBorder: Border.all(
+    //           color: const Color(0xffB7B7B7),
+    //           width: 1.0,
+    //         ),
+    //         activeToggleBorder: Border.all(
+    //           color: const Color(0xff49AE50),
+    //           width: 1.0,
+    //         ),
+    //       ),
+    //     ),
+    //     // popupmenu icon
+    //     IconButton(
+    //         onPressed: onMenuTap,
+    //         icon: SvgPicture.asset(
+    //           ImagePath.chatpopupmenuIcon,
+    //           width: 4 * SizeConfig.widthMultiplier!,
+    //           height: 20 * SizeConfig.heightMultiplier!,
+    //           color: Theme.of(context).primaryColor,
+    //         )),
+    //   ],
     );
   }
 
@@ -397,7 +434,8 @@ class _MessageTileState extends State<MessageTile> {
               children: [
                 Text(
                     _chatController.getDayString(
-                        DateTime.parse(message.sentAt).toLocal(), DateTime.now()),
+                        DateTime.parse(message.sentAt).toLocal(),
+                        DateTime.now()),
                     style: AppTextStyle.grey400Text
                         .copyWith(fontSize: 12 * SizeConfig.textMultiplier!)),
               ],
@@ -406,9 +444,10 @@ class _MessageTileState extends State<MessageTile> {
         if (widget.messageList.length > widget.index + 1)
           if ((DateTime.parse(message.sentAt).toLocal()).day >
               DateTime.parse((MessageData.fromJson(
-                          widget.messageList[widget.index+1].data()
+                          widget.messageList[widget.index + 1].data()
                               as Map<String, dynamic>)
-                      .sentAt)).toLocal()
+                      .sentAt))
+                  .toLocal()
                   .day)
             Padding(
               padding: EdgeInsets.symmetric(
@@ -418,7 +457,8 @@ class _MessageTileState extends State<MessageTile> {
                 children: [
                   Text(
                       _chatController.getDayString(
-                          DateTime.parse(message.sentAt).toLocal(), DateTime.now()),
+                          DateTime.parse(message.sentAt).toLocal(),
+                          DateTime.now()),
                       style: AppTextStyle.grey400Text
                           .copyWith(fontSize: 12 * SizeConfig.textMultiplier!)),
                 ],
@@ -435,6 +475,81 @@ class _MessageTileState extends State<MessageTile> {
 class SendMessageWidget extends StatelessWidget {
   SendMessageWidget({Key? key}) : super(key: key);
 
+  bottomsheet(context, {required FirebaseChatController chatController}) async {
+    return showModalBottomSheet(
+      backgroundColor: kBlack,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(50),
+        ),
+      ),
+      context: context,
+      builder: (context) => SizedBox(
+        height: 190 * SizeConfig.heightMultiplier!,
+        child: Container(
+          margin: const EdgeInsets.all(30),
+          child: Column(children: [
+            GestureDetector(
+              onTap: () async {
+                Navigator.pop(context);
+                chatController.sendImageFromCamera(context, gallery: false);
+              },
+              child: Row(
+                children: [
+                  Container(
+                    height: 40 * SizeConfig.heightMultiplier!,
+                    width: 40 * SizeConfig.widthMultiplier!,
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                    child: const Icon(
+                      Icons.camera_alt,
+                      color: greenChatColor,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Text(
+                    "Camera",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: () async {
+                Navigator.of(context).pop();
+                chatController.sendImageFromCamera(context, gallery: true);
+              },
+              child: Row(
+                children: [
+                  Container(
+                    height: 40 * SizeConfig.heightMultiplier!,
+                    width: 40 * SizeConfig.widthMultiplier!,
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                    child: const Icon(
+                      Icons.photo,
+                      color: greenChatColor,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Text(
+                    "Gallery",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  )
+                ],
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<FirebaseChatController>(
@@ -446,7 +561,7 @@ class SendMessageWidget extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       padding: EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.transparent,
                       ),
                       child: Row(
@@ -499,7 +614,7 @@ class SendMessageWidget extends StatelessWidget {
                                           : Container()),
                                       Obx(() =>
                                           _chatController.mediaIsUploading.value
-                                              ? LinearProgressIndicator(
+                                              ? const LinearProgressIndicator(
                                                   backgroundColor:
                                                       Color(0xff747474),
                                                   color: kBlack)
@@ -519,7 +634,7 @@ class SendMessageWidget extends StatelessWidget {
                         child: Container(
                           padding:
                               EdgeInsets.all(16 * SizeConfig.widthMultiplier!),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.transparent,
                           ),
                           child: Row(
@@ -536,7 +651,8 @@ class SendMessageWidget extends StatelessWidget {
                                       inputFormatters: [
                                         UpperCaseTextFormatter()
                                       ],
-                                      textCapitalization: TextCapitalization.sentences,
+                                      textCapitalization:
+                                          TextCapitalization.sentences,
                                       keyboardType: TextInputType.multiline,
                                       onChanged: (value) {
                                         _chatController
@@ -585,7 +701,9 @@ class SendMessageWidget extends StatelessWidget {
                                                     SizeConfig.widthMultiplier!,
                                                 child: IconButton(
                                                     onPressed: () {
-                                                     _chatController.sendImageFromCamera(context);
+                                                      bottomsheet(context,
+                                                          chatController:
+                                                              _chatController);
                                                     },
                                                     icon: SvgPicture.asset(
                                                       ImagePath.openCameraIcon,
