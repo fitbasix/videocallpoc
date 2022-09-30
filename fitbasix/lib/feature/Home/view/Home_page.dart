@@ -19,6 +19,7 @@ import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/report_abuse/report_abuse_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -64,7 +65,7 @@ class HomeAndTrainerPage extends StatelessWidget {
       if (jsonOb['home'] == 1) HomePage(),
       if (jsonOb['get_trained'] == 1) GetTrainedScreen(),
       if (jsonOb['post'] == 1) CreatePostScreen(),
-      if (jsonOb['tools'] == 1) ToolsScreen(),
+      if (jsonOb['tools'] == 1) const ToolsScreen(),
     ];
 
     return Scaffold(
@@ -136,6 +137,15 @@ class _HomePageState extends State<HomePage> {
   DateTime? currentBackPressTime;
 
   @override
+  void dispose() {
+    super.dispose();
+    searchUserController.dispose();
+    _reportAbuseController.dispose();
+    _homeController.dispose();
+    postController.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     fetchNotification();
@@ -194,7 +204,7 @@ class _HomePageState extends State<HomePage> {
       Get.to(
         () => ChatPage(),
       );
-    }else if(postId != null){
+    } else if (postId != null) {
       _homeController.commentsList.clear();
       _homeController.viewReplies!.clear();
       _homeController.postLoading.value = true;
@@ -204,21 +214,20 @@ class _HomePageState extends State<HomePage> {
       _homeController.postLoading.value = false;
       _homeController.commentsLoading.value = true;
       _homeController.postComments.value =
-      await HomeService.fetchComment(postId: postId);
+          await HomeService.fetchComment(postId: postId);
 
       if (_homeController.postComments.value.response!.data!.isNotEmpty) {
         _homeController.commentsList.value =
-        _homeController.postComments.value.response!.data!;
+            _homeController.postComments.value.response!.data!;
       }
       _homeController.commentsLoading.value = false;
     }
   }
 
-
   Future<bool> onWillPop() async {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
       currentBackPressTime = now;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('close_app_text'.tr),
@@ -314,9 +323,7 @@ class _HomePageState extends State<HomePage> {
                                                     .initialPostData
                                                     .value
                                                     .response!
-                                                    .data!
-                                                    .length !=
-                                                0) {
+                                                    .data!.isNotEmpty) {
                                               _profileController
                                                       .userPostList.value =
                                                   _profileController
@@ -425,13 +432,13 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         const Spacer(),
                                         GestureDetector(
-                                          onTap: (){
+                                          onTap: () {
                                             Navigator.pushNamed(context,
                                                 RouteName.myTrainersScreen);
                                           },
                                           child: Image.asset(
                                             ImagePath.chatIcon,
-                                              scale: 4,
+                                            scale: 4,
                                           ),
                                         ),
                                       ],
@@ -482,20 +489,22 @@ class _HomePageState extends State<HomePage> {
                                                               .widthMultiplier!,
                                                       child: Text.rich(
                                                         TextSpan(
-                                                          text: 'You can get a lot more out of it.\nStart with our ',
-                                                          children: [
-                                                            TextSpan(
-                                                              text: 'demo plan ',
-                                                              style: AppTextStyle
-                                                                  .black600Text
-                                                                  .copyWith(
-                                                                  fontSize: 14 *
-                                                                      SizeConfig
-                                                                          .textMultiplier!,
-                                                                  color: kgreen49),
-                                                            )
-                                                          ]
-                                                        ),
+                                                            text:
+                                                                'You can get a lot more out of it.\nStart with our ',
+                                                            children: [
+                                                              TextSpan(
+                                                                text:
+                                                                    'demo plan ',
+                                                                style: AppTextStyle
+                                                                    .black600Text
+                                                                    .copyWith(
+                                                                        fontSize: 14 *
+                                                                            SizeConfig
+                                                                                .textMultiplier!,
+                                                                        color:
+                                                                            kgreen49),
+                                                              )
+                                                            ]),
                                                         style: AppTextStyle
                                                             .black600Text
                                                             .copyWith(
@@ -1046,7 +1055,7 @@ class _HomePageState extends State<HomePage> {
                                                                   spreadRadius:
                                                                       -2,
                                                                   offset:
-                                                                      Offset(
+                                                                      const Offset(
                                                                           0, 5))
                                                             ],
                                                           ),
@@ -1082,32 +1091,40 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   Expanded(
                                                     child: GestureDetector(
-                                                      onTap: () async{
+                                                      onTap: () async {
                                                         _homeController
-                                                            .explorePageCount.value = 0;
-                                                        Navigator.pushNamed(context,
-                                                            RouteName.exploreSearch);
-                                                        _homeController.searchController
+                                                            .explorePageCount
+                                                            .value = 0;
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            RouteName
+                                                                .exploreSearch);
+                                                        _homeController
+                                                            .searchController
                                                             .clear();
                                                         _homeController
-                                                            .exploreSearchText.value = "";
-                                                        postController.getCategory();
+                                                            .exploreSearchText
+                                                            .value = "";
+                                                        postController
+                                                            .getCategory();
                                                         _homeController
                                                             .isExploreDataLoading
                                                             .value = true;
                                                         _homeController
-                                                            .explorePostModel.value =
+                                                                .explorePostModel
+                                                                .value =
                                                             await HomeService
-                                                            .getExplorePosts(
+                                                                .getExplorePosts(
                                                           skip: 0,
                                                         );
                                                         _homeController
-                                                            .explorePostList.value =
-                                                        _homeController
-                                                            .explorePostModel
-                                                            .value
-                                                            .response!
-                                                            .data!;
+                                                                .explorePostList
+                                                                .value =
+                                                            _homeController
+                                                                .explorePostModel
+                                                                .value
+                                                                .response!
+                                                                .data!;
                                                         _homeController
                                                             .isExploreDataLoading
                                                             .value = false;
@@ -1140,7 +1157,7 @@ class _HomePageState extends State<HomePage> {
                                                                   spreadRadius:
                                                                       -2,
                                                                   offset:
-                                                                      Offset(
+                                                                      const Offset(
                                                                           0, 5))
                                                             ],
                                                           ),
@@ -1191,7 +1208,7 @@ class _HomePageState extends State<HomePage> {
                                                           .withOpacity(0.10),
                                                       blurRadius: 10,
                                                       spreadRadius: -2,
-                                                      offset: Offset(0, 5))
+                                                      offset: const Offset(0, 5))
                                                 ]),
                                             child: Column(
                                               children: [
@@ -1232,7 +1249,7 @@ class _HomePageState extends State<HomePage> {
                                                   children: [
                                                     ClipRRect(
                                                       borderRadius:
-                                                          BorderRadius.only(
+                                                          const BorderRadius.only(
                                                               topLeft: Radius
                                                                   .circular(8),
                                                               topRight: Radius
@@ -1253,7 +1270,7 @@ class _HomePageState extends State<HomePage> {
                                                               .heightMultiplier!,
                                                       decoration: BoxDecoration(
                                                         borderRadius:
-                                                            BorderRadius.only(
+                                                            const BorderRadius.only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         8),
@@ -1263,13 +1280,13 @@ class _HomePageState extends State<HomePage> {
                                                         gradient:
                                                             RadialGradient(
                                                                 colors: [
-                                                              Color(0xff000000)
+                                                              const Color(0xff000000)
                                                                   .withOpacity(
                                                                       0),
-                                                              Color(0xff000000)
+                                                              const Color(0xff000000)
                                                                   .withOpacity(
                                                                       0.22),
-                                                              Color(0xff000000)
+                                                              const Color(0xff000000)
                                                                   .withOpacity(
                                                                       1.0),
                                                             ],
@@ -1305,7 +1322,7 @@ class _HomePageState extends State<HomePage> {
                                                             .widthMultiplier!),
                                                 // above
                                                 Container(
-                                                  padding: EdgeInsets.only(
+                                                  padding: const EdgeInsets.only(
                                                       left: 16, bottom: 16),
                                                   child: Row(
                                                     children: [
@@ -1337,23 +1354,19 @@ class _HomePageState extends State<HomePage> {
                                                                         .widthMultiplier!,
                                                               ),
                                                               Text.rich(
-                                                               TextSpan(
-                                                                 text:  'Track ',
-                                                                 children: [
-                                                                   TextSpan(
-                                                                     text: 'hydration',
-                                                                     style:  AppTextStyle.boldWhiteText.copyWith(
-                                                                         color: Theme.of(
-                                                                             context)
-                                                                             .textTheme
-                                                                             .bodyText1
-                                                                             ?.color,
-                                                                         fontSize: 14 *
-                                                                             SizeConfig
-                                                                                 .textMultiplier!),
-                                                                   )
-                                                                 ]
-                                                               ),
+                                                                TextSpan(
+                                                                    text:
+                                                                        'Track ',
+                                                                    children: [
+                                                                      TextSpan(
+                                                                        text:
+                                                                            'hydration',
+                                                                        style: AppTextStyle.boldWhiteText.copyWith(
+                                                                            color:
+                                                                                Theme.of(context).textTheme.bodyText1?.color,
+                                                                            fontSize: 14 * SizeConfig.textMultiplier!),
+                                                                      )
+                                                                    ]),
                                                                 style: AppTextStyle.grey400Text.copyWith(
                                                                     color: Theme.of(
                                                                             context)
@@ -1395,25 +1408,21 @@ class _HomePageState extends State<HomePage> {
                                                               ),
                                                               Text.rich(
                                                                 TextSpan(
-                                                                    text:  'Track ',
+                                                                    text:
+                                                                        'Track ',
                                                                     children: [
                                                                       TextSpan(
-                                                                        text: 'calories',
-                                                                        style:  AppTextStyle.boldWhiteText.copyWith(
-                                                                            color: Theme.of(
-                                                                                context)
-                                                                                .textTheme
-                                                                                .bodyText1
-                                                                                ?.color,
-                                                                            fontSize: 14 *
-                                                                                SizeConfig
-                                                                                    .textMultiplier!),
+                                                                        text:
+                                                                            'calories',
+                                                                        style: AppTextStyle.boldWhiteText.copyWith(
+                                                                            color:
+                                                                                Theme.of(context).textTheme.bodyText1?.color,
+                                                                            fontSize: 14 * SizeConfig.textMultiplier!),
                                                                       )
-                                                                    ]
-                                                                ),
+                                                                    ]),
                                                                 style: AppTextStyle.grey400Text.copyWith(
                                                                     color: Theme.of(
-                                                                        context)
+                                                                            context)
                                                                         .textTheme
                                                                         .bodyText1
                                                                         ?.color,
@@ -1425,10 +1434,13 @@ class _HomePageState extends State<HomePage> {
                                                           )
                                                         ],
                                                       ),
-                                                      Spacer(),
+                                                      const Spacer(),
                                                       SizedBox(
-                                                        height: 40 * SizeConfig.heightMultiplier!,
-                                                        child: GreenCircleArrowButton(
+                                                        height: 40 *
+                                                            SizeConfig
+                                                                .heightMultiplier!,
+                                                        child:
+                                                            GreenCircleArrowButton(
                                                           onTap: () {
                                                             Navigator.pushNamed(
                                                                 context,
@@ -1467,7 +1479,7 @@ class _HomePageState extends State<HomePage> {
                                                 color: kBlack.withOpacity(0.10),
                                                 blurRadius: 10,
                                                 spreadRadius: 0,
-                                                offset: Offset(0, 5))
+                                                offset: const Offset(0, 5))
                                           ]),
                                       child: Row(
                                         children: [
@@ -1532,14 +1544,33 @@ class _HomePageState extends State<HomePage> {
                                   height: 9 * SizeConfig.heightMultiplier!,
                                 ),
                                 CarouselSlider(
-                                  items: [ImagePath.banner1,ImagePath.banner2,ImagePath.banner3,ImagePath.banner4,ImagePath.banner5,].map((e) =>Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10 * SizeConfig.heightMultiplier!),
-                                    child: Image.asset(e,fit: BoxFit.contain,),), ).toList(), options: CarouselOptions(
-                                  autoPlay: true,
-                                  viewportFraction: 1,
-                                  autoPlayInterval: const Duration(seconds: 3),
-                                  aspectRatio: 3,
-                                ),),
+                                  items: [
+                                    ImagePath.banner1,
+                                    ImagePath.banner2,
+                                    ImagePath.banner3,
+                                    ImagePath.banner4,
+                                    ImagePath.banner5,
+                                  ]
+                                      .map(
+                                        (e) => Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10 *
+                                                  SizeConfig.heightMultiplier!),
+                                          child: Image.asset(
+                                            e,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  options: CarouselOptions(
+                                    autoPlay: true,
+                                    viewportFraction: 1,
+                                    autoPlayInterval:
+                                        const Duration(seconds: 3),
+                                    aspectRatio: 3,
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 10 * SizeConfig.heightMultiplier!,
                                 ),
@@ -1580,17 +1611,18 @@ class _HomePageState extends State<HomePage> {
                                                   .isPostUpdate.value
                                               ? Center(child: Container())
                                               : ListView.builder(
+                                                cacheExtent: 1500,
+                                                addAutomaticKeepAlives: false,
+                                                addRepaintBoundaries: false,
                                                   itemCount: _homeController
-                                                              .trendingPostList
-                                                              .length ==
-                                                          0
+                                                              .trendingPostList.isEmpty
                                                       ? 0
                                                       : _homeController
                                                           .trendingPostList
                                                           .length,
                                                   shrinkWrap: true,
                                                   physics:
-                                                      NeverScrollableScrollPhysics(),
+                                                      const NeverScrollableScrollPhysics(),
                                                   itemBuilder: (_, index) {
                                                     _homeController
                                                         .alreadyRenderedPostId
@@ -1640,6 +1672,7 @@ class _HomePageState extends State<HomePage> {
                                                           .isNeedToLoadData
                                                           .value = false;
                                                     }
+                                                    print("Links: " + _homeController.trendingPostList.elementAt(index).files.toString());
                                                     return Obx(() => Column(
                                                           children: [
                                                             PostTile(
@@ -1684,7 +1717,8 @@ class _HomePageState extends State<HomePage> {
                                                                       index]
                                                                   .postCategory![
                                                                       0]
-                                                                  .name!.capitalize!,
+                                                                  .name!
+                                                                  .capitalize!,
                                                               date: DateFormat
                                                                       .d()
                                                                   .add_MMM()
@@ -1696,9 +1730,7 @@ class _HomePageState extends State<HomePage> {
                                                                           .trendingPostList[
                                                                               index]
                                                                           .location!
-                                                                          .placeName!
-                                                                          .length ==
-                                                                      0
+                                                                          .placeName!.isEmpty
                                                                   ? ''
                                                                   : _homeController
                                                                       .trendingPostList[
@@ -1710,9 +1742,7 @@ class _HomePageState extends State<HomePage> {
                                                               imageUrl: _homeController
                                                                           .trendingPostList[
                                                                               index]
-                                                                          .files!
-                                                                          .length ==
-                                                                      0
+                                                                          .files!.isEmpty
                                                                   ? []
                                                                   : _homeController
                                                                       .trendingPostList[
@@ -1916,9 +1946,7 @@ class _HomePageState extends State<HomePage> {
                                                                         .postComments
                                                                         .value
                                                                         .response!
-                                                                        .data!
-                                                                        .length !=
-                                                                    0) {
+                                                                        .data!.isNotEmpty) {
                                                                   _homeController
                                                                           .commentsList
                                                                           .value =
@@ -1963,7 +1991,7 @@ class _HomePageState extends State<HomePage> {
                                     left: Get.width / 2 - 10,
                                     child: Center(
                                         child: CustomizedCircularProgress()))
-                                : SizedBox()),
+                                : const SizedBox()),
 
                             /// search users logic and UI
                             // Obx(() => showUserSearch.value
@@ -1981,8 +2009,8 @@ class _HomePageState extends State<HomePage> {
                             Padding(
                               padding: EdgeInsets.only(
                                 left: 15.0 * SizeConfig.widthMultiplier!,
-                                 top: 20.0 * SizeConfig.widthMultiplier!,
-                              right: 15.0 * SizeConfig.widthMultiplier!,
+                                top: 20.0 * SizeConfig.widthMultiplier!,
+                                right: 15.0 * SizeConfig.widthMultiplier!,
                               ),
                               child: SvgPicture.asset(
                                 ImagePath.logo,
@@ -1997,13 +2025,15 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    width: Get.width - 150 * SizeConfig.widthMultiplier!,
+                                    width: Get.width -
+                                        150 * SizeConfig.widthMultiplier!,
                                     margin: EdgeInsets.symmetric(
-                                        horizontal: 16 * SizeConfig.widthMultiplier!,
-                                        vertical: 12 * SizeConfig.heightMultiplier!),
+                                        horizontal:
+                                            16 * SizeConfig.widthMultiplier!,
+                                        vertical:
+                                            12 * SizeConfig.heightMultiplier!),
                                     decoration: BoxDecoration(
-                                      color: Theme
-                                          .of(context)
+                                      color: Theme.of(context)
                                           .textTheme
                                           .headline4
                                           ?.color,
@@ -2015,50 +2045,79 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Row(
                                           children: [
-                                            SizedBox(width: 10 * SizeConfig.widthMultiplier!,),
-                                    Icon(
-                                        Icons.search,
-                                        color: hintGrey,
-                                     size: 20 * SizeConfig.heightMultiplier!,
-                                      ),
+                                            SizedBox(
+                                              width: 10 *
+                                                  SizeConfig.widthMultiplier!,
+                                            ),
+                                            Icon(
+                                              Icons.search,
+                                              color: hintGrey,
+                                              size: 20 *
+                                                  SizeConfig.heightMultiplier!,
+                                            ),
                                             Expanded(
                                               child: TextField(
                                                 inputFormatters: [
-                                        UpperCaseTextFormatter()
-                                      ],
-                                      textCapitalization: TextCapitalization.sentences,
-                                                controller: searchUserController,
+                                                  UpperCaseTextFormatter()
+                                                ],
+                                                textCapitalization:
+                                                    TextCapitalization
+                                                        .sentences,
+                                                controller:
+                                                    searchUserController,
                                                 onChanged: (value) async {
                                                   if (value.isNotEmpty) {
                                                     WidgetsBinding.instance!
-                                                        .addPostFrameCallback((_) async {
-                                                      showUserSearch.value = true;
-                                                      var users = await CreatePostService
-                                                          .getUsers(value);
-                                                      _homeController.searchUsersData
-                                                          .value = users.response!.data!;
+                                                        .addPostFrameCallback(
+                                                            (_) async {
+                                                      showUserSearch.value =
+                                                          true;
+                                                      var users =
+                                                          await CreatePostService
+                                                              .getUsers(value);
+                                                      _homeController
+                                                              .searchUsersData
+                                                              .value =
+                                                          users.response!.data!;
                                                     });
-                                                  }
-                                                  else {
+                                                  } else {
                                                     WidgetsBinding.instance!
-                                                        .addPostFrameCallback((_) {
-                                                      showUserSearch.value = false;
-                                                      _homeController.searchUsersData.value = [UserData()];
+                                                        .addPostFrameCallback(
+                                                            (_) {
+                                                      showUserSearch.value =
+                                                          false;
+                                                      _homeController
+                                                          .searchUsersData
+                                                          .value = [UserData()];
                                                     });
                                                   }
                                                   //_homeController.searchUsersData.value = users.response!.data!;
                                                 },
-                                                style: AppTextStyle.normalGreenText.copyWith(
-                                                    color:
-                                                    Theme
-                                                        .of(context)
-                                                        .textTheme
-                                                        .bodyText1
-                                                        ?.color),
+                                                style: AppTextStyle
+                                                    .normalGreenText
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color),
                                                 onSubmitted: (value) {},
                                                 decoration: InputDecoration(
                                                   isDense: true,
-                                                  contentPadding: EdgeInsets.fromLTRB(10 * SizeConfig.heightMultiplier!,10 * SizeConfig.heightMultiplier!, 10* SizeConfig.heightMultiplier!, 10 * SizeConfig.heightMultiplier!,),
+                                                  contentPadding:
+                                                      EdgeInsets.fromLTRB(
+                                                    10 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    10 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    10 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    10 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                  ),
                                                   // prefixIcon: Transform(
                                                   //   transform: Matrix4.translationValues(
                                                   //       0, 2, 0),
@@ -2069,77 +2128,106 @@ class _HomePageState extends State<HomePage> {
                                                   // ),
                                                   border: InputBorder.none,
                                                   hintText: 'search'.tr,
-                                                  hintStyle: AppTextStyle.smallGreyText
+                                                  hintStyle: AppTextStyle
+                                                      .smallGreyText
                                                       .copyWith(
-                                                      fontSize: 14 * SizeConfig.textMultiplier!,
-                                                      color: hintGrey),
+                                                          fontSize: 14 *
+                                                              SizeConfig
+                                                                  .textMultiplier!,
+                                                          color: hintGrey),
                                                 ),
                                               ),
                                             ),
                                           ],
                                         ),
                                         Obx(() =>
-                                        showUserSearch.value &&
-                                            (_homeController.searchUsersData.isNotEmpty &&
-                                                _homeController.searchUsersData[0].name !=
-                                                    null) ? Container(
-                                            height: 250 * SizeConfig.heightMultiplier!,
-                                            padding: EdgeInsets.only(bottom: 10*SizeConfig.heightMultiplier!),
-                                            child: ListView.builder(
-                                                shrinkWrap: true,
-                                                physics: BouncingScrollPhysics(),
-                                                itemCount: _homeController.searchUsersData
-                                                    .length,
-                                                itemBuilder: (context, index) {
-                                                  return Obx(() =>
-                                                      Padding(
-                                                        padding: EdgeInsets.symmetric(
-                                                            horizontal: 16 * SizeConfig
-                                                                .widthMultiplier!),
-                                                        child: GestureDetector(
-                                                          onTap: (){
-                                                           if(_homeController.searchUsersData[index].trainerType!.isNotEmpty){
-                                                             gotoIndividualPage(index,_homeController.searchUsersData[index].id!);
-                                                           }
-                                                           else{
-                                                            gotoIndividualUserPage(index, _homeController.searchUsersData[index].id!);
-                                                           }
-                                                          },
-                                                          child: PeopleTile(
-                                                            wantCheckBox: false,
-                                                            name: CapitalizeFunction.capitalize(_homeController
-                                                                .searchUsersData[index]
-                                                                .name!.capitalize!),
-                                                            subtitle:
+                                            showUserSearch.value &&
+                                                    (_homeController
+                                                            .searchUsersData
+                                                            .isNotEmpty &&
+                                                        _homeController
+                                                                .searchUsersData[
+                                                                    0]
+                                                                .name !=
+                                                            null)
+                                                ? Container(
+                                                    height: 250 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 10 *
+                                                            SizeConfig
+                                                                .heightMultiplier!),
+                                                    child: ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            const BouncingScrollPhysics(),
+                                                        itemCount:
                                                             _homeController
-                                                                .searchUsersData[index]
-                                                                .name!,
-                                                            image: _homeController
-                                                                .searchUsersData[index]
-                                                                .profilePhoto!,
-                                                            onTap: (value) async {
-
-                                                            },
-                                                            value: false,
-                                                          ),
-                                                        ),
-                                                      ));
-                                                })
-                                        ) : Container())
+                                                                .searchUsersData
+                                                                .length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return Obx(
+                                                              () => Padding(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            16 *
+                                                                                SizeConfig.widthMultiplier!),
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        if (_homeController
+                                                                            .searchUsersData[index]
+                                                                            .trainerType!
+                                                                            .isNotEmpty) {
+                                                                          gotoIndividualPage(
+                                                                              index,
+                                                                              _homeController.searchUsersData[index].id!);
+                                                                        } else {
+                                                                          gotoIndividualUserPage(
+                                                                              index,
+                                                                              _homeController.searchUsersData[index].id!);
+                                                                        }
+                                                                      },
+                                                                      child:
+                                                                          PeopleTile(
+                                                                        wantCheckBox:
+                                                                            false,
+                                                                        name: CapitalizeFunction.capitalize(_homeController
+                                                                            .searchUsersData[index]
+                                                                            .name!
+                                                                            .capitalize!),
+                                                                        subtitle: _homeController
+                                                                            .searchUsersData[index]
+                                                                            .name!,
+                                                                        image: _homeController
+                                                                            .searchUsersData[index]
+                                                                            .profilePhoto!,
+                                                                        onTap:
+                                                                            (value) async {},
+                                                                        value:
+                                                                            false,
+                                                                      ),
+                                                                    ),
+                                                                  ));
+                                                        }))
+                                                : Container())
                                       ],
                                     ),
                                   ),
-                              // GestureDetector(
-                              //   onTap: (){
-                              //   },
-                              //   child: Padding(
-                              //       padding: EdgeInsets.only(
-                              //           top: 23 * SizeConfig.heightMultiplier!),
-                              //       child: SvgPicture.asset(
-                              //         ImagePath.bellIcon, color: Colors.white,
-                              //         height: 19.5 * SizeConfig.heightMultiplier!,
-                              //         width: 16 * SizeConfig.widthMultiplier!,)),
-                              // )
+                                  // GestureDetector(
+                                  //   onTap: (){
+                                  //   },
+                                  //   child: Padding(
+                                  //       padding: EdgeInsets.only(
+                                  //           top: 23 * SizeConfig.heightMultiplier!),
+                                  //       child: SvgPicture.asset(
+                                  //         ImagePath.bellIcon, color: Colors.white,
+                                  //         height: 19.5 * SizeConfig.heightMultiplier!,
+                                  //         width: 16 * SizeConfig.widthMultiplier!,)),
+                                  // )
                                 ],
                               ),
                             ),
@@ -2175,8 +2263,7 @@ class _HomePageState extends State<HomePage> {
           await TrainerServices.getTrainerPosts(trainerId, 0);
       _trainerController.isMyTrainerProfileLoading.value = false;
       _trainerController.loadingIndicator.value = false;
-      if (_trainerController.initialPostData.value.response!.data!.length !=
-          0) {
+      if (_trainerController.initialPostData.value.response!.data!.isNotEmpty) {
         _trainerController.trainerPostList.value =
             _trainerController.initialPostData.value.response!.data!;
       } else {
@@ -2202,7 +2289,7 @@ class _HomePageState extends State<HomePage> {
     _homeController.isLoading.value = true;
     var response = await HomeService.getIndividualUserPosts(userId, 0);
     _individualUserController.userPostList.value = response.response!.data!;
-    if (response.response!.data!.length != 0) {
+    if (response.response!.data!.isNotEmpty) {
       _individualUserController.userPostList.value = response.response!.data!;
     } else {
       _individualUserController.userPostList.clear();
@@ -2307,7 +2394,7 @@ class _HomePageState extends State<HomePage> {
     _homeController.initialPostData.value =
         await HomeService.getPosts(skip: null);
 
-    if (_homeController.initialPostData.value.response!.data!.length != 0) {
+    if (_homeController.initialPostData.value.response!.data!.isNotEmpty) {
       _homeController.trendingPostList.value =
           _homeController.initialPostData.value.response!.data!;
     }

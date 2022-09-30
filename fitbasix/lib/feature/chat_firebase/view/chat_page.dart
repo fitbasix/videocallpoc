@@ -17,6 +17,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ChatPage extends StatefulWidget {
@@ -31,8 +32,16 @@ class _ChatPageState extends State<ChatPage> {
 
   var firstLoad = true;
 
+  chatId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var senderId = prefs.getString('userId')!;
+    prefs.setString('chatId', "chat_${senderId}");
+    print(prefs.get('chatId'));
+  }
+
   @override
   void initState() {
+    chatId();
     FirebaseFirestore.instance
         .collection('chats')
         .doc(_chatController.firebaseService.getChatRoomId(
@@ -43,6 +52,18 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {});
     });
     super.initState();
+  }
+
+  @override
+  void dispose() async {
+    remove();
+    super.dispose();
+  }
+
+  remove() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('chatId');
+    print("done");
   }
 
   @override
@@ -232,14 +253,13 @@ class _ChatPageState extends State<ChatPage> {
                                                                 .mediaUrl)));
                                               },
                                               child: Hero(
-                                                tag: MessageData.fromJson(snapshot
-                                                                        .data!
-                                                                        .docs[index]
-                                                                        .data()
-                                                                    as Map<
-                                                                        String,
-                                                                        dynamic>)
-                                                                .mediaUrl,
+                                                tag: MessageData.fromJson(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                                .data()
+                                                            as Map<String,
+                                                                dynamic>)
+                                                    .mediaUrl,
                                                 child: MediaMessageWidget(
                                                     passedMessage:
                                                         MessageData.fromJson(
@@ -335,50 +355,50 @@ class AppbarforChat extends StatelessWidget with PreferredSizeWidget {
           ),
         ],
       ),
-    //   actions: [
-    //     //call icon
-    //     Container(
-    //       child: FlutterSwitch(
-    //         onToggle: onHangUpTapped!,
-    //         value: false,
-    //         height: 24 * SizeConfig.heightMultiplier!,
-    //         width: 48 * SizeConfig.widthMultiplier!,
-    //         borderRadius: 30.0,
-    //         padding: 1.0,
-    //         activeToggleColor: kPureWhite,
-    //         inactiveToggleColor: const Color(0xffB7B7B7),
-    //         // toggleSize: 28,
-    //         activeColor: const Color(0xff49AE50),
-    //         inactiveColor: Colors.transparent,
-    //         activeIcon: const Icon(
-    //           Icons.videocam,
-    //           color: Color(0xff49AE50),
-    //         ),
-    //         inactiveIcon: const Icon(
-    //           Icons.videocam,
-    //           color: kPureWhite,
-    //         ),
+      //   actions: [
+      //     //call icon
+      //     Container(
+      //       child: FlutterSwitch(
+      //         onToggle: onHangUpTapped!,
+      //         value: false,
+      //         height: 24 * SizeConfig.heightMultiplier!,
+      //         width: 48 * SizeConfig.widthMultiplier!,
+      //         borderRadius: 30.0,
+      //         padding: 1.0,
+      //         activeToggleColor: kPureWhite,
+      //         inactiveToggleColor: const Color(0xffB7B7B7),
+      //         // toggleSize: 28,
+      //         activeColor: const Color(0xff49AE50),
+      //         inactiveColor: Colors.transparent,
+      //         activeIcon: const Icon(
+      //           Icons.videocam,
+      //           color: Color(0xff49AE50),
+      //         ),
+      //         inactiveIcon: const Icon(
+      //           Icons.videocam,
+      //           color: kPureWhite,
+      //         ),
 
-    //         inactiveSwitchBorder: Border.all(
-    //           color: const Color(0xffB7B7B7),
-    //           width: 1.0,
-    //         ),
-    //         activeToggleBorder: Border.all(
-    //           color: const Color(0xff49AE50),
-    //           width: 1.0,
-    //         ),
-    //       ),
-    //     ),
-    //     // popupmenu icon
-    //     IconButton(
-    //         onPressed: onMenuTap,
-    //         icon: SvgPicture.asset(
-    //           ImagePath.chatpopupmenuIcon,
-    //           width: 4 * SizeConfig.widthMultiplier!,
-    //           height: 20 * SizeConfig.heightMultiplier!,
-    //           color: Theme.of(context).primaryColor,
-    //         )),
-    //   ],
+      //         inactiveSwitchBorder: Border.all(
+      //           color: const Color(0xffB7B7B7),
+      //           width: 1.0,
+      //         ),
+      //         activeToggleBorder: Border.all(
+      //           color: const Color(0xff49AE50),
+      //           width: 1.0,
+      //         ),
+      //       ),
+      //     ),
+      //     // popupmenu icon
+      //     IconButton(
+      //         onPressed: onMenuTap,
+      //         icon: SvgPicture.asset(
+      //           ImagePath.chatpopupmenuIcon,
+      //           width: 4 * SizeConfig.widthMultiplier!,
+      //           height: 20 * SizeConfig.heightMultiplier!,
+      //           color: Theme.of(context).primaryColor,
+      //         )),
+      //   ],
     );
   }
 

@@ -30,7 +30,7 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   bool state = false;
   bool buffer = false;
   Uint8List? thumbnail;
-  GlobalKey _key = GlobalKey();
+  final GlobalKey _key = GlobalKey();
   Rx<double> videoProgress = 0.05.obs;
   Rx<int> videoLength = 1.obs;
 
@@ -45,6 +45,7 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
               ? _controller.value.position.inSeconds
               : 0.0) /
           videoLength.value);
+          
       setState(() {
         state = _controller.value.isPlaying;
         buffer = _controller.value.isBuffering;
@@ -58,7 +59,7 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   getThumbnail() async {
     thumbnail = await VideoThumbnail.thumbnailData(
       video: widget.videoUrl,
-      imageFormat: ImageFormat.JPEG,
+      imageFormat: ImageFormat.PNG,
       maxWidth: Get.width
           .toInt(), // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
       quality: 25,
@@ -68,6 +69,7 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
   @override
   void dispose() {
     _controller.dispose();
+    _homeController.dispose();
     super.dispose();
   }
 

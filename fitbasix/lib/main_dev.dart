@@ -156,7 +156,7 @@ Future<void> main() async {
       var postId = json['postId'];
 
       if (postId != '') {
-       await sendToPost(postId: postId);
+        await sendToPost(postId: postId);
       } else {
         var controller = Get.find<FirebaseChatController>();
         controller.getValues();
@@ -170,19 +170,31 @@ Future<void> main() async {
     });
 
     FirebaseMessaging.onMessage.listen((message) async {
-      AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            displayOnForeground: true,
-            displayOnBackground: true,
-            channelKey: 'basic_channel',
-            id: 10,
-            title: message.notification!.title.toString(),
-            wakeUpScreen: true,
-            category: NotificationCategory.Reminder,
-            autoDismissible: false,
-            payload: {'data': jsonEncode(message.data)},
-            body: message.notification!.body.toString()),
-      );
+      print("Nitesh: " + message.data.toString());
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      var chatId = prefs.getString('chatId') ?? "";
+      print(chatId);
+      if (Platform.isIOS) {
+          print("nope");
+        }
+      print(message.data["receiverChatId"] + " - - - " + chatId);
+      if (message.data["receiverChatId"] != chatId) {
+        print(message.data["receiverChatId"] + " - - - " + chatId);
+        
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+              displayOnForeground: true,
+              displayOnBackground: true,
+              channelKey: 'basic_channel',
+              id: 10,
+              title: message.notification!.title.toString(),
+              wakeUpScreen: true,
+              category: NotificationCategory.Reminder,
+              autoDismissible: false,
+              payload: {'data': jsonEncode(message.data)},
+              body: message.notification!.body.toString()),
+        );
+      }
     });
 
     FirebaseMessaging.instance.getInitialMessage().then((initialMessage) async {
