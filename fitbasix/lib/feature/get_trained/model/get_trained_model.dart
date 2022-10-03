@@ -12,10 +12,11 @@ GetTrainerModel getTrainerModelFromJson(String str) =>
 String getTrainerModelToJson(GetTrainerModel data) =>
     json.encode(data.toJson());
 
+GetAllMyTrainers getAllMyTrainersFromJson(String str) =>
+    GetAllMyTrainers.fromJson(json.decode(str));
 
-GetAllMyTrainers getAllMyTrainersFromJson(String str) => GetAllMyTrainers.fromJson(json.decode(str));
-
-String getAllMyTrainersToJson(GetAllMyTrainers data) => json.encode(data.toJson());
+String getAllMyTrainersToJson(GetAllMyTrainers data) =>
+    json.encode(data.toJson());
 
 class GetAllMyTrainers {
   GetAllMyTrainers({
@@ -28,17 +29,20 @@ class GetAllMyTrainers {
   ResponseMyTrainer? response;
   String? resStr;
 
-  factory GetAllMyTrainers.fromJson(Map<String, dynamic> json) => GetAllMyTrainers(
-    code: json["code"] == null ? null : json["code"],
-    response: json["response"] == null ? null : ResponseMyTrainer.fromJson(json["response"]),
-    resStr: json["resStr"] == null ? null : json["resStr"],
-  );
+  factory GetAllMyTrainers.fromJson(Map<String, dynamic> json) =>
+      GetAllMyTrainers(
+        code: json["code"] == null ? null : json["code"],
+        response: json["response"] == null
+            ? null
+            : ResponseMyTrainer.fromJson(json["response"]),
+        resStr: json["resStr"] == null ? null : json["resStr"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "code": code == null ? null : code,
-    "response": response == null ? null : response!.toJson(),
-    "resStr": resStr == null ? null : resStr,
-  };
+        "code": code == null ? null : code,
+        "response": response == null ? null : response!.toJson(),
+        "resStr": resStr == null ? null : resStr,
+      };
 }
 
 class ResponseMyTrainer {
@@ -50,18 +54,22 @@ class ResponseMyTrainer {
   String? message;
   List<MyTrainer>? data;
 
-  factory ResponseMyTrainer.fromJson(Map<String, dynamic> json) => ResponseMyTrainer(
-    message: json["message"] == null ? null : json["message"],
-    data: json["data"] == null ? null : List<MyTrainer>.from(json["data"].map((x) => MyTrainer.fromJson(x))),
-  );
+  factory ResponseMyTrainer.fromJson(Map<String, dynamic> json) =>
+      ResponseMyTrainer(
+        message: json["message"] == null ? null : json["message"],
+        data: json["data"] == null
+            ? null
+            : List<MyTrainer>.from(
+                json["data"].map((x) => MyTrainer.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "message": message == null ? null : message,
-    "data": data == null ? null : List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "message": message == null ? null : message,
+        "data": data == null
+            ? null
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
-
-
 
 class GetTrainerModel {
   GetTrainerModel({
@@ -155,7 +163,8 @@ class MyTrainer {
       this.profilePhoto,
       this.chatId,
       this.time,
-      this.days});
+      this.days,
+      this.lastMessageDate});
 
   String? id;
   String? user;
@@ -168,6 +177,7 @@ class MyTrainer {
   String? chatId;
   String? time;
   List<int>? days;
+  DateTime? lastMessageDate;
 
   factory MyTrainer.fromJson(Map<String, dynamic> json) => MyTrainer(
       id: json["_id"] == null ? null : json["_id"],
@@ -186,7 +196,8 @@ class MyTrainer {
       profilePhoto: json["profilePhoto"] == null ? null : json["profilePhoto"],
       chatId: json["chat"],
       time: json["time"],
-      days: List<int>.from(json["days"].map((x) => x)));
+      days: List<int>.from(json["days"].map((x) => x)),
+      lastMessageDate: json['lastMessageDate'] == null ? null : DateTime.parse(json["startDate"]));
 
   Map<String, dynamic> toJson() => {
         "_id": id == null ? null : id,
@@ -201,6 +212,7 @@ class MyTrainer {
         "name": name == null ? null : name,
         "profilePhoto": profilePhoto == null ? null : profilePhoto,
         "chat": chatId,
+        "lastMessageDate": lastMessageDate
       };
 }
 

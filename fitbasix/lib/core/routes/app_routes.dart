@@ -5,6 +5,7 @@ import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/explore.dart';
 import 'package:fitbasix/feature/Home/view/widgets/individual_user_profile_screen.dart';
+import 'package:fitbasix/feature/call_back_form/view/callBackPage.dart';
 import 'package:fitbasix/feature/get_trained/view/all_trainer_screen.dart';
 import 'package:fitbasix/feature/get_trained/view/get_trained_screen.dart';
 import 'package:fitbasix/feature/plans/view/payment_page.dart';
@@ -111,6 +112,7 @@ abstract class RouteName {
   static const viewAllUserWithDoc = "/view_all_user_with_document";
   static const networkErrorScreen = "/network_error_screen";
   static const individualUserProfileScreen = "/individual_user_profile_screen";
+  static const callBackPage = "/callBackPage";
   RouteName._();
 }
 
@@ -430,6 +432,11 @@ class GenerateRoute {
     if (route == RouteName.planTimingScreen) {
       return MaterialPageRoute(
         builder: (BuildContext context) => PlanTimingUI(),
+      );
+    }
+    if (route == RouteName.callBackPage) {
+      return MaterialPageRoute(
+        builder: (context) => CallBackPage(),
       );
     }
     if (route == RouteName.editPersonalInfo) {

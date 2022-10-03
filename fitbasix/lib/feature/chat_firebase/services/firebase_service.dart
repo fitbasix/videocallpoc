@@ -58,7 +58,7 @@ class FirebaseServices {
     }
   }
 
-  Future<String> getLastMessage({
+  Future<MessageData?> getLastMessage({
     required String receiverId,
     required String senderId,
   }) async {
@@ -70,12 +70,11 @@ class FirebaseServices {
         .get();
     if (data.docs.isNotEmpty) {
       var message =
-          MessageData.fromJson(data.docs[0].data() as Map<String, dynamic>)
-              .message;
-      printInfo(info: message);
+          MessageData.fromJson(data.docs[0].data() as Map<String, dynamic>);
+      printInfo(info: message.toString());
       return message;
     }
-    return '';
+    return null;
   }
 
   Stream<QuerySnapshot> getMessageStream({

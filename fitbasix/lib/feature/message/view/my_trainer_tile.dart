@@ -6,6 +6,7 @@ import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
+import 'package:fitbasix/feature/chat_firebase/model/chat_model.dart';
 import 'package:fitbasix/feature/chat_firebase/services/firebase_service.dart';
 import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
@@ -46,17 +47,56 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   TrainerController _trainerController = Get.find();
   ScrollController _scrollController = ScrollController();
   bool isMessageLoading = false;
+  Map<String, dynamic> order = {};
   final HomeController _homeController = Get.find();
-  RxList<MyTrainer>? myTrainers;
+  RxList<MyTrainer> myTrainers = [MyTrainer()].obs;
+  Rx<MessageData?>? lastMessage;
+
+  fetch(final element) async {}
+
+  fetchData() async {
+    print("calling : ${myTrainers.value}");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await Future.forEach(myTrainers.value, (MyTrainer element) async {
+      var firebaseService = FirebaseServices();
+      var senderId = prefs.getString('userId')!;
+      String value = (await firebaseService.getLastMessage(
+                  receiverId: element.chatId.toString().replaceAll('chat_', ''),
+                  senderId: senderId) ??
+              MessageData(
+                  senderName: "",
+                  senderId: "",
+                  senderAvatar: "",
+                  message: "",
+                  sentAt: ""))
+          .sentAt;
+      print("Time: ${value}");
+      try {
+        element.lastMessageDate = DateTime.parse(value);
+      } catch (e) {
+        element.lastMessageDate = DateTime.now();
+      }
+    });
+
+    print(
+        "Data:---- ${myTrainers.value[0].lastMessageDate} ${myTrainers.value[1].lastMessageDate}");
+
+    myTrainers.sort(
+      (a, b) {
+        return b.lastMessageDate!.compareTo(a.lastMessageDate!);
+      },
+    );
+    print(myTrainers.toJson().toString());
+  }
+
   @override
   void initState() {
     _trainerController.currentMyTrainerPage.value = 1;
-
     myTrainers =
         _trainerController.trainers.value.response!.data!.myTrainers!.obs;
+    fetchData();
     _trainerController.isMyTrainerNeedToLoadData.value = true;
     _scrollController.addListener(() async {
-      print(_trainerController.isMyTrainerNeedToLoadData.value);
       if (_trainerController.isMyTrainerNeedToLoadData.value == true &&
           !_trainerController.showLoaderOnMyTrainer.value) {
         if (_scrollController.position.maxScrollExtent ==
@@ -120,10 +160,8 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                           8 * SizeConfig.widthMultiplier!),
                     ),
                     child: TextField(
-                      inputFormatters: [
-                                        UpperCaseTextFormatter()
-                                      ],
-                                      textCapitalization: TextCapitalization.sentences,
+                      inputFormatters: [UpperCaseTextFormatter()],
+                      textCapitalization: TextCapitalization.sentences,
                       controller: _trainerController.searchMyTrainerController,
                       style: AppTextStyle.smallGreyText.copyWith(
                           fontSize: 14 * SizeConfig.textMultiplier!,
@@ -304,8 +342,10 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                     Get.put(FirebaseChatController());
                                 controller.getValues();
                                 controller.receiverId = myTrainers![index].id!;
-                                controller.senderPhoto = myTrainers![index].profilePhoto!;
-                                controller.senderName = myTrainers![index].name!;
+                                controller.senderPhoto =
+                                    myTrainers![index].profilePhoto!;
+                                controller.senderName =
+                                    myTrainers![index].name!;
                                 Get.to(
                                   () => ChatPage(),
                                 );
@@ -440,7 +480,13 @@ class TrainersTileUI extends StatelessWidget {
       : super(key: key);
   List<String> taggedPersonList;
   String? trainerName;
-  RxString lastMessage = ''.obs;
+  Rx<MessageData?> lastMessage = MessageData(
+          senderName: "",
+          senderId: "",
+          senderAvatar: "",
+          message: "",
+          sentAt: "")
+      .obs;
   String? trainerProfilePicUrl;
   bool? isCurrentlyEnrolled;
   bool? userHasChatHistory = true;
@@ -528,8 +574,8 @@ class TrainersTileUI extends StatelessWidget {
                   () => Text(
                       lastMessageIsLoading.value
                           ? "lets_start_conversation".tr
-                          : (lastMessage.value.isNotEmpty
-                              ? lastMessage.value
+                          : (lastMessage.value!.message.isNotEmpty
+                              ? lastMessage.value!.message
                               : "lets_start_conversation".tr),
                       style: AppTextStyle.hmedium13Text.copyWith(
                           color: isCurrentlyEnrolled!
@@ -568,14 +614,14 @@ class TrainersTileUI extends StatelessWidget {
     );
   }
 
-  fetchLastMessage()async{
-   var firebaseService = FirebaseServices();
-   SharedPreferences prefs = await SharedPreferences.getInstance();
-   var senderId = prefs.getString('userId')!;
-   printInfo(info: userChatId!);
-   lastMessage.value = await firebaseService.getLastMessage(receiverId: userChatId!.replaceAll('chat_', ''), senderId: senderId);
-   printInfo(info: lastMessage.value);
-   lastMessageIsLoading.value = false;
+  fetchLastMessage() async {
+    var firebaseService = FirebaseServices();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var senderId = prefs.getString('userId')!;
+    printInfo(info: userChatId!);
+    lastMessage.value = await firebaseService.getLastMessage(
+        receiverId: userChatId!.replaceAll('chat_', ''), senderId: senderId);
+    lastMessageIsLoading.value = false;
   }
 
   // fetchLastMessage(){

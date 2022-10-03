@@ -3,7 +3,7 @@ import '../../app_config.dart';
 class ApiUrl {
   static String liveBaseURL = AppConfig.api_url;
 
-  // static String liveBaseURL = 'https://b69c-103-13-107-204.in.ngrok.io';
+  // static String liveBaseURL = 'https://fc49-2409-4052-4d80-6988-e8c1-ff4c-d3c6-f42c.in.ngrok.io';
 
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getAbuseData =
@@ -112,4 +112,6 @@ class ApiUrl {
 
   /// rate and review
   static String rateAndReview = liveBaseURL + '/api/rating/rateAndReview';
+  ///CallBack
+  static String callBack = liveBaseURL + '/api/getCall/CallInfo';
 }

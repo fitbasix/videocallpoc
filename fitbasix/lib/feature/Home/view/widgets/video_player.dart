@@ -36,24 +36,27 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
 
   @override
   void initState() {
-    getThumbnail();
+    // getThumbnail();
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl);
+    try {
+      _controller = VideoPlayerController.network(widget.videoUrl)
+        ..addListener(() {
+          videoProgress.value = ((_controller.value.isPlaying
+                  ? _controller.value.position.inSeconds
+                  : 0.0) /
+              videoLength.value);
 
-    _controller.addListener(() {
-      videoProgress.value = ((_controller.value.isPlaying
-              ? _controller.value.position.inSeconds
-              : 0.0) /
-          videoLength.value);
-          
-      setState(() {
-        state = _controller.value.isPlaying;
-        buffer = _controller.value.isBuffering;
-      });
-    });
-    _controller.initialize().then((value) {
-      videoLength.value = _controller.value.duration.inSeconds;
-    });
+          setState(() {
+            state = _controller.value.isPlaying;
+            buffer = _controller.value.isBuffering;
+          });
+        })
+        ..initialize().then((value) {
+          videoLength.value = _controller.value.duration.inSeconds;
+        });
+    } catch (e) {
+      print("error here: " + e.toString());
+    }
   }
 
   getThumbnail() async {

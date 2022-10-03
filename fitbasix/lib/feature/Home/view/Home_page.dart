@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
 
           _homeController.currentPage.value++;
           _homeController.showLoader.value = false;
-          setState(() {});
+          // setState(() {});
         }
       }
     });
@@ -320,10 +320,11 @@ class _HomePageState extends State<HomePage> {
                                                     .getUserPosts();
 
                                             if (_profileController
-                                                    .initialPostData
-                                                    .value
-                                                    .response!
-                                                    .data!.isNotEmpty) {
+                                                .initialPostData
+                                                .value
+                                                .response!
+                                                .data!
+                                                .isNotEmpty) {
                                               _profileController
                                                       .userPostList.value =
                                                   _profileController
@@ -1208,7 +1209,8 @@ class _HomePageState extends State<HomePage> {
                                                           .withOpacity(0.10),
                                                       blurRadius: 10,
                                                       spreadRadius: -2,
-                                                      offset: const Offset(0, 5))
+                                                      offset:
+                                                          const Offset(0, 5))
                                                 ]),
                                             child: Column(
                                               children: [
@@ -1249,7 +1251,8 @@ class _HomePageState extends State<HomePage> {
                                                   children: [
                                                     ClipRRect(
                                                       borderRadius:
-                                                          const BorderRadius.only(
+                                                          const BorderRadius
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(8),
                                                               topRight: Radius
@@ -1270,7 +1273,8 @@ class _HomePageState extends State<HomePage> {
                                                               .heightMultiplier!,
                                                       decoration: BoxDecoration(
                                                         borderRadius:
-                                                            const BorderRadius.only(
+                                                            const BorderRadius
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         8),
@@ -1280,13 +1284,16 @@ class _HomePageState extends State<HomePage> {
                                                         gradient:
                                                             RadialGradient(
                                                                 colors: [
-                                                              const Color(0xff000000)
+                                                              const Color(
+                                                                      0xff000000)
                                                                   .withOpacity(
                                                                       0),
-                                                              const Color(0xff000000)
+                                                              const Color(
+                                                                      0xff000000)
                                                                   .withOpacity(
                                                                       0.22),
-                                                              const Color(0xff000000)
+                                                              const Color(
+                                                                      0xff000000)
                                                                   .withOpacity(
                                                                       1.0),
                                                             ],
@@ -1322,8 +1329,9 @@ class _HomePageState extends State<HomePage> {
                                                             .widthMultiplier!),
                                                 // above
                                                 Container(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 16, bottom: 16),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 16, bottom: 16),
                                                   child: Row(
                                                     children: [
                                                       Column(
@@ -1611,11 +1619,12 @@ class _HomePageState extends State<HomePage> {
                                                   .isPostUpdate.value
                                               ? Center(child: Container())
                                               : ListView.builder(
-                                                cacheExtent: 1500,
-                                                addAutomaticKeepAlives: false,
-                                                addRepaintBoundaries: false,
+                                                  cacheExtent: 1500,
+                                                  addAutomaticKeepAlives: false,
+                                                  addRepaintBoundaries: false,
                                                   itemCount: _homeController
-                                                              .trendingPostList.isEmpty
+                                                          .trendingPostList
+                                                          .isEmpty
                                                       ? 0
                                                       : _homeController
                                                           .trendingPostList
@@ -1672,7 +1681,12 @@ class _HomePageState extends State<HomePage> {
                                                           .isNeedToLoadData
                                                           .value = false;
                                                     }
-                                                    print("Links: " + _homeController.trendingPostList.elementAt(index).files.toString());
+                                                    print("Links: " +
+                                                        _homeController
+                                                            .trendingPostList
+                                                            .elementAt(index)
+                                                            .files
+                                                            .toString());
                                                     return Obx(() => Column(
                                                           children: [
                                                             PostTile(
@@ -1727,10 +1741,11 @@ class _HomePageState extends State<HomePage> {
                                                                           index]
                                                                       .updatedAt!),
                                                               place: _homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .location!
-                                                                          .placeName!.isEmpty
+                                                                      .trendingPostList[
+                                                                          index]
+                                                                      .location!
+                                                                      .placeName!
+                                                                      .isEmpty
                                                                   ? ''
                                                                   : _homeController
                                                                       .trendingPostList[
@@ -1740,9 +1755,10 @@ class _HomePageState extends State<HomePage> {
                                                                           1]
                                                                       .toString(),
                                                               imageUrl: _homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .files!.isEmpty
+                                                                      .trendingPostList[
+                                                                          index]
+                                                                      .files!
+                                                                      .isEmpty
                                                                   ? []
                                                                   : _homeController
                                                                       .trendingPostList[
@@ -1943,10 +1959,11 @@ class _HomePageState extends State<HomePage> {
                                                                             .id!);
 
                                                                 if (_homeController
-                                                                        .postComments
-                                                                        .value
-                                                                        .response!
-                                                                        .data!.isNotEmpty) {
+                                                                    .postComments
+                                                                    .value
+                                                                    .response!
+                                                                    .data!
+                                                                    .isNotEmpty) {
                                                                   _homeController
                                                                           .commentsList
                                                                           .value =
@@ -2159,6 +2176,7 @@ class _HomePageState extends State<HomePage> {
                                                             SizeConfig
                                                                 .heightMultiplier!),
                                                     child: ListView.builder(
+                                                        cacheExtent: 1500,
                                                         shrinkWrap: true,
                                                         physics:
                                                             const BouncingScrollPhysics(),
@@ -2217,17 +2235,23 @@ class _HomePageState extends State<HomePage> {
                                       ],
                                     ),
                                   ),
-                                  // GestureDetector(
-                                  //   onTap: (){
-                                  //   },
-                                  //   child: Padding(
-                                  //       padding: EdgeInsets.only(
-                                  //           top: 23 * SizeConfig.heightMultiplier!),
-                                  //       child: SvgPicture.asset(
-                                  //         ImagePath.bellIcon, color: Colors.white,
-                                  //         height: 19.5 * SizeConfig.heightMultiplier!,
-                                  //         width: 16 * SizeConfig.widthMultiplier!,)),
-                                  // )
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed('/callBackPage');
+                                    },
+                                    child: Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 23 *
+                                                SizeConfig.heightMultiplier!, right: 15.0 * SizeConfig.widthMultiplier!),
+                                        child: SvgPicture.asset(
+                                          ImagePath.bellIcon,
+                                          color: Colors.white,
+                                          height: 19.5 *
+                                              SizeConfig.heightMultiplier!,
+                                          width:
+                                              16 * SizeConfig.widthMultiplier!,
+                                        )),
+                                  )
                                 ],
                               ),
                             ),

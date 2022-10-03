@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/call_back_form/model/callBackModel';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
@@ -19,6 +20,8 @@ import '../../log_in/controller/login_controller.dart';
 class ProfileController extends GetxController {
   var val = 0.obs;
   LoginController? loginController;
+  RxBool isclicked = RxBool(false);
+  late Rx<CallBackModel> callBackResult = CallBackModel().obs;
   final HomeController homeController = Get.find();
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();

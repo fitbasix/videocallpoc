@@ -88,7 +88,7 @@ class TrainerServices {
       List<int>? availability,
       int? sortBy}) async {
     int sortMethod =
-        sortBy == null ? _trainerController.SelectedSortMethod.value : sortBy;
+        sortBy ?? _trainerController.SelectedSortMethod.value;
 
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
@@ -99,14 +99,13 @@ class TrainerServices {
     var response =
         await dio!.post(ApiUrl.getAllTrainer + "?sortBy=$sortMethod", data: {
       "skip": currentPage == null ? 0 : currentPage * 5,
-      "name": name == null ? _trainerController.searchedName.value : name,
+      "name": name ?? _trainerController.searchedName.value,
       "trainerType": trainerType == null
           ? (_trainerController.trainerType.value == 0
               ? []
               : [_trainerController.trainerType.value])
           : [trainerType],
-      "time":
-          availability == null ? _trainerController.availability : availability,
+      "time": availability ?? _trainerController.availability,
       "interests": interests == null
           ? [_trainerController.SelectedInterestIndex.value]
           : [interests],
@@ -125,7 +124,8 @@ class TrainerServices {
     var response = await dio!.post(ApiUrl.getMyTrainers, data: {
       "skip": currentPage == null ? 0 : currentPage * 5,
       "name":
-          name == null ? _trainerController.searchedMyTrainerName.value : name,
+          name ?? _trainerController.searchedMyTrainerName.value,
+          "limit": 1.toString()
     });
     print("jjjj " + response.toString());
     GetAllMyTrainers mytrainer = getAllMyTrainersFromJson(response.toString());

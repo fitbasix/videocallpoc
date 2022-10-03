@@ -1,0 +1,49 @@
+// To parse this JSON data, do
+//
+//     final callBackModel = callBackModelFromJson(jsonString);
+
+import 'dart:convert';
+
+CallBackModel callBackModelFromJson(String str) => CallBackModel.fromJson(json.decode(str));
+
+String callBackModelToJson(CallBackModel data) => json.encode(data.toJson());
+
+class CallBackModel {
+    CallBackModel({
+         this.code,
+         this.response,
+         this.resStr,
+    });
+
+    final int? code;
+    final Response? response;
+    final String? resStr;
+
+    factory CallBackModel.fromJson(Map<String, dynamic> json) => CallBackModel(
+        code: json["code"],
+        response: Response.fromJson(json["response"]),
+        resStr: json["resStr"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "code": code,
+        "response": response?.toJson(),
+        "resStr": resStr,
+    };
+}
+
+class Response {
+    Response({
+       this.message,
+    });
+
+    final String? message;
+
+    factory Response.fromJson(Map<String, dynamic> json) => Response(
+        message: json["message"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "message": message,
+    };
+}

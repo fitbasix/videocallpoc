@@ -1,5 +1,6 @@
 import 'package:fitbasix/core/universal_widgets/capitalizeText.dart';
 import 'package:fitbasix/feature/Home/view/widgets/my_subscriptions.dart';
+import 'package:fitbasix/feature/call_back_form/services/callBackServices.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:fitbasix/feature/profile/view/appbar_for_account.dart';
@@ -337,8 +338,8 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 height: 17 * SizeConfig.heightMultiplier!,
               ),
               GestureDetector(
-                onTap: (){
-                  Get.to(()=>MySubscriptions());
+                onTap: () {
+                  Get.to(() => MySubscriptions());
                 },
                 child: Container(
                   height: 48 * SizeConfig.heightMultiplier!,
@@ -351,10 +352,48 @@ class EditPersonalInfoScreen extends StatelessWidget {
                   ),
                   child: Text(
                     'My Subscriptions',
-                    style: AppTextStyle.boldWhiteText.copyWith(
-                      color: kgreen49
-                    ),
+                    style: AppTextStyle.boldWhiteText.copyWith(color: kgreen49),
                   ),
+                ),
+              ),
+              SizedBox(
+                height: 17 * SizeConfig.heightMultiplier!,
+              ),
+              GestureDetector(
+                onTap: () async {
+                  _profileController.isclicked.value = true;
+                  _profileController.callBackResult.value =
+                      await CallBackServices.sendRequest(
+                          name: _profileController.nameController.text,
+                          email: _profileController.emailController.text,
+                          number: _profileController
+                              .loginController!.mobileNumber.value,
+                          query:
+                              _profileController.loginController!.userId.value);
+                  _profileController.isclicked.value = false;
+                  Get.showSnackbar(const GetSnackBar(
+                    message: "Your Request has been sent.",
+                    title: "Call Back",
+                    backgroundColor: kGreenColor,
+                    duration: Duration(seconds: 3),
+                  ));
+                },
+                child: Container(
+                  height: 48 * SizeConfig.heightMultiplier!,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                    border: Border.all(color: kgreen49),
+                  ),
+                  child: _profileController.isclicked.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : Text(
+                          'Get a Call Back',
+                          style: AppTextStyle.boldWhiteText
+                              .copyWith(color: kgreen49),
+                        ),
                 ),
               )
             ],
