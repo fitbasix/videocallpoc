@@ -359,62 +359,62 @@ class EditPersonalInfoScreen extends StatelessWidget {
               SizedBox(
                 height: 17 * SizeConfig.heightMultiplier!,
               ),
-              GestureDetector(
-                onTap: homeController.userProfileData.value.response!.data
-                      !.profile!.getCallStatus == true ? null : () async {
-                  print(homeController.userProfileData.value.response!.data
-                      !.profile!.getCallStatus);
-                  _profileController.isclicked.value = true;
-                  _profileController.callBackResult.value =
-                      await CallBackServices.sendRequest(
-                          name: _profileController.nameController.text,
-                          email: _profileController.emailController.text,
-                          number: _profileController
-                              .loginController!.mobileController.text,
-                          query: homeController
-                              .userProfileData.value.response!.data!.profile!.id
-                              .toString());
-                  _profileController.isclicked.value = false;
-                  Get.showSnackbar(const GetSnackBar(
-                    message: "Your Request has been sent.",
-                    title: "Call Back",
-                    backgroundColor: kGreenColor,
-                    duration: Duration(seconds: 3),
-                  ));
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 48 * SizeConfig.heightMultiplier!,
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-                    border: Border.all(color: homeController.userProfileData.value.response!.data
-                      !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
-                    color: Colors.transparent,
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          ImagePath.callbackIcon,
-                          height: (30) * SizeConfig.textMultiplier!,
-                          color: homeController.userProfileData.value.response!.data
-                      !.profile!.getCallStatus == true ? Colors.grey : kGreenColor,
-                        ),
-                        SizedBox(width: 8 * SizeConfig.widthMultiplier!),
-                        Text(
-                          "Get a CallBack",
-                          style: AppTextStyle.normalWhiteText
-                              .copyWith(color: homeController.userProfileData.value.response!.data
-                      !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+              // GestureDetector(
+              //   onTap: homeController.userProfileData.value.response!.data
+              //         !.profile!.getCallStatus == true ? null : () async {
+              //     print(homeController.userProfileData.value.response!.data
+              //         !.profile!.getCallStatus);
+              //     _profileController.isclicked.value = true;
+              //     _profileController.callBackResult.value =
+              //         await CallBackServices.sendRequest(
+              //             name: _profileController.nameController.text,
+              //             email: _profileController.emailController.text,
+              //             number: _profileController
+              //                 .loginController!.mobileController.text,
+              //             query: homeController
+              //                 .userProfileData.value.response!.data!.profile!.id
+              //                 .toString());
+              //     _profileController.isclicked.value = false;
+              //     Get.showSnackbar(const GetSnackBar(
+              //       message: "Your Request has been sent.",
+              //       title: "Call Back",
+              //       backgroundColor: kGreenColor,
+              //       duration: Duration(seconds: 3),
+              //     ));
+              //   },
+              //   child: Container(
+              //     width: MediaQuery.of(context).size.width,
+              //     height: 48 * SizeConfig.heightMultiplier!,
+              //     decoration: BoxDecoration(
+              //       borderRadius:
+              //           BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+              //       border: Border.all(color: homeController.userProfileData.value.response!.data
+              //         !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
+              //       color: Colors.transparent,
+              //     ),
+              //     child: Center(
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           SvgPicture.asset(
+              //             ImagePath.callbackIcon,
+              //             height: (30) * SizeConfig.textMultiplier!,
+              //             color: homeController.userProfileData.value.response!.data
+              //         !.profile!.getCallStatus == true ? Colors.grey : kGreenColor,
+              //           ),
+              //           SizedBox(width: 8 * SizeConfig.widthMultiplier!),
+              //           Text(
+              //             "Get a CallBack".tr,
+              //             style: AppTextStyle.normalWhiteText
+              //                 .copyWith(color: homeController.userProfileData.value.response!.data
+              //         !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ),

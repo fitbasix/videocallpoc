@@ -7,6 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
+import 'package:fitbasix/feature/call_back_form/services/callBackServices.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
@@ -158,7 +159,8 @@ class _HomePageState extends State<HomePage> {
     _homeController.scrollController.addListener(() async {
       if (_homeController.isNeedToLoadData.value == true) {
         if (_homeController.scrollController.position.maxScrollExtent ==
-            _homeController.scrollController.position.pixels && _homeController.showLoader.value == false) {
+                _homeController.scrollController.position.pixels &&
+            _homeController.showLoader.value == false) {
           _homeController.showLoader.value = true;
           final postQuery = await HomeService.getPosts(
               skip: _homeController.currentPage.value);
@@ -241,6 +243,8 @@ class _HomePageState extends State<HomePage> {
     return Future.value(true);
   }
 
+  final ProfileController _profileController = Get.put(ProfileController());
+
   @override
   Widget build(BuildContext context) {
     fetchCaloriesDataFromStorage();
@@ -301,146 +305,204 @@ class _HomePageState extends State<HomePage> {
                                             8 * SizeConfig.heightMultiplier!),
                                     child: Row(
                                       children: [
-                                        GestureDetector(
-                                          onTap: () async {
-                                            final ProfileController
-                                                _profileController =
-                                                Get.put(ProfileController());
-                                            refreshProfileData();
-
-                                            _profileController
-                                                .setAssetDataForGallery();
-                                            _profileController
-                                                .directFromHome.value = true;
-                                            Navigator.pushNamed(context,
-                                                RouteName.userprofileinfo);
-                                            _profileController
-                                                    .initialPostData.value =
-                                                await ProfileServices
-                                                    .getUserPosts();
-
-                                            if (_profileController
-                                                .initialPostData
-                                                .value
-                                                .response!
-                                                .data!
-                                                .isNotEmpty) {
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              final ProfileController
+                                                  _profileController =
+                                                  Get.put(ProfileController());
+                                              refreshProfileData();
+                                        
                                               _profileController
-                                                      .userPostList.value =
-                                                  _profileController
-                                                      .initialPostData
+                                                  .setAssetDataForGallery();
+                                              _profileController
+                                                  .directFromHome.value = true;
+                                              Navigator.pushNamed(context,
+                                                  RouteName.userprofileinfo);
+                                              _profileController
+                                                      .initialPostData.value =
+                                                  await ProfileServices
+                                                      .getUserPosts();
+                                        
+                                              if (_profileController
+                                                  .initialPostData
+                                                  .value
+                                                  .response!
+                                                  .data!
+                                                  .isNotEmpty) {
+                                                _profileController
+                                                        .userPostList.value =
+                                                    _profileController
+                                                        .initialPostData
+                                                        .value
+                                                        .response!
+                                                        .data!;
+                                              } else {
+                                                _profileController.userPostList
+                                                    .clear();
+                                              }
+                                            },
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              constraints: BoxConstraints(
+                                                minWidth: Get.width -
+                                                    120 *
+                                                        SizeConfig
+                                                            .widthMultiplier!,
+                                                // maxWidth: Get.width-100*SizeConfig.widthMultiplier!
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(30 *
+                                                            SizeConfig
+                                                                .widthMultiplier!),
+                                                    child: Obx(() => CachedNetworkImage(
+                                                        imageUrl: _homeController
+                                                                    .profilePhoto.value ==
+                                                                ""
+                                                            ? _homeController
+                                                                .userProfileData
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .profile!
+                                                                .profilePhoto
+                                                                .toString()
+                                                            : _homeController
+                                                                .profilePhoto
+                                                                .value,
+                                                        placeholder: (context, url) =>
+                                                            ShimmerEffect(),
+                                                        errorWidget:
+                                                            (context, url, error) =>
+                                                                ShimmerEffect(),
+                                                        fit: BoxFit.cover,
+                                                        height: 50 *
+                                                            SizeConfig
+                                                                .widthMultiplier!,
+                                                        width: 50 * SizeConfig.widthMultiplier!)),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 15 *
+                                                        SizeConfig
+                                                            .widthMultiplier!,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        // mainAxisSize: MainAxisSize.min,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          _homeController
+                                                                      .userProfileData
+                                                                      .value
+                                                                      .response ==
+                                                                  null
+                                                              ? Container()
+                                                              : Text(
+                                                                  'hi_name'
+                                                                      .trParams({
+                                                                    'name': _homeController
+                                                                        .userProfileData
+                                                                        .value
+                                                                        .response!
+                                                                        .data!
+                                                                        .profile!
+                                                                        .name!
+                                                                        .capitalize
+                                                                        .toString()
+                                                                  }),
+                                                                  style: AppTextStyle.boldBlackText.copyWith(
+                                                                      fontSize: 16 *
+                                                                          SizeConfig
+                                                                              .textMultiplier!,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .bodyText1
+                                                                          ?.color),
+                                                                ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        // const Spacer(),
+                                        GestureDetector(
+                                          onTap: _homeController
+                                                      .userProfileData
                                                       .value
                                                       .response!
-                                                      .data!;
-                                            } else {
-                                              _profileController.userPostList
-                                                  .clear();
-                                            }
-                                          },
-                                          child: Container(
-                                            color: Colors.transparent,
-                                            constraints: BoxConstraints(
-                                              minWidth: Get.width -
-                                                  120 *
-                                                      SizeConfig
-                                                          .widthMultiplier!,
-                                              // maxWidth: Get.width-100*SizeConfig.widthMultiplier!
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(30 *
-                                                          SizeConfig
-                                                              .widthMultiplier!),
-                                                  child: Obx(() => CachedNetworkImage(
-                                                      imageUrl: _homeController
-                                                                  .profilePhoto.value ==
-                                                              ""
-                                                          ? _homeController
+                                                      .data!
+                                                      .profile!
+                                                      .getCallStatus ==
+                                                  true
+                                              ? null
+                                              : () async {
+                                                  print(_homeController
+                                                      .userProfileData
+                                                      .value
+                                                      .response!
+                                                      .data!
+                                                      .profile!
+                                                      .getCallStatus);
+                                                  _profileController
+                                                      .isclicked.value = true;
+                                                  _profileController
+                                                          .callBackResult
+                                                          .value =
+                                                      await CallBackServices.sendRequest(
+                                                          name: _profileController
+                                                              .nameController
+                                                              .text,
+                                                          email:
+                                                              _profileController
+                                                                  .emailController
+                                                                  .text,
+                                                          number: _profileController
+                                                              .loginController!
+                                                              .mobileController
+                                                              .text,
+                                                          query: _homeController
                                                               .userProfileData
                                                               .value
                                                               .response!
                                                               .data!
                                                               .profile!
-                                                              .profilePhoto
-                                                              .toString()
-                                                          : _homeController
-                                                              .profilePhoto
-                                                              .value,
-                                                      placeholder: (context, url) =>
-                                                          ShimmerEffect(),
-                                                      errorWidget:
-                                                          (context, url, error) =>
-                                                              ShimmerEffect(),
-                                                      fit: BoxFit.cover,
-                                                      height: 50 *
-                                                          SizeConfig
-                                                              .widthMultiplier!,
-                                                      width: 50 * SizeConfig.widthMultiplier!)),
-                                                ),
-                                                SizedBox(
-                                                  width: 15 *
-                                                      SizeConfig
-                                                          .widthMultiplier!,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      // mainAxisSize: MainAxisSize.min,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        _homeController
-                                                                    .userProfileData
-                                                                    .value
-                                                                    .response ==
-                                                                null
-                                                            ? Container()
-                                                            : Text(
-                                                                'hi_name'
-                                                                    .trParams({
-                                                                  'name': _homeController
-                                                                      .userProfileData
-                                                                      .value
-                                                                      .response!
-                                                                      .data!
-                                                                      .profile!
-                                                                      .name!
-                                                                      .capitalize
-                                                                      .toString()
-                                                                }),
-                                                                style: AppTextStyle.boldBlackText.copyWith(
-                                                                    fontSize: 16 *
-                                                                        SizeConfig
-                                                                            .textMultiplier!,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyText1
-                                                                        ?.color),
-                                                              ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        GestureDetector(
-                                          onTap: () {
-                                            _homeController
-                                                .selectedIndex.value = 2;
-                                          },
-                                          child: SvgPicture.asset(
-                                            ImagePath.chatIconSVG,
-                                            height: 25,
-                                            color: kPureWhite,
+                                                              .id
+                                                              .toString());
+                                                  _profileController
+                                                      .isclicked.value = false;
+                                                  Get.showSnackbar(
+                                                      const GetSnackBar(
+                                                    message:
+                                                        "Your Request has been sent.",
+                                                    title: "Call Back",
+                                                    backgroundColor:
+                                                        kGreenColor,
+                                                    duration:
+                                                        Duration(seconds: 3),
+                                                  ));
+                                                },
+                                          child: Column(
+                                            children: [
+                                              SvgPicture.asset(
+                                                ImagePath.callbackIcon,
+                                                height: 30,
+                                                color: kPureWhite,
+                                              ),
+                                              const Text("Get a CallBack")
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -1703,7 +1765,8 @@ class _HomePageState extends State<HomePage> {
                                                                     _homeController
                                                                         .trendingPostList[
                                                                             index]
-                                                                        .id!] ?? _homeController
+                                                                        .id!] ??
+                                                                _homeController
                                                                     .trendingPostList[
                                                                         index]
                                                                     .commentgiven,
@@ -2004,6 +2067,7 @@ class _HomePageState extends State<HomePage> {
                                     child: Center(
                                         child: CustomizedCircularProgress()))
                                 : const SizedBox()),
+
                             /// search users logic and UI
                             // Obx(() => showUserSearch.value
                             //     ? GestureDetector(
