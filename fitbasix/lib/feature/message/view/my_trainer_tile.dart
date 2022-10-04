@@ -138,7 +138,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
           elevation: 0,
           leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                _homeController.selectedIndex.value = 0;
               },
               icon: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -488,7 +488,13 @@ class TrainersTileUI extends StatelessWidget {
       : super(key: key);
   List<String> taggedPersonList;
   String? trainerName;
-  Rx<MessageData?> lastMessage = MessageData(senderName: "", senderId: "", senderAvatar: "", message: "", sentAt: "").obs;
+  Rx<MessageData?> lastMessage = MessageData(
+          senderName: "",
+          senderId: "",
+          senderAvatar: "",
+          message: "",
+          sentAt: "")
+      .obs;
   String? trainerProfilePicUrl;
   bool? isCurrentlyEnrolled;
   bool? userHasChatHistory = true;
