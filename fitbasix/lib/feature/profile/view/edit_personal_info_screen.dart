@@ -360,16 +360,20 @@ class EditPersonalInfoScreen extends StatelessWidget {
                 height: 17 * SizeConfig.heightMultiplier!,
               ),
               GestureDetector(
-                onTap: () async {
+                onTap: homeController.userProfileData.value.response!.data
+                      !.profile!.getCallStatus == true ? null : () async {
+                  print(homeController.userProfileData.value.response!.data
+                      !.profile!.getCallStatus);
                   _profileController.isclicked.value = true;
                   _profileController.callBackResult.value =
                       await CallBackServices.sendRequest(
                           name: _profileController.nameController.text,
                           email: _profileController.emailController.text,
                           number: _profileController
-                              .loginController!.mobileNumber.value,
-                          query:
-                              _profileController.loginController!.userId.value);
+                              .loginController!.mobileController.text,
+                          query: homeController
+                              .userProfileData.value.response!.data!.profile!.id
+                              .toString());
                   _profileController.isclicked.value = false;
                   Get.showSnackbar(const GetSnackBar(
                     message: "Your Request has been sent.",
@@ -384,7 +388,8 @@ class EditPersonalInfoScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-                    border: Border.all(color: kGreenColor),
+                    border: Border.all(color: homeController.userProfileData.value.response!.data
+                      !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
                     color: Colors.transparent,
                   ),
                   child: Center(
@@ -395,13 +400,15 @@ class EditPersonalInfoScreen extends StatelessWidget {
                         SvgPicture.asset(
                           ImagePath.callbackIcon,
                           height: (30) * SizeConfig.textMultiplier!,
-                          color: kGreenColor,
+                          color: homeController.userProfileData.value.response!.data
+                      !.profile!.getCallStatus == true ? Colors.grey : kGreenColor,
                         ),
                         SizedBox(width: 8 * SizeConfig.widthMultiplier!),
                         Text(
                           "Get a CallBack",
                           style: AppTextStyle.normalWhiteText
-                              .copyWith(color: kGreenColor),
+                              .copyWith(color: homeController.userProfileData.value.response!.data
+                      !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
                         ),
                       ],
                     ),

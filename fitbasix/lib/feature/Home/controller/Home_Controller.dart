@@ -458,6 +458,7 @@ class HomeController extends GetxController {
           _state = AppState.DATA_NOT_FETCHED;
         }
       }
+
       fetchData();
     }
     setup();
@@ -487,6 +488,7 @@ class HomeController extends GetxController {
     if (initialPostData.value.response!.data!.length != 0) {
       trendingPostList.value = initialPostData.value.response!.data!;
     }
+    currentPage.value = 1;
   }
 
   Future<bool?> postRateAndReview({

@@ -53,6 +53,7 @@ class _VideoPlayerContainerState extends State<VideoPlayerContainer> {
         })
         ..initialize().then((value) {
           videoLength.value = _controller.value.duration.inSeconds;
+          setState(() {});
         });
     } catch (e) {
       print("error here: " + e.toString());

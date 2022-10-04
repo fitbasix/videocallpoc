@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
     _homeController.scrollController.addListener(() async {
       if (_homeController.isNeedToLoadData.value == true) {
         if (_homeController.scrollController.position.maxScrollExtent ==
-            _homeController.scrollController.position.pixels) {
+            _homeController.scrollController.position.pixels && _homeController.showLoader.value == false) {
           _homeController.showLoader.value = true;
           final postQuery = await HomeService.getPosts(
               skip: _homeController.currentPage.value);
@@ -278,10 +278,6 @@ class _HomePageState extends State<HomePage> {
                         controller: _homeController.scrollController,
                         child: Stack(
                           children: [
-                            Container(
-                              height: 300 * SizeConfig.heightMultiplier!,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -441,9 +437,10 @@ class _HomePageState extends State<HomePage> {
                                             _homeController
                                                 .selectedIndex.value = 2;
                                           },
-                                          child: Image.asset(
-                                            ImagePath.chatIcon,
-                                            scale: 4,
+                                          child: SvgPicture.asset(
+                                            ImagePath.chatIconSVG,
+                                            height: 25,
+                                            color: kPureWhite,
                                           ),
                                         ),
                                       ],
@@ -1616,389 +1613,384 @@ class _HomePageState extends State<HomePage> {
                                         height:
                                             10 * SizeConfig.heightMultiplier!,
                                       ),
-                                      Container(
-                                        // height: 5000,
-                                        child: Obx(
-                                          () => _homeController
-                                                  .isPostUpdate.value
-                                              ? Center(child: Container())
-                                              : ListView.builder(
-                                                  addAutomaticKeepAlives: false,
-                                                  addRepaintBoundaries: false,
-                                                  itemCount: _homeController
-                                                          .trendingPostList
-                                                          .isEmpty
-                                                      ? 0
-                                                      : _homeController
-                                                          .trendingPostList
-                                                          .length,
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  itemBuilder: (_, index) {
-                                                    _homeController
-                                                        .alreadyRenderedPostId
-                                                        .add(_homeController
-                                                            .trendingPostList[
-                                                                index]
-                                                            .id!);
-                                                    _homeController
-                                                        .alreadyRenderedPostId
-                                                        .toSet();
-                                                    // if(_homeController.alreadyRenderedPostId.indexOf(_homeController
-                                                    //     .trendingPostList[
-                                                    // index]
-                                                    //     .id!)==-1){
-                                                    //   _homeController.commentsMap.addIf(false==false,
-                                                    //       _homeController
-                                                    //           .trendingPostList[
-                                                    //       index]
-                                                    //           .id!, _homeController
-                                                    //           .trendingPostList[
-                                                    //       index]
-                                                    //           .commentgiven);
-                                                    //   _homeController.updateCount.addIf(false==false,
-                                                    //       _homeController
-                                                    //           .trendingPostList[
-                                                    //       index]
-                                                    //           .id!, UpdateCount(id: _homeController
-                                                    //           .trendingPostList[
-                                                    //       index]
-                                                    //           .id!,
-                                                    //           comments: _homeController
-                                                    //               .trendingPostList[
-                                                    //           index]
-                                                    //               .comments,
-                                                    //           likes: _homeController
-                                                    //               .trendingPostList[
-                                                    //           index]
-                                                    //               .likes
-                                                    //       ));
-                                                    // }
+                                      Obx(
+                                        () => _homeController.isPostUpdate.value
+                                            ? Center(child: Container())
+                                            : ListView.builder(
+                                                addAutomaticKeepAlives: false,
+                                                addRepaintBoundaries: false,
+                                                itemCount: _homeController
+                                                        .trendingPostList
+                                                        .isEmpty
+                                                    ? 0
+                                                    : _homeController
+                                                        .trendingPostList
+                                                        .length,
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const ClampingScrollPhysics(),
+                                                itemBuilder: (_, index) {
+                                                  /// Changed due to no use.
+                                                  // _homeController
+                                                  //     .alreadyRenderedPostId
+                                                  //     .add(_homeController
+                                                  //         .trendingPostList[
+                                                  //             index]
+                                                  //         .id!);
+                                                  // _homeController
+                                                  //     .alreadyRenderedPostId
+                                                  //     .toSet();
 
-                                                    if (_homeController
-                                                            .trendingPostList
-                                                            .length <
-                                                        5) {
+                                                  // if(_homeController.alreadyRenderedPostId.indexOf(_homeController
+                                                  //     .trendingPostList[
+                                                  // index]
+                                                  //     .id!)==-1){
+                                                  //   _homeController.commentsMap.addIf(false==false,
+                                                  //       _homeController
+                                                  //           .trendingPostList[
+                                                  //       index]
+                                                  //           .id!, _homeController
+                                                  //           .trendingPostList[
+                                                  //       index]
+                                                  //           .commentgiven);
+                                                  //   _homeController.updateCount.addIf(false==false,
+                                                  //       _homeController
+                                                  //           .trendingPostList[
+                                                  //       index]
+                                                  //           .id!, UpdateCount(id: _homeController
+                                                  //           .trendingPostList[
+                                                  //       index]
+                                                  //           .id!,
+                                                  //           comments: _homeController
+                                                  //               .trendingPostList[
+                                                  //           index]
+                                                  //               .comments,
+                                                  //           likes: _homeController
+                                                  //               .trendingPostList[
+                                                  //           index]
+                                                  //               .likes
+                                                  //       ));
+                                                  // }
+
+                                                  if (_homeController
+                                                          .trendingPostList
+                                                          .length <
+                                                      5) {
+                                                    _homeController
+                                                        .isNeedToLoadData
+                                                        .value = false;
+                                                  }
+                                                  print("Links: " +
                                                       _homeController
-                                                          .isNeedToLoadData
-                                                          .value = false;
-                                                    }
-                                                    print("Links: " +
-                                                        _homeController
-                                                            .trendingPostList
-                                                            .elementAt(index)
-                                                            .files
-                                                            .toString());
-                                                    return Obx(() => Column(
-                                                          children: [
-                                                            PostTile(
-                                                              isMe: _homeController
-                                                                  .trendingPostList[
-                                                                      index]
-                                                                  .isMe!,
-                                                              userID: _homeController
-                                                                  .trendingPostList[
-                                                                      index]
-                                                                  .userId!
-                                                                  .id,
-                                                              comment: _homeController.commentsMap[_homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .id!] ==
-                                                                      null
-                                                                  ? _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .commentgiven
-                                                                  : _homeController
-                                                                          .commentsMap[
-                                                                      _homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .id!],
-                                                              name: _homeController
-                                                                  .trendingPostList[
-                                                                      index]
-                                                                  .userId!
-                                                                  .name
-                                                                  .toString(),
-                                                              profilePhoto:
-                                                                  _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .userId!
-                                                                      .profilePhoto!,
-                                                              category: _homeController
-                                                                  .trendingPostList[
-                                                                      index]
-                                                                  .postCategory![
-                                                                      0]
-                                                                  .name!
-                                                                  .capitalize!,
-                                                              date: DateFormat
-                                                                      .d()
-                                                                  .add_MMM()
-                                                                  .format(_homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .updatedAt!),
-                                                              place: _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .location!
-                                                                      .placeName!
-                                                                      .isEmpty
-                                                                  ? ''
-                                                                  : _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .location!
-                                                                      .placeName![
-                                                                          1]
-                                                                      .toString(),
-                                                              imageUrl: _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .files!
-                                                                      .isEmpty
-                                                                  ? []
-                                                                  : _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .files!,
-                                                              caption: _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .caption ??
-                                                                  '',
-                                                              likes: _homeController.updateCount[_homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .id!] ==
-                                                                      null
-                                                                  ? _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .likes!
-                                                                      .toString()
-                                                                  : _homeController
-                                                                      .updateCount[_homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .id!]!
-                                                                      .likes!
-                                                                      .toString(),
-                                                              comments: _homeController.updateCount[_homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .id!] ==
-                                                                      null
-                                                                  ? _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .comments!
-                                                                      .toString()
-                                                                  : _homeController
-                                                                      .updateCount[_homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .id!]!
-                                                                      .comments!
-                                                                      .toString(),
-                                                              hitLike:
-                                                                  () async {
-                                                                _homeController.LikedPostMap[_homeController
-                                                                    .trendingPostList[
-                                                                        index]
-                                                                    .id!] = _homeController.LikedPostMap[_homeController
-                                                                            .trendingPostList[
-                                                                                index]
-                                                                            .id!] ==
-                                                                        null
-                                                                    ? !(_homeController
-                                                                        .trendingPostList[
-                                                                            index]
-                                                                        .isLiked!)
-                                                                    : !(_homeController
-                                                                            .LikedPostMap[
-                                                                        _homeController
-                                                                            .trendingPostList[index]
-                                                                            .id!]!);
-                                                                if (_homeController
-                                                                            .LikedPostMap[
-                                                                        _homeController
-                                                                            .trendingPostList[index]
-                                                                            .id!]! ==
-                                                                    false) {
-                                                                  _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .isLiked = false;
-
-                                                                  await HomeService.unlikePost(
-                                                                      postId: _homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .id!);
-                                                                } else {
-                                                                  _homeController
-                                                                      .trendingPostList[
-                                                                          index]
-                                                                      .isLiked = true;
-
-                                                                  _homeController
-                                                                      .likedPost
-                                                                      .toSet()
-                                                                      .toList();
-
-                                                                  await HomeService.likePost(
-                                                                      postId: _homeController
-                                                                          .trendingPostList[
-                                                                              index]
-                                                                          .id!);
-                                                                }
-
-                                                                RecentCommentModel
-                                                                    recentComment =
-                                                                    RecentCommentModel();
-                                                                recentComment = await HomeService.recentComment(
-                                                                    postId: _homeController
-                                                                        .trendingPostList[
-                                                                            index]
-                                                                        .id!);
-                                                                // _homeController.commentsMap[_homeController.post.value.id.toString()] =
-                                                                //     recentComment.response!.data!.comment;
-                                                                _homeController
-                                                                        .updateCount[
+                                                          .trendingPostList
+                                                          .elementAt(index)
+                                                          .files
+                                                          .toString());
+                                                  return Obx(() => Column(
+                                                        children: [
+                                                          PostTile(
+                                                            isMe: _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .isMe!,
+                                                            userID: _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .userId!
+                                                                .id,
+                                                            comment: _homeController
+                                                                        .commentsMap[
                                                                     _homeController
                                                                         .trendingPostList[
                                                                             index]
-                                                                        .id!] = recentComment
-                                                                    .response!
-                                                                    .data!
-                                                                    .data;
-
-                                                                setState(() {});
-                                                              },
-                                                              addComment: () {
-                                                                // HomeService.addComment(
-                                                                //     _homeController
-                                                                //         .trendingPostList[
-                                                                //             index]
-                                                                //         .id!,
-                                                                //     _homeController
-                                                                //         .comment.value);
-                                                                //
-                                                                // setState(() {});
-                                                                //
-                                                                // _homeController
-                                                                //     .commentController
-                                                                //     .clear();
-                                                              },
-                                                              postId: _homeController
+                                                                        .id!] ?? _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .commentgiven,
+                                                            name: _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .userId!
+                                                                .name
+                                                                .toString(),
+                                                            profilePhoto:
+                                                                _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .userId!
+                                                                    .profilePhoto!,
+                                                            category: _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .postCategory![
+                                                                    0]
+                                                                .name!
+                                                                .capitalize!,
+                                                            date: DateFormat.d()
+                                                                .add_MMM()
+                                                                .format(_homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .updatedAt!),
+                                                            place: _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .location!
+                                                                    .placeName!
+                                                                    .isEmpty
+                                                                ? ''
+                                                                : _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .location!
+                                                                    .placeName![
+                                                                        1]
+                                                                    .toString(),
+                                                            imageUrl: _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .files!
+                                                                    .isEmpty
+                                                                ? []
+                                                                : _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .files!,
+                                                            caption: _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .caption ??
+                                                                '',
+                                                            likes: _homeController.updateCount[_homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                    null
+                                                                ? _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .likes!
+                                                                    .toString()
+                                                                : _homeController
+                                                                    .updateCount[_homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!]!
+                                                                    .likes!
+                                                                    .toString(),
+                                                            comments: _homeController.updateCount[_homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                    null
+                                                                ? _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .comments!
+                                                                    .toString()
+                                                                : _homeController
+                                                                    .updateCount[_homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!]!
+                                                                    .comments!
+                                                                    .toString(),
+                                                            hitLike: () async {
+                                                              _homeController.LikedPostMap[_homeController
                                                                   .trendingPostList[
                                                                       index]
-                                                                  .id!,
-                                                              isLiked: _homeController.LikedPostMap[_homeController
+                                                                  .id!] = _homeController.LikedPostMap[_homeController
                                                                           .trendingPostList[
                                                                               index]
                                                                           .id!] ==
                                                                       null
-                                                                  ? _homeController
+                                                                  ? !(_homeController
                                                                       .trendingPostList[
                                                                           index]
-                                                                      .isLiked!
-                                                                  : _homeController
+                                                                      .isLiked!)
+                                                                  : !(_homeController
                                                                           .LikedPostMap[
                                                                       _homeController
                                                                           .trendingPostList[
                                                                               index]
-                                                                          .id!]!,
-                                                              onTap: () async {
+                                                                          .id!]!);
+                                                              if (_homeController
+                                                                          .LikedPostMap[
+                                                                      _homeController
+                                                                          .trendingPostList[
+                                                                              index]
+                                                                          .id!]! ==
+                                                                  false) {
                                                                 _homeController
-                                                                    .commentsList
-                                                                    .clear();
-                                                                _homeController
-                                                                    .viewReplies!
-                                                                    .clear();
-                                                                // _homeController.replyList.clear();
-                                                                Navigator.pushNamed(
-                                                                    context,
-                                                                    RouteName
-                                                                        .postScreen);
-                                                                _homeController
-                                                                    .postLoading
-                                                                    .value = true;
-                                                                var postData = await HomeService.getPostById(
-                                                                    _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .isLiked = false;
+
+                                                                await HomeService.unlikePost(
+                                                                    postId: _homeController
                                                                         .trendingPostList[
                                                                             index]
                                                                         .id!);
+                                                              } else {
+                                                                _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .isLiked = true;
 
                                                                 _homeController
-                                                                        .post
+                                                                    .likedPost
+                                                                    .toSet()
+                                                                    .toList();
+
+                                                                await HomeService.likePost(
+                                                                    postId: _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!);
+                                                              }
+
+                                                              RecentCommentModel
+                                                                  recentComment =
+                                                                  RecentCommentModel();
+                                                              recentComment = await HomeService
+                                                                  .recentComment(
+                                                                      postId: _homeController
+                                                                          .trendingPostList[
+                                                                              index]
+                                                                          .id!);
+                                                              // _homeController.commentsMap[_homeController.post.value.id.toString()] =
+                                                              //     recentComment.response!.data!.comment;
+                                                              _homeController
+                                                                      .updateCount[
+                                                                  _homeController
+                                                                      .trendingPostList[
+                                                                          index]
+                                                                      .id!] = recentComment
+                                                                  .response!
+                                                                  .data!
+                                                                  .data;
+
+                                                              setState(() {});
+                                                            },
+                                                            addComment: () {
+                                                              // HomeService.addComment(
+                                                              //     _homeController
+                                                              //         .trendingPostList[
+                                                              //             index]
+                                                              //         .id!,
+                                                              //     _homeController
+                                                              //         .comment.value);
+                                                              //
+                                                              // setState(() {});
+                                                              //
+                                                              // _homeController
+                                                              //     .commentController
+                                                              //     .clear();
+                                                            },
+                                                            postId: _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .id!,
+                                                            isLiked: _homeController.LikedPostMap[_homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!] ==
+                                                                    null
+                                                                ? _homeController
+                                                                    .trendingPostList[
+                                                                        index]
+                                                                    .isLiked!
+                                                                : _homeController
+                                                                        .LikedPostMap[
+                                                                    _homeController
+                                                                        .trendingPostList[
+                                                                            index]
+                                                                        .id!]!,
+                                                            onTap: () async {
+                                                              _homeController
+                                                                  .commentsList
+                                                                  .clear();
+                                                              _homeController
+                                                                  .viewReplies!
+                                                                  .clear();
+                                                              // _homeController.replyList.clear();
+                                                              Navigator.pushNamed(
+                                                                  context,
+                                                                  RouteName
+                                                                      .postScreen);
+                                                              _homeController
+                                                                  .postLoading
+                                                                  .value = true;
+                                                              var postData = await HomeService
+                                                                  .getPostById(
+                                                                      _homeController
+                                                                          .trendingPostList[
+                                                                              index]
+                                                                          .id!);
+
+                                                              _homeController
+                                                                      .post
+                                                                      .value =
+                                                                  postData
+                                                                      .response!
+                                                                      .data!;
+
+                                                              _homeController
+                                                                  .postLoading
+                                                                  .value = false;
+                                                              _homeController
+                                                                  .commentsLoading
+                                                                  .value = true;
+                                                              // print("post id  "+_homeController._homeController
+                                                              //     .trendingPostList[
+                                                              // index]
+                                                              //     .id!);
+                                                              _homeController
+                                                                      .postComments
+                                                                      .value =
+                                                                  await HomeService.fetchComment(
+                                                                      postId: _homeController
+                                                                          .trendingPostList[
+                                                                              index]
+                                                                          .id!);
+
+                                                              if (_homeController
+                                                                  .postComments
+                                                                  .value
+                                                                  .response!
+                                                                  .data!
+                                                                  .isNotEmpty) {
+                                                                _homeController
+                                                                        .commentsList
                                                                         .value =
-                                                                    postData
+                                                                    _homeController
+                                                                        .postComments
+                                                                        .value
                                                                         .response!
                                                                         .data!;
-
-                                                                _homeController
-                                                                    .postLoading
-                                                                    .value = false;
-                                                                _homeController
-                                                                    .commentsLoading
-                                                                    .value = true;
-                                                                // print("post id  "+_homeController._homeController
-                                                                //     .trendingPostList[
-                                                                // index]
-                                                                //     .id!);
-                                                                _homeController
-                                                                        .postComments
-                                                                        .value =
-                                                                    await HomeService.fetchComment(
-                                                                        postId: _homeController
-                                                                            .trendingPostList[index]
-                                                                            .id!);
-
-                                                                if (_homeController
-                                                                    .postComments
-                                                                    .value
-                                                                    .response!
-                                                                    .data!
-                                                                    .isNotEmpty) {
-                                                                  _homeController
-                                                                          .commentsList
-                                                                          .value =
-                                                                      _homeController
-                                                                          .postComments
-                                                                          .value
-                                                                          .response!
-                                                                          .data!;
-                                                                }
-                                                                _homeController
-                                                                    .commentsLoading
-                                                                    .value = false;
-                                                              },
-                                                              people: _homeController
-                                                                  .trendingPostList[
-                                                                      index]
-                                                                  .people!,
-                                                            ),
-                                                            Container(
-                                                              height: 16 *
-                                                                  SizeConfig
-                                                                      .heightMultiplier!,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .scaffoldBackgroundColor
-                                                                  .withOpacity(
-                                                                      0.1),
-                                                            )
-                                                          ],
-                                                        ));
-                                                  }),
-                                        ),
+                                                              }
+                                                              _homeController
+                                                                  .commentsLoading
+                                                                  .value = false;
+                                                            },
+                                                            people: _homeController
+                                                                .trendingPostList[
+                                                                    index]
+                                                                .people!,
+                                                          ),
+                                                          Container(
+                                                            height: 16 *
+                                                                SizeConfig
+                                                                    .heightMultiplier!,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .scaffoldBackgroundColor
+                                                                .withOpacity(
+                                                                    0.1),
+                                                          )
+                                                        ],
+                                                      ));
+                                                }),
                                       )
                                     ],
                                   ),
@@ -2012,7 +2004,6 @@ class _HomePageState extends State<HomePage> {
                                     child: Center(
                                         child: CustomizedCircularProgress()))
                                 : const SizedBox()),
-
                             /// search users logic and UI
                             // Obx(() => showUserSearch.value
                             //     ? GestureDetector(

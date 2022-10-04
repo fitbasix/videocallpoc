@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 class CallBackServices {
   static var dio = DioUtil().getInstance();
   static Future<CallBackModel> sendRequest(
-    {required String name, required String email, required String number, required String query}
-  ) async {
+      {required String name,
+      required String email,
+      required String number,
+      required String query}) async {
+    print(number + email + name + query);
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
     var response = await dio!.post(ApiUrl.callBack, data: {

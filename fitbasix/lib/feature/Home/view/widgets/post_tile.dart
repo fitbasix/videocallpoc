@@ -11,6 +11,7 @@ import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -398,6 +399,11 @@ class _PostTileState extends State<PostTile> {
             widget.imageUrl.length == 1
                 ? _postController.getUrlType(widget.imageUrl[0]) == 0
                     ? CachedNetworkImage(
+                        cacheManager: CacheManager(Config(
+                          "fitbasix",
+                          stalePeriod: const Duration(seconds: 10),
+                          //one week cache period
+                        )),
                         imageUrl: widget.imageUrl[0],
                         placeholder: (context, url) => ShimmerEffect(),
                         errorWidget: (context, url, error) => ShimmerEffect(),
@@ -450,6 +456,12 @@ class _PostTileState extends State<PostTile> {
                                           .getUrlType(widget.imageUrl[index]) ==
                                       0
                                   ? CachedNetworkImage(
+                                      cacheManager: CacheManager(Config(
+                                        "fitbasix",
+                                        stalePeriod:
+                                            const Duration(seconds: 10),
+                                        //one week cache period
+                                      )),
                                       imageUrl: widget.imageUrl[index],
                                       placeholder: (context, url) =>
                                           ShimmerEffect(),
