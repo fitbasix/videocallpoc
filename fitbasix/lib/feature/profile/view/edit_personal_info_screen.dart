@@ -379,21 +379,33 @@ class EditPersonalInfoScreen extends StatelessWidget {
                   ));
                 },
                 child: Container(
+                  width: MediaQuery.of(context).size.width,
                   height: 48 * SizeConfig.heightMultiplier!,
-                  width: double.infinity,
-                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-                    border: Border.all(color: kgreen49),
+                    border: Border.all(color: kGreenColor),
+                    color: Colors.transparent,
                   ),
-                  child: _profileController.isclicked.value
-                      ? const Center(child: CircularProgressIndicator())
-                      : Text(
-                          'Get a Call Back',
-                          style: AppTextStyle.boldWhiteText
-                              .copyWith(color: kgreen49),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          ImagePath.callbackIcon,
+                          height: (30) * SizeConfig.textMultiplier!,
+                          color: kGreenColor,
                         ),
+                        SizedBox(width: 8 * SizeConfig.widthMultiplier!),
+                        Text(
+                          "Get a CallBack",
+                          style: AppTextStyle.normalWhiteText
+                              .copyWith(color: kGreenColor),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               )
             ],

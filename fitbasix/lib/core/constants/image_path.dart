@@ -4,6 +4,7 @@ final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
 
 class ImagePath {
+  static const String callbackIcon = "assets/Icons/callback-icon.svg";
   static const String arrowRightIcon = "assets/Icons/arrow-right.svg";
   static const String biceps = "assets/Icons/biceps.svg";
   static const String apple = "assets/Icons/apple.svg";

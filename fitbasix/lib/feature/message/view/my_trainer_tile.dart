@@ -51,8 +51,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   final HomeController _homeController = Get.find();
   RxList<MyTrainer> myTrainers = [MyTrainer()].obs;
   Rx<MessageData?>? lastMessage;
-
-  fetch(final element) async {}
+  RxBool loader = true.obs;
 
   fetchData() async {
     print("calling : ${myTrainers.value}");
@@ -86,6 +85,8 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
         return b.lastMessageDate!.compareTo(a.lastMessageDate!);
       },
     );
+    loader.value = false;
+    print(loader.value.toString());
     print(myTrainers.toJson().toString());
   }
 
@@ -290,132 +291,139 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
         ),
         body: Obx(
           () => (myTrainers!.isNotEmpty)
-              ? Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        itemCount: myTrainers!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          int indexWhereChatPresent = -1;
-                          // if (widget.chatHistoryList != null &&
-                          //     widget.chatHistoryList![0].lastMessage != null) {
-                          //   indexWhereChatPresent = widget.chatHistoryList!
-                          //       .indexWhere((element) => element.occupantsIds!
-                          //           .contains(myTrainers![index].quickBlox));
-                          // print(myTrainers![index].chatId.toString() +
-                          //     " ioiiiiii");
-                          // print(
-                          //     myTrainers![index].name.toString() + " ioiiiiii");
-                          //
-                          // // }
-                          // print(
-                          //     "iddddd " + myTrainers![index].chatId.toString());
-                          // print("pic " +
-                          //     myTrainers![index].profilePhoto.toString());
-                          return TrainersTileUI(
-                            userChatId: myTrainers![index].chatId,
-                            taggedPersonList: myTrainers![index]
-                                    .strengths!
-                                    .isNotEmpty
-                                ? List.generate(
-                                    myTrainers![index].strengths!.length,
-                                    (i) =>
-                                        myTrainers![index].strengths![i].name!)
-                                : [],
-                            trainerName: myTrainers![index].name!.capitalize,
-                            trainerProfilePicUrl:
-                                myTrainers![index].profilePhoto,
-                            isCurrentlyEnrolled:
-                                myTrainers![index].isCurrentlyEnrolled,
-                            userHasChatHistory:
-                                indexWhereChatPresent != -1 ? true : false,
-                            enrolledDate:
-                                myTrainers![index].isCurrentlyEnrolled!
-                                    ? myTrainers![index].startDate
-                                    : myTrainers![index].endDate,
-                            lastMessageTime:
-                                indexWhereChatPresent != -1 ? 0 : 0,
-                            onTrainerTapped: () async {
-                              if (myTrainers![index].chatId != null) {
-                                var controller =
-                                    Get.put(FirebaseChatController());
-                                controller.getValues();
-                                controller.receiverId = myTrainers![index].id!;
-                                controller.senderPhoto =
-                                    myTrainers![index].profilePhoto!;
-                                controller.senderName =
-                                    myTrainers![index].name!;
-                                Get.to(
-                                  () => ChatPage(),
-                                );
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => MessageList(
-                                //           chatId: myTrainers![index].chatId,
-                                //           trainerId: myTrainers![index].id.toString(),
-                                //           profilePicURL: myTrainers![index]
-                                //               .profilePhoto
-                                //               .toString(),
-                                //           trainerTitle:
-                                //           myTrainers![index].name.toString(),
-                                //           time: myTrainers![index].time,
-                                //           days: myTrainers![index].days,
-                                //         )));
-                              }
-                              // String url = await TrainerServices.getEnablexUrl(
-                              //     myTrainers![index].id.toString());
-                              // if(Platform.isAndroid){
-                              //   Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //           builder: (context) => InAppWebViewPage(
-                              //             url: url,
-                              //           )));
-                              // }
-                              // else{
-                              //   launch(url);
-                              // }
-                              //133817477 user1
-                              //133815819 trainer1
-                              //133612091 trainer
-                              // final sharedPreferences =
-                              //     await SharedPreferences.getInstance();
-                              // _homeController.userQuickBloxId.value =
-                              //     sharedPreferences.getInt("userQuickBloxId")!;
-                              // int UserQuickBloxId =
-                              //     myTrainers![index].quickBlox!; //133819788;
-                              // String trainerName = myTrainers![index].name!;
-                              // bool isCurrentlyEnrolled =
-                              //     myTrainers![index].isCurrentlyEnrolled!;
-                              // Navigator.push(
-                              //     context,
-                              // MaterialPageRoute(
-                              //     builder: (context) => ChatScreen(
-                              //           opponentID: UserQuickBloxId,
-                              //           trainerTitle: trainerName,
-                              //           isCurrentlyEnrolled:
-                              //               isCurrentlyEnrolled,
-                              //           profilePicURL: myTrainers![index]
-                              //               .profilePhoto!,
-                              //           trainerId: myTrainers![index].user,
-                              //           time: myTrainers![index].time,
-                              //           days: myTrainers![index].days,
-                              //         )
+              ? Obx(() => (loader.value == true)
+                  ? Center(
+                      child: CustomizedCircularProgress(),
+                    )
+                  : Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: myTrainers!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              int indexWhereChatPresent = -1;
+                              // if (widget.chatHistoryList != null &&
+                              //     widget.chatHistoryList![0].lastMessage != null) {
+                              //   indexWhereChatPresent = widget.chatHistoryList!
+                              //       .indexWhere((element) => element.occupantsIds!
+                              //           .contains(myTrainers![index].quickBlox));
+                              // print(myTrainers![index].chatId.toString() +
+                              //     " ioiiiiii");
+                              // print(
+                              //     myTrainers![index].name.toString() + " ioiiiiii");
                               //
-                              //
-                              // ));
+                              // // }
+                              // print(
+                              //     "iddddd " + myTrainers![index].chatId.toString());
+                              // print("pic " +
+                              //     myTrainers![index].profilePhoto.toString());
+                              return TrainersTileUI(
+                                userChatId: myTrainers![index].chatId,
+                                taggedPersonList: myTrainers![index]
+                                        .strengths!
+                                        .isNotEmpty
+                                    ? List.generate(
+                                        myTrainers![index].strengths!.length,
+                                        (i) => myTrainers![index]
+                                            .strengths![i]
+                                            .name!)
+                                    : [],
+                                trainerName:
+                                    myTrainers![index].name!.capitalize,
+                                trainerProfilePicUrl:
+                                    myTrainers![index].profilePhoto,
+                                isCurrentlyEnrolled:
+                                    myTrainers![index].isCurrentlyEnrolled,
+                                userHasChatHistory:
+                                    indexWhereChatPresent != -1 ? true : false,
+                                enrolledDate:
+                                    myTrainers![index].isCurrentlyEnrolled!
+                                        ? myTrainers![index].startDate
+                                        : myTrainers![index].endDate,
+                                lastMessageTime:
+                                    myTrainers[index].lastMessageDate!.day,
+                                onTrainerTapped: () async {
+                                  if (myTrainers![index].chatId != null) {
+                                    var controller =
+                                        Get.put(FirebaseChatController());
+                                    controller.getValues();
+                                    controller.receiverId =
+                                        myTrainers![index].id!;
+                                    controller.senderPhoto =
+                                        myTrainers![index].profilePhoto!;
+                                    controller.senderName =
+                                        myTrainers![index].name!;
+                                    Get.to(
+                                      () => ChatPage(),
+                                    );
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => MessageList(
+                                    //           chatId: myTrainers![index].chatId,
+                                    //           trainerId: myTrainers![index].id.toString(),
+                                    //           profilePicURL: myTrainers![index]
+                                    //               .profilePhoto
+                                    //               .toString(),
+                                    //           trainerTitle:
+                                    //           myTrainers![index].name.toString(),
+                                    //           time: myTrainers![index].time,
+                                    //           days: myTrainers![index].days,
+                                    //         )));
+                                  }
+                                  // String url = await TrainerServices.getEnablexUrl(
+                                  //     myTrainers![index].id.toString());
+                                  // if(Platform.isAndroid){
+                                  //   Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //           builder: (context) => InAppWebViewPage(
+                                  //             url: url,
+                                  //           )));
+                                  // }
+                                  // else{
+                                  //   launch(url);
+                                  // }
+                                  //133817477 user1
+                                  //133815819 trainer1
+                                  //133612091 trainer
+                                  // final sharedPreferences =
+                                  //     await SharedPreferences.getInstance();
+                                  // _homeController.userQuickBloxId.value =
+                                  //     sharedPreferences.getInt("userQuickBloxId")!;
+                                  // int UserQuickBloxId =
+                                  //     myTrainers![index].quickBlox!; //133819788;
+                                  // String trainerName = myTrainers![index].name!;
+                                  // bool isCurrentlyEnrolled =
+                                  //     myTrainers![index].isCurrentlyEnrolled!;
+                                  // Navigator.push(
+                                  //     context,
+                                  // MaterialPageRoute(
+                                  //     builder: (context) => ChatScreen(
+                                  //           opponentID: UserQuickBloxId,
+                                  //           trainerTitle: trainerName,
+                                  //           isCurrentlyEnrolled:
+                                  //               isCurrentlyEnrolled,
+                                  //           profilePicURL: myTrainers![index]
+                                  //               .profilePhoto!,
+                                  //           trainerId: myTrainers![index].user,
+                                  //           time: myTrainers![index].time,
+                                  //           days: myTrainers![index].days,
+                                  //         )
+                                  //
+                                  //
+                                  // ));
+                                },
+                              );
                             },
-                          );
-                        },
-                      ),
-                    ),
-                    Obx(() => _trainerController.showLoaderOnMyTrainer.value
-                        ? Center(child: CustomizedCircularProgress())
-                        : Container())
-                  ],
-                )
+                          ),
+                        ),
+                        Obx(() => _trainerController.showLoaderOnMyTrainer.value
+                            ? Center(child: CustomizedCircularProgress())
+                            : Container())
+                      ],
+                    ))
               : Container(
                   margin:
                       EdgeInsets.only(top: 110 * SizeConfig.heightMultiplier!),
@@ -480,13 +488,7 @@ class TrainersTileUI extends StatelessWidget {
       : super(key: key);
   List<String> taggedPersonList;
   String? trainerName;
-  Rx<MessageData?> lastMessage = MessageData(
-          senderName: "",
-          senderId: "",
-          senderAvatar: "",
-          message: "",
-          sentAt: "")
-      .obs;
+  Rx<MessageData?> lastMessage = MessageData(senderName: "", senderId: "", senderAvatar: "", message: "", sentAt: "").obs;
   String? trainerProfilePicUrl;
   bool? isCurrentlyEnrolled;
   bool? userHasChatHistory = true;
@@ -575,7 +577,7 @@ class TrainersTileUI extends StatelessWidget {
                       lastMessageIsLoading.value
                           ? "lets_start_conversation".tr
                           : (lastMessage.value!.message.isNotEmpty
-                              ? lastMessage.value!.message
+                              ? lastMessage.value!.message.toString()
                               : "lets_start_conversation".tr),
                       style: AppTextStyle.hmedium13Text.copyWith(
                           color: isCurrentlyEnrolled!

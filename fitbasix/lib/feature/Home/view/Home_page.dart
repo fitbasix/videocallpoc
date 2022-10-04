@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
+import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
@@ -64,6 +65,8 @@ class HomeAndTrainerPage extends StatelessWidget {
     final List<Widget> screens = [
       if (jsonOb['home'] == 1) HomePage(),
       if (jsonOb['get_trained'] == 1) GetTrainedScreen(),
+      ///Added the Chat Screen in bottomNavigationBar
+      MyTrainersScreen(),
       if (jsonOb['post'] == 1) CreatePostScreen(),
       if (jsonOb['tools'] == 1) const ToolsScreen(),
     ];
