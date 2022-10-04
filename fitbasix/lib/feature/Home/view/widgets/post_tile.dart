@@ -707,7 +707,7 @@ class _PostTileState extends State<PostTile> {
               margin: EdgeInsets.symmetric(
                   horizontal: 16 * SizeConfig.widthMultiplier!),
               height: 1 * SizeConfig.heightMultiplier!,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: kBlack,
               ),
             )

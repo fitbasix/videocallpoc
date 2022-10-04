@@ -86,6 +86,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                   ),
                 ),
               ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  child: Image.asset(ImagePath.chatIcon, height: 20, color: Colors.grey,),
+                ),
+                label: 'Chat'.tr
+                ),
             if (jsonOb['post'] == 1)
               BottomNavigationBarItem(
                   icon: const Icon(

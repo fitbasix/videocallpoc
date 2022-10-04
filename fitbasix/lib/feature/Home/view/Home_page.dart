@@ -204,6 +204,7 @@ class _HomePageState extends State<HomePage> {
       Get.to(
         () => ChatPage(),
       );
+
     } else if (postId != null) {
       _homeController.commentsList.clear();
       _homeController.viewReplies!.clear();
@@ -1619,7 +1620,6 @@ class _HomePageState extends State<HomePage> {
                                                   .isPostUpdate.value
                                               ? Center(child: Container())
                                               : ListView.builder(
-                                                  cacheExtent: 1500,
                                                   addAutomaticKeepAlives: false,
                                                   addRepaintBoundaries: false,
                                                   itemCount: _homeController
@@ -2176,7 +2176,6 @@ class _HomePageState extends State<HomePage> {
                                                             SizeConfig
                                                                 .heightMultiplier!),
                                                     child: ListView.builder(
-                                                        cacheExtent: 1500,
                                                         shrinkWrap: true,
                                                         physics:
                                                             const BouncingScrollPhysics(),
@@ -2242,7 +2241,9 @@ class _HomePageState extends State<HomePage> {
                                     child: Padding(
                                         padding: EdgeInsets.only(
                                             top: 23 *
-                                                SizeConfig.heightMultiplier!, right: 15.0 * SizeConfig.widthMultiplier!),
+                                                SizeConfig.heightMultiplier!,
+                                            right: 15.0 *
+                                                SizeConfig.widthMultiplier!),
                                         child: SvgPicture.asset(
                                           ImagePath.bellIcon,
                                           color: Colors.white,
