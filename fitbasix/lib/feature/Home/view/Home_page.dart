@@ -440,7 +440,11 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         // const Spacer(),
                                         Container(
-                                          padding: EdgeInsets.all(2),
+                                          padding: const EdgeInsets.all(10),
+                                          alignment: Alignment.center,
+                                          height: 43 *
+                                              SizeConfig
+                                                  .heightMultiplier!,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(
                                                 8 *
@@ -499,23 +503,13 @@ class _HomePageState extends State<HomePage> {
                                                         const GetSnackBar(
                                                       message:
                                                           "Your Request has been sent.",
-                                                      title: "Call Back",
                                                       backgroundColor:
                                                           kGreenColor,
                                                       duration:
                                                           Duration(seconds: 3),
                                                     ));
                                                   },
-                                            child: Column(
-                                              children: [
-                                                SvgPicture.asset(
-                                                  ImagePath.callbackIcon,
-                                                  height: 30,
-                                                  color: kPureWhite,
-                                                ),
-                                                const Text("Get a CallBack")
-                                              ],
-                                            ),
+                                            child: Text("Get a Call back",),
                                           ),
                                         ),
                                       ],
