@@ -312,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                                                   _profileController =
                                                   Get.put(ProfileController());
                                               refreshProfileData();
-                                        
+
                                               _profileController
                                                   .setAssetDataForGallery();
                                               _profileController
@@ -323,7 +323,7 @@ class _HomePageState extends State<HomePage> {
                                                       .initialPostData.value =
                                                   await ProfileServices
                                                       .getUserPosts();
-                                        
+
                                               if (_profileController
                                                   .initialPostData
                                                   .value
@@ -354,8 +354,8 @@ class _HomePageState extends State<HomePage> {
                                               child: Row(
                                                 children: [
                                                   ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(30 *
+                                                    borderRadius: BorderRadius
+                                                        .circular(30 *
                                                             SizeConfig
                                                                 .widthMultiplier!),
                                                     child: Obx(() => CachedNetworkImage(
@@ -373,15 +373,15 @@ class _HomePageState extends State<HomePage> {
                                                             : _homeController
                                                                 .profilePhoto
                                                                 .value,
-                                                        placeholder: (context, url) =>
-                                                            ShimmerEffect(),
-                                                        errorWidget:
-                                                            (context, url, error) =>
+                                                        placeholder:
+                                                            (context, url) =>
                                                                 ShimmerEffect(),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            ShimmerEffect(),
                                                         fit: BoxFit.cover,
                                                         height: 50 *
-                                                            SizeConfig
-                                                                .widthMultiplier!,
+                                                            SizeConfig.widthMultiplier!,
                                                         width: 50 * SizeConfig.widthMultiplier!)),
                                                   ),
                                                   SizedBox(
@@ -391,7 +391,8 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Row(
                                                         // mainAxisSize: MainAxisSize.min,
@@ -438,71 +439,83 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         // const Spacer(),
-                                        GestureDetector(
-                                          onTap: _homeController
-                                                      .userProfileData
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .profile!
-                                                      .getCallStatus ==
-                                                  true
-                                              ? null
-                                              : () async {
-                                                  print(_homeController
-                                                      .userProfileData
-                                                      .value
-                                                      .response!
-                                                      .data!
-                                                      .profile!
-                                                      .getCallStatus);
-                                                  _profileController
-                                                      .isclicked.value = true;
-                                                  _profileController
-                                                          .callBackResult
-                                                          .value =
-                                                      await CallBackServices.sendRequest(
-                                                          name: _profileController
-                                                              .nameController
-                                                              .text,
-                                                          email:
-                                                              _profileController
-                                                                  .emailController
-                                                                  .text,
-                                                          number: _profileController
-                                                              .loginController!
-                                                              .mobileController
-                                                              .text,
-                                                          query: _homeController
-                                                              .userProfileData
-                                                              .value
-                                                              .response!
-                                                              .data!
-                                                              .profile!
-                                                              .id
-                                                              .toString());
-                                                  _profileController
-                                                      .isclicked.value = false;
-                                                  Get.showSnackbar(
-                                                      const GetSnackBar(
-                                                    message:
-                                                        "Your Request has been sent.",
-                                                    title: "Call Back",
-                                                    backgroundColor:
-                                                        kGreenColor,
-                                                    duration:
-                                                        Duration(seconds: 3),
-                                                  ));
-                                                },
-                                          child: Column(
-                                            children: [
-                                              SvgPicture.asset(
-                                                ImagePath.callbackIcon,
-                                                height: 30,
-                                                color: kPureWhite,
-                                              ),
-                                              const Text("Get a CallBack")
-                                            ],
+                                        Container(
+                                          padding: EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                8 *
+                                                    SizeConfig
+                                                        .heightMultiplier!),
+                                            border:
+                                                Border.all(color: kGreenColor),
+                                            color: kGreenColor,
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: _homeController
+                                                        .userProfileData
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .profile!
+                                                        .getCallStatus ==
+                                                    true
+                                                ? null
+                                                : () async {
+                                                    print(_homeController
+                                                        .userProfileData
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .profile!
+                                                        .getCallStatus);
+                                                    _profileController
+                                                        .isclicked.value = true;
+                                                    _profileController
+                                                            .callBackResult.value =
+                                                        await CallBackServices.sendRequest(
+                                                            name:
+                                                                _profileController
+                                                                    .nameController
+                                                                    .text,
+                                                            email:
+                                                                _profileController
+                                                                    .emailController
+                                                                    .text,
+                                                            number: _profileController
+                                                                .loginController!
+                                                                .mobileController
+                                                                .text,
+                                                            query: _homeController
+                                                                .userProfileData
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .profile!
+                                                                .id
+                                                                .toString());
+                                                    _profileController.isclicked
+                                                        .value = false;
+                                                    Get.showSnackbar(
+                                                        const GetSnackBar(
+                                                      message:
+                                                          "Your Request has been sent.",
+                                                      title: "Call Back",
+                                                      backgroundColor:
+                                                          kGreenColor,
+                                                      duration:
+                                                          Duration(seconds: 3),
+                                                    ));
+                                                  },
+                                            child: Column(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  ImagePath.callbackIcon,
+                                                  height: 30,
+                                                  color: kPureWhite,
+                                                ),
+                                                const Text("Get a CallBack")
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],

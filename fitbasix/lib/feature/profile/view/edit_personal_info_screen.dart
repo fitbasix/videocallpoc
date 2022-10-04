@@ -385,13 +385,13 @@ class EditPersonalInfoScreen extends StatelessWidget {
               //   child: Container(
               //     width: MediaQuery.of(context).size.width,
               //     height: 48 * SizeConfig.heightMultiplier!,
-              //     decoration: BoxDecoration(
-              //       borderRadius:
-              //           BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-              //       border: Border.all(color: homeController.userProfileData.value.response!.data
-              //         !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
-              //       color: Colors.transparent,
-              //     ),
+                  // decoration: BoxDecoration(
+                  //   borderRadius:
+                  //       BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+                  //   border: Border.all(color: homeController.userProfileData.value.response!.data
+                  //     !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
+                  //   color: Colors.transparent,
+                  // ),
               //     child: Center(
               //       child: Row(
               //         mainAxisAlignment: MainAxisAlignment.center,
