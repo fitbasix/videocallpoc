@@ -92,16 +92,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             BottomNavigationBarItem(
                 icon: Padding(
                   padding: const EdgeInsets.only(bottom: 2.0),
-                  child: Image.asset(
-                    ImagePath.chatIcon,
+                  child: SvgPicture.asset(
+                    ImagePath.chatIconSVG,
                     height: 20,
-                    color: Colors.grey,
+                    color: Colors.white.withOpacity(.5),
                   ),
                 ),
                 activeIcon: Padding(
                   padding: const EdgeInsets.only(bottom: 2.0),
-                  child: Image.asset(
-                    ImagePath.chatIcon,
+                  child: SvgPicture.asset(
+                    ImagePath.chatIconSVG,
                     height: 20,
                     color: kGreenColor,
                   ),

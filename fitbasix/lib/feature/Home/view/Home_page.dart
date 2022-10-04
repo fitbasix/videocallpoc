@@ -65,6 +65,7 @@ class HomeAndTrainerPage extends StatelessWidget {
     final List<Widget> screens = [
       if (jsonOb['home'] == 1) HomePage(),
       if (jsonOb['get_trained'] == 1) GetTrainedScreen(),
+
       ///Added the Chat Screen in bottomNavigationBar
       MyTrainersScreen(),
       if (jsonOb['post'] == 1) CreatePostScreen(),
@@ -207,7 +208,6 @@ class _HomePageState extends State<HomePage> {
       Get.to(
         () => ChatPage(),
       );
-
     } else if (postId != null) {
       _homeController.commentsList.clear();
       _homeController.viewReplies!.clear();
@@ -438,8 +438,8 @@ class _HomePageState extends State<HomePage> {
                                         const Spacer(),
                                         GestureDetector(
                                           onTap: () {
-                                            Navigator.pushNamed(context,
-                                                RouteName.myTrainersScreen);
+                                            _homeController
+                                                .selectedIndex.value = 2;
                                           },
                                           child: Image.asset(
                                             ImagePath.chatIcon,

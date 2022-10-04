@@ -21,7 +21,6 @@ class ImagePath {
 
   static const String trainerBg = "assets/get_trained/trainerBg.png";
 
-
   static const String refresh = "assets/Icons/refresh.svg";
   static const String gfit = "assets/Icons/fit.svg";
   static const String health = "assets/Icons/health.png";
@@ -58,6 +57,7 @@ class ImagePath {
 
   static const String logo = 'assets/icon.svg';
   static const String chatIcon = "assets/Icons/chat.png";
+  static const String chatIconSVG = "assets/Icons/chat.svg";
   static const String starActive = "assets/Icons/star_ac.svg";
   static const String star = "assets/Icons/star.svg";
 
