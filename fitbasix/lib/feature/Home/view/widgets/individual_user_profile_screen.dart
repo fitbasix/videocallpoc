@@ -214,7 +214,7 @@ class _IndividualUserProfileUIState extends State<IndividualUserProfileUI> {
                                       187 * SizeConfig.heightMultiplier!,
                                     ),
                                     Text(
-                                      widget.username.toString(),
+                                      widget.username!.capitalize.toString(),
                                       style: AppTextStyle.titleText.copyWith(
                                           color: Theme.of(context)
                                               .textTheme

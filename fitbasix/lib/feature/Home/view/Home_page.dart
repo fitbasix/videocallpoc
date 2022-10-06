@@ -243,7 +243,6 @@ class _HomePageState extends State<HomePage> {
     return Future.value(true);
   }
 
-  final ProfileController _profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -442,17 +441,34 @@ class _HomePageState extends State<HomePage> {
                                         Container(
                                           padding: const EdgeInsets.all(10),
                                           alignment: Alignment.center,
-                                          height: 43 *
-                                              SizeConfig
-                                                  .heightMultiplier!,
+                                          height:
+                                              43 * SizeConfig.heightMultiplier!,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(
                                                 8 *
                                                     SizeConfig
                                                         .heightMultiplier!),
-                                            border:
-                                                Border.all(color: kGreenColor),
-                                            color: kGreenColor,
+                                            border: Border.all(
+                                                color: _homeController
+                                                            .userProfileData
+                                                            .value
+                                                            .response!
+                                                            .data!
+                                                            .profile!
+                                                            .getCallStatus ==
+                                                        true
+                                                    ? Colors.grey
+                                                    : kGreenColor),
+                                            color: _homeController
+                                                        .userProfileData
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .profile!
+                                                        .getCallStatus ==
+                                                    true
+                                                ? Colors.grey
+                                                : kGreenColor,
                                           ),
                                           child: GestureDetector(
                                             onTap: _homeController
@@ -465,30 +481,12 @@ class _HomePageState extends State<HomePage> {
                                                     true
                                                 ? null
                                                 : () async {
-                                                    print(_homeController
-                                                        .userProfileData
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .profile!
-                                                        .getCallStatus);
-                                                    _profileController
-                                                        .isclicked.value = true;
-                                                    _profileController
-                                                            .callBackResult.value =
                                                         await CallBackServices.sendRequest(
                                                             name:
-                                                                _profileController
-                                                                    .nameController
-                                                                    .text,
+                                                                _homeController.userProfileData.value.response!.data!.profile!.name.toString(),
                                                             email:
-                                                                _profileController
-                                                                    .emailController
-                                                                    .text,
-                                                            number: _profileController
-                                                                .loginController!
-                                                                .mobileController
-                                                                .text,
+                                                                _homeController.userProfileData.value.response!.data!.profile!.email.toString(),
+                                                            number: _homeController.userProfileData.value.response!.data!.profile!.mobileNumber.toString(),
                                                             query: _homeController
                                                                 .userProfileData
                                                                 .value
@@ -497,8 +495,6 @@ class _HomePageState extends State<HomePage> {
                                                                 .profile!
                                                                 .id
                                                                 .toString());
-                                                    _profileController.isclicked
-                                                        .value = false;
                                                     Get.showSnackbar(
                                                         const GetSnackBar(
                                                       message:
@@ -509,7 +505,9 @@ class _HomePageState extends State<HomePage> {
                                                           Duration(seconds: 3),
                                                     ));
                                                   },
-                                            child: Text("Get a Call back",),
+                                            child: Text(
+                                              "Get a Call back",
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -519,7 +517,6 @@ class _HomePageState extends State<HomePage> {
                                 // SizedBox(
                                 //   height: 16 * SizeConfig.heightMultiplier!,
                                 // ),
-
                                 Obx(
                                   () => _homeController
                                               .userProfileData
@@ -530,109 +527,104 @@ class _HomePageState extends State<HomePage> {
                                               .isPreviousEnrolled ==
                                           true
                                       ? Container()
-                                      : Container(
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 24 *
+                                      : Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 24 *
+                                                  SizeConfig.heightMultiplier!,
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 16 *
+                                                    SizeConfig.widthMultiplier!,
+                                                vertical: 11 *
                                                     SizeConfig
                                                         .heightMultiplier!,
                                               ),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 16 *
-                                                      SizeConfig
-                                                          .widthMultiplier!,
-                                                  vertical: 11 *
-                                                      SizeConfig
-                                                          .heightMultiplier!,
-                                                ),
-                                                color: const Color(0xff031402),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 216 *
+                                              color: const Color(0xff031402),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 216 *
+                                                        SizeConfig
+                                                            .widthMultiplier!,
+                                                    child: Text.rich(
+                                                      TextSpan(
+                                                          text:
+                                                              'You can get a lot more out of it.\nStart with our ',
+                                                          children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  'demo plan ',
+                                                              style: AppTextStyle
+                                                                  .black600Text
+                                                                  .copyWith(
+                                                                      fontSize: 14 *
+                                                                          SizeConfig
+                                                                              .textMultiplier!,
+                                                                      color:
+                                                                          kgreen49),
+                                                            )
+                                                          ]),
+                                                      style: AppTextStyle
+                                                          .black600Text
+                                                          .copyWith(
+                                                              fontSize: 14 *
+                                                                  SizeConfig
+                                                                      .textMultiplier!,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyText1
+                                                                  ?.color),
+                                                    ),
+                                                  ),
+                                                  const Spacer(),
+                                                  //join button
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      _homeController
+                                                          .selectedIndex
+                                                          .value = 1;
+                                                      //Navigator.pushNamed(context, RouteName.userSetting);
+                                                    },
+                                                    child: Container(
+                                                      height: 36 *
+                                                          SizeConfig
+                                                              .heightMultiplier!,
+                                                      width: 96 *
                                                           SizeConfig
                                                               .widthMultiplier!,
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                            text:
-                                                                'You can get a lot more out of it.\nStart with our ',
-                                                            children: [
-                                                              TextSpan(
-                                                                text:
-                                                                    'demo plan ',
-                                                                style: AppTextStyle
-                                                                    .black600Text
-                                                                    .copyWith(
-                                                                        fontSize: 14 *
-                                                                            SizeConfig
-                                                                                .textMultiplier!,
-                                                                        color:
-                                                                            kgreen49),
-                                                              )
-                                                            ]),
-                                                        style: AppTextStyle
-                                                            .black600Text
-                                                            .copyWith(
-                                                                fontSize: 14 *
-                                                                    SizeConfig
-                                                                        .textMultiplier!,
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyText1
-                                                                    ?.color),
+                                                      decoration: BoxDecoration(
+                                                        color: kgreen49,
+                                                        borderRadius: BorderRadius
+                                                            .circular(2 *
+                                                                SizeConfig
+                                                                    .heightMultiplier!),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          'take_demo'.tr,
+                                                          style: AppTextStyle
+                                                              .black600Text
+                                                              .copyWith(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText1
+                                                                      ?.color),
+                                                        ),
                                                       ),
                                                     ),
-                                                    const Spacer(),
-                                                    //join button
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        _homeController
-                                                            .selectedIndex
-                                                            .value = 1;
-                                                        //Navigator.pushNamed(context, RouteName.userSetting);
-                                                      },
-                                                      child: Container(
-                                                        height: 36 *
-                                                            SizeConfig
-                                                                .heightMultiplier!,
-                                                        width: 96 *
-                                                            SizeConfig
-                                                                .widthMultiplier!,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: kgreen49,
-                                                          borderRadius: BorderRadius
-                                                              .circular(2 *
-                                                                  SizeConfig
-                                                                      .heightMultiplier!),
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            'take_demo'.tr,
-                                                            style: AppTextStyle
-                                                                .black600Text
-                                                                .copyWith(
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyText1
-                                                                        ?.color),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                                  )
+                                                ],
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                 ),
 
@@ -2299,25 +2291,25 @@ class _HomePageState extends State<HomePage> {
                                       ],
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed('/callBackPage');
-                                    },
-                                    child: Padding(
-                                        padding: EdgeInsets.only(
-                                            top: 23 *
-                                                SizeConfig.heightMultiplier!,
-                                            right: 15.0 *
-                                                SizeConfig.widthMultiplier!),
-                                        child: SvgPicture.asset(
-                                          ImagePath.bellIcon,
-                                          color: Colors.white,
-                                          height: 19.5 *
-                                              SizeConfig.heightMultiplier!,
-                                          width:
-                                              16 * SizeConfig.widthMultiplier!,
-                                        )),
-                                  )
+                                  // GestureDetector(
+                                  //   onTap: () {
+                                  //     Get.toNamed('/callBackPage');
+                                  //   },
+                                  //   child: Padding(
+                                  //       padding: EdgeInsets.only(
+                                  //           top: 23 *
+                                  //               SizeConfig.heightMultiplier!,
+                                  //           right: 15.0 *
+                                  //               SizeConfig.widthMultiplier!),
+                                  //       child: SvgPicture.asset(
+                                  //         ImagePath.bellIcon,
+                                  //         color: Colors.white,
+                                  //         height: 19.5 *
+                                  //             SizeConfig.heightMultiplier!,
+                                  //         width:
+                                  //             16 * SizeConfig.widthMultiplier!,
+                                  //       )),
+                                  // )
                                 ],
                               ),
                             ),

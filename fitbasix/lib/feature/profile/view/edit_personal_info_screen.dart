@@ -29,7 +29,6 @@ class EditPersonalInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(_profileController.DOBController.text);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
@@ -79,12 +78,12 @@ class EditPersonalInfoScreen extends StatelessWidget {
                   border: OutlineInputBorder(
                     borderRadius:
                         BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                    borderSide: BorderSide(color: greyBorder, width: 1.0),
+                    borderSide: const BorderSide(color: greyBorder, width: 1.0),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius:
                         BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                    borderSide: BorderSide(color: greyBorder, width: 1.5),
+                    borderSide: const BorderSide(color: greyBorder, width: 1.5),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius:
@@ -95,12 +94,12 @@ class EditPersonalInfoScreen extends StatelessWidget {
                   enabledBorder: OutlineInputBorder(
                     borderRadius:
                         BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                    borderSide: BorderSide(color: greyBorder, width: 1.0),
+                    borderSide: const BorderSide(color: greyBorder, width: 1.0),
                   ),
                   disabledBorder: OutlineInputBorder(
                     borderRadius:
                         BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                    borderSide: BorderSide(color: greyBorder, width: 1.0),
+                    borderSide: const BorderSide(color: greyBorder, width: 1.0),
                   ),
                 ),
               ),
@@ -187,17 +186,20 @@ class EditPersonalInfoScreen extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: kLightGrey, width: 1.0),
+                          borderSide:
+                              const BorderSide(color: kLightGrey, width: 1.0),
                         ),
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: greyBorder, width: 1.0),
+                          borderSide:
+                              const BorderSide(color: greyBorder, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: greyBorder, width: 1.5),
+                          borderSide:
+                              const BorderSide(color: greyBorder, width: 1.5),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
@@ -208,7 +210,8 @@ class EditPersonalInfoScreen extends StatelessWidget {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               8 * SizeConfig.widthMultiplier!),
-                          borderSide: BorderSide(color: greyBorder, width: 1.0),
+                          borderSide:
+                              const BorderSide(color: greyBorder, width: 1.0),
                         ),
                       ),
                     ),
@@ -385,13 +388,13 @@ class EditPersonalInfoScreen extends StatelessWidget {
               //   child: Container(
               //     width: MediaQuery.of(context).size.width,
               //     height: 48 * SizeConfig.heightMultiplier!,
-                  // decoration: BoxDecoration(
-                  //   borderRadius:
-                  //       BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
-                  //   border: Border.all(color: homeController.userProfileData.value.response!.data
-                  //     !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
-                  //   color: Colors.transparent,
-                  // ),
+              // decoration: BoxDecoration(
+              //   borderRadius:
+              //       BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
+              //   border: Border.all(color: homeController.userProfileData.value.response!.data
+              //     !.profile!.getCallStatus == true ? Colors.grey : kGreenColor),
+              //   color: Colors.transparent,
+              // ),
               //     child: Center(
               //       child: Row(
               //         mainAxisAlignment: MainAxisAlignment.center,

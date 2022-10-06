@@ -194,7 +194,7 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     ),
                                     Text(
                                       CapitalizeFunction.capitalize(
-                                          widget.username.toString()),
+                                          widget.username.toString()).capitalize!,
                                       style: AppTextStyle.titleText.copyWith(
                                           color: Theme.of(context)
                                               .textTheme

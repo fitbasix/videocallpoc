@@ -107,7 +107,7 @@ class _ExplorePostTileState extends State<ExplorePostTile> {
                           ? Row(
                               children: [
                                 Text(
-                                  widget.name,
+                                  widget.name.capitalize!,
                                   style: AppTextStyle.boldBlackText.copyWith(
                                       color: Theme.of(context)
                                           .textTheme

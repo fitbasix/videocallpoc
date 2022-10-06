@@ -123,6 +123,8 @@ class ProfileController extends GetxController {
 
   Future<void> setEditProfileData() async {
     log("dfgdsg");
+    print("NItesh - " + homeController
+        .userProfileData.value.response!.data!.profile!.mobileNumber.toString());
     loginController!.mobileController.text = homeController
         .userProfileData.value.response!.data!.profile!.mobileNumber
         .toString();
@@ -206,9 +208,8 @@ class ProfileController extends GetxController {
     super.onInit();
   }
 
-  Future<void> getProfilePosts() async{
-    final postQuery = await ProfileServices.getUserPosts(
-        skip: 0);
+  Future<void> getProfilePosts() async {
+    final postQuery = await ProfileServices.getUserPosts(skip: 0);
     userPostList.clear();
     userPostList.addAll(postQuery.response!.data!);
   }
