@@ -56,28 +56,54 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
   fetchData() async {
     print("calling : ${myTrainers.value}");
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await Future.forEach(myTrainers.value, (MyTrainer element) async {
-      var firebaseService = FirebaseServices();
-      var senderId = prefs.getString('userId')!;
-      String value = (await firebaseService.getLastMessage(
-                  receiverId: element.chatId.toString().replaceAll('chat_', ''),
-                  senderId: senderId) ??
-              MessageData(
-                  senderName: "",
-                  senderId: "",
-                  senderAvatar: "",
-                  message: "",
-                  sentAt: ""))
-          .sentAt;
-      print("Time: ${value}");
-      try {
-        element.lastMessageDate = DateTime.parse(value);
-      } catch (e) {
-        element.lastMessageDate = DateTime.now();
-      }
-    });
+    // for (MyTrainer element in myTrainers.value) {
+    //   var firebaseService = FirebaseServices();
+    //   var senderId = prefs.getString('userId')!;
+    //   String value = (await firebaseService.getLastMessage(
+    //               receiverId: element.chatId.toString().replaceAll('chat_', ''),
+    //               senderId: senderId) ??
+    //           MessageData(
+    //               senderName: "",
+    //               senderId: "",
+    //               senderAvatar: "",
+    //               message: "",
+    //               sentAt: ""))
+    //       .sentAt;
+    //   print("Time: ${value}");
+    //   try {
+    //     element.lastMessageDate = DateTime.parse(value);
+    //   } catch (e) {
+    //     element.lastMessageDate = DateTime.now();
+    //   }
+    // }
+    try {
+      await Future.forEach(myTrainers.value, (MyTrainer element) async {
+        var firebaseService = FirebaseServices();
+        var senderId = prefs.getString('userId')!;
+        String value = (await firebaseService.getLastMessage(
+                    receiverId:
+                        element.chatId.toString().replaceAll('chat_', ''),
+                    senderId: senderId) ??
+                MessageData(
+                    senderName: "",
+                    senderId: "",
+                    senderAvatar: "",
+                    message: "",
+                    sentAt: ""))
+            .sentAt;
+        print("Time: ${value}");
+        try {
+          element.lastMessageDate = DateTime.parse(value);
+        } catch (e) {
+          element.lastMessageDate = DateTime.now();
+        }
+      });
+    } catch (e) {
+      print("&&&&&&&&&&&&&&&&&&&&&&&&" + e.toString());
+    }
 
-    print(
+    if (myTrainers.value.length > 1) {
+      print(
         "Data:---- ${myTrainers.value[0].lastMessageDate} ${myTrainers.value[1].lastMessageDate}");
 
     myTrainers.sort(
@@ -85,6 +111,7 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
         return b.lastMessageDate!.compareTo(a.lastMessageDate!);
       },
     );
+    }
     loader.value = false;
     print(loader.value.toString());
     print(myTrainers.toJson().toString());
@@ -95,7 +122,6 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
     _trainerController.currentMyTrainerPage.value = 1;
     myTrainers =
         _trainerController.trainers.value.response!.data!.myTrainers!.obs;
-    fetchData();
     _trainerController.isMyTrainerNeedToLoadData.value = true;
     _scrollController.addListener(() async {
       if (_trainerController.isMyTrainerNeedToLoadData.value == true &&
@@ -125,6 +151,12 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
         }
       }
     });
+    try {
+      fetchData();
+    } catch (e) {
+      print("NItesh - $e");
+    }
+    // loader.value = false;
     super.initState();
   }
 
@@ -341,8 +373,8 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
                                     myTrainers![index].isCurrentlyEnrolled!
                                         ? myTrainers![index].startDate
                                         : myTrainers![index].endDate,
-                                lastMessageTime:
-                                    myTrainers[index].lastMessageDate!.day,
+                                lastMessageTime: 0,
+                                // myTrainers[index].lastMessageDate!.day,
                                 onTrainerTapped: () async {
                                   if (myTrainers![index].chatId != null) {
                                     var controller =
