@@ -18,6 +18,7 @@ class PostService {
   ) async {
     var formData = FormData();
     if (files != null)
+      // ignore: curly_braces_in_flow_control_structures
       for (var file in files) {
         formData.files.addAll([
           MapEntry(
@@ -26,6 +27,7 @@ class PostService {
                   filename: file.path.split('/').last)),
         ]);
       }
+      
 
     dio!.options.headers["language"] = "1";
     dio!.options.headers['Authorization'] = await LogInService.getAccessToken();

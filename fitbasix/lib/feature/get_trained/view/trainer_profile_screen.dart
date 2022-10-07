@@ -123,8 +123,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                           _trainerController.atrainerDetail.value.user!.id!;
                       controller.senderPhoto = _trainerController
                           .atrainerDetail.value.user!.profilePhoto!;
-                      controller.senderName =
-                          _trainerController.atrainerDetail.value.user!.name!.capitalize!;
+                      controller.senderName = _trainerController
+                          .atrainerDetail.value.user!.name!.capitalize!;
                       Get.to(
                         () => ChatPage(),
                       );
@@ -311,7 +311,8 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   onBack: () {
                     Navigator.pop(context);
                   },
-                  name: trainerController.atrainerDetail.value.user!.name!.capitalize!,
+                  name: trainerController
+                      .atrainerDetail.value.user!.name!.capitalize!,
                   followersCount: NumberFormatter.textFormatter(
                       trainerController.atrainerDetail.value.followers!),
                   followingCount: NumberFormatter.textFormatter(
@@ -660,6 +661,7 @@ class _TrainerPageState extends State<TrainerPage> {
                                   left: 24.0 * SizeConfig.widthMultiplier!),
                               child: Text(
                                 'about'.tr,
+                                textAlign: TextAlign.justify,
                                 style: AppTextStyle.greenSemiBoldText.copyWith(
                                   color: Theme.of(context)
                                       .textTheme
@@ -673,16 +675,19 @@ class _TrainerPageState extends State<TrainerPage> {
                               padding: EdgeInsets.only(
                                   left: 24.0 * SizeConfig.widthMultiplier!,
                                   right: 24.0 * SizeConfig.widthMultiplier!),
-                              child: Text(
-                                widget.aboutTrainer,
-                                style:
-                                    AppTextStyle.lightMediumBlackText.copyWith(
-                                  fontSize: (14) * SizeConfig.textMultiplier!,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      ?.color,
+                              child: RichText(
+                                text: TextSpan(
+                                  text: widget.aboutTrainer,
+                                  style: AppTextStyle.lightMediumBlackText
+                                      .copyWith(
+                                    fontSize: (14) * SizeConfig.textMultiplier!,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.color,
+                                  ),
                                 ),
+                                textAlign: TextAlign.justify,
                               ),
                             ),
                             // SizedBox(
@@ -971,7 +976,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                           : _trainerController
                                               .trainerPostList.length,
                                       shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemBuilder: (_, index) {
                                         return Obx(() => Column(
                                               children: [
@@ -1010,7 +1016,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   name: _trainerController
                                                       .trainerPostList[index]
                                                       .userId!
-                                                      .name!.capitalize!,
+                                                      .name!
+                                                      .capitalize!,
                                                   profilePhoto:
                                                       _trainerController
                                                           .trainerPostList[
@@ -1020,7 +1027,8 @@ class _TrainerPageState extends State<TrainerPage> {
                                                   category: _trainerController
                                                       .trainerPostList[index]
                                                       .postCategory![0]
-                                                      .name!.capitalize!,
+                                                      .name!
+                                                      .capitalize!,
                                                   date: DateFormat.d()
                                                       .add_MMM()
                                                       .format(_trainerController
@@ -1635,7 +1643,7 @@ class _UnfollowDialogState extends State<UnfollowDialog> {
       child: Container(
         decoration: BoxDecoration(
           color: kBlack,
-          borderRadius: BorderRadius.circular(8 *SizeConfig.heightMultiplier!),
+          borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
         ),
         padding: EdgeInsets.symmetric(
             vertical: 15 * SizeConfig.heightMultiplier!,

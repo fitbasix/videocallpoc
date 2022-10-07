@@ -98,11 +98,12 @@ class TrainerServices {
             : name.toString()));
     var response =
         await dio!.post(ApiUrl.getAllTrainer + "?sortBy=$sortMethod", data: {
-      "skip": currentPage == null ? 0 : currentPage * 5,
+      ///Pavan S
+      // "skip": currentPage == null ? 0 : currentPage * 5,
       "name": name ?? _trainerController.searchedName.value,
       "trainerType": trainerType == null
           ? (_trainerController.trainerType.value == 0
-              ? []
+              ? [0]
               : [_trainerController.trainerType.value])
           : [trainerType],
       "time": availability ?? _trainerController.availability,

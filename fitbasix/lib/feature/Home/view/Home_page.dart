@@ -438,7 +438,14 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         // const Spacer(),
-                                        Container(
+                                        _homeController
+                                                        .userProfileData
+                                                        .value
+                                                        .response!
+                                                        .data!
+                                                        .profile!
+                                                        .getCallStatus ==
+                                                    true ? Container(): Container(
                                           padding: const EdgeInsets.all(10),
                                           alignment: Alignment.center,
                                           height:

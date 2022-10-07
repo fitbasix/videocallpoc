@@ -733,6 +733,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             CommentsTile(
+                                              userId: widget.commentsList[index].user!.id?? "",
                                               name: widget.commentsList[index]
                                                       .user!.name ??
                                                   '',
@@ -1106,6 +1107,7 @@ class _FullPostTileState extends State<FullPostTile> {
                                                                             Column(
                                                                           children: [
                                                                             CommentsTile(
+                                                                              userId: snapshot.data![index2].user!.id!,
                                                                               name: snapshot.data![index2].user!.name!,
                                                                               comment: snapshot.data![index2].comment!,
                                                                               taggedPersonName: snapshot.data![index2].taggedPerson == null ? '' : snapshot.data![index2].taggedPerson!.name!,

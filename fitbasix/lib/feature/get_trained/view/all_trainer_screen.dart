@@ -44,46 +44,70 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
   final TrainerController _trainerController = Get.find();
   final ScrollController _scrollController = ScrollController();
 
+  get() async {
+    final trainer = await TrainerServices.getAllTrainer(
+      currentPage: _trainerController.currentPage.value,
+    );
+    if (trainer.response!.data!.trainers!.isNotEmpty) {
+      if (trainer.response!.data!.trainers!.length < 5) {
+        for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
+          _trainerController.allTrainer.value.response!.data!.trainers!
+              .add(trainer.response!.data!.trainers![i]);
+        }
+        //return;
+      } else {
+        for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
+          _trainerController.allTrainer.value.response!.data!.trainers!
+              .add(trainer.response!.data!.trainers![i]);
+        }
+      }
+    }
+    setState(() {
+      _trainerController.showLoader.value = false;
+    });
+  }
+
   @override
   void initState() {
     getSortByData();
-    _scrollController.addListener(() async {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        _trainerController.showLoader.value = true;
-        final trainer = _trainerController.trainerType.value == 0
-            ? await TrainerServices.getAllTrainer(
-                currentPage: _trainerController.currentPage.value,
-              )
-            : _trainerController.trainerType.value == 1
-                ? await TrainerServices.getAllTrainer(
-                    currentPage: _trainerController.currentPage.value,
-                    trainerType: 1)
-                : _trainerController.trainerType.value == 2
-                    ? await TrainerServices.getAllTrainer(
-                        currentPage: _trainerController.currentPage.value,
-                        trainerType: 2)
-                    : AllTrainer();
-        if (trainer.response!.data!.trainers!.length != 0) {
-          if (trainer.response!.data!.trainers!.length < 5) {
-            for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
-              _trainerController.allTrainer.value.response!.data!.trainers!
-                  .add(trainer.response!.data!.trainers![i]);
-            }
-            //return;
-          } else {
-            for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
-              _trainerController.allTrainer.value.response!.data!.trainers!
-                  .add(trainer.response!.data!.trainers![i]);
-            }
-          }
-        }
-        _trainerController.currentPage.value++;
-        _trainerController.showLoader.value = false;
+    get();
+    // _scrollController.addListener(() async {
+    //   if (_scrollController.position.pixels ==
+    //       _scrollController.position.maxScrollExtent) {
+    //     _trainerController.showLoader.value = true;
+    //     final trainer = _trainerController.trainerType.value == 0
+    //         ? await TrainerServices.getAllTrainer(
+    //             currentPage: _trainerController.currentPage.value,
+    //           )
+    //         : _trainerController.trainerType.value == 1
+    //             ? await TrainerServices.getAllTrainer(
+    //                 currentPage: _trainerController.currentPage.value,
+    //                 trainerType: 1)
+    //             : _trainerController.trainerType.value == 2
+    //                 ? await TrainerServices.getAllTrainer(
+    //                     currentPage: _trainerController.currentPage.value,
+    //                     trainerType: 2)
+    //                 : AllTrainer();
+    //     if (trainer.response!.data!.trainers!.isNotEmpty) {
+    //       if (trainer.response!.data!.trainers!.length < 5) {
+    //         for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
+    //           _trainerController.allTrainer.value.response!.data!.trainers!
+    //               .add(trainer.response!.data!.trainers![i]);
+    //         }
+    //         //return;
+    //       } else {
+    //         for (int i = 0; i < trainer.response!.data!.trainers!.length; i++) {
+    //           _trainerController.allTrainer.value.response!.data!.trainers!
+    //               .add(trainer.response!.data!.trainers![i]);
+    //         }
+    //       }
+    //     }
+    //     _trainerController.currentPage.value++;
+    //     _trainerController.showLoader.value = false;
 
-        setState(() {});
-      }
-    });
+    //     setState(() {});
+    //   }
+    // });
     super.initState();
   }
 
@@ -121,10 +145,8 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             8 * SizeConfig.widthMultiplier!),
                       ),
                       child: TextField(
-                        inputFormatters: [
-                                        UpperCaseTextFormatter()
-                                      ],
-                                      textCapitalization: TextCapitalization.sentences,
+                        inputFormatters: [UpperCaseTextFormatter()],
+                        textCapitalization: TextCapitalization.sentences,
                         controller: _trainerController.searchController,
                         style: AppTextStyle.smallGreyText.copyWith(
                             fontSize: 14 * SizeConfig.textMultiplier!,
@@ -146,7 +168,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                               _scrollController.jumpTo(0);
                               _trainerController.filterIsLoading.value = false;
                             }
-                            if (value.length == 0) {
+                            if (value.isEmpty) {
                               _trainerController.filterIsLoading.value = true;
                               _trainerController.searchedName.value = value;
                               _trainerController.allTrainer.value =
@@ -195,24 +217,22 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                           ),
                           suffixIcon: GestureDetector(
                             onTap: () async {
-                              _trainerController.searchController.text.length ==
-                                      0
+                              _trainerController.searchController.text.isEmpty
                                   ? _trainerController.isSearchActive.value =
                                       false
                                   : _trainerController.searchController.clear();
                               _trainerController.filterIsLoading.value = true;
                               _trainerController.searchedName.value = "";
                               _trainerController.allTrainer.value =
-                              await TrainerServices.getAllTrainer(
+                                  await TrainerServices.getAllTrainer(
                                 name: "",
                                 interests: _trainerController
                                     .SelectedInterestIndex.value,
                                 trainerType:
-                                _trainerController.trainerType.value,
+                                    _trainerController.trainerType.value,
                               );
                               _scrollController.jumpTo(0);
                               _trainerController.filterIsLoading.value = false;
-
                             },
                             child: Icon(
                               Icons.clear,
@@ -430,13 +450,15 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                             return Obx(() => _trainerController.isLoading.value
                                 ? Shimmer.fromColors(
                                     child: ItemCategory(
-                                        interest: CapitalizeFunction.capitalize(_trainerController
-                                            .interests
-                                            .value
-                                            .response!
-                                            .response!
-                                            .data![index]
-                                            .name!.capitalize!),
+                                        interest: CapitalizeFunction.capitalize(
+                                            _trainerController
+                                                .interests
+                                                .value
+                                                .response!
+                                                .response!
+                                                .data![index]
+                                                .name!
+                                                .capitalize!),
                                         onTap: () {},
                                         isSelected: false),
                                     baseColor:
@@ -483,13 +505,15 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                               index
                                           ? true
                                           : false,
-                                      interest: CapitalizeFunction.capitalize(_trainerController
-                                          .interests
-                                          .value
-                                          .response!
-                                          .response!
-                                          .data![index]
-                                          .name!.capitalize!),
+                                      interest: CapitalizeFunction.capitalize(
+                                          _trainerController
+                                              .interests
+                                              .value
+                                              .response!
+                                              .response!
+                                              .data![index]
+                                              .name!
+                                              .capitalize!),
                                     ),
                                   ));
                           }),
@@ -545,8 +569,7 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                         : Container(
                             // height: Get.height,
                             child: _trainerController.allTrainer.value.response!
-                                        .data!.trainers!.length ==
-                                    0
+                                    .data!.trainers!.isEmpty
                                 ? Container(
                                     padding: EdgeInsets.only(
                                         top: 71 * SizeConfig.heightMultiplier!,
@@ -598,18 +621,17 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                   )
                                 : ListView.builder(
                                     itemCount: _trainerController
-                                                .allTrainer
-                                                .value
-                                                .response!
-                                                .data!
-                                                .trainers!
-                                                .length ==
-                                            0
+                                            .allTrainer
+                                            .value
+                                            .response!
+                                            .data!
+                                            .trainers!
+                                            .isEmpty
                                         ? 0
                                         : _trainerController.allTrainer.value
                                             .response!.data!.trainers!.length,
                                     shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
+                                    physics: const ClampingScrollPhysics(),
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       print(_trainerController
@@ -629,24 +651,28 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                     .trainers![index]
                                                     .user !=
                                                 null
-                                            ? CapitalizeFunction.capitalize(_trainerController
+                                            ? CapitalizeFunction.capitalize(
+                                                _trainerController
                                                     .allTrainer
                                                     .value
                                                     .response!
                                                     .data!
                                                     .trainers![index]
                                                     .user!
-                                                    .name ?? '')
+                                                    .name!
+                                                    .capitalize!)
                                             : '',
-                                        strength: CapitalizeFunction.capitalize(_trainerController
-                                            .allTrainer
-                                            .value
-                                            .response!
-                                            .data!
-                                            .trainers![index]
-                                            .strength![0]
-                                            .name
-                                            .toString()),
+                                        strength: CapitalizeFunction.capitalize(
+                                            _trainerController
+                                                .allTrainer
+                                                .value
+                                                .response!
+                                                .data!
+                                                .trainers![index]
+                                                .strength![0]
+                                                .name!
+                                                .capitalize!
+                                                .toString()),
                                         strengthCount: _trainerController
                                                 .allTrainer
                                                 .value
@@ -758,12 +784,11 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
                                                           .id!,
                                                       0);
                                           if (_trainerController
-                                                  .initialPostData
-                                                  .value
-                                                  .response!
-                                                  .data!
-                                                  .length !=
-                                              0) {
+                                              .initialPostData
+                                              .value
+                                              .response!
+                                              .data!
+                                              .isNotEmpty) {
                                             _trainerController
                                                     .trainerPostList.value =
                                                 _trainerController

@@ -668,9 +668,7 @@ class SendMessageWidget extends StatelessWidget {
                                     ),
                                     child: TextField(
                                       // focusNode: _focus,
-                                      inputFormatters: [
-                                        UpperCaseTextFormatter()
-                                      ],
+                                      inputFormatters: [],
                                       textCapitalization:
                                           TextCapitalization.sentences,
                                       keyboardType: TextInputType.multiline,

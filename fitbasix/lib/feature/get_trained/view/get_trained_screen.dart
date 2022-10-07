@@ -2455,7 +2455,7 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                       planId: widget.planDetail.id!,
                       expiryDate: widget.planDetail.expiryDate!,
                       days: widget.planDetail.weekDays!,
-                      time: widget.planDetail.sessionTime!.name!.capitalize!,
+                      time: widget.planDetail.sessionTime!.name!.toUpperCase(),
                     ),
                   );
                 },

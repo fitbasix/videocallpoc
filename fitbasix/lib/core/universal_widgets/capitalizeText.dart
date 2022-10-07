@@ -4,8 +4,12 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    return newValue.copyWith(
-        text: newValue.text[0].toUpperCase() + newValue.text.substring(1));
+    if (!Uri.parse(newValue.text).isAbsolute) {
+      return newValue.copyWith(
+          text: newValue.text[0].toUpperCase() + newValue.text.substring(1));
+    } else {
+      return newValue;
+    }
   }
 }
 

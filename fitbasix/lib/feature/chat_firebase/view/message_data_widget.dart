@@ -11,6 +11,10 @@ import 'package:intl/intl.dart';
 import 'package:selectable_autolink_text/selectable_autolink_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const String urlPattern =
+    r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})';
+final RegExp linkRegExp = RegExp('($urlPattern)', caseSensitive: false);
+
 class MessageWidget extends StatefulWidget {
   final MessageData messageData;
   const MessageWidget({Key? key, required this.messageData}) : super(key: key);
@@ -23,6 +27,45 @@ class _MessageWidgetState extends State<MessageWidget> {
   final FirebaseChatController _chatController = Get.find();
   String? text;
   bool sentByMe = false;
+
+  Future<void> openUrl(String url) async {
+    String uri = url;
+    if (!url.contains('http')) {
+      uri = "https://" + url;
+    }
+    if (await canLaunch(uri)) {
+      await launch(uri, forceSafariVC: false);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  List<InlineSpan> linkify(String text) {
+    final List<InlineSpan> list = <InlineSpan>[];
+    final RegExpMatch? match = linkRegExp.firstMatch(text);
+    if (match == null) {
+      list.add(TextSpan(text: text));
+      return list;
+    }
+
+    if (match.start > 0) {
+      list.add(TextSpan(text: text.substring(0, match.start)));
+    }
+
+    final String linkText = match.group(0).toString();
+    if (linkText.contains(RegExp(urlPattern, caseSensitive: false))) {
+      list.add(buildLinkComponent(linkText, linkText));
+    } else {
+      throw 'Unexpected match: $linkText';
+    }
+
+    list.addAll(linkify(text.substring(match.start + linkText.length)));
+
+    return list;
+  }
+
+  buildTextWithLinks(String textToLink) =>
+      Text.rich(TextSpan(children: linkify(textToLink)));
 
   @override
   Widget build(BuildContext context) {
@@ -73,40 +116,43 @@ class _MessageWidgetState extends State<MessageWidget> {
                       color: background,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: SelectableAutoLinkText(
-                      text ?? "",
-                      style: sentByMe == true
-                          ? AppTextStyle.white400Text
-                          : AppTextStyle.black400Text
-                              .copyWith(color: kPureWhite),
-                      linkStyle: AppTextStyle.white400Text.copyWith(
-                        color: Colors.white,
-                        decoration: TextDecoration.underline,
-                      ),
-                      highlightedLinkStyle: TextStyle(
-                        color: Colors.white,
-                        backgroundColor: Colors.transparent,
-                      ),
-                      onTransformDisplayLink: AutoLinkUtils.shrinkUrl,
-                      onTap: (url) async {
-                        if (await canLaunch(url)) {
-                          launch(url, forceSafariVC: false);
-                        } else {}
-                      },
-                      onLongPress: (url) {
-                        print('🍔LongPress: $url');
-                      },
-                      onTapOther: (local, global) {
-                        print('🍇️onTapOther: $local, $global');
-                      },
+                    child: RichText(
+                      text: TextSpan(children: linkify(text.toString())),
                     ),
+                    //   child: SelectableAutoLinkText(
+                    //     text ?? "",
+                    //     style: sentByMe == true
+                    //         ? AppTextStyle.white400Text
+                    //         : AppTextStyle.black400Text
+                    //             .copyWith(color: kPureWhite),
+                    // linkStyle: AppTextStyle.white400Text.copyWith(
+                    //   color: Colors.white,
+                    //   decoration: TextDecoration.underline,
+                    // ),
+                    //     highlightedLinkStyle: const TextStyle(
+                    //       color: Colors.white,
+                    //       backgroundColor: Colors.transparent,
+                    //     ),
+                    //     onTap: (url) async {
+                    //       if (await canLaunchUrl(Uri.parse(url))) {
+                    //         launchUrl(Uri.parse(url),mode: LaunchMode.inAppWebView);
+                    //       } else {}
+                    //     },
+                    //     onLongPress: (url) {
+                    //       print('🍔LongPress: $url');
+                    //     },
+                    //     onTapOther: (local, global) {
+                    //       print('🍇️onTapOther: $local, $global');
+                    //     },
+                    //   ),
+                    // ),
                   ),
                   SizedBox(
                     height: 5.0 * SizeConfig.heightMultiplier!,
                   ),
                   Text(
-                      DateFormat.jm()
-                          .format(DateTime.parse(widget.messageData.sentAt).toLocal()),
+                      DateFormat.jm().format(
+                          DateTime.parse(widget.messageData.sentAt).toLocal()),
                       style: sentByMe == true
                           ? AppTextStyle.white400Text.copyWith(
                               fontSize: 9.0 * SizeConfig.textMultiplier!)
@@ -121,4 +167,16 @@ class _MessageWidgetState extends State<MessageWidget> {
       ],
     );
   }
+
+  WidgetSpan buildLinkComponent(String text, String linkToOpen) => WidgetSpan(
+          child: InkWell(
+        child: Text(
+          text,
+          style: AppTextStyle.white400Text.copyWith(
+            color: Colors.white,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+        onTap: () => openUrl(linkToOpen),
+      ));
 }

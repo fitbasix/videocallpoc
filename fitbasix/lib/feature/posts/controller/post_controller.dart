@@ -1,16 +1,13 @@
-import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
+// ignore_for_file: invalid_use_of_protected_member
 
+import 'dart:io';
 import 'package:fitbasix/feature/posts/model/UserModel.dart';
 import 'package:fitbasix/feature/posts/model/category_model.dart';
 import 'package:fitbasix/feature/posts/model/location_model.dart';
 import 'package:fitbasix/feature/posts/model/media_response_model.dart';
 import 'package:fitbasix/feature/posts/model/post_model.dart';
 import 'package:fitbasix/feature/posts/model/suggestion_model.dart';
-import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -37,7 +34,7 @@ class PostController extends GetxController {
       TextEditingController();
   Rx<Suggestion> searchSuggestion = Rx(Suggestion());
   RxList<UserData> users = RxList<UserData>([]);
-  final sessionToken = Uuid().v4();
+  final sessionToken = const Uuid().v4();
   RxBool searchLoading = RxBool(false);
   RxString selectedLocation = RxString('');
   RxInt lastSelectedPersonIndex = RxInt(0);
@@ -67,7 +64,6 @@ class PostController extends GetxController {
   Future<List<AssetEntity>> fetchAssets({required int presentPage}) async {
     lastPage.value = currentPage.value;
     foldersAvailable.value = await PhotoManager.getAssetPathList(onlyAll: true);
-    print("kkk" + foldersAvailable.value.toString());
 //     try{
 // selectedFolder.value = foldersAvailable.indexOf(
 //         foldersAvailable.singleWhere(
@@ -99,23 +95,26 @@ class PostController extends GetxController {
   }
 
   Future<void> getCategory() async {
-    if (categories.length == 0) {
+    if (categories.isEmpty) {
       CategoryModel categoryModel = await CreatePostService.getCategory();
       categories.value = categoryModel.response!.response!.data!;
     }
   }
 
-  Future<File> genThumbnailFile(String path) async {
-    final fileName = await VideoThumbnail.thumbnailFile(
-      video: path,
-      thumbnailPath: (await getTemporaryDirectory()).path,
-      imageFormat: ImageFormat.JPEG,
-      maxHeight:
-          100, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
-      quality: 100,
-    );
-    File file = File(fileName!);
-    return file;
+  Future<File?> genThumbnailFile(String path) async {
+    try {
+      final fileName = await VideoThumbnail.thumbnailFile(
+        video: path,
+        thumbnailPath: (await getTemporaryDirectory()).path,
+        imageFormat: ImageFormat.JPEG,
+        maxHeight: 100,
+        quality: 100,
+      );
+      File file = File(fileName!);
+      return file;
+    } catch (e) {
+    }
+    return null;
   }
 
   Future getPostData() async {
@@ -125,12 +124,10 @@ class PostController extends GetxController {
   Future<void> setFolderIndex({required int index}) async {
     selectedFolder.value = index;
     currentPage.value = 0;
-    print(selectedFolder.value);
     assets.value = await foldersAvailable.value[selectedFolder.value]
         .getAssetListPaged(page: currentPage.value, size: 100);
     imageCache!.clear();
     imageCache!.clearLiveImages();
-    print("lll" + assets.value.toString());
   }
 
   void toggleDropDownExpansion() {
@@ -138,13 +135,11 @@ class PostController extends GetxController {
   }
 
   void getSelectedMedia(AssetEntity? assetEntity) {
-    if (selectedMediaAsset.indexOf(assetEntity) == -1) {
+    if (!selectedMediaAsset.contains(assetEntity)) {
       selectedMediaAsset.add(assetEntity!);
     } else {
-      print("remove");
       selectedMediaAsset.remove(assetEntity!);
     }
-    print(selectedMediaAsset);
   }
 
   Future<List<File>> getFile(List<AssetEntity> assetEntities) async {
@@ -200,7 +195,7 @@ class PostController extends GetxController {
     } else {
       await getPostData();
     }
-    Future.delayed(Duration(milliseconds: 50), () {
+    Future.delayed(const Duration(milliseconds: 50), () {
       iscreateingPost.value = false;
     });
   }

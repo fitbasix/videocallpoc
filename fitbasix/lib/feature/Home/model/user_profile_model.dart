@@ -73,7 +73,7 @@ class ProfileResponseData {
 }
 
 class Profile {
-  Profile( 
+  Profile(
       {this.id,
       this.name,
       this.profilePhoto,
@@ -93,6 +93,7 @@ class Profile {
       this.chatId,
       this.isPreviousEnrolled,
       this.isFollowing,
+      this.role,
       this.getCallStatus});
 
   final String? id;
@@ -115,6 +116,7 @@ class Profile {
   final bool? isPreviousEnrolled;
   bool? isFollowing;
   bool? getCallStatus;
+  final String? role;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
       id: json["_id"],
@@ -138,6 +140,7 @@ class Profile {
       selectedInterest: List<int>.from(json["interests"].map((x) => x)),
       followers: json["followers"],
       chatId: json["chat"],
+      role: json["role"],
       getCallStatus: json["getCallStatus"]);
 
   Map<String, dynamic> toJson() => {
@@ -149,7 +152,8 @@ class Profile {
         "following": following,
         "followers": followers,
         "chat": chatId,
-        "getCallStatus": getCallStatus
+        "getCallStatus": getCallStatus,
+        "role": role
       };
 }
 

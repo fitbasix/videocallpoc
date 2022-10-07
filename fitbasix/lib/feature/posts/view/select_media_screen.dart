@@ -107,35 +107,46 @@ class _SelectMediaScreenState extends State<SelectMediaScreen> {
               ? _postController.isLoading.value == false
                   ? RightTick(
                       onTap: () async {
-                        await _postController
-                            .getFile(_postController.selectedMediaAsset);
-                        _postController.isLoading.value = true;
-                        // print('before');
-                        // if (_postController.imageFile != null) {
-                        //   _postController.selectedMediaFiles.addIf(
-                        //       _postController.imageFile != null,
-                        //       _postController.imageFile!);
-                        // }
-                        _postController.selectedFiles
-                            .addAll(_postController.selectedMediaFiles);
-                        _postController.uploadedFiles.value =
-                            await PostService.uploadMedia(
-                          _postController.selectedFiles,
-                        );
-                        // _postController.uploadUrls.value =
-                        //     _postController.uploadedFiles.value.response!.data!;
-                        if (_postController.uploadedFiles.value.code == 0) {
-                          _postController.postData.value =
-                              await CreatePostService.createPost(
-                                  postId: _postController.postId.value,
-                                  files: _postController
-                                      .uploadedFiles.value.response!.data);
-                          Navigator.pop(context);
+                        try {
+                          print("1");
+                          await _postController
+                              .getFile(_postController.selectedMediaAsset);
+                          _postController.isLoading.value = true;
+                          // print('before');
+                          // if (_postController.imageFile != null) {
+                          //   _postController.selectedMediaFiles.addIf(
+                          //       _postController.imageFile != null,
+                          //       _postController.imageFile!);
+                          // }
+                          print("1");
+                          _postController.selectedFiles
+                              .addAll(_postController.selectedMediaFiles);
+                          print("1");
+                          _postController.uploadedFiles.value =
+                              await PostService.uploadMedia(
+                            _postController.selectedFiles,
+                          );
+                          print("1");
+                          // _postController.uploadUrls.value =
+                          //     _postController.uploadedFiles.value.response!.data!;
+                          if (_postController.uploadedFiles.value.code == 0) {
+                            print("1-1");
+                            _postController.postData.value =
+                                await CreatePostService.createPost(
+                                    postId: _postController.postId.value,
+                                    files: _postController
+                                        .uploadedFiles.value.response!.data);
+                            Navigator.pop(context);
+                          }
+                          print("1");
+                          _postController.selectedMediaFiles.clear();
+                          print("1");
+                          _postController.selectedMediaAsset.clear();
+                          print("1");
+                          _postController.isLoading.value = false;
+                        } catch (e) {
+                          print(e.toString());
                         }
-
-                        _postController.selectedMediaFiles.clear();
-                        _postController.selectedMediaAsset.clear();
-                        _postController.isLoading.value = false;
                       },
                     )
                   : Row(

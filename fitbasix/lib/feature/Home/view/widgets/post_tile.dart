@@ -1,12 +1,16 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/Home/controller/individual_user_controller.dart';
 import 'package:fitbasix/feature/Home/model/RecentCommentModel.dart';
 import 'package:fitbasix/feature/Home/model/post_feed_model.dart';
+import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/post_screen.dart';
 import 'package:fitbasix/feature/Home/view/widgets/video_player.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/posts/controller/post_controller.dart';
 import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
@@ -104,11 +108,24 @@ class _PostTileState extends State<PostTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 20 * SizeConfig.widthMultiplier!,
-                    backgroundImage:
-                        CachedNetworkImageProvider(widget.profilePhoto),
-                  ),
+                  GestureDetector(
+                      onTap: () async {
+                        final result =
+                            await HomeService.getIndividualUserProfileData(
+                                userId: widget.userID);
+                        if (result.response!.data!.profile!.role == "user") {
+                          print("HI");
+                          gotoIndividualUserPage(result, widget.userID.toString());
+                        } else {
+                          print("Nope");
+                          gotoIndividualPage(null, widget.userID.toString());
+                        }
+                      },
+                      child: CircleAvatar(
+                        radius: 20 * SizeConfig.widthMultiplier!,
+                        backgroundImage:
+                            CachedNetworkImageProvider(widget.profilePhoto),
+                      )),
                   SizedBox(
                     width: 12 * SizeConfig.widthMultiplier!,
                   ),
@@ -598,6 +615,7 @@ class _PostTileState extends State<PostTile> {
             widget.comment == null
                 ? Container()
                 : CommentsTile(
+                    userId: widget.comment!.user!.id.toString(),
                     name: widget.comment!.user!.name.toString(),
                     profilePhoto: widget.comment!.user!.profilePhoto.toString(),
                     comment: widget.comment!.comment.toString(),
@@ -1387,5 +1405,59 @@ class _PostTileState extends State<PostTile> {
         );
       },
     );
+  }
+  void gotoIndividualUserPage(final index, String userId) async {
+    final IndividualUserController _individualUserController =
+        Get.put(IndividualUserController());
+    _homeController.individualUserProfileData.value = UserProfileModel();
+    _homeController.isIndividualUserProfileLoading.value = true;
+    Navigator.pushNamed(context, RouteName.individualUserProfileScreen);
+    var result = index;
+    if (result.response != null) {
+      _homeController.individualUserProfileData.value = result;
+    }
+    _homeController.isIndividualUserProfileLoading.value = false;
+    _homeController.isLoading.value = true;
+    var response = await HomeService.getIndividualUserPosts(userId, 0);
+    _individualUserController.userPostList.value = response.response!.data!;
+    if (response.response!.data!.isNotEmpty) {
+      _individualUserController.userPostList.value = response.response!.data!;
+    } else {
+      _individualUserController.userPostList.clear();
+    }
+    _homeController.isLoading.value = false;
+  }
+
+  void gotoIndividualPage(int? index, String trainerId) async {
+    TrainerController _trainerController = Get.find();
+    if (true) {
+      _trainerController.atrainerDetail.value = Trainer();
+
+      _trainerController.isProfileLoading.value = true;
+      _trainerController.isMyTrainerProfileLoading.value = true;
+      Navigator.pushNamed(context, RouteName.trainerProfileScreen);
+
+      var result = await TrainerServices.getATrainerDetail(trainerId);
+      if (result.response!.data != null) {
+        _trainerController.atrainerDetail.value = result.response!.data!;
+      }
+
+      _trainerController.planModel.value =
+          await TrainerServices.getPlanByTrainerId(
+              trainerId, _trainerController.currentPlanType);
+
+      _trainerController.initialPostData.value =
+          await TrainerServices.getTrainerPosts(trainerId, 0);
+      _trainerController.isMyTrainerProfileLoading.value = false;
+      _trainerController.loadingIndicator.value = false;
+      if (_trainerController.initialPostData.value.response!.data!.isNotEmpty) {
+        _trainerController.trainerPostList.value =
+            _trainerController.initialPostData.value.response!.data!;
+      } else {
+        _trainerController.trainerPostList.clear();
+      }
+      _trainerController.isProfileLoading.value = false;
+      _trainerController.isMyTrainerProfileLoading.value = false;
+    }
   }
 }

@@ -153,7 +153,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       // setState(() {});
                                       Get.showSnackbar(GetSnackBar(
                                         message: 'post_successfull'.tr,
-                                        duration: Duration(seconds: 3),
+                                        duration: const Duration(seconds: 3),
                                       ));
                                       await _homeController.getTrendingPost();
                                     }
@@ -277,7 +277,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       : _postController.postData.value.response!
                                                   .data!.people!.length ==
                                               1
-                                          ? Container(
+                                          ? SizedBox(
                                               width: 276 *
                                                   SizeConfig.widthMultiplier!,
                                               child: Wrap(
@@ -365,7 +365,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                 ],
                                               ),
                                             )
-                                          : Container(
+                                          : SizedBox(
                                               width: 276 *
                                                   SizeConfig.widthMultiplier!,
                                               child: Wrap(
@@ -533,7 +533,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       _postController.postData.value.response!
                                                   .data!.files!.length ==
                                               0
-                                          ? Container(
+                                          ? SizedBox(
                                               height: 180 *
                                                   SizeConfig.heightMultiplier!,
                                               child: TextField(
@@ -591,9 +591,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                   child: ListView(
                                                     shrinkWrap: true,
                                                     physics:
-                                                        NeverScrollableScrollPhysics(),
+                                                        const NeverScrollableScrollPhysics(),
                                                     children: [
-                                                      Container(
+                                                      SizedBox(
                                                         height: 64 *
                                                             SizeConfig
                                                                 .heightMultiplier!,
@@ -737,7 +737,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                                     snapshot
                                                                         .data;
                                                                 if (image !=
-                                                                    null)
+                                                                    null) {
                                                                   return Stack(
                                                                     children: [
                                                                       Image
@@ -809,226 +809,226 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                                       )
                                                                     ],
                                                                   );
+                                                                }
                                                                 return Container();
                                                               })
                                                     ],
                                                   ),
                                                 )
-                                              : Container(
-                                                  child: ListView(
-                                                    shrinkWrap: true,
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    children: [
-                                                      Container(
-                                                        height: 64 *
-                                                            SizeConfig
-                                                                .heightMultiplier!,
-                                                        child: TextField(
-                                                          inputFormatters: [
-                                                            UpperCaseTextFormatter()
-                                                          ],
-                                                          textCapitalization:
-                                                              TextCapitalization
-                                                                  .sentences,
-                                                          controller:
-                                                              _postController
-                                                                  .postTextController,
-                                                          onChanged: (value) {
-                                                            _postController
-                                                                .postText
-                                                                .value = value;
-                                                          },
-                                                          onSubmitted:
-                                                              (value) {},
-                                                          onEditingComplete:
-                                                              () {},
-                                                          style: AppTextStyle
-                                                              .normalGreenText
+                                              : ListView(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                children: [
+                                                  SizedBox(
+                                                    height: 64 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    child: TextField(
+                                                      inputFormatters: [
+                                                        UpperCaseTextFormatter()
+                                                      ],
+                                                      textCapitalization:
+                                                          TextCapitalization
+                                                              .sentences,
+                                                      controller:
+                                                          _postController
+                                                              .postTextController,
+                                                      onChanged: (value) {
+                                                        _postController
+                                                            .postText
+                                                            .value = value;
+                                                      },
+                                                      onSubmitted:
+                                                          (value) {},
+                                                      onEditingComplete:
+                                                          () {},
+                                                      style: AppTextStyle
+                                                          .normalGreenText
+                                                          .copyWith(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyText1
+                                                                  ?.color),
+                                                      // keyboardType: TextInputType.multiline,
+                                                      maxLines: null,
+                                                      decoration: InputDecoration(
+                                                          border: InputBorder
+                                                              .none,
+                                                          hintText:
+                                                              'post_hint'
+                                                                  .tr,
+                                                          hintStyle: AppTextStyle
+                                                                  .NormalText
                                                               .copyWith(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .bodyText1
-                                                                      ?.color),
-                                                          // keyboardType: TextInputType.multiline,
-                                                          maxLines: null,
-                                                          decoration: InputDecoration(
-                                                              border: InputBorder
-                                                                  .none,
-                                                              hintText:
-                                                                  'post_hint'
-                                                                      .tr,
-                                                              hintStyle: AppTextStyle
-                                                                      .NormalText
-                                                                  .copyWith(
-                                                                      fontSize: 18 *
-                                                                          SizeConfig
-                                                                              .textMultiplier!,
-                                                                      color:
-                                                                          hintGrey)),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 120 *
-                                                            SizeConfig
-                                                                .heightMultiplier!,
-                                                        child: ListView.builder(
-                                                            itemCount:
-                                                                _postController
-                                                                    .postData
-                                                                    .value
-                                                                    .response!
-                                                                    .data!
-                                                                    .files!
-                                                                    .length,
-                                                            shrinkWrap: true,
-                                                            scrollDirection:
-                                                                Axis.horizontal,
-                                                            itemBuilder:
-                                                                (BuildContext
-                                                                        context,
-                                                                    int index) {
-                                                              return Padding(
-                                                                  padding: EdgeInsets.only(
-                                                                      right: 12 *
-                                                                          SizeConfig
-                                                                              .widthMultiplier!),
-                                                                  child: _postController.getUrlType(_postController.postData.value.response!.data!.files![
-                                                                              index]) ==
-                                                                          0
-                                                                      ? Stack(
-                                                                          children: [
-                                                                            CachedNetworkImage(
-                                                                              imageUrl: _postController.postData.value.response!.data!.files![index],
-                                                                              height: 120 * SizeConfig.heightMultiplier!,
-                                                                              width: 120 * SizeConfig.widthMultiplier!,
-                                                                              fit: BoxFit.fitWidth,
-                                                                              placeholder: (_, __) => AspectRatio(
-                                                                                aspectRatio: 1.6,
-                                                                                child: BlurHash(
-                                                                                  hash: 'L6Pj0^i_.AyE_3t7t7R**0o#DgR4',
+                                                                  fontSize: 18 *
+                                                                      SizeConfig
+                                                                          .textMultiplier!,
+                                                                  color:
+                                                                      hintGrey)),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 120 *
+                                                        SizeConfig
+                                                            .heightMultiplier!,
+                                                    child: ListView.builder(
+                                                        itemCount:
+                                                            _postController
+                                                                .postData
+                                                                .value
+                                                                .response!
+                                                                .data!
+                                                                .files!
+                                                                .length,
+                                                        shrinkWrap: true,
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          return Padding(
+                                                              padding: EdgeInsets.only(
+                                                                  right: 12 *
+                                                                      SizeConfig
+                                                                          .widthMultiplier!),
+                                                              child: _postController.getUrlType(_postController.postData.value.response!.data!.files![
+                                                                          index]) ==
+                                                                      0
+                                                                  ? Stack(
+                                                                      children: [
+                                                                        CachedNetworkImage(
+                                                                          imageUrl: _postController.postData.value.response!.data!.files![index],
+                                                                          height: 120 * SizeConfig.heightMultiplier!,
+                                                                          width: 120 * SizeConfig.widthMultiplier!,
+                                                                          fit: BoxFit.fitWidth,
+                                                                          placeholder: (_, __) => const AspectRatio(
+                                                                            aspectRatio: 1.6,
+                                                                            child: BlurHash(
+                                                                              hash: 'L6Pj0^i_.AyE_3t7t7R**0o#DgR4',
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Positioned(
+                                                                            top: 4,
+                                                                            right: 4,
+                                                                            child: GestureDetector(
+                                                                              onTap: () async {
+                                                                                _postController.deletingFile.value = true;
+                                                                                if (_postController.selectedFiles.length != 0) {
+                                                                                  _postController.selectedFiles.removeAt(index);
+                                                                                  // _postController.selectedFiles.removeAt(index);
+                                                                                  _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                    _postController.selectedFiles,
+                                                                                  );
+                                                                                } else {
+                                                                                  _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                    [],
+                                                                                  );
+                                                                                }
+                                                                                if (_postController.uploadedFiles.value.code == 0) {
+                                                                                  _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
+                                                                                }
+                                                                                _postController.deletingFile.value = false;
+                                                                              },
+                                                                              child: SvgPicture.asset(
+                                                                                ImagePath.cancelIcon,
+                                                                                height: 24 * SizeConfig.widthMultiplier!,
+                                                                                width: 24 * SizeConfig.widthMultiplier!,
+                                                                                fit: BoxFit.contain,
+                                                                              ),
+                                                                            ))
+                                                                      ],
+                                                                    )
+                                                                  : FutureBuilder<
+                                                                          File?>(
+                                                                      future: _postController.genThumbnailFile(_postController
+                                                                          .postData
+                                                                          .value
+                                                                          .response!
+                                                                          .data!
+                                                                          .files![index]),
+                                                                      builder: (_, snapshot) {
+                                                                        final image =
+                                                                            snapshot.data;
+                                                                        if (image !=
+                                                                            null) {
+                                                                          return Stack(
+                                                                            children: [
+                                                                              Image.file(
+                                                                                image,
+                                                                                fit: BoxFit.fitWidth,
+                                                                                height: 120 * SizeConfig.widthMultiplier!,
+                                                                                width: 120 * SizeConfig.widthMultiplier!,
+                                                                              ),
+                                                                              Positioned(
+                                                                                top: 40,
+                                                                                left: 40,
+                                                                                child: Icon(
+                                                                                  Icons.play_arrow,
+                                                                                  color: kPureWhite,
+                                                                                  size: 32 * SizeConfig.heightMultiplier!,
                                                                                 ),
                                                                               ),
-                                                                            ),
-                                                                            Positioned(
-                                                                                top: 4,
-                                                                                right: 4,
-                                                                                child: GestureDetector(
-                                                                                  onTap: () async {
-                                                                                    _postController.deletingFile.value = true;
-                                                                                    if (_postController.selectedFiles.length != 0) {
-                                                                                      _postController.selectedFiles.removeAt(index);
-                                                                                      // _postController.selectedFiles.removeAt(index);
-                                                                                      _postController.uploadedFiles.value = await PostService.uploadMedia(
-                                                                                        _postController.selectedFiles,
-                                                                                      );
-                                                                                    } else {
-                                                                                      _postController.uploadedFiles.value = await PostService.uploadMedia(
-                                                                                        [],
-                                                                                      );
-                                                                                    }
-                                                                                    if (_postController.uploadedFiles.value.code == 0) {
-                                                                                      _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
-                                                                                    }
-                                                                                    _postController.deletingFile.value = false;
-                                                                                  },
-                                                                                  child: SvgPicture.asset(
-                                                                                    ImagePath.cancelIcon,
-                                                                                    height: 24 * SizeConfig.widthMultiplier!,
-                                                                                    width: 24 * SizeConfig.widthMultiplier!,
-                                                                                    fit: BoxFit.contain,
-                                                                                  ),
-                                                                                ))
-                                                                          ],
-                                                                        )
-                                                                      : FutureBuilder<
-                                                                              File?>(
-                                                                          future: _postController.genThumbnailFile(_postController
-                                                                              .postData
-                                                                              .value
-                                                                              .response!
-                                                                              .data!
-                                                                              .files![index]),
-                                                                          builder: (_, snapshot) {
-                                                                            final image =
-                                                                                snapshot.data;
-                                                                            if (image !=
-                                                                                null)
-                                                                              return Stack(
-                                                                                children: [
-                                                                                  Image.file(
-                                                                                    image,
-                                                                                    fit: BoxFit.fitWidth,
-                                                                                    height: 120 * SizeConfig.widthMultiplier!,
-                                                                                    width: 120 * SizeConfig.widthMultiplier!,
-                                                                                  ),
-                                                                                  Positioned(
-                                                                                    top: 40,
-                                                                                    left: 40,
-                                                                                    child: Icon(
-                                                                                      Icons.play_arrow,
-                                                                                      color: kPureWhite,
-                                                                                      size: 32 * SizeConfig.heightMultiplier!,
+                                                                              Positioned(
+                                                                                  top: 4,
+                                                                                  right: 4,
+                                                                                  child: GestureDetector(
+                                                                                    onTap: () async {
+                                                                                      _postController.deletingFile.value = true;
+                                                                                      if (_postController.selectedFiles.length != 0) {
+                                                                                        _postController.selectedFiles.removeAt(index);
+                                                                                        // _postController.selectedFiles.removeAt(index);
+                                                                                        _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                          _postController.selectedFiles,
+                                                                                        );
+                                                                                      } else {
+                                                                                        _postController.uploadedFiles.value = await PostService.uploadMedia(
+                                                                                          [],
+                                                                                        );
+                                                                                      }
+                                                                                      if (_postController.uploadedFiles.value.code == 0) {
+                                                                                        _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
+                                                                                      }
+                                                                                      _postController.deletingFile.value = false;
+                                                                                    },
+                                                                                    child: SvgPicture.asset(
+                                                                                      ImagePath.cancelIcon,
+                                                                                      height: 24 * SizeConfig.widthMultiplier!,
+                                                                                      width: 24 * SizeConfig.widthMultiplier!,
+                                                                                      fit: BoxFit.contain,
                                                                                     ),
-                                                                                  ),
-                                                                                  Positioned(
-                                                                                      top: 4,
-                                                                                      right: 4,
-                                                                                      child: GestureDetector(
-                                                                                        onTap: () async {
-                                                                                          _postController.deletingFile.value = true;
-                                                                                          if (_postController.selectedFiles.length != 0) {
-                                                                                            _postController.selectedFiles.removeAt(index);
-                                                                                            // _postController.selectedFiles.removeAt(index);
-                                                                                            _postController.uploadedFiles.value = await PostService.uploadMedia(
-                                                                                              _postController.selectedFiles,
-                                                                                            );
-                                                                                          } else {
-                                                                                            _postController.uploadedFiles.value = await PostService.uploadMedia(
-                                                                                              [],
-                                                                                            );
-                                                                                          }
-                                                                                          if (_postController.uploadedFiles.value.code == 0) {
-                                                                                            _postController.postData.value = await CreatePostService.createPost(postId: _postController.postId.value, files: _postController.uploadedFiles.value.response!.data);
-                                                                                          }
-                                                                                          _postController.deletingFile.value = false;
-                                                                                        },
-                                                                                        child: SvgPicture.asset(
-                                                                                          ImagePath.cancelIcon,
-                                                                                          height: 24 * SizeConfig.widthMultiplier!,
-                                                                                          width: 24 * SizeConfig.widthMultiplier!,
-                                                                                          fit: BoxFit.contain,
-                                                                                        ),
-                                                                                      ))
-                                                                                ],
-                                                                              );
-                                                                            return Container();
-                                                                          })
+                                                                                  ))
+                                                                            ],
+                                                                          );
+                                                                        }
+                                                                        return Container();
+                                                                      })
 
-                                                                  // child: CachedNetworkImage(
-                                                                  //   imageUrl: _postController
-                                                                  //       .postData
-                                                                  //       .value
-                                                                  //       .response!
-                                                                  //       .data!
-                                                                  //       .files![index],
-                                                                  //   height: 120 *
-                                                                  //       SizeConfig.widthMultiplier!,
-                                                                  //   width: 120 *
-                                                                  //       SizeConfig.widthMultiplier!,
-                                                                  //   fit: BoxFit.fitWidth,
-                                                                  // ),
-                                                                  );
-                                                            }),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )),
+                                                              // child: CachedNetworkImage(
+                                                              //   imageUrl: _postController
+                                                              //       .postData
+                                                              //       .value
+                                                              //       .response!
+                                                              //       .data!
+                                                              //       .files![index],
+                                                              //   height: 120 *
+                                                              //       SizeConfig.widthMultiplier!,
+                                                              //   width: 120 *
+                                                              //       SizeConfig.widthMultiplier!,
+                                                              //   fit: BoxFit.fitWidth,
+                                                              // ),
+                                                              );
+                                                        }),
+                                                  )
+                                                ],
+                                              )),
                               SizedBox(
                                 height: 16 * SizeConfig.heightMultiplier!,
                               ),
-                              Divider(),
+                              const Divider(),
                               Obx(() => _postController.postData.value.response!
                                           .data!.location!.placeName!.length ==
                                       0
@@ -1085,7 +1085,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.location_pin,
                                               color: kPink,
                                             ),
@@ -1118,7 +1118,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               SizedBox(
                                 height: 17 * SizeConfig.heightMultiplier!,
                               ),
-                              Divider(
+                              const Divider(
                                 height: 0,
                               ),
                               SizedBox(
@@ -1126,17 +1126,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  _postController.uploadingProgress.value = 0;
-                                  if (!userClickedOnPhotoVideoButton) {
-                                    userClickedOnPhotoVideoButton = true;
-                                    _postController.currentPage.value = 0;
-                                    _postController.assets.value =
-                                        await _postController.fetchAssets(
-                                            presentPage: _postController
-                                                .currentPage.value);
-                                    userClickedOnPhotoVideoButton = false;
-                                    Navigator.pushNamed(
-                                        context, RouteName.customGallery);
+                                  try {
+                                    _postController.uploadingProgress.value = 0;
+                                    if (!userClickedOnPhotoVideoButton) {
+                                      userClickedOnPhotoVideoButton = true;
+                                      _postController.currentPage.value = 0;
+                                      _postController.assets.value =
+                                          await _postController.fetchAssets(
+                                              presentPage: _postController
+                                                  .currentPage.value);
+                                      userClickedOnPhotoVideoButton = false;
+                                      Navigator.pushNamed(
+                                          context, RouteName.customGallery);
+                                    }
+                                  } catch (e) {
+                                    print(e.toString());
                                   }
                                 },
                                 child: Container(
@@ -1171,7 +1175,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               SizedBox(
                                 height: 17 * SizeConfig.heightMultiplier!,
                               ),
-                              Divider(
+                              const Divider(
                                 height: 0,
                               ),
                               SizedBox(
@@ -1219,7 +1223,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               SizedBox(
                                 height: 17 * SizeConfig.heightMultiplier!,
                               ),
-                              Divider(),
+                              const Divider(),
                               SizedBox(
                                 height: 34 * SizeConfig.heightMultiplier!,
                               ),

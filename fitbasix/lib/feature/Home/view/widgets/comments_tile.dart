@@ -1,4 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitbasix/core/routes/app_routes.dart';
+import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/Home/controller/individual_user_controller.dart';
+import 'package:fitbasix/feature/Home/model/user_profile_model.dart';
+import 'package:fitbasix/feature/Home/services/home_service.dart';
+import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
+import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
+import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
+import 'package:fitbasix/feature/posts/services/createPost_Services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +30,7 @@ class CommentsTile extends StatefulWidget {
     required this.minWidth,
     required this.taggedPersonName,
     required this.maxWidth,
+    required this.userId,
   }) : super(key: key);
 
   final String name;
@@ -34,6 +44,7 @@ class CommentsTile extends StatefulWidget {
   final int? replyCount;
   final double minWidth;
   final double maxWidth;
+  final String userId;
 
   @override
   State<CommentsTile> createState() => _CommentsTileState();
@@ -41,8 +52,8 @@ class CommentsTile extends StatefulWidget {
 
 class _CommentsTileState extends State<CommentsTile> {
   bool showAll = false;
-
   final int length = 50;
+  final HomeController _homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +64,23 @@ class _CommentsTileState extends State<CommentsTile> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: CachedNetworkImageProvider(widget.profilePhoto),
-          ),
+          GestureDetector(
+              onTap: () async {
+                final result = await HomeService.getIndividualUserProfileData(
+                    userId: widget.userId);
+                if (result.response!.data!.profile!.role == "user") {
+                  print("HI");
+                  gotoIndividualUserPage(result, widget.userId);
+                } else {
+                  print("Nope");
+                  gotoIndividualPage(null, widget.userId);
+                }
+              },
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage:
+                    CachedNetworkImageProvider(widget.profilePhoto),
+              )),
           SizedBox(
             width: 8 * SizeConfig.widthMultiplier!,
           ),
@@ -85,8 +109,7 @@ class _CommentsTileState extends State<CommentsTile> {
                     children: [
                       Text(
                         widget.name.capitalize!,
-                        style: AppTextStyle.boldBlackText
-                            .copyWith(
+                        style: AppTextStyle.boldBlackText.copyWith(
                             color: Theme.of(context).textTheme.bodyText1?.color,
                             fontSize: 12 * SizeConfig.textMultiplier!),
                       ),
@@ -106,7 +129,10 @@ class _CommentsTileState extends State<CommentsTile> {
                                 ? widget.comment.substring(0, length) + '...'
                                 : widget.comment,
                             style: AppTextStyle.normalBlackText.copyWith(
-                              color: Theme.of(context).textTheme.bodyText1?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color,
                                 fontSize: 14 * SizeConfig.textMultiplier!)),
                         widget.comment.length > length
                             ? WidgetSpan(
@@ -120,9 +146,11 @@ class _CommentsTileState extends State<CommentsTile> {
                                     showAll
                                         ? ' ' + 'see_less'.tr
                                         : ' ' + 'see_more'.tr,
-                                    style: AppTextStyle.normalBlackText.copyWith(
-                                        fontSize: 12 * SizeConfig.textMultiplier!,
-                                        color: hintGrey)),
+                                    style: AppTextStyle.normalBlackText
+                                        .copyWith(
+                                            fontSize:
+                                                12 * SizeConfig.textMultiplier!,
+                                            color: hintGrey)),
                               ))
                             : TextSpan()
                       ])),
@@ -148,14 +176,17 @@ class _CommentsTileState extends State<CommentsTile> {
                   height: 8 * SizeConfig.heightMultiplier!,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 4 * SizeConfig.widthMultiplier!),
+                  padding:
+                      EdgeInsets.only(left: 4 * SizeConfig.widthMultiplier!),
                   child: Row(
                     children: [
                       Text(widget.time,
                           style: AppTextStyle.normalBlackText.copyWith(
                               fontSize: 12 * SizeConfig.textMultiplier!,
-                              color: Theme.of(context).textTheme.headline6?.color
-                          )),
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.color)),
                       SizedBox(
                         width: 13 * SizeConfig.widthMultiplier!,
                       ),
@@ -163,27 +194,31 @@ class _CommentsTileState extends State<CommentsTile> {
                         onTap: widget.onLikeComment,
                         child: Container(
                           color: Colors.transparent,
-                          padding: EdgeInsets.only(right: 5 * SizeConfig.widthMultiplier!),
+                          padding: EdgeInsets.only(
+                              right: 5 * SizeConfig.widthMultiplier!),
                           child: Icon(
                             Icons.favorite,
                             color: Theme.of(context).textTheme.headline6?.color,
-                            size: 14*SizeConfig.heightMultiplier!,
+                            size: 14 * SizeConfig.heightMultiplier!,
                           ),
                         ),
                       ),
                       Text(
-                          'likes'.trParams({'no_likes': widget.likes.toString()}),
+                          'likes'
+                              .trParams({'no_likes': widget.likes.toString()}),
                           style: AppTextStyle.normalBlackText.copyWith(
                               fontSize: 12 * SizeConfig.textMultiplier!,
-                              color: Theme.of(context).textTheme.headline6?.color
-                          )),
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.color)),
                       SizedBox(
                         width: 13 * SizeConfig.widthMultiplier!,
                       ),
                       Icon(
                         Icons.reply,
                         color: Theme.of(context).textTheme.headline6?.color,
-                        size: 18*SizeConfig.heightMultiplier!,
+                        size: 18 * SizeConfig.heightMultiplier!,
                       ),
                       SizedBox(
                         width: 4 * SizeConfig.widthMultiplier!,
@@ -193,8 +228,10 @@ class _CommentsTileState extends State<CommentsTile> {
                         child: Text('reply'.tr,
                             style: AppTextStyle.normalBlackText.copyWith(
                                 fontSize: 12 * SizeConfig.textMultiplier!,
-                                color: Theme.of(context).textTheme.headline6?.color
-                            )),
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    ?.color)),
                       ),
                     ],
                   ),
@@ -205,5 +242,60 @@ class _CommentsTileState extends State<CommentsTile> {
         ],
       ),
     );
+  }
+
+  void gotoIndividualUserPage(final index, String userId) async {
+    final IndividualUserController _individualUserController =
+        Get.put(IndividualUserController());
+    _homeController.individualUserProfileData.value = UserProfileModel();
+    _homeController.isIndividualUserProfileLoading.value = true;
+    Navigator.pushNamed(context, RouteName.individualUserProfileScreen);
+    var result = index;
+    if (result.response != null) {
+      _homeController.individualUserProfileData.value = result;
+    }
+    _homeController.isIndividualUserProfileLoading.value = false;
+    _homeController.isLoading.value = true;
+    var response = await HomeService.getIndividualUserPosts(userId, 0);
+    _individualUserController.userPostList.value = response.response!.data!;
+    if (response.response!.data!.isNotEmpty) {
+      _individualUserController.userPostList.value = response.response!.data!;
+    } else {
+      _individualUserController.userPostList.clear();
+    }
+    _homeController.isLoading.value = false;
+  }
+
+  void gotoIndividualPage(int? index, String trainerId) async {
+    TrainerController _trainerController = Get.find();
+    if (true) {
+      _trainerController.atrainerDetail.value = Trainer();
+
+      _trainerController.isProfileLoading.value = true;
+      _trainerController.isMyTrainerProfileLoading.value = true;
+      Navigator.pushNamed(context, RouteName.trainerProfileScreen);
+
+      var result = await TrainerServices.getATrainerDetail(trainerId);
+      if (result.response!.data != null) {
+        _trainerController.atrainerDetail.value = result.response!.data!;
+      }
+
+      _trainerController.planModel.value =
+          await TrainerServices.getPlanByTrainerId(
+              trainerId, _trainerController.currentPlanType);
+
+      _trainerController.initialPostData.value =
+          await TrainerServices.getTrainerPosts(trainerId, 0);
+      _trainerController.isMyTrainerProfileLoading.value = false;
+      _trainerController.loadingIndicator.value = false;
+      if (_trainerController.initialPostData.value.response!.data!.isNotEmpty) {
+        _trainerController.trainerPostList.value =
+            _trainerController.initialPostData.value.response!.data!;
+      } else {
+        _trainerController.trainerPostList.clear();
+      }
+      _trainerController.isProfileLoading.value = false;
+      _trainerController.isMyTrainerProfileLoading.value = false;
+    }
   }
 }
