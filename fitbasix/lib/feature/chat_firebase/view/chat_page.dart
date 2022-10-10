@@ -252,23 +252,14 @@ class _ChatPageState extends State<ChatPage> {
                                                                         dynamic>)
                                                                 .mediaUrl)));
                                               },
-                                              child: Hero(
-                                                tag: MessageData.fromJson(
-                                                        snapshot.data!
-                                                                .docs[index]
-                                                                .data()
-                                                            as Map<String,
-                                                                dynamic>)
-                                                    .mediaUrl,
-                                                child: MediaMessageWidget(
-                                                    passedMessage:
-                                                        MessageData.fromJson(
-                                                            snapshot.data!
-                                                                    .docs[index]
-                                                                    .data()
-                                                                as Map<String,
-                                                                    dynamic>)),
-                                              ),
+                                              child: MediaMessageWidget(
+                                                  passedMessage:
+                                                      MessageData.fromJson(
+                                                          snapshot.data!
+                                                                  .docs[index]
+                                                                  .data()
+                                                              as Map<String,
+                                                                  dynamic>)),
                                             )
                                           : MessageTile(
                                               index: index,

@@ -125,8 +125,10 @@ class GetTrainedScreen extends StatelessWidget {
                                               _trainerController
                                                   .currentMyTrainerPage
                                                   .value = 1;
-                                              Navigator.pushNamed(context,
-                                                  RouteName.myTrainersScreen);
+
+                                              ///Navigator to Chat Page
+                                              _homeController
+                                                  .selectedIndex.value = 2;
                                             },
                                           ))
                                   ],
@@ -2594,7 +2596,8 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                     onTap: () {
                       Get.dialog(
                         CancelSubscriptionWidget(
-                          trainerName: widget.planDetail.trainer!.name!.capitalize!,
+                          trainerName:
+                              widget.planDetail.trainer!.name!.capitalize!,
                           planId: widget.planDetail.id!,
                           planName: widget.planDetail.planDetails!.planName!,
                         ),

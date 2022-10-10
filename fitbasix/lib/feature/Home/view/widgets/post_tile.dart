@@ -17,6 +17,7 @@ import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:get/get.dart';
 
 import 'package:fitbasix/core/constants/app_text_style.dart';
@@ -115,7 +116,8 @@ class _PostTileState extends State<PostTile> {
                                 userId: widget.userID);
                         if (result.response!.data!.profile!.role == "user") {
                           print("HI");
-                          gotoIndividualUserPage(result, widget.userID.toString());
+                          gotoIndividualUserPage(
+                              result, widget.userID.toString());
                         } else {
                           print("Nope");
                           gotoIndividualPage(null, widget.userID.toString());
@@ -433,6 +435,7 @@ class _PostTileState extends State<PostTile> {
                       )
                 : SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+
                     child: Row(
                       children: List.generate(
                         widget.imageUrl.length,
@@ -1406,6 +1409,7 @@ class _PostTileState extends State<PostTile> {
       },
     );
   }
+
   void gotoIndividualUserPage(final index, String userId) async {
     final IndividualUserController _individualUserController =
         Get.put(IndividualUserController());

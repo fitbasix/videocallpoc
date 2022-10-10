@@ -104,13 +104,13 @@ class _MyTrainerTileScreenState extends State<MyTrainerTileScreen> {
 
     if (myTrainers.value.length > 1) {
       print(
-        "Data:---- ${myTrainers.value[0].lastMessageDate} ${myTrainers.value[1].lastMessageDate}");
+          "Data:---- ${myTrainers.value[0].lastMessageDate} ${myTrainers.value[1].lastMessageDate}");
 
-    myTrainers.sort(
-      (a, b) {
-        return b.lastMessageDate!.compareTo(a.lastMessageDate!);
-      },
-    );
+      myTrainers.sort(
+        (a, b) {
+          return b.lastMessageDate!.compareTo(a.lastMessageDate!);
+        },
+      );
     }
     loader.value = false;
     print(loader.value.toString());
@@ -614,8 +614,8 @@ class TrainersTileUI extends StatelessWidget {
                   () => Text(
                       lastMessageIsLoading.value
                           ? "lets_start_conversation".tr
-                          : (lastMessage.value!.message.isNotEmpty
-                              ? lastMessage.value!.message.toString()
+                          : (lastMessage.value!.message.isNotEmpty || lastMessage.value!.mediaType.isNotEmpty
+                              ? lastMessage.value!.message.toString() == "" ? lastMessage.value!.mediaType.capitalize!.toString() : lastMessage.value!.message.toString()
                               : "lets_start_conversation".tr),
                       style: AppTextStyle.hmedium13Text.copyWith(
                           color: isCurrentlyEnrolled!
@@ -624,28 +624,26 @@ class TrainersTileUI extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: 15 * SizeConfig.widthMultiplier!,
-                    bottom: 15 * SizeConfig.heightMultiplier!),
-                child: Row(
-                  children: [
-                    Text(
-                        isCurrentlyEnrolled!
-                            ? 'enrolled_on'.tr
-                            : "enrolled_end_on",
-                        style: AppTextStyle.hsmallhintText),
-                    SizedBox(
-                      width: 4 * SizeConfig.widthMultiplier!,
-                    ),
-                    Text(DateFormat("d MMM yyyy").format(enrolledDate!),
-                        style: isCurrentlyEnrolled!
-                            ? AppTextStyle.hsmallGreenText
-                            : AppTextStyle.hsmallGreenText
-                                .copyWith(color: hintGrey))
-                  ],
-                ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: 15 * SizeConfig.widthMultiplier!,
+                  bottom: 15 * SizeConfig.heightMultiplier!),
+              child: Row(
+                children: [
+                  Text(
+                      isCurrentlyEnrolled!
+                          ? 'enrolled_on'.tr
+                          : "enrolled_end_on",
+                      style: AppTextStyle.hsmallhintText),
+                  SizedBox(
+                    width: 4 * SizeConfig.widthMultiplier!,
+                  ),
+                  Text(DateFormat("d MMM yyyy").format(enrolledDate!),
+                      style: isCurrentlyEnrolled!
+                          ? AppTextStyle.hsmallGreenText
+                          : AppTextStyle.hsmallGreenText
+                              .copyWith(color: hintGrey))
+                ],
               ),
             )
           ],
@@ -661,6 +659,7 @@ class TrainersTileUI extends StatelessWidget {
     printInfo(info: userChatId!);
     lastMessage.value = await firebaseService.getLastMessage(
         receiverId: userChatId!.replaceAll('chat_', ''), senderId: senderId);
+    print("Last Message: - ${lastMessage.value!.toJson().toString()}");
     lastMessageIsLoading.value = false;
   }
 

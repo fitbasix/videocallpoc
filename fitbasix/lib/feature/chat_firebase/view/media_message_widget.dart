@@ -53,39 +53,42 @@ class _MediaMessageState extends State<MediaMessageWidget> {
           sentByMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         if (widget.passedMessage.mediaType == 'image')
-          Padding(
-            padding: EdgeInsets.only(
-                bottom: 8.0 * SizeConfig.heightMultiplier!,
-                right: 16 * SizeConfig.widthMultiplier!,
-                left: 16 * SizeConfig.widthMultiplier!),
-            child: Container(
-              padding: EdgeInsets.all(1 * SizeConfig.widthMultiplier!),
-              constraints: BoxConstraints(
-                  maxHeight: 200 * SizeConfig.heightMultiplier!,
-                  maxWidth: 150 * SizeConfig.widthMultiplier!),
-              decoration: BoxDecoration(
+          Hero(
+            tag: widget.passedMessage.mediaUrl,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  bottom: 8.0 * SizeConfig.heightMultiplier!,
+                  right: 16 * SizeConfig.widthMultiplier!,
+                  left: 16 * SizeConfig.widthMultiplier!),
+              child: Container(
+                padding: EdgeInsets.all(1 * SizeConfig.widthMultiplier!),
+                constraints: BoxConstraints(
+                    maxHeight: 200 * SizeConfig.heightMultiplier!,
+                    maxWidth: 150 * SizeConfig.widthMultiplier!),
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
+                    color: sentByMe ? Colors.grey[900] : Colors.grey[800]),
+                child: ClipRRect(
                   borderRadius:
                       BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                  color: sentByMe ? Colors.grey[900] : Colors.grey[800]),
-              child: ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(8 * SizeConfig.widthMultiplier!),
-                child: CachedNetworkImage(
-                  imageUrl: widget.passedMessage.mediaUrl,
-                  fit: BoxFit.cover,
-                  height: 200 * SizeConfig.widthMultiplier!,
-                  width: 200 * SizeConfig.heightMultiplier!,
-                  placeholder: (BuildContext context, String url) {
-                    return Container(
-                      height: 200 * SizeConfig.heightMultiplier!,
-                      width: 150 * SizeConfig.widthMultiplier!,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: kGreenColor,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.passedMessage.mediaUrl,
+                    fit: BoxFit.cover,
+                    height: 200 * SizeConfig.widthMultiplier!,
+                    width: 200 * SizeConfig.heightMultiplier!,
+                    placeholder: (BuildContext context, String url) {
+                      return Container(
+                        height: 200 * SizeConfig.heightMultiplier!,
+                        width: 150 * SizeConfig.widthMultiplier!,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: kGreenColor,
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

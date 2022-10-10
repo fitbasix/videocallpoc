@@ -21,7 +21,6 @@ import 'package:fitbasix/feature/posts/view/tag_people_screen.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/report_abuse/report_abuse_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -56,6 +55,8 @@ import '../controller/individual_user_controller.dart';
 
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
+
+   HomeAndTrainerPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,11 +195,9 @@ class _HomePageState extends State<HomePage> {
   void fetchNotification() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var senderChatId = prefs.getString('senderChatId');
     var senderId = prefs.getString('senderId');
     var senderName = prefs.getString('senderName');
     var senderProfilePhoto = prefs.getString('senderProfilePhoto');
-    var userIdForCometChat = prefs.getString("userIdForCometChat");
     var postId = prefs.getString('postId');
 
     if (senderId != null) {
@@ -247,7 +246,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     fetchCaloriesDataFromStorage();
-    final user = FirebaseAuth.instance.currentUser;
     final now = DateTime.now();
     String formatter = DateFormat('MMMd').format(now);
     return GestureDetector(
