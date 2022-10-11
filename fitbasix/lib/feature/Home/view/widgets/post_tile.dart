@@ -88,6 +88,7 @@ class _PostTileState extends State<PostTile> {
   final HomeController _homeController = Get.find();
   final PostController _postController = Get.find();
   final ReportAbuseController _reportAbuseController = Get.find();
+  final postScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -434,113 +435,119 @@ class _PostTileState extends State<PostTile> {
                         key: Key(widget.imageUrl[0]),
                       )
                 : SingleChildScrollView(
+                    controller: postScrollController,
                     scrollDirection: Axis.horizontal,
-
                     child: Row(
                       children: List.generate(
                         widget.imageUrl.length,
                         (index) {
-                          return Stack(
-                            children: [
-                              // _postController
-                              //             .getUrlType(widget.imageUrl[index]) ==
-                              //         0
-                              //     ? AspectRatio(
-                              //         aspectRatio: 4 / 5,
-                              //         child: CachedNetworkImage(
-                              //           imageUrl: widget.imageUrl[index],
-                              //           // height: 360 * SizeConfig.widthMultiplier!,
-                              //           // width: 360 * SizeConfig.widthMultiplier!,
-                              //           fit: BoxFit.cover,
-                              //         ),
-                              //       )
-                              //     : Container(
-                              // height: 360 * SizeConfig.widthMultiplier!,
-                              // width: 360 * SizeConfig.widthMultiplier!,
-                              // child: VideoPlayerContainer(
-                              //     videoUrl: widget.imageUrl[index]),
-                              // ),
-                              // ClipRect(
-                              //   child: BackdropFilter(
-                              //     filter: ImageFilter.blur(
-                              //         sigmaX: 7.0, sigmaY: 7.0),
-                              //     child: Container(
-                              //       // imageUrl: widget.imageUrl[index],
-                              //       height: 360 * SizeConfig.widthMultiplier!,
-                              //       width: 360 * SizeConfig.widthMultiplier!,
-                              //       color: Colors.black.withOpacity(0.5),
-                              //     ),
-                              //   ),
-                              // ),
-                              _postController
-                                          .getUrlType(widget.imageUrl[index]) ==
-                                      0
-                                  ? CachedNetworkImage(
-                                      cacheManager: CacheManager(Config(
-                                        "fitbasix",
-                                        stalePeriod:
-                                            const Duration(seconds: 10),
-                                        //one week cache period
-                                      )),
-                                      imageUrl: widget.imageUrl[index],
-                                      placeholder: (context, url) =>
-                                          ShimmerEffect(),
-                                      errorWidget: (context, url, error) =>
-                                          ShimmerEffect(),
-                                      width: Get.width,
-                                      // height: 360 * SizeConfig.widthMultiplier!,
-                                      // width: 360 * SizeConfig.widthMultiplier!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : VideoPlayerContainer(
-                                      key: Key(widget.imageUrl[0]),
-                                      videoUrl: widget.imageUrl[index],
-                                    ),
-                              // Positioned(
-                              //   top: 0,
-                              //   right: 0,
-                              //   child: Container(
-                              //     child: BackdropFilter(
-                              //       filter: ImageFilter.blur(
-                              //           sigmaX: 7.0, sigmaY: 7.0),
-                              //       child: Container(
-                              //         height: 360 * SizeConfig.widthMultiplier!,
-                              //         width: 360 * SizeConfig.widthMultiplier!,
-                              //         color: Colors.black.withOpacity(0.5),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
-                              widget.imageUrl.length != 1
-                                  ? Positioned(
-                                      right: 0,
-                                      child: Container(
-                                        margin: EdgeInsets.only(
-                                            top: 16 *
-                                                SizeConfig.heightMultiplier!,
-                                            right: 16 *
-                                                SizeConfig.widthMultiplier!),
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 2 *
-                                                SizeConfig.heightMultiplier!,
-                                            horizontal: 12 *
-                                                SizeConfig.widthMultiplier!),
-                                        decoration: BoxDecoration(
-                                            color: lightBlack.withOpacity(0.5),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: Text(
-                                          '${index + 1}/${widget.imageUrl.length}',
-                                          style: AppTextStyle.boldBlackText
-                                              .copyWith(
-                                                  color: kPureWhite,
-                                                  fontSize: 14 *
-                                                      SizeConfig
-                                                          .textMultiplier!),
-                                        ),
-                                      ))
-                                  : SizedBox()
-                            ],
+                          return GestureDetector(
+                            onHorizontalDragUpdate: (details) {
+                              print(details.primaryDelta.toString());
+                            },
+                            child: Stack(
+                              children: [
+                                // _postController
+                                //             .getUrlType(widget.imageUrl[index]) ==
+                                //         0
+                                //     ? AspectRatio(
+                                //         aspectRatio: 4 / 5,
+                                //         child: CachedNetworkImage(
+                                //           imageUrl: widget.imageUrl[index],
+                                //           // height: 360 * SizeConfig.widthMultiplier!,
+                                //           // width: 360 * SizeConfig.widthMultiplier!,
+                                //           fit: BoxFit.cover,
+                                //         ),
+                                //       )
+                                //     : Container(
+                                // height: 360 * SizeConfig.widthMultiplier!,
+                                // width: 360 * SizeConfig.widthMultiplier!,
+                                // child: VideoPlayerContainer(
+                                //     videoUrl: widget.imageUrl[index]),
+                                // ),
+                                // ClipRect(
+                                //   child: BackdropFilter(
+                                //     filter: ImageFilter.blur(
+                                //         sigmaX: 7.0, sigmaY: 7.0),
+                                //     child: Container(
+                                //       // imageUrl: widget.imageUrl[index],
+                                //       height: 360 * SizeConfig.widthMultiplier!,
+                                //       width: 360 * SizeConfig.widthMultiplier!,
+                                //       color: Colors.black.withOpacity(0.5),
+                                //     ),
+                                //   ),
+                                // ),
+                                _postController.getUrlType(
+                                            widget.imageUrl[index]) ==
+                                        0
+                                    ? CachedNetworkImage(
+                                        cacheManager: CacheManager(Config(
+                                          "fitbasix",
+                                          stalePeriod:
+                                              const Duration(seconds: 10),
+                                          //one week cache period
+                                        )),
+                                        imageUrl: widget.imageUrl[index],
+                                        placeholder: (context, url) =>
+                                            ShimmerEffect(),
+                                        errorWidget: (context, url, error) =>
+                                            ShimmerEffect(),
+                                        width: Get.width,
+                                        // height: 360 * SizeConfig.widthMultiplier!,
+                                        // width: 360 * SizeConfig.widthMultiplier!,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : VideoPlayerContainer(
+                                        key: Key(widget.imageUrl[0]),
+                                        videoUrl: widget.imageUrl[index],
+                                      ),
+                                // Positioned(
+                                //   top: 0,
+                                //   right: 0,
+                                //   child: Container(
+                                //     child: BackdropFilter(
+                                //       filter: ImageFilter.blur(
+                                //           sigmaX: 7.0, sigmaY: 7.0),
+                                //       child: Container(
+                                //         height: 360 * SizeConfig.widthMultiplier!,
+                                //         width: 360 * SizeConfig.widthMultiplier!,
+                                //         color: Colors.black.withOpacity(0.5),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                widget.imageUrl.length != 1
+                                    ? Positioned(
+                                        right: 0,
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              top: 16 *
+                                                  SizeConfig.heightMultiplier!,
+                                              right: 16 *
+                                                  SizeConfig.widthMultiplier!),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 2 *
+                                                  SizeConfig.heightMultiplier!,
+                                              horizontal: 12 *
+                                                  SizeConfig.widthMultiplier!),
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  lightBlack.withOpacity(0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: Text(
+                                            '${index + 1}/${widget.imageUrl.length}',
+                                            style: AppTextStyle.boldBlackText
+                                                .copyWith(
+                                                    color: kPureWhite,
+                                                    fontSize: 14 *
+                                                        SizeConfig
+                                                            .textMultiplier!),
+                                          ),
+                                        ))
+                                    : SizedBox()
+                              ],
+                            ),
                           );
                         },
                       ),

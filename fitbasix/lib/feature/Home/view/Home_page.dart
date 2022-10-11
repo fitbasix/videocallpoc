@@ -56,7 +56,7 @@ import '../controller/individual_user_controller.dart';
 class HomeAndTrainerPage extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
-   HomeAndTrainerPage({Key? key}) : super(key: key);
+  HomeAndTrainerPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +127,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController searchUserController = TextEditingController();
   RxBool showUserSearch = false.obs;
   int switchValue = 1;
+  
 
   RxDouble _caloriesData = 0.0.obs;
 
@@ -241,7 +242,6 @@ class _HomePageState extends State<HomePage> {
     }
     return Future.value(true);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -436,86 +436,98 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         // const Spacer(),
-                                        _homeController
-                                                        .userProfileData
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .profile!
-                                                        .getCallStatus ==
-                                                    true ? Container(): Container(
-                                          padding: const EdgeInsets.all(10),
-                                          alignment: Alignment.center,
-                                          height:
-                                              43 * SizeConfig.heightMultiplier!,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                8 *
+                                        Obx(() => _homeController.showCallBackButton.value ==
+                                                true
+                                            ? Container()
+                                            : Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                alignment: Alignment.center,
+                                                height: 43 *
                                                     SizeConfig
-                                                        .heightMultiplier!),
-                                            border: Border.all(
-                                                color: _homeController
-                                                            .userProfileData
-                                                            .value
-                                                            .response!
-                                                            .data!
-                                                            .profile!
-                                                            .getCallStatus ==
-                                                        true
-                                                    ? Colors.grey
-                                                    : kGreenColor),
-                                            color: _homeController
-                                                        .userProfileData
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .profile!
-                                                        .getCallStatus ==
-                                                    true
-                                                ? Colors.grey
-                                                : kGreenColor,
-                                          ),
-                                          child: GestureDetector(
-                                            onTap: _homeController
-                                                        .userProfileData
-                                                        .value
-                                                        .response!
-                                                        .data!
-                                                        .profile!
-                                                        .getCallStatus ==
-                                                    true
-                                                ? null
-                                                : () async {
-                                                        await CallBackServices.sendRequest(
-                                                            name:
-                                                                _homeController.userProfileData.value.response!.data!.profile!.name.toString(),
-                                                            email:
-                                                                _homeController.userProfileData.value.response!.data!.profile!.email.toString(),
-                                                            number: _homeController.userProfileData.value.response!.data!.profile!.mobileNumber.toString(),
-                                                            query: _homeController
-                                                                .userProfileData
-                                                                .value
-                                                                .response!
-                                                                .data!
-                                                                .profile!
-                                                                .id
-                                                                .toString());
-                                                    Get.showSnackbar(
-                                                        const GetSnackBar(
-                                                      message:
-                                                          "Your Request has been sent.",
-                                                      backgroundColor:
-                                                          kGreenColor,
-                                                      duration:
-                                                          Duration(seconds: 3),
-                                                    ));
-                                                  },
-                                            child: Text(
-                                              "Get a Call back",
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                                        .heightMultiplier!,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8 *
+                                                          SizeConfig
+                                                              .heightMultiplier!),
+                                                  border: Border.all(
+                                                      color: _homeController
+                                                                  .userProfileData
+                                                                  .value
+                                                                  .response!
+                                                                  .data!
+                                                                  .profile!
+                                                                  .getCallStatus ==
+                                                              true
+                                                          ? Colors.grey
+                                                          : kGreenColor),
+                                                  color: _homeController
+                                                              .userProfileData
+                                                              .value
+                                                              .response!
+                                                              .data!
+                                                              .profile!
+                                                              .getCallStatus ==
+                                                          true
+                                                      ? Colors.grey
+                                                      : kGreenColor,
+                                                ),
+                                                child: GestureDetector(
+                                                  onTap: _homeController.showCallBackButton.value ==
+                                                          true
+                                                      ? null
+                                                      : () async {
+                                                          await CallBackServices.sendRequest(
+                                                              name: _homeController
+                                                                  .userProfileData
+                                                                  .value
+                                                                  .response!
+                                                                  .data!
+                                                                  .profile!
+                                                                  .name
+                                                                  .toString(),
+                                                              email: _homeController
+                                                                  .userProfileData
+                                                                  .value
+                                                                  .response!
+                                                                  .data!
+                                                                  .profile!
+                                                                  .email
+                                                                  .toString(),
+                                                              number: _homeController
+                                                                  .userProfileData
+                                                                  .value
+                                                                  .response!
+                                                                  .data!
+                                                                  .profile!
+                                                                  .mobileNumber
+                                                                  .toString(),
+                                                              query: _homeController
+                                                                  .userProfileData
+                                                                  .value
+                                                                  .response!
+                                                                  .data!
+                                                                  .profile!
+                                                                  .id
+                                                                  .toString());
+                                                          Get.showSnackbar(
+                                                              const GetSnackBar(
+                                                            message:
+                                                                "Your Request has been sent.",
+                                                            backgroundColor:
+                                                                kGreenColor,
+                                                            duration: Duration(
+                                                                seconds: 3),
+                                                          ));
+                                                          _homeController.showCallBackButton.value = true;
+                                                        },
+                                                  child: const Text(
+                                                    "Get a Call back",
+                                                  ),
+                                                ),
+                                              ),
+                                      )],
                                     ),
                                   ),
                                 ),

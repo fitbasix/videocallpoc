@@ -97,6 +97,7 @@ class HomeController extends GetxController {
   RxBool updateWaterData = false.obs;
   RxString openCommentId = "".obs;
   RxList<PlanDetail> activePlans = RxList<PlanDetail>([]);
+  RxBool showCallBackButton = false.obs;
 
   RxMap<String, Comment?> commentsMap = RxMap<String, Comment?>(
     {},
@@ -267,6 +268,9 @@ class HomeController extends GetxController {
     isLoading.value = true;
     print("test");
     userProfileData.value = await CreatePostService.getUserProfile();
+    print("Value ---------------------------------------- ${userProfileData.value.response!.data!.profile!.getCallStatus}");
+    showCallBackButton.value =
+        (userProfileData.value.response!.data!.profile!.getCallStatus) ?? false;
 
     ///todo after
     if (userProfileData.value.response!.data!.profile!.email == null) {
