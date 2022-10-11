@@ -120,13 +120,14 @@ class NoTrainerScreen extends StatelessWidget {
                 child: TextButton(
 
                   onPressed: () {
+                    _homeController.selectedIndex.value = 1;
                   //   Navigator.pushNamed(context, RouteName.trainerplanScreen);
                   //  Navigator.pushNamed(context, RouteName.planInformationScreen);
                   // Navigator.pushNamed(context, RouteName.planTimingScreen);
 
                   },
                   child:
-                      Text('explore_trainers'.tr, style: AppTextStyle.hboldWhiteText),
+                      Text('Explore Trainers'.tr, style: AppTextStyle.hboldWhiteText),
 
                 ),
               ),
