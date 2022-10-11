@@ -147,7 +147,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     searchUserController.dispose();
-    _reportAbuseController.dispose();
     _homeController.dispose();
     postController.dispose();
   }
