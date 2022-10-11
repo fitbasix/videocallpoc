@@ -170,7 +170,6 @@ Future<void> main() async {
     });
 
     FirebaseMessaging.onMessage.listen((message) async {
-      print("Nitesh: " + message.data.toString());
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       var chatId = prefs.getString('chatId') ?? "";
       print(chatId);
