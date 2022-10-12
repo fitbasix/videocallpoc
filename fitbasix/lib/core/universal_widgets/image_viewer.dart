@@ -15,6 +15,7 @@ class ImageViewer extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPureBlack,
+        title: Text(label),
       ),
       extendBodyBehindAppBar: false,
       body: SizedBox(

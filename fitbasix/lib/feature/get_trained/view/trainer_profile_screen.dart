@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:fitbasix/core/constants/credentials.dart';
 import 'package:fitbasix/core/routes/app_routes.dart';
 import 'package:fitbasix/core/universal_widgets/customized_circular_indicator.dart';
+import 'package:fitbasix/core/universal_widgets/image_viewer.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/Home/services/home_service.dart';
 import 'package:fitbasix/feature/Home/view/my_trainers_screen.dart';
@@ -1438,49 +1439,58 @@ class AchivementCertificateTile extends StatelessWidget {
   final String certificateIcon;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //79
-      height: 81 * SizeConfig.heightMultiplier!,
-      //214
-      width: 214 * SizeConfig.widthMultiplier!,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0), color: color),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 12 * SizeConfig.widthMultiplier!,
-          ),
-          CircleAvatar(
-            radius: 19 * SizeConfig.heightMultiplier!,
-            backgroundImage: NetworkImage(certificateIcon),
-          ),
-          SizedBox(
-            width: 8 * SizeConfig.widthMultiplier!,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                //height: 30 * SizeConfig.widthMultiplier!,
-                width: 134 * SizeConfig.heightMultiplier!,
-                child: Text(certificateDescription,
+    return GestureDetector(
+      onTap: () {
+        print(certificateIcon);
+        Get.to(() => ImageViewer(
+                    imgUrl: certificateIcon,
+                    label: certificateDescription.capitalize!,
+                  ));
+      },
+      child: Container(
+        //79
+        height: 81 * SizeConfig.heightMultiplier!,
+        //214
+        width: 214 * SizeConfig.widthMultiplier!,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0), color: color),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 12 * SizeConfig.widthMultiplier!,
+            ),
+            CircleAvatar(
+              radius: 19 * SizeConfig.heightMultiplier!,
+              backgroundImage: NetworkImage(certificateIcon),
+            ),
+            SizedBox(
+              width: 8 * SizeConfig.widthMultiplier!,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  //height: 30 * SizeConfig.widthMultiplier!,
+                  width: 134 * SizeConfig.heightMultiplier!,
+                  child: Text(certificateDescription.capitalize!,
+                      style: AppTextStyle.lightMediumBlackText.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).textTheme.bodyText1?.color)),
+                ),
+                SizedBox(
+                  height: 4 * SizeConfig.heightMultiplier!,
+                ),
+                Text('certified'.tr,
                     style: AppTextStyle.lightMediumBlackText.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).textTheme.bodyText1?.color)),
-              ),
-              SizedBox(
-                height: 4 * SizeConfig.heightMultiplier!,
-              ),
-              Text('certified'.tr,
-                  style: AppTextStyle.lightMediumBlackText.copyWith(
-                      fontSize: 12 * SizeConfig.textMultiplier!,
-                      color: Theme.of(context).textTheme.bodyText1?.color))
-            ],
-          )
-        ],
+                        fontSize: 12 * SizeConfig.textMultiplier!,
+                        color: Theme.of(context).textTheme.bodyText1?.color))
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

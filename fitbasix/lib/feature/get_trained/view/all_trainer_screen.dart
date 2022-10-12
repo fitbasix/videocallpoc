@@ -70,7 +70,9 @@ class _AllTrainerScreenState extends State<AllTrainerScreen> {
   @override
   void initState() {
     getSortByData();
-    get();
+    ///Nitesh
+    // get();
+
     // _scrollController.addListener(() async {
     //   if (_scrollController.position.pixels ==
     //       _scrollController.position.maxScrollExtent) {

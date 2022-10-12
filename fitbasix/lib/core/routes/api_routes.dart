@@ -1,9 +1,9 @@
 import 'package:fitbasix/app_config.dart';
 
 class ApiUrl {
-  // static String liveBaseURL = AppConfig.api_url;
+  static String liveBaseURL = AppConfig.api_url;
 
-  static String liveBaseURL = 'https://1acc-182-69-176-186.in.ngrok.io';
+  // static String liveBaseURL = 'https://1acc-182-69-176-186.in.ngrok.io';
 
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getAbuseData =
