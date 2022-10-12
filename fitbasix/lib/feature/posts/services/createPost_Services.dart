@@ -61,7 +61,8 @@ class CreatePostService {
       Map publishPost = {
         "postId": postId,
         "isPublished": isPublish,
-        "caption": caption
+        "caption": caption,
+        "files": files ?? []
       };
       Map getPostData = {"postId": postId};
       var response = await dio!

@@ -54,6 +54,7 @@ class PostController extends GetxController {
   RxList<String> uploadUrls = RxList<String>([]);
   Rx<PostData> postData = PostData().obs;
   RxBool isLoading = RxBool(false);
+  RxBool creatingPostLoading = false.obs;
   RxList<File> selectedFiles = RxList<File>([]);
   RxBool deletingFile = RxBool(false);
   RxBool iscreateingPost = RxBool(false);
@@ -112,8 +113,7 @@ class PostController extends GetxController {
       );
       File file = File(fileName!);
       return file;
-    } catch (e) {
-    }
+    } catch (e) {}
     return null;
   }
 

@@ -1691,6 +1691,14 @@ class _HomePageState extends State<HomePage> {
                                             10 * SizeConfig.heightMultiplier!,
                                       ),
                                       Obx(
+                                        () => postController.creatingPostLoading.value ==
+                                        true ? const LinearProgressIndicator(
+                                          color: kGreenColor,
+                                          backgroundColor: Colors.black,
+                                          minHeight: 5,
+                                        ) : Container()
+                                      ),
+                                      Obx(
                                         () => _homeController.isPostUpdate.value
                                             ? Center(child: Container())
                                             : ListView.builder(

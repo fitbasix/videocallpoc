@@ -1,9 +1,9 @@
 import 'package:fitbasix/app_config.dart';
 
 class ApiUrl {
-  static String liveBaseURL = AppConfig.api_url;
+  // static String liveBaseURL = AppConfig.api_url;
 
-  // static String liveBaseURL = 'https://560a-49-249-44-114.in.ngrok.io';
+  static String liveBaseURL = 'https://1acc-182-69-176-186.in.ngrok.io';
 
   static String getOTP = liveBaseURL + '/api/auth/sendOtp';
   static String getAbuseData =
@@ -112,6 +112,10 @@ class ApiUrl {
 
   /// rate and review
   static String rateAndReview = liveBaseURL + '/api/rating/rateAndReview';
+
   ///CallBack
   static String callBack = liveBaseURL + '/api/getCall/CallInfo';
+
+  ///Upload Chat Media URL
+  static String uploadChatMedia = liveBaseURL + '/api/chat/uploadChatDocuments';
 }

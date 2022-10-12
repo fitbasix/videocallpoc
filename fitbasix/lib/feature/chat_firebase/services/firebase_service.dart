@@ -1,15 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fitbasix/core/routes/api_routes.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
 import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controller.dart';
 import 'package:fitbasix/feature/chat_firebase/model/chat_model.dart';
+import 'package:fitbasix/feature/chat_firebase/model/mediaLinkModel.dart';
 import 'package:fitbasix/feature/chat_firebase/services/message_service.dart';
 import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
+import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class FirebaseServices {
   static final FirebaseServices firebaseServices = FirebaseServices._private();
@@ -71,7 +75,6 @@ class FirebaseServices {
     if (data.docs.isNotEmpty) {
       var message =
           MessageData.fromJson(data.docs[0].data() as Map<String, dynamic>);
-      printInfo(info: message.toString());
       return message;
     }
     return null;
@@ -90,13 +93,24 @@ class FirebaseServices {
 
   Future<String> uploadFile(File file, String fileName, String senderId) async {
     var url = '';
-    var reference = firebaseStorage.ref().child(
-        '$senderId/${DateTime.now().millisecondsSinceEpoch}_$fileName'); // get a reference to the path of the image directory
-    String storagePath = reference.fullPath;
-    printInfo(info: 'Uploading to $storagePath');
-    var uploadTask = await reference.putFile(file);
-    var data = await uploadTask.ref.getDownloadURL();
-    printInfo(info: "Image Uploaded");
-    return data;
+    // var reference = firebaseStorage.ref().child(
+    //     '$senderId/${DateTime.now().millisecondsSinceEpoch}_$fileName'); // get a reference to the path of the image directory
+    // String storagePath = reference.fullPath;
+    // printInfo(info: 'Uploading to $storagePath');
+    // var uploadTask = await reference.putFile(file);
+    // var data = await uploadTask.ref.getDownloadURL();
+    final dio = Dio();
+    var formData = FormData();
+    formData.files.addAll([
+      MapEntry(
+          'file',
+          await MultipartFile.fromFile(file.path,
+              filename: file.path.split('/').last)),
+    ]);
+    dio.options.headers["language"] = "1";
+    dio.options.headers['Authorization'] = await LogInService.getAccessToken();
+    var result = await dio.post(ApiUrl.uploadChatMedia, data: formData);
+    print(result.data.toString());
+    return imageModelFromJson(result.toString()).response.location;
   }
 }
