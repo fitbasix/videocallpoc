@@ -9,6 +9,7 @@ import 'package:fitbasix/feature/Home/model/postpone_model.dart';
 import 'package:fitbasix/feature/get_trained/controller/trainer_controller.dart';
 import 'package:fitbasix/feature/get_trained/model/PlanModel.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
+import 'package:fitbasix/feature/get_trained/model/followersModel.dart';
 import 'package:fitbasix/feature/get_trained/model/get_trained_model.dart';
 import 'package:fitbasix/feature/get_trained/model/interest_model.dart';
 import 'package:fitbasix/feature/get_trained/model/sortbymodel.dart';
@@ -330,6 +331,38 @@ class TrainerServices {
     } on Exception catch (e) {
       log(e.toString());
       return false;
+    }
+  }
+
+  static Future<FollowerModel?> getFollowers({
+    required int index,
+    required String id,
+    int? currentPage,
+  }) async {
+    
+    dio!.options.headers["language"] = "1";
+    dio!.options.headers['Authorization'] = await LogInService.getAccessToken();
+    
+    try {
+      var response = await dio!.post(
+        index == 0 ? ApiUrl.myFollowers : ApiUrl.myFollowings,
+        data: {
+          "id": id,
+          // "skip": currentPage == null ? 0 : currentPage * 5,
+          // "limit": 5
+        },
+      );
+      print("called");
+      print(response.data.toString());
+      if (response.statusCode == 200) {
+        print(response.data.toString());
+        return followerModelFromJson(response.toString());
+      } else {
+        return followerModelFromJson(response.toString());
+      }
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
   }
 }

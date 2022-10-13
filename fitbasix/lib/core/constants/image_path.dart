@@ -205,4 +205,5 @@ class ImagePath {
   static const String banner3 = "assets/banners/banner3.png";
   static const String banner4 = "assets/banners/banner4.png";
   static const String banner5 = "assets/banners/banner5.png";
+  static const String cancelled = "assets/cancelled.svg";
 }

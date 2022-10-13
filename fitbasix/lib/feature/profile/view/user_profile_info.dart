@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
 import 'package:fitbasix/core/universal_widgets/capitalizeText.dart';
 import 'package:fitbasix/feature/Home/controller/Home_Controller.dart';
+import 'package:fitbasix/feature/get_trained/view/followers.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:fitbasix/feature/profile/services/profile_services.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       body: Obx(
         () => UserPageInfo(
+          id: _homeController.userProfileData.value.response!.data!.profile!.id!,
           username: _homeController
               .userProfileData.value.response!.data!.profile!.name,
           userfollowerscount: _homeController
@@ -86,7 +88,7 @@ class UserPageInfo extends StatefulWidget {
       this.aboutuser,
       this.oneditprofile,
       this.oneditcoverimage,
-      Key? key})
+      Key? key, required this.id})
       : super(key: key);
 
   final String? username;
@@ -97,6 +99,7 @@ class UserPageInfo extends StatefulWidget {
   final String? aboutuser;
   final VoidCallback? oneditprofile;
   final VoidCallback? oneditcoverimage;
+  final String id;
   @override
   _UserPageInfoState createState() => _UserPageInfoState();
 }
@@ -194,7 +197,8 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     ),
                                     Text(
                                       CapitalizeFunction.capitalize(
-                                          widget.username.toString()).capitalize!,
+                                              widget.username.toString())
+                                          .capitalize!,
                                       style: AppTextStyle.titleText.copyWith(
                                           color: Theme.of(context)
                                               .textTheme
@@ -245,68 +249,80 @@ class _UserPageInfoState extends State<UserPageInfo> {
                                     right: 27 * SizeConfig.widthMultiplier!),
                                 child: Row(
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(widget.userfollowerscount!,
-                                            style: AppTextStyle.hmedium13Text
-                                                .copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1
-                                                  ?.color,
-                                              fontSize: (18) *
-                                                  SizeConfig.textMultiplier!,
+                                    GestureDetector(
+                                      onTap: () => Get.to(() => FollowersList(
+                                              id: widget.id, index: 0,
                                             )),
-                                        SizedBox(
-                                          height:
-                                              4 * SizeConfig.heightMultiplier!,
-                                        ),
-                                        Text('follower'.tr,
-                                            style: AppTextStyle.hmediumBlackText
-                                                .copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1
-                                                  ?.color,
-                                              fontSize: (12) *
-                                                  SizeConfig.textMultiplier!,
-                                            )),
-                                      ],
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(widget.userfollowerscount!,
+                                              style: AppTextStyle.hmedium13Text
+                                                  .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: (18) *
+                                                    SizeConfig.textMultiplier!,
+                                              )),
+                                          SizedBox(
+                                            height:
+                                                4 * SizeConfig.heightMultiplier!,
+                                          ),
+                                          Text('follower'.tr,
+                                              style: AppTextStyle.hmediumBlackText
+                                                  .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: (12) *
+                                                    SizeConfig.textMultiplier!,
+                                              )),
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(
                                         width:
                                             32 * SizeConfig.widthMultiplier!),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(widget.userfollowingscount!,
-                                            style: AppTextStyle.hmedium13Text
-                                                .copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1
-                                                  ?.color,
-                                              fontSize: (18) *
-                                                  SizeConfig.textMultiplier!,
-                                            )),
-                                        SizedBox(
-                                          height:
-                                              4 * SizeConfig.heightMultiplier!,
-                                        ),
-                                        Text('following'.tr,
-                                            style: AppTextStyle.hmediumBlackText
-                                                .copyWith(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1
-                                                  ?.color,
-                                              fontSize: (12) *
-                                                  SizeConfig.textMultiplier!,
-                                            )),
-                                      ],
+                                    GestureDetector(
+                                      onTap: () => Get.to(() => FollowersList(
+                                            id: widget.id,
+                                            index: 1,
+                                          )),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(widget.userfollowingscount!,
+                                              style: AppTextStyle.hmedium13Text
+                                                  .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: (18) *
+                                                    SizeConfig.textMultiplier!,
+                                              )),
+                                          SizedBox(
+                                            height: 4 *
+                                                SizeConfig.heightMultiplier!,
+                                          ),
+                                          Text('following'.tr,
+                                              style: AppTextStyle
+                                                  .hmediumBlackText
+                                                  .copyWith(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    ?.color,
+                                                fontSize: (12) *
+                                                    SizeConfig.textMultiplier!,
+                                              )),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -14,6 +14,7 @@ import 'package:fitbasix/feature/chat_firebase/controller/firebase_chat_controll
 import 'package:fitbasix/feature/chat_firebase/view/chat_page.dart';
 import 'package:fitbasix/feature/get_trained/model/all_trainer_model.dart';
 import 'package:fitbasix/feature/get_trained/services/trainer_services.dart';
+import 'package:fitbasix/feature/get_trained/view/followers.dart';
 import 'package:fitbasix/feature/message/view/screens/message_list.dart';
 import 'package:fitbasix/feature/message/view/web_call.dart';
 import 'package:flutter/material.dart';
@@ -331,6 +332,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
                   allPlans: trainerController.isProfileLoading.value ? [] : [],
                   isFollowing:
                       trainerController.atrainerDetail.value.isFollowing!,
+                  id: trainerController.atrainerDetail.value.user!.id!,
                 )
               : Center(
                   child: CustomizedCircularProgress(),
@@ -353,7 +355,7 @@ class _TrainerProfileScreenState extends State<TrainerProfileScreen> {
 }
 
 class TrainerPage extends StatefulWidget {
-  const TrainerPage(
+  TrainerPage(
       {required this.trainerImage,
       required this.trainerCoverImage,
       required this.onFollow,
@@ -372,7 +374,8 @@ class TrainerPage extends StatefulWidget {
       required this.allPlans,
       required this.isFollowing,
       required this.isEnrolled,
-      Key? key})
+      Key? key,
+      required this.id})
       : super(key: key);
   final String trainerImage;
   final String trainerCoverImage;
@@ -392,6 +395,7 @@ class TrainerPage extends StatefulWidget {
   final List<Plan> allPlans;
   final bool isFollowing;
   final bool isEnrolled;
+  final String id;
 
   @override
   State<TrainerPage> createState() => _TrainerPageState();
@@ -401,6 +405,8 @@ class _TrainerPageState extends State<TrainerPage> {
   final HomeController _homeController = Get.find();
   final ScrollController _scrollController = ScrollController();
   final TrainerController _trainerController = Get.find();
+
+
 
   @override
   void initState() {
@@ -530,50 +536,62 @@ class _TrainerPageState extends State<TrainerPage> {
                                 children: [
                                   Row(
                                     children: [
-                                      Column(
-                                        children: [
-                                          Text(widget.followersCount,
-                                              style: AppTextStyle.boldBlackText
-                                                  .copyWith(
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1
-                                                          ?.color)),
-                                          Text('follower'.tr,
-                                              style: AppTextStyle.smallBlackText
-                                                  .copyWith(
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1
-                                                          ?.color,
-                                                      fontSize: 12 *
-                                                          SizeConfig
-                                                              .textMultiplier!))
-                                        ],
+                                      GestureDetector(
+                                        onTap: () => Get.to(() => FollowersList(
+                                              id: widget.id, index: 0,
+                                            )),
+                                        child: Column(
+                                          children: [
+                                            Text(widget.followersCount,
+                                                style: AppTextStyle
+                                                    .boldBlackText
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color)),
+                                            Text('follower'.tr,
+                                                style: AppTextStyle
+                                                    .smallBlackText
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color,
+                                                        fontSize: 12 *
+                                                            SizeConfig
+                                                                .textMultiplier!))
+                                          ],
+                                        ),
                                       ),
                                       SizedBox(
                                           width:
                                               25 * SizeConfig.widthMultiplier!),
-                                      Column(
-                                        children: [
-                                          Text(widget.followingCount,
-                                              style: AppTextStyle.boldBlackText
-                                                  .copyWith(
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1
-                                                          ?.color)),
-                                          Text('following'.tr,
-                                              style: AppTextStyle.smallBlackText
-                                                  .copyWith(
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1
-                                                          ?.color,
-                                                      fontSize: 12 *
-                                                          SizeConfig
-                                                              .textMultiplier!))
-                                        ],
+                                      GestureDetector(
+                                        onTap: () => Get.to(() => FollowersList(
+                                              id: widget.id, index: 1,
+                                            )),
+                                        child: Column(
+                                          children: [
+                                            Text(widget.followingCount,
+                                                style: AppTextStyle.boldBlackText
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color)),
+                                            Text('following'.tr,
+                                                style: AppTextStyle.smallBlackText
+                                                    .copyWith(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            ?.color,
+                                                        fontSize: 12 *
+                                                            SizeConfig
+                                                                .textMultiplier!))
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -1443,9 +1461,9 @@ class AchivementCertificateTile extends StatelessWidget {
       onTap: () {
         print(certificateIcon);
         Get.to(() => ImageViewer(
-                    imgUrl: certificateIcon,
-                    label: certificateDescription.capitalize!,
-                  ));
+              imgUrl: certificateIcon,
+              label: certificateDescription.capitalize!,
+            ));
       },
       child: Container(
         //79

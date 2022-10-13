@@ -33,6 +33,7 @@ class MySubscriptions extends StatelessWidget {
         body:
         ListView.separated(
           itemBuilder: (context, index) => MyTrainersTile(
+            isActive: _homeController.activePlans[index].isActive!,
             index: index,
             isSubscriptionPage: true,
             planDetail: _homeController.activePlans[index],

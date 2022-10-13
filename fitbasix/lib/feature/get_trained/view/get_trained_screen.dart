@@ -164,6 +164,8 @@ class GetTrainedScreen extends StatelessWidget {
                                 items: List<Widget>.generate(
                                     _homeController.activePlans.length,
                                     (index) => MyTrainersTile(
+                                          isActive: _homeController
+                                              .activePlans[index].isActive!,
                                           index: index,
                                           planDetail: _homeController
                                               .activePlans[index],
@@ -2168,16 +2170,17 @@ class SeeAllButton extends StatelessWidget {
 }
 
 class MyTrainersTile extends StatefulWidget {
-  MyTrainersTile({
-    Key? key,
-    required this.name,
-    required this.imageUrl,
-    required this.isCurrentlyEnrolled,
-    this.onMyTrainerTileTapped,
-    required this.planDetail,
-    this.isSubscriptionPage = false,
-    required this.index,
-  }) : super(key: key);
+  MyTrainersTile(
+      {Key? key,
+      required this.name,
+      required this.imageUrl,
+      required this.isCurrentlyEnrolled,
+      this.onMyTrainerTileTapped,
+      required this.planDetail,
+      this.isSubscriptionPage = false,
+      required this.index,
+      required this.isActive})
+      : super(key: key);
 
   String imageUrl;
   String name;
@@ -2186,6 +2189,7 @@ class MyTrainersTile extends StatefulWidget {
   PlanDetail planDetail;
   bool isSubscriptionPage;
   int index;
+  bool isActive;
 
   @override
   State<MyTrainersTile> createState() => _MyTrainersTileState();
@@ -2199,7 +2203,7 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onMyTrainerTileTapped,
+      onTap: widget.isActive ? widget.onMyTrainerTileTapped : null,
       child: Container(
         margin: widget.isSubscriptionPage
             ? EdgeInsets.symmetric(horizontal: 10 * SizeConfig.widthMultiplier!)
@@ -2214,119 +2218,196 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
           borderRadius: BorderRadius.circular(8 * SizeConfig.heightMultiplier!),
           color: Theme.of(context).cardColor,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Row(
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 25 * SizeConfig.imageSizeMultiplier!,
-                  backgroundImage: NetworkImage(widget.imageUrl),
-                ),
-                SizedBox(
-                  width: 12 * SizeConfig.widthMultiplier!,
-                ),
-                SizedBox(
-                  width: 120 * SizeConfig.textMultiplier!,
-                  child: Text(
-                    widget.name.capitalize!,
-                    style: AppTextStyle.white400Text,
-                    textAlign: TextAlign.left,
-                    maxLines: 2,
-                  ),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      widget.planDetail.isExpanded =
-                          !widget.planDetail.isExpanded;
-                      _trainerController.isCarouselExpanded.value =
-                          widget.planDetail.isExpanded;
-                      if (widget.planDetail.isExpanded == false) {
-                        _trainerController.showChangeTiming.value = false;
-                      }
-                    });
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        widget.planDetail.isExpanded
-                            ? 'Hide details'
-                            : 'Show details',
-                        style: AppTextStyle.NormalText.copyWith(
-                            fontSize: 14 * SizeConfig.textMultiplier!,
-                            color:
-                                Theme.of(context).textTheme.headline1?.color),
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 25 * SizeConfig.imageSizeMultiplier!,
+                      backgroundImage: NetworkImage(widget.imageUrl),
+                    ),
+                    SizedBox(
+                      width: 12 * SizeConfig.widthMultiplier!,
+                    ),
+                    SizedBox(
+                      width: 120 * SizeConfig.textMultiplier!,
+                      child: Text(
+                        widget.name.capitalize!,
+                        style: AppTextStyle.white400Text,
+                        textAlign: TextAlign.left,
+                        maxLines: 2,
                       ),
-                      SizedBox(
-                        width: 5 * SizeConfig.widthMultiplier!,
-                      ),
-                      Icon(
-                        widget.planDetail.isExpanded
-                            ? Icons.keyboard_arrow_up
-                            : Icons.keyboard_arrow_down,
-                        size: 25 * SizeConfig.heightMultiplier!,
-                        color: Theme.of(context).textTheme.headline1?.color,
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 15 * SizeConfig.heightMultiplier!,
-            ),
-            widget.planDetail.isExpanded
-                ? Column(
-                    children: [
-                      Row(
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: !widget.isActive
+                          ? null
+                          : () {
+                              setState(() {
+                                widget.planDetail.isExpanded =
+                                    !widget.planDetail.isExpanded;
+                                _trainerController.isCarouselExpanded.value =
+                                    widget.planDetail.isExpanded;
+                                if (widget.planDetail.isExpanded == false) {
+                                  _trainerController.showChangeTiming.value =
+                                      false;
+                                }
+                              });
+                            },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Icon(
-                            Icons.schedule,
-                            color: kGreyColor,
-                            size: 20 * SizeConfig.heightMultiplier!,
+                          Text(
+                            widget.planDetail.isExpanded
+                                ? 'Hide details'
+                                : 'Show details',
+                            style: AppTextStyle.NormalText.copyWith(
+                                fontSize: 14 * SizeConfig.textMultiplier!,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    ?.color),
                           ),
                           SizedBox(
-                            width: 10 * SizeConfig.heightMultiplier!,
+                            width: 5 * SizeConfig.widthMultiplier!,
                           ),
-                          Text(
-                            'Timings',
-                            style: AppTextStyle.white400Text.copyWith(
-                              color: kGreyColor,
-                            ),
+                          Icon(
+                            widget.planDetail.isExpanded
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            size: 25 * SizeConfig.heightMultiplier!,
+                            color: Theme.of(context).textTheme.headline1?.color,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 15 * SizeConfig.heightMultiplier!,
+                ),
+                widget.planDetail.isExpanded
+                    ? Column(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.schedule,
+                                color: kGreyColor,
+                                size: 20 * SizeConfig.heightMultiplier!,
+                              ),
+                              SizedBox(
+                                width: 10 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                'Timings',
+                                style: AppTextStyle.white400Text.copyWith(
+                                  color: kGreyColor,
+                                ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                Get.find<TrainerController>().getTime(
+                                    widget.planDetail.sessionTime!.name!),
+                                style: AppTextStyle.white400Text,
+                              ),
+                            ],
                           ),
-                          const Spacer(),
+                          SizedBox(
+                            height: 10 * SizeConfig.heightMultiplier!,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today_rounded,
+                                color: kGreyColor,
+                                size: 20 * SizeConfig.heightMultiplier!,
+                              ),
+                              SizedBox(
+                                width: 10 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                'Days',
+                                style: AppTextStyle.white400Text.copyWith(
+                                  color: kGreyColor,
+                                ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                _homeController.getDaysFromIndex(
+                                    widget.planDetail.weekDays!),
+                                style: AppTextStyle.white400Text,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10 * SizeConfig.heightMultiplier!,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.note_alt_outlined,
+                                color: kGreyColor,
+                                size: 20 * SizeConfig.heightMultiplier!,
+                              ),
+                              SizedBox(
+                                width: 10 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                'Plan',
+                                style: AppTextStyle.white400Text.copyWith(
+                                  color: kGreyColor,
+                                ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                widget.planDetail.planDetails!.planName!,
+                                style: AppTextStyle.white400Text,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10 * SizeConfig.heightMultiplier!,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.alarm,
+                                color: kGreyColor,
+                                size: 20 * SizeConfig.heightMultiplier!,
+                              ),
+                              SizedBox(
+                                width: 10 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                'Plan Expiry',
+                                style: AppTextStyle.white400Text.copyWith(
+                                  color: kGreyColor,
+                                ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                DateFormat('d MMMM yyyy')
+                                    .format(widget.planDetail.expiryDate!),
+                                style: AppTextStyle.white400Text,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           Text(
                             Get.find<TrainerController>()
                                 .getTime(widget.planDetail.sessionTime!.name!),
                             style: AppTextStyle.white400Text,
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10 * SizeConfig.heightMultiplier!,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.calendar_today_rounded,
-                            color: kGreyColor,
-                            size: 20 * SizeConfig.heightMultiplier!,
-                          ),
-                          SizedBox(
-                            width: 10 * SizeConfig.heightMultiplier!,
-                          ),
-                          Text(
-                            'Days',
-                            style: AppTextStyle.white400Text.copyWith(
-                              color: kGreyColor,
-                            ),
-                          ),
-                          const Spacer(),
                           Text(
                             _homeController
                                 .getDaysFromIndex(widget.planDetail.weekDays!),
@@ -2334,279 +2415,75 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10 * SizeConfig.heightMultiplier!,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.note_alt_outlined,
-                            color: kGreyColor,
-                            size: 20 * SizeConfig.heightMultiplier!,
-                          ),
-                          SizedBox(
-                            width: 10 * SizeConfig.heightMultiplier!,
-                          ),
-                          Text(
-                            'Plan',
-                            style: AppTextStyle.white400Text.copyWith(
-                              color: kGreyColor,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            widget.planDetail.planDetails!.planName!,
-                            style: AppTextStyle.white400Text,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10 * SizeConfig.heightMultiplier!,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.alarm,
-                            color: kGreyColor,
-                            size: 20 * SizeConfig.heightMultiplier!,
-                          ),
-                          SizedBox(
-                            width: 10 * SizeConfig.heightMultiplier!,
-                          ),
-                          Text(
-                            'Plan Expiry',
-                            style: AppTextStyle.white400Text.copyWith(
-                              color: kGreyColor,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            DateFormat('d MMMM yyyy')
-                                .format(widget.planDetail.expiryDate!),
-                            style: AppTextStyle.white400Text,
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        Get.find<TrainerController>()
-                            .getTime(widget.planDetail.sessionTime!.name!),
-                        style: AppTextStyle.white400Text,
-                      ),
-                      Text(
-                        _homeController
-                            .getDaysFromIndex(widget.planDetail.weekDays!),
-                        style: AppTextStyle.white400Text,
-                      ),
-                    ],
-                  ),
-            if (widget.planDetail.isExpanded)
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: 5 * SizeConfig.heightMultiplier!),
-                child: Divider(
-                  color: Colors.white.withOpacity(0.16),
-                ),
-              ),
-            if (widget.planDetail.isExpanded && !widget.isSubscriptionPage)
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _homeController.activePlans[widget.index].isChangeExpanded =
-                        !_homeController
-                            .activePlans[widget.index].isChangeExpanded;
-                    _trainerController.showChangeTiming.value = _homeController
-                        .activePlans[widget.index].isChangeExpanded;
-                  });
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Request a change in timings',
-                      style: AppTextStyle.NormalText.copyWith(
-                          fontSize: 14 * SizeConfig.textMultiplier!,
-                          color: kPureWhite,
-                          decoration: TextDecoration.underline),
+                if (widget.planDetail.isExpanded)
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 5 * SizeConfig.heightMultiplier!),
+                    child: Divider(
+                      color: Colors.white.withOpacity(0.16),
                     ),
-                    SizedBox(
-                      width: 5 * SizeConfig.widthMultiplier!,
-                    ),
-                    Icon(
-                      _homeController.activePlans[widget.index].isChangeExpanded
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down,
-                      size: 25 * SizeConfig.heightMultiplier!,
-                      color: Theme.of(context).textTheme.headline1?.color,
-                    )
-                  ],
-                ),
-              ),
-            if (_homeController.activePlans[widget.index].isChangeExpanded &&
-                widget.planDetail.isExpanded &&
-                widget.planDetail.postponeSessionLeft! > 0)
-              GestureDetector(
-                onTap: () {
-                  Get.dialog(
-                    PostponeSessionWidget(
-                      trainerId: widget.planDetail.trainer!.id!,
-                      planId: widget.planDetail.id!,
-                      expiryDate: widget.planDetail.expiryDate!,
-                      days: widget.planDetail.weekDays!,
-                      time: widget.planDetail.sessionTime!.name!.toUpperCase(),
-                    ),
-                  );
-                },
-                child: Container(
-                  margin:
-                      EdgeInsets.only(top: 10 * SizeConfig.heightMultiplier!),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20 * SizeConfig.widthMultiplier!,
-                    vertical: 15 * SizeConfig.heightMultiplier!,
                   ),
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(4 * SizeConfig.heightMultiplier!),
-                    color: grey2B,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.history,
-                        color: kPureWhite,
-                      ),
-                      SizedBox(
-                        width: 15 * SizeConfig.heightMultiplier!,
-                      ),
-                      Text(
-                        'Postpone next session',
-                        style: AppTextStyle.NormalText.copyWith(
-                          fontSize: 14 * SizeConfig.textMultiplier!,
-                          color: kPureWhite,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            if (_homeController.activePlans[widget.index].isChangeExpanded &&
-                widget.planDetail.isExpanded &&
-                widget.planDetail.postponeSessionLeft! < 1)
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: 10 * SizeConfig.heightMultiplier!),
-                child: Text(
-                    'You have already postponed your sessions three times',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.grey400Text),
-              ),
-            if (widget.planDetail.isExpanded && widget.isSubscriptionPage)
-              Column(
-                children: [
+                if (widget.planDetail.isExpanded && !widget.isSubscriptionPage)
                   GestureDetector(
-                    onTap: () async {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => PdfViewerFile(
-                              link: _homeController
-                                  .activePlans[widget.index].invoicePdf
-                                  .toString())));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          top: 8 * SizeConfig.heightMultiplier!),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20 * SizeConfig.widthMultiplier!,
-                        vertical: 15 * SizeConfig.heightMultiplier!,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            4 * SizeConfig.heightMultiplier!),
-                        color: kgreen49,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.download,
-                            color: kPureWhite,
-                          ),
-                          SizedBox(
-                            width: 15 * SizeConfig.heightMultiplier!,
-                          ),
-                          Text(
-                            'Download invoice',
-                            style: AppTextStyle.NormalText.copyWith(
+                    onTap: !widget.isActive
+                        ? null
+                        : () {
+                            setState(() {
+                              _homeController.activePlans[widget.index]
+                                      .isChangeExpanded =
+                                  !_homeController.activePlans[widget.index]
+                                      .isChangeExpanded;
+                              _trainerController.showChangeTiming.value =
+                                  _homeController.activePlans[widget.index]
+                                      .isChangeExpanded;
+                            });
+                          },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Request a change in timings',
+                          style: AppTextStyle.NormalText.copyWith(
                               fontSize: 14 * SizeConfig.textMultiplier!,
                               color: kPureWhite,
-                            ),
-                          ),
-                        ],
-                      ),
+                              decoration: TextDecoration.underline),
+                        ),
+                        SizedBox(
+                          width: 5 * SizeConfig.widthMultiplier!,
+                        ),
+                        Icon(
+                          _homeController
+                                  .activePlans[widget.index].isChangeExpanded
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down,
+                          size: 25 * SizeConfig.heightMultiplier!,
+                          color: Theme.of(context).textTheme.headline1?.color,
+                        )
+                      ],
                     ),
                   ),
+                if (_homeController
+                        .activePlans[widget.index].isChangeExpanded &&
+                    widget.planDetail.isExpanded &&
+                    widget.planDetail.postponeSessionLeft! > 0)
                   GestureDetector(
-                    onTap: () {
-                      Get.to(
-                        () => ReviewPage(
-                          image: widget.planDetail.trainer!.profilePhoto!,
-                          name: widget.planDetail.trainer!.name!.capitalize!,
-                          trainerId: widget.planDetail.trainer!.id!,
-                        ),
-                      );
-                    },
+                    onTap: !widget.isActive
+                        ? null
+                        : () {
+                            Get.dialog(
+                              PostponeSessionWidget(
+                                trainerId: widget.planDetail.trainer!.id!,
+                                planId: widget.planDetail.id!,
+                                expiryDate: widget.planDetail.expiryDate!,
+                                days: widget.planDetail.weekDays!,
+                                time: widget.planDetail.sessionTime!.name!
+                                    .toUpperCase(),
+                              ),
+                            );
+                          },
                     child: Container(
                       margin: EdgeInsets.only(
-                          top: 8 * SizeConfig.heightMultiplier!),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20 * SizeConfig.widthMultiplier!,
-                        vertical: 15 * SizeConfig.heightMultiplier!,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            4 * SizeConfig.heightMultiplier!),
-                        color: kgreen49,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.star_border,
-                            color: kPureWhite,
-                          ),
-                          SizedBox(
-                            width: 15 * SizeConfig.heightMultiplier!,
-                          ),
-                          Text(
-                            'Rate and review',
-                            style: AppTextStyle.NormalText.copyWith(
-                              fontSize: 14 * SizeConfig.textMultiplier!,
-                              color: kPureWhite,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.dialog(
-                        CancelSubscriptionWidget(
-                          trainerName:
-                              widget.planDetail.trainer!.name!.capitalize!,
-                          planId: widget.planDetail.id!,
-                          planName: widget.planDetail.planDetails!.planName!,
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(
-                          top: 8 * SizeConfig.heightMultiplier!),
+                          top: 10 * SizeConfig.heightMultiplier!),
                       padding: EdgeInsets.symmetric(
                         horizontal: 20 * SizeConfig.widthMultiplier!,
                         vertical: 15 * SizeConfig.heightMultiplier!,
@@ -2617,18 +2494,17 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                         color: grey2B,
                       ),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(
-                            Icons.close,
+                            Icons.history,
                             color: kPureWhite,
                           ),
                           SizedBox(
                             width: 15 * SizeConfig.heightMultiplier!,
                           ),
                           Text(
-                            'Cancel Subcription',
+                            'Postpone next session',
                             style: AppTextStyle.NormalText.copyWith(
                               fontSize: 14 * SizeConfig.textMultiplier!,
                               color: kPureWhite,
@@ -2638,8 +2514,172 @@ class _MyTrainersTileState extends State<MyTrainersTile> {
                       ),
                     ),
                   ),
-                ],
-              )
+                if (_homeController
+                        .activePlans[widget.index].isChangeExpanded &&
+                    widget.planDetail.isExpanded &&
+                    widget.planDetail.postponeSessionLeft! < 1)
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 10 * SizeConfig.heightMultiplier!),
+                    child: Text(
+                        'You have already postponed your sessions three times',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.grey400Text),
+                  ),
+                if (widget.planDetail.isExpanded && widget.isSubscriptionPage)
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: !widget.isActive
+                            ? null
+                            : () async {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => PdfViewerFile(
+                                        link: _homeController
+                                            .activePlans[widget.index]
+                                            .invoicePdf
+                                            .toString())));
+                              },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: 8 * SizeConfig.heightMultiplier!),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20 * SizeConfig.widthMultiplier!,
+                            vertical: 15 * SizeConfig.heightMultiplier!,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                4 * SizeConfig.heightMultiplier!),
+                            color: kgreen49,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.download,
+                                color: kPureWhite,
+                              ),
+                              SizedBox(
+                                width: 15 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                'Download invoice',
+                                style: AppTextStyle.NormalText.copyWith(
+                                  fontSize: 14 * SizeConfig.textMultiplier!,
+                                  color: kPureWhite,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: !widget.isActive
+                            ? null
+                            : () {
+                                Get.to(
+                                  () => ReviewPage(
+                                    image: widget
+                                        .planDetail.trainer!.profilePhoto!,
+                                    name: widget
+                                        .planDetail.trainer!.name!.capitalize!,
+                                    trainerId: widget.planDetail.trainer!.id!,
+                                  ),
+                                );
+                              },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: 8 * SizeConfig.heightMultiplier!),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20 * SizeConfig.widthMultiplier!,
+                            vertical: 15 * SizeConfig.heightMultiplier!,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                4 * SizeConfig.heightMultiplier!),
+                            color: kgreen49,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.star_border,
+                                color: kPureWhite,
+                              ),
+                              SizedBox(
+                                width: 15 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                'Rate and review',
+                                style: AppTextStyle.NormalText.copyWith(
+                                  fontSize: 14 * SizeConfig.textMultiplier!,
+                                  color: kPureWhite,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: !widget.isActive
+                            ? null
+                            : () {
+                                Get.dialog(
+                                  CancelSubscriptionWidget(
+                                    trainerName: widget
+                                        .planDetail.trainer!.name!.capitalize!,
+                                    planId: widget.planDetail.id!,
+                                    planName: widget
+                                        .planDetail.planDetails!.planName!,
+                                  ),
+                                );
+                              },
+                        child: Container(
+                          width: double.infinity,
+                          margin: EdgeInsets.only(
+                              top: 8 * SizeConfig.heightMultiplier!),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20 * SizeConfig.widthMultiplier!,
+                            vertical: 15 * SizeConfig.heightMultiplier!,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                4 * SizeConfig.heightMultiplier!),
+                            color: grey2B,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.close,
+                                color: kPureWhite,
+                              ),
+                              SizedBox(
+                                width: 15 * SizeConfig.heightMultiplier!,
+                              ),
+                              Text(
+                                'Cancel Subcription',
+                                style: AppTextStyle.NormalText.copyWith(
+                                  fontSize: 14 * SizeConfig.textMultiplier!,
+                                  color: kPureWhite,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+              ],
+            ),
+            if (!widget.isActive)
+              Align(
+                  alignment: Alignment.topRight,
+                  child: SvgPicture.asset(
+                    ImagePath.cancelled,
+                    height: 20,
+                  ))
           ],
         ),
       ),

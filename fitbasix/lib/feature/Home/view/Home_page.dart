@@ -1692,8 +1692,11 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Obx(
                                         () => postController.creatingPostLoading.value ==
-                                        true ? const LinearProgressIndicator(
+                                        true ? LinearProgressIndicator(
                                           color: kGreenColor,
+                                          value: postController
+                                              .uploadingProgress.value /
+                                          100,
                                           backgroundColor: Colors.black,
                                           minHeight: 5,
                                         ) : Container()

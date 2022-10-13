@@ -14,6 +14,7 @@ import 'package:fitbasix/feature/log_in/controller/login_controller.dart';
 import 'package:fitbasix/feature/log_in/services/login_services.dart';
 import 'package:fitbasix/feature/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' as Get;
 
 class FirebaseServices {
   static final FirebaseServices firebaseServices = FirebaseServices._private();
@@ -109,7 +110,14 @@ class FirebaseServices {
     ]);
     dio.options.headers["language"] = "1";
     dio.options.headers['Authorization'] = await LogInService.getAccessToken();
-    var result = await dio.post(ApiUrl.uploadChatMedia, data: formData);
+    var result = await dio.post(
+      ApiUrl.uploadChatMedia,
+      data: formData,
+      onSendProgress: (sent, total) {
+        Get.Get.find<FirebaseChatController>().uploadProgress.value =
+            ((sent / total) * 100).toPrecision(0);
+      },
+    );
     print(result.data.toString());
     return imageModelFromJson(result.toString()).response.location;
   }

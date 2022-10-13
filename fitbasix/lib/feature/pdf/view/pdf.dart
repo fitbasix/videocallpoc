@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:fitbasix/core/constants/color_palette.dart';
+import 'package:fitbasix/core/reponsive/SizeConfig.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -77,52 +78,53 @@ class _PdfViewerFileState extends State<PdfViewerFile> {
       appBar: AppBar(
         backgroundColor: kPureBlack,
         actions: [
-          IconButton(
-              onPressed: () async {
-                await [
-                  Permission.manageExternalStorage,
-                  Permission.storage,
-                  Permission.accessMediaLocation,
-                  Permission.mediaLibrary
-                ].request();
-                setState(() {
-                  loader = true;
-                });
-                if (Platform.isAndroid) {
-                  var dt = await downloadFile(
-                      widget.link,
-                      widget.link.split('/').last,
-                      '/storage/emulated/0/Fitbasix');
+          if (!Platform.isIOS)
+            IconButton(
+                onPressed: () async {
+                  await [
+                    Permission.manageExternalStorage,
+                    Permission.storage,
+                    Permission.accessMediaLocation,
+                    Permission.mediaLibrary
+                  ].request();
+                  setState(() {
+                    loader = true;
+                  });
+                  if (Platform.isAndroid) {
+                    var dt = await downloadFile(
+                        widget.link,
+                        widget.link.split('/').last,
+                        '/storage/emulated/0/Fitbasix');
 
-                  await Future.delayed(Duration(seconds: 1), () {
-                    setState(() {
-                      loader = false;
+                    await Future.delayed(Duration(seconds: 1), () {
+                      setState(() {
+                        loader = false;
+                      });
                     });
-                  });
-                  Get.rawSnackbar(
-                    message: 'File Saved at $dt',
-                  );
-                } else {
-                  Directory appDocDir =
-                      await getApplicationDocumentsDirectory();
-                  String appDocPath = appDocDir.path;
-                  print('appDocPath');
-                  var dt = await downloadFile(widget.link,
-                      DateTime.now().toIso8601String(), appDocPath);
-                  await Future.delayed(Duration(seconds: 1), () {
-                    setState(() {
-                      loader = false;
+                    Get.rawSnackbar(
+                      message: 'File Saved at $dt',
+                    );
+                  } else {
+                    Directory appDocDir =
+                        await getApplicationDocumentsDirectory();
+                    String appDocPath = appDocDir.path;
+                    print('appDocPath');
+                    var dt = await downloadFile(widget.link,
+                        DateTime.now().toIso8601String(), appDocPath);
+                    await Future.delayed(Duration(seconds: 1), () {
+                      setState(() {
+                        loader = false;
+                      });
                     });
-                  });
-                  Get.rawSnackbar(
-                    message: 'File Saved at $dt',
-                  );
-                }
-              },
-              icon: Icon(
-                Icons.download,
-                color: kgreen49,
-              ))
+                    Get.rawSnackbar(
+                      message: 'File Saved at $dt',
+                    );
+                  }
+                },
+                icon: Icon(
+                  Icons.download,
+                  color: kgreen49,
+                ))
         ],
       ),
       body: loader
@@ -130,6 +132,15 @@ class _PdfViewerFileState extends State<PdfViewerFile> {
           : PDFViewer(
               document: document,
             ),
+      bottomNavigationBar: (Platform.isIOS)
+          ? Container(
+              height: 50 * SizeConfig.heightMultiplier!,
+              color: kPureBlack,
+              child: const Center(child:  Text("Note: You can take screenshot of this invoice.")),
+            )
+          : Container(
+            height: 0,
+          ),
     );
   }
 }

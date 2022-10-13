@@ -25,6 +25,7 @@ class FirebaseChatController extends GetxController {
 
   var userWantToSendMedia = false.obs;
   var mediaIsUploading = false.obs;
+  RxDouble uploadProgress = RxDouble(0);
 
   @override
   void onInit() async {

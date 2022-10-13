@@ -625,10 +625,11 @@ class SendMessageWidget extends StatelessWidget {
                                           : Container()),
                                       Obx(() =>
                                           _chatController.mediaIsUploading.value
-                                              ? const LinearProgressIndicator(
+                                              ? LinearProgressIndicator(
+                                                value: _chatController.uploadProgress.value,
                                                   backgroundColor:
                                                       Color(0xff747474),
-                                                  color: kBlack)
+                                                  color: kGreenColor)
                                               : Container())
                                     ],
                                   ),

@@ -173,11 +173,12 @@ class TrainerController extends GetxController {
   Future<void> setUp() async {
     getTrainedIsLoading.value = true;
     trainers.value = await TrainerServices.getTrainers();
+    
     for (var trainer in trainers.value.response!.data!.myTrainers!) {
       printInfo(info: trainer.isCurrentlyEnrolled.toString());
-      if (trainer.isCurrentlyEnrolled!) {
+      
         myTrainers.value.add(trainer);
-      }
+      
     }
     printInfo(info: myTrainers.length.toString());
     interests.value = await TrainerServices.getAllInterest();
