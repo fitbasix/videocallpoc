@@ -12,13 +12,16 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
+    <list default="true" id="1843b8ab-3b62-4d8d-ba89-b88563bc73e9" name="Default Changelist" comment="video calling with enableX and iFrame -- low code version">
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/video_call/controller/video_controller.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/video_call/services/video_service.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/video_call/view/iframe.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitbasix/lib/feature/video_call/view/video_call.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/Home/model/active_plans_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/Home/model/active_plans_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/get_trained_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/get_trained/view/get_trained_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitbasix/lib/feature/plans/view/trainers_plan.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/feature/plans/view/trainers_plan.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/.run/Flavor_ dev.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/.run/Flavor_ dev.run.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fitbasix/lib/setup-my-app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/fitbasix/lib/setup-my-app.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +36,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="video_calling_enablex" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -81,12 +89,12 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/fitbasix/android/app/src/main/AndroidManifest.xml" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/fitbasix/ios/Podfile" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/message/view/chat_ui.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/message/view/documents_view_screen.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/fitbasix/ios/Podfile" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/message/view/accepted_video_call_screen.dart" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/fitbasix/android/app/src/main/AndroidManifest.xml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/fitbasix/lib/feature/Home/view/Home_page.dart" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -106,12 +114,13 @@
     <property name="com.android.tools.idea.emulator.frame.visible" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/fitbasix/lib/feature/view_documents/demo" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/fitbasix/lib/feature" />
     <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Roshan\Documents\GitHub\fitbasix-flutter-app\fitbasix\lib\feature" />
       <recent name="$PROJECT_DIR$/fitbasix/lib/feature/view_documents/demo" />
       <recent name="$PROJECT_DIR$/fitbasix/assets" />
     </key>
@@ -128,13 +137,17 @@
       <command value=".env" />
     </option>
   </component>
-  <component name="RunManager" selected="Flutter.Flavor: prod">
+  <component name="RunManager" selected="Flutter.Flavor: dev">
     <configuration name="Flavor: dev" type="FlutterRunConfigurationType" factoryName="Flutter" temporary="true">
       <option name="additionalArgs" value="--flavor dev" />
       <option name="buildFlavor" value="dev" />
       <option name="filePath" value="$PROJECT_DIR$/fitbasix/lib/main_dev.dart" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Flutter.Flavor: dev" />
+      <item itemvalue="Flutter.Flavor: prod" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Flutter.Flavor: dev" />
@@ -177,5 +190,17 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/fitbasix/lib/feature/Home/controller/Home_Controller.dart</url>
+          <line>266</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

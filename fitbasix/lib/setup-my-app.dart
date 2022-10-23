@@ -13,6 +13,7 @@ import 'package:fitbasix/feature/log_in/view/enter_mobile_google.dart';
 import 'package:fitbasix/feature/log_in/view/enter_otp_google.dart';
 import 'package:fitbasix/feature/log_in/view/login_screen.dart';
 import 'package:fitbasix/feature/profile/view/account_and_subscription_screen.dart';
+import 'package:fitbasix/feature/video_call/view/video_call.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,14 +76,14 @@ Future<void> setupApp() async {
 
     runApp(FitBasixApp(
       translations: translations,
-      child:
-      accessToken == null
-          ? LoginScreen()
-          : (_initialUri != null || _latestUri != null)
-              ? TrainerProfileScreen(
-                  trainerID: "6226f41b28d9a579eeabb5ee",
-                )
-              : HomeAndTrainerPage(),
+      child:VideoCallScreen()
+      // accessToken == null
+      //     ? LoginScreen()
+      //     : (_initialUri != null || _latestUri != null)
+      //         ? TrainerProfileScreen(
+      //             trainerID: "6226f41b28d9a579eeabb5ee",
+      //           )
+      //         : HomeAndTrainerPage(),
     )
     );
   }, (exception, stackTrace) async {
