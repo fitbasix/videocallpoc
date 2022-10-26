@@ -38,7 +38,7 @@ class VideoCallService {
       "sip": {"enabled": false},
       "data": {"custom_key": ""}
     };
-    String username = '';
+    String username = '62822665f5d2af4b9a214d13';
     String password = 'Rase2ySyTeaaAyraPemaUymu9eEebygydyNu';
     String basicAuth =
         'Basic ' + base64.encode(utf8.encode('$username:$password'));
